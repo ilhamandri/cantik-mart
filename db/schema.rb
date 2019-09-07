@@ -212,6 +212,8 @@ ActiveRecord::Schema.define(version: 2019_08_23_081123) do
 
   create_table "item_cats", force: :cascade do |t|
     t.string "name", default: "DEFAULT", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "department_id"
     t.index ["department_id"], name: "index_item_cats_on_department_id"
   end
