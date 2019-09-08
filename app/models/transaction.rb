@@ -4,5 +4,19 @@ class Transaction < ApplicationRecord
   belongs_to :user
   belongs_to :member, optional: true
   belongs_to :complain, optional: true
+
+  enum payment_type:{
+  	CASH: 1,
+  	DEBIT: 2,
+  	CREDIT: 3
+  }
+
+  enum bank:{
+  	BCA: 1,
+  	MANDIRI: 2,
+  	BNI: 3,
+  	BRI: 4,
+  	PERMATA: 5
+  }
 end
 

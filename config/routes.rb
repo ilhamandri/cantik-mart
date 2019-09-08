@@ -46,6 +46,9 @@ Rails.application.routes.draw do
   get '/api/:api_type', to: 'apis#index'
   post '/api/trx/post', to: 'transactions#create_trx'
   get '/get/:type', to: 'gets#index'
+  post '/api/post/:type', to: 'posts#index'
+
+  resources :posts
 
   resources :report
 

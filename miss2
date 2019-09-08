@@ -78,13 +78,18 @@
 --> COMPLAIN : prevent kalau total masih minus / merah
 
 --> GET
-	: ITEM
-	: ITEM CAT
-	: USERS
+	: ITEM x
+	: ITEM CAT x
+	: USERS x
+	: STOCK x
+	: DEPARTMENT x
+	: MEMBER
 --> POST
-	: TRX
+	: TRX 
 	: TRX_ITEM
-	: FINGERPRINT
+	: ABSENT
+	: MEMBER
+
 
 
 8dda7b5b80d9eff0630be17308b14580

@@ -8,6 +8,7 @@ class GetsController < ApplicationController
 		 render :json =>json_result if store.nil?
 		 json_result["stores"] = Store.where("updated_at >= ? AND updated_at <= ?", from, to)
 		 json_result["users"] = User.where("updated_at >= ? AND updated_at <= ?", from, to)
+		 json_result["members"] = Member.where("updated_at >= ? AND updated_at <= ?", from, to)
 		 json_result["departments"] = Department.where("updated_at >= ? AND updated_at <= ?", from, to)
 		 json_result["item_cats"] = ItemCat.where("updated_at >= ? AND updated_at <= ?", from, to)
 		 json_result["items"] = Item.where("updated_at >= ? AND updated_at <= ?", from, to)

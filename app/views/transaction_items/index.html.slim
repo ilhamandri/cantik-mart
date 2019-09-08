@@ -9,18 +9,31 @@
           | Informasi Transaksi 
       .card-body
         .row
-          .col
+          .col-4
             label Invoice
             input disabled="disabled" class="form-control md-form" value="#{transaction.invoice}"
-          .col
+          .col-4
             label Member
             input disabled="disabled" class="form-control md-form" value="#{member}"
-          .col
+          .col-4
             label Kasir
             input disabled="disabled" class="form-control md-form" value="#{transaction.user.name}"
           .col
             label Total
             input disabled="disabled" class="form-control md-form" value="#{transaction.grand_total}"
+          .col
+            label Pembayaran
+            input disabled="disabled" class="form-control md-form" value="#{transaction.payment_type}"
+          - if transaction.payment_type == "DEBIT" || transaction.payment_type == "CREDIT"
+            .col
+              label Bank
+              input disabled="disabled" class="form-control md-form" value="#{transaction.bank}"
+            .col
+              label No. EDC
+              input disabled="disabled" class="form-control md-form" value="#{transaction.edc_inv.to_i}"
+            .col
+              label No. Kartu
+              input disabled="disabled" class="form-control md-form" value="#{transaction.card_number.to_s}"
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
