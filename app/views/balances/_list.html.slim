@@ -1,0 +1,19 @@
+- aktiva = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
+- passiva = balance.equity + balance.outcome + balance.transaction_value + balance.debt
+tr
+	td #{balance.store.name}
+	td #{balance.created_at.to_date}
+	td #{aktiva}
+	td #{passiva}
+	td 
+		- if aktiva == passiva
+			.text-success
+				| BALANCE
+		- else
+			.text-danger
+				| TIDAK BALANCE
+	td 
+		a href="#{balance_path(id: balance.id)}"
+	      button.btn.btn-rounded.btn-primary type="button" 
+	        i.fas.fa-refresh 
+	        | Detil Laporan 

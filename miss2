@@ -32,6 +32,7 @@
 		==> checkin ulang ==> ada ga checkout sebelumnya -> checkout sebelumnya = checkin + 8jam
 		==> overtime out = overtime in + 2jam
 	- hubungin ke fix cost : ditarik per kapan =======> gabung sama post data di applications_controllers
+	- hitung absent berdasarkan gaji --> insert ke fix_cost
 
 --> harga jual beli diatur dari pusat atau toko ?
 
@@ -47,20 +48,9 @@
 		# supplier
 		# warehouse
 	* transfer
-	* profit
-	* cash flow
-	* debt
-	* credit
-	* fix cost
-	* tax
-	* operational
-	* assets value
 
 
 --> pembukuan manual per hari secara cron + tombol untuk bulanan
-
---> laporan => activa passiva
-	report (CRUD) ==> OK (DB ROUTES), NOK(MODEL CONTROLLERS URLinNAV)
 
 --> check semua params is required ==> mengurangi error params not found
 
@@ -72,24 +62,30 @@
 
 --> COMPLAIN : prevent kalau total masih minus / merah
 
---> GET
-	: ITEM x
-	: ITEM CAT x
-	: USERS x
-	: STOCK x
-	: DEPARTMENT x
-	: MEMBER x
 --> POST
-	: TRX x
-	: TRX_ITEM x
 	: ABSENT
-	: MEMBER x
 
---> bayar hutang + piutang
+
+--> filter berdasarkan toko di semua keuangan + order + transfer + transaksi 
+
+--> recap untuk bulanan
+--> income outcome tax transaction fix_cost => kenapa bisa ga balance?
+
+--> update ke StoreBalance file recap untuk harian (update nama file)
+
+
+
 
 
 
 8dda7b5b80d9eff0630be17308b14580
+
+
+
+
+
+
+
 
 
 sudo -u postgres psql

@@ -32,6 +32,10 @@ gem 'usagewatch'
 # gem 'savon', '~> 2.12.0'
 gem 'activity_notification'
 gem 'whenever'
+gem 'zip-zip'
+gem 'rubyzip'
+gem 'axlsx'
+gem 'axlsx_rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

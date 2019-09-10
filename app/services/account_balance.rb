@@ -7,7 +7,7 @@ class AccountBalance
 
   def self.balance_account
     stores = Store.all
-    time_start = DateTime.now.beginning_of_day-1.days
+    time_start = DateTime.now.beginning_of_month.beginning_of_day
     time_end = DateTime.now.end_of_day
     stores.each do |store|
       # kas
@@ -33,14 +33,16 @@ class AccountBalance
       aktiva = kas + piutang + nilai_stok + nilai_aset
       passiva = transaksi + pengeluaran + modal + hutang
 
-      # PENGELUARAN PEMASUKAN PAJAK FIX_COST OPERASIONAL TRX
+      # PENGELUARAN PEMASUKAN PAJAK FIX_COST OPERASIONAL TRX(loss)
       # save ke db
 
       store.debt = hutang
       store.receivable = piutang
       store.save!
 
-      balances = StoreBalance.where(store: store).where("created_at >= ? AND created_at <= ?",time_start, time_end)
+      curr_day_start = DateTime.now.beginning_of_day
+      curr_day_end = DateTime.now.end_of_day
+      balances = StoreBalance.where(store: store).where("created_at >= ? AND created_at <= ?",curr_day_start, curr_day_end)
       if balances.size == 0 
         StoreBalance.create store: store, cash: kas, receivable: piutang, stock_value: nilai_stok,
           asset_value: nilai_aset, transaction_value: transaksi, equity: modal, debt: hutang, outcome: pengeluaran

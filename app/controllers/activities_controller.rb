@@ -1,5 +1,5 @@
 class ActivitiesController < ApplicationController
-  
+  before_action :require_login
 	def index
 		@models = PublicActivity::Activity.pluck(:trackable_type)
 	  	@activities = PublicActivity::Activity.order("created_at desc").page param_page

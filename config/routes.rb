@@ -47,10 +47,13 @@ Rails.application.routes.draw do
   post '/api/trx/post', to: 'transactions#create_trx'
   get '/get/:store_id', to: 'gets#index'
   post '/api/post/:type', to: 'posts#index'
+  get '/refresh/balance', to: 'balances#refresh'
+
+  get '/download/:type', to: 'downloads#serve_file', as: "download"
 
   resources :pays, only: %i[new create]
 
-  resources :reports
+  resources :balances
 
   resources :items
   resources :grocer_items
