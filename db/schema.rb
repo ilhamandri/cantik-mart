@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_08_131505) do
+ActiveRecord::Schema.define(version: 2019_09_10_060106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 2019_09_08_131505) do
     t.string "invoice", default: "-", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "payment"
     t.index ["store_id"], name: "index_cash_flows_on_store_id"
     t.index ["user_id"], name: "index_cash_flows_on_user_id"
   end
@@ -114,13 +115,12 @@ ActiveRecord::Schema.define(version: 2019_09_08_131505) do
     t.string "invoice", null: false
     t.integer "total_items", null: false
     t.bigint "store_id", null: false
-    t.bigint "member_id"
     t.datetime "date_created"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "transaction_id", null: false
-    t.index ["member_id"], name: "index_complains_on_member_id"
+    t.bigint "member_card"
     t.index ["store_id"], name: "index_complains_on_store_id"
     t.index ["transaction_id"], name: "index_complains_on_transaction_id"
     t.index ["user_id"], name: "index_complains_on_user_id"
@@ -414,6 +414,21 @@ ActiveRecord::Schema.define(version: 2019_09_08_131505) do
     t.index ["user_id"], name: "index_stock_values_on_user_id"
   end
 
+  create_table "store_balances", force: :cascade do |t|
+    t.float "cash", null: false
+    t.float "receivable", null: false
+    t.float "stock_value", null: false
+    t.float "asset_value", null: false
+    t.float "equity", null: false
+    t.float "debt", null: false
+    t.float "transaction_value", null: false
+    t.float "outcome", null: false
+    t.bigint "store_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_store_balances_on_store_id"
+  end
+
   create_table "store_items", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "item_id", null: false
@@ -478,7 +493,6 @@ ActiveRecord::Schema.define(version: 2019_09_08_131505) do
   create_table "transactions", force: :cascade do |t|
     t.string "invoice", null: false
     t.bigint "user_id", null: false
-    t.bigint "member_id"
     t.float "total", null: false
     t.float "discount", default: 0.0
     t.float "grand_total", null: false
@@ -491,7 +505,9 @@ ActiveRecord::Schema.define(version: 2019_09_08_131505) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "card_number"
-    t.index ["member_id"], name: "index_transactions_on_member_id"
+    t.bigint "member_card"
+    t.bigint "store_id", default: 1, null: false
+    t.index ["store_id"], name: "index_transactions_on_store_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
@@ -572,7 +588,6 @@ ActiveRecord::Schema.define(version: 2019_09_08_131505) do
   add_foreign_key "cashes", "users"
   add_foreign_key "complain_items", "complains"
   add_foreign_key "complain_items", "items"
-  add_foreign_key "complains", "members"
   add_foreign_key "complains", "stores"
   add_foreign_key "complains", "users"
   add_foreign_key "controller_methods", "controllers"
@@ -610,13 +625,14 @@ ActiveRecord::Schema.define(version: 2019_09_08_131505) do
   add_foreign_key "returs", "users"
   add_foreign_key "stock_values", "stores"
   add_foreign_key "stock_values", "users"
+  add_foreign_key "store_balances", "stores"
   add_foreign_key "store_items", "items"
   add_foreign_key "store_items", "stores"
   add_foreign_key "supplier_items", "items"
   add_foreign_key "supplier_items", "suppliers"
   add_foreign_key "transaction_items", "items"
   add_foreign_key "transaction_items", "transactions"
-  add_foreign_key "transactions", "members"
+  add_foreign_key "transactions", "stores"
   add_foreign_key "transactions", "users"
   add_foreign_key "transfer_items", "items"
   add_foreign_key "transfer_items", "transfers"

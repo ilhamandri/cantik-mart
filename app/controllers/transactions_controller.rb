@@ -107,10 +107,6 @@ class TransactionsController < ApplicationController
       items
     end
 
-    def decrease_stock trx_id
-      
-    end
-
     def param_page
       params[:page]
     end

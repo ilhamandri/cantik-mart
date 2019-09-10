@@ -8,42 +8,6 @@ class CashFlowsController < ApplicationController
   	@finances = filter[1]
   end
 
-  def check_prev
-    check_prev_trx
-  end
-
-  def check_prev_trx
-    start_date = DateTime.now.to_date
-    end_date = DateTime.now.to_date - 1.day
-    
-    last_trx = "01-01-1999".to_date
-    last_trx = Transaction.last.date_created.to_date if Transaction.last.present?
-    
-    checking_trx_finance = CashFlow.where(finance_type: CashFlow::TRANSACTIONS).last
-    start_date = checking_trx_finance.date_created if checking_trx_finance.present?
-    start_date = "01-01-1999".to_date if checking_trx_finance.nil?
-
-    transactions = Transaction.where("date_created > ? AND date_created < ?", start_date, end_date).group("DATE(date_created)").sum(:grand_total)
-    based_prices = Transaction.where("date_created > ? AND date_created < ?", start_date, end_date).group("DATE(date_created)").sum(:hpp_total)
-
-    a = transactions
-    b = based_prices
-    trx_based =  a.merge!(b) { |k, o, n| k=o,k=n,k=o - n }
-    trx_based.each do |transaction|
-      if CashFlow.find_by(invoice: "TRX-"+transaction[0].to_s).nil?  
-        a = CashFlow.create date_created: transaction[0].to_date, nominal: transaction[1][0], user: current_user, 
-        store: current_user.store, description: "TRX "+transaction[0].to_s, finance_type: CashFlow::TRANSACTIONS,
-        invoice: "TRX-"+transaction[0].to_s
-        # b = CashFlow.create date_created: transaction[0].to_date, nominal: transaction[1][1], user: current_user, 
-        # store: current_user.store, description: "HPP "+transaction[0].to_s, finance_type: CashFlow::HPP
-        # c = CashFlow.create date_created: transaction[0].to_date, nominal: transaction[1][2], user: current_user, 
-        # store: current_user.store, description: "PRF "+transaction[0].to_s, finance_type: CashFlow::PROFIT
-        ProfitLoss.create date_created: transaction[0].to_date, nominal: transaction[1][2], user: current_user, 
-        store: current_user.store, description: "PRF "+transaction[0].to_s, finance_type: ProfitLoss::PROFIT
-      end
-    end
-  end
-
   def new
     @users = User.all
   end
@@ -66,8 +30,8 @@ class CashFlowsController < ApplicationController
       return redirect_back_data_error new_cash_flow_path, "Tanggal yang dimasukkan harus lebih dari tanggal hari ini." if due_date.to_date <= Date.today
       receivable = Receivable.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
                     finance_type: Receivable::EMPLOYEE, deficiency:nominal, to_user: to_user, due_date: due_date
-      cash_flow = CashFlow.create user: user, store: store, nominal: nominal*-1, date_created: date_created, description: description, 
-                      finance_type: CashFlow::EMPLOYEE_LOAN, invoice: invoice
+      cash_flow = CashFlow.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
+                      finance_type: CashFlow::EMPLOYEE_LOAN, invoice: invoice, ref_id: receivable.id
       curr_store = current_user.store
       curr_store.cash = curr_store.cash - nominal
       curr_store.receivable = curr_store.receivable + nominal
@@ -78,10 +42,10 @@ class CashFlowsController < ApplicationController
       return redirect_back_data_error new_cash_flow_path, "Tanggal jatuh tempo harus diisi." if due_date.nil?
       return redirect_back_data_error new_cash_flow_path, "Tanggal yang dimasukkan harus lebih dari tanggal hari ini." if due_date.to_date <= Date.today
       invoice = " BL-"+inv_number
-      debt = Debt.create user: user, store: store, nominal: nominal*-1, date_created: date_created, description: description,
+      debt = Debt.create user: user, store: store, nominal: nominal, date_created: date_created, description: description,
                     finance_type: Debt::BANK, deficiency:nominal, due_date: due_date
       cash_flow = CashFlow.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
-                      finance_type: CashFlow::BANK_LOAN, invoice: invoice
+                      finance_type: CashFlow::BANK_LOAN, invoice: invoice, ref_id: debt.id
       curr_store = current_user.store
       curr_store.cash = curr_store.cash + nominal
       curr_store.debt = curr_store.debt + nominal
@@ -90,7 +54,7 @@ class CashFlowsController < ApplicationController
       debt.create_activity :create, owner: current_user           
     elsif finance_type == "Outcome"
       invoice = " OUT-"+inv_number
-      cash_flow = CashFlow.create user: user, store: store, nominal: nominal*-1, date_created: date_created, description: description, 
+      cash_flow = CashFlow.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
                       finance_type: CashFlow::OUTCOME, invoice: invoice
       curr_store = current_user.store
       curr_store.cash = curr_store.cash - nominal
@@ -114,7 +78,7 @@ class CashFlowsController < ApplicationController
       cash_flow.create_activity :create, owner: current_user         
     elsif finance_type == "Operational"
       invoice = " OPR-"+inv_number
-      cash_flow = CashFlow.create user: user, store: store, nominal: nominal*-1, date_created: date_created, description: description, 
+      cash_flow = CashFlow.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
                       finance_type: CashFlow::OPERATIONAL, invoice: invoice
       curr_store = current_user.store
       curr_store.cash = curr_store.cash - nominal
@@ -131,7 +95,7 @@ class CashFlowsController < ApplicationController
         tax_current_month.save!
         tax_current_month.create_activity :edit, owner: current_user         
       else
-        cash_flow = CashFlow.create user: user, store: store, nominal: nominal*-1, date_created: date_created, description: description, 
+        cash_flow = CashFlow.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
                         finance_type: CashFlow::TAX, invoice: invoice
         cash_flow.create_activity :create, owner: current_user
         curr_store = current_user.store
@@ -140,7 +104,7 @@ class CashFlowsController < ApplicationController
       end
     elsif finance_type == "Fix_Cost"
       invoice = " FIX-"+inv_number
-      cash_flow = CashFlow.create user: user, store: store, nominal: nominal*-1, date_created: date_created, description: description, 
+      cash_flow = CashFlow.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
                       finance_type: CashFlow::FIX_COST, invoice: invoice
       curr_store = current_user.store
       curr_store.cash = curr_store.cash - nominal

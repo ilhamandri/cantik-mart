@@ -18,10 +18,29 @@ tr
       - if @activity.trackable.present?
         - class_name = @activity.trackable.class.name 
         - if class_name == "GrocerItem"
-          = link_to @activity.trackable.item.name, item_path(id: @activity.trackable.item_id), :class => "btn btn-rounded btn-success"
+          = link_to @activity.trackable.item.name, item_path(id: @activity.trackable.item_id)
         - elsif ["Order", "Retur", "Transfer"].include? class_name
-          = link_to @activity.trackable.invoice, @activity.trackable, :class => "btn btn-rounded btn-success"
+          = link_to @activity.trackable.invoice
+        - elsif ["CashFlow"].include? class_name
+          - cashflow =  @activity.trackable
+          - cashflow_ftype = cashflow.finance_type
+
+          - if ["Bank_Loan", "Outcome"].include? cashflow_ftype 
+            - if cashflow.ref_id.present?
+              = link_to cashflow.invoice, debt_path(id: cashflow.ref_id)
+            -else
+              | #{cashflow.invoice}
+
+          - elsif ["Employee_Loan", "Income"].include? cashflow_ftype 
+            - if cashflow.ref_id.present?
+              = link_to cashflow.invoice, receivable_path(id: cashflow.ref_id)
+            -else
+              | #{cashflow.invoice}
+
+          - else
+            | #{cashflow.invoice}
+
+        - elsif ["Receivable", "Debt"].include? class_name
+          = link_to @activity.trackable.description, @activity.trackable
         - else
-          = link_to @activity.trackable.name, @activity.trackable, :class => "btn btn-rounded btn-success"
-      - else
-        -
+          = link_to @activity.trackable.name, @activity.trackable

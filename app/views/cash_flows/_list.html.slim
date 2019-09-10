@@ -9,10 +9,21 @@ tr
     td 0
     td #{nominal}
   td #{finance.date_created}
-  - if finance.ref_id.present?
-    - if ( finance.finance_type == "Outcome" || finance.finance_type == "Debt") && (finance.description.include? "ORD-") 
-      td
-        a href='#{order_items_path(id: finance.ref_id)}'
+  td
+    - if finance.ref_id.present?
+      - if finance.finance_type == "Outcome"
+        a href="#{debt_path(id: finance.ref_id)}"
           | #{finance.description}
-  - else
-    td #{finance.description}
+      - elsif finance.finance_type == "Income"
+        a href="#{receivable_path(id: finance.ref_id)}"
+          | #{finance.description}
+      - elsif finance.finance_type == "Debt"
+        a href="#{debt_path(id: finance.ref_id)}"
+          | #{finance.description}
+      - elsif finance.finance_type == "Receivable"
+        a href="#{receivable_path(id: finance.ref_id)}"
+          | #{finance.description}
+      - else
+        | #{finance.description}
+    -else
+      | #{finance.description}

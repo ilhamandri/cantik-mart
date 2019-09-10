@@ -2,6 +2,10 @@ class ApplicationController < ActionController::Base
   include Clearance::Controller
   include PublicActivity::StoreController 
   
+  def self.finance_recap
+    print "CRON OK"
+  end
+
   protected
     def authorize *authorized_level
       redirect_back_no_access_right unless authorized_level.include? current_user.level
@@ -57,5 +61,8 @@ class ApplicationController < ActionController::Base
     def set_notification from_user, to_user, m_type, message, link
       Notification.create from_user: from_user, to_user: to_user, m_type: m_type,
         message: message, link: link, date_created: DateTime.now
+    end
+
+    def absents_recap
     end
 end

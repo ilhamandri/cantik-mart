@@ -3,17 +3,15 @@ tr
   td #{transaction.date_created.to_date}
   td #{transaction.user.store.name}
   td 
-    - if transaction.member.nil?
+    - member = Member.find_by(card_number: transaction.member_card)
+    - if member.nil?
       | -
     - else 
-      | #{transaction.member.name}
+      | #{member.name}
   td #{transaction.items}
   td #{transaction.grand_total}
   td
     a href='#{transaction_items_path(id: transaction.id)}'
       button class="btn btn-rounded btn-primary"
         | Item
-    a href='#{new_complain_path(id: transaction.id)}'
-      button class="btn btn-rounded btn-warning"
-        | Retur
 

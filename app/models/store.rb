@@ -5,6 +5,8 @@ class Store < ApplicationRecord
   has_many :retur
   has_many :members
   has_many :complains
+  has_many :transactions
+  has_many :store_balances
   
   enum store_type:{
     retail: 0,

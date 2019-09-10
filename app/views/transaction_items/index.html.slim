@@ -1,6 +1,6 @@
 - transaction = @transaction_items.first.trx
 - member = "-"
-- member = transaction.member.name  if transaction.member.present?
+- member = Member.find_by(card_number: transaction.member_card).name  if transaction.member_card.present?
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
@@ -9,15 +9,18 @@
           | Informasi Transaksi 
       .card-body
         .row
-          .col-4
+          .col-3
             label Invoice
             input disabled="disabled" class="form-control md-form" value="#{transaction.invoice}"
-          .col-4
+          .col-3
             label Member
             input disabled="disabled" class="form-control md-form" value="#{member}"
-          .col-4
+          .col-3
             label Kasir
             input disabled="disabled" class="form-control md-form" value="#{transaction.user.name}"
+          .col-3
+            label Tgl. Transaksi
+            input disabled="disabled" class="form-control md-form" value="#{transaction.created_at}"
           .col
             label Total
             input disabled="disabled" class="form-control md-form" value="#{transaction.grand_total}"

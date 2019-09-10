@@ -45,12 +45,12 @@ Rails.application.routes.draw do
 
   get '/api/:api_type', to: 'apis#index'
   post '/api/trx/post', to: 'transactions#create_trx'
-  get '/get/:type', to: 'gets#index'
+  get '/get/:store_id', to: 'gets#index'
   post '/api/post/:type', to: 'posts#index'
 
-  resources :posts
+  resources :pays, only: %i[new create]
 
-  resources :report
+  resources :reports
 
   resources :items
   resources :grocer_items
@@ -90,8 +90,8 @@ Rails.application.routes.draw do
   resources :transaction_items, only: %i[index show]
 
   resources :cash_flows, only: %i[index new create]
-  resources :debts, only: %i[index new create]
-  resources :receivables, only: %i[index new create]
+  resources :debts, only: %i[index new create show]
+  resources :receivables, only: %i[index new create show]
   resources :taxs, only: %i[index new create]
   resources :fix_costs, only: %i[index new create]
   resources :operationals, only: %i[index new create]

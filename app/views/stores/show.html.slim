@@ -1,3 +1,7 @@
+- time_start = DateTime.now.beginning_of_day-1.days
+- time_end = DateTime.now.end_of_day
+- AccountBalance.balance_account
+- balance = StoreBalance.where(store: @store).order("created_at DESC").first
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
@@ -43,45 +47,45 @@
             | AKTIVA
           .card-body
             label for="phone" Kas
-            input type="number" class="form-control md-form" value='#{@store.cash}'
+            input type="number" class="form-control md-form" value='#{balance.cash}' 
 
             label for="phone" Piutang
-            input type="number" class="form-control md-form" value='#{@store.receivable}'
+            input type="number" class="form-control md-form" value='#{balance.receivable}'
 
             label for="phone" Nilai Stok
-            input type="number" class="form-control md-form" value='#{@store.receivable}'
+            input type="number" class="form-control md-form" value='#{balance.stock_value}'
 
             label for="phone" Nilai Aset
-            input type="number" class="form-control md-form" value='#{@store.receivable}'
+            input type="number" class="form-control md-form" value='#{balance.asset_value}'
 
         .card-body.col-6.text-right
           .card-header.white-text.primary-color
             | PASSIVA
           .card-body
             label for="phone" Modal
-            input type="number" class="form-control md-form" value='#{@store.cash}'
+            input type="number" class="form-control md-form" value='#{balance.cash}'
 
             label for="phone" Hutang
-            input type="number" class="form-control md-form" value='#{@store.debt}'
+            input type="number" class="form-control md-form" value='#{balance.debt}'
 
             label for="phone" Penjualan (Profit & Loss)
-            input type="number" class="form-control md-form" value='#{@store.debt}'
+            input type="number" class="form-control md-form" value='#{balance.transaction_value}'
 
             label for="phone" Pengeluaran
-            input type="number" class="form-control md-form" value='#{@store.debt}'
+            input type="number" class="form-control md-form" value='#{balance.outcome}'
 
         .col-12
           hr.primary-color-dark
 
         .col-5.text-center
-          - activa = @store.cash + @store.receivable
+          - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
           | #{number_to_currency(activa, unit: "Rp. ")}
 
         .col-2.text-center
           | :
 
         .col-5.text-center
-          - passiva = @store.equity + @store.debt
+          - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
           | #{number_to_currency(passiva, unit: "Rp. ")}
 
         h5.col-12.text-center

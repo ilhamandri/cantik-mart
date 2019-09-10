@@ -1,7 +1,7 @@
 require 'roo'
 
 class InsertProdlist
-	
+
 	def initialize
 	end
 
@@ -53,11 +53,10 @@ class InsertProdlist
 	end
 
 	def insert_prod code, name, buy, sell, wholesale, box, cat_id, brand, file
-		puts file
 		item = Item.create code: code, name: name, buy: buy, 
 		sell: sell, wholesale: wholesale, box: box, 
 		item_cat_id: cat_id, brand: brand
-		StoreItem.create store: Store.first, stock: 9999, item: item
+		StoreItem.create store: Store.first, stock: 0, item: item
 	end
 
 	def find_cat cat_name

@@ -45,7 +45,7 @@ class OrdersController < ApplicationController
   end
 
   def new
-    return redirect_back_data_error, "Data Supplier Belum Tersedia, Silahkan Menambahkan Data Supplier" if Supplier.count <= 0
+    return redirect_back_data_error suppliers_path, "Data Supplier Belum Tersedia, Silahkan Menambahkan Data Supplier" if Supplier.count <= 0
     @suppliers = Supplier.select(:id, :name, :address).order("supplier_type DESC").all
     if params[:item_id].present?
       @add_item = Item.find_by(id: params[:item_id])
@@ -193,7 +193,7 @@ class OrdersController < ApplicationController
       new_buy = 0
       new_buy = (new_buy_total + old_buy_total) / (item[1].to_i + store_stock.stock.to_i) if (item[1].to_i + store_stock.stock.to_i) > 0
       if current_user.store.store_type == "retail"
-        store_stock.buy = new_total
+        store_stock.buy = new_buy
         store_stock.save!
       else
         this_item.buy = new_buy

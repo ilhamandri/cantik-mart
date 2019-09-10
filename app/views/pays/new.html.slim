@@ -1,0 +1,36 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pembayaran
+    .card.mb-4
+      .card-body
+        = form_for :pay, url: pays_path, method: "POST" do |form|
+          .form-group
+            label.text-primary for="type" Tipe
+            - tipe = "Hutang"
+            - tipe = "Piutang" if @type=="receivable"
+            input type="text" value="#{tipe}" class="form-control md-form"
+            input type="text" value="#{@type}" name="pay[type]" style="display: none;" 
+            input type="number" value="#{@data.id}" name="pay[id]" style="display: none;" 
+          .form-group
+            - if @type == "debt"
+              label.text-primary for="type" Kepada
+              input type="text" value="#{@data.description}" name="pay[from_to]" class="form-control md-form"
+            - else
+              label.text-primary for="type" Dari
+              - if @data.finance_type == "EMPLOYEE"
+                input type="text" value="#{User.find_by(id: @data.to_user).name}" name="pay[from_to]" class="form-control md-form"
+              - else
+
+          .form-group
+            label.text-primary for="type" Nominal
+            input type="text" value="#{@data.nominal}" name="pay[nominal]" class="form-control md-form"
+          .form-group
+            label.text-primary for="type" Kekurangan
+            input type="text" value="#{@data.deficiency}" name="pay[deficiency]" class="form-control md-form"
+          .form-group
+            label.text-primary for="nominal" Bayar
+            = form.number_field :pay_nominal, required: true, class: "form-control md-form", id: "nominal"
+          .form-group.text-center
+            = form.submit "Bayar", class: "btn btn-rounded btn-warning"

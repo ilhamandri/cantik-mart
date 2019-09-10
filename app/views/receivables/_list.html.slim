@@ -6,10 +6,14 @@ tr
     - else
       - user = User.find(finance.to_user)
       td #{user.name} (#{user.store.name}) 
+    td #{finance.user.name} (#{finance.store.name})
     td #{finance.date_created}
   	td #{finance.nominal.abs}
   	td #{finance.deficiency.abs}
     td
-      a href="#{finance.ref_id}"
-        | #{finance.description}  
-    td #{finance.user.name} (#{finance.store.name})
+      - if finance.finance_type == "EMPLOYEE"
+        - if finance.deficiency.abs > 0 
+          a href='#{receivable_path(id: finance.id)}' class="btn btn-rounded btn-warning"
+            | #{finance.description}
+        - else
+          | #{finance.description}

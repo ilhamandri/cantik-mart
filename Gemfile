@@ -31,6 +31,7 @@ gem 'usagewatch'
 # gem 'chartkick'
 # gem 'savon', '~> 2.12.0'
 gem 'activity_notification'
+gem 'whenever'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

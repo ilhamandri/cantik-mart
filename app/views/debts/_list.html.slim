@@ -8,5 +8,15 @@ tr
   td #{finance.deficiency.abs}
   td #{finance.due_date}
   td
-    a href='#{order_items_path(id: finance.ref_id)}'
+    - if finance.finance_type == "BANK"
+      - if finance.deficiency.abs > 0 
+        a href='#{debt_path(id: finance.id)}' class="btn btn-rounded btn-warning"
+          | #{finance.description}
+      - else
+        | #{finance.description}
+    - elsif finance.finance_type == "ORDER"
+        a href='#{order_path(id: finance.ref_id)}' class="btn btn-rounded btn-info"
+          | #{finance.description}
+    - else
       | #{finance.description}
+   

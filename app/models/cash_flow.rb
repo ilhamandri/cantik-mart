@@ -36,4 +36,6 @@ class CashFlow < ApplicationRecord
   BANK_LOAN = 13
   SUPPLIER_LOAN = 14
 
+  outcome = ["Tax", "Fix_Cost", "Operational"]
+
 end

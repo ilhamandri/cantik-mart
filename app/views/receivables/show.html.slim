@@ -1,0 +1,50 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data Hutang
+      .card-body 
+        .row
+          .col-12
+            .form-group
+              label for="name" Deskripsi
+              input type="text" class="form-control md-form" value="#{@receivable.description}"
+          .col-4
+            .form-group
+              label for="name" Dibuat Oleh
+              input type="text" class="form-control md-form" value="#{@receivable.user.name} - #{@receivable.user.store.name}"
+          .col-4
+            .form-group
+              label for="name" Nominal
+              input type="text" class="form-control md-form" value="#{@receivable.nominal}"
+          .col-4
+            .form-group
+              label for="name" Kekurangan
+              input type="text" class="form-control md-form" value="#{@receivable.deficiency}"
+          .col-12.text-center
+            a href='#{new_pay_path(id: @receivable.id, type: "receivable")}' class="btn btn-warning btn-rounded"
+              | Bayar
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Riwayat Pembayaran
+      .card-body 
+        table.table
+          tr
+            th  No. Invoice
+            th  Dibayarkan              
+            th  Tanggal
+            th  Nominal
+          - pays = CashFlow.where(finance_type: "Income", payment: "receivable")
+          - pays.each do |pay|
+            tr
+              td #{pay.invoice}
+              td #{pay.user.name} - #{pay.store.name}
+              td #{pay.created_at}
+              td #{pay.nominal}
+        
+        

@@ -9,6 +9,12 @@ class ReceivablesController < ApplicationController
     @totals = total
   end
 
+  def show
+    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless params[:id].present?
+    @receivable = Receivable.find_by_id params[:id]
+    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless @receivable.present?
+  end
+
   private
     def param_page
       params[:page]

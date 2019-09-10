@@ -1,8 +1,9 @@
 tr
   td #{retur.invoice}
   td 
-  	- if retur.member.present?
-  		| #{retur.member.name}
+    - member = Member.find_by(card_number: retur.member_card)
+  	- if member.present?
+  		| #{member.name}
   	- else
   		| -
   td #{retur.total_items}

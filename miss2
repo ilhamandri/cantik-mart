@@ -31,7 +31,7 @@
 	- check in / overtime in ==> lupa check out / overtime out
 		==> checkin ulang ==> ada ga checkout sebelumnya -> checkout sebelumnya = checkin + 8jam
 		==> overtime out = overtime in + 2jam
-	- hubungin ke fix cost : ditarik per kapan
+	- hubungin ke fix cost : ditarik per kapan =======> gabung sama post data di applications_controllers
 
 --> harga jual beli diatur dari pusat atau toko ?
 
@@ -60,11 +60,6 @@
 --> pembukuan manual per hari secara cron + tombol untuk bulanan
 
 --> laporan => activa passiva
-	* stock value
-	* assets
-	* profit loss
-	* pengeluaran
-	
 	report (CRUD) ==> OK (DB ROUTES), NOK(MODEL CONTROLLERS URLinNAV)
 
 --> check semua params is required ==> mengurangi error params not found
@@ -83,13 +78,30 @@
 	: USERS x
 	: STOCK x
 	: DEPARTMENT x
-	: MEMBER
+	: MEMBER x
 --> POST
-	: TRX 
-	: TRX_ITEM
+	: TRX x
+	: TRX_ITEM x
 	: ABSENT
-	: MEMBER
+	: MEMBER x
+
+--> bayar hutang + piutang
 
 
 
 8dda7b5b80d9eff0630be17308b14580
+
+
+sudo -u postgres psql
+
+DROP DATABASE cantik_mart;
+CREATE DATABASE cantik_mart;
+
+DROP DATABASE cantik_mart_local;
+CREATE DATABASE cantik_mart_local;
+
+rails db:migrate
+rails c
+Store.create name:"Store Bandung"
+User.create name:"OWNER", email: "admin@pardev.id", password: "admin123", level: 1, store: Store.first 
+
