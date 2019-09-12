@@ -3,6 +3,7 @@ class ComplainsController < ApplicationController
   before_action :require_fingerprint
   def index
     @complains = Complain.page param_page
+    @complains = @complains.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
     if params[:search].present?
       search = params[:search].downcase
       @search = search
@@ -87,7 +88,6 @@ class ComplainsController < ApplicationController
     additional_total = 0
     additional_discount = 0
     new_items.each do |new_item|
-      # item discount +sum all  disc
       item = Item.find_by(id: new_item[0])
       trx_item = TransactionItem.create item: item,  
       transaction_id: @transaction.id,
@@ -103,6 +103,8 @@ class ComplainsController < ApplicationController
     @transaction.discount = @transaction.discount + additional_discount
     @transaction.grand_total = @transaction.grand_total + (additional_total - additional_discount)
     @transaction.save!
+
+    # ubah data transaksi di hari trx ini
 
     complain.create_activity :create, owner: current_user
 

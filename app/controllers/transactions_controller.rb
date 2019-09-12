@@ -5,6 +5,7 @@ class TransactionsController < ApplicationController
 
   def index
     @transactions = Transaction.page param_page
+    @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
     if params[:search].present?
       search = params[:search].downcase
       @search = search

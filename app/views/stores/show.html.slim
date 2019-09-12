@@ -42,6 +42,11 @@
         h5.font-weight-500.my-1
           | Keuangan
       .row
+        - stock_under_zero = StoreItem.where(store: @store).where('stock < 0').count
+        - if stock_under_zero > 0
+          .card-body.col-12.text-left
+            .text-danger
+              | * Terdapat #{stock_under_zero} item dengan stok dibawah 0.
         .card-body.col-6.text-left
           .card-header.white-text.primary-color
             | AKTIVA
@@ -63,15 +68,15 @@
             | PASSIVA
           .card-body
             label for="phone" Modal
-            input type="number" class="form-control md-form" value='#{balance.cash}'
+            input type="number" class="form-control md-form" value='#{balance.equity}'
 
             label for="phone" Hutang
             input type="number" class="form-control md-form" value='#{balance.debt}'
 
-            label for="phone" Penjualan (Profit & Loss)
+            label for="phone" Transaksi
             input type="number" class="form-control md-form" value='#{balance.transaction_value}'
 
-            label for="phone" Pengeluaran
+            label for="phone" Pemasukkan & Pengeluaran
             input type="number" class="form-control md-form" value='#{balance.outcome}'
 
         .col-12
@@ -98,3 +103,10 @@
               | NOT BALANCE (#{number_to_currency((activa-passiva).abs, unit: "Rp. ")})
 
           br
+          - balance = StoreBalance.where(store: @store).where("created_at > ?", DateTime.now.beginning_of_day).first
+          - file = balance.filename.split("/").last
+          - file_exist = File.exist?("./report/"+file)
+          - if file_exist
+            a href="#{download_file_path(name: file)}"
+              button.btn.btn-rounded.btn-success type="button" 
+                | Unduh

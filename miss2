@@ -1,47 +1,9 @@
---> komplain 
-	- JS
-		- if komplain & diganti change
-	- Diganti
-		- sama
-			=> (do nothing) 
-		- beda
-			=> 0 -> JS 
-			=> Beli > x > 0  
-			==> Total diupdate ----> (komplain - ganti)*harga 
-			===> di DB ----> ((item.stock * buy) + ((kompalin - ganti) * harga)) / (item.stock + kompalin - ganti)
-	- Tambah Pembelian
-		=> update TOTAL
-	- payment
-		- if total 
-			=> + ___ harus dibuat ke minus
-			=> - ___ lakukan pembayaran
-
-
-	- if 
-		diganti semua == 0 ==> declined
-		diganti > 0 ==> reason must be available
-		diganti > komplain ==> declined
-		diganti > beli ==> declined
-
-		komplain > beli ==> declined
-		komplain < 0 ==> declined
-
-
---> absent
-	- check in / overtime in ==> lupa check out / overtime out
-		==> checkin ulang ==> ada ga checkout sebelumnya -> checkout sebelumnya = checkin + 8jam
-		==> overtime out = overtime in + 2jam
-	- hubungin ke fix cost : ditarik per kapan =======> gabung sama post data di applications_controllers
-	- hitung absent berdasarkan gaji --> insert ke fix_cost
-
---> harga jual beli diatur dari pusat atau toko ?
-
 --> cek semua notifikasi
 	* payment
 	* due date
 	* confirm order / transfer
 
---> print laporan 
+--> print laporan ?
 	* order
 	* retur
 		# consument
@@ -49,29 +11,32 @@
 		# warehouse
 	* transfer
 
-
---> pembukuan manual per hari secara cron + tombol untuk bulanan
+=====================================================================
 
 --> check semua params is required ==> mengurangi error params not found
 
---> semua controllers harus punya show
-
---> jangan cata activity jika data tidak ada perubahan
+--> jangan catat activity jika data tidak ada perubahan
 
 --> catat activity jika data dihapus
 
---> COMPLAIN : prevent kalau total masih minus / merah
+======================================================================
 
 --> POST
-	: ABSENT
+	: ABSENT --> per tanggal berapa ?
 
 
---> filter berdasarkan toko di semua keuangan + order + transfer + transaksi 
+--> pembukuan manual per hari secara cron --> jam berapa ?
 
---> recap untuk bulanan
---> income outcome tax transaction fix_cost => kenapa bisa ga balance?
+--> recap untuk bulanan --> per tanggal berapa ?
 
---> update ke StoreBalance file recap untuk harian (update nama file)
+======================================================================
+
+--> COMPLAIN : prevent kalau total masih minus / merah
+--> complain --> balancing (harga ?) --> complain ubah data transaksi di hari trx itu dibuat
+
+
+
+
 
 
 
@@ -96,8 +61,31 @@ CREATE DATABASE cantik_mart;
 DROP DATABASE cantik_mart_local;
 CREATE DATABASE cantik_mart_local;
 
+\q
+
 rails db:migrate
 rails c
 Store.create name:"Store Bandung"
 User.create name:"OWNER", email: "admin@pardev.id", password: "admin123", level: 1, store: Store.first 
+Store.create name:"Store Bandung 2"
+User.create name:"OWNER", email: "admin2@pardev.id", password: "admin123", level: 1, store: Store.second 
 
+localhost:3000/controllers
+localhost:3000/items
+
+
+TransactionItem.delete_all
+Transaction.delete_all
+ReturItem.delete_all
+Retur.delete_all
+TransferItem.delete_all
+Transfer.delete_all
+
+OrderItem.delete_all
+Order.delete_all
+Debt.delete_all
+CashFlow.delete_all
+Receivable.delete_all
+
+StoreItem.update_all(stock: 0)
+Store.update_all(cash: 5000000000, equity: 5000000000)

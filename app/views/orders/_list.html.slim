@@ -16,7 +16,7 @@ tr
       | LUNAS (#{order.date_paid_off.to_date})
 
   td
-    - if order.date_receive.nil? 
+    - if order.date_receive.nil? && order.total != 0
       = form_for :order, url: "#{order_path(id: order.id)}", method: "DELETE" do |form|
         = form.submit "Hapus", class: "btn btn-rounded btn-danger"
   td

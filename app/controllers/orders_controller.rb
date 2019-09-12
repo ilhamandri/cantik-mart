@@ -5,7 +5,7 @@ class OrdersController < ApplicationController
   def index
     @orders = Order.order("date_created DESC").page param_page
     @search_text = ""
-
+    @orders = @orders.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
 
     if params[:search].present?
       search = params[:search].downcase
@@ -151,6 +151,7 @@ class OrdersController < ApplicationController
     order.total = new_total
     order.date_change = DateTime.now
     order.editable = false
+
     changes = order.changes
     order.save!
     payment = edit_payment new_total, order
@@ -173,15 +174,52 @@ class OrdersController < ApplicationController
     order = Order.find params[:id]
     return redirect_back_data_error orders_path unless order.present?
     return redirect_back_data_error orders_path, "Order Tidak Dapat Diubah" if order.date_receive.present? || order.date_paid_off.present?
+    order_from_retur = (order.total==0)
     due_date = params[:order][:due_date]
     urls = order_path(id: params[:id])
     return redirect_back_data_error order_confirmation_path(id: order.id), "Tanggal Jatuh Tempo Harus Diisi" if due_date.nil?
     items = order_items
     new_total = 0
+    receivable = nil
     items.each do |item|
       order_item = OrderItem.find item[0]
       break if order_item.nil?
-      order_item.receive = item[1]
+      qty_order = order_item.quantity
+      receive_qty = item[1].to_i
+      buy = order_item.item.buy if !order_item.item.local_item
+      buy = StoreItem.find_by(store: order.store, item: order_item.item).buy.to_f if order_item.item.local_item
+      nominal_value = buy * (qty_order-receive_qty)
+      if receive_qty <= 0
+        if receivable.nil?
+          receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
+                        description: "RECEIVABLE FROM RETUR #"+order.invoice, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: order.supplier_id,
+                        ref_id: urls, due_date: DateTime.now + 2.months
+        else
+          receivable.nominal += receivable.nominal+nominal_value
+          receivable.deficiency += receivable.deficiency+nominal_value
+          receivable.save!
+          next
+        end
+      else
+        if qty_order < receive_qty
+          receive_qty = qty_order
+        else
+          if order_from_retur
+            if receivable.nil?
+              receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
+                            description: "RECEIVABLE FROM RETUR #"+order.invoice, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: order.supplier_id,
+                            ref_id: urls, due_date: DateTime.now + 2.months
+            else
+              receivable.nominal += receivable.nominal+nominal_value
+              receivable.deficiency += receivable.deficiency+nominal_value
+              receivable.save!
+              next
+            end
+          end
+        end
+      end
+
+      order_item.receive = receive_qty
       order_item.save!
       this_item = Item.find order_item.item.id
       store_stock = StoreItem.find_by(item_id: order_item.item.id, store_id: current_user.store)
@@ -189,10 +227,11 @@ class OrdersController < ApplicationController
       store_stock.stock = store_stock.stock + item[1].to_i
       store_stock.save!
       new_buy_total = item[1].to_i * order_item.price.to_i
-      old_buy_total = store_stock.stock.to_i * this_item.buy.to_i
+      old_buy_total = store_stock.stock.to_i * store_stock.buy.to_f if this_item.local_item
+      old_buy_total = store_stock.stock.to_i * this_item.buy.to_f if !this_item.local_item
       new_buy = 0
       new_buy = (new_buy_total + old_buy_total) / (item[1].to_i + store_stock.stock.to_i) if (item[1].to_i + store_stock.stock.to_i) > 0
-      if current_user.store.store_type == "retail"
+      if !this_item.local_item
         store_stock.buy = new_buy
         store_stock.save!
       else
@@ -212,13 +251,14 @@ class OrdersController < ApplicationController
       return redirect_success urls, "Order " + order.invoice + " Telah Diterima"
     end
 
-    Debt.create user: current_user, store: current_user.store, nominal: new_total, 
+    if !order_from_retur
+      Debt.create user: current_user, store: current_user.store, nominal: new_total, 
                 deficiency: new_total, date_created: DateTime.now, ref_id: order.id,
                 description: order.invoice, finance_type: Debt::ORDER, due_date: due_date
 
-    set_notification(current_user, User.find_by(store: current_user.store, level: User::FINANCE), 
-      Notification::INFO, "Pembayaran "+order.invoice+" sebesar "+number_to_currency(new_total, unit: "Rp. "), urls)
-    
+      set_notification(current_user, User.find_by(store: current_user.store, level: User::FINANCE), 
+        Notification::INFO, "Pembayaran "+order.invoice+" sebesar "+number_to_currency(new_total, unit: "Rp. "), urls)
+    end
     description = order.invoice + " (" + new_total.to_s + ")"
     urls = order_path(id: params[:id])
     return redirect_success urls, "Order " + order.invoice + " Telah Diterima"
@@ -259,8 +299,11 @@ class OrdersController < ApplicationController
       dec_receivable = decrease_receivable order.supplier_id, nominal, order
       return redirect_back_data_error orders_path, "Data Order Tidak Valid" unless dec_receivable
     else
-      CashFlow.create user: current_user, store: current_user.store, description: order.invoice, nominal: order_inv.nominal*-1, 
-                    date_created: params[:order_pay][:date_paid], finance_type: CashFlow::OUTCOME, ref_id: order.id
+      CashFlow.create user: current_user, store: current_user.store, description: order.invoice, nominal: order_inv.nominal, 
+                    date_created: params[:order_pay][:date_paid], finance_type: CashFlow::OUTCOME, ref_id: order.id, payment: "order"
+      store = current_user.store
+      store.cash = store.cash - nominal
+      store.save!
     end
     debt.deficiency = deficiency
     if deficiency <= 0
@@ -326,6 +369,11 @@ class OrdersController < ApplicationController
                         description: "OVER PAYMENT #"+order.invoice, finance_type: Receivable::OVER, deficiency:over, to_user: order.supplier_id,
                         ref_id: order_path(id: order.id)
         return true
+      else
+        debt = Debt.find_by(finance_type: 'ORDER', ref_id: 14)
+        debt.deficiency = paid
+        debt.nominal = nominal
+        debt.save!
       end
       return false
     end

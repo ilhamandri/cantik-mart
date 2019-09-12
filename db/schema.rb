@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_10_060106) do
+ActiveRecord::Schema.define(version: 2019_09_12_062855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -233,6 +233,7 @@ ActiveRecord::Schema.define(version: 2019_09_10_060106) do
     t.float "discount", default: 0.0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "local_item", default: false
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 
@@ -426,6 +427,7 @@ ActiveRecord::Schema.define(version: 2019_09_10_060106) do
     t.bigint "store_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "filename"
     t.index ["store_id"], name: "index_store_balances_on_store_id"
   end
 
@@ -454,6 +456,7 @@ ActiveRecord::Schema.define(version: 2019_09_10_060106) do
     t.float "receivable", default: 0.0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "grand_total_before", default: 0.0
   end
 
   create_table "supplier_items", force: :cascade do |t|

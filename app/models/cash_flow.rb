@@ -15,7 +15,8 @@ class CashFlow < ApplicationRecord
     Income: 11,
     Employee_Loan: 12,
     Bank_Loan: 13,
-
+    Supplier_Loan: 14,
+    Modal: 15
   }
 
   belongs_to :store
@@ -35,7 +36,6 @@ class CashFlow < ApplicationRecord
   EMPLOYEE_LOAN = 12
   BANK_LOAN = 13
   SUPPLIER_LOAN = 14
-
-  outcome = ["Tax", "Fix_Cost", "Operational"]
+  MODAL = 15
 
 end

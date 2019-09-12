@@ -53,17 +53,33 @@ class TransfersController < ApplicationController
       to_store_id: to_store,
       user: current_user
 
+    trf_status = false
     items.each do |item|
       check_item = Item.find item[0]
       next if check_item.nil?
       qty = item[1].to_i
       next if qty < 1
       TransferItem.create item_id: item[0], transfer_id: transfer.id, request_quantity: qty, description: item[2]
+      if !check_item.local_item
+        trf_status = true
+      end
     end
-    
+
+
     transfer.create_activity :create, owner: current_user
     urls = transfer_items_path id: transfer.id
-    return redirect_success urls, "Data Transfer - " + transfer.invoice + " - Berhasil Disimpan"
+
+    if !trf_status
+      transfer.date_approve = "01-01-1999".to_date
+      transfer.date_picked = "01-01-1999".to_date
+      transfer.status = "01-01-1999".to_date
+      transfer.description = "Dibatalkan otomatis oleh sistem (terdapat local item)" 
+      transfer.save!
+      return redirect_back_data_error urls, "Dibatalkan otomatis oleh sistem (tidak ada barang yang dikirim / terdapat item dengan local item)"
+    else
+      return redirect_success urls, "Data Transfer - " + transfer.invoice + " - Berhasil Disimpan"
+    end
+    
   end
 
   def confirmation
@@ -80,13 +96,13 @@ class TransfersController < ApplicationController
     return redirect redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless transfer.present?
     return redirect_back_data_error transfers_path "Data Transfer Tidak Valid" if transfer.date_confirm.present? || transfer.date_picked.present?
     if params[:transfer][:status]=="0"
-      transfer.description = "Dibatalkan oleh " + current_user.name + "("+current_user.store.name+")"
-      transfer.date_approve = DateTime.now
+      transfer.description = "Dibatalkan oleh " + current_user.name + "("+current_user.store.name+") pada "+DateTime.now.to_data.to_s
+      transfer.date_approve = "01-01-1999".to_date
       transfer.date_picked = "01-01-1999".to_date
       transfer.status = "01-01-1999".to_date
     else
       transfer.date_approve = DateTime.now
-      transfer.approved_by = current_user.id
+      transfer.approved_by = current_user
     end
     
     transfer.save!
@@ -95,70 +111,70 @@ class TransfersController < ApplicationController
   end
 
   def picked
-    return redirect_back_data_error, "Data Transfer Tidak Ditemukan" unless params[:id].present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     @transfer = Transfer.find params[:id]
-    return redirect_back_data_error, "Data Transfer Tidak Ditemukan" unless @transfer.present?
-    return redirect_back_data_error, "Data Transfer Tidak Valid" if @transfer.date_approve.nil? || @transfer.date_picked.present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless @transfer.present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" if @transfer.date_approve.nil? || @transfer.date_picked.present?
     @transfer_items = TransferItem.where(transfer_id: @transfer.id)
   end
 
   def sent
-    return redirect_back_data_error, "Data Transfer Tidak Ditemukan" unless params[:id].present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     transfer = Transfer.find params[:id]
-    return redirect_back_data_error, "Data Transfer Tidak Ditemukan" if transfer.nil?
-    return redirect_back_data_error, "Data Transfer Tidak Valid" unless transfer.to_store_id == current_user.store.id
-    return redirect_back_data_error, "Data Transfer Tidak Valid" if transfer.date_picked.present? || transfer.status.present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" if transfer.nil?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" unless transfer.to_store_id == current_user.store.id
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" if transfer.date_picked.present? || transfer.status.present?
     status = sent_items params[:id] 
     transfer.date_picked = DateTime.now
-    transfer.picked_by = current_user.id
+    transfer.picked_by = current_user
     if status==false
       transfer.status = "01-01-1999".to_date
       transfer.description = "Dibatalkan otomatis oleh sistem (tidak ada barang yang dikirim)" 
       transfer.save!
-      return redirect_success transfers_path
+      return redirect_back_data_error transfers_path, "Dibatalkan otomatis oleh sistem (tidak ada barang yang dikirim)"
     else
       transfer.save!
-      return redirect_success transfers_path
+      return redirect_success transfers_path, "Item Transfer Telah Disimpan"
     end
     
-    
+    return redirect_success transfers_path, "Item Transfer Telah Disimpan"
   end
 
   def receive
-    return redirect_back_data_error, "Data Transfer Tidak Ditemukan" unless params[:id].present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     @transfer = Transfer.find params[:id]
-    return redirect_back_data_error, "Data Transfer Tidak Ditemukan" unless @transfer.present?
-    return redirect_back_data_error, "Data Transfer Tidak Valid" if @transfer.date_approve.nil? || @transfer.date_picked.nil?|| @transfer.status.present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless @transfer.present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" if @transfer.date_approve.nil? || @transfer.date_picked.nil?|| @transfer.status.present?
     @transfer_items = TransferItem.where(transfer_id: @transfer.id)
   end
 
   def received
-    return redirect_back_data_error unless params[:id].present?
+    return redirect_back_data_error, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     transfer = Transfer.find params[:id]
-    return redirect_back_data_error, "Data Transfer Tidak Ditemukan" if transfer.nil?
-    return redirect_back_data_error, "Data Transfer Tidak Valid" unless transfer.from_store_id == current_user.store.id
-    return redirect_back_data_error, "Data Transfer Tidak Valid" if transfer.date_picked.nil? || transfer.date_approve.nil? || transfer.status.present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" if transfer.nil?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" unless transfer.from_store_id == current_user.store.id
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" if transfer.date_picked.nil? || transfer.date_approve.nil? || transfer.status.present?
     receive_items params[:id]
     transfer.status = DateTime.now
-    transfer_item.confirmed_by = current_user.id
+    transfer.confirmed_by = current_user
     transfer.save!
-    return redirect_success transfers_path
+    return redirect_success transfers_path, "Transfer Telah Diterima"
   end
 
   def destroy
-    return redirect_back_data_error unless params[:id].present?
+    return redirect_back_data_error transfers_path, "Transfer Telah Diterima" unless params[:id].present?
     transfer = Transfer.find params[:id]
-    return redirect_back_data_error unless transfer.present?
-    return redirect_back_data_error if transfer.date_approve.present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless transfer.present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" if transfer.date_approve.present?
     TransferItem.where(transfer_id: params[:id]).destroy_all
     transfer.destroy
-    return redirect_success transfers_path
+    return redirect_success transfers_path, "Transfer Telah Dihapus"
   end
 
   def show
-    return redirect_back_data_error transfers_path unless params[:id].present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     @transfer = Transfer.find_by_id params[:id]
-    return redirect_back_data_error transfers_path unless @transfer.present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless @transfer.present?
   end
 
   private
@@ -178,6 +194,10 @@ class TransfersController < ApplicationController
         store_item = StoreItem.find_by(item_id: item[0], store_id: current_user.store.id)
         qty = item[1].to_i
         
+        next if store_item.nil?
+
+        next if store_item.stock <= 0
+
         if store_item.present?
           if transfer_item.request_quantity < qty
             qty = transfer_item.request_quantity
@@ -186,10 +206,9 @@ class TransfersController < ApplicationController
         else
           qty = 0
         end
-        
+            
         transfer_item.sent_quantity = qty
         transfer_item.save!
-        next if store_item.nil?
         new_stock = store_item.stock.to_i - qty
         store_item.stock = new_stock
         store_item.save!
@@ -198,6 +217,9 @@ class TransfersController < ApplicationController
     end
 
     def receive_items transfer_id
+      transfer = Transfer.find transfer_id
+      from_store = transfer.from_store
+      to_store = transfer.to_store
       status = true
       transfer_items.each do |item|
         transfer_item = TransferItem.find item[2]
@@ -205,6 +227,9 @@ class TransfersController < ApplicationController
         transfer_item.receive_quantity = qty
         transfer_item.save!
         store_item = StoreItem.find_by(item_id: item[0], store_id: current_user.store.id)
+        
+        buy = store_item.item.buy
+
         if store_item.nil?
           StoreItem.create store: current_user.store, item_id: item[0], stock: qty
         else
@@ -213,6 +238,10 @@ class TransfersController < ApplicationController
             status = false
           end 
           store_item.stock =  store_item.stock.to_i + qty
+          from_store.equity = from_store.equity + (buy * qty)
+          to_store.equity = to_store.equity - (buy * qty)
+          from_store.save!
+          to_store.save!
           store_item.save!
         end
       end

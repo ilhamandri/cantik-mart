@@ -24,6 +24,7 @@ class ReceivablesController < ApplicationController
       results = []
       search_text = "Pencarian "
       filters = Receivable.page param_page
+      filters = filters.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
 
       switch_data_month_param = params[:switch_date_month]
       if switch_data_month_param == "month" 

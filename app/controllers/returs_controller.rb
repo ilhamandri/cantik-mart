@@ -12,6 +12,12 @@ class RetursController < ApplicationController
     @returs_waiting = Retur.where('date_approve is not null AND date_picked is null')
       .order("date_created DESC").page(param_page).per(5)
 
+
+    @returs = @returs.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+    @returs_new = @returs_new.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+    @returs_complete = @returs_complete.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+    @returs_picked = @returs_picked.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+    @returs_waiting = @returs_waiting.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
     if (current_user.level != User::OWNER) || (current_user.level != User::SUPER_ADMIN)
       @returs = @returs.where(store: current_user.store)
       @returs_new = @returs_new.where(store: current_user.store)

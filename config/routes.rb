@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   get '/refresh/balance', to: 'balances#refresh'
 
   get '/download/:type', to: 'downloads#serve_file', as: "download"
+  get '/file/download', to: 'downloads#get_file', as: "download_file"
 
   resources :pays, only: %i[new create]
 

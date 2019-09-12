@@ -25,7 +25,7 @@ class DebtsController < ApplicationController
       results = []
       search_text = "Pencarian "
       filters = Debt.page param_page
-
+      filter = filters.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
       due_date = params[:due_date]
       if due_date == 1
         filters = filters.where("due_date <= ?", Date.today.end_of_week)

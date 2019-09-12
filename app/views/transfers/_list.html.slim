@@ -9,10 +9,13 @@ tr
       | - 
     - elsif transfer.date_approve.to_date == "01-01-1999".to_date
       .text-danger
-        | #{transfer.approved_by.name} (#{transfer.date_approve.to_date})
+        - if transfer.approved_by.present?
+          | DIBATALKAN #{transfer.approved_by.name}
+        - else
+          | DIBATALKAN SISTEM
     - else
       .text-success
-        | #{transfer.approved_by.name} (#{transfer.date_approve.to_date})
+        | DISETUJUI #{transfer.approved_by.name} (#{transfer.date_approve.to_date})
   td
     - if transfer.date_picked.nil?
       | - 

@@ -4,6 +4,7 @@ class OperationalsController < ApplicationController
 
   def index
   	filter = filter_search
+    filter = filter.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
     @search = filter[0]
     @finances = filter[1]
   end

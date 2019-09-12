@@ -17,7 +17,7 @@ class TaxsController < ApplicationController
       results = []
       search_text = "Pencarian "
       filters = CashFlow.where(finance_type: CashFlow::TAX).page param_page
-
+      filters = filters.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
       switch_data_month_param = params[:switch_date_month]
       before_months = 5
       if params[:months].present?

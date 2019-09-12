@@ -15,5 +15,10 @@ tr
 	td 
 		a href="#{balance_path(id: balance.id)}"
 	      button.btn.btn-rounded.btn-primary type="button" 
-	        i.fas.fa-refresh 
 	        | Detil Laporan 
+	    - file = balance.filename.split("/").last
+	    - file_exist = File.exist?("./report/"+file)
+	    - if file_exist
+		    a href="#{download_file_path(name: file)}"
+		      button.btn.btn-rounded.btn-success type="button" 
+		        | Unduh

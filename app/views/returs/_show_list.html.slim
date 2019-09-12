@@ -14,7 +14,13 @@ tr
       i.fas.fa-times
   td #{ret_item.description}
   - if ret_item.feedback.present?
-    td #{ret_item.feedback}
+    td 
+      - if ret_item.feedback == "retur_item"
+        | TUKAR BARANG
+      - elsif ret_item.feedback == "cash"
+        | PIUTANG
+      - elsif ret_item.feedback == "loss"
+        | LOSS
     td.text-right #{ret_item.nominal}
   - else
     td.text-right

@@ -24,8 +24,10 @@ class ReturItemsController < ApplicationController
     urls = retur_path(id: retur.id)
     order = nil
     receivable = nil
-    cash_flow = nil
     total_items = 0
+
+    return redirect_back_data_error returs_path, "Data Retur Tidak Valid" if feed_value.empty?
+    
     feed_value.each do |value|
       retur_item = ReturItem.find_by(id: value[1])
       if retur_item.nil?
@@ -46,14 +48,33 @@ class ReturItemsController < ApplicationController
             editable: true,
             user: current_user
         end
+       
         order_qty = value[2].to_i
+        if order_qty == 0
+          value[0] = "loss"
+          next
+        end
         order_qty = retur_item.accept_item if order_qty > retur_item.accept_item 
+        if order_qty < retur_item.accept_item 
+          buy = retur_item.item.buy if !retur_item.item.local_item
+          buy = StoreItem.find_by(store: retur.store, item: retur_item.item).buy.to_f if retur_item.item.local_item
+          nominal_value =  (retur_item.accept_item - order_qty) * buy
+          if receivable.nil?
+            receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
+                        description: "RECEIVABLE FROM RETUR #"+retur.invoice, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: retur.supplier_id,
+                        ref_id: urls, due_date: DateTime.now + 2.months
+          else
+            receivable.nominal += receivable.nominal+nominal_value
+            receivable.deficiency += receivable.deficiency+nominal_value
+            receivable.save!
+          end
+        end
         ord_item = Item.find_by(id: retur_item.item.id)
-        a = OrderItem.create quantity: order_qty, 
-        price: 0,
-        item: ord_item,
-        order: order,
-        description: "RETUR #"+retur.invoice
+        OrderItem.create  quantity: order_qty, 
+                          price: 0,
+                          item: ord_item,
+                          order: order,
+                          description: "RETUR #"+retur.invoice
 
         retur_item.ref_id = order.id
         retur_item.nominal = order_qty
@@ -62,11 +83,12 @@ class ReturItemsController < ApplicationController
 
       elsif value[0] == "cash"
         nominal_value = value[2].to_i
+
         return redirect_back_data_error urls, "Nominal Potong Nota > 100" if nominal_value < 100
         if receivable.nil?
           receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
-                        description: "RECEIVABLE FROM RETUR #"+retur.invoice, finance_type: Receivable::RETUR, deficiency:value[2], to_user: retur.supplier_id,
-                        ref_id: urls
+                        description: "RECEIVABLE FROM RETUR #"+retur.invoice, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: retur.supplier_id,
+                        ref_id: urls, due_date: DateTime.now + 2.months
         else
           receivable.nominal += receivable.nominal+nominal_value
           receivable.deficiency += receivable.deficiency+nominal_value
@@ -96,8 +118,25 @@ class ReturItemsController < ApplicationController
 
     def feedback_value
       array = []
-      params[:retur][:retur_items].each do |item|
-        array << item[1].values
+      params[:retur][:retur_items].each do |item_r|
+        item_d = item_r[1]
+        ret_item = ReturItem.find_by(id: item_d["item_id"])
+        item = ret_item.item
+        nominal = item_d["nominal"].to_i
+
+        if item_d["feedback"] == "cash"
+          buy = item.buy if !item.local_item
+          buy = StoreItem.find_by(item: item, store: ret_item.retur.store).buy if item.local_item
+
+          qty = ret_item.accept_item.to_i
+
+          totals = qty * buy
+
+          if totals != nominal
+            return []
+          end
+        end
+        array << item_r[1].values
       end
       array
     end

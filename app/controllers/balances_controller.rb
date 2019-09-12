@@ -1,5 +1,6 @@
 class BalancesController < ApplicationController
   before_action :require_login
+  before_action :require_fingerprint
 
   def index
   	@balances = StoreBalance.page param_page
@@ -28,6 +29,8 @@ class BalancesController < ApplicationController
   	def search balances
   		search_text = ""
   		return [balances, search_text] if params[:balance].nil?
+
+      balances = balances.where(store: current_user.store) if !["owner", "super_admin"].include? current_user.level 
 
   		switch_date_month = params[:balance][:switch_date_month]
   		date_from = params[:balance][:date_from]
