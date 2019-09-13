@@ -17,11 +17,11 @@
           .col-4
             .form-group
               label for="name" Nominal
-              input type="text" class="form-control md-form" value="#{@debt.nominal}"
+              input type="text" class="form-control md-form" value="#{number_with_delimiter(@debt.nominal, delimiter: ".", separator: ",")}"
           .col-4
             .form-group
               label for="name" Kekurangan
-              input type="text" class="form-control md-form" value="#{@debt.deficiency}"
+              input type="text" class="form-control md-form" value="#{number_with_delimiter(@debt.deficiency, delimiter: ".", separator: ",")}"
           .col-12.text-center
             a href='#{new_pay_path(id: @debt.id, type: "debt")}' class="btn btn-warning btn-rounded"
               | Bayar
@@ -45,6 +45,6 @@
               td #{pay.invoice}
               td #{pay.user.name} - #{pay.store.name}
               td #{pay.created_at}
-              td #{pay.nominal}
+              td #{number_with_delimiter(pay.nominal, delimiter: ".", separator: ",")}
         
         

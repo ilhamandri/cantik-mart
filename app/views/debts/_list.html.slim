@@ -4,8 +4,8 @@ tr
   	br 
   	| #{finance.date_created}
   td #{finance.finance_type}
-  td #{finance.nominal.abs}
-  td #{finance.deficiency.abs}
+  td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
+  td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}
   td #{finance.due_date}
   td
     - if finance.finance_type == "BANK"

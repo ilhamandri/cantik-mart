@@ -21,7 +21,7 @@ tr
         | PIUTANG
       - elsif ret_item.feedback == "loss"
         | LOSS
-    td.text-right #{ret_item.nominal}
+    td.text-right #{number_with_delimiter(ret_item.nominal, delimiter: ".")}
   - else
     td.text-right
       i.fas.fa-times

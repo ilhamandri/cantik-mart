@@ -6,7 +6,7 @@ tr
     - else
       =image_tag("/images/default_item.jpg", height: '70', width: '70')
   td #{item.name}
-  td #{item.brand}
+  / td #{item.brand}
   td 
     - department = item.item_cat.department.name
     - item_cat = item.item_cat.name
@@ -14,8 +14,10 @@ tr
       | #{item_cat}
     - else
       | #{department} - #{item_cat}
-  td #{item.buy}
-  td #{item.sell}
+  - buy = item.buy
+  - buy = StoreItem.find_by(store: current_user.store, item: item).buy if item.local_item && StoreItem.find_by(store: current_user.store, item: item).preset?
+  td #{number_with_delimiter(item.buy, delimiter: ".")}
+  td #{number_with_delimiter(item.sell, delimiter: ".")}
   td
     a href='#{item_path(id: item.id)}'
       button.btn.btn-rounded.btn-info type="button" 

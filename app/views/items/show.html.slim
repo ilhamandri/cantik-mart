@@ -8,22 +8,16 @@
         = form_for :item, url: '' do |form|
           .form-group
             label for="code" Kode
-            = form.text_field :code, required: true, class: "form-control md-form", id: "code"
+            = form.text_field :code, required: true, class: "form-control md-form", id: "code", disabled:"disabled"
           .form-group
             label for="name" Nama
-            = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name",  disabled:"disabled"
           form-group
             label for="brand" Merek
-            = form.text_field :brand, required: true, class: "form-control md-form", id: "brand"
+            = form.text_field :brand, required: true, class: "form-control md-form", id: "brand", disabled:"disabled"
           .form-group
               label for="item" Kategori
-              input class="md-form form-control" value="#{@item.item_cat.name}"
-          .form-group
-            label for="buy" Harga Beli Satuan
-            = form.number_field :buy, required: true, class: "form-control md-form", id: "buy"
-          .form-group
-            label for="buy" Harga Beli Grosir
-            = form.number_field :buy_grocer, required: true, class: "form-control md-form", id: "buy"
+              input class="md-form form-control" value="#{@item.item_cat.name}" disabled="disabled"
           .form-group.table-responsive.text-nowrap
             label for="sell" Harga Jual
             table class="table table-hover"
@@ -37,7 +31,7 @@
                 tr
                   td 0
                   td 1
-                  td #{@item.sell}
+                  td #{number_to_currency(@item.sell, delimiter: ".", separator: ",", unit: "Rp. ")}
                   td #{@item.discount}
                   td
                 - item_grocers = @item.grocer_items
@@ -46,8 +40,8 @@
                     tr 
                       td #{item.min}
                       td #{item.max}
-                      td #{item.price}
-                      td #{item.discount}
+                      td #{number_to_currency(item.price, delimiter: ".", separator: ",", unit: "Rp. ")}
+                      td #{number_to_currency(item.discount, delimiter: ".", separator: ",", unit: "Rp. ")}
                       td.text-right
                         a class="btn btn-rounded btn-warning" href="#{edit_grocer_item_path(id: item.id)}"
                           |   Ubah

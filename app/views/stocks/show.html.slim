@@ -20,7 +20,7 @@
             input type='number' value="#{@stock.stock}" disabled= true class="form-control md-form"
           .form-group
             label for="stock" Limit
-            = form.number_field :min_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.min_stock}"
+            = form.number_field :min_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.min_stock}", disabled: "disabled"
           .form-group
             label for="sell" Harga Jual
             table class="table"
@@ -32,14 +32,14 @@
                 tr
                   td 0
                   td 1
-                  td #{@item.sell}
+                  td #{number_to_currency(@item.sell, unit: "Rp. ", separator: ",", delimiter: ".")}
                 - item_grocers = @item.grocer_items
                 - if item_grocers.present?
                   -item_grocers.each do |item|
                     tr 
                       td #{item.min}
                       td #{item.max}
-                      td #{item.price}
+                      td #{number_to_currency(item.price, unit: "Rp. ", separator: ",", delimiter: ".")}
         .col-12.text-center
           a href='#{edit_stock_path(id: @stock.id)}' class="btn btn-rounded btn-warning" type="button" 
                 | Edit

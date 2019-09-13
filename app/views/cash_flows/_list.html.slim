@@ -3,11 +3,11 @@ tr
   td #{finance.user.name} (#{finance.store.name})
   td #{finance.finance_type}
   - if finance.nominal > 0
-    td #{nominal}
+    td #{number_with_delimiter(nominal.to_i, delimiter: ".", separator: ",")}
     td 0
   - else
     td 0
-    td #{nominal}
+    td #{number_with_delimiter(nominal.to_i, delimiter: ".", separator: ",")}
   td #{finance.date_created}
   td
     - if finance.ref_id.present?

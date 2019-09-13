@@ -24,7 +24,7 @@
                 = form.text_field :address, required: true, class: "form-control md-form", id: "address", readonly: "disabled"
               .form-group
                 label for="phone" No. Telepon
-                = form.number_field :phone, required: true, class: "form-control md-form", id: "phone", disabled: "disabled"
+                input class="form-control md-form" value="#{number_with_delimiter(@user.phone, delimiter: " ")}" disabled="disabled"
               .form-group
                 label for="sex" Jenis Kelamin
                 input class="form-control md-form" value="#{@user.sex}" disabled="disabled"
@@ -33,7 +33,7 @@
                 input class="form-control md-form" value="#{@user.level}" disabled="disabled"
               .form-group
                 label for="id-card" KTP
-                = form.text_field :id_card, required: true, class: "form-control md-form", id: "id-card", disabled: "disabled"
+                input class="form-control md-form" value="#{number_with_delimiter(@user.id_card, delimiter: " ")}" disabled="disabled"
               .form-group
                 label for="id-card" ID Fingerprint
                 = form.text_field :fingerprint, required: true, class: "form-control md-form", id: "id-card", disabled: "disabled"

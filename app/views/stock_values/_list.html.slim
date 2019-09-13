@@ -1,5 +1,5 @@
 tr
   td #{finance.store.name}
   td #{Date::MONTHNAMES[finance.date_created.month]} #{finance.date_created.year}
-  td #{finance.nominal.abs}
+  td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
   / td #{finance.description}

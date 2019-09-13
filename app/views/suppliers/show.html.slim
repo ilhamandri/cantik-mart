@@ -8,13 +8,13 @@
         = form_for :supplier, url: "" do |form|
           .form-group
             label for="name" Nama
-            = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
           .form_group
             label for="address" Alamat
-            = form.text_field :address, required: true, class: "form-control md-form", id: "address"
+            = form.text_field :address, required: true, class: "form-control md-form", id: "address", disabled: "disabled"
           .form-group
             label for="phone" Nomor Telepon
-            = form.number_field :phone, required: true, class: "form-control md-form", id: "phone"
+            input class="form-control md-form" value="#{number_to_phone(@supplier.phone, country_code: 62)}" disabled="disabled"
           
       .col-12.text-center
         a href='#{edit_supplier_path(id: @supplier.id)}'

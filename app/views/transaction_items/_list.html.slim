@@ -2,6 +2,6 @@ tr
   td #{transaction_item.item.code}
   td #{transaction_item.item.name}
   td #{transaction_item.quantity}
-  td #{transaction_item.price}
-  td #{transaction_item.discount}
-  td #{(transaction_item.price - transaction_item.discount) * transaction_item.quantity}
+  td #{number_with_delimiter(transaction_item.price, delimiter: ".", separator: ",")}
+  td #{number_with_delimiter(transaction_item.discount, delimiter: ".", separator: ",")}
+  td #{number_with_delimiter((transaction_item.price - transaction_item.discount) * transaction_item.quantity, delimiter: ".", separator: ",")}

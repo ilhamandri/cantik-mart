@@ -8,8 +8,8 @@ tr
       td #{user.name} (#{user.store.name}) 
     td #{finance.user.name} (#{finance.store.name})
     td #{finance.date_created}
-  	td #{finance.nominal.abs}
-  	td #{finance.deficiency.abs}
+  	td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
+    td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}
     td
       - if finance.finance_type == "EMPLOYEE"
         - if finance.deficiency.abs > 0 

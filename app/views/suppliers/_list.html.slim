@@ -1,7 +1,7 @@
 tr
   	td #{supplier.name}
   	td #{supplier.address}
-  	td #{supplier.phone}
+  	td #{number_to_phone(supplier.phone, country_code: 62)}
   	td 
   		a href='#{supplier_path(id: supplier.id)}'
     		button.btn.btn-rounded.btn-info type="button" 

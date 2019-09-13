@@ -9,7 +9,7 @@ tr
     - else 
       | #{member.name}
   td #{transaction.items}
-  td #{transaction.grand_total}
+  td #{number_with_delimiter(transaction.grand_total, delimiter: ".", separator:",", precision: 2)}
   td
     a href='#{transaction_items_path(id: transaction.id)}'
       button class="btn btn-rounded btn-primary"

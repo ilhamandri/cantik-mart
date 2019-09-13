@@ -8,7 +8,7 @@ tr
 	td #{inventory.item.item_cat.name}
 	td #{inventory.stock}
 	td #{inventory.min_stock}
-	td #{inventory.item.sell}
+	td #{number_with_delimiter(inventory.item.sell, delimiter: ".")}
 	td
 	  	a href='#{stock_path(id: inventory.id)}'
 	  		button.btn.btn-rounded.btn-primary type="button" 

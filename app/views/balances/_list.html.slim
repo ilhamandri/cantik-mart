@@ -3,8 +3,8 @@
 tr
 	td #{balance.store.name}
 	td #{balance.created_at.to_date}
-	td #{aktiva}
-	td #{passiva}
+	td #{number_with_delimiter(aktiva.to_i, delimiter: ".", separator: ",")}
+	td #{number_with_delimiter(passiva.to_i, delimiter: ".", separator: ",")}
 	td 
 		- if aktiva == passiva
 			.text-success

@@ -12,17 +12,17 @@
         = form_for :store, url: "" do |form|
           .form-group
             label for="name" Nama
-            = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
           .form_group
             label for="address" Alamat
             = form.text_field :address, required: true, class: "form-control md-form", id: "address"
           .form-group
             label for="phone" Nomor Telepon
-            = form.number_field :phone, required: true, class: "form-control md-form", id: "phone"
+            input class="form-control md-form" value="#{number_to_phone(@store.phone, country_code: 62)}"
           .form-group
             label for="phone" Jumlah Member
             - members_count = Member.where(store: @store).count
-            input type="number" class="form-control md-form" value='#{members_count}'
+            input type="number" class="form-control md-form" value='#{number_with_delimiter(members_count, delimiter: ".")}'
           .form-group
             label for="user" Karyawan
             textarea class="form-control md-form"
@@ -52,32 +52,32 @@
             | AKTIVA
           .card-body
             label for="phone" Kas
-            input type="number" class="form-control md-form" value='#{balance.cash}' 
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.cash, delimiter: ".")}' 
 
             label for="phone" Piutang
-            input type="number" class="form-control md-form" value='#{balance.receivable}'
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.receivable, delimiter: ".")}'
 
             label for="phone" Nilai Stok
-            input type="number" class="form-control md-form" value='#{balance.stock_value}'
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.stock_value, delimiter: ".")}'
 
             label for="phone" Nilai Aset
-            input type="number" class="form-control md-form" value='#{balance.asset_value}'
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.asset_value, delimiter: ".")}'
 
-        .card-body.col-6.text-right
+        .card-body.col-6.text-left
           .card-header.white-text.primary-color
             | PASSIVA
           .card-body
             label for="phone" Modal
-            input type="number" class="form-control md-form" value='#{balance.equity}'
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.equity, delimiter: ".")}'
 
             label for="phone" Hutang
-            input type="number" class="form-control md-form" value='#{balance.debt}'
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.debt, delimiter: ".")}'
 
             label for="phone" Transaksi
-            input type="number" class="form-control md-form" value='#{balance.transaction_value}'
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.transaction_value, delimiter: ".")}'
 
             label for="phone" Pemasukkan & Pengeluaran
-            input type="number" class="form-control md-form" value='#{balance.outcome}'
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.outcome, delimiter: ".")}'
 
         .col-12
           hr.primary-color-dark

@@ -5,4 +5,4 @@ tr
   td #{item.name}
   td #{item.brand}
   td #{item.item_cat.name}
-  td.text-center #{order_qty}
+  td.text-center #{number_with_delimiter(order_qty, delimiter: ".")}

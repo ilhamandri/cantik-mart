@@ -7,7 +7,7 @@ tr
   	td #{user.name}
     td #{user.level}
   	td #{user.address}
-  	td #{user.phone}
+  	td #{number_to_phone(user.phone)}
   	td #{user.sex}
   	td
     	a href='#{user_path(id: user.id)}'
