@@ -4,6 +4,10 @@
   .col
     h5
       | Data #{@order_items.first.order.invoice}
+  .col.text-right
+    a href="#{order_path(id: order_id, format: :pdf)}"
+      button.btn.btn-rounded.btn-success type="button" 
+        | CETAK
   - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
     .col.text-right
       a href="#{order_confirmation_path(id: order_id)}"
@@ -48,23 +52,36 @@ br
         table class="table"
           thead
             th Kode
-            th Foto
+            / th Foto
             th Nama
             th Jumlah
-            th Harga / Item
             th Terima
-            th.text-right Total
+            th Harga / Item
+            th Diskon
+            th PPn
+            th.text-right Grand Total
           tbody
             = render partial: 'list_show', collection: @order_items, as: :order_item
-          tfoot.text-xl-right
-            td
-            td
-            td
-            td
-            td
-            td
-            td.font-weight-bold.text-danger
-              | #{number_to_currency(order.total, unit: "Rp. ")}
+          tfoot.text-right.text-danger
+            tr
+              td
+              td
+              td
+              td
+              td
+              td.font-weight-bold DISKON (#{order.discount_percentage}% )
+              td
+              td.font-weight-bold #{number_with_delimiter(order.discount, separator: ",", delimiter: ".")}
+            tr
+              td
+              td
+              td
+              td
+              td
+              td.font-weight-bold TOTAL
+              td
+              td.font-weight-bold #{number_with_delimiter(order.grand_total, separator: ",", delimiter: ".")}
+            
 
 - if order.date_receive.present?
   br

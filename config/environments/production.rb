@@ -35,7 +35,7 @@ Rails.application.configure do
   
 
   # config.assets.compile = false
-  config.assets.compile = ['*.js', '*.css']
+  config.assets.precompile = ['*.js', '*.css']
 
   config.active_support.deprecation = :silence
   # config.active_support.deprecation = :notify

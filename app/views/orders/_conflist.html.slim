@@ -1,9 +1,20 @@
 tr
   td #{r_item.item.name}
-  td #{r_item.item.item_cat.name}
+  - desc = "-"
+  - desc = r_item.description if r_item.description.present?
+  td #{desc}
   td #{r_item.quantity}
-  td #{r_item.description}
   td 
     input type="number" class="form-control" name="order[order_items][#{r_item_counter}][item_id]" value="#{r_item.id}" style="display: none;"
-    input type="number" class="form-control" name="order[order_items][#{r_item_counter}][total]"
+    input type="number" class="form-control" name="order[order_items][#{r_item_counter}][total]" value="0" required="required" min="0"  step="0.1"
+  td 
+    input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[price]]" value="0" required="required" min="0"  step="0.1"
+  td 
+    input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[discount1]]" value="0" required="required" min="0"  step="0.1"
+  td 
+    input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[ppn]]" value="0" required="required" min="0"  step="0.1"
+  td 
+    input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[discount2]]" required="required" min="0" value="0"  step="0.1"
+  td
+  	| 0
     

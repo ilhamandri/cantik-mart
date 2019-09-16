@@ -3,11 +3,9 @@
 	* due date
 	* confirm order / transfer
 
---> print laporan ?
-	* order
+--> print laporan
 	* retur
 		# consument
-		# supplier
 		# warehouse
 	* transfer
 
@@ -41,8 +39,24 @@
 --> cek di complain number_format
 --> nilai stok belum ditambah ke table stock_value -- skalian cek semua udah masuk blm
 --> coba ubah ambil data keuangan slain income outcome dari per table masing2
+--> filter di download finance
 
 
+1. Desimal															c
+2. Format tanggal 													x
+3. Cetak Laporan 													
+4. Perbedaan Harga Lama dan Harga Baru (pake persen)				x
+	=> di po ubah harga beli kalo lebih mahal dari skrng			x
+	=> default jatuh tempo di order/:id/receive  					
+	=> edit receive 
+5. Harga PO order dulu baru di input								x
+6. input margin diround up 											x
+7. Semua transfer retur itu 										x
+8. Retur musnah bisa jadi peluang 									
+9. PO barang baru ketika datang faktur								x
+10. Diskon item dan diskon total faktur --> order 					x
+11. Daftar barang kode nama kategori								x
+12. Cetak semua dokumen
 
 
 8dda7b5b80d9eff0630be17308b14580

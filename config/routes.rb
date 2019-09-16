@@ -51,7 +51,7 @@ Rails.application.routes.draw do
 
   get '/download/:type', to: 'downloads#serve_file', as: "download"
   get '/file/download', to: 'downloads#get_file', as: "download_file"
-
+  get '/file/print/:type/:id', to: 'download#print', as: "print"
   resources :pays, only: %i[new create]
 
   resources :balances

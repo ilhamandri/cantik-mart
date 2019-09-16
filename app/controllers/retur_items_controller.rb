@@ -45,8 +45,9 @@ class ReturItemsController < ApplicationController
             total: 0,
             date_created: DateTime.now,
             invoice: "ORD-" + Time.now.to_i.to_s, 
-            editable: true,
-            user: current_user
+            editable: false,
+            user: current_user,
+            from_retur: true
         end
        
         order_qty = value[2].to_i

@@ -1,6 +1,10 @@
 - transfer = @transfer_items.first.transfer 
 - transfer_id = transfer.id
 .row
+  .col.text-right
+    a href="#{transfer_path(id: transfer_id, format: :pdf)}"
+      button.btn.btn-rounded.btn-success type="button" 
+        | CETAK
   - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && @transfer_items.first.transfer.from_store.id == current_user.store.id
     .col.text-right
     .col-md-6.text-right

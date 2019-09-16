@@ -3,7 +3,7 @@
     .col-lg-12.col-md-12
       .card-header.white-text.info-color
           h5.font-weight-500.my-1
-            | Data Buat Pesanan Baru
+            | Buat Pesanan Baru
       .card.mb-4
         .card-body
           .row
@@ -47,8 +47,6 @@
                   th
                     | Jumlah
                   th
-                    | Harga
-                  th
                     | Deskripsi
                   th
                 - if @add_item.present?
@@ -63,8 +61,6 @@
                       input type="text" required=true class="form-control md-form" id="quantity" name="order[order_items][1][item_cat]" value="#{@add_item.item_cat.name}" readonly="readonly"
                     td 
                       input type="number" required=true class="form-control md-form" id="quantity" name="order[order_items][1][quantity]" value=1 min=1
-                    td 
-                      input type="number" required=true class="form-control md-form" id="quantity" name="order[order_items][1][price]" value="#{@add_item.buy}" min=100 
                     td 
                       input type="textarea" class="form-control md-form" id="description" name="order[order_items][1][description]" value=""
                     td
@@ -89,8 +85,6 @@
                         input type="text" required=true class="form-control md-form" id="quantity" name="order[order_items][#{index+idx}][quantity]" value="#{stock.item_cat.name}"
                       td 
                         input type="number" required=true class="form-control md-form" id="quantity" name="order[order_items][#{index+idx}][quantity]" value="#{new_order}"
-                      td 
-                        input type="number" required=true class="form-control md-form" id="quantity" name="order[order_items][#{index+idx}][price]"
                       td 
                         input type="textarea" class="form-control md-form" id="description" name="order[order_items][#{index+idx}][description]" value="Barang yang terkena stok limit."
                       td

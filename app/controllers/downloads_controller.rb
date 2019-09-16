@@ -217,7 +217,20 @@ class DownloadsController < ApplicationController
 		end
 
 		p.serialize(filename)
+	end
 
+	def print
+		doc_type = params[:type]
+		id = params[:id]
+		return redirect_back_data_error homes_path, "Data Tidak Ditemukan" if doc_type.nil? || id.nil? 
+		
+		if doc_type == "order"
+		elsif doc_type == "transfer"
+		elsif doc_type == "retur"
+		elsif doc_type == "complain"
+				
+		end
+				
 	end
 
 	private 

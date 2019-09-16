@@ -12,7 +12,7 @@
           .form-group
             label for="name" Nama
             = form.text_field :name, required: true, class: "form-control md-form", id: "name"
-          form-group
+          .form-group style= "display: none"
             label for="brand" Merek
             = form.text_field :brand, required: true, class: "form-control md-form", id: "brand"
           .form-group
@@ -22,14 +22,10 @@
                   option value="#{item_cat.id}"
                     | #{item_cat.name}     
           .form-group
-            label for="buy" Harga Beli
-            = form.number_field :buy, required: true, class: "form-control md-form", id: "buy", min: "100"
+            label for="sell" Margin
+            = form.number_field :margin, required: true, class: "form-control md-form", id: "sell", min: "0"
           .form-group
-            label for="sell" Harga Jual
-            = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", min: "100"
-          .form-group
-            label for="sell" Diskon
-            = form.number_field :discount, required: true, class: "form-control md-form", id: "sell", min: "0"
-
+            label for="sell" Link Foto
+            = form.text_field :image, required: true, class: "form-control md-form", id: "sell"
           .form-group.text-center
             = form.submit "Ubah Barang", class: "btn btn-rounded btn-primary"

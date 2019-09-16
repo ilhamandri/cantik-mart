@@ -191,8 +191,17 @@ class RetursController < ApplicationController
 
   def show
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless params[:id].present?
+    @retur = Retur.find_by(id: params[:id])
     @retur_items = ReturItem.page param_page
-    @retur_items = @retur_items.where(retur_id: params[:id])
+    @retur_items = @retur_items.where(retur: @retur)
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: @retur.invoice,
+          layout: 'pdf_layout.html.erb',
+          template: "returs/print.html.slim"
+      end
+    end
   end
 
   private

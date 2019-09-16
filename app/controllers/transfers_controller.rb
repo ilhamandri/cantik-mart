@@ -96,7 +96,7 @@ class TransfersController < ApplicationController
     return redirect redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless transfer.present?
     return redirect_back_data_error transfers_path "Data Transfer Tidak Valid" if transfer.date_confirm.present? || transfer.date_picked.present?
     if params[:transfer][:status]=="0"
-      transfer.description = "Dibatalkan oleh " + current_user.name + "("+current_user.store.name+") pada "+DateTime.now.to_data.to_s
+      transfer.description = "Dibatalkan oleh " + current_user.name + "("+current_user.store.name+") pada "+DateTime.now.to_date.to_s
       transfer.date_approve = "01-01-1999".to_date
       transfer.date_picked = "01-01-1999".to_date
       transfer.status = "01-01-1999".to_date
@@ -175,6 +175,14 @@ class TransfersController < ApplicationController
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     @transfer = Transfer.find_by_id params[:id]
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless @transfer.present?
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: @transfer.invoice,
+          layout: 'pdf_layout.html.erb',
+          template: "transfers/print.html.slim"
+      end
+    end
   end
 
   private

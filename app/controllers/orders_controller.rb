@@ -87,7 +87,7 @@ class OrdersController < ApplicationController
       end
       supplier_item = SupplierItem.find_by(item_id: item_arr[0])
       SupplierItem.create supplier_id: address_to, item: item if supplier_item.nil?
-      order_item = OrderItem.create item_id: item_arr[0], order_id: order.id, quantity: item_arr[4], price: item_arr[5], description: item_arr[6]
+      order_item = OrderItem.create item_id: item_arr[0], order_id: order.id, quantity: item_arr[4], price: 0, description: item_arr[5]
       total+= (item_arr[5].to_i*item_arr[4].to_i)
     end
 
@@ -98,7 +98,7 @@ class OrdersController < ApplicationController
     return redirect_success urls, "Order Berhasil Disimpan"
   end
 
-   def destroy
+  def destroy
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
     order = Order.find params[:id]
     return redirect_back_data_error orders_path, "Data Order Tidak Dapat Dihapus" unless order.present?
@@ -174,63 +174,99 @@ class OrdersController < ApplicationController
     order = Order.find params[:id]
     return redirect_back_data_error orders_path unless order.present?
     return redirect_back_data_error orders_path, "Order Tidak Dapat Diubah" if order.date_receive.present? || order.date_paid_off.present?
-    order_from_retur = (order.total==0)
+    order_from_retur = order.from_retur
     due_date = params[:order][:due_date]
     urls = order_path(id: params[:id])
     return redirect_back_data_error order_confirmation_path(id: order.id), "Tanggal Jatuh Tempo Harus Diisi" if due_date.nil?
     items = order_items
     new_total = 0
     receivable = nil
+    disc_percentage = 0
+    disc_percentage = params[:order][:discount].to_i if params[:order][:discount].present?
+    disc = 0
+
     items.each do |item|
       order_item = OrderItem.find item[0]
       break if order_item.nil?
       qty_order = order_item.quantity
       receive_qty = item[1].to_i
-      buy = order_item.item.buy if !order_item.item.local_item
-      buy = StoreItem.find_by(store: order.store, item: order_item.item).buy.to_f if order_item.item.local_item
-      nominal_value = buy * (qty_order-receive_qty)
-      if receive_qty <= 0
-        if receivable.nil?
-          receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
-                        description: "RECEIVABLE FROM RETUR #"+order.invoice, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: order.supplier_id,
-                        ref_id: urls, due_date: DateTime.now + 2.months
-        else
-          receivable.nominal += receivable.nominal+nominal_value
-          receivable.deficiency += receivable.deficiency+nominal_value
-          receivable.save!
-          next
+      
+      price = item[2].to_f
+      disc_1 = item[3].to_f
+      disc_2 = item[4].to_f
+      ppn = item[5].to_f
+      
+
+      if qty_order < receive_qty
+          receive_qty = qty_order
+      end
+
+
+      if order_from_retur
+        buy = order_item.item.buy if !order_item.item.local_item
+        buy = StoreItem.find_by(store: order.store, item: order_item.item).buy.to_f if order_item.item.local_item
+        nominal_value = buy * (qty_order-receive_qty)
+        if receive_qty <= 0 || qty_order > receive_qty
+          if receivable.nil?
+            receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
+                          description: "RECEIVABLE FROM RETUR #"+order.invoice, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: order.supplier_id,
+                          ref_id: urls, due_date: DateTime.now + 2.months
+          else
+            receivable.nominal += receivable.nominal+nominal_value
+            receivable.deficiency += receivable.deficiency+nominal_value
+            receivable.save!
+            next
+          end          
+        end
+      end
+
+
+      this_item = order_item.item
+      store_stock = StoreItem.find_by(item: this_item, store_id: current_user.store)
+      store_stock = StoreItem.create store: current_user.store, item: this_item, stock: 0, min_stock: 5 if store_stock.nil?
+
+
+      price_1 = price - (price*disc_1/100) 
+      price_2 = price_1 - (price_1*disc_2/100)
+      price_3 = price_2 + (price_2*ppn/100)
+      based_item_price = price_3 - (price_3 * disc_percentage / 100)
+      based_price = based_item_price * receive_qty
+      new_buy_total = based_price * receive_qty
+
+
+      profit_margin = this_item.margin
+      new_price = based_item_price + (based_item_price * profit_margin / 100).round(-2)
+      if this_item.local_item
+        last_price = store_stock.buy
+        if new_price > last_price
+          store_stock.sell = new_price
+          store_stock.save!
         end
       else
-        if qty_order < receive_qty
-          receive_qty = qty_order
-        else
-          if order_from_retur
-            if receivable.nil?
-              receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
-                            description: "RECEIVABLE FROM RETUR #"+order.invoice, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: order.supplier_id,
-                            ref_id: urls, due_date: DateTime.now + 2.months
-            else
-              receivable.nominal += receivable.nominal+nominal_value
-              receivable.deficiency += receivable.deficiency+nominal_value
-              receivable.save!
-              next
-            end
-          end
+        last_price = this_item.sell
+        if new_price > last_price
+          this_item.sell = new_price
+          this_item.save!
         end
       end
 
       order_item.receive = receive_qty
+      order_item.discount_1 = disc_1
+      order_item.discount_2 = disc_2
+      order_item.ppn = ppn
+      order_item.price = price
+      order_item.grand_total = new_buy_total
       order_item.save!
-      this_item = Item.find order_item.item.id
-      store_stock = StoreItem.find_by(item_id: order_item.item.id, store_id: current_user.store)
-      store_stock = StoreItem.create store: current_user.store, item: this_item, stock: 0, min_stock: 5 if store_stock.nil?
-      store_stock.stock = store_stock.stock + item[1].to_i
+
+
+      store_stock.stock = store_stock.stock + receive_qty
       store_stock.save!
-      new_buy_total = item[1].to_i * order_item.price.to_i
+
       old_buy_total = store_stock.stock.to_i * store_stock.buy.to_f if this_item.local_item
       old_buy_total = store_stock.stock.to_i * this_item.buy.to_f if !this_item.local_item
       new_buy = 0
-      new_buy = (new_buy_total + old_buy_total) / (item[1].to_i + store_stock.stock.to_i) if (item[1].to_i + store_stock.stock.to_i) > 0
+      new_buy = (new_buy_total + old_buy_total) / (receive_qty + store_stock.stock.to_i) if (receive_qty + store_stock.stock.to_i) > 0
+
       if !this_item.local_item
         store_stock.buy = new_buy
         store_stock.save!
@@ -240,9 +276,13 @@ class OrdersController < ApplicationController
       end
       new_total +=  new_buy_total
     end
+
     order.total = new_total
+    order.discount_percentage = disc_percentage
+    order.discount = (new_total*disc_percentage/100)
     order.date_receive = DateTime.now
     order.received_by = current_user
+    order.grand_total = order.total - order.discount
     order.save!
     
     if order.total == 0
@@ -318,12 +358,20 @@ class OrdersController < ApplicationController
 
   def show
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
-    order = Order.find_by(id: params[:id])
-    return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless order.present?
+    @order = Order.find_by(id: params[:id])
+    return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless @order.present?
     @order_items = OrderItem.page param_page
     @order_items = @order_items.where(order_id: params[:id])
-    @order_invs = InvoiceTransaction.where(invoice: order.invoice)
-    @pay = order.total.to_i - @order_invs.sum(:nominal) 
+    @order_invs = InvoiceTransaction.where(invoice: @order.invoice)
+    @pay = @order.total.to_i - @order_invs.sum(:nominal) 
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: @order.invoice,
+          layout: 'pdf_layout.html.erb',
+          template: "orders/print.html.slim"
+      end
+    end
   end
 
   private

@@ -5,6 +5,10 @@
     h5
       | Data (#{@retur_items.first.retur.invoice})
   .col.text-right
+    a href="#{retur_path(id: retur_id, format: :pdf)}"
+      button.btn.btn-rounded.btn-success type="button" 
+        | CETAK
+  .col.text-right
   - if retur.date_approve.present? && retur.date_picked.present? && retur.status.nil?
     a href="#{retur_feedback_path(id: retur_id)}"
       button class="btn btn-rounded btn-primary"

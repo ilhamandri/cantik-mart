@@ -5,6 +5,12 @@
         h5.font-weight-500.my-1
           | Detil Barang - #{@item.name} (#{@item.code})
       .card-body
+        .row
+          .col-12.text-center
+            - if @item.image.present?
+              =image_tag("#{@item.image}", height: '200', width: '200', class:"z-depth-2")
+            - else
+              =image_tag("/images/default_item.jpg", height: '200', width: '200', class:"z-depth-2")
         = form_for :item, url: '' do |form|
           .form-group
             label for="code" Kode
@@ -12,12 +18,18 @@
           .form-group
             label for="name" Nama
             = form.text_field :name, required: true, class: "form-control md-form", id: "name",  disabled:"disabled"
-          form-group
+          / .form-group
             label for="brand" Merek
             = form.text_field :brand, required: true, class: "form-control md-form", id: "brand", disabled:"disabled"
           .form-group
               label for="item" Kategori
               input class="md-form form-control" value="#{@item.item_cat.name}" disabled="disabled"
+          .form-group
+            label for="item" Harga Beli
+            input class="md-form form-control" value="#{@item.buy}" disabled="disabled"
+          .form-group
+            label for="item" Margin
+            input class="md-form form-control" value="#{@item.margin}" disabled="disabled"
           .form-group.table-responsive.text-nowrap
             label for="sell" Harga Jual
             table class="table table-hover"
@@ -26,13 +38,15 @@
                 th Max
                 th Harga
                 th Diskon
+                th Profit
                 th
               tbody
                 tr
                   td 0
                   td 1
                   td #{number_to_currency(@item.sell, delimiter: ".", separator: ",", unit: "Rp. ")}
-                  td #{@item.discount}
+                  td #{number_to_currency(@item.discount, delimiter: ".", separator: ",", unit: "Rp. ")}
+                  td #{number_to_currency((@item.sell - @item.buy), delimiter: ".", separator: ",", unit: "Rp. ")}
                   td
                 - item_grocers = @item.grocer_items
                 - if item_grocers.present?

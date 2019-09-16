@@ -1,0 +1,87 @@
+- transfer_items = @transfer.transfer_items
+- transfer  = @transfer
+#customer
+  table#meta
+    tr
+      td.meta-head Invoice #
+      td
+        textarea #{@transfer.invoice}
+    tr
+      td.meta-head Tanggal
+      td
+        textarea #{@transfer.created_at.to_date} - #{@transfer.user.name}
+    tr
+      td.meta-head Dari
+      td
+        .due #{@transfer.from_store.name}
+    tr
+      td.meta-head Kepada 
+      td
+        .due #{@transfer.to_store.name}
+
+- if transfer.description != "-"
+  table#items
+    tr 
+      th STATUS
+    tr
+      td style="text-align: center" class="text-danger" #{transfer.description}
+table#items
+  tr
+   th Konfirmasi
+   th Kirim
+   th Terima
+  tr
+    td
+      - if transfer.date_approve.nil?
+        | - 
+      - elsif transfer.date_approve.to_date == "01-01-1999".to_date
+        .text-danger
+          | x
+      - else
+        .text-success
+          | #{transfer.approved_by.name} (#{transfer.date_approve.to_date})
+    td
+      - if transfer.date_picked.nil?
+        | - 
+      - else 
+        - if transfer.date_picked.to_date == "01-01-1999".to_date
+          .text-danger
+            | x
+        - else
+          - if transfer.status.present?
+            - if transfer.status.to_date == "01-01-1999".to_date
+              .text-danger
+                | #{transfer.picked_by.name} (#{transfer.date_picked.to_date})
+            - else
+              | #{transfer.picked_by.name} (#{transfer.date_picked.to_date})
+          - else
+            | #{transfer.picked_by.name} (#{transfer.date_picked.to_date})
+    td
+      - if transfer.status.nil?
+        | -
+      - elsif transfer.status.to_date == "01-01-1999".to_date
+        .text-danger
+          | x
+      - else
+        | #{transfer.confirmed_by.name} (#{transfer.status.to_date})
+table#items
+  tr
+    th Barang
+    th Deskripsi
+    th Minta
+    th Kirim
+    th Terima
+
+  - total = 0
+  - transfer_items.each do |transfer_item|
+    tr.item-row
+      td.item-name
+        textarea #{transfer_item.item.name}
+      td.description
+        textarea #{transfer_item.description}
+      td
+        textarea #{transfer_item.request_quantity}
+      td
+        textarea #{transfer_item.sent_quantity}
+      td
+        textarea #{transfer_item.receive_quantity}

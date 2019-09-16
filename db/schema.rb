@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_12_062855) do
+ActiveRecord::Schema.define(version: 2019_09_15_095839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -234,6 +234,7 @@ ActiveRecord::Schema.define(version: 2019_09_12_062855) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "local_item", default: false
+    t.integer "margin", default: 0
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 
@@ -286,6 +287,10 @@ ActiveRecord::Schema.define(version: 2019_09_12_062855) do
     t.integer "new_receive", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "discount_1", default: 0
+    t.integer "discount_2", default: 0
+    t.integer "ppn", default: 0
+    t.bigint "grand_total", default: 0
     t.index ["item_id"], name: "index_order_items_on_item_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
   end
@@ -306,6 +311,12 @@ ActiveRecord::Schema.define(version: 2019_09_12_062855) do
     t.bigint "received_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "salesman", default: "-"
+    t.string "no_faktur", default: "-"
+    t.integer "discount", default: 0
+    t.bigint "discount_percentage", default: 0
+    t.boolean "from_retur", default: false
+    t.bigint "grand_total", default: 0
     t.index ["store_id"], name: "index_orders_on_store_id"
     t.index ["supplier_id"], name: "index_orders_on_supplier_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
