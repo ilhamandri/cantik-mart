@@ -118,6 +118,15 @@ class CashFlowsController < ApplicationController
       curr_store.cash = curr_store.cash + nominal
       curr_store.equity = curr_store.equity + nominal
       curr_store.save!
+      cash_flow.create_activity :create, owner: current_user   
+    elsif finance_type == "Withdraw"
+      invoice = " WDR-"+inv_number
+      cash_flow = CashFlow.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
+                      finance_type: CashFlow::WITHDRAW, invoice: invoice
+      curr_store = current_user.store
+      curr_store.cash = curr_store.cash - nominal
+      curr_store.equity = curr_store.equity - nominal
+      curr_store.save!
       cash_flow.create_activity :create, owner: current_user                
     end
     return redirect_success cash_flows_path, "Data Berhasil Disimpan"

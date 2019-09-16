@@ -32,9 +32,8 @@
 --> COMPLAIN : prevent kalau total masih minus / merah
 --> complain --> balancing (harga ?) --> complain ubah data transaksi di hari trx itu dibuat
 --> tarik modal
---> LOSS
+--> cek ulang redirect di retur, lepas batas item tersedia atau tidak
 --> MEMBER CEK BUAT BARU => HAPUS KTP
---> Gambar item ==> url form
 --> pisahin list di orders
 --> cek di complain number_format
 --> nilai stok belum ditambah ke table stock_value -- skalian cek semua udah masuk blm
@@ -44,7 +43,7 @@
 
 1. Desimal															c
 2. Format tanggal 													x
-3. Cetak Laporan 													
+3. Cetak Laporan 													x
 4. Perbedaan Harga Lama dan Harga Baru (pake persen)				x
 	=> di po ubah harga beli kalo lebih mahal dari skrng			x
 	=> default jatuh tempo di order/:id/receive  					
@@ -56,7 +55,7 @@
 9. PO barang baru ketika datang faktur								x
 10. Diskon item dan diskon total faktur --> order 					x
 11. Daftar barang kode nama kategori								x
-12. Cetak semua dokumen
+12. Cetak semua dokumen												x
 
 
 8dda7b5b80d9eff0630be17308b14580

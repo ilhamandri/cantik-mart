@@ -1,7 +1,7 @@
 tr
   - nominal = finance.nominal.abs
   td #{finance.user.name} (#{finance.store.name})
-  td #{finance.finance_type}
+  td #{finance.finance_type.gsub("_", " ")}
   - if finance.nominal > 0
     td #{number_with_delimiter(nominal.to_i, delimiter: ".", separator: ",")}
     td 0
