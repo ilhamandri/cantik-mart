@@ -2,8 +2,10 @@ class AbsentsController < ApplicationController
   before_action :require_login
 
   def index
-    status = get_data
-    @bool_stats = status
+    status = false
+    # status = get_data
+    # @bool_stats = status
+    AccountBalance.salary
     if !status
       @status = "Fingerprint tidak terhubung."
     end

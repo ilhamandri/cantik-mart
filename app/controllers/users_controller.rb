@@ -70,7 +70,7 @@ class UsersController < ApplicationController
   private
     def user_params
       params.require(:user).permit(
-        :name, :email, :password, :level, :phone, :sex, :store_id, :id_card, :address, :fingerprint
+        :name, :email, :password, :level, :phone, :sex, :store_id, :id_card, :address, :fingerprint, :salary
       )
     end
 

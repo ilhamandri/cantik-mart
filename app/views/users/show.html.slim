@@ -17,6 +17,9 @@
                 label for="name" Nama
                 = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
               .form-group
+                label for="id-card" Toko
+                input class="form-control md-form" value="#{@user.store.name}" disabled="disabled"
+              .form-group
                 label for="email" Email
                 = form.text_field :email, required: true, class: "form-control md-form", id: "email", disabled: "disabled"
               .form_group
@@ -37,6 +40,9 @@
               .form-group
                 label for="id-card" ID Fingerprint
                 = form.text_field :fingerprint, required: true, class: "form-control md-form", id: "id-card", disabled: "disabled"
+              .form-group
+                label for="id-card" Gaji
+                input class="form-control md-form" value="#{number_with_delimiter(@user.salary, delimiter: " ")}" disabled="disabled"
               .form-group
                 label for="id-card" Terakhir Update
                 input type="text" value="#{@user.updated_at}" class="form-control md-form"

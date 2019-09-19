@@ -22,6 +22,10 @@ class DownloadsController < ApplicationController
 	  	return
   	end
 
+  	def selected_download datas, data_type
+  		serving_file datas, data_type
+  	end
+
   	def get_file
 	    return redirect_back_data_error balances_path, "File Tidak Ditemukan" if params[:name].nil?
 	    filename = "./report/"+params[:name]
@@ -219,20 +223,6 @@ class DownloadsController < ApplicationController
 		p.serialize(filename)
 	end
 
-	def print
-		doc_type = params[:type]
-		id = params[:id]
-		return redirect_back_data_error homes_path, "Data Tidak Ditemukan" if doc_type.nil? || id.nil? 
-		
-		if doc_type == "order"
-		elsif doc_type == "transfer"
-		elsif doc_type == "retur"
-		elsif doc_type == "complain"
-				
-		end
-				
-	end
-
 	private 
 	  	def redirect_home
 		  return redirect_back fallback_location: root_path
@@ -249,10 +239,12 @@ class DownloadsController < ApplicationController
 		end
 
 		def latest_month datas
+
 			return datas
 		end
 
 		def filter_data datas, option
+
 			return datas
 		end
 

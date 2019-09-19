@@ -1,6 +1,7 @@
 class AccountBalance
   
   @@store_id = 1
+  @@salary_date = "25"
 
   def initialize
   end
@@ -16,7 +17,7 @@ class AccountBalance
       piutang_sebelumnya = Receivable.where("created_at < ? AND deficiency > 0", time_start).where(store: store).sum(:deficiency).to_f
       piutang =  piutang_sebelumnya + Receivable.where("created_at >= ? AND created_at <= ? AND deficiency > 0", time_start, time_end).where(store: store).sum(:deficiency).to_f
       # stock_value
-      nilai_stok = stock_values(store, time_start, time_end).to_f
+      nilai_stok = stock_values(store).to_f
       # assets
       nilai_aset = assets(store, time_start, time_end).to_f
 
@@ -88,12 +89,21 @@ class AccountBalance
     end
   end
 
-  def self.stock_values store, time_start, time_end
+  def self.stock_values store
     stocks = StoreItem.where(store: store).where('stock != 0')
     values = 0
     stocks.each do |store_stock|
       values += store_stock.stock * store_stock.item.buy if !store_stock.item.local_item
       values += store_stock.buy * store_stock.stock if store_stock.item.local_item
+    end
+    time_start = DateTime.now.beginning_of_day
+    time_end = DateTime.now.end_of_day
+    stock_value = StockValue.where(store: store).where("created_at >= ? AND created_at <= ?", time_start, time_end).first
+    if stock_value.nil?
+      StockValue.create store: store, user: User.first, date_created: DateTime.now, nominal: values, description: "Nilai Stock - "+Date.today.month.to_s+"/"+Date.today.year.to_s
+    else
+      stock_value.nominal = values
+      stock_value.save!
     end
     return values
   end
@@ -123,18 +133,38 @@ class AccountBalance
   end
 
   def self.loss_item store,time_start, time_end
-    # LOSS
     loss_val = 0
-    returs = Retur.where("created_at >= ? AND created_at <= ?", time_start, time_end).where(store: store)
-    returs.each do |retur|
-      losses = retur.retur_items.where(feedback: 'loss')
-      losses.each do |loss|
+    losses = Loss.where("created_at >= ? AND created_at <= ?", time_start, time_end).where(store: store)
+    losses.each do |loss|
+      losses_items = loss.loss_items
+      losses_items.each do |loss|
         store_stock = StoreItem.find_by(store: store, item: loss.item)
-        loss_val += loss.quantity * store_stock.item.buy if store_stock.buy == 0
-        loss_val += loss.quantity * store_stock.stock if store_stock.buy > 0
+        loss_val += loss.quantity * store_stock.item.buy if !store_stock.item.local_item
+        loss_val += loss.quantity * store_stock.buy if store_stock.item.local_item
       end
     end
     return loss_val
+  end
+
+  def self.salary 
+    end_date_s = @@salary_date+"-"+Date.today.month.to_s+"-"+Date.today.year.to_s
+    end_date = end_date_s.to_datetime.end_of_day
+    start_date = (end_date - 1.month + 1.day).beginning_of_day
+
+    User.all.each do |user|
+      absents = Absent.where(user: user).where("check_in >= ? AND check_in <= ?", start_date, end_date).count
+      user_salary = user.salary
+      salary = user_salary * absents
+      user_salary = UserSalary.where(user: user).where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_day, DateTime.now.end_of_day).first
+      if user_salary.nil?
+        UserSalary.create user: user, nominal: salary, checking: absents
+      else
+        user_salary.checking = absents
+        user_salary.nominal = salary
+        user_salary.save!
+      end
+    end
+
   end
   
 end

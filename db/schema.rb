@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_15_095839) do
+ActiveRecord::Schema.define(version: 2019_09_18_165930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,6 +238,28 @@ ActiveRecord::Schema.define(version: 2019_09_15_095839) do
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 
+  create_table "loss_items", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "loss_id", null: false
+    t.integer "quantity", default: 0, null: false
+    t.string "description", default: "-", null: false
+    t.index ["item_id"], name: "index_loss_items_on_item_id"
+    t.index ["loss_id"], name: "index_loss_items_on_loss_id"
+  end
+
+  create_table "losses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "store_id", null: false
+    t.integer "total_item", null: false
+    t.boolean "from_retur", default: false
+    t.bigint "ref_id"
+    t.string "invoice", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_losses_on_store_id"
+    t.index ["user_id"], name: "index_losses_on_user_id"
+  end
+
   create_table "members", force: :cascade do |t|
     t.string "name", null: false
     t.string "id_card"
@@ -291,6 +313,7 @@ ActiveRecord::Schema.define(version: 2019_09_15_095839) do
     t.integer "discount_2", default: 0
     t.integer "ppn", default: 0
     t.bigint "grand_total", default: 0
+    t.bigint "total", default: 0, null: false
     t.index ["item_id"], name: "index_order_items_on_item_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
   end
@@ -569,6 +592,15 @@ ActiveRecord::Schema.define(version: 2019_09_15_095839) do
     t.index ["controller_method_id"], name: "index_user_methods_on_controller_method_id"
   end
 
+  create_table "user_salaries", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "nominal", default: 0, null: false
+    t.integer "checking", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_salaries_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
@@ -615,6 +647,10 @@ ActiveRecord::Schema.define(version: 2019_09_15_095839) do
   add_foreign_key "invoice_transactions", "users"
   add_foreign_key "item_cats", "departments"
   add_foreign_key "items", "item_cats"
+  add_foreign_key "loss_items", "items"
+  add_foreign_key "loss_items", "losses"
+  add_foreign_key "losses", "stores"
+  add_foreign_key "losses", "users"
   add_foreign_key "members", "stores"
   add_foreign_key "members", "users"
   add_foreign_key "notifications", "users", column: "from_user_id"
@@ -654,4 +690,5 @@ ActiveRecord::Schema.define(version: 2019_09_15_095839) do
   add_foreign_key "transfers", "stores", column: "to_store_id"
   add_foreign_key "transfers", "users"
   add_foreign_key "user_methods", "controller_methods"
+  add_foreign_key "user_salaries", "users"
 end

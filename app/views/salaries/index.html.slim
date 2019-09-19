@@ -1,0 +1,64 @@
+.row
+  .col
+    h5
+      | Gaji Karyawan
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+      h5.font-weight-500.my-1
+        | Pencarian
+    .card.mb-4
+      .card-body
+        = form_for :finances, url: taxs_path, method: 'GET' do |form|
+          .row
+            - if ["owner", "super_admin", "super_finance"].include? current_user.level
+              .col-md-12
+                select class="mdb-select md-form" id="months" name="store_id"
+                  option value="0"
+                    | Semua Toko
+                  - Store.all.each do |store|
+                    option value="#{store.id}"
+                      | #{store.name}
+            .col
+              select class="mdb-select md-form" id="months" name="months"
+                option[value=3]
+                  | 3 bulan
+                option[value=6]
+                  | 6 bulan
+                option[value=9]
+                  | 9 bulan
+                option[value=12]
+                  | 1 tahun
+            .col
+              select class="mdb-select md-form" id="order_by" name="order_by"
+                option[value="asc"]
+                  | secara A - Z
+                option[value="desc"]
+                  | secara Z - A
+            .col-12.text-center
+              button class="btn btn-rounded btn-primary"
+                | Cari
+        - if @search.present?
+          .col-md-12.text-center.grey-text
+            b
+              | #{@search}
+          
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data
+    .card.mb-4
+      .card-body.table-responsive.text-nowrap
+        = paginate @salaries
+        table class="table"
+          thead
+            th Karyawan
+            th Toko
+            th Bulan / Tahun
+            th Jumlah Masuk
+            th Nominal
+          tbody
+            = render partial: 'list', collection: @salaries, as: :salary
+

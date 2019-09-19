@@ -23,6 +23,7 @@ class ReturItemsController < ApplicationController
     feed_value = feedback_value
     urls = retur_path(id: retur.id)
     order = nil
+    loss = nil
     receivable = nil
     total_items = 0
 
@@ -53,35 +54,43 @@ class ReturItemsController < ApplicationController
         order_qty = value[2].to_i
         if order_qty == 0
           value[0] = "loss"
-          next
-        end
-        order_qty = retur_item.accept_item if order_qty > retur_item.accept_item 
-        if order_qty < retur_item.accept_item 
-          buy = retur_item.item.buy if !retur_item.item.local_item
-          buy = StoreItem.find_by(store: retur.store, item: retur_item.item).buy.to_f if retur_item.item.local_item
-          nominal_value =  (retur_item.accept_item - order_qty) * buy
-          if receivable.nil?
-            receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
-                        description: "RECEIVABLE FROM RETUR #"+retur.invoice, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: retur.supplier_id,
-                        ref_id: urls, due_date: DateTime.now + 2.months
+          if loss.nil?
+            invoice = "LOSS" + Time.now.to_i.to_s
+            Loss.create user: current_user, store: current_user.store, from_retur: true, ref_id: retur.id, total_item: 1, invoice: invoice
+            LossItem.create item: retur_item.item, quantity: retur_item.quantity, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
           else
-            receivable.nominal += receivable.nominal+nominal_value
-            receivable.deficiency += receivable.deficiency+nominal_value
-            receivable.save!
+            loss.total_item = loss.total_item + 1
+            loss.save!
+            LossItem.create item: retur_item.item, quantity: retur_item.quantity, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
           end
+        else
+          order_qty = retur_item.accept_item if order_qty > retur_item.accept_item 
+          if order_qty < retur_item.accept_item 
+            buy = retur_item.item.buy if !retur_item.item.local_item
+            buy = StoreItem.find_by(store: retur.store, item: retur_item.item).buy.to_f if retur_item.item.local_item
+            nominal_value =  (retur_item.accept_item - order_qty) * buy
+            if receivable.nil?
+              receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
+                          description: "RECEIVABLE FROM RETUR #"+retur.invoice, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: retur.supplier_id,
+                          ref_id: urls, due_date: DateTime.now + 2.months
+            else
+              receivable.nominal += receivable.nominal+nominal_value
+              receivable.deficiency += receivable.deficiency+nominal_value
+              receivable.save!
+            end
+          end
+          ord_item = Item.find_by(id: retur_item.item.id)
+          OrderItem.create  quantity: order_qty, 
+                            price: 0,
+                            item: ord_item,
+                            order: order,
+                            description: "RETUR #"+retur.invoice
+
+          retur_item.ref_id = order.id
+          retur_item.nominal = order_qty
+          total_items+=1
+          order.update(total_items: total_items)
         end
-        ord_item = Item.find_by(id: retur_item.item.id)
-        OrderItem.create  quantity: order_qty, 
-                          price: 0,
-                          item: ord_item,
-                          order: order,
-                          description: "RETUR #"+retur.invoice
-
-        retur_item.ref_id = order.id
-        retur_item.nominal = order_qty
-        total_items+=1
-        order.update(total_items: total_items)
-
       elsif value[0] == "cash"
         nominal_value = value[2].to_i
 
@@ -97,6 +106,16 @@ class ReturItemsController < ApplicationController
         end
         retur_item.ref_id = receivable.id
         retur_item.nominal = nominal_value
+      elsif value[0] == "loss"
+        if loss.nil?
+          invoice = "LOSS" + Time.now.to_i.to_s
+          Loss.create user: current_user, store: current_user.store, from_retur: true, ref_id: retur.id, total_item: 1, invoice: invoice
+          LossItem.create item: retur_item.item, quantity: retur_item.quantity, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
+        else
+          loss.total_item = loss.total_item + 1
+          loss.save!
+          LossItem.create item: retur_item.item, quantity: retur_item.quantity, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
+        end
       end
       retur_item.feedback = value[0]
       retur_item.save!

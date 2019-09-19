@@ -41,7 +41,7 @@ tr
       td #{number_with_delimiter(disc_1 + disc_2, delimiter: ".", separator: ",")}
       td #{number_with_delimiter(ppn, delimiter: ".", separator: ",")}
       td.text-danger.text-right
-        | #{number_with_delimiter(order_item.grand_total, delimiter: ".", separator: ",")}
+        | #{number_with_delimiter(order_item.total, delimiter: ".", separator: ",")}
     - else
       - 4.times do
         td 

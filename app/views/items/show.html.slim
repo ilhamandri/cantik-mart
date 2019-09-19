@@ -30,6 +30,12 @@
           .form-group
             label for="item" Margin
             input class="md-form form-control" value="#{@item.margin}" disabled="disabled"
+          .form-group
+            label for="item" Jenis Barang
+            - if !@item.local_item
+              input class="md-form form-control" value="Barang dari Pusat" disabled="disabled"
+            - else
+              input class="md-form form-control" value="Barang Lokal" disabled="disabled"
           .form-group.table-responsive.text-nowrap
             label for="sell" Harga Jual
             table class="table table-hover"

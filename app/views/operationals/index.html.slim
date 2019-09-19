@@ -17,6 +17,14 @@
       .card-body
         = form_for :finances, url: operationals_path, method: 'GET' do |form|
           .row
+            - if ["owner", "super_admin", "super_finance"].include? current_user.level
+              .col-md-12
+                select class="mdb-select md-form" id="months" name="store_id"
+                  option value="0"
+                    | Semua Toko
+                  - Store.all.each do |store|
+                    option value="#{store.id}"
+                      | #{store.name}
             .col-md-12.text-center
               input#materialGroupExample1.form-check-input.form-control[type="radio" name="switch_date_month" checked="checked" value="date"]
                 label class="form-check-label" for="materialGroupExample1" Tanggal

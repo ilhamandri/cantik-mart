@@ -22,6 +22,6 @@
 
 # set :environment, 'development'
 # set :output, "log/cron.log"
-# every 1.minute do
-# 	runner "ApplicationController.finance_recap"
+# every 1.day, at: '11:00 pm'
+# 	runner "AccountBalance.balance_account"
 # end

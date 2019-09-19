@@ -2,7 +2,7 @@ tr
   td #{order.invoice}
   td #{order.supplier.name}
   td #{order.total_items}
-  td #{number_with_delimiter(order.total, delimiter: ".")}
+  td #{number_with_delimiter(order.grand_total, delimiter: ".")}
   td #{order.user.name} (#{order.date_created.to_date})
   td
     - if order.date_receive.nil?

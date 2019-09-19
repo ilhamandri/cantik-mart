@@ -17,6 +17,14 @@ br
       .card-body
         = form_for :order, url: orders_path, method: 'GET' do |form|
           .row  
+            - if ["owner", "super_admin", "super_finance"].include? current_user.level
+              .col-md-12
+                select class="mdb-select md-form" id="months" name="store_id"
+                  option value="0"
+                    | Semua Toko
+                  - Store.all.each do |store|
+                    option value="#{store.id}"
+                      | #{store.name}
             .col-6
               input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice (12345678)" value="#{@seacrh}"
             .col-6
@@ -38,9 +46,22 @@ br
               | #{@search_text}
 .container-fluid
   .col-lg-12.col-md-12
-    .card-header.white-text.primary-color
+    - if @color == "danger"
+      .card-header.white-text.danger-color 
         h5.font-weight-500.my-1
-          | Data Order
+          | Telah Diterima & Belum Lunas
+    - elsif @color == "success"
+      .card-header.white-text.success-color 
+        h5.font-weight-500.my-1
+          | Lunas
+    - elsif @color == "warning"
+      .card-header.white-text.warning-color 
+        h5.font-weight-500.my-1
+          | Dalam Proses
+    - else
+      .card-header.white-text.primary-color 
+        h5.font-weight-500.my-1
+          | Semua Data
     .card.mb-4
       .card-body.table-responsive.text-nowrap
         table class="table table-hover"

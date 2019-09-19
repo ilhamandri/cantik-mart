@@ -28,14 +28,18 @@ class OrdersController < ApplicationController
 
 
     if params[:type].present?
+      @color = ""
       type = params[:type]
       if type == "ongoing" 
+        @color = "warning"
         @search_text += "dengan status sedang dalam proses"
         @orders = @orders.where(store_id: current_user.store.id).where('date_receive is null')
       elsif type == "payment"
+        @color = "danger"
         @search_text += "dengan status belum lunas"
         @orders = @orders.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null')
        elsif type == "complete"
+        @color = "success"
         @search_text += "dengan status lunas"
         @orders = @orders.where("date_paid_off  is not null").order("date_created DESC")
       end
@@ -131,30 +135,54 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if order.date_paid_off.present? || order.date_receive.nil?
     items = edit_order_items
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if items.empty?
+    new_grand_total = 0
     new_total = 0
+    disc_percentage = order.discount_percentage.to_f
     items.each do |item|
       order_item = OrderItem.find item[0]
       break if order_item.nil?
-      new_receive_number = item[1].to_i.abs
-      next if new_receive_number <= order_item.receive
-      order_item.new_receive = new_receive_number
+      new_receive = item[1].to_i.abs
+      next if new_receive <= 0
+
+      price = order_item.price
+      disc_1 = order_item.discount_1.to_f
+      disc_2 = order_item.discount_2.to_f
+      ppn = order_item.ppn.to_f
+
+      price_1 = price - (price*disc_1/100) 
+      price_2 = price_1 - (price_1*disc_2/100)
+      price_3 = (price_2 + (price_2*ppn/100)).to_i
+      based_item_price = (price_3 - (price_3 * disc_percentage / 100)).to_i
+      new_grand_total_item = based_item_price * new_receive
+      total_item_without_disc_global = (price_3 * new_receive).to_i
+
+      order_item.new_receive = new_receive
+      order_item.discount_1 = disc_1
+      order_item.discount_2 = disc_2
+      order_item.ppn = ppn
+      order_item.price = price
+      order_item.total = total_item_without_disc_global
+      order_item.grand_total = new_grand_total_item.to_i
       order_item.save!
+
       this_item = Item.find order_item.item.id
       store_stock = StoreItem.find_by(item_id: order_item.item.id, store_id: current_user.store)
       store_stock = StoreItem.create store: current_user.store, item: this_item, stock: 0, min_stock: 5 if store_stock.nil?
-      store_stock.stock = store_stock.stock - order_item.receive + item[1].to_i
+      store_stock.stock = store_stock.stock - order_item.receive + new_receive
       store_stock.save!
-      new_buy_total = item[1].to_i * order_item.price.to_i
-      new_total +=  new_buy_total
+      new_grand_total +=  new_grand_total_item.to_i
+      new_total += total_item_without_disc_global
     end
-    order.old_total = order.total
+    order.old_total = order.grand_total
     order.total = new_total
+    order.grand_total = new_total - ( new_total * disc_percentage / 100).to_i
+    order.discount = ( new_total * disc_percentage / 100).to_i
     order.date_change = DateTime.now
     order.editable = false
 
     changes = order.changes
     order.save!
-    payment = edit_payment new_total, order
+    payment = edit_payment new_grand_total, order
 
     order.create_activity :edit, owner: current_user, parameters: changes
 
@@ -230,8 +258,7 @@ class OrdersController < ApplicationController
       price_2 = price_1 - (price_1*disc_2/100)
       price_3 = price_2 + (price_2*ppn/100)
       based_item_price = price_3 - (price_3 * disc_percentage / 100)
-      based_price = based_item_price * receive_qty
-      new_buy_total = based_price * receive_qty
+      new_buy_total = based_item_price * receive_qty
 
 
       profit_margin = this_item.margin
@@ -360,10 +387,9 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
     @order = Order.find_by(id: params[:id])
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless @order.present?
-    @order_items = OrderItem.page param_page
-    @order_items = @order_items.where(order_id: params[:id])
+    @order_items = OrderItem.where(order_id: params[:id]).page param_page
     @order_invs = InvoiceTransaction.where(invoice: @order.invoice)
-    @pay = @order.total.to_i - @order_invs.sum(:nominal) 
+    @pay = @order.grand_total.to_i - @order_invs.sum(:nominal) 
     respond_to do |format|
       format.html
       format.pdf do

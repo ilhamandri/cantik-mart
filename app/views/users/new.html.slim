@@ -51,5 +51,8 @@
           .form-group
             label for="id-card" ID Fingerprint
             = form.text_field :fingerprint, required: true, class: "form-control md-form", id: "id-card"
+          .form-group
+            label for="id-card" Gaji
+            = form.text_field :salary, required: true, class: "form-control md-form", id: "id-card"
           .form-group.text-center
             = form.submit "Tambah User", class: "btn btn-rounded btn-primary"

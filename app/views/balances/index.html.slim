@@ -17,6 +17,14 @@
       .card-body
         = form_for :balance, url: balances_path, method: 'GET' do |form|
           .row
+            - if ["owner", "super_admin", "super_finance"].include? current_user.level
+              .col-md-12
+                select class="mdb-select md-form" id="months" name="balance[store_id]"
+                  option value="0"
+                    | Semua Toko
+                  - Store.all.each do |store|
+                    option value="#{store.id}"
+                      | #{store.name}
             .col-md-12.text-center
               input#materialGroupExample1.form-check-input.form-control[type="radio" name="balance[switch_date_month]" checked="checked" value="date"]
               label class="form-check-label" for="materialGroupExample1" Tanggal Buat   
@@ -47,13 +55,11 @@
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
-              a href="#{download_path(type: "balance", option: @params.to_s)}" class="btn btn-rounded btn-success" 
-                i.fas.fa-refresh 
-                | Unduh Laporan 
         - if @search.present?
           .col-md-12.text-center.grey-text
-            b
-              | #{@search}
+            a href="#{balances_path(type: "balance", option: @params.to_s, format: :zip)}"
+              b
+                | #{@search}
 
 .container-fluid
   .col-lg-12.col-md-12

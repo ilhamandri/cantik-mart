@@ -3,9 +3,23 @@ class CashFlowsController < ApplicationController
   before_action :require_fingerprint
 
   def index
-  	filter = filter_search
+  	filter = filter_search params
     @search = filter[0]
   	@finances = filter[1]
+    @params = params.to_s
+    respond_to do |format|
+      format.html
+      format.pdf do
+        new_params = eval(params[:option])
+        filter = filter_search new_params
+        @search = filter[0]
+        @finances = filter[1]
+        @store_name= filter[2]
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "cash_flows/print.html.slim"
+      end
+    end
   end
 
   def new
@@ -137,12 +151,12 @@ class CashFlowsController < ApplicationController
       params[:page]
     end
 
-    def filter_search
+    def filter_search params
       results = []
       search_text = "Pencarian "
       filters = CashFlow.page param_page
       filters = filters.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
-      finance_types = params[:finance_type]
+      finance_types = params["finance_type"]
       if finance_types.present?
         finance_types = finance_types.map(&:to_i)
         if finance_types.size > 0
@@ -164,22 +178,39 @@ class CashFlowsController < ApplicationController
         end
       end
 
-      switch_data_month_param = params[:switch_date_month]
+      switch_data_month_param = params["switch_date_month"]
       if switch_data_month_param == "month" 
-        before_months = params[:months].to_i
+        before_months = params["months"].to_i
         search_text += before_months.to_s + " bulan terakhir "
         start_months = (DateTime.now - before_months.months).beginning_of_month 
         filters = filters.where("date_created >= ?", start_months)
       else
         end_date = DateTime.now.to_date + 1.day
         start_date = DateTime.now.to_date - 1.weeks
-        end_date = params[:end_date] if params[:end_date].present?
-        start_date = params[:date_from] if params[:date_from].present?
-        search_text += "dari " + start_date.to_s + " hingga " + end_date.to_s + " "
+        end_date = params["end_date"] if params["end_date"].present?
+        start_date = params["date_from"] if params["date_from"].present?
+        search_text += "dari " + start_date.to_date.to_s + " hingga " + end_date.to_date.to_s + " "
         filters = filters.where("date_created >= ? AND date_created <= ?", start_date, end_date)
       end
 
-      if params[:order_by] == "asc"
+      store_id = params["store_id"].to_i
+      store_name = "SEMUA TOKO"
+      if store_id.present?
+        if store_id != 0
+          store = Store.find_by(id: store_id)
+          if store.present?
+            filters = filters.where(store: store)
+            search_text+= "pada Toko "+store.name+" "
+            store_name = store.name
+          else
+            search_text += "pada Semua Toko "
+          end
+        end
+      else
+        search_text += "pada Semua Toko "
+      end
+
+      if params["order_by"] == "asc"
         search_text+= "secara menaik"
         filters = filters.order("date_created ASC")
       else
@@ -188,6 +219,7 @@ class CashFlowsController < ApplicationController
       end
       results << search_text
       results << filters
+      results << store_name
       return results
     end
 end

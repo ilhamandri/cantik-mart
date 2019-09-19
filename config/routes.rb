@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   resources :balances
 
   resources :items
+  resources :salaries
   resources :grocer_items
   resources :item_cats
   resources :departments
@@ -82,8 +83,8 @@ Rails.application.routes.draw do
   resources :transfers
   resources :transfer_items
   
-  resources :retur_warehouses
-  resources :retur_warehouse_items
+  resources :losses
+  resources :loss_items
 
   resources :warning_items
 

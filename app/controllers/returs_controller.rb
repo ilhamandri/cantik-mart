@@ -118,16 +118,12 @@ class RetursController < ApplicationController
         ReturItem.where(retur: retur).delete_all
         retur.delete
         return redirect_back_data_error new_retur_path, "Data Barang Retur Tidak Tersedia di Toko"
-      elsif item.stock < retur_item[1].to_i
-        ReturItem.where(retur: retur).delete_all
-        retur.delete
-        return redirect_back_data_error new_retur_path, "Data Jumlah Barang Retur Melebihi Jumlah Stok Toko"
       end
       description = "-"
       description = retur_item[5] if retur_item[5].size > 0
       ReturItem.create item_id: retur_item[0], retur_id: retur.id, quantity: retur_item[4], description: description
     end
-    urls = retur_path id: retur.id
+    urls = retur_path(id: retur.id)
     return redirect_success urls, "Data Retur Telah Disimpan"
   end
 

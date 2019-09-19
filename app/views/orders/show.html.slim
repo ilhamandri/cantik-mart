@@ -30,6 +30,16 @@ br
             .col-md-12
               label for="form" INVOICE
               input type="text" class="form-control md-form" disabled=true value="#{order.invoice}"
+            - if order.received_by.present?
+              - due_date = "TIDAK ADA TAGIHAN - DARI RETUR"
+              - due_date = Debt.find_by(finance_type: "ORDER", ref_id: order.id).due_date.to_date if Debt.find_by(finance_type: "ORDER", ref_id: order.id).present?
+              .col-md-6
+                label for="form" Jatuh Tempo
+                input type="text" class="form-control md-form" disabled=true value="#{due_date}"
+              .col-md-6
+                label for="form" Penerima
+                input type="text" class="form-control md-form" disabled=true value="#{order.received_by.name} ( #{order.date_receive} )" 
+              
             .col-md-4
               label for="form" Total
               input type="number" class="form-control md-form" disabled=true value="#{order.total_items}"
@@ -57,12 +67,21 @@ br
             th Jumlah
             th Terima
             th Harga / Item
-            th Diskon
-            th PPn
-            th.text-right Grand Total
+            th Diskon / Item
+            th PPn / Item
+            th.text-right Total
           tbody
             = render partial: 'list_show', collection: @order_items, as: :order_item
           tfoot.text-right.text-danger
+            tr
+              td
+              td
+              td
+              td
+              td
+              td.font-weight-bold SUB TOTAL
+              td
+              td.font-weight-bold #{number_with_delimiter(order.total, separator: ",", delimiter: ".")}
             tr
               td
               td
