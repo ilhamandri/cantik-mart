@@ -41,14 +41,21 @@ function total_complain(){
   $("#total").val(new_total);
   if(new_total > 0){
     total_text.style.color = "green";
-    total_text.innerHTML = "BAYAR : Rp. "+formatangka_titik(new_total);
+    total_text.innerHTML = "TAMBAH : Rp. "+formatangka_titik(new_total)+",00";
   }else if (new_total==0){
     total_text.style.color = "black";
     total_text.innerHTML = "TIDAK ADA TAMBAHAN";
   }else{
     total_text.style.color = "red";
-    total_text.innerHTML = "GANTI : Rp. "+formatangka_titik(new_total);
+    total_text.innerHTML = "KURANG : Rp. "+formatangka_titik(new_total)+",00";
   }
+
+  if(new_total>=0){
+    $("#submitButton").show();
+  }else{
+    $("#submitButton").hide();
+  }
+
 }
 
 function formatangka_titik(total) {
@@ -200,8 +207,6 @@ function refresh_notification_list(result){
         }else{
           time+= "just now"
         }
-
-        // alert(diffDays + " days, " + diffHrs + " hours, " + diffMins + " minutes, " + diffSecs + " seconds");
 
         element = "<a class='bq-"+m_type+" dropdown-item waves-effect waves-light' href='"+url+"'>"
         element+=   "<i class='fas fa-"+icon+" mr-2' aria-hidden='true'></i>"

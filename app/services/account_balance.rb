@@ -1,6 +1,8 @@
 class AccountBalance
   
   @@store_id = 1
+  # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
+  @@work_day = [1,2,3,4,5]
   @@salary_date = "25"
 
   def initialize
@@ -28,8 +30,6 @@ class AccountBalance
       penjualan = transaksi_arr[1]
 
       kas += penjualan
-
-      # binding.pry if store.id == 1
       
       # outcome
       pengeluaran = outcomes(store, time_start, time_end).to_f
@@ -48,10 +48,6 @@ class AccountBalance
       aktiva = kas + piutang + nilai_stok + nilai_aset
       passiva = profit + income_outcome + modals + hutang
 
-      # Loss Item
-
-     # kas baru diisi dari kas bulan lama
-     # modal sama dengan bulan sebelumnya 
 
       store.debt = hutang
       store.receivable = piutang
@@ -98,7 +94,8 @@ class AccountBalance
     end
     time_start = DateTime.now.beginning_of_day
     time_end = DateTime.now.end_of_day
-    stock_value = StockValue.where(store: store).where("created_at >= ? AND created_at <= ?", time_start, time_end).first
+    # record tiap hari
+    stock_value = StockValue.where(store: store).where("created_at >= ? AND created_at <= ?", time_start.beginning_of_day, time_end.end_of_day).first
     if stock_value.nil?
       StockValue.create store: store, user: User.first, date_created: DateTime.now, nominal: values, description: "Nilai Stock - "+Date.today.month.to_s+"/"+Date.today.year.to_s
     else
@@ -150,12 +147,15 @@ class AccountBalance
     end_date_s = @@salary_date+"-"+Date.today.month.to_s+"-"+Date.today.year.to_s
     end_date = end_date_s.to_datetime.end_of_day
     start_date = (end_date - 1.month + 1.day).beginning_of_day
+    n_days = (end_date-start_date).to_i
+
+    working_dates = (start_date..end_date).to_a.select {|k| @@work_day.include?(k.wday)}
 
     User.all.each do |user|
       absents = Absent.where(user: user).where("check_in >= ? AND check_in <= ?", start_date, end_date).count
       user_salary = user.salary
-      salary = user_salary * absents
-      user_salary = UserSalary.where(user: user).where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_day, DateTime.now.end_of_day).first
+      salary = user_salary.to_f * (absents.to_f / working_dates.size.to_f)
+      user_salary = UserSalary.where(user: user).where("created_at >= ? AND created_at <= ?", start_date, end_date).first
       if user_salary.nil?
         UserSalary.create user: user, nominal: salary, checking: absents
       else

@@ -1,7 +1,7 @@
 .row
   .col.text-left
     h5
-      | Daftar Transaksi #{"(PENCARIAN '"+@search+"')" if @search.present?}
+      | Daftar Transaksi
   / .col.text-right
     a href="#{new_transaction_path}"
       button.btn.btn-rounded.btn-primary type="button" 
@@ -31,6 +31,10 @@ br
             .col-md-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
+        br      
+        .col-md-12.text-center.grey-text
+          b  
+            | #{@search}
 .container-fluid
   .col-lg-12.col-md-12
     .card-header.white-text.info-color 

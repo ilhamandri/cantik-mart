@@ -9,6 +9,15 @@
           | Informasi Transaksi 
       .card-body
         .row
+          - if transaction.from_complain?
+            - complain = Complain.find_by(id: transaction.complain_id)
+            .col-6
+              label DARI RETUR
+              input disabled="disabled" class="form-control md-form" value="#{complain.invoice}"
+            .col-6
+              label NOMINAL
+              input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(complain.nominal, delimiter: ".")}"
+            br
           .col-3
             label Invoice
             input disabled="disabled" class="form-control md-form" value="#{transaction.invoice}"
@@ -23,7 +32,7 @@
             input disabled="disabled" class="form-control md-form" value="#{transaction.created_at}"
           .col
             label Total
-            input disabled="disabled" class="form-control md-form" value="#{transaction.grand_total}"
+            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total, delimiter: ".")}"
           .col
             label Pembayaran
             input disabled="disabled" class="form-control md-form" value="#{transaction.payment_type}"
@@ -55,3 +64,44 @@
           tbody
             = render partial: 'list', collection: @transaction_items, as: :transaction_item
         = paginate @transaction_items
+
+- check_complain = Complain.find_by(transaction_id: transaction.id)
+- if check_complain.present? || transaction.from_complain?
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.danger-color
+          h5.font-weight-500.my-1
+            | Daftar Retur 
+        .card-body.table-responsive.text-nowrap
+          table class="table"
+            thead
+              th
+                | Barang
+              th
+                | Harga
+              th
+                | Beli
+              th
+                | Komplain
+              th
+                | Diganti
+              th
+                | Keterangan
+              th
+            tbody
+              - if transaction.from_complain?
+                - complain = Complain.find_by(id: transaction.complain_id)
+                - trx = Transaction.find_by(id: complain.transaction_id)
+                - @transaction_items = trx.transaction_items
+              - @transaction_items.each do |trx_item|
+                - if trx_item.retur.present?
+                  tr
+                    td #{trx_item.item.name}
+                    td #{number_with_delimiter(trx_item.price - trx_item.discount, delimiter: ".")}
+                    td #{trx_item.quantity}
+                    td #{trx_item.retur}
+                    td #{trx_item.replace}
+                    td #{trx_item.reason}
+
+

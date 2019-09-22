@@ -18,18 +18,29 @@ br
         = form_for :retur, url: returs_path, method: 'GET' do |form|
           .row
             - if ["owner", "super_admin", "super_finance"].include? current_user.level
-              .col-md-12
+              .col-md-6
                 select class="mdb-select md-form" id="months" name="store_id"
                   option value="0"
                     | Semua Toko
                   - Store.all.each do |store|
                     option value="#{store.id}"
                       | #{store.name}
+              .col-md-6
+                select class="md-form mdb-select colorful-select dropdown-primary" searchable="Nama Supplier..." name="supplier_id" id="supplierId"
+                  option value="0"
+                    | Semua Supplier
+                  - Supplier.all.each do |supplier|
+                    option value="#{supplier.id}"
+                      | #{supplier.name}
             .col-12.text-center
               input type="text" class="form-control md-form" id="search" name="search"
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
+        .col-md-12.text-center.grey-text
+          b  
+            | #{@search}
+
 
 .container-fluid
   .col-lg-12.col-md-12

@@ -1,9 +1,13 @@
 - member = "NO MEMBER"
-- member = @transaction.member.name if @transaction.member.present?
+- member = Member.find_by(card_number: @transaction.member_card) if @transaction.member_card.present?
 .row
   .col.text-left
     h5
       | Retur #{@complain.invoice}
+  .col.text-right
+    a href="#{complain_path(id: @complain.id, format: :pdf)}"
+      button.btn.btn-rounded.btn-success type="button" 
+        | CETAK
 br
 
 .container-fluid
@@ -11,25 +15,28 @@ br
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Data Retur
+          | Data Retur Pelanggan
       .card-body
         .row
           .col-4
-            label No. Trx
+            label No. Invoice
+            input disabled="disabled" class="form-control md-form" value="#{@complain.invoice}"
+          .col-4
+            label Dari Transaksi
             input disabled="disabled" class="form-control md-form" value="#{@transaction.invoice}"
           
           .col-4
             label Member
             input disabled="disabled" class="form-control md-form" value="#{member}"
           .col-4
-            label Toko
-            input disabled="disabled" class="form-control md-form" value="#{@transaction.user.store.name}"
-          .col
-            label Tanggal Transaksi
-            input disabled="disabled" class="form-control md-form" value="#{@transaction.date_created}"
-          .col
             label Tanggal Komplain
             input disabled="disabled" class="form-control md-form" value="#{@complain.date_created}"
+          .col-4
+            label Tanggal Transaksi
+            input disabled="disabled" class="form-control md-form" value="#{@transaction.date_created}"
+          .col-4
+            label Toko
+            input disabled="disabled" class="form-control md-form" value="#{@transaction.user.store.name}"
 
 .container-fluid
   .col-lg-12.col-md-12
@@ -62,7 +69,7 @@ br
             - if trx_item.retur.present?
               tr
                 td #{trx_item.item.name}
-                td #{trx_item.price}
+                td #{number_with_delimiter(trx_item.price, delimiter: ".")}
                 td #{trx_item.quantity}
                 td #{trx_item.retur}
                 td #{trx_item.replace}

@@ -2,26 +2,23 @@ class ComplainsController < ApplicationController
   before_action :require_login
   before_action :require_fingerprint
   def index
-    @complains = Complain.page param_page
-    @complains = @complains.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
-    if params[:search].present?
-      search = params[:search].downcase
-      @search = search
-      search_arr = search.split(":")
-      if search_arr.size > 2
-        complainn redirect_back_no_access_right
-      elsif search_arr.size == 2
-        store = Store.where('lower(name) like ?', "%"+search_arr[1].downcase+"%").pluck(:id)
-        member = Member.where('lower(pic) like ?', "%"+search_arr[1].downcase+"%").pluck(:id)
-          if search_arr[0]== "to" && member.present?
-            @complains = @complains.where(member: member)
-          elsif search_arr[0]== "from" && store.present?
-            @complains = @complains.where(store_id: store)
-          else
-            @complains = @complains.where("invoice like ?", "%"+ search_arr[1]+"%")
-          end
-      else
-        @complains = @complains.where("invoice like ?", "%"+ search+"%")
+    filter = filter_search params, "html"
+    @search = filter[0]
+    @finances = filter[1]
+    @params = params.to_s
+
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        new_params = eval(params[:option])
+        filter = filter_search new_params, "pdf"
+        @search = filter[0]
+        @finances = filter[1]
+        @store_name= filter[2]
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "complains/print_all.html.slim"
       end
     end
   end
@@ -51,60 +48,108 @@ class ComplainsController < ApplicationController
       total_items: total_item,
       store_id: current_user.store.id,
       date_created: Time.now,
-      member_id: @transaction.member,
+      member_card: @transaction.member_card,
       user_id: current_user.id,
       transaction_id: @transaction.id
 
-    complain_items.each do |complain_item|
-      item = Item.find complain_item[0]
-      if item.nil?
-        complain.delete
-        return redirect_back_data_error returs_path, "Data tidak valid"
-      else
-        store_stock = StoreItem.find_by(item_id: item.id)
-        if store_stock.nil?
-          complain.delete
-          return redirect_back_data_error returs_path, "Data tidak valid"
+    items_retur_total = 0
+    nominal = 0
+    items.each do |complain_item|
+      trx_item = TransactionItem.find_by(id: complain_item[0])
+      item = trx_item.item
+      store_stock = StoreItem.find_by(item: item)
+      
+
+      reason = complain_item[5]
+      retur = complain_item[3].to_i
+      replace = complain_item[4].to_i
+
+      next if retur == 0
+
+      next if (retur - replace) < 0
+
+      trx_item.retur = retur
+      trx_item.replace = replace
+      trx_item.reason = reason
+
+      nominal += (retur-replace) * (trx_item.price - trx_item.discount)
+      
+      new_stock = store_stock.stock + retur - replace
+      store_stock.stock = new_stock
+      store_stock.save!
+      trx_item.save!
+      items_retur_total += retur
+    end
+
+    complain.total_items = items_retur_total;
+    complain.nominal = nominal;
+    complain.save!
+
+    if new_items.count > 0
+      new_trx = Transaction.new
+      new_trx.invoice = "TRX-" + Time.now.to_i.to_s + "-" + current_user.store.id.to_s + "-" + current_user.id.to_s
+      new_trx.user = current_user
+      member_card = nil
+      if params[:member] != ""
+        member = Member.find_by(card_number: params[:member].to_i)
+        if member.present?
+          member_card = member.card_number
+        end
+      end
+
+      total = 0
+      discount = 0
+      hpp = 0
+
+      new_trx.member_card = member_card
+      new_trx.date_created = Time.now
+      new_trx.payment_type = 1
+      new_trx.store = current_user.store
+      new_trx.from_complain = true
+      new_trx.complain_id = complain.id
+      new_trx.sub_from_complain = nominal
+      new_trx.items = new_items.count
+      new_trx.discount = discount
+      new_trx.total = total
+      new_trx.hpp_total = hpp
+      new_trx.grand_total = total - discount
+      new_trx.save!
+      new_items.each do |new_item|
+        item = Item.find_by(id: new_item[0])
+        buy = item.buy
+        if item.local_item?
+          store_item = StoreItem.find_by(item: item, store: current_user.store)
+          if store_item.present?
+            buy = store_item.buy
+          end
         end
 
-        reason = complain_item[5]
-        retur = complain_item[3].to_i
-        replace = complain_item[4].to_i
+        qty = new_item[1].to_i
+        price = new_item[2].to_f
+        disc = new_item[3].to_f
 
-        transaction_items = @transaction.transaction_items.find_by(item: item)
-        transaction_items.retur = retur
-        transaction_items.replace = replace
-        transaction_items.reason = reason
-        
-        new_stock = store_stock.stock + retur - replace
-        next if (retur - replace) <= 0
-        item.buy = ( (item.buy*store_stock.stock) + ( (transaction_items.price-transaction_items.discount) * (retur-replace) ) ) / new_stock
-        item.save!
-        store_stock.save!
-        transaction_items.save!
-      end      
+        hpp += buy * qty
+
+        discount += disc * qty
+        total += price * qty
+
+        trx_item = TransactionItem.create item: item,  
+        transaction_id: new_trx.id,
+        quantity: qty, 
+        price: price,
+        discount: disc,
+        date_created: DateTime.now
+      end
+
+      new_trx.discount = discount
+      new_trx.total = total
+      new_trx.hpp_total = hpp
+      new_trx.grand_total = total - discount
+      new_trx.save!
+
+
+      new_trx.create_activity :create, owner: current_user
     end
-
-    additional_total = 0
-    additional_discount = 0
-    new_items.each do |new_item|
-      item = Item.find_by(id: new_item[0])
-      trx_item = TransactionItem.create item: item,  
-      transaction_id: @transaction.id,
-      quantity: new_item[1], 
-      price: new_item[2],
-      discount: 0,
-      date_created: DateTime.now
-      additional_total+= new_item[1].to_i * new_item[2].to_i
-      additional_discount+= new_item[1].to_i * new_item[3].to_i
-    end
-
-    @transaction.total = @transaction.total + additional_total
-    @transaction.discount = @transaction.discount + additional_discount
-    @transaction.grand_total = @transaction.grand_total + (additional_total - additional_discount)
-    @transaction.save!
-
-    # ubah data transaksi di hari trx ini
 
     complain.create_activity :create, owner: current_user
 
@@ -119,9 +164,54 @@ class ComplainsController < ApplicationController
     return redirect_back_data_error complains_path, "Data tidak ditemukan" if @transaction.nil?
     return redirect_back_data_error complains_path, "Tidak memiliki hak akses" if @transaction.user.store != current_user.store
     @transaction_items = @transaction.transaction_items
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "complains/print.html.slim"
+      end
+    end
   end
 
   private
+    def filter_search params, r_type
+      results = []
+      @complains = Complain.page param_page if r_type=="html"
+      @complains = Complain.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      @search = ""
+      if params["search"].present?
+        @search += "Pencarian "+params["search"]
+        search = params["search"].downcase
+        @complains =@complains.where("invoice like ?", "%"+ search+"%")
+      end
+
+      before_months = params["months"].to_i
+      @search += before_months.to_s + " bulan terakhir "
+      start_months = (DateTime.now - before_months.months).beginning_of_month.beginning_of_day 
+      @complains = @complains.where("created_at >= ?", start_months)
+
+      store_name = "SEMUA TOKO"
+      if params["store_id"].present?
+        store = Store.find_by(id: params["store_id"])
+        if store.present?
+          @complains = @complains.where(store: store)
+          store_name = store.name
+          @search += "Pencarian" if @search==""
+          @search += " di Toko '"+store.name+"'"
+        else
+          @search += "Penacarian" if @search==""
+          @search += " di Semua Toko"
+        end
+      end
+
+      results << @search
+      results << @complains
+      results << store_name
+      return results
+    end
+    
     def complain_items
       items = []
       retur_qty_status = false

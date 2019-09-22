@@ -4,36 +4,21 @@
 
 --> catat activity jika data dihapus
 
---> aktifin cron balance
+=====================================================================
 
---> aktifin notifikasi
+--> aktifin cron balance (config/schedule.rb => whenever --update-crontab)
+
+--> aktifin notifikasi (js)
+
+--> set tanggal pehitungan absent + store_id (service/finance)
 
 ======================================================================
-
---> POST
-	: ABSENT --> per tanggal berapa ?
-
-
---> pembukuan manual per hari secara cron --> jam 23.00
 
 --> recap untuk bulanan --> klik bulanan
 
+--> complain brapa hari max? 3?
+
 ======================================================================
-
---> COMPLAIN : prevent kalau total masih minus / merah
-
---> complain --> complain ubah data transaksi di hari trx itu dibuat
-
---> cek ulang redirect di retur
-
---> filter di download finance
-
---> print laporan
-	* DEBT RECEIVABLE TAX OPERATIONAL FIX_COST STOCK_VALUE SALARY STOCK
-	* retur
-		# consument
-
---> filter store di semua controller
 
 --> print struk
 
@@ -42,17 +27,12 @@
 	* due date
 	* confirm order / transfer
 
---> di item, tambah item ini bergerak dari mana saja + ref_id
-
-1. Desimal		==> complain									c
-2.	=> default jatuh tempo di order/:id/receive  	
-8. Retur musnah bisa jadi peluang 									
-
-
-8dda7b5b80d9eff0630be17308b14580
-
-
-
+--> print list index
+	* order
+	* transfer
+	* trx
+	* retur
+								
 
 
 
@@ -71,10 +51,10 @@ CREATE DATABASE cantik_mart_local;
 
 rails db:migrate
 rails c
-Store.create name:"Store Bandung"
-User.create name:"OWNER", email: "admin@pardev.id", password: "admin123", level: 1, store: Store.first 
-Store.create name:"Store Bandung 2"
-User.create name:"OWNER", email: "admin2@pardev.id", password: "admin123", level: 1, store: Store.second 
+Store.create name:"Store Bandung", cash: 10000000, equity: 10000000
+User.create name:"SUPER ADMIN 1", email: "admin@pardev.id", password: "admin123", level: 1, store: Store.first 
+Store.create name:"Store Bandung 2", cash: 10000000, equity: 10000000
+User.create name:"SUPER ADMIN 2", email: "admin2@pardev.id", password: "admin123", level: 1, store: Store.second 
 
 localhost:3000/controllers
 localhost:3000/items
@@ -95,3 +75,14 @@ Receivable.delete_all
 
 StoreItem.update_all(stock: 0)
 Store.update_all(cash: 5000000000, equity: 5000000000)
+
+
+
+
+
+
+
+
+
+
+binding port 3000 -> 80

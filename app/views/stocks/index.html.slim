@@ -20,11 +20,23 @@ br
                   - Store.all.each do |store|
                     option value="#{store.id}"
                       | #{store.name}
-            .col-12.text-center
+            .col-6.text-center
               input type="text" class="form-control md-form" id="search" name="search" placeholder="Kode Barang..."
+            .col-6
+              select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari Kategori..." name="item_cat_id" id="supplierId"
+                - ItemCat.all.each do |item_cat|
+                  option value="#{item_cat.id}"
+                    | #{item_cat.name}
+
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
+
+        .col-md-12.text-center.grey-text
+          a href="#{stocks_path(option: @params.to_s, format: :pdf)}"
+            b
+              | #{@search}
+
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4

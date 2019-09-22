@@ -3,25 +3,24 @@ class TransfersController < ApplicationController
   before_action :require_fingerprint
   def index
     @transfers = Transfer.order("date_created DESC").page param_page
-    if params[:search].present?
-      search = params[:search].downcase
-      @search = search
-      search_arr = search.split(":")
-      if search_arr.size > 2
-        return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan"
-      elsif search_arr.size == 2
-        store = Store.where('lower(name) like ?', "%"+search_arr[1].downcase+"%").pluck(:id)
-        if store.present?
-          if search_arr[0]== "to"
-            @transfers = @transfers.where(to_store_id: store)
-          elsif search_arr[1]== "from"
-            @transfers = @transfers.where(from_store_id: store)
-          else
-            @transfers = @transfers.where("invoice like ?", "%"+ search_arr[1]+"%")
-          end
-        end
+    @transfers = @transfers.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+    
+    @search = ""
+    if params["search"].present?
+      @search += "Pencarian "+params["search"]
+      search = params["search"].downcase
+      @transfers =@transfers.where("invoice like ?", "%"+ search+"%")
+    end
+
+    if params["store_id"].present?
+      store = Store.find_by(id: params["store_id"])
+      if store.present?
+        @transfers = @transfers.where("to_store_id = ? OR from_store_id = ?", store.id, store.id)
+        @search += "Pencarian" if @search==""
+        @search += " di Toko '"+store.name+"'"
       else
-        @transfers = @transfers.where("invoice like ?", "%"+ search+"%")
+        @search += "Penacarian" if @search==""
+        @search += " di Semua Toko"
       end
     end
   end

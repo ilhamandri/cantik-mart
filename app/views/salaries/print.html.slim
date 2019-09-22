@@ -1,0 +1,33 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Karyawan 
+      td
+        textarea #{@user_name}
+    tr
+      td.meta-head Jenis
+      td 
+        textarea Gaji Karyawan
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | #{@search}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Karyawan
+    th Toko
+    th Tanggal
+    th Nominal
+
+  - @salaries.each do |salary|
+    tr.item-row
+      td #{salary.user.name}
+      td #{salary.user.store.name}
+      td #{salary.created_at.month} / #{salary.created_at.year}
+      td #{salary.nominal}

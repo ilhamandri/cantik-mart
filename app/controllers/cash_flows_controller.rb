@@ -156,6 +156,7 @@ class CashFlowsController < ApplicationController
       search_text = "Pencarian "
       filters = CashFlow.page param_page
       filters = filters.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+
       finance_types = params["finance_type"]
       if finance_types.present?
         finance_types = finance_types.map(&:to_i)
@@ -182,15 +183,15 @@ class CashFlowsController < ApplicationController
       if switch_data_month_param == "month" 
         before_months = params["months"].to_i
         search_text += before_months.to_s + " bulan terakhir "
-        start_months = (DateTime.now - before_months.months).beginning_of_month 
-        filters = filters.where("date_created >= ?", start_months)
+        start_months = (DateTime.now - before_months.months).beginning_of_day
+        filters = filters.where("created_at >= ?", start_months)
       else
-        end_date = DateTime.now.to_date + 1.day
-        start_date = DateTime.now.to_date - 1.weeks
+        end_date = DateTime.now.to_date.end_of_day + 3.days
+        start_date = DateTime.now.to_date.beginning_of_day - 1.weeks
         end_date = params["end_date"] if params["end_date"].present?
         start_date = params["date_from"] if params["date_from"].present?
         search_text += "dari " + start_date.to_date.to_s + " hingga " + end_date.to_date.to_s + " "
-        filters = filters.where("date_created >= ? AND date_created <= ?", start_date, end_date)
+        filters = filters.where("created_at >= ? AND created_at <= ?", start_date, end_date)
       end
 
       store_id = params["store_id"].to_i

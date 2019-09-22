@@ -2,15 +2,74 @@ class StocksController < ApplicationController
   before_action :require_login
   before_action :require_fingerprint
   def index
-    @inventories = StoreItem.page param_page
-    @inventories = @inventories.where(store: current_user.store)
+    filter = filter_search params, "html"
+    @search = filter[0]
+    @inventories = filter[1]
+
+    @params = params.to_s
+    respond_to do |format|
+      format.html
+      format.pdf do
+        new_params = eval(params[:option])
+        filter = filter_search new_params, "pdf"
+        @search = filter[0]
+        @inventories = filter[1]
+        @store_name= filter[2]
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "stocks/print.html.slim"
+      end
+    end    
+  end
+
+  def filter_search params, respond_type
+    results = []
+    @inventories = StoreItem.all
+    @inventories = @inventories.where(store: current_user.store) if !["owner", "super_admin", "super_finance"].include? current_user.level
+    @inventories = @inventories.page param_page if respond_type != "pdf"
+    @search = ""
+
+    items = nil
+
     if params[:search].present?
-      @search = params[:search].downcase
-      search = "%"+@search+"%"
-      items = Item.where('lower(name) like ? OR code like ?', search, search).pluck(:id)
+      @search = "Pencarian '"+params[:search]+"'"
+      lower_search = params[:search].downcase
+      search = "%"+lower_search+"%"
+      items = Item.where('lower(name) like ? OR lower(code) like ?', search, search).pluck(:id)
       @inventories = @inventories.where(item_id: items)
     end
+    store_name = "SEMUA TOKO"
+    if params["store_id"].present?
+      store = Store.find_by(id: params["store_id"])
+      if store.present?
+        @inventories = @inventories.where(store: store)
+        @search += "Pencarian " if @search==""
+        @search += " di Toko "+store.name
+        store_name = store.name
+      else
+        @search += "Penacarian " if @search==""
+        @search += " di Semua Toko" 
+      end
+    end
 
+    if params["item_cat_id"].present?
+      item_cat = ItemCat.find_by(id: params["item_cat_id"])
+      if item_cat.present?
+        items = Item.all if items.nil?
+        items = items.where(item_cat: item_cat)
+        @inventories = @inventories.where(item: items)
+        @search += "Penacarian " if @search==""
+        @search += " pada kategori "+item_cat.name
+      else
+        @search += "Penacarian " if @search==""
+        @search += " pada Semua Kategori"
+      end
+    end
+
+    results << @search
+    results << @inventories
+    results << store_name
+    return results
   end
 
   def edit

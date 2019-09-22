@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_18_165930) do
+ActiveRecord::Schema.define(version: 2019_09_22_165620) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 2019_09_18_165930) do
     t.datetime "updated_at", null: false
     t.bigint "transaction_id", null: false
     t.bigint "member_card"
+    t.float "nominal", default: 0.0, null: false
     t.index ["store_id"], name: "index_complains_on_store_id"
     t.index ["transaction_id"], name: "index_complains_on_transaction_id"
     t.index ["user_id"], name: "index_complains_on_user_id"
@@ -544,6 +545,9 @@ ActiveRecord::Schema.define(version: 2019_09_18_165930) do
     t.string "card_number"
     t.bigint "member_card"
     t.bigint "store_id", default: 1, null: false
+    t.float "sub_from_complain", default: 0.0, null: false
+    t.boolean "from_complain", default: false, null: false
+    t.bigint "complain_id"
     t.index ["store_id"], name: "index_transactions_on_store_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end

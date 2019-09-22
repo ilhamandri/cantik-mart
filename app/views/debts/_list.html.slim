@@ -6,7 +6,7 @@ tr
   td #{finance.finance_type}
   td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
   td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}
-  td #{finance.due_date}
+  td #{finance.due_date.to_date}
   td
     - if finance.finance_type == "BANK"
       - if finance.deficiency.abs > 0 

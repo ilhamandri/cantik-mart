@@ -10,16 +10,16 @@
         | Pencarian
     .card.mb-4
       .card-body
-        = form_for :finances, url: taxs_path, method: 'GET' do |form|
+        = form_for :finances, url: salaries_path, method: 'GET' do |form|
           .row
             - if ["owner", "super_admin", "super_finance"].include? current_user.level
               .col-md-12
-                select class="mdb-select md-form" id="months" name="store_id"
+                select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="user_id"
                   option value="0"
-                    | Semua Toko
-                  - Store.all.each do |store|
-                    option value="#{store.id}"
-                      | #{store.name}
+                    | Semua Karyawan
+                  - User.all.each do |user|
+                    option value="#{user.id}"
+                      | #{user.name} - #{user.store.name}
             .col
               select class="mdb-select md-form" id="months" name="months"
                 option[value=3]
@@ -39,8 +39,9 @@
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
-        - if @search.present?
-          .col-md-12.text-center.grey-text
+
+        .col-md-12.text-center.grey-text
+          a href="#{salaries_path(option: @params.to_s, format: :pdf)}"
             b
               | #{@search}
           

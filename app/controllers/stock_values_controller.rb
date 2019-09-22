@@ -4,9 +4,24 @@ class StockValuesController < ApplicationController
 
   def index
     AccountBalance.balance_account
-    filter = filter_search
+    filter = filter_search params
     @search = filter[0]
     @finances = filter[1]
+
+    @params = params
+    respond_to do |format|
+      format.html
+      format.pdf do
+        new_params = eval(params[:option])
+        filter = filter_search new_params
+        @search = filter[0]
+        @finances = filter[1]
+        @store_name= filter[2]
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "stock_values/print.html.slim"
+      end
+    end
   end
 
   private
@@ -14,7 +29,7 @@ class StockValuesController < ApplicationController
       params[:page]
     end
     
-    def filter_search
+    def filter_search params
       results = []
       search_text = "Pencarian "
       filters = StockValue.page param_page
@@ -29,6 +44,17 @@ class StockValuesController < ApplicationController
       start_months = (DateTime.now - before_months.months).beginning_of_month 
       filters = filters.where("date_created >= ?", start_months)
 
+      store_name = "SEMUA TOKO"
+      if params["store_id"].present?
+        store = Store.find_by(id: params["store_id"])
+        if store.present?
+          filters = filters.where(store: store)
+          search_text += "di Toko '"+store.name+"' "
+        else
+          search_text += "di Semua Toko "
+        end
+      end
+      
       if params[:order_by] == "asc"
         search_text+= "secara menaik"
         filters = filters.order("date_created ASC")
@@ -38,6 +64,7 @@ class StockValuesController < ApplicationController
       end
       results << search_text
       results << filters
+      results << store_name
       return results
     end
 end

@@ -53,8 +53,9 @@
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
-        - if @search.present?
-          .col-md-12.text-center.grey-text
+
+        .col-md-12.text-center.grey-text
+          a href="#{operationals_path(option: @params.to_s, format: :pdf)}"
             b
               | #{@search}
 .container-fluid

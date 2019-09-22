@@ -119,6 +119,7 @@ class ApisController < ApplicationController
         end
       else
         item << item_store.item.sell
+        item << item_id.discount
       end
       item << item_id.id
       json_result << item

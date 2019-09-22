@@ -4,8 +4,8 @@ class OrdersController < ApplicationController
   before_action :require_fingerprint
   def index
     @orders = Order.order("date_created DESC").page param_page
-    @search_text = ""
-    @orders = @orders.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+    @search = ""
+    @orders = @orders.where(store: current_user.store) if  !["owner", "super_admin", "super_finance"].include? current_user.level
 
     if params[:search].present?
       search = params[:search].downcase
@@ -22,29 +22,41 @@ class OrdersController < ApplicationController
         end
       else
         @orders = @orders.where("lower(invoice) like ?", "%"+ search+"%")
-        @search_text += "Pencarian " + search.upcase + " "
+        @search += "Pencarian " + search.upcase + " "
       end
     end
 
 
     if params[:type].present?
       @color = ""
+      @search += "Pencarian " if @search==""
       type = params[:type]
       if type == "ongoing" 
         @color = "warning"
-        @search_text += "dengan status sedang dalam proses"
+        @search += "dengan status sedang dalam proses"
         @orders = @orders.where(store_id: current_user.store.id).where('date_receive is null')
       elsif type == "payment"
         @color = "danger"
-        @search_text += "dengan status belum lunas"
+        @search += "dengan status belum lunas"
         @orders = @orders.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null')
        elsif type == "complete"
         @color = "success"
-        @search_text += "dengan status lunas"
+        @search += "dengan status lunas"
         @orders = @orders.where("date_paid_off  is not null").order("date_created DESC")
       end
     end
 
+    if params["store_id"].present?
+      store = Store.find_by(id: params["store_id"])
+      if store.present?
+        @orders = @orders.where(store: store)
+        @search += "Pencarian" if @search==""
+        @search += " di Toko '"+store.name+"'"
+      else
+        @search += "Penacarian" if @search==""
+        @search += " di Semua Toko"
+      end
+    end
     
   end
 

@@ -6,9 +6,10 @@ class TransactionsController < ApplicationController
   def index
     @transactions = Transaction.page param_page
     @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+    @search = ""
     if params[:search].present?
       search = params[:search].downcase
-      @search = search
+      @search = "Pencarian "+params[:search]
       search_arr = search.split(":")
       if search_arr.size > 2
         return redirect_back_data_error transactions_path, "Data Tidak Valid"
@@ -21,6 +22,18 @@ class TransactionsController < ApplicationController
           end
       else
         @transactions = @transactions.where("invoice like ?", "%"+ search+"%")
+      end
+    end
+
+    if params["store_id"].present?
+      store = Store.find_by(id: params["store_id"])
+      if store.present?
+        @transactions = @transactions.where(store: store)
+        @search += "Pencarian" if @search==""
+        @search += " di Toko '"+store.name+"'"
+      else
+        @search += "Penacarian" if @search==""
+        @search += " di Semua Toko"
       end
     end
   end

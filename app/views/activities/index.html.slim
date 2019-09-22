@@ -24,14 +24,6 @@ br
           - if @search_id.nil?
             input type="number" class="form-control md-form" name="id" value="#{@search_id}" style="display: none"
           .row.align-middle
-            - if ["owner", "super_admin", "super_finance"].include? current_user.level
-              .col-md-12
-                select class="mdb-select md-form" id="months" name="store_id"
-                  option value="0"
-                    | Semua Toko
-                  - Store.all.each do |store|
-                    option value="#{store.id}"
-                      | #{store.name}
             .col-md-4.text-center
               select.mdb-select.colorful-select.dropdown-primary.md-form multiple="multiple" searchable=("Cari Pengguna")  name="activity[access_levels][]"
                 - users_level = UserMethod.where(controller_method: @method).pluck(:user_level)

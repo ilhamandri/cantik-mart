@@ -1,0 +1,52 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Toko 
+      td
+        textarea #{@store_name}
+    tr
+      td.meta-head Jenis
+      td 
+        textarea Retur Konsumen
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | #{@search}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Invoice
+    th Dari Transaksi
+    th Ke Transaksi
+    th Member
+    th Tanggal Retur
+    th Total Item
+    th Nominal
+
+  - @complains.each do |complain|
+    - trx = Transaction.find_by(id: complain.transaction_id)
+    - member = "-"
+    - member = Member.find_by(card_number: complain.member_card) if complain.member_card.present?
+    tr.item-row
+      td 
+        textarea #{complain.invoice}
+      td 
+        textarea #{trx.invoice}
+      td 
+        textarea #{trx.invoice}
+      td 
+        textarea #{member}
+      td 
+        | #{complain.created_at} 
+        br
+        | ( #{complain.user.name}- #{complain.user.store.name} )
+      td 
+        textarea #{complain.total_items}
+      td 
+        textarea #{complain.total_items}
+

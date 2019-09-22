@@ -1,9 +1,0 @@
-1. run 'bundle install'
-2. run 'rails db:migrate'
-3. Create using rails console
-	1. Store
-	2. User
-	3. Member
-	4. Item
-	5. Supplier
-4. After creating user, change that user id into 999999 as super_admin

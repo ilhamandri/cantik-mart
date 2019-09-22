@@ -18,13 +18,23 @@ br
         = form_for :order, url: orders_path, method: 'GET' do |form|
           .row  
             - if ["owner", "super_admin", "super_finance"].include? current_user.level
-              .col-md-12
+              .col-md-6
                 select class="mdb-select md-form" id="months" name="store_id"
                   option value="0"
                     | Semua Toko
                   - Store.all.each do |store|
                     option value="#{store.id}"
                       | #{store.name}
+              .col-md-6
+                select class="mdb-select md-form" id="months" name="month"
+                  option value="3"
+                    | 1 Bulan
+                  option value="3"
+                    | 3 Bulan
+                  option value="3"
+                    | 6 Bulan
+                  option value="3"
+                    | 12 Bulan
             .col-6
               input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice (12345678)" value="#{@seacrh}"
             .col-6
@@ -40,10 +50,10 @@ br
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
-        .row
-          .col.text-center
-            p
-              | #{@search_text}
+        br      
+        .col-md-12.text-center.grey-text
+          b  
+            | #{@search}
 .container-fluid
   .col-lg-12.col-md-12
     - if @color == "danger"

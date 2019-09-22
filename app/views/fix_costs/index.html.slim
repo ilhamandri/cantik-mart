@@ -44,8 +44,9 @@
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
-        - if @search.present?
-          .col-md-12.text-center.grey-text
+
+        .col-md-12.text-center.grey-text
+          a href="#{fix_costs_path(option: @params.to_s, format: :pdf)}"
             b
               | #{@search}
           

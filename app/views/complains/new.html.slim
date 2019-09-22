@@ -1,5 +1,5 @@
 - member = "NO MEMBER"
-- member = @transaction.member.name if @transaction.member.present?
+- member = Member.find_by(card_number: @transaction.member_card) if @transaction.member_card.present?
 .row
   .col.text-left
     h5
@@ -39,7 +39,7 @@ br
             - @transaction_items.each_with_index do |trx_item, index|
               tr
                 td hidden=true
-                  input type="text" required=true class="form-control" id="description" name="complain[complain_items][#{index}][item_id]" value="#{trx_item.item.id}" 
+                  input type="text" required=true class="form-control" id="description" name="complain[complain_items][#{index}][item_id]" value="#{trx_item.id}" 
                 td
                   | #{trx_item.item.name}
                 td 
@@ -81,8 +81,10 @@ br
                     | Jumlah
                   th
                     | Harga
+                  th
+                    | Diskon
 
 
   .col-md-12.text-center
     .form-group.text-center
-      = form.submit "Buat Retur", class: "btn btn-rounded btn-primary"
+      = form.submit "Buat Retur", class: "btn btn-rounded btn-primary", id: "submitButton", style:"display: none;"
