@@ -18,7 +18,7 @@ br
        = form_for :complain, url: complains_path, method: 'GET' do |form|
         .row   
           - if ["owner", "super_admin", "super_finance"].include? current_user.level
-            .col-md-6
+            .col-md-12
               select class="mdb-select md-form" name="store_id"
                 option value="0"
                   | Semua Toko
@@ -35,8 +35,8 @@ br
                   | 6 Bulan
                 option value="12"
                   | 12 Bulan
-          .col-12.text-center
-            input type="text" class="form-control md-form" id="search" name="search"
+          .col-6.text-center
+            input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice ... "
           .col-12.text-center
             button class="btn btn-rounded btn-primary"
               | Cari

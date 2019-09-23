@@ -188,10 +188,12 @@ class ComplainsController < ApplicationController
       end
 
       before_months = params["months"].to_i
-      @search += before_months.to_s + " bulan terakhir "
-      start_months = (DateTime.now - before_months.months).beginning_of_month.beginning_of_day 
-      @complains = @complains.where("created_at >= ?", start_months)
-
+      if before_months != 0
+        @search += before_months.to_s + " bulan terakhir "
+        start_months = (DateTime.now - before_months.months).beginning_of_month.beginning_of_day 
+        @complains = @complains.where("created_at >= ?", start_months)
+      end
+      
       store_name = "SEMUA TOKO"
       if params["store_id"].present?
         store = Store.find_by(id: params["store_id"])

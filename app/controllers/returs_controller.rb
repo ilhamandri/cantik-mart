@@ -2,72 +2,22 @@ class RetursController < ApplicationController
   before_action :require_login
   before_action :require_fingerprint
   def index
-    @returs = Retur.order("date_created DESC").page(param_page).per(5)
-    @returs_new = Retur.where('date_approve is null')
-      .order("date_created DESC").page(param_page).per(5)
-    @returs_complete = Retur.where('status is not null')
-      .order("date_created DESC").page(param_page).per(5)
-    @returs_picked = Retur.where('date_picked is not null AND status is null')
-      .order("date_created DESC").page(param_page).per(5)
-    @returs_waiting = Retur.where('date_approve is not null AND date_picked is null')
-      .order("date_created DESC").page(param_page).per(5)
-
+    filter = filter_search params, "html"
+    @search = filter[0]
+    @returs = filter[1]
     @params = params.to_s
 
-    @returs = @returs.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
-    @returs_new = @returs_new.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
-    @returs_complete = @returs_complete.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
-    @returs_picked = @returs_picked.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
-    @returs_waiting = @returs_waiting.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
-    if (current_user.level != User::OWNER) || (current_user.level != User::SUPER_ADMIN)
-      @returs = @returs.where(store: current_user.store)
-      @returs_new = @returs_new.where(store: current_user.store)
-      @returs_complete = @returs_complete.where(store: current_user.store)
-      @returs_picked = @returs_picked.where(store: current_user.store)
-      @returs_waiting =  @returs_waiting.where(store: current_user.store)
-    end
-
-
-    @search = ""
-    if params["search"].present?
-      @search += "Pencarian "+params["search"]
-      search = params["search"].downcase
-    
-      @returs = @returs.where("invoice like ?", "%"+ search+"%")
-      @returs_new = @returs_new.where("invoice like ?", "%"+ search+"%")
-      @returs_complete = @returs_complete.where("invoice like ?", "%"+ search+"%")
-      @returs_picked = @returs_picked.where("invoice like ?", "%"+ search+"%")
-      @returs_waiting =  @returs_waiting.where("invoice like ?", "%"+ search+"%")
-    end
-
-    if params["supplier_id"].present?
-      supplier = Supplier.find_by(id: params["supplier_id"])
-      @search += "Pencarian" if @search==""
-      if supplier.present?
-        @search +=" dengan Supplier '"+supplier.name+"'"
-        @returs = @returs.where(supplier: supplier)
-        @returs_new = @returs_new.where(supplier: supplier)
-        @returs_complete = @returs_complete.where(supplier: supplier)
-        @returs_picked = @returs_picked.where(supplier: supplier)
-        @returs_waiting =  @returs_waiting.where(supplier: supplier)
-      else
-        @search += " dengan Semua Supplier"
-      end
-    end
-
-    if params["store_id"].present?
-      store = Store.find_by(id: params["store_id"])
-      if store.present?
-        @returs = @returs.where(store: store)
-        @returs_new = @returs_new.where(store: store)
-        @returs_complete = @returs_complete.where(store: store)
-        @returs_picked = @returs_picked.where(store: store)
-        @returs_waiting = @returs_waiting.where(store: store)
-        @search += "Pencarian" if @search==""
-        @search += " di Toko '"+store.name+"'"
-      else
-        @search += "Pencarian" if @search==""
-        @search += " di Semua Toko"
+    respond_to do |format|
+      format.html
+      format.pdf do
+        new_params = eval(params[:option])
+        filter = filter_search new_params, "pdf"
+        @search = filter[0]
+        @returs = filter[1]
+        @store_name= filter[2]
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "returs/print_all.html.slim"
       end
     end
   end
@@ -209,6 +159,71 @@ class RetursController < ApplicationController
   end
 
   private
+    def filter_search params, r_type
+      results = []
+      @returs = Retur.all
+      if r_type == "html"
+        @returs = @returs.page param_page if r_type=="html"
+      end
+      @returs = @returs.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      @search = ""
+      if params["search"].present?
+        @search += "Pencarian "+params["search"]
+        search = params["search"].downcase
+        @returs =@returs.where("invoice like ?", "%"+ search+"%")
+      end
+
+      before_months = params["months"].to_i
+      if before_months != 0
+        @search += before_months.to_s + " bulan terakhir "
+        start_months = (DateTime.now - before_months.months).beginning_of_month.beginning_of_day 
+        @returs = @returs.where("created_at >= ?", start_months)
+      end
+
+      store_name = "SEMUA TOKO"
+      if params["store_id"].present?
+        store = Store.find_by(id: params["store_id"])
+        if store.present?
+          @returs = @returs.where(store: store)
+          store_name = store.name
+          @search += "Pencarian" if @search==""
+          @search += " di Toko '"+store.name+"' "
+        else
+          @search += "Penacarian" if @search==""
+          @search += " di Semua Toko "
+        end
+      end
+
+      if params["type"].present?
+        @color = ""
+        @search += "Pencarian " if @search==""
+        type = params["type"]
+        if type == "pick" 
+          @color = "warning"
+          @search += "dengan status menunggu pengambilan supplier"
+          @returs = @returs.where('date_approve is not null AND date_picked is null').order("date_created DESC")
+        elsif type == "feedback"
+          @color = "danger"
+          @search += "dengan status menunggu hasil"
+          @returs = @returs.where('date_picked is not null AND status is null').order("date_created DESC")
+         elsif type == "complete"
+          @color = "success"
+          @search += "dengan status selesai"
+          @returs = @returs.where('status is not null').order("date_created DESC")
+        elsif type == "confirm"
+          @returs = @returs.where('date_approve is null').order("date_created DESC")
+          @color = "info"
+          @search += "dengan status menunggu konfirmasi"
+        end
+      end
+
+      results << @search
+      results << @returs
+      results << store_name
+      return results
+    end
+
+
     def retur_items
       items = []
       if params[:retur][:retur_items].present?

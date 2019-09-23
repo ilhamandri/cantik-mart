@@ -72,7 +72,7 @@ table#items
         textarea #{ppn}
       td
         - grand_total = "-"
-        - grand_total = order_item.total if received
+        - grand_total = order_item.grand_total if received
         span #{number_with_delimiter(grand_total, delimiter: ".", separator: ",")}
 
   - if received

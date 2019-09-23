@@ -4,36 +4,22 @@ class TransactionsController < ApplicationController
   skip_before_action :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
 
   def index
-    @transactions = Transaction.page param_page
-    @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
-    @search = ""
-    if params[:search].present?
-      search = params[:search].downcase
-      @search = "Pencarian "+params[:search]
-      search_arr = search.split(":")
-      if search_arr.size > 2
-        return redirect_back_data_error transactions_path, "Data Tidak Valid"
-      elsif search_arr.size == 2
-        store = Store.where('lower(store) like ?', "%"+search_arr[1].downcase+"%").pluck(:id)
-          if search_arr[0]== "store" && store.present?
-            @transactions = @transactions.where(store_id: store)
-          else
-            @transactions = @transactions.where("invoice like ?", "%"+ search_arr[1]+"%")
-          end
-      else
-        @transactions = @transactions.where("invoice like ?", "%"+ search+"%")
-      end
-    end
+    filter = filter_search params, "html"
+    @search = filter[0]
+    @transactions = filter[1]
+    @params = params.to_s
 
-    if params["store_id"].present?
-      store = Store.find_by(id: params["store_id"])
-      if store.present?
-        @transactions = @transactions.where(store: store)
-        @search += "Pencarian" if @search==""
-        @search += " di Toko '"+store.name+"'"
-      else
-        @search += "Penacarian" if @search==""
-        @search += " di Semua Toko"
+    respond_to do |format|
+      format.html
+      format.pdf do
+        new_params = eval(params[:option])
+        filter = filter_search new_params, "pdf"
+        @search = filter[0]
+        @transactions = filter[1]
+        @store_name= filter[2]
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "transactions/print_all.html.slim"
       end
     end
   end
@@ -112,6 +98,47 @@ class TransactionsController < ApplicationController
   end
 
   private
+    def filter_search params, r_type
+      results = []
+      @transactions = Transaction.all
+      if r_type == "html"
+        @transactions = @transactions.page param_page if r_type=="html"
+      end
+      @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      @search = ""
+      if params["search"].present?
+        @search += "Pencarian "+params["search"]
+        search = params["search"].downcase
+        @transactions =@transactions.where("invoice like ?", "%"+ search+"%")
+      end
+
+      before_months = params["months"].to_i
+      if before_months != 0
+        @search += before_months.to_s + " bulan terakhir "
+        start_months = (DateTime.now - before_months.months).beginning_of_month.beginning_of_day 
+        @transactions = @transactions.where("created_at >= ?", start_months)
+      end
+
+      store_name = "SEMUA TOKO"
+      if params["store_id"].present?
+        store = Store.find_by(id: params["store_id"])
+        if store.present?
+          @transactions = @transactions.where(store: store)
+          store_name = store.name
+          @search += "Pencarian" if @search==""
+          @search += " di Toko '"+store.name+"'"
+        else
+          @search += "Penacarian" if @search==""
+          @search += " di Semua Toko"
+        end
+      end
+
+      results << @search
+      results << @transactions
+      results << store_name
+      return results
+    end
+
     def trx_items
       items = []
       par_items = params[:items].values

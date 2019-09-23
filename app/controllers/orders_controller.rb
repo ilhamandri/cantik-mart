@@ -3,61 +3,24 @@ class OrdersController < ApplicationController
   before_action :require_login
   before_action :require_fingerprint
   def index
-    @orders = Order.order("date_created DESC").page param_page
-    @search = ""
-    @orders = @orders.where(store: current_user.store) if  !["owner", "super_admin", "super_finance"].include? current_user.level
+    filter = filter_search params, "html"
+    @search = filter[0]
+    @orders = filter[1]
+    @params = params.to_s
 
-    if params[:search].present?
-      search = params[:search].downcase
-      search_arr = search.split(":")
-      if search_arr.size > 2
-        return redirect_back_data_error orders_path, "Data Tidak Valid"
-      elsif search_arr.size == 2
-        supplier = Supplier.where('lower(pic) like ?', "%"+search_arr[1].downcase+"%").pluck(:id)
-        if search_arr[0]== "supplier" && supplier.present?
-          @orders = @orders.where(supplier_id: supplier)
-        else
-          @orders = @orders.where("lower(invoice) like ?", "%"+ search_arr[1]+"%")
-          @search_text += "Pencarian " + search_arr[1].upcase + " "
-        end
-      else
-        @orders = @orders.where("lower(invoice) like ?", "%"+ search+"%")
-        @search += "Pencarian " + search.upcase + " "
+    respond_to do |format|
+      format.html
+      format.pdf do
+        new_params = eval(params[:option])
+        filter = filter_search new_params, "pdf"
+        @search = filter[0]
+        @orders = filter[1]
+        @store_name= filter[2]
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "orders/print_all.html.slim"
       end
     end
-
-
-    if params[:type].present?
-      @color = ""
-      @search += "Pencarian " if @search==""
-      type = params[:type]
-      if type == "ongoing" 
-        @color = "warning"
-        @search += "dengan status sedang dalam proses"
-        @orders = @orders.where(store_id: current_user.store.id).where('date_receive is null')
-      elsif type == "payment"
-        @color = "danger"
-        @search += "dengan status belum lunas"
-        @orders = @orders.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null')
-       elsif type == "complete"
-        @color = "success"
-        @search += "dengan status lunas"
-        @orders = @orders.where("date_paid_off  is not null").order("date_created DESC")
-      end
-    end
-
-    if params["store_id"].present?
-      store = Store.find_by(id: params["store_id"])
-      if store.present?
-        @orders = @orders.where(store: store)
-        @search += "Pencarian" if @search==""
-        @search += " di Toko '"+store.name+"'"
-      else
-        @search += "Penacarian" if @search==""
-        @search += " di Semua Toko"
-      end
-    end
-    
   end
 
   def new
@@ -413,6 +376,68 @@ class OrdersController < ApplicationController
   end
 
   private
+
+    def filter_search params, r_type
+      results = []
+      @orders = Order.all
+      if r_type == "html"
+        @orders = @orders.page param_page if r_type=="html"
+      end
+      @orders = @orders.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      @search = ""
+      if params["search"].present?
+        @search += "Pencarian "+params["search"]
+        search = params["search"].downcase
+        @orders =@orders.where("invoice like ?", "%"+ search+"%")
+      end
+
+      before_months = params["months"].to_i
+      if before_months != 0
+        @search += before_months.to_s + " bulan terakhir "
+        start_months = (DateTime.now - before_months.months).beginning_of_month.beginning_of_day 
+        @orders = @orders.where("created_at >= ?", start_months)
+      end
+
+      store_name = "SEMUA TOKO"
+      if params["store_id"].present?
+        store = Store.find_by(id: params["store_id"])
+        if store.present?
+          @orders = @orders.where(store: store)
+          store_name = store.name
+          @search += "Pencarian" if @search==""
+          @search += " di Toko '"+store.name+"'"
+        else
+          @search += "Penacarian" if @search==""
+          @search += " di Semua Toko"
+        end
+      end
+
+      if params["type"].present?
+        @color = ""
+        @search += "Pencarian " if @search==""
+        type = params["type"]
+        if type == "ongoing" 
+          @color = "warning"
+          @search += "dengan status sedang dalam proses"
+          @orders = @orders.where(store_id: current_user.store.id).where('date_receive is null')
+        elsif type == "payment"
+          @color = "danger"
+          @search += "dengan status belum lunas"
+          @orders = @orders.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null')
+         elsif type == "complete"
+          @color = "success"
+          @search += "dengan status lunas"
+          @orders = @orders.where("date_paid_off  is not null").order("date_created DESC")
+        end
+      end
+
+      results << @search
+      results << @orders
+      results << store_name
+      return results
+    end
+
+    
     def paid_params
       params.require(:order_pay).permit(
         :nominal, :date_paid

@@ -22,17 +22,19 @@
 
 --> print struk
 
+--> perubahan harga 
+	* notif untuk cetak 
+
+--> diskon 
+	* 2x + 1y => add new item di json paling akhir 
+
+--> check kalau ada item baru 
+	* jangan bikin baris baru
+
 --> cek semua notifikasi
 	* payment
 	* due date
-	* confirm order / transfer
-
---> print list index
-	* order
-	* transfer
-	* trx
-	* retur
-								
+	* confirm order / transfer							
 
 
 

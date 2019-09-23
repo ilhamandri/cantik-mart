@@ -19,22 +19,33 @@ br
         = form_for :transfer, url: transfers_path, method: 'GET' do |form|
           .row
             - if ["owner", "super_admin", "super_finance"].include? current_user.level
-              .col-md-12
+              .col-12
                 select class="mdb-select md-form" id="months" name="store_id"
                   option value="0"
                     | Semua Toko
                   - Store.all.each do |store|
                     option value="#{store.id}"
                       | #{store.name}
-            .col-12.text-center
+            .col-md-6
+              select class="mdb-select md-form" id="months" name="months"
+                option value="1"
+                  | 1 Bulan
+                option value="3"
+                  | 3 Bulan
+                option value="6"
+                  | 6 Bulan
+                option value="12"
+                  | 12 Bulan
+            .col-6.text-center
               input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice ..."
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
-        br      
+        br
         .col-md-12.text-center.grey-text
-          b  
-            | #{@search}
+          a href="#{transfers_path(option: @params.to_s, format: :pdf)}"
+            b
+              | #{@search}
 
 .container-fluid
   .col-lg-12.col-md-12

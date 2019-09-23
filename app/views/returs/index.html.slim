@@ -16,106 +16,85 @@ br
           | Pencarian
       .card-body
         = form_for :retur, url: returs_path, method: 'GET' do |form|
-          .row
+          .row  
             - if ["owner", "super_admin", "super_finance"].include? current_user.level
-              .col-md-6
+              .col-md-12
                 select class="mdb-select md-form" id="months" name="store_id"
                   option value="0"
                     | Semua Toko
                   - Store.all.each do |store|
                     option value="#{store.id}"
                       | #{store.name}
-              .col-md-6
-                select class="md-form mdb-select colorful-select dropdown-primary" searchable="Nama Supplier..." name="supplier_id" id="supplierId"
-                  option value="0"
-                    | Semua Supplier
-                  - Supplier.all.each do |supplier|
-                    option value="#{supplier.id}"
-                      | #{supplier.name}
-            .col-12.text-center
-              input type="text" class="form-control md-form" id="search" name="search"
+            .col-md-6
+              select class="mdb-select md-form" id="months" name="months"
+                option value="1"
+                  | 1 Bulan
+                option value="3"
+                  | 3 Bulan
+                option value="6"
+                  | 6 Bulan
+                option value="12"
+                  | 12 Bulan
+            .col-6
+              select[class="mdb-select md-form md-outline colorful-select dropdown-primary" id="order_type" name="type"]
+                option[value=""]
+                  | Semua
+                option[value="confirm"]
+                  | Menunggu Konfirmasi
+                option[value="pick"]
+                  | Menunggu Pengambilan
+                option[value="feedback"]
+                  | Menunggu Keputusan
+                option[value="complete"]
+                  | Selesai
+            .col-12
+              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice (12345678)" value="#{@seacrh}"
+            
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
+        br
         .col-md-12.text-center.grey-text
-          b  
-            | #{@search}
+          a href="#{returs_path(option: @params.to_s, format: :pdf)}"
+            b
+              | #{@search}
 
 
 .container-fluid
   .col-lg-12.col-md-12
-    .card.mb-4 style="overflow-x:auto;"
-      .card-header.white-text.primary-color
-        h5.font-weight-500.my-1
-          | Menunggu Konfirmasi
-      .card-body
-        table class="table"
-          thead
-            th Invoice
-            th Dari
-            th Kepada
-            th Total Item
-            th Tgl. Buat
-            th Aksi
-          tbody
-            = render partial: 'list_new', collection: @returs_new, as: :retur
-        = paginate @returs_new
-
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4 style="overflow-x:auto;"
-      .card-header.white-text.warning-color
-        h5.font-weight-500.my-1
-          | Menunggu Pengambilan
-      .card-body
-        table class="table"
-          thead
-            th Invoice
-            th Dari
-            th Kepada
-            th Total Item
-            th Tgl. Konfirmasi
-            th Aksi
-          tbody
-            = render partial: 'list_waiting', collection: @returs_waiting, as: :retur
-        = paginate @returs_waiting
-
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4 style="overflow-x:auto;"
-      .card-header.white-text.danger-color
+    - if @color == "danger"
+      .card-header.white-text.danger-color 
         h5.font-weight-500.my-1
           | Menunggu Keputusan
-      .card-body
-        table class="table"
-          thead
-            th Invoice
-            th Dari
-            th Kepada
-            th Total Item
-            th Tgl. Pengambilan
-            th Aksi
-          tbody
-            = render partial: 'list_picked', collection: @returs_picked, as: :retur
-        = paginate @returs_picked
-
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4 style="overflow-x:auto;"
-      .card-header.white-text.success-color
+    - elsif @color == "success"
+      .card-header.white-text.success-color 
         h5.font-weight-500.my-1
           | Selesai
-      .card-body
-        table class="table"
+    - elsif @color == "warning"
+      .card-header.white-text.warning-color 
+        h5.font-weight-500.my-1
+          | Menunggu Pengambilan
+    - elsif @color == "info"
+      .card-header.white-text.warning-color 
+        h5.font-weight-500.my-1
+          | Menunggu Konfirmasi
+    - else
+      .card-header.white-text.primary-color 
+        h5.font-weight-500.my-1
+          | Semua Data
+    .card.mb-4
+      .card-body.table-responsive.text-nowrap
+        table class="table table-hover"
           thead
             th Invoice
             th Dari
             th Kepada
             th Total Item
-            th Tgl. Selesai
+            th Buat
+            th Konfirmasi
+            th Ambil
+            th Selesai
             th Aksi
           tbody
-            = render partial: 'list_complete', collection: @returs_complete, as: :retur
-        = paginate @returs_complete
-
-
+            = render partial: 'list', collection: @returs, as: :retur
+        = paginate @returs

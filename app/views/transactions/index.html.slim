@@ -26,15 +26,28 @@ br
                   - Store.all.each do |store|
                     option value="#{store.id}"
                       | #{store.name}
-            .col-md-12
-              input type="text" class="form-control md-form" id="search" name="search"
+
+            .col-md-6
+              select class="mdb-select md-form" id="months" name="months"
+                option value="1"
+                  | 1 Bulan
+                option value="3"
+                  | 3 Bulan
+                option value="6"
+                  | 6 Bulan
+                option value="12"
+                  | 12 Bulan
+
+            .col-md-6
+              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice ..."
             .col-md-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
-        br      
+        br
         .col-md-12.text-center.grey-text
-          b  
-            | #{@search}
+          a href="#{transactions_path(option: @params.to_s, format: :pdf)}"
+            b
+              | #{@search}
 .container-fluid
   .col-lg-12.col-md-12
     .card-header.white-text.info-color 

@@ -1,0 +1,78 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Toko 
+      td
+        textarea #{@store_name}
+    tr
+      td.meta-head Jenis
+      td 
+        textarea Order Supplier
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | #{@search}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Invoice
+    th Dari
+    th Kepada
+    th Total Item
+    th Buat
+    th Status
+    th Kirim
+    th Terima
+    th Keterangan
+
+  - @transfers.each do |transfer|
+    tr.item-row
+      td #{transfer.invoice}
+      td #{transfer.from_store.name}
+      td #{transfer.to_store.name}
+      td #{transfer.total_items}
+      td #{transfer.date_created.to_date}
+      td
+        - if transfer.date_approve.nil?
+          | - 
+        - elsif transfer.date_approve.to_date == "01-01-1999".to_date
+          .text-danger
+            - if transfer.approved_by.present?
+              | DIBATALKAN #{transfer.approved_by.name}
+            - else
+              | DIBATALKAN SISTEM
+        - else
+          .text-success
+            | DISETUJUI #{transfer.approved_by.name} (#{transfer.date_approve.to_date})
+      td
+        - if transfer.date_picked.nil?
+          | - 
+        - else 
+          - if transfer.date_picked.to_date == "01-01-1999".to_date
+            .text-danger
+              | x
+          - else
+            - if transfer.status.present?
+              - if transfer.status.to_date == "01-01-1999".to_date
+                .text-danger
+                  | #{transfer.picked_by.name} (#{transfer.date_picked.to_date})
+              - else
+                | #{transfer.picked_by.name} (#{transfer.date_picked.to_date})
+            - else
+              | #{transfer.picked_by.name} (#{transfer.date_picked.to_date})
+      td
+        - if transfer.status.nil?
+          | -
+        - elsif transfer.status.to_date == "01-01-1999".to_date
+          .text-danger
+            | x
+        - else
+          | #{transfer.confirmed_by.name} (#{transfer.status.to_date})
+      td #{transfer.description}
+
+

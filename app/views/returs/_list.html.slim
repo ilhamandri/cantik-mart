@@ -8,12 +8,12 @@ tr
     - if retur.date_approve.nil?
       | - 
     - else
-      | #{order.approved_by.name} (#{retur.date_approve.to_date})
+      | #{retur.approved_by.name} (#{retur.date_approve.to_date})
   td
     - if retur.date_picked.nil?
       | - 
     - else
-      | #{order.picked_by.name} (#{retur.date_picked.to_date})
+      | #{retur.picked_by.name} (#{retur.date_picked.to_date})
   td
     - if retur.status.nil?
       | -
@@ -26,6 +26,6 @@ tr
         = form.submit "Hapus", class: "btn btn-rounded btn-danger"
   td
     a href='#{retur_path(id: retur.id)}'
-      button class="btn btn-rounded btn-primary"
+      button class="btn btn-primary"
         | Item
 

@@ -2,25 +2,22 @@ class TransfersController < ApplicationController
   before_action :require_login
   before_action :require_fingerprint
   def index
-    @transfers = Transfer.order("date_created DESC").page param_page
-    @transfers = @transfers.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
-    
-    @search = ""
-    if params["search"].present?
-      @search += "Pencarian "+params["search"]
-      search = params["search"].downcase
-      @transfers =@transfers.where("invoice like ?", "%"+ search+"%")
-    end
+    filter = filter_search params, "html"
+    @search = filter[0]
+    @transfers = filter[1]
+    @params = params.to_s
 
-    if params["store_id"].present?
-      store = Store.find_by(id: params["store_id"])
-      if store.present?
-        @transfers = @transfers.where("to_store_id = ? OR from_store_id = ?", store.id, store.id)
-        @search += "Pencarian" if @search==""
-        @search += " di Toko '"+store.name+"'"
-      else
-        @search += "Penacarian" if @search==""
-        @search += " di Semua Toko"
+    respond_to do |format|
+      format.html
+      format.pdf do
+        new_params = eval(params[:option])
+        filter = filter_search new_params, "pdf"
+        @search = filter[0]
+        @transfers = filter[1]
+        @store_name= filter[2]
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "transfers/print_all.html.slim"
       end
     end
   end
@@ -185,6 +182,47 @@ class TransfersController < ApplicationController
   end
 
   private
+    def filter_search params, r_type
+      results = []
+      @transfers = Transfer.all
+      if r_type == "html"
+        @transfers = @transfers.page param_page if r_type=="html"
+      end
+      @transfers = @transfers.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      @search = ""
+      if params["search"].present?
+        @search += "Pencarian "+params["search"]
+        search = params["search"].downcase
+        @transfers =@transfers.where("invoice like ?", "%"+ search+"%")
+      end
+
+      before_months = params["months"].to_i
+      if before_months != 0
+        @search += before_months.to_s + " bulan terakhir "
+        start_months = (DateTime.now - before_months.months).beginning_of_month.beginning_of_day 
+        @transfers = @transfers.where("created_at >= ?", start_months)
+      end
+
+      store_name = "SEMUA TOKO"
+      if params["store_id"].present?
+        store = Store.find_by(id: params["store_id"])
+        if store.present?
+          @transfers = @transfers.where(store: store)
+          store_name = store.name
+          @search += "Pencarian" if @search==""
+          @search += " di Toko '"+store.name+"'"
+        else
+          @search += "Penacarian" if @search==""
+          @search += " di Semua Toko"
+        end
+      end
+
+      results << @search
+      results << @transfers
+      results << store_name
+      return results
+    end
+
     def transfer_items
       items = []
       return items if params[:transfer][:transfer_items].nil?
