@@ -35,8 +35,8 @@ class StocksController < ApplicationController
       @search = "Pencarian '"+params[:search]+"'"
       lower_search = params[:search].downcase
       search = "%"+lower_search+"%"
-      items = Item.where('lower(name) like ? OR lower(code) like ?', search, search).pluck(:id)
-      @inventories = @inventories.where(item_id: items)
+      items = Item.where('lower(name) like ? OR lower(code) like ?', search, search)
+      @inventories = @inventories.where(item: items)
     end
     store_name = "SEMUA TOKO"
     if params["store_id"].present?

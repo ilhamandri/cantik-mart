@@ -15,16 +15,13 @@
 
 ======================================================================
 
---> recap untuk bulanan --> klik bulanan
+--> recap untuk bulanan --> klik bulanan --> grand_total_before = 0
 
 ======================================================================
 
 
 --> diskon 
 	* 2x + 1y => add new item di json paling akhir 
-	
---> check kalau ada item baru 
-	* jangan bikin baris baru
 
 --> style di NEW _ TRX
 

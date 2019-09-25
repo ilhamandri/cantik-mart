@@ -80,7 +80,6 @@ class GrocerItemsController < ApplicationController
               return redirect_back_data_error new_grocer_item_path, "Data tidak valid" if grocer_item.invalid?
               grocer_item.save!
               grocer_item.create_activity :create, owner: current_user
-              binding.pry
               return redirect_success item_path(id: grocer_item.item.id), "Perubahan harga "+grocer_item.item.name+" berhasil disimpan"
             end
           end

@@ -16,7 +16,12 @@
             label for="name" Harga Jual
             = form.number_field :price, required: true, class: "form-control md-form", id: "price", min: "100", value: "0"
           .form-group
-            label for="name" Diskon ( 0-100 : %, > 100 : Harga)
-            = form.number_field :discount, required: true, class: "form-control md-form", id: "price", min: "0"
+            label for="name" Diskon 
+            br
+            label.text-danger * 0 - 100 = Dianggap %
+            br
+            label.text-danger * lebih dar 100 = Dianggap harga Rupiah
+            
+            = form.number_field :discount, required: true, class: "form-control md-form", id: "price", min: "0", value:"0"
           .form-group.text-center
             = form.submit "Tambah Harga Barang", class: "btn btn-rounded btn-primary"

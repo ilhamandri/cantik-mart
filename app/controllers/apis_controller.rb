@@ -111,15 +111,25 @@ class ApisController < ApplicationController
       if grocer_price.present?
         find_price = grocer_price.where('max >= ? AND min <= ?', qty, qty).order("max ASC")
         if find_price.present?
-          item << find_price.first.price
-          item << find_price.first.discount
+          price = find_price.first.price
+          disc = find_price.first.discount
+          disc = (disc * price) / 100 if disc <= 100
+          item << price
+          item << disc
         else
-          item << item_store.item.sell
-          item << item_store.item.discount
+          find_price = grocer_price.order("max ASC")
+          price = find_price.first.price
+          disc = find_price.first.discount
+          disc = (disc * price) / 100 if disc <= 100
+          item << price
+          item << disc
         end
       else
-        item << item_store.item.sell
-        item << item_id.discount
+        price = item_store.item.sell
+        disc = item_id.discount
+        disc = (disc * price) / 100 if disc <= 100
+        item << price
+        item << disc
       end
       item << item_id.id
       json_result << item

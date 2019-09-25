@@ -51,8 +51,10 @@
                   td 0
                   td 1
                   td #{number_to_currency(@item.sell, delimiter: ".", separator: ",", unit: "Rp. ")}
-                  td #{number_to_currency(@item.discount, delimiter: ".", separator: ",", unit: "Rp. ")}
-                  td #{number_to_currency((@item.sell - @item.buy), delimiter: ".", separator: ",", unit: "Rp. ")}
+                  - disc = @item.discount
+                  - disc = @item.discount * @item.sell / 100 if disc <= 100
+                  td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
+                  td #{number_to_currency((@item.sell - @item.buy - disc), delimiter: ".", separator: ",", unit: "Rp. ")}
                   td
                 - item_grocers = @item.grocer_items
                 - if item_grocers.present?
@@ -61,12 +63,15 @@
                       td #{item.min}
                       td #{item.max}
                       td #{number_to_currency(item.price, delimiter: ".", separator: ",", unit: "Rp. ")}
-                      td #{number_to_currency(item.discount, delimiter: ".", separator: ",", unit: "Rp. ")}
+                      - disc = item.discount
+                      - disc = item.discount / 100 * item.price
+                      td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
+                      td #{number_to_currency(item.price - @item.buy - disc, delimiter: ".", separator: ",", unit: "Rp. ")}
                       td.text-right
-                        a class="btn btn-rounded btn-warning" href="#{edit_grocer_item_path(id: item.id)}"
+                        a class="btn btn-warning" href="#{edit_grocer_item_path(id: item.id)}"
                           |   Ubah
                         | &nbsp&nbsp&nbsp
-                        a class="btn btn-rounded btn-danger" href="#{grocer_item_path(id: item.id)}"
+                        a class="btn btn-danger" href="#{grocer_item_path(id: item.id)}"
                           |   Hapus
 
           .form-group.text-center
