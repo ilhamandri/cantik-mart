@@ -4,8 +4,8 @@ class StoresController < ApplicationController
   def index
     @stores = Store.page param_page
     if params[:search].present?
-      @search = params[:search].downcase
-      search = "%"+@search+"%"
+      @search = "Pencarian '"+params[:search].upcase+"'"
+      search = "%"+params[:search].downcase+"%"
       @stores = @stores.where("lower(name) like ? OR phone like ?", search, search)
     end
   end
@@ -30,16 +30,8 @@ class StoresController < ApplicationController
     store = Store.new store_params
     store.name = params[:store][:name].camelize
     store.address = params[:store][:address].camelize
-    return redirect_back_data_error stores_path if store.invalid?
-    supplier = Supplier.new name: "GUDANG - "+params[:store][:name],
-      phone: params[:store][:phone],
-      address: params[:store][:address],
-      supplier_type: 1
-    return redirect_back_data_error stores_path, "Data Tidak Lengkap" if supplier.invalid?
     store.save!
-    supplier.save!
     store.create_activity :create, owner: current_user
-    supplier.create_activity :create, owner: current_user
     return redirect_success stores_path, "Toko - " + store.name + " - Berhasil Disimpan"
   end
 

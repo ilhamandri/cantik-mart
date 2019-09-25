@@ -17,7 +17,7 @@
             = form.text_field :brand, required: true, class: "form-control md-form", id: "brand"
           .form-group
               label for="item" Kategori
-              select name="supplier_item[item_cat_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" searchable="Cari..."
+              select name="item[item_cat_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" searchable="Cari..."
                 - @item_cats.each do |item_cat|
                   - if @item.item_cat == item_cat
                     option value="#{item_cat.id}" selected="selected"
@@ -30,13 +30,13 @@
             = form.number_field :margin, required: true, class: "form-control md-form", id: "sell", min: "0"
           .form-group
             label for="sell" Harga Beli Satuan
-            = form.number_field :buy, required: true, class: "form-control md-form", id: "sell", min: "100"
+            = form.number_field :buy, required: true, class: "form-control md-form", id: "sell", min: "0"
           .form-group
             label for="sell" Diskon Satuan
-            = form.number_field :discount, required: true, class: "form-control md-form", id: "sell", min: "100"
+            = form.number_field :discount, required: true, class: "form-control md-form", id: "sell", min: "0"
           .form-group
             label for="sell" Harga Jual Satuan
-            = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", min: "100"
+            = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", min: "0"
           .form-group
             label for="item" Jenis Barang
             select name="item[local_item]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
@@ -48,6 +48,6 @@
                   | Barang Lokal 
           .form-group
             label for="sell" Link Foto
-            = form.text_field :image, required: true, class: "form-control md-form", id: "sell"
+            = form.text_field :image, class: "form-control md-form", id: "sell"
           .form-group.text-center
             = form.submit "Ubah Barang", class: "btn btn-rounded btn-primary"

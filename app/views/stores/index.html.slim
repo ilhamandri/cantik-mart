@@ -18,10 +18,15 @@ br
         = form_for :store, url: stores_path, method: 'GET' do |form|
           .row
             .col-12
-              input type="text" class="form-control md-form" id="search" name="search"
+              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nama / Nomor Telepon Toko ..."
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
+
+          .col-md-12.text-center.grey-text
+            br
+            b
+              | #{@search}
 .container-fluid
   .col-lg-12.col-md-12
     .card-header.white-text.info-color

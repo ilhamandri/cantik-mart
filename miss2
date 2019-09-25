@@ -11,25 +11,28 @@
 --> aktifin notifikasi (js)
 
 --> set tanggal pehitungan absent + store_id (service/finance)
+--> set @@max_complain ==> complains
 
 ======================================================================
 
 --> recap untuk bulanan --> klik bulanan
 
---> complain brapa hari max? 3?
-
 ======================================================================
+
+
+--> diskon 
+	* 2x + 1y => add new item di json paling akhir 
+	
+--> check kalau ada item baru 
+	* jangan bikin baris baru
+
+--> style di NEW _ TRX
 
 --> print struk
 
 --> perubahan harga 
 	* notif untuk cetak 
-
---> diskon 
-	* 2x + 1y => add new item di json paling akhir 
-
---> check kalau ada item baru 
-	* jangan bikin baris baru
+	* layout cetak 
 
 --> cek semua notifikasi
 	* payment

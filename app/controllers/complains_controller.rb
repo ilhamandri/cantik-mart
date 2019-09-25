@@ -1,6 +1,9 @@
 class ComplainsController < ApplicationController
   before_action :require_login
   before_action :require_fingerprint
+
+  @@max_complain = 3
+  
   def index
     filter = filter_search params, "html"
     @search = filter[0]
@@ -28,6 +31,8 @@ class ComplainsController < ApplicationController
     id = params[:id]
     @transaction = Transaction.find id
     return redirect_back_data_error complains_path, "Data tidak ditemukan" if @transaction.nil?
+    complain = (@transaction.created_at >= (DateTime.now - @@max_complain.days))
+    return redirect_back_data_error complains_path, "Data tidak valid" if complain
     return redirect_back_data_error complains_path, "Data tidak valid" if @transaction.user.store != current_user.store
     @transaction_items = @transaction.transaction_items
     return redirect_back_data_error complains_path, "Tidak dapat melakukan komplain" if Complain.find_by(transaction_id: @transaction).present?
@@ -38,6 +43,8 @@ class ComplainsController < ApplicationController
     id = params[:id]
     @transaction = Transaction.find id
     return redirect_back_data_error complains_path, "Data tidak ditemukan" if @transaction.nil?
+    complain = (@transaction.created_at >= (DateTime.now - @@max_complain.days))
+    return redirect_back_data_error complains_path, "Data tidak valid" if complain
     return redirect_back_data_error complains_path, "Data tidak valid" if @transaction.user.store != current_user.store
     return redirect_back_data_error complains_path, "Tidak dapat melakukan komplain" if Complain.find_by(transaction_id: @transaction).present?
     invoice = "CMP-" + Time.now.to_i.to_s

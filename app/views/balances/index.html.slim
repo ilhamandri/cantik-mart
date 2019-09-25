@@ -55,11 +55,10 @@
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
-        - if @search.present?
-          .col-md-12.text-center.grey-text
-            a href="#{balances_path(type: "balance", option: @params.to_s, format: :zip)}"
-              b
-                | #{@search}
+        .col-md-12.text-center.grey-text
+          a href="#{balances_path(type: "balance", option: @params.to_s, format: :zip)}"
+            b
+              | #{@search}
 
 .container-fluid
   .col-lg-12.col-md-12

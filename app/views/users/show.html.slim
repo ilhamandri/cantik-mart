@@ -27,7 +27,7 @@
                 = form.text_field :address, required: true, class: "form-control md-form", id: "address", readonly: "disabled"
               .form-group
                 label for="phone" No. Telepon
-                input class="form-control md-form" value="#{number_with_delimiter(@user.phone, delimiter: " ")}" disabled="disabled"
+                input class="form-control md-form" value="#{number_to_phone(@user.phone, country_code: 62)}" disabled="disabled"
               .form-group
                 label for="sex" Jenis Kelamin
                 input class="form-control md-form" value="#{@user.sex}" disabled="disabled"

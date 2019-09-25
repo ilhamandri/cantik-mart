@@ -15,17 +15,17 @@
             = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
           .form_group
             label for="address" Alamat
-            = form.text_field :address, required: true, class: "form-control md-form", id: "address"
+            = form.text_field :address, required: true, class: "form-control md-form", id: "address", disabled: "disabled"
           .form-group
             label for="phone" Nomor Telepon
-            input class="form-control md-form" value="#{number_to_phone(@store.phone, country_code: 62)}"
+            input class="form-control md-form" value="#{number_to_phone(@store.phone, country_code: 62)}" disabled= "disabled"
           .form-group
             label for="phone" Jumlah Member
             - members_count = Member.where(store: @store).count
-            input type="number" class="form-control md-form" value='#{number_with_delimiter(members_count, delimiter: ".")}'
+            input type="number" class="form-control md-form" value='#{number_with_delimiter(members_count, delimiter: ".")}' disabled= "disabled"
           .form-group
             label for="user" Karyawan
-            textarea class="form-control md-form"
+            textarea class="form-control md-form" disabled="disabled"
               - users = User.where(store: @store).pluck(:name)
               - users.each do |user|
                 -if users.last == user

@@ -19,7 +19,6 @@ br
           .row
             - if ["owner", "super_admin", "super_finance"].include? current_user.level
               .col-md-12.text-center
-                label Toko
                 select class="mdb-select md-form" id="months" name="store_id"
                   option value="0"
                     | Semua Toko
@@ -27,10 +26,15 @@ br
                     option value="#{store.id}"
                       | #{store.name}
             .col-12
-              input type="text" class="form-control md-form" id="search" name="search"
+              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nama / Nomor Telepon Member ..."
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
+
+          .col-md-12.text-center.grey-text
+            br
+            b
+              | #{@search}
 .container-fluid
   .col-lg-12.col-md-12
     .card-header.white-text.info-color

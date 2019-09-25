@@ -13,18 +13,15 @@
           label for="address" Alamat
           = form.text_field :address, required: true, class: "form-control md-form", id: "address"
         .form-group
-          label for="phone" Phone
-          = form.number_field :phone, required: true, class: "form-control md-form", id: "phone"
+          label for="phone" Nomor Telepon
+          = form.number_field :phone, required: true, class: "form-control md-form", id: "phone", minlength:"6", maxlength: "13", pattern:"[0-9]+", title:"6-13 digit nomor telepon"
         .form-group
-          label for="sex" Sex
+          label for="sex" Jenis Kelamin
           select name="member[sex]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary"
             option value='laki_laki'
               | Laki - laki
             option value='perempuan'
               | Perempuan
-        .form-group
-          label for="id-card" KTP
-          = form.text_field :id_card, required: true, class: "form-control md-form", id: "id-card"
         .form-group
           label for="card-card" Nomor Kartu
           = form.text_field :card_number, required: true, class: "form-control md-form", id: "card_number"

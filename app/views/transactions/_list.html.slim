@@ -16,6 +16,7 @@ tr
         | Item
 
     - complain = Complain.where(transaction_id: transaction).empty?
+    - complain = (transaction.created_at >= (DateTime.now - 3.days))
     - if complain && !transaction.from_complain
       a href='#{new_complain_path(id: transaction.id)}'
         button class="btn btn-danger"

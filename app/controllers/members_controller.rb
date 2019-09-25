@@ -4,10 +4,23 @@ class MembersController < ApplicationController
 
   def index
     @members = Member.page param_page
-    if params[:search].present?
-      @search = params[:search].downcase
-      search = "%"+@search+"%"
+    @search = ""
+    if params["search"].present?
+      @search += "Pencarian '" + params["search"].upcase + "' "
+      search = "%"+params["search"].downcase+"%"
       @members = @members.where("lower(name) like ? OR phone like ?", search, search)
+    end
+
+    if params["store_id"].present?
+      store = Store.find_by(id: params["store_id"])
+      if store.present?
+        @members = @members.where(store: store)
+        @search += "Pencarian " if @search == ""
+        @search += " pada Toko "+store.name
+      else
+        @search += "Pencarian " if @search == ""
+        @search += " pada Semua Toko "
+      end
     end
   end
 

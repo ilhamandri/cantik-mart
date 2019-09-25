@@ -39,6 +39,8 @@ class ItemsController < ApplicationController
   def create
     item = Item.new item_params
     item.brand = "-" if params[:item][:brand].nil?
+    item.buy = 0
+    item.local_item = params[:item][:local_item]
     return redirect_back_data_error new_item_path, "Data Barang Tidak Valid" if item.invalid?
     item.save!
     item.create_activity :create, owner: current_user
@@ -81,7 +83,7 @@ class ItemsController < ApplicationController
   private
     def item_params
       params.require(:item).permit(
-        :name, :code, :item_cat_id, :margin, :brand, :sell, :discount
+        :name, :code, :item_cat_id, :margin, :brand, :sell, :buy, :discount, :local_item
       )
     end
 

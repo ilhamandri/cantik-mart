@@ -14,9 +14,9 @@
             = form.number_field :max, required: true, class: "form-control md-form", id: "name", min: "3", value: "3"
           .form-group
             label for="name" Harga Jual
-            = form.number_field :price, required: true, class: "form-control md-form", id: "price", min: "100", value: "100"
+            = form.number_field :price, required: true, class: "form-control md-form", id: "price", min: "100", value: "0"
           .form-group
-            label for="name" Diskon
-            = form.number_field :discount, required: true, class: "form-control md-form", id: "price", min: "100"
+            label for="name" Diskon ( 0-100 : %, > 100 : Harga)
+            = form.number_field :discount, required: true, class: "form-control md-form", id: "price", min: "0"
           .form-group.text-center
             = form.submit "Tambah Harga Barang", class: "btn btn-rounded btn-primary"
