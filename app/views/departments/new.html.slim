@@ -3,11 +3,13 @@
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Tambah Department
+          | Tambah Departemen
       .card-body
+
         = form_for :department, url: departments_path, method: "POST" do |form|
-		  .form-group
-		    label for="name" Nama
-		    = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name"
           .form-group.text-center
             = form.submit "Tambah Departemen", class: "btn btn-rounded btn-primary"
+

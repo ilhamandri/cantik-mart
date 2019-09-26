@@ -32,18 +32,20 @@ class PromotionsController < ApplicationController
       filters = Promotion.page param_page
 
       switch_data_month_param = params["switch_date_month"]
-      if switch_data_month_param == "month" 
-        before_months = params["months"].to_i
-        search_text += before_months.to_s + " bulan terakhir "
-        start_months = (DateTime.now - before_months.months).beginning_of_month 
-        filters = filters.where("date_created >= ?", start_months)
+      if switch_data_month_param == "due_date"
+        end_date = DateTime.now.to_date + 1.day
+        start_date = DateTime.now.to_date - 1.weeks
+        end_date = params["end_date"] if params["end_date"].present?
+        start_date = params["date_from"] if params["date_from"].present?
+        search_text += "dari " + start_date.to_s + " hingga " + end_date.to_s + " "
+        filters = filters.where("due_date >= ? AND due_date <= ?", start_date, end_date)
       elsif switch_data_month_param == "date"
         end_date = DateTime.now.to_date + 1.day
         start_date = DateTime.now.to_date - 1.weeks
         end_date = params["end_date"] if params["end_date"].present?
         start_date = params["date_from"] if params["date_from"].present?
         search_text += "dari " + start_date.to_s + " hingga " + end_date.to_s + " "
-        filters = filters.where("date_created >= ? AND date_created <= ?", start_date, end_date)
+        filters = filters.where("created_at >= ? AND created_at <= ?", start_date, end_date)
       else
         filters = filters.where("end_promo <= ?", Date.today.end_of_week.end_of_day)
         search_text += "jatuh tempo di minggu ini "
@@ -51,9 +53,9 @@ class PromotionsController < ApplicationController
 
       if params["order_by"] == "asc"
         search_text+= "secara menaik"
-        filters = filters.order("date_created ASC")
+        filters = filters.order("created_at ASC")
       else
-        filters = filters.order("date_created DESC")
+        filters = filters.order("created_at DESC")
         search_text+= "secara menurun"
       end
 

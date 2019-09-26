@@ -21,7 +21,7 @@ tr
   - if order_item.receive.present?
     - based_price = based_item_price * order_item.receive
 
-  - if !order.editable
+  - if !order.editable && !order.from_retur
   	td
       |#{order_item.receive} &nbsp
       span 
@@ -31,7 +31,7 @@ tr
     td #{number_with_delimiter(disc_1 + disc_2, delimiter: ".", separator: ",")}
     td #{number_with_delimiter(ppn, delimiter: ".", separator: ",")}
     td.text-danger.text-right
-		  | #{number_with_delimiter(order_item.grand_total, delimiter: ".", separator: ",")}
+		  | #{number_with_delimiter(order_item.total, delimiter: ".", separator: ",")}
 
 
   - else
@@ -41,7 +41,7 @@ tr
       td #{number_with_delimiter(disc_1 + disc_2, delimiter: ".", separator: ",")}
       td #{number_with_delimiter(ppn, delimiter: ".", separator: ",")}
       td.text-danger.text-right
-        | #{number_with_delimiter(order_item.grand_total, delimiter: ".", separator: ",")}
+        | #{number_with_delimiter(order_item.total, delimiter: ".", separator: ",")}
     - else
       - 4.times do
         td 

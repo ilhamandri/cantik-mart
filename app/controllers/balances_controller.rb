@@ -15,21 +15,27 @@ class BalancesController < ApplicationController
         new_params = eval(params[:option])
         start_date = nil
         end_date = nil
-        if new_params.nil?
-          end_date = DateTime.now.end_of_day
-          start_date = (end_date - 1.month).beginning_of_day
+
+        switch_data_month_param = params["switch_date_month"]
+        if switch_data_month_param == "due_date" 
+          end_date = DateTime.now.to_date + 1.day
+          start_date = DateTime.now.to_date - 1.weeks
+          end_date = params["end_date"] if params["end_date"].present?
+          start_date = params["date_from"] if params["date_from"].present?
+          search_text += "jatuh tempo dari " + start_date.to_s + " hingga " + end_date.to_s + " "
+          filters = filters.where("due_date >= ? AND due_date <= ?", start_date, end_date)
+        elsif switch_data_month_param == "date"
+          end_date = Date.today + 1.day
+          start_date = Date.today - 1.weeks
+          end_date = params["end_date"].to_date if params["end_date"].present?
+          start_date = params["date_from"].to_date if params["date_from"].present?
+          search_text += "dari " + start_date.to_s + " hingga " + end_date.to_s + " "
+          filters = filters.where("date_created >= ? AND date_created <= ?", start_date, end_date)
         else
-          if new_params["switch_date_month"] == "date"
-            start_date = DateTime.now.beginning_of_day
-            end_date = DateTime.now.end_of_day
-            start_date = new_params["date_from"].to_datetime.beginning_of_day if new_params[:date_from].present?
-            end_date = new_params["date_to"].to_datetime.end_of_day if new_params[:date_to].present?
-          else
-            n_month = new_params["month"].to_i
-            end_date = DateTime.now.end_of_day
-            start_date = (end_date - n_month.months).beginning_of_day
-          end
+          filters = filters.where("due_date <= ?", Date.today.end_of_week.end_of_day)
+          search_text += "jatuh tempo di minggu ini "
         end
+        
         filenames = StoreBalance.where("created_at >= ? AND created_at <= ?", start_date, end_date).pluck(:filename)
         if filenames.empty?
           redirect_back_data_error balances_path, "File Tidak Ditemukan"
@@ -77,29 +83,17 @@ class BalancesController < ApplicationController
 
       balances = balances.where(store: current_user.store) if !["owner", "super_admin", "super_finance"].include? current_user.level 
 
+      date_start = Date.today 
+      date_to = Date.today + 1.weeks
   		switch_date_month = params[:balance][:switch_date_month]
-  		date_from = params[:balance][:date_from]
-  		date_to = params[:balance][:date_to]
-  		month = params[:balance][:month]
+  		date_from = params[:balance][:date_from].to_date if params[:balance][:date_from].present?
+  		date_to = params[:balance][:date_to].to_date if params[:balance][:date_to].present?
   		order_by = params[:balance][:order_by]
       store_id = params[:balance][:store_id].to_i
 
-  		if switch_date_month.present?
-  			if switch_date_month == "month"
-  				if month.present?
-  					search_text += month.to_s + " bulan terakhir"
-  					date_from = (DateTime.now - month.to_i.months).beginning_of_day
-  					balances = balances.where("created_at >= ?", date_from)
-  				end
-  			else
-  				if date_from.present? && date_to.present?
-  					d_date_from = date_from.to_datetime.beginning_of_day
-  					d_date_to = date_to.to_datetime.end_of_day
-  					search_text += "dari "+d_date_from.to_date.to_s + " - " + d_date_to.to_date.to_s
-  					balances = balances.where("created_at >= ? AND created_at <= ?", d_date_from, d_date_to)
-  				end
-  			end	
-  		end
+			search_text += "dari "+date_start.to_s + " - " + date_to.to_date.to_s
+			balances = balances.where("created_at >= ? AND created_at <= ?", date_start.to_datetime, date_to.to_datetime)
+  				
 
        if store_id.present?
         if store_id != 0

@@ -15,32 +15,32 @@
           | AKTIVA
         .card-body
           label for="phone" Kas
-          input type="number" class="form-control md-form" value='#{balance.cash}' 
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.cash.to_i, delimiter: ".", separator: ",")}' 
 
           label for="phone" Piutang
-          input type="number" class="form-control md-form" value='#{balance.receivable}'
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.receivable.to_i, delimiter: ".", separator: ",")}'
 
           label for="phone" Nilai Stok
-          input type="number" class="form-control md-form" value='#{balance.stock_value}'
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.stock_value.to_i, delimiter: ".", separator: ",")}'
 
           label for="phone" Nilai Aset
-          input type="number" class="form-control md-form" value='#{balance.asset_value}'
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.asset_value.to_i, delimiter: ".", separator: ",")}'
 
       .card-body.col-6.text-right
         .card-header.white-text.primary-color
           | PASSIVA
         .card-body
           label for="phone" Modal
-          input type="number" class="form-control md-form" value='#{balance.cash}'
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.equity.to_i, delimiter: ".", separator: ",")}'
 
           label for="phone" Hutang
-          input type="number" class="form-control md-form" value='#{balance.debt}'
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.debt.to_i, delimiter: ".", separator: ",")}'
 
           label for="phone" Penjualan (Profit & Loss)
-          input type="number" class="form-control md-form" value='#{balance.transaction_value}'
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.transaction_value.to_i, delimiter: ".", separator: ",")}'
 
           label for="phone" Pengeluaran
-          input type="number" class="form-control md-form" value='#{balance.outcome}'
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.outcome.to_i, delimiter: ".", separator: ",")}'
 
       .col-12
         hr.primary-color-dark

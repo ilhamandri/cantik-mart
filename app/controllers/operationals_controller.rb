@@ -34,20 +34,14 @@ class OperationalsController < ApplicationController
       search_text = "Pencarian "
       filters = CashFlow.where(finance_type: CashFlow::OPERATIONAL).page param_page
 
-      switch_data_month_param = params[:switch_date_month]
-      if switch_data_month_param == "month" 
-        before_months = params[:months].to_i
-        search_text += before_months.to_s + " bulan terakhir "
-        start_months = (DateTime.now - before_months.months).beginning_of_month 
-        filters = filters.where("date_created >= ?", start_months)
-      else
-        end_date = DateTime.now.to_date + 1.day
-        start_date = DateTime.now.to_date - 1.weeks
-        end_date = params[:end_date] if params[:end_date].present?
-        start_date = params[:date_from] if params[:date_from].present?
-        search_text += "dari " + start_date.to_s + " hingga " + end_date.to_s + " "
-        filters = filters.where("date_created >= ? AND date_created <= ?", start_date, end_date)
-      end
+      
+      end_date = Date.today + 1.day
+      start_date = Date.today - 1.weeks
+      end_date = params["end_date"].to_date if params["end_date"].present?
+      start_date = params["date_from"].to_date if params["date_from"].present?
+      search_text += "dari " + start_date.to_s + " hingga " + end_date.to_s + " "
+      filters = filters.where("date_created >= ? AND date_created <= ?", start_date, end_date)
+      
 
       store_name ="SEMUA TOKO"
 

@@ -30,15 +30,15 @@ br
             .col-md-12
               label for="form" INVOICE
               input type="text" class="form-control md-form" disabled=true value="#{order.invoice}"
-            - if order.received_by.present?
-              - due_date = "TIDAK ADA TAGIHAN - DARI RETUR"
-              - due_date = Debt.find_by(finance_type: "ORDER", ref_id: order.id).due_date.to_date if Debt.find_by(finance_type: "ORDER", ref_id: order.id).present?
+            - if order.from_retur
               .col-md-6
-                label for="form" Jatuh Tempo
-                input type="text" class="form-control md-form" disabled=true value="#{due_date}"
-              .col-md-6
-                label for="form" Penerima
-                input type="text" class="form-control md-form" disabled=true value="#{order.received_by.name} ( #{order.date_receive} )" 
+                label for="form" KETERANGAN
+                input type="text" class="form-control md-form" disabled=true value="#{"TIDAK ADA TAGIHAN - ORDER DARI RETUR"}"
+              .col-md-6.text-center
+                / center v-align
+                - retur = ReturItem.find_by(ref_id: order.id).retur
+                a href="#{retur_path(id: retur.id)}" class="btn btn-primary btn-rounded"
+                  | #{retur.invoice}
               
             .col-md-4
               label for="form" Jumlah Item

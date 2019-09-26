@@ -26,7 +26,7 @@ class ReturItemsController < ApplicationController
     loss = nil
     receivable = nil
     total_items = 0
-
+    binding.pry
     return redirect_back_data_error returs_path, "Data Retur Tidak Valid" if feed_value.empty?
     
     feed_value.each do |value|
@@ -143,19 +143,7 @@ class ReturItemsController < ApplicationController
         ret_item = ReturItem.find_by(id: item_d["item_id"])
         item = ret_item.item
         nominal = item_d["nominal"].to_i
-
-        if item_d["feedback"] == "cash"
-          buy = item.buy if !item.local_item
-          buy = StoreItem.find_by(item: item, store: ret_item.retur.store).buy if item.local_item
-
-          qty = ret_item.accept_item.to_i
-
-          totals = qty * buy
-
-          if totals != nominal
-            return []
-          end
-        end
+        
         array << item_r[1].values
       end
       array

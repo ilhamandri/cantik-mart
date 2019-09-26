@@ -21,17 +21,19 @@
               .form-group
                 label for="from" Kepada
                 input type="text" class="form-control md-form" disabled=true value="#{@order.supplier.name}"
-            .col-12  
-              .text-danger
-                | (*Wajib Diisi)
-            .col-12
-              .form-group
-                label for="from" Tanggal Jatuh Tempo Pembayaran
-                input type="date" class="form-control md-form" value="#{(Date.today+2.weeks).strftime("%m/%d/%Y")}" name="order[due_date]" required=true
-            .col-12
-              .form-group
-                label for="from" Diskon Total ( % )
-                input type="number" class="form-control md-form" value="0" name="order[discount]" required=true
+            
+            - if !@order.from_retur
+              .col-12  
+                .text-danger
+                  | (*Wajib Diisi)
+              .col-12
+                .form-group
+                  label for="from" Tanggal Jatuh Tempo Pembayaran
+                  input type="date" class="form-control md-form" value="#{(Date.today+2.weeks).strftime("%m/%d/%Y")}" name="order[due_date]" required=true
+              .col-12
+                .form-group
+                  label for="from" Diskon Total ( % )
+                  input type="number" class="form-control md-form" value="0" name="order[discount]" required=true
   .container-fluid
   .container-fluid
     .col-lg-12.col-md-12
@@ -46,11 +48,11 @@
                 th Deskripsi
                 th Pesan
                 th Terima
-                th Harga
-                th Diskon 1 ( % )
-                th Diskon 2 ( % )
-                th PPN (%)
-                th Total
+                - if !@order.from_retur
+                  th Harga
+                  th Diskon 1 ( % )
+                  th Diskon 2 ( % )
+                  th PPN (%)
               tbody
                 = render partial: 'conflist', collection: @order_items, as: :r_item
             .form-group.text-center

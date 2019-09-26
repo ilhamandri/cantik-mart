@@ -25,28 +25,11 @@
                   - Store.all.each do |store|
                     option value="#{store.id}"
                       | #{store.name}
-            .col-md-12.text-center
-              input#materialGroupExample1.form-check-input.form-control[type="radio" name="balance[switch_date_month]" checked="checked" value="date"]
-              label class="form-check-label" for="materialGroupExample1" Tanggal Buat   
-              |  &nbsp &nbsp &nbsp
-              input#materialGroupExample2.form-check-input[type="radio" name="balance[switch_date_month]" value="month"]
-              label class="form-check-label" for="materialGroupExample2" Bulan
-              
-            .col-md-3
+            .col-md-4
                 input class="form-control md-form" type="date" name="balance[date_from]" id="date_from"
-            .col-md-3
+            .col-md-4
                 input class="form-control md-form" type="date" name="balance[date_to]" id="date_to"
-            .col-md-3
-              select class="mdb-select md-form" id="months" name="balance[month]"
-                option[value=3]
-                  | 3 bulan
-                option[value=6]
-                  | 6 bulan
-                option[value=9]
-                  | 9 bulan
-                option[value=12]
-                  | 1 tahun
-            .col-3
+            .col-md-4
               select class="mdb-select md-form" id="order_by" name="balance[order_by]"
                 option[value="desc"]
                   | urutkan dari terakhir

@@ -145,7 +145,7 @@ class AccountBalance
 
   def self.salary 
     end_date_s = @@salary_date+"-"+Date.today.month.to_s+"-"+Date.today.year.to_s
-    end_date = end_date_s.to_datetime.end_of_day
+    end_date = end_date_s.to_datetime.end_of_day+1.month
     start_date = (end_date - 1.month + 1.day).beginning_of_day
     n_days = (end_date-start_date).to_i
 
