@@ -6,8 +6,8 @@ class GetsController < ApplicationController
 		 	store = Store.find_by(id: params[:store_id])
 		 end
 		 if store.present?
-			 from = params[:from].to_datetime.strftime('%a, %d %b %Y %H:%M:%S') - 7.hours
-			 to = params[:to].to_datetime.strftime('%a, %d %b %Y %H:%M:%S') - 7.hours
+			 from = params[:from].to_time - 7.hours
+			 to = params[:to].to_time - 7.hours
 
 			 render :json =>json_result if store.nil?
 			 json_result["stores"] = Store.where("updated_at >= ? AND updated_at <= ?", from, to)
