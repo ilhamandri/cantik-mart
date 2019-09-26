@@ -233,7 +233,8 @@ class OrdersController < ApplicationController
       price_2 = price_1 - (price_1*disc_2/100)
       price_3 = price_2 + (price_2*ppn/100)
       based_item_price = price_3 - (price_3 * disc_percentage / 100)
-      new_buy_total = based_item_price * receive_qty
+      new_buy_total = price_3 * receive_qty
+      item_grand_total = based_item_price * receive_qty
 
 
       profit_margin = this_item.margin
@@ -257,7 +258,8 @@ class OrdersController < ApplicationController
       order_item.discount_2 = disc_2
       order_item.ppn = ppn
       order_item.price = price
-      order_item.grand_total = new_buy_total
+      order_item.total = new_buy_total
+      order_item.grand_total = item_grand_total
       order_item.save!
 
 

@@ -55,6 +55,7 @@ Rails.application.routes.draw do
   resources :pays, only: %i[new create]
 
   resources :balances
+  resources :promotions
 
   resources :items
   resources :salaries

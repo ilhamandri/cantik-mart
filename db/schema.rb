@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_22_165620) do
+ActiveRecord::Schema.define(version: 2019_09_26_042330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -372,6 +372,21 @@ ActiveRecord::Schema.define(version: 2019_09_22_165620) do
     t.index ["user_id"], name: "index_profit_losses_on_user_id"
   end
 
+  create_table "promotions", force: :cascade do |t|
+    t.bigint "buy_item_id", null: false
+    t.integer "buy_quantity", null: false
+    t.bigint "free_item_id", null: false
+    t.integer "free_quantity", null: false
+    t.datetime "start_promo", null: false
+    t.datetime "end_promo", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["buy_item_id"], name: "index_promotions_on_buy_item_id"
+    t.index ["free_item_id"], name: "index_promotions_on_free_item_id"
+    t.index ["user_id"], name: "index_promotions_on_user_id"
+  end
+
   create_table "receivables", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
@@ -669,6 +684,9 @@ ActiveRecord::Schema.define(version: 2019_09_22_165620) do
   add_foreign_key "outcomes", "users"
   add_foreign_key "profit_losses", "stores"
   add_foreign_key "profit_losses", "users"
+  add_foreign_key "promotions", "items", column: "buy_item_id"
+  add_foreign_key "promotions", "items", column: "free_item_id"
+  add_foreign_key "promotions", "users"
   add_foreign_key "receivables", "stores"
   add_foreign_key "receivables", "users"
   add_foreign_key "reports", "stores"

@@ -1,0 +1,44 @@
+.row
+  .col
+    h5
+      | Daftar Promo
+  .col.text-right
+    a href="#{new_promotion_path}"
+      button.btn.btn-rounded.btn-success type="button" 
+        i.fas.fa-plus 
+        |   Tambah Promo
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pencarian
+      .card-body
+        = form_for :promotion, url: promotions_path, method: 'GET' do |form|
+          .row
+            .col
+              input type="text" class="form-control md-form" id="search" name="search"
+            .col-12.text-center
+              button class="btn btn-rounded btn-primary"
+                | Cari
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data Sub-Department
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Beli Item
+            th Jumlah 
+            th Gratis Item
+            th Gratis
+            th Tgl Mulai
+            th Tgl Berakhir
+            th Aksi
+          tbody
+            = render partial: 'list', collection: @promotions, as: :promotion
+        = paginate @promotions
+
