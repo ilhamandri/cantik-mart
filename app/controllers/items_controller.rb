@@ -3,8 +3,8 @@ class ItemsController < ApplicationController
   before_action :require_fingerprint
   
   def index
-    # insert_prod = InsertProdlist.new
-    # insert_prod.read
+    insert_prod = InsertProdlist.new
+    insert_prod.read
     
     @items = Item.page param_page
     if params[:search].present?
