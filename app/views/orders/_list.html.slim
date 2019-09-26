@@ -1,7 +1,10 @@
 tr
   td #{order.invoice}
   td #{order.supplier.name}
-  td #{order.total_items}
+  - item_order_count = order.order_items.sum(:quantity)
+  - if order.order_items.sum(:receive) != 0
+    - item_order_count = order.order_items.sum(:receive)
+  td #{item_order_count}
   td #{number_with_delimiter(order.grand_total, delimiter: ".")}
   td #{order.user.name} (#{order.date_created.to_date})
   td
