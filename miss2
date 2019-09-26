@@ -30,9 +30,14 @@
 
 --> print struk
 
+--> konten di home untuk setiap level
+
 --> perubahan harga 
+	* tambah col price_last_update
 	* notif untuk cetak 
-	* layout cetak 
+	* CETAK
+		- price tag (zebra)
+		- price papaer
 
 --> cek semua notifikasi
 	* payment

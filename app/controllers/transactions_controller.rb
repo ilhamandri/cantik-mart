@@ -47,20 +47,19 @@ class TransactionsController < ApplicationController
     end
 
     trx = Transaction.new
-    trx.invoice = "TRX-" + Time.now.to_i.to_s
+    trx.invoice = "TRX-" + Time.now.to_i.to_s + "-" + current_user.store.id.to_s + "-" + current_user.id.to_s
     trx.user = current_user
-    member_id = nil
+    member_card = nil
     if params[:member] != ""
       member = Member.find_by(card_number: params[:member].to_i)
-      if member.nil?
-        member_id = nil
-      else
-        member_id = member.id
+      if member.present?
+        member_card = member.card_number
       end
     end
-    trx.member_id = member_id
+    trx.member_card = member_card
     trx.date_created = Time.now
-    trx.payment_type = params[:payment]
+    trx.payment_type = params[:payment].to_i
+    trx.store = current_user.store
 
     trx.items = item.to_i
     trx.discount = discount.to_i
@@ -68,8 +67,9 @@ class TransactionsController < ApplicationController
     trx.grand_total = grand_total.to_i
 
     if params[:payment] != 1
-      trx.bank = params[:bank]
-      trx.edc_inv = params[:edc]
+      trx.bank = params[:bank].to_i
+      trx.edc_inv = params[:edc].to_s
+      trx.card_number = params[:card].to_s
     end
 
     trx.save!

@@ -2,11 +2,40 @@
 <html>
    <head>
       <meta charset="utf-8"/>
+      <meta http-equiv=“Pragma” content=”no-cache”>
+      <meta http-equiv=“Expires” content=”-1″>
+      <meta http-equiv=“CACHE-CONTROL” content=”NO-CACHE”>
       <title>Cantik Mart</title>
+
+      <link rel="stylesheet" href="/assets/css/cashier.css">
+      <link rel='stylesheet' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css'>
+      <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+      <!-- Compiled and minified CSS -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+      
       <style>
          .overflow {
          height: 65vh;
          }
+
+         .dataTables_scrollHead {
+          font-size: large;
+         }
+
+         tr{
+          font-size: medium;
+         }
+
+         label {
+          font-size: unset;
+          font-weight: unset;
+          color: unset;
+         }
+
          .ui.page.grid {
          padding: 0 !important; 
          }
@@ -31,22 +60,12 @@
          transition-duration: 0.4s;
          cursor: pointer;
          }
-         .button1 {
-         background-color: white; 
-         color: black; 
-         border: 2px solid #4CAF50;
-         }
-         .button1:hover {
-         background-color: #4CAF50;
-         color: white;
-         }
+         .modal{
+          background: none;
+          max-height: unset;
+          bottom: unset;
+        }
       </style>
-      <link rel='stylesheet' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css'>
-      <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
-      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-      <!-- Compiled and minified CSS -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-      <link rel="stylesheet" href="/assets/css/cashier.css">
    </head>
    <body>
       <div class="ui grid page">
@@ -58,60 +77,61 @@
                   <a class="item" data-tab="member">MEMBER</a>
                </div>
                <div class="ui tab" data-tab="transaction">
-                  <div class="ui form">
-                     <div class="five fields">
-                        <div class="field">
-                           <label>KODE BARANG</label>
-                           <input type="text" placeholder="123456789" id="itemId"/>
-                        </div>
-                        <div class="field">
-                           <label>JUMLAH</label>
-                           <input type="number" value="1" min="1" id="item_qty"/>
-                        </div>
-                        <div class="field align-right">
-                           <label style="font-size: 15px;">TOTAL BELANJA</label>
-                           <label style="font-size: 40px; font-weight: 990;" id="label-total">0</label>
-                        </div>
-                        <div class="field">
-                           <label>MEMBER</label>
-                           <input type="text" placeholder="123456789" id="memberId"/>
-                        </div>
-                        <div class="field align-right">
-                           <label></label>
-                           <button data-target="modal1" class="btn-large modal-trigger">BAYAR</button>
-                        </div>
-                     </div>
-                     <div class="one fields">
-                        <hr>
-                        <br>
-                        <div class="overflow">
-                           <table id="itemList" style="width:100%">
-                              <thead>
-                                 <tr>
-                                    <th class="width10">Kode</th>
-                                    <th class="width55">Nama Barang</th>
-                                    <th class="width15">Kategori</th>
-                                    <th class="width15">Jumlah</th>
-                                    <th class="width15">Harga</th>
-                                    <th class="width15">Diskon</th>
-                                    <th class="width15">Total</th>
-                                 </tr>
-                              </thead>
-                              <tbody>
-                              </tbody>
-                           </table>
-                        </div>
-                     </div>
+                  <div class="row">
+                    <div class="col-sm-8">
+                      <label>MEMBER</label>
+                      <input type="text" placeholder="Nomor Kartu Member ..." id="memberId"/>
+                      <input type="text" style="display: none", disabled="disabled" id="memberName">
+                    </div>
+                    <div class="col-sm-4">
+                      <label style="font-size: 15px;">TOTAL BELANJA</label>
+                      <br>
+                      <label style="font-size: 40px; font-weight: 990;" id="label-total">0</label>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="field">
+                         <label>KODE BARANG</label>
+                         <input type="text" placeholder="Kode Barang ..." id="itemId"/>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <label>JUMLAH</label>
+                      <input type="number" value="1" min="1" id="item_qty"/>
+                    </div>
+                    <div class="col-sm-4 text-right">
+                      <button data-target="modal1" class="btn btn-primary btn-large modal-trigger">BAYAR</button>
+                    </div>
+                    <div class="col-sm-12">
+                      <table id="itemList">
+                        <thead>
+                           <tr>
+                              <th class="width10">Kode</th>
+                              <th class="width55">Nama Barang</th>
+                              <th class="width15">Kategori</th>
+                              <th class="width15">Jumlah</th>
+                              <th class="width15">Harga</th>
+                              <th class="width15">Diskon</th>
+                              <th class="width15">Total</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="col-sm-12 text-center">
+                      <button id="button-remove" class="btn btn-danger">HAPUS BARANG</button>
+                    </div>
                   </div>
                </div>
                <div class="ui tab" data-tab="member">
-                  <div class="four fields">
-                     <div class="field">
-                        <a href="localhost:3000/members/new"><button class="text-right btn btn-primary">+ MEMBER</button></a>
-                        <br>
-                        <label>CARI MEMBER</label>
-                        <input type="text" placeholder="Nama Member / No. Telp / Alamat" id="memberSearchId"/>
-                     </div>
+                  <div class="row">
+                    <div class="col-md-12 text-right">
+                        <a href="localhost:3030/members/new"><button class="text-right btn btn-primary">+ MEMBER</button></a>
+                    </div>
+                    <div class="col-md-12">
+                      <label>CARI MEMBER</label>
+                      <input type="text" placeholder="Nama Member / No. Telp / Alamat" id="memberSearchId"/>
+                    </div>
                   </div>
                   <div class="one fields">
                      <br>
@@ -198,17 +218,23 @@
                      <select id="bank-select">
                         <option value="1" selected>BCA</option>
                         <option value="2">Mandiri</option>
-                        <option value="3">Permata</option>
+                        <option value="3">BNI</option>
+                        <option value="4">BRI</option>
+                        <option value="5">Permata</option>
                      </select>
                      <label>Bank</label>
                   </div>
-                  <div class="input-field col s12">
-                     <input type="text" placeholder="123456789" id="edc-number"/>
+                  <div class="input-field col s6">
+                     <input type="number" placeholder="123456789" id="edc-number" autocomplete="off"/>
                      <label>Nomor TRX (EDC)</label>
+                  </div>
+                  <div class="input-field col s6">
+                     <input type="number" placeholder="123456789" id="card-number" autocomplete="off"/>
+                     <label>Nomor Kartu</label>
                   </div>
                </div>
                <div class="input-field col s12" id="nominal-div">
-                  <input type="number" placeholder="123456789" id="nominal" min="0" onkeyup="exchange()" />
+                  <input type="number" placeholder="123456789" id="nominal" min="0" onkeyup="exchange()" autocomplete="off", value="0" />
                   <label>Jumlah Uang</label>
                </div>
             </div>
@@ -225,22 +251,28 @@
                   </b>
                </div>
             </div>
-         </div>
-         <div class="modal-footer">
-            <a class="waves-effect waves-green btn-flat"onclick="PrintBill()" style="color: blue;">CETAK</a>
-            <a class="modal-close waves-effect waves-green btn-flat" style="color: green;" onclick="CheckOut()">KONFIRMASI</a>
+           <div class="modal-footer">
+              <a onclick="PrintBill()" style="color: blue;">TEST CETAK</a>
+              <a class="modal-close btn btn-success" onclick="CheckOut()">SELESAI</a>
+           </div>
          </div>
       </div>
+
+
+
+
+
+
+
+
+
+
       <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
       <script src='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/javascript/semantic.min.js'></script>
       <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js'></script>
       <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
       <!-- Compiled and minified JavaScript -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
-      <!-- <script type="text/javascript" src="/assets/js/dependencies/rsvp-3.1.0.min.js"></script>
-         <script type="text/javascript" src="/assets/js/dependencies/sha-256.min.js"></script>
-         <script type="text/javascript" src="/assets/js/qz-tray.js"></script>
-          <script src="/assets/js/cashier.js"></script>-->
       <script type="text/javascript">
          function CheckOut() {
              var table = $('#itemList').DataTable();
@@ -261,12 +293,18 @@
              var payment = $("#payment-method-select").val();
              var member = $("#memberId").val();
              var change = "0";
-             var bank = 0;
-             var edc = "";
+             var bank = $("#bank-select").val();
+             var edc = $("#edc-nnumber").val();
+             var card = $("#card-number").val();
          
              if (payment==1){
-                 nominal= $('#nominal').val();
                  change = $('#change-h5').html();
+                 var nominal = parseFloat($('#nominal').val());
+                 if (total > nominal) {
+                   var bilangan = nominal - total;
+                   alert("Jumlah Uang Kurang.")
+                   return false;
+                 }
              }else{
                  bank = $("#bank-select").val();
                  edc = $("#edc-number").val();
@@ -276,6 +314,7 @@
              map["payment"] = payment;
              map["bank"] = bank;
              map["edc"] = edc;
+             map["card"] = card;
              map["member"] = member;
              jQuery.ajax({
                        url: "/api/trx/post",
@@ -288,133 +327,201 @@
                          }
                        },
                        success: function(result) {
-                        var table = $('#itemList').DataTable();
-                        table.clear().draw();
-                        $("#total-h5").html("0");
-                         document.getElementById("label-total").innerHTML = "0";
-                         }
+                          $("#payment-method-select").val(0);
+                          $("#nominal").val();
+                          var table = $('#itemList').DataTable();
+                          table.clear().draw();
+                          $("#total-h5").html("0");
+                          document.getElementById("label-total").innerHTML = "0";
+                          document.location.reload();
+                          window.location.reload()
+                        }
              });
          }
          
          $('.top.menu .item').tab();
+
          $(document).ready(function() {
-         $('#itemList').DataTable({
-         scrollY: '50vh',
-         scrollCollapse: true,
-         paging: false,
-         pageLength: 10,
-         paging: false,
-         searching: false,
-         columns: [{
-             "width": "10%"
-         },
-         {
-             "width": "25%"
-         },
-         {
-             "width": "15%"
-         },
-         {
-             "width": "5%"
-         },
-         {
-             "width": "15%"
-         },
-         {
-             "width": "15%"
-         },
-         {
-             "width": "15%"
-         },
-         ]
+            $('#itemList').DataTable({
+             scrollY: '50vh',
+             scrollCollapse: true,
+             paging: false,
+             pageLength: 10,
+             paging: false,
+             searching: false,
+             columns: [{
+                     "width": "10%"
+                 },
+                 {
+                     "width": "25%"
+                 },
+                 {
+                     "width": "15%"
+                 },
+                 {
+                     "width": "5%"
+                 },
+                 {
+                     "width": "15%"
+                 },
+                 {
+                     "width": "15%"
+                 },
+                 {
+                     "width": "15%"
+                 },
+                ]
+            });
+
+
+            var table = $('#itemList').DataTable();
+
+
+            $('#itemList tbody').on( 'click', 'tr', function () {
+              if ( $(this).hasClass('selected') ) {
+                  $(this).removeClass('selected');
+              }
+              else {
+                  table.$('tr.selected').removeClass('selected');
+                  $(this).addClass('selected');
+              }
+            } );
+       
+            $('#button-remove').click( function () {
+              table.row('.selected').remove().draw( false );
+              GrandTotal();
+            } );
+
+            $('#itemSearchList').DataTable({
+               scrollY: '50vh',
+               scrollCollapse: true,
+               pageLength: 10,
+               searching: false,
+                  order: [
+                   [1, "asc"]
+                   ],
+                  lengthChange: false
+            });
+            $('#memberSearchList').DataTable({
+               scrollY: '50vh',
+               scrollCollapse: true,
+               pageLength: 10,
+               searching: false,
+               lengthChange: false
+            });
+           document.getElementById("itemId").focus();
+           $('.modal').modal();
+           $('select').formSelect();
          });
-         $('#itemSearchList').DataTable({
-         scrollY: '50vh',
-         scrollCollapse: true,
-         pageLength: 10,
-         searching: false,
-         order: [
-         [1, "asc"]
-         ],
-         lengthChange: false
-         });
-         $('#memberSearchList').DataTable({
-         scrollY: '50vh',
-         scrollCollapse: true,
-         pageLength: 10,
-         searching: false,
-         lengthChange: false
-         });
-         document.getElementById("itemId").focus();
-         $('.modal').modal();
-         $('select').formSelect();
-         startConnection();
-         });
+
+         function GrandTotal() {
+           total = 0;
+           var table = $('#itemList').DataTable();
+           var data = table.rows().data();
+           for (var i = 0; i < data.length; i++) {
+            total += parseFloat(data[i][6]);
+           }
+           var bilangan = total;
+           
+           var reverse = bilangan.toString().split('').reverse().join(''),
+           ribuan = reverse.match(/\d{1,3}/g);
+           ribuan = ribuan.join('.').split('').reverse().join('');
+           
+           $("#total-h5").html(ribuan);
+           document.getElementById("label-total").innerHTML = ribuan;
+         }
          
          
          var total = 0;
          
          function PaymentMethod() {
-         var method = $('#payment-method-select').val();
-         if (method != 1) {
-         $("#card").css("display", "block");
-         $("#nominal-div").css("display", "none");
-         $("#change-div").css("display", "none");
-         } else {
-         $("#nominal-div").css("display", "block");
-         $("#change-div").css("display", "block");
-         $("#card").css("display", "none");
-         }
+           var method = $('#payment-method-select').val();
+           if (method != 1) {
+             $("#card").css("display", "block");
+             $("#nominal-div").css("display", "none");
+             $("#change-div").css("display", "none");
+           } else {
+             $("#nominal-div").css("display", "block");
+             $("#change-div").css("display", "block");
+             $("#card").css("display", "none");
+           }
          }
          
          function exchange() {
-         var nominal = parseFloat($('#nominal').val());
-         if (total <= nominal) {
-         var bilangan = nominal - total;
-         
-         var reverse = bilangan.toString().split('').reverse().join(''),
-         ribuan = reverse.match(/\d{1,3}/g);
-         ribuan = ribuan.join('.').split('').reverse().join('');
-         
-         $("#change-h5").html(ribuan);
-         }
+           var nominal = parseFloat($('#nominal').val());
+           if (total <= nominal) {
+             var bilangan = nominal - total;
+             
+             var reverse = bilangan.toString().split('').reverse().join(''),
+             ribuan = reverse.match(/\d{1,3}/g);
+             ribuan = ribuan.join('.').split('').reverse().join('');
+             
+             $("#change-h5").html(ribuan);
+             return bilangan;
+           }
          }
          
          var itemId = document.getElementById('itemId');
          var itemSearchId = document.getElementById('itemSearchId');
+         var memberId = document.getElementById('memberId');
          var memberSearchId = document.getElementById('memberSearchId');
          var qtyInput = document.getElementById('item_qty');
          var timeout = null;
          
          qtyInput.onkeyup = function(e) {
-         clearTimeout(timeout);
-         timeout = setTimeout(function() {
-         document.getElementById("itemId").focus();
-         }, 600);
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+            document.getElementById("itemId").focus();
+           }, 600);
+         };
+
+         memberId.onkeyup = function(e) {
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+             var member = document.getElementById("memberId").value;
+             $.ajax({
+             method: "GET",
+             cache: false,
+             url: "/api/member_trx?search=" + member,
+             success: function(result_arr) {
+                 if (result_arr.length == 0){
+                  return;
+                 }
+                 name = result_arr[0][1]
+                 phone = result_arr[0][3]
+                 $("#memberName").val(name + " - " + phone);
+                 $("#memberName").show();
+                 $("#memberId").hide();
+             },
+             error: function(error) {
+                 
+             }
+             });
+           }, 300);
          };
          
          memberSearchId.onkeyup = function(e) {
-         clearTimeout(timeout);
-         timeout = setTimeout(function() {
-         var member = document.getElementById("memberSearchId").value;
-         var table = $('#memberSearchList').DataTable();
-         $.ajax({
-         method: "GET",
-         cache: false,
-         url: "/api/member?search=" + member,
-         success: function(result_arr) {
-             table.clear().draw();
-             for (var i = 0; i < result_arr.length; i++) {
-                 var result = result_arr[i];
-                 var dataSet = [result[0], result[1], result[2], result[3]];
-                 table.row.add(dataSet).draw();
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+             var member = document.getElementById("memberSearchId").value;
+             var table = $('#memberSearchList').DataTable();
+             $.ajax({
+             method: "GET",
+             cache: false,
+             url: "/api/member?search=" + member,
+             success: function(result_arr) {
+                 table.clear().draw();
+                 for (var i = 0; i < result_arr.length; i++) {
+                     var result = result_arr[i];
+                     var dataSet = [result[0], result[1], result[2], result[3]];
+                     table.row.add(dataSet).draw();
+                 }
+             },
+             error: function(error) {
+                 table.clear().draw();
              }
-         },
-         error: function(error) {
-             table.clear().draw();
-         }
-         });
-         }, 300);
+             });
+           }, 300);
          };
          
          itemSearchId.onkeyup = function(e) {
@@ -433,7 +540,7 @@
                  var reverse = result[3].toString().split('').reverse().join(''),
                  ribuan = reverse.match(/\d{1,3}/g);
                  ribuan = ribuan.join('.').split('').reverse().join('');
-                 var dataSet = [result[0], result[1], result[2], 0, ribuan];
+                 var dataSet = [result[0], result[1], result[2], ribuan, result[4]];
                  table.row.add(dataSet).draw();
              }
          },
@@ -445,52 +552,118 @@
          };
          
          itemId.onkeyup = function(e) {
-         clearTimeout(timeout);
-         timeout = setTimeout(function() {
-         var item_id = document.getElementById("itemId").value;
-         var item_qty = document.getElementById("item_qty").value;
-         $.ajax({
-         method: "GET",
-         cache: false,
-         url: "/api/trx?search=" + item_id + "&qty=" + item_qty,
-         success: function(result_arr) {
-             var table = $('#itemList').DataTable();
-             var result = result_arr[0];
-             var qty = qtyInput.value;
-             var total = parseFloat(qty) * (parseFloat(result[3]) - parseFloat(result[4]));
-             var dataSet = [result[0], result[1], result[2], qty, result[3], result[4], total];
-         
-             table.row.add(dataSet).draw();
-             GrandTotal();
-         
-             document.getElementById("itemId").value = "";
-             document.getElementById("item_qty").value = 1;
-             document.getElementById("itemId").focus();
-         },
-         error: function(error) {
-             document.getElementById("itemId").value = "";
-             document.getElementById("item_qty").value = 1;
-             document.getElementById("itemId").focus();
-         }
-         });
-         }, 300);
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+           var item_id = document.getElementById("itemId").value;
+           var item_qty = document.getElementById("item_qty").value;
+           $.ajax({
+             method: "GET",
+             cache: false,
+             url: "/api/trx?search=" + item_id + "&qty=" + item_qty,
+             success: function(result_arr) {
+                 updateTable(result_arr);
+             },
+             error: function(error) {
+                 document.getElementById("itemId").value = "";
+                 document.getElementById("item_qty").value = 1;
+                 document.getElementById("itemId").focus();
+             }
+           });
+           }, 300);
          };
+
+         function updateTable(result_arr){
+           var table = $('#itemList').DataTable();
+           var result = result_arr[0];
+           var qty = qtyInput.value;
+           var total = parseFloat(qty) * (parseFloat(result[3]) - parseFloat(result[4]));
+
+           var code= result[0];
+
+           if (table.rows().count()<1) {
+            var dataSet = [code, result[1], result[2], qty, result[3], result[4], total];
+            table.row.add(dataSet).draw();
+            GrandTotal();
+            document.getElementById("itemId").value = "";
+            document.getElementById("item_qty").value = 1;
+            document.getElementById("itemId").focus();
+            return;
+           }
+
+           var existing = false
+           var curr_code = "";
+           var curr_qty = "";
+           var curr_price = "";
+           var curr_disc = "";
+           var rowIdx = 0
+
+           var t_size = $('#itemList').DataTable().rows().count();
+
+           for (var i = 0; i < t_size; i++) {
+            this_code = table.cell(i,0).data();
+            if (this_code == code){
+              existing = true;
+              curr_code = table.cell(i,0).data();
+              curr_qty = table.cell(i,3).data();
+              curr_price = table.cell(i,4).data();
+              curr_disc = table.cell(i,5).data();
+              rowIdx = i;
+              break;
+            }
+           };
+
+           if (existing){
+            new_qty = parseInt(curr_qty)+parseInt(qty);
+            $.ajax({
+               method: "GET",
+               cache: false,
+               url: "/api/trx?search=" + curr_code + "&qty=" + new_qty,
+               success: function(result_arr) {
+                  var result = result_arr[0];
+                  var new_price = parseFloat(result[3]);
+                  var new_disc = parseFloat(result[4]);
+                  var new_total = parseFloat(new_qty) * (new_price-new_disc);
+
+                  table.cell(rowIdx,3).data(new_qty);
+                  table.cell(rowIdx,4).data(new_price);
+                  table.cell(rowIdx,5).data(new_disc);
+                  table.cell(rowIdx,6).data(new_total);
+
+                  table.draw();
+               },
+               error: function(error) {
+                   document.getElementById("itemId").value = "";
+                   document.getElementById("item_qty").value = 1;
+                   document.getElementById("itemId").focus();
+               }
+             });
+          }else{
+            var dataSet = [code, result[1], result[2], qty, result[3], result[4], total];
+            table.row.add(dataSet).draw();
+          } 
+          table.draw();
+          GrandTotal();
+          document.getElementById("itemId").value = "";
+          document.getElementById("item_qty").value = 1;
+          document.getElementById("itemId").focus();
+          return;
+         }
          
          function GrandTotal() {
-         total = 0;
-         var table = $('#itemList').DataTable();
-         var data = table.rows().data();
-         for (var i = 0; i < data.length; i++) {
-         total += parseFloat(data[i][6]);
-         }
-         var bilangan = total;
-         
-         var reverse = bilangan.toString().split('').reverse().join(''),
-         ribuan = reverse.match(/\d{1,3}/g);
-         ribuan = ribuan.join('.').split('').reverse().join('');
-         
-         $("#total-h5").html(ribuan);
-         document.getElementById("label-total").innerHTML = ribuan;
+           total = 0;
+           var table = $('#itemList').DataTable();
+           var data = table.rows().data();
+           for (var i = 0; i < data.length; i++) {
+            total += parseFloat(data[i][6]);
+           }
+           var bilangan = total;
+           
+           var reverse = bilangan.toString().split('').reverse().join(''),
+           ribuan = reverse.match(/\d{1,3}/g);
+           ribuan = ribuan.join('.').split('').reverse().join('');
+           
+           $("#total-h5").html(ribuan);
+           document.getElementById("label-total").innerHTML = ribuan;
          }
          
          var head_html = '<html> <table style="font-family: monospace; width: 100%"> <tr style="height: 2cm; " > <td valign="top"  width="70%">CANTIK MART <br> Plered, Purwakarta <br> 022 - 12345678 </td> <td style="text-align: right;" width="30%"> <img src="127.0.0.1:8080/assets/images/icon2.png" width="100%"> </td> </tr> </table><hr>';
@@ -552,230 +725,13 @@
              body_html += '</table>';
          
              printHTML(head_html+body_html+footer_html);
-         }           
+         }  
          
          function printHTML(html) {
-             setPrinter("zebra");
-             var config = getUpdatedConfig();
-             var printData = [
-                 {
-                     type: 'html',
-                     format: 'plain',
-                     data: html
-                 }
-             ];
-             qz.print(config, printData).catch(displayError);
+             
          }
          
          
-         /// Authentication setup ///
-         qz.security.setCertificatePromise(function(resolve, reject) {
-         //Preferred method - from server
-         //        $.ajax("assets/signing/digital-certificate.txt").then(resolve, reject);
-         
-         //Alternate method 1 - anonymous
-         //        resolve();
-         
-         //Alternate method 2 - direct
-         resolve("-----BEGIN CERTIFICATE-----\n" +
-         "MIIFAzCCAuugAwIBAgICEAIwDQYJKoZIhvcNAQEFBQAwgZgxCzAJBgNVBAYTAlVT\n" +
-         "MQswCQYDVQQIDAJOWTEbMBkGA1UECgwSUVogSW5kdXN0cmllcywgTExDMRswGQYD\n" +
-         "VQQLDBJRWiBJbmR1c3RyaWVzLCBMTEMxGTAXBgNVBAMMEHF6aW5kdXN0cmllcy5j\n" +
-         "b20xJzAlBgkqhkiG9w0BCQEWGHN1cHBvcnRAcXppbmR1c3RyaWVzLmNvbTAeFw0x\n" +
-         "NTAzMTkwMjM4NDVaFw0yNTAzMTkwMjM4NDVaMHMxCzAJBgNVBAYTAkFBMRMwEQYD\n" +
-         "VQQIDApTb21lIFN0YXRlMQ0wCwYDVQQKDAREZW1vMQ0wCwYDVQQLDAREZW1vMRIw\n" +
-         "EAYDVQQDDAlsb2NhbGhvc3QxHTAbBgkqhkiG9w0BCQEWDnJvb3RAbG9jYWxob3N0\n" +
-         "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtFzbBDRTDHHmlSVQLqjY\n" +
-         "aoGax7ql3XgRGdhZlNEJPZDs5482ty34J4sI2ZK2yC8YkZ/x+WCSveUgDQIVJ8oK\n" +
-         "D4jtAPxqHnfSr9RAbvB1GQoiYLxhfxEp/+zfB9dBKDTRZR2nJm/mMsavY2DnSzLp\n" +
-         "t7PJOjt3BdtISRtGMRsWmRHRfy882msBxsYug22odnT1OdaJQ54bWJT5iJnceBV2\n" +
-         "1oOqWSg5hU1MupZRxxHbzI61EpTLlxXJQ7YNSwwiDzjaxGrufxc4eZnzGQ1A8h1u\n" +
-         "jTaG84S1MWvG7BfcPLW+sya+PkrQWMOCIgXrQnAsUgqQrgxQ8Ocq3G4X9UvBy5VR\n" +
-         "CwIDAQABo3sweTAJBgNVHRMEAjAAMCwGCWCGSAGG+EIBDQQfFh1PcGVuU1NMIEdl\n" +
-         "bmVyYXRlZCBDZXJ0aWZpY2F0ZTAdBgNVHQ4EFgQUpG420UhvfwAFMr+8vf3pJunQ\n" +
-         "gH4wHwYDVR0jBBgwFoAUkKZQt4TUuepf8gWEE3hF6Kl1VFwwDQYJKoZIhvcNAQEF\n" +
-         "BQADggIBAFXr6G1g7yYVHg6uGfh1nK2jhpKBAOA+OtZQLNHYlBgoAuRRNWdE9/v4\n" +
-         "J/3Jeid2DAyihm2j92qsQJXkyxBgdTLG+ncILlRElXvG7IrOh3tq/TttdzLcMjaR\n" +
-         "8w/AkVDLNL0z35shNXih5F9JlbNRGqbVhC7qZl+V1BITfx6mGc4ayke7C9Hm57X0\n" +
-         "ak/NerAC/QXNs/bF17b+zsUt2ja5NVS8dDSC4JAkM1dD64Y26leYbPybB+FgOxFu\n" +
-         "wou9gFxzwbdGLCGboi0lNLjEysHJBi90KjPUETbzMmoilHNJXw7egIo8yS5eq8RH\n" +
-         "i2lS0GsQjYFMvplNVMATDXUPm9MKpCbZ7IlJ5eekhWqvErddcHbzCuUBkDZ7wX/j\n" +
-         "unk/3DyXdTsSGuZk3/fLEsc4/YTujpAjVXiA1LCooQJ7SmNOpUa66TPz9O7Ufkng\n" +
-         "+CoTSACmnlHdP7U9WLr5TYnmL9eoHwtb0hwENe1oFC5zClJoSX/7DRexSJfB7YBf\n" +
-         "vn6JA2xy4C6PqximyCPisErNp85GUcZfo33Np1aywFv9H+a83rSUcV6kpE/jAZio\n" +
-         "5qLpgIOisArj1HTM6goDWzKhLiR/AeG3IJvgbpr9Gr7uZmfFyQzUjvkJ9cybZRd+\n" +
-         "G8azmpBBotmKsbtbAU/I/LVk8saeXznshOVVpDRYtVnjZeAneso7\n" +
-         "-----END CERTIFICATE-----\n" +
-         "--START INTERMEDIATE CERT--\n" +
-         "-----BEGIN CERTIFICATE-----\n" +
-         "MIIFEjCCA/qgAwIBAgICEAAwDQYJKoZIhvcNAQELBQAwgawxCzAJBgNVBAYTAlVT\n" +
-         "MQswCQYDVQQIDAJOWTESMBAGA1UEBwwJQ2FuYXN0b3RhMRswGQYDVQQKDBJRWiBJ\n" +
-         "bmR1c3RyaWVzLCBMTEMxGzAZBgNVBAsMElFaIEluZHVzdHJpZXMsIExMQzEZMBcG\n" +
-         "A1UEAwwQcXppbmR1c3RyaWVzLmNvbTEnMCUGCSqGSIb3DQEJARYYc3VwcG9ydEBx\n" +
-         "emluZHVzdHJpZXMuY29tMB4XDTE1MDMwMjAwNTAxOFoXDTM1MDMwMjAwNTAxOFow\n" +
-         "gZgxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJOWTEbMBkGA1UECgwSUVogSW5kdXN0\n" +
-         "cmllcywgTExDMRswGQYDVQQLDBJRWiBJbmR1c3RyaWVzLCBMTEMxGTAXBgNVBAMM\n" +
-         "EHF6aW5kdXN0cmllcy5jb20xJzAlBgkqhkiG9w0BCQEWGHN1cHBvcnRAcXppbmR1\n" +
-         "c3RyaWVzLmNvbTCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBANTDgNLU\n" +
-         "iohl/rQoZ2bTMHVEk1mA020LYhgfWjO0+GsLlbg5SvWVFWkv4ZgffuVRXLHrwz1H\n" +
-         "YpMyo+Zh8ksJF9ssJWCwQGO5ciM6dmoryyB0VZHGY1blewdMuxieXP7Kr6XD3GRM\n" +
-         "GAhEwTxjUzI3ksuRunX4IcnRXKYkg5pjs4nLEhXtIZWDLiXPUsyUAEq1U1qdL1AH\n" +
-         "EtdK/L3zLATnhPB6ZiM+HzNG4aAPynSA38fpeeZ4R0tINMpFThwNgGUsxYKsP9kh\n" +
-         "0gxGl8YHL6ZzC7BC8FXIB/0Wteng0+XLAVto56Pyxt7BdxtNVuVNNXgkCi9tMqVX\n" +
-         "xOk3oIvODDt0UoQUZ/umUuoMuOLekYUpZVk4utCqXXlB4mVfS5/zWB6nVxFX8Io1\n" +
-         "9FOiDLTwZVtBmzmeikzb6o1QLp9F2TAvlf8+DIGDOo0DpPQUtOUyLPCh5hBaDGFE\n" +
-         "ZhE56qPCBiQIc4T2klWX/80C5NZnd/tJNxjyUyk7bjdDzhzT10CGRAsqxAnsjvMD\n" +
-         "2KcMf3oXN4PNgyfpbfq2ipxJ1u777Gpbzyf0xoKwH9FYigmqfRh5N2pEdiYawKrX\n" +
-         "6pyXzGM4cvQ5X1Yxf2x/+xdTLdVaLnZgwrdqwFYmDejGAldXlYDl3jbBHVM1v+uY\n" +
-         "5ItGTjk+3vLrxmvGy5XFVG+8fF/xaVfo5TW5AgMBAAGjUDBOMB0GA1UdDgQWBBSQ\n" +
-         "plC3hNS56l/yBYQTeEXoqXVUXDAfBgNVHSMEGDAWgBQDRcZNwPqOqQvagw9BpW0S\n" +
-         "BkOpXjAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQAJIO8SiNr9jpLQ\n" +
-         "eUsFUmbueoxyI5L+P5eV92ceVOJ2tAlBA13vzF1NWlpSlrMmQcVUE/K4D01qtr0k\n" +
-         "gDs6LUHvj2XXLpyEogitbBgipkQpwCTJVfC9bWYBwEotC7Y8mVjjEV7uXAT71GKT\n" +
-         "x8XlB9maf+BTZGgyoulA5pTYJ++7s/xX9gzSWCa+eXGcjguBtYYXaAjjAqFGRAvu\n" +
-         "pz1yrDWcA6H94HeErJKUXBakS0Jm/V33JDuVXY+aZ8EQi2kV82aZbNdXll/R6iGw\n" +
-         "2ur4rDErnHsiphBgZB71C5FD4cdfSONTsYxmPmyUb5T+KLUouxZ9B0Wh58ucc1Lp\n" +
-         "rbO7BnjW\n" +
-         "-----END CERTIFICATE-----\n");
-         });
-         
-         qz.security.setSignaturePromise(function(toSign) {
-         return function(resolve, reject) {
-         //Preferred method - from server
-         //            $.ajax("/secure/url/for/sign-message?request=" + toSign).then(resolve, reject);
-         
-         //Alternate method - unsigned
-         resolve();
-         };
-         });
-         
-         
-         /// Connection ///
-         function launchQZ() {
-         if (!qz.websocket.isActive()) {
-         window.location.assign("qz:launch");
-         //Retry 5 times, pausing 1 second between each attempt
-         startConnection({
-         retries: 5,
-         delay: 1
-         });
-         }
-         }
-         
-         function startConnection(config) {
-         if (!qz.websocket.isActive()) {
-         updateState('Waiting', 'default');
-         
-         qz.websocket.connect(config).then(function() {
-         updateState('Active', 'success');
-         findVersion();
-         }).catch(handleConnectionError);
-         } else {
-         displayMessage('An active connection with QZ already exists.', 'alert-warning');
-         }
-         }
-         
-         function updateState(text, css) {
-         $("#launch").show();
-         }
-         
-         function getPath() {
-         var path = window.location.href;
-         return path.substring(0, path.lastIndexOf("/"));
-         }
-         
-         
-         /// QZ Config ///
-         var cfg = null;
-         
-         function getUpdatedConfig() {
-         if (cfg == null) {
-         cfg = qz.configs.create(null);
-         }
-         
-         updateConfig();
-         return cfg
-         }
-         
-         function updateConfig() {
-         var pxlSize = null;
-         if ($("#pxlSizeActive").prop('checked')) {
-         pxlSize = {
-         width: $("#pxlSizeWidth").val(),
-         height: $("#pxlSizeHeight").val()
-         };
-         }
-         
-         var pxlMargins = $("#pxlMargins").val();
-         if ($("#pxlMarginsActive").prop('checked')) {
-         pxlMargins = {
-         top: $("#pxlMarginsTop").val(),
-         right: $("#pxlMarginsRight").val(),
-         bottom: $("#pxlMarginsBottom").val(),
-         left: $("#pxlMarginsLeft").val()
-         };
-         }
-         
-         var copies = 1;
-         var jobName = null;
-         if ($("#rawTab").hasClass("active")) {
-         copies = $("#rawCopies").val();
-         jobName = $("#rawJobName").val();
-         } else {
-         copies = $("#pxlCopies").val();
-         jobName = $("#pxlJobName").val();
-         }
-         
-         cfg.reconfigure({
-         altPrinting: $("#rawAltPrinting").prop('checked'),
-         encoding: $("#rawEncoding").val(),
-         endOfDoc: $("#rawEndOfDoc").val(),
-         perSpool: $("#rawPerSpool").val(),
-         
-         colorType: $("#pxlColorType").val(),
-         copies: copies,
-         density: $("#pxlDensity").val(),
-         duplex: $("#pxlDuplex").prop('checked'),
-         interpolation: $("#pxlInterpolation").val(),
-         jobName: jobName,
-         legacy: $("#pxlLegacy").prop('checked'),
-         margins: pxlMargins,
-         orientation: $("#pxlOrientation").val(),
-         paperThickness: $("#pxlPaperThickness").val(),
-         printerTray: $("#pxlPrinterTray").val(),
-         rasterize: $("#pxlRasterize").prop('checked'),
-         rotation: $("#pxlRotation").val(),
-         scaleContent: $("#pxlScale").prop('checked'),
-         size: pxlSize,
-         units: $("input[name='pxlUnits']:checked").val()
-         });
-         }
-         
-         function setPrinter(printer) {
-         var cf = getUpdatedConfig();
-         cf.setPrinter(printer);
-         
-         if (typeof printer === 'object' && printer.name == undefined) {
-         var shown;
-         if (printer.file != undefined) {
-         shown = "<em>FILE:</em> " + printer.file;
-         }
-         if (printer.host != undefined) {
-         shown = "<em>HOST:</em> " + printer.host + ":" + printer.port;
-         }
-         
-         $("#configPrinter").html(shown);
-         } else {
-         if (printer.name != undefined) {
-         printer = printer.name;
-         }
-         
-         if (printer == undefined) {
-         printer = 'NONE';
-         }
-         $("#configPrinter").html(printer);
-         }
-         }
       </script>
    </body>
 </html>
