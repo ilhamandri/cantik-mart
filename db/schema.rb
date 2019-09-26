@@ -223,8 +223,8 @@ ActiveRecord::Schema.define(version: 2019_09_22_165620) do
     t.string "code", default: "DEFAULT_CODE", null: false
     t.string "name", default: "DEFAULT_NAME", null: false
     t.integer "stock", default: 0, null: false
-    t.integer "buy", default: 1, null: false
-    t.integer "sell", default: 1, null: false
+    t.integer "buy", default: 0, null: false
+    t.integer "sell", default: 0, null: false
     t.bigint "item_cat_id", null: false
     t.string "brand", null: false
     t.float "wholesale", default: 0.0, null: false
