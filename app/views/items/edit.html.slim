@@ -44,11 +44,15 @@
           .form-group
             label for="item" Jenis Barang
             select name="item[local_item]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
-              - if !@item.local_item
-                option value="false"
+              - if @item.local_item == "false"
+                option value="false" selected="selected"
                   | Barang Pusat 
-              - else
                 option value="true"
+                  | Barang Lokal 
+              - else
+                option value="false" 
+                  | Barang Pusat 
+                option value="true" selected="selected"
                   | Barang Lokal 
           .form-group
             label for="sell" Link Foto
