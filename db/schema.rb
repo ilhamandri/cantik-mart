@@ -380,6 +380,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_042330) do
     t.datetime "start_promo", null: false
     t.datetime "end_promo", null: false
     t.bigint "user_id", null: false
+    t.string "promo_code", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["buy_item_id"], name: "index_promotions_on_buy_item_id"

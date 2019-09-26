@@ -8,7 +8,8 @@ class CreateTablePromotions < ActiveRecord::Migration[5.2]
     	t.timestamp :start_promo, null: false
     	t.timestamp :end_promo, null: false
       t.references :user, foreign_key: true, null: false
-      	
+      t.string :promo_code, null: false
+      
       t.timestamps
     end
   end

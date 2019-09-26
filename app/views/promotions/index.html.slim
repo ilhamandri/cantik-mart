@@ -17,22 +17,35 @@ br
       .card-body
         = form_for :promotion, url: promotions_path, method: 'GET' do |form|
           .row
-            .col
-              input type="text" class="form-control md-form" id="search" name="search"
+            .col-md-4
+                input class="form-control md-form" type="date" name="date_from" id="date_from"
+            .col-md-4
+                input class="form-control md-form" type="date" name="date_to" id="date_to"
+            .col-md-4
+              select class="mdb-select md-form" id="order_by" name="order_by"
+                option[value="desc"]
+                  | urutkan dari terakhir
+                option[value="asc"]
+                  | urutkan dari pertama
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
+        .col-md-12.text-center.grey-text
+          a href="#{promotions_path(option: @params.to_s, format: :pdf)}"
+            b
+              | #{@search}
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Data Sub-Department
+          | Data Promo
       .card-body.table-responsive.text-nowrap
         table class="table"
           thead
+            th Kode Promo
             th Beli Item
-            th Jumlah 
+            th Beli 
             th Gratis Item
             th Gratis
             th Tgl Mulai

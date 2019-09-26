@@ -21,7 +21,54 @@ class PromotionsController < ApplicationController
     end
   end
 
+  def create
+    buy_code = params[:promotion][:buy_item]
+    free_code = params[:promotion][:free_item]
+    start_date = params[:promotion][:start_promo]
+    end_date = params[:promotion][:end_promo]
+
+    buy_item = Item.find_by(code: buy_code)
+    free_item = Item.find_by(code: free_code)
+    promo_code = "PROMO-"+DateTime.now.to_i.to_s
+
+    return redirect_back_data_error new_promotion_path, "Data barang beli dengan kode - "+buy_code+" tidak ditemukan" if buy_item.nil?
+    return redirect_back_data_error new_promotion_path, "Data barang gratis dengan kode - "+free_code+" tidak ditemukan" if free_item.nil?
+    return redirect_back_data_error new_promotion_path, "Data mulai promo tidak valid" if start_date.nil?
+    return redirect_back_data_error new_promotion_path, "Data selesai promo tidak valid" if end_date.nil?
+
+
+
+    promotion = Promotion.new promotion_params
+    promotion.promo_code = promo_code
+    promotion.user = current_user
+    promotion.start_promo = start_date.to_datetime.beginning_of_day
+    promotion.end_promo = end_date.to_datetime.end_of_day
+    promotion.buy_item = buy_item
+    promotion.free_item = free_item
+
+    return redirect_back_data_error new_promotion_path, "Data tidak lengkap. Silahkan periksa kembali." if promotion.invalid?
+    promotion.save!
+    promotion.create_activity :create, owner: current_user
+    return redirect_success promotions_path, promo_code + " - Berhasil Disimpan"
+  end
+
+  def destroy
+    return redirect_back_data_error promotions_path, "Data Promo Tidak Ditemukan" if params[:id].nil?
+    promotion = Promotion.find_by(id: params[:id])
+    return redirect_back_data_error promotions_path, "Data Promo Tidak Ditemukan" if promotion.nil?
+    promo_code = promotion.promo_code
+    promotion.destroy
+    return redirect_success promotions_path, "Data Promo - " + promo_code + " - Telah Dihapus"
+  
+  end
+
   private
+    def promotion_params
+      params.require(:promotion).permit(
+        :buy_quantity, :free_quantity, :start_promo, :end_promo
+      )
+    end
+
   	def param_page
   		params[:page]
   	end
@@ -31,25 +78,13 @@ class PromotionsController < ApplicationController
       search_text = "Pencarian "
       filters = Promotion.page param_page
 
-      switch_data_month_param = params["switch_date_month"]
-      if switch_data_month_param == "due_date"
-        end_date = DateTime.now.to_date + 1.day
-        start_date = DateTime.now.to_date - 1.weeks
-        end_date = params["end_date"] if params["end_date"].present?
-        start_date = params["date_from"] if params["date_from"].present?
-        search_text += "dari " + start_date.to_s + " hingga " + end_date.to_s + " "
-        filters = filters.where("due_date >= ? AND due_date <= ?", start_date, end_date)
-      elsif switch_data_month_param == "date"
-        end_date = DateTime.now.to_date + 1.day
-        start_date = DateTime.now.to_date - 1.weeks
-        end_date = params["end_date"] if params["end_date"].present?
-        start_date = params["date_from"] if params["date_from"].present?
-        search_text += "dari " + start_date.to_s + " hingga " + end_date.to_s + " "
-        filters = filters.where("created_at >= ? AND created_at <= ?", start_date, end_date)
-      else
-        filters = filters.where("end_promo <= ?", Date.today.end_of_week.end_of_day)
-        search_text += "jatuh tempo di minggu ini "
-      end
+     
+      end_date = DateTime.now.to_date + 1.day
+      start_date = DateTime.now.to_date - 1.month
+      end_date = params["end_date"].to_date.to_s if params["end_date"].present?
+      start_date = params["date_from"].to_date.to_s if params["date_from"].present?
+      search_text += "dari " + start_date.to_s + " hingga " + end_date.to_s + " "
+      filters = filters.where("created_at >= ? AND created_at <= ?", start_date, end_date)
 
       if params["order_by"] == "asc"
         search_text+= "secara menaik"
@@ -57,11 +92,6 @@ class PromotionsController < ApplicationController
       else
         filters = filters.order("created_at DESC")
         search_text+= "secara menurun"
-      end
-
-      if params["type"].present?
-        filters = filters.where(finance_type: Debt.finance_types.key(params["type"].to_i))
-        filters = filters.where("deficiency > ?",0)
       end
 
       results << search_text

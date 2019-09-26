@@ -20,8 +20,13 @@
 ======================================================================
 
 
---> diskon 
-	* 2x + 1y => add new item di json paling akhir 
+--> promo 
+	* JS add free item
+	* JS show code_promo
+	* JS add item free with price 0 and qty
+	* simpan kode promo yang dipake
+
+--> jumlah promo yang terpakai untuk setiap toko
 
 --> print struk
 

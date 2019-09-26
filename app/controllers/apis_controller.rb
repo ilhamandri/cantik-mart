@@ -99,41 +99,52 @@ class ApisController < ApplicationController
     return render :json => json_result unless qty.present?
     search = search.gsub(/\s+/, "")
     item_id = Item.find_by(code: search)
-    item_stores = StoreItem.where(store_id: current_user.store.id, item: item_id)
-    return render :json => json_result unless item_stores.present?
-    item_stores.each do |item_store|
-      item = []
-      item << item_store.item.code
-      item << item_store.item.name
-      item << item_store.item.item_cat.name
-      curr_item = item_store.item
-      grocer_price = curr_item.grocer_items
-      if grocer_price.present?
-        find_price = grocer_price.where('max >= ? AND min <= ?', qty, qty).order("max ASC")
-        if find_price.present?
-          price = find_price.first.price
-          disc = find_price.first.discount
-          disc = (disc * price) / 100 if disc <= 100
-          item << price
-          item << disc
-        else
-          find_price = grocer_price.order("max ASC")
-          price = find_price.first.price
-          disc = find_price.first.discount
-          disc = (disc * price) / 100 if disc <= 100
-          item << price
-          item << disc
-        end
+    item_store = StoreItem.find_by(store_id: current_user.store.id, item: item_id)
+    return render :json => json_result unless item_store.present?
+
+    item = []
+    item << item_store.item.code
+    item << item_store.item.name
+    item << item_store.item.item_cat.name
+    curr_item = item_store.item
+    grocer_price = curr_item.grocer_items
+    if grocer_price.present?
+      find_price = grocer_price.where('max >= ? AND min <= ?', qty, qty).order("max ASC")
+      if find_price.present?
+        price = find_price.first.price
+        disc = find_price.first.discount
+        disc = (disc * price) / 100 if disc <= 100
+        item << price
+        item << disc
       else
-        price = item_store.item.sell
-        disc = item_id.discount
+        find_price = grocer_price.order("max ASC")
+        price = find_price.first.price
+        disc = find_price.first.discount
         disc = (disc * price) / 100 if disc <= 100
         item << price
         item << disc
       end
-      item << item_id.id
-      json_result << item
+    else
+      price = item_store.item.sell
+      disc = item_id.discount
+      disc = (disc * price) / 100 if disc <= 100
+      item << price
+      item << disc
     end
+    item << item_id.id
+
+
+    promo = Promotion.where(buy_item: item_id).where("start_promo <= ? AND end_promo >= ? AND buy_quantity <= ?", DateTime.now, DateTime.now, qty).first
+    if promo.present?
+      item << promo.promo_code
+      item << promo.free_item.id
+      item << promo.free_item.name
+      item << promo.free_quantity
+      binding.pry
+    end
+    
+    json_result << item
+
     render :json => json_result
   end
 
