@@ -364,10 +364,12 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
     t.bigint "item_id", null: false
     t.bigint "store_id", null: false
     t.bigint "grocer_item_id"
+    t.bigint "promotion_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["grocer_item_id"], name: "index_prints_on_grocer_item_id"
     t.index ["item_id"], name: "index_prints_on_item_id"
+    t.index ["promotion_id"], name: "index_prints_on_promotion_id"
     t.index ["store_id"], name: "index_prints_on_store_id"
   end
 
@@ -698,6 +700,7 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
   add_foreign_key "outcomes", "users"
   add_foreign_key "prints", "grocer_items"
   add_foreign_key "prints", "items"
+  add_foreign_key "prints", "promotions"
   add_foreign_key "prints", "stores"
   add_foreign_key "profit_losses", "stores"
   add_foreign_key "profit_losses", "users"

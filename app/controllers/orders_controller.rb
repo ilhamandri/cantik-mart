@@ -244,12 +244,33 @@ class OrdersController < ApplicationController
         if new_price > last_price
           store_stock.sell = new_price
           store_stock.save!
+
+          to_users = User.where(level: ["owner", "super_admin", "super_visi"]).where(store: current_user.store)
+      
+          Print.create item: item, store: current_user.store, grocer_item: grocer_item
+
+          message = "Terdapat perubahan harga jual. Segera cetak label harga "+item.name
+          to_users.each do |to_user|
+            set_notification current_user, to_user, "info", message, prints_path
+          end
+
         end
       else
         last_price = this_item.sell
         if new_price > last_price
           this_item.sell = new_price
           this_item.save!
+
+          to_users = User.where(level: ["owner", "super_admin", "super_visi"])
+      
+          Store.all.each do |store|
+            Print.create item: item, store: store, grocer_item: grocer_item
+          end
+          message = "Terdapat perubahan harga jual. Segera cetak label harga "+item.name
+          to_users.each do |to_user|
+            set_notification current_user, to_user, "info", message, prints_path
+          end
+
         end
       end
 

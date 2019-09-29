@@ -23,23 +23,18 @@
 
 --> jumlah promo yang terpakai untuk setiap toko
 
---> print promo untuk setiap info
-
 --> print struk
 
 --> konten di home untuk setiap level
 
 --> perubahan harga
-	* notif di order
 	* CETAK
 		- price tag (zebra)
-		- price paper
 
 --> cek semua notifikasi
 	* payment
 	* due date
-	* confirm order / transfer	
-	* cetak						
+	* confirm order / transfer					
 
 
 

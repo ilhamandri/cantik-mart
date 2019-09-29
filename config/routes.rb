@@ -57,7 +57,8 @@ Rails.application.routes.draw do
   resources :balances
   resources :promotions
   resources :prints
-
+  get '/clean/prints', to: 'prints#clean', as: "clean_prints"
+  
   resources :items
   resources :salaries
   resources :grocer_items

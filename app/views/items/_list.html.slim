@@ -20,6 +20,9 @@ tr
   td #{number_with_delimiter(item.sell, delimiter: ".")}
   td
     a href='#{item_path(id: item.id)}'
-      button.btn.btn-rounded.btn-info type="button" 
+      button.btn.btn-primary type="button" 
         | Detil
+    a href='#{item_path(id: item.id, format: :pdf)}'
+      button.btn.btn-success type="button" 
+        | + Cetak
 

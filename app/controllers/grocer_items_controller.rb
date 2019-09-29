@@ -51,12 +51,13 @@ class GrocerItemsController < ApplicationController
     end
     item.price_updated = DateTime.now
     item.save!
+
     to_users = User.where(level: ["owner", "super_admin", "super_visi"])
       
     Store.all.each do |store|
       Print.create item: item, store: store, grocer_item: grocer_item
     end
-    message = "Terdapat penambahan harga. Segera cetak label harga "+item.name
+    message = "Terdapat penambahan harga grosir. Segera cetak label harga "+item.name
     to_users.each do |to_user|
       set_notification current_user, to_user, "info", message, prints_path
     end
@@ -81,6 +82,17 @@ class GrocerItemsController < ApplicationController
     min = grocer_item.min
     max = grocer_item.max
     grocer = GrocerItem.where(item: grocer_item.item)
+    item = grocer_item.item
+
+    if grocer_item.price == 0
+      grocer_item.price = item.sell
+    end
+    if grocer_item.discount == 0
+      if grocer_item.price == item.sell
+        return redirect_back_data_error new_grocer_item_path, "Tidak ada data yang disimpan"
+      end
+    end
+
     if min < 2
       return redirect_back_data_error new_grocer_item_path
     else
@@ -106,12 +118,31 @@ class GrocerItemsController < ApplicationController
         end
       end
     end
+
+    to_users = User.where(level: ["owner", "super_admin", "super_visi"])
+      
+    Store.all.each do |store|
+      Print.create item: item, store: store, grocer_item: grocer_item
+    end
+    message = "Terdapat perubahan harga grosir. Segera cetak label harga "+item.name
+    to_users.each do |to_user|
+      set_notification current_user, to_user, "info", message, prints_path
+    end
+
   end
 
   def show
     return redirect_back_data_error item_cats_path, "Data Tidak Ditemukan" unless params[:id].present?
     @grocer_item = GrocerItem.find_by_id params[:id]
     return redirect_back_data_error new_item_cat_path, "Data Tidak Ditemukan" unless @grocer_item.present?
+    @item = @grocer_item.item
+    respond_to do |format|
+      format.html
+      format.pdf do
+        Print.create item: @item, store: current_user.store, grocer_item: @grocer_item
+        return redirect_success item_path(id: @item.id), "Data Barang Telah Ditambahkan di Daftar Cetak"
+      end
+    end
   end
 
   def destroy

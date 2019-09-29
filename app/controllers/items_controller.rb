@@ -30,6 +30,13 @@ class ItemsController < ApplicationController
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless params[:id].present?
     @item = Item.find_by_id params[:id]
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless @item.present?
+    respond_to do |format|
+      format.html
+      format.pdf do
+        Print.create item: @item, store: current_user.store
+        return redirect_success items_path, "Data Barang Telah Ditambahkan di Daftar Cetak"
+      end
+    end
   end
 
   def new
@@ -63,7 +70,7 @@ class ItemsController < ApplicationController
     item.image = params[:item][:image]
     item.assign_attributes item_params
     changes = item.changes
-    if changes["sell"].present? 
+    if changes["sell"].present? || changes["discount"].present?
       item.price_updated = DateTime.now
       to_users = User.where(level: ["owner", "super_admin", "super_visi"])
       Store.all.each do |store|

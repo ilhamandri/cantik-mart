@@ -36,8 +36,6 @@ class PromotionsController < ApplicationController
     return redirect_back_data_error new_promotion_path, "Data mulai promo tidak valid" if start_date.nil?
     return redirect_back_data_error new_promotion_path, "Data selesai promo tidak valid" if end_date.nil?
 
-
-
     promotion = Promotion.new promotion_params
     promotion.promo_code = promo_code
     promotion.user = current_user
@@ -48,6 +46,17 @@ class PromotionsController < ApplicationController
 
     return redirect_back_data_error new_promotion_path, "Data tidak lengkap. Silahkan periksa kembali." if promotion.invalid?
     promotion.save!
+
+    to_users = User.where(level: ["owner", "super_admin", "super_visi"])
+      
+    Store.all.each do |store|
+      Print.create item: buy_item, store: store, promotion: promotion
+    end
+    message = "Terdapat promo baru "+promotion.promo_code
+    to_users.each do |to_user|
+      set_notification current_user, to_user, "info", message, prints_path
+    end
+
     promotion.create_activity :create, owner: current_user
     return redirect_success promotions_path, promo_code + " - Berhasil Disimpan"
   end
@@ -65,12 +74,12 @@ class PromotionsController < ApplicationController
     return redirect_back_data_error promotions_path, "Data Promo Tidak Ditemukan" unless params[:id].present?
     @promotion = Promotion.find_by(id: params[:id])
     return redirect_back_data_error promotions_path, "Data Promo Tidak Ditemukan" unless @promotion.present?
+    @item = @promotion.buy_item
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: @promotion.promo_code,
-          layout: 'pdf_layout.html.erb',
-          template: "orders/print.html.slim"
+        Print.create item: @item, store: current_user.store, promotion: @promotion
+        return redirect_success promotion_path(id: @promotion.id), "Data Promo Telah Ditambahkan di Daftar Cetak"
       end
     end
   end

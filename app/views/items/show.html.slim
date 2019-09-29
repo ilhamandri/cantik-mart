@@ -70,6 +70,9 @@
                       td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
                       td #{number_to_currency(item.price - @item.buy - disc, delimiter: ".", separator: ",", unit: "Rp. ")}
                       td.text-right
+                        a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
+                          |   + Cetak
+                        | &nbsp&nbsp&nbsp
                         a class="btn btn-warning" href="#{edit_grocer_item_path(id: item.id)}"
                           |   Ubah
                         | &nbsp&nbsp&nbsp

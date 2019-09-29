@@ -4,6 +4,7 @@
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
           | Detil Promo
+
       .card-body
 
         = form_for :promotion, url: "", method: "POST" do |form|
@@ -32,4 +33,9 @@
             .form-group.col-6
               label for="name" Tanggal Selesai Promo
               input class="form-control md-form"   value="#{@promotion.end_promo.to_date}" disabled="disabled"
+            .col-12.text-center
+              = button_to "Hapus", @promotion, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Apakah Anda akan menghapus promo ?" }
+
+              a href="#{promotion_path(id: @promotion.id, format: :pdf)}" class="btn btn-success"
+                | + Cetak
 
