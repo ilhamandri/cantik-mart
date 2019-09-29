@@ -6,21 +6,26 @@
           | Tambah Harga Barang - #{Item.find_by(id: @id).name}
       .card-body
         = form_for :grocer_item, url: grocer_items_path(id: @id), method: "POST" do |form|
+          - mins = GrocerItem.where(item_id: params[:id]).order("max DESC").first
+          - min = mins.max + 1 if mins.present?
+          - min = 2 if mins.nil?
           .form-group
             label for="name" Minimum Pembelian
-            = form.number_field :min, required: true, class: "form-control md-form", id: "name", min: "2", value: "2"
+            = form.number_field :min, required: true, class: "form-control md-form", id: "name", min: "2", value: "#{min}"
           .form-group
             label for="name" Maximum Pembelian
-            = form.number_field :max, required: true, class: "form-control md-form", id: "name", min: "3", value: "3"
+            = form.number_field :max, required: true, class: "form-control md-form", id: "name", min: "2", value: "#{min}"
           .form-group
-            label for="name" Harga Jual
-            = form.number_field :price, required: true, class: "form-control md-form", id: "price", min: "100", value: "0"
+            label for="name" Harga Jual Satuan
+            br
+            label.text-danger * Isi dengan 0 jika harga jual sama
+            = form.number_field :price, required: true, class: "form-control md-form", id: "price", min: "0", value: "0"
           .form-group
             label for="name" Diskon 
             br
             label.text-danger * 0 - 100 = Dianggap %
             br
-            label.text-danger * lebih dar 100 = Dianggap harga Rupiah
+            label.text-danger * lebih dari 100 = Dianggap harga Rupiah
             
             = form.number_field :discount, required: true, class: "form-control md-form", id: "price", min: "0", value:"0"
           .form-group.text-center

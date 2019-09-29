@@ -131,16 +131,17 @@ class ApisController < ApplicationController
       item << price
       item << disc
     end
+
     item << item_id.id
 
 
     promo = Promotion.where(buy_item: item_id).where("start_promo <= ? AND end_promo >= ? AND buy_quantity <= ?", DateTime.now, DateTime.now, qty).first
     if promo.present?
+      hit_promo = qty.to_i / promo.buy_quantity
       item << promo.promo_code
-      item << promo.free_item.id
+      item << promo.free_item.code
       item << promo.free_item.name
-      item << promo.free_quantity
-      binding.pry
+      item << hit_promo * promo.free_quantity
     end
     
     json_result << item

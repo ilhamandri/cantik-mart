@@ -1,11 +1,19 @@
+- promo = promotion
+- promo_name = "BELI "+promo.buy_quantity.to_s+" '"+promo.buy_item.name+"' GRATIS "+promo.free_quantity.to_s+" '"+promo.free_item.name+"'"
 tr
 	td #{promotion.promo_code}
-	td #{promotion.buy_item.code} - #{promotion.buy_item.name}
-	td #{promotion.buy_quantity}
-	td #{promotion.free_item.code} - #{promotion.free_item.name}
-	td #{promotion.free_quantity}
+	td #{promo_name}
 	td #{promotion.start_promo.to_date}
 	td #{promotion.end_promo.to_date}
+	td #{promotion.hit}
 	td 
 		- if promotion.end_promo >= DateTime.now.end_of_day
-			= button_to "Hapus", promotion, :method=>:delete, :class=>"btn btn-rounded btn-danger", data: {confirm: "Apakah Anda akan menghapus promo ?" }
+			= button_to "Hapus", promotion, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Apakah Anda akan menghapus promo ?" }
+		- else
+			- if promotion.hit <= 0
+				= button_to "Hapus", promotion, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Apakah Anda akan menghapus promo ?" }
+	td
+		a href='#{promotion_path(id: promotion.id)}'
+			button class="btn btn-primary"
+	        	| Detil
+

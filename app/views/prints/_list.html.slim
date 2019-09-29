@@ -1,0 +1,18 @@
+tr
+	td #{print.item.code}
+	- if print.grocer_item_id.present?
+		- grocer_item = print.grocer_item
+		- min = grocer_item.min
+		- text = "Promo Beli "+min.to_s+" - "+grocer_item.item.name
+		td #{text}
+	- else
+		td #{print.item.name}
+	td #{print.item.item_cat.name}
+	- if print.grocer_item_id.present?
+		- price = print.grocer_item.price
+		- disc = print.grocer_item.discount
+		- disc = price*print.grocer_item.discount/100 if print.grocer_item.discount < 100
+		- if disc 
+		td #{number_with_delimiter(price - disc, delimiter: ".")}
+	- else
+		td #{number_with_delimiter(print.item.sell, delimiter: ".")}

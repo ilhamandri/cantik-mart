@@ -1,0 +1,9 @@
+- is_promo = false
+- is_promo = transaction_item.reason.include? "PROMO-" if transaction_item.reason.present?
+- if is_promo
+	tr
+	  td #{transaction_item.reason}
+	  - promo = Promotion.find_by(promo_code: transaction_item.reason)
+	  - promo_name = "BELI "+promo.buy_quantity.to_s+" '"+promo.buy_item.name+"' GRATIS "+promo.free_quantity.to_s+" '"+promo.free_item.name+"'"
+	  td #{promo_name}
+	  td #{transaction_item.quantity}

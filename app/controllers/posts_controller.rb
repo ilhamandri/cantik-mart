@@ -31,7 +31,13 @@ class PostsController < ApplicationController
 						trx_item.delete("id")
 						trx_item["transaction_id"] = trx.id
 						new_trx_item = TransactionItem.create trx_item 
-
+						if new_trx_item.reason.present?
+							if new_trx_item.reason.include? "PROMO-"
+								promotion = Promotion.find_by(promo_code: new_trx_item.reason)
+								promotion.hit = promotion.hit+1
+								promotion.save!
+							end
+						end
 						store_stock = StoreItem.find_by(store: trx.user.store, item: new_trx_item.item)
 					    next if store_stock.nil?
 					    store_stock.stock = store_stock.stock.to_i - new_trx_item.quantity.to_i
@@ -39,10 +45,18 @@ class PostsController < ApplicationController
 					end
 				end
 				json_trx_data3.each do |data|
-					# cari data absents
+					start_date = data["created_at"].to_datetime.beginning_of_day
+					end_date = data["created_at"].to_datetime.end_of_day
+					
+					absent = Absent.where(user_id: data["user_id"]).where("created_at >= ? AND created_at <= ?", start_date, end_date).first
+					
+					if absent.nil?
+						Absent.create data
+					else
+						absent.assign_attributes data
+						absent.save!
+					end
 				end
-			elsif post_type == "absents"
-				
 			end	
 		end
 		

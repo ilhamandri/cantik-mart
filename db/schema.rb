@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_26_042330) do
+ActiveRecord::Schema.define(version: 2019_09_29_180829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -236,6 +236,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_042330) do
     t.datetime "updated_at", null: false
     t.boolean "local_item", default: false
     t.integer "margin", default: 0
+    t.datetime "price_updated"
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 
@@ -359,6 +360,17 @@ ActiveRecord::Schema.define(version: 2019_09_26_042330) do
     t.index ["user_id"], name: "index_outcomes_on_user_id"
   end
 
+  create_table "prints", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "store_id", null: false
+    t.bigint "grocer_item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["grocer_item_id"], name: "index_prints_on_grocer_item_id"
+    t.index ["item_id"], name: "index_prints_on_item_id"
+    t.index ["store_id"], name: "index_prints_on_store_id"
+  end
+
   create_table "profit_losses", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
@@ -381,6 +393,7 @@ ActiveRecord::Schema.define(version: 2019_09_26_042330) do
     t.datetime "end_promo", null: false
     t.bigint "user_id", null: false
     t.string "promo_code", null: false
+    t.integer "hit", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["buy_item_id"], name: "index_promotions_on_buy_item_id"
@@ -683,6 +696,9 @@ ActiveRecord::Schema.define(version: 2019_09_26_042330) do
   add_foreign_key "orders", "users"
   add_foreign_key "outcomes", "stores"
   add_foreign_key "outcomes", "users"
+  add_foreign_key "prints", "grocer_items"
+  add_foreign_key "prints", "items"
+  add_foreign_key "prints", "stores"
   add_foreign_key "profit_losses", "stores"
   add_foreign_key "profit_losses", "users"
   add_foreign_key "promotions", "items", column: "buy_item_id"

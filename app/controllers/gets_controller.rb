@@ -18,6 +18,7 @@ class GetsController < ApplicationController
 			 json_result["items"] = Item.where("updated_at >= ? AND updated_at <= ?", from, to)
 			 json_result["stocks"] = StoreItem.where(store: store).where("updated_at >= ? AND updated_at <= ?", from, to)
 			 json_result["grocers"] = GrocerItem.where("updated_at >= ? AND updated_at <= ?", from, to)
+			 json_result["promotions"] = Promotion.where("updated_at >= ? AND updated_at <= ?", from, to)
 		 end
 		 render :json => json_result
 	end

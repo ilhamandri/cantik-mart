@@ -41,6 +41,7 @@ class ItemsController < ApplicationController
     item.brand = "-" if params[:item][:brand].nil?
     item.buy = 0
     item.local_item = params[:item][:local_item]
+    item.price_updated = DateTime.now
     return redirect_back_data_error new_item_path, "Data Barang Tidak Valid" if item.invalid?
     item.save!
     item.create_activity :create, owner: current_user
@@ -62,6 +63,17 @@ class ItemsController < ApplicationController
     item.image = params[:item][:image]
     item.assign_attributes item_params
     changes = item.changes
+    if changes["sell"].present? 
+      item.price_updated = DateTime.now
+      to_users = User.where(level: ["owner", "super_admin", "super_visi"])
+      Store.all.each do |store|
+        Print.create item: item, store: store
+      end
+      message = "Terdapat perubahan harga. Segera cetak label harga "+item.name
+      to_users.each do |to_user|
+        set_notification current_user, to_user, "info", message, prints_path
+      end
+    end
     item.save! if item.changed?
     item.create_activity :edit, owner: current_user, params: changes
     urls = item_path id: item.id

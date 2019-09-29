@@ -19,11 +19,19 @@ class GrocerItemsController < ApplicationController
     min = grocer_item.min
     max = grocer_item.max
     grocer = GrocerItem.where(item: item)
+    if grocer_item.price == 0
+      grocer_item.price = item.sell
+    end
+    if grocer_item.discount == 0
+      if grocer_item.price == item.sell
+        return redirect_back_data_error new_grocer_item_path, "Tidak ada data yang disimpan"
+      end
+    end
     if min < 2
       return redirect_back_data_error new_grocer_item_path, "Data tidak valid"
     else
       if min > max 
-        return redirect_back_data_error new_grocer_item_path, "Data tidak valid"
+        return redirect_back_data_error new_grocer_item_path, "Data tidak valid. Minimum dan Maximum terbalik."
       else
         check_same_value = grocer.where("max = ? OR max = ? OR min = ? OR min = ?", min, max, min, max)
         if check_same_value.present?
@@ -41,6 +49,18 @@ class GrocerItemsController < ApplicationController
         end
       end
     end
+    item.price_updated = DateTime.now
+    item.save!
+    to_users = User.where(level: ["owner", "super_admin", "super_visi"])
+      
+    Store.all.each do |store|
+      Print.create item: item, store: store, grocer_item: grocer_item
+    end
+    message = "Terdapat penambahan harga. Segera cetak label harga "+item.name
+    to_users.each do |to_user|
+      set_notification current_user, to_user, "info", message, prints_path
+    end
+
     return redirect_back_data_error new_grocer_item_path, "Data tidak valid" if grocer_item.invalid?
     grocer_item.save!
     grocer_item.create_activity :create, owner: current_user
@@ -89,17 +109,18 @@ class GrocerItemsController < ApplicationController
   end
 
   def show
-    return redirect_back_data_error item_cats_path unless params[:id].present?
+    return redirect_back_data_error item_cats_path, "Data Tidak Ditemukan" unless params[:id].present?
     @grocer_item = GrocerItem.find_by_id params[:id]
-    return redirect_back_data_error new_item_cat_path unless @grocer_item.present?
+    return redirect_back_data_error new_item_cat_path, "Data Tidak Ditemukan" unless @grocer_item.present?
   end
 
   def destroy
-    return redirect_back_data_error item_cats_path unless params[:id].present?
+    return redirect_back_data_error item_cats_path, "Data Tidak Ditemukan" unless params[:id].present?
     @grocer_item = GrocerItem.find_by_id params[:id]
-    return redirect_back_data_error new_item_cat_path unless @grocer_item.present?
+    return redirect_back_data_error new_item_cat_path, "Data Tidak Ditemukan" unless @grocer_item.present?
+    item_name = @grocer_item.item.name
     @grocer_item.destroy
-    return redirect_success item_path(id: @grocer_item.item.id)
+    return redirect_success item_path(id: @grocer_item.item.id), "Harga Grosir "+item_name+" berhasil dihapus"
   end
 
   private

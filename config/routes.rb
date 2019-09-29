@@ -56,6 +56,7 @@ Rails.application.routes.draw do
 
   resources :balances
   resources :promotions
+  resources :prints
 
   resources :items
   resources :salaries

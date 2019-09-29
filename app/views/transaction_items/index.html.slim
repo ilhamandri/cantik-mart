@@ -51,7 +51,7 @@
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Daftar Barang 
+          | Daftar Belanja 
       .card-body.table-responsive.text-nowrap
         table class="table"
           thead
@@ -63,6 +63,22 @@
             th Total
           tbody
             = render partial: 'list', collection: @transaction_items, as: :transaction_item
+        = paginate @transaction_items
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Promo Barang
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Kode Promo
+            th Promo
+            th Jumlah Gratis 
+          tbody
+            = render partial: 'promo', collection: @transaction_items, as: :transaction_item
         = paginate @transaction_items
 
 - check_complain = Complain.find_by(transaction_id: transaction.id)

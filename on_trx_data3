@@ -1,0 +1,15 @@
+
+[1mFrom:[0m /home/zerd/Work/cantik-mart/app/controllers/posts_controller.rb @ line 47 PostsController#index:
+
+    [1;34m42[0m: 				[1;30m# 	    next if store_stock.nil?[0m
+    [1;34m43[0m: 				[1;30m# 	    store_stock.stock = store_stock.stock.to_i - new_trx_item.quantity.to_i[0m
+    [1;34m44[0m: 				[1;30m# 	    store_stock.save![0m
+    [1;34m45[0m: 				[1;30m# 	end[0m
+    [1;34m46[0m: 				[1;30m# end[0m
+ => [1;34m47[0m: 				binding.pry
+    [1;34m48[0m: 				json_trx_data3.each [32mdo[0m |data|
+    [1;34m49[0m: 					start_date = data.created_at.to_datetime.beginning_of_day
+    [1;34m50[0m: 					end_date = data.created_at.to_datetime.end_of_day
+    [1;34m51[0m: 					absent = absent.where([35muser_id[0m: data.user_id).where([31m[1;31m"[0m[31mcreated_at >= ? AND created_at <= ?[1;31m"[0m[31m[0m, start_date, end_date).first
+    [1;34m52[0m: 					[32mif[0m absent.nil?
+

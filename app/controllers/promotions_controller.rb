@@ -16,7 +16,7 @@ class PromotionsController < ApplicationController
         @promotions = filter[1]
         render pdf: DateTime.now.to_i.to_s,
           layout: 'pdf_layout.html.erb',
-          template: "promotions/print.html.slim"
+          template: "promotions/print_all.html.slim"
       end
     end
   end
@@ -59,7 +59,20 @@ class PromotionsController < ApplicationController
     promo_code = promotion.promo_code
     promotion.destroy
     return redirect_success promotions_path, "Data Promo - " + promo_code + " - Telah Dihapus"
-  
+  end
+
+  def show
+    return redirect_back_data_error promotions_path, "Data Promo Tidak Ditemukan" unless params[:id].present?
+    @promotion = Promotion.find_by(id: params[:id])
+    return redirect_back_data_error promotions_path, "Data Promo Tidak Ditemukan" unless @promotion.present?
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: @promotion.promo_code,
+          layout: 'pdf_layout.html.erb',
+          template: "orders/print.html.slim"
+      end
+    end
   end
 
   private
