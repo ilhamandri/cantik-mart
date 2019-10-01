@@ -63,8 +63,14 @@ class AccountBalance
       balance = StoreBalance.create store: store, cash: kas, receivable: piutang, stock_value: nilai_stok,
           asset_value: nilai_aset, transaction_value: profit, equity: modals, debt: hutang, outcome: income_outcome
       
+      last_balancing_s = @@salary_date+"-"+Date.today.month.to_s+"-"+Date.today.year.to_s
+      last_balancing = last_balancing_s.to_datetime.end_of_day
       store.cash = kas
-      store.grand_total_before = penjualan
+      if last_balancing.to_date != Date.today      
+        store.grand_total_before = penjualan
+      else
+        store.grand_total_before = 0
+      end
       
       store.save!
 
