@@ -7,6 +7,7 @@ class PrintsController < ApplicationController
       format.html
       format.pdf do
         render pdf: DateTime.now.to_i.to_s,
+          show_as_html: false,
           template: "prints/print.html.slim"
       end
     end
