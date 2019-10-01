@@ -44,7 +44,7 @@ PENDING
 
 
 ssh root@193.168.195.145 -p 22
-
+tmux attach -t 0
 
 
 

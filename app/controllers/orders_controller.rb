@@ -247,9 +247,9 @@ class OrdersController < ApplicationController
 
           to_users = User.where(level: ["owner", "super_admin", "super_visi"]).where(store: current_user.store)
       
-          Print.create item: item, store: current_user.store, grocer_item: grocer_item
+          Print.create item: this_item, store: current_user.store
 
-          message = "Terdapat perubahan harga jual. Segera cetak label harga "+item.name
+          message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
           to_users.each do |to_user|
             set_notification current_user, to_user, "info", message, prints_path
           end
@@ -264,9 +264,9 @@ class OrdersController < ApplicationController
           to_users = User.where(level: ["owner", "super_admin", "super_visi"])
       
           Store.all.each do |store|
-            Print.create item: item, store: store, grocer_item: grocer_item
+            Print.create item: this_item, store: store
           end
-          message = "Terdapat perubahan harga jual. Segera cetak label harga "+item.name
+          message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
           to_users.each do |to_user|
             set_notification current_user, to_user, "info", message, prints_path
           end
@@ -317,7 +317,7 @@ class OrdersController < ApplicationController
     end
 
     if !order_from_retur
-      Debt.create user: current_user, store: current_user.store, nominal: new_total, 
+      Debt.create user: current_user, store: current_user.store, nominal: order.grand_total, 
                 deficiency: new_total, date_created: DateTime.now, ref_id: order.id,
                 description: order.invoice, finance_type: Debt::ORDER, due_date: due_date
 
@@ -335,7 +335,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if @order.nil?
     return redirect_back_data_error orders_path, "Data Order Tidak Valid"if @order.date_receive.nil? || @order.date_paid_off.present?
     @order_invs = InvoiceTransaction.where(invoice: @order.invoice)
-    @pay = @order.total.to_i - @order_invs.sum(:nominal) 
+    @pay = @order.grand_total.to_i - @order_invs.sum(:nominal) 
   end
 
   def paid
@@ -344,7 +344,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if order.nil?
     return redirect_back_data_error orders_path, "Data Order Tidak Valid" if order.date_receive.nil? || order.date_paid_off.present?
     order_invs = InvoiceTransaction.where(invoice: order.invoice)
-    totals = order.total.to_f 
+    totals = order.grand_total.to_f 
     paid = totals- order_invs.sum(:nominal) 
     nominal = params[:order_pay][:nominal].to_i 
     nominal = params[:order_pay][:receivable_nominal].to_i if params[:order_pay][:user_receivable] == "on"

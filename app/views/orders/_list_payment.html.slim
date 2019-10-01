@@ -2,5 +2,5 @@ tr
   	td #{order_inv.transaction_invoice}
 	td #{order_inv.user.name}
   	td #{order_inv.date_created.to_date} 
-  	td #{order_inv.nominal}
+  	td #{number_with_delimiter(order_inv.nominal, delimiter: ".")}
 

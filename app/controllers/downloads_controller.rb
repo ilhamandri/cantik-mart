@@ -155,7 +155,7 @@ class DownloadsController < ApplicationController
 				invoice = order.invoice
 				store_name = order.store.name
 				user_name = order.user.name
-				supplier_name = order.user.name
+				supplier_name = order.supplier.name
 				created_at = order.created_at
 				number_items = order.total_items
 				total = order.total

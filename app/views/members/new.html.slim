@@ -24,6 +24,6 @@
                 | Perempuan
           .form-group
             label for="card-card" Nomor Kartu
-            = form.text_field :card_number, required: true, class: "form-control md-form", id: "card_number"
+            = form.text_field :card_number, required: true, class: "form-control md-form", id: "card_number", minlength:"1", pattern:"[0-9]+", title:"berisi nomor kartu"
           .form-group.text-center
             = form.submit "Tambah Member", class: "btn btn-rounded btn-primary"

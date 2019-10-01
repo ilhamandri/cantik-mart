@@ -20,7 +20,7 @@
           input type="text" class="form-control md-form" value='#{@member.sex}'  disabled="disabled"
         .form-group
           label for="card-card" Nomor Kartu
-          input class="form-control md-form" value="#{number_with_delimiter(@member.card_number, delimiter: ".")}"  disabled="disabled"
+          input class="form-control md-form" value="#{number_with_delimiter(@member.card_number, delimiter: " ")}"  disabled="disabled"
         .form-group
           label for="card-card" Dibuat Di Toko
           input type="text" class="form-control md-form" value='#{@member.store.name}'  disabled="disabled"

@@ -21,6 +21,8 @@ class StoresController < ApplicationController
     if store.store_items.present? || store.users.present?
       return redirect_back_data_error stores_path, "Data Toko Tidak Ditemukan" unless store.present?
     else
+      StockValue.where(store: store).delete_all
+      StoreBalance.where(store: store).delete_all
       store.destroy
       return redirect_success stores_path, "Data Toko - " + store.name + " - Berhasil Dihapus"
     end

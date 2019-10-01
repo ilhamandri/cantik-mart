@@ -150,7 +150,8 @@ class GrocerItemsController < ApplicationController
     @grocer_item = GrocerItem.find_by_id params[:id]
     return redirect_back_data_error new_item_cat_path, "Data Tidak Ditemukan" unless @grocer_item.present?
     item_name = @grocer_item.item.name
-    @grocer_item.destroy
+    Print.where(grocer_item: @grocer_item).delete_all
+    @grocer_item.delete
     return redirect_success item_path(id: @grocer_item.item.id), "Harga Grosir "+item_name+" berhasil dihapus"
   end
 

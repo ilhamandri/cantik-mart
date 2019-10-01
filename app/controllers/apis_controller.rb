@@ -78,7 +78,8 @@ class ApisController < ApplicationController
     search = params[:search].squish
     return render :json => json_result unless search.present?
     search = search.gsub(/\s+/, "")
-    find_item = Item.find_by(code: search)
+    is_warehouse = !(current_user.store.store_type == "warehouse")
+    find_item = Item.find_by(code: search, local_item: is_warehouse)
     return render :json => json_result unless find_item.present?
     item = []
     item << find_item.code

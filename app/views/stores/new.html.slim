@@ -14,7 +14,7 @@
             = form.text_field :address, required: true, class: "form-control md-form", id: "address"
           .form-group
             label for="phone" Nomor Telepon
-            = form.number_field :phone, required: true, class: "form-control md-form", id: "phone"
+            = form.text_field :phone, required: true, class: "form-control md-form", id: "phone", minlength:"1", pattern:"[0-9]+", title:"6-13 digit nomor telepon"
           .form-group
             label for="type" Tipe Toko
             select class="mdb-select md-form colorful-select dropdown-primary md-outline"  name="store[store_type]"
