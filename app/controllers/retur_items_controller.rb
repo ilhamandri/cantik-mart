@@ -26,7 +26,6 @@ class ReturItemsController < ApplicationController
     loss = nil
     receivable = nil
     total_items = 0
-    binding.pry
     return redirect_back_data_error returs_path, "Data Retur Tidak Valid" if feed_value.empty?
     
     feed_value.each do |value|

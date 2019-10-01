@@ -296,14 +296,12 @@ class OrdersController < ApplicationController
       new_buy = old_buy_total
       new_buy = (new_buy_total + old_buy_total.to_f) / (receive_qty + store_stock.stock.to_i) if receive_qty > 0
 
-      binding.pry 
 
       if !this_item.local_item
         store_stock.buy = new_buy
         store_stock.save!
       else
         this_item.buy = new_buy
-        binding.pry
         this_item.save!
       end
       new_total +=  new_buy_total
