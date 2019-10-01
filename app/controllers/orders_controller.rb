@@ -282,8 +282,6 @@ class OrdersController < ApplicationController
       order_item.grand_total = item_grand_total
       order_item.save!
 
-      store_stock.stock = store_stock.stock + receive_qty
-      store_stock.save!
 
       old_buy_total = 0
 
@@ -293,7 +291,7 @@ class OrdersController < ApplicationController
         old_buy_total = store_stock.stock.to_i * this_item.buy.to_f 
       end
 
-      new_buy = (new_buy_total + old_buy_total.to_f) / (store_stock.stock.to_i) 
+      new_buy = (new_buy_total + old_buy_total.to_f) / (receive_qty + store_stock.stock.to_i) 
 
       if this_item.local_item
         store_stock.buy = new_buy
@@ -302,6 +300,10 @@ class OrdersController < ApplicationController
         this_item.buy = new_buy
         this_item.save!
       end
+
+      store_stock.stock = store_stock.stock + receive_qty
+      store_stock.save!
+      
       new_total +=  new_buy_total
     end
 
