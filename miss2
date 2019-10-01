@@ -64,6 +64,7 @@ CREATE DATABASE cantik_mart_local;
 
 rails db:migrate
 rails c
+Supplier.create name: "Supplier 1", address: "BANDUNG", telephone: "123123123"
 Store.create name:"Store Bandung", cash: 10000000, equity: 10000000
 User.create name:"USER 1", email: "admin@pardev.id", password: "admin123", level: 1, store: Store.first 
 Store.create name:"Store Bandung 2", cash: 10000000, equity: 10000000
