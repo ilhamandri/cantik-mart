@@ -3,6 +3,7 @@ class BalancesController < ApplicationController
   before_action :require_fingerprint
 
   def index
+    AccountBalance.balance_account
   	@balances = StoreBalance.page param_page
   	filter_search = search @balances
   	@balances = filter_search[0]

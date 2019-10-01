@@ -270,7 +270,6 @@ class OrdersController < ApplicationController
           to_users.each do |to_user|
             set_notification current_user, to_user, "info", message, prints_path
           end
-
         end
       end
 
@@ -283,20 +282,28 @@ class OrdersController < ApplicationController
       order_item.grand_total = item_grand_total
       order_item.save!
 
-
       store_stock.stock = store_stock.stock + receive_qty
       store_stock.save!
 
-      old_buy_total = store_stock.stock.to_i * store_stock.buy.to_f if this_item.local_item
-      old_buy_total = store_stock.stock.to_i * this_item.buy.to_f if !this_item.local_item
-      new_buy = 0
-      new_buy = (new_buy_total + old_buy_total) / (receive_qty + store_stock.stock.to_i) if (receive_qty + store_stock.stock.to_i) > 0
+      old_buy_total = 0
+
+      if this_item.local_item
+        old_buy_total = store_stock.stock.to_i * store_stock.buy.to_f 
+      else
+        old_buy_total = store_stock.stock.to_i * this_item.buy.to_f 
+      end
+
+      new_buy = old_buy_total
+      new_buy = (new_buy_total + old_buy_total.to_f) / (receive_qty + store_stock.stock.to_i) if receive_qty > 0
+
+      binding.pry 
 
       if !this_item.local_item
         store_stock.buy = new_buy
         store_stock.save!
       else
         this_item.buy = new_buy
+        binding.pry
         this_item.save!
       end
       new_total +=  new_buy_total
