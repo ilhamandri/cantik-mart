@@ -318,13 +318,13 @@ class OrdersController < ApplicationController
 
     if !order_from_retur
       Debt.create user: current_user, store: current_user.store, nominal: order.grand_total, 
-                deficiency: new_total, date_created: DateTime.now, ref_id: order.id,
+                deficiency: order.grand_total, date_created: DateTime.now, ref_id: order.id,
                 description: order.invoice, finance_type: Debt::ORDER, due_date: due_date
 
       set_notification(current_user, User.find_by(store: current_user.store, level: User::FINANCE), 
         Notification::INFO, "Pembayaran "+order.invoice+" sebesar "+number_to_currency(new_total, unit: "Rp. "), urls)
     end
-    description = order.invoice + " (" + new_total.to_s + ")"
+    description = order.invoice + " (" + order.grand_total.to_s + ")"
     urls = order_path(id: params[:id])
     return redirect_success urls, "Order " + order.invoice + " Telah Diterima"
   end
