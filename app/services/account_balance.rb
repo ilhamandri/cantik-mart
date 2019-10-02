@@ -38,7 +38,8 @@ class AccountBalance
       # loss_item
       loss = loss_item(store, time_start, time_end).to_f
       # (profit - loss)
-      income_outcome = pemasukan - pengeluaran - loss
+      profit -= loss
+      income_outcome = pemasukan - pengeluaran 
       # modal
       modals = store.equity.to_f
       # debt
