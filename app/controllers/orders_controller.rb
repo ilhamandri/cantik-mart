@@ -200,7 +200,7 @@ class OrdersController < ApplicationController
       disc_2 = item[4].to_f
       ppn = item[5].to_f
       
-      if receive_qty <= 0 || price <= 0
+      if !order_from_retur && (receive_qty <= 0 || price <= 0)
         order_item.receive = 0
         order_item.discount_1 = 0
         order_item.discount_2 = 0
