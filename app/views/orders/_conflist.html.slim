@@ -3,11 +3,12 @@ tr
   - desc = "-"
   - desc = r_item.description if r_item.description.present?
   td #{desc}
-  td #{r_item.quantity}
   td 
+    | #{r_item.quantity}
     input type="number" class="form-control" name="order[order_items][#{r_item_counter}][item_id]" value="#{r_item.id}" style="display: none;"
-    input type="number" class="form-control" name="order[order_items][#{r_item_counter}][total]" value="0" required="required" min="0"  step="1"
   - if !@order.from_retur
+    td 
+      input type="number" class="form-control" name="order[order_items][#{r_item_counter}][total]" value="0" required="required" min="0"  step="1"
     td 
       input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[price]]" value="0" required="required" min="0"  step="100"
     td 
