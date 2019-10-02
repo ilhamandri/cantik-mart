@@ -53,12 +53,12 @@ class ReturItemsController < ApplicationController
         order_qty = value[2].to_i
         if order_qty != retur_item.accept_item
           value[0] = "loss"
+          diff_item =  (retur_item.accept_item - order_qty)
           if loss.nil?
-            invoice = "LOSS" + Time.now.to_i.to_s
-            Loss.create user: current_user, store: current_user.store, from_retur: true, ref_id: retur.id, total_item: order_qty, invoice: invoice
-            LossItem.create item: retur_item.item, quantity: order_qty, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
+            invoice = "LOSS-" + Time.now.to_i.to_s
+            loss = Loss.create user: current_user, store: current_user.store, from_retur: true, ref_id: retur.id, total_item: diff_item, invoice: invoice
+            LossItem.create item: retur_item.item, quantity: diff_item, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
           else
-            diff_item =  (retur_item.accept_item - order_qty)
             loss.total_item = loss.total_item + diff_item
             loss.save!
             LossItem.create item: retur_item.item, quantity: diff_item, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
