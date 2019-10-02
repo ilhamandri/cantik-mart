@@ -297,22 +297,24 @@ class OrdersController < ApplicationController
 
       old_buy_total = 0
 
-      if this_item.local_item
-        old_buy_total = store_stock.stock.to_i * store_stock.buy.to_f 
-      else
-        old_buy_total = store_stock.stock.to_i * this_item.buy.to_f 
+      if !order_from_retur
+        if this_item.local_item
+          old_buy_total = store_stock.stock.to_i * store_stock.buy.to_f 
+        else
+          old_buy_total = store_stock.stock.to_i * this_item.buy.to_f 
+        end
+
+        new_buy = (item_grand_total + old_buy_total.to_f) / (receive_qty + store_stock.stock.to_i) 
+
+        if this_item.local_item
+          store_stock.buy = new_buy
+          store_stock.save!
+        else
+          this_item.buy = new_buy
+          this_item.save!
+        end
       end
-
-      new_buy = (item_grand_total + old_buy_total.to_f) / (receive_qty + store_stock.stock.to_i) 
-
-      if this_item.local_item
-        store_stock.buy = new_buy
-        store_stock.save!
-      else
-        this_item.buy = new_buy
-        this_item.save!
-      end
-
+      
       store_stock.stock = store_stock.stock + receive_qty
       store_stock.save!
       
