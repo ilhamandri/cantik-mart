@@ -218,21 +218,7 @@ class OrdersController < ApplicationController
 
 
       if order_from_retur
-        buy = order_item.item.buy if !order_item.item.local_item
-        buy = StoreItem.find_by(store: order.store, item: order_item.item).buy.to_f if order_item.item.local_item
-        nominal_value = buy * (qty_order-receive_qty)
-        if receive_qty <= 0 || qty_order > receive_qty
-          if receivable.nil?
-            receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
-                          description: "RECEIVABLE FROM RETUR #"+order.invoice, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: order.supplier_id,
-                          ref_id: urls, due_date: DateTime.now + 2.months
-          else
-            receivable.nominal += receivable.nominal+nominal_value
-            receivable.deficiency += receivable.deficiency+nominal_value
-            receivable.save!
-            next
-          end          
-        end
+        receive_qty = qty_order
       end
 
 
