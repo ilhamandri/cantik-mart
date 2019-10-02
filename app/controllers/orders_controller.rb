@@ -179,8 +179,9 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Order Tidak Dapat Diubah" if order.date_receive.present? || order.date_paid_off.present?
     order_from_retur = order.from_retur
     due_date = params[:order][:due_date]
+    due_date = DateTime.now if order_from_retur
     urls = order_path(id: params[:id])
-    return redirect_back_data_error order_confirmation_path(id: order.id), "Tanggal Jatuh Tempo Harus Diisi" if due_date.nil?
+    return redirect_back_data_error order_confirmation_path(id: order.id), "Tanggal Jatuh Tempo Harus Diisi" if due_date.nil? 
     items = order_items
     new_total = 0
     receivable = nil
@@ -199,6 +200,17 @@ class OrdersController < ApplicationController
       disc_2 = item[4].to_f
       ppn = item[5].to_f
       
+      if receive_qty <= 0 || price <= 0
+        order_item.receive = 0
+        order_item.discount_1 = 0
+        order_item.discount_2 = 0
+        order_item.ppn = 0
+        order_item.price = 0
+        order_item.total = 0
+        order_item.grand_total = 0
+        order_item.save!
+        next
+      end
 
       if qty_order < receive_qty
           receive_qty = qty_order
@@ -383,6 +395,8 @@ class OrdersController < ApplicationController
     end
     debt.save!
     urls = order_path(id: params[:id])
+    set_notification(current_user, User.find_by(store: current_user.store, level: User::FINANCE), 
+        Notification::INFO, "Pembayaran "+order.invoice+" sebesar "+number_to_currency(new_total, unit: "Rp. ")+ " Telah Dikonfirmasi", urls)
     return redirect_success urls, "Pembayaran Order " + order.invoice + " Sebesar " + nominal.to_s + " Telah Dikonfirmasi"
   end
 

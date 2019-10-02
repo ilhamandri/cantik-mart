@@ -82,6 +82,8 @@ class RetursController < ApplicationController
       ReturItem.create item_id: retur_item[0], retur_id: retur.id, quantity: retur_item[4], description: description
     end
     urls = retur_path(id: retur.id)
+    set_notification(current_user, User.find_by(store: current_user.store, level: User::SUPERVISI), 
+        Notification::INFO, "Konfirmasi retur "+retur.invoice, urls)
     return redirect_success urls, "Data Retur Telah Disimpan"
   end
 
@@ -129,8 +131,11 @@ class RetursController < ApplicationController
     retur.date_picked = Time.now
     retur.picked_by = current_user
     retur.save!
+    urls = retur_path(id: retur.id)
+    set_notification(current_user, User.find_by(store: current_user.store, level: User::SUPERVISI), 
+        Notification::INFO, "Retur "+retur.invoice+" telah diambil", urls)
     decrease_stock params[:id]
-    return redirect_success returs_path, "Retur Telah Diambil Suplier"
+    return redirect_success urls, "Retur Telah Diambil Suplier"
   end
 
   def destroy
