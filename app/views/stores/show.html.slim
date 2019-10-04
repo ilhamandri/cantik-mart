@@ -73,7 +73,7 @@
             label for="phone" Hutang
             input class="form-control md-form text-right" value='#{number_with_delimiter(balance.debt, delimiter: ".", separator: ",")}'
 
-            label for="phone" Transaksi
+            label for="phone" Transaksi(Profit) & Loss
             input class="form-control md-form text-right" value='#{number_with_delimiter(balance.transaction_value, delimiter: ".", separator: ",")}'
 
             label for="phone" Pemasukkan & Pengeluaran
@@ -95,7 +95,7 @@
 
         h5.col-12.text-center
           hr.primary-color-dark
-          - if activa == passiva
+          - if activa.to_i == passiva.to_i
             .text-success
               | BALANCE
           - else

@@ -41,10 +41,14 @@ PENDING
 
 
 
-
+=============================================================
 ssh root@193.168.195.145 -p 22
 tmux attach -t 0
 
+rm -rf config/credentials.ymc
+rm -rf config/master.key
+EDITOR="atom --wait" rails credentials:edit
+=============================================================
 
 
 

@@ -72,7 +72,7 @@ class ItemsController < ApplicationController
     changes = item.changes
     change = false
     if changes["margin"].present?
-      margin = (item.buy * margin / 100)
+      margin = (item.buy * item.margin / 100)
       item.sell = item.buy + margin 
       change = true
     end
