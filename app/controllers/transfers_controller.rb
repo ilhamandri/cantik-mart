@@ -73,9 +73,13 @@ class TransfersController < ApplicationController
       transfer.save!
       return redirect_back_data_error urls, "Dibatalkan otomatis oleh sistem (tidak ada barang yang dikirim / terdapat item dengan local item)"
     else
+      user = User.find_by(store: transfer.to_store, level: User::SUPERVISI)
+      if user.present?
+        set_notification(current_user, user, 
+          Notification::INFO, "Permintaan transfer"+transfer.invoice, urls)
+      end
       return redirect_success urls, "Data Transfer - " + transfer.invoice + " - Berhasil Disimpan"
     end
-    
   end
 
   def confirmation
@@ -271,9 +275,9 @@ class TransfersController < ApplicationController
         qty = item[1].to_i.abs
         transfer_item.receive_quantity = qty
         transfer_item.save!
-        store_item = StoreItem.find_by(item_id: item[0], store_id: current_user.store.id)
+        store_item = StoreItem.find_by(item: transfer_item.item, store_id: current_user.store.id)
         
-        buy = store_item.item.buy
+        buy = transfer_item.item.buy
 
         if store_item.nil?
           StoreItem.create store: current_user.store, item_id: item[0], stock: qty

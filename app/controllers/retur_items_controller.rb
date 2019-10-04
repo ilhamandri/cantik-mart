@@ -127,7 +127,6 @@ class ReturItemsController < ApplicationController
         cash_flow_in = CashFlow.create user: current_user, store: current_user.store, nominal: diff_stock_val_cash, date_created: DateTime.now, description: desc, 
                       finance_type: CashFlow::INCOME, invoice: invoice
       end
-      binding.pry
     end
 
     retur.status = Time.now
