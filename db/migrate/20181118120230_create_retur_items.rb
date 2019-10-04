@@ -7,7 +7,7 @@ class CreateReturItems < ActiveRecord::Migration[5.2]
       t.string :description, null: false
       t.integer :feedback, default: 0
       t.integer :accept_item, default: 0
-      t.float :nominal, default: 0, null: false
+      t.bigint :nominal, default: 0, null: false
       t.bigint :ref_id
       
       t.timestamps

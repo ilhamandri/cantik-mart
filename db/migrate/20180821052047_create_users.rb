@@ -8,7 +8,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string :address, null: false, default: "DEFAULT ADDRESS"
       t.integer :sex, null: false, default: 0
       t.bigint :id_card, null: false, default: 123456789123456
-      t.float :salary, null: false, default: 0
+      t.bigint :salary, null: false, default: 0
       t.string :image
       t.integer :fingerprint
       

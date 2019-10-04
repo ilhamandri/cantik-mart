@@ -5,10 +5,10 @@ class CreateStore < ActiveRecord::Migration[5.2]
       t.string :address, null: false, default: "DEFAULT STORE ADDRESS"
       t.string :phone, null: false, default: 1234567
       t.integer :store_type, null: false, default: 1
-      t.float :cash, null: false, default: 100000000
-      t.float :equity, null: false, default: 100000000
-      t.float :debt, null: false, default: 0
-      t.float :receivable, null: false, default: 0
+      t.bigint :cash, null: false, default: 100000000
+      t.bigint :equity, null: false, default: 100000000
+      t.bigint :debt, null: false, default: 0
+      t.bigint :receivable, null: false, default: 0
 
       t.timestamps
     end

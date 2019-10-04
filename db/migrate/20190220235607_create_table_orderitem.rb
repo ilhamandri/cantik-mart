@@ -2,8 +2,8 @@ class CreateTableOrderitem < ActiveRecord::Migration[5.2]
   def change
   	create_table :order_items do |t|
   		t.integer :receive
-	  	t.float :quantity, null: false
-	  	t.float :price, null: false
+	  	t.bigint :quantity, null: false
+	  	t.bigint :price, null: false
 	  	t.references :item, foreign_key: true, null:false
 	  	t.references :order, foreign_key: true, null:false
 	  	t.string :description, default: "-"

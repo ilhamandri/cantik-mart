@@ -3,8 +3,8 @@ class CreateTableCredit < ActiveRecord::Migration[5.2]
     create_table :receivables do |t|
     	t.references :store, null: false, foreign_key: true
     	t.references :user, null: false, foreign_key: true
-    	t.float :nominal, null: false
-        t.float :deficiency, null: false
+    	t.bigint :nominal, null: false
+        t.bigint :deficiency, null: false
     	t.timestamp :date_created, null: false
     	t.string :description, null: false
     	t.string :ref_id

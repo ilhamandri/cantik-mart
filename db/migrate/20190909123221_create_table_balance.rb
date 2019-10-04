@@ -1,14 +1,14 @@
 class CreateTableBalance < ActiveRecord::Migration[5.2]
   def change
     create_table :store_balances do |t|
-    	t.float :cash, null: false
-    	t.float :receivable, null: false
-    	t.float :stock_value, null: false
-    	t.float :asset_value, null: false
-    	t.float :equity, null: false
-    	t.float :debt, null: false
-    	t.float :transaction_value, null: false
-    	t.float :outcome, null: false
+    	t.bigint :cash, null: false
+    	t.bigint :receivable, null: false
+    	t.bigint :stock_value, null: false
+    	t.bigint :asset_value, null: false
+    	t.bigint :equity, null: false
+    	t.bigint :debt, null: false
+    	t.bigint :transaction_value, null: false
+    	t.bigint :outcome, null: false
         t.references :store, foreign_key: true, null: false
         t.timestamps
     end
