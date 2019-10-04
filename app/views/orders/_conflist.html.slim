@@ -4,7 +4,7 @@ tr
   - desc = r_item.description if r_item.description.present?
   td #{desc}
   td 
-    | #{r_item.quantity}
+    | #{r_item.quantity.to_i}
     input type="number" class="form-control" name="order[order_items][#{r_item_counter}][item_id]" value="#{r_item.id}" style="display: none;"
   - if !@order.from_retur
     td 

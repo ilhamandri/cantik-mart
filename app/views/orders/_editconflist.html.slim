@@ -7,7 +7,7 @@ tr
   -else
   	td #{r_item.description}
   td #{r_item.price}
-  td #{r_item.quantity}
+  td #{r_item.quantity.to_i}
   td #{r_item.receive}
   td 
     input type="number" class="md-form" name="order[order_items][#{r_item_counter}][item_id]" value="#{r_item.id}" style="display: none;"

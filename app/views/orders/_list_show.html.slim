@@ -7,7 +7,7 @@ tr
     - else
       =image_tag("/images/default_item.jpg", height: '70', width: '70')
   td #{order_item.item.name}
-  td #{order_item.quantity}
+  td #{order_item.quantity.to_i}
 
   - price = order_item.price
 

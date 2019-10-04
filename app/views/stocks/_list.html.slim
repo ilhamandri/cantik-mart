@@ -6,8 +6,8 @@ tr
 	    - else
 	td #{inventory.item.name}
 	td #{inventory.item.item_cat.name}
-	td #{inventory.stock}
-	td #{inventory.min_stock}
+	td #{inventory.stock.to_i}
+	td #{inventory.min_stock.to_i}
 	td #{number_with_delimiter(inventory.item.sell, delimiter: ".")}
 	td
 	  	a href='#{stock_path(id: inventory.id)}'
