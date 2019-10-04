@@ -71,6 +71,8 @@ class AccountBalance
       last_balancing_s = @@salary_date+"-"+Date.today.month.to_s+"-"+Date.today.year.to_s
       last_balancing = last_balancing_s.to_datetime.end_of_day
       store.cash = kas
+      store.modals_before = transfer
+      binding.pry
       if last_balancing.to_date != Date.today      
         store.grand_total_before = penjualan
         store.modals_before = transfer
@@ -157,8 +159,8 @@ class AccountBalance
 
   def self.transfers store, time_start, time_end
     val = 0
-    request_transfers = Transfer("created_at >= ? AND created_at <= ?", time_start, time_end).where(from_store: store)
-    sent_transfers = Transfer("created_at >= ? AND created_at <= ?", time_start, time_end).where(to_store: store)
+    request_transfers = Transfer.where("created_at >= ? AND created_at <= ?", time_start, time_end).where(from_store: store)
+    sent_transfers = Transfer.where("created_at >= ? AND created_at <= ?", time_start, time_end).where(to_store: store)
 
     request_transfers.each do |req_trf|
       req_items = req_trf.transfer_items
