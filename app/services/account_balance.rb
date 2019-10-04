@@ -46,6 +46,7 @@ class AccountBalance
       modals = store.equity.to_f
       modals = modals - store.modals_before.to_f
       modals+= transfer
+      binding.pry
       # debt
       hutang_sebelumnya = Debt.where("created_at < ? AND deficiency > 0", time_start).where(store: store).sum(:deficiency).to_f
       hutang = hutang_sebelumnya + Debt.where("created_at >= ? AND created_at <= ? AND deficiency > 0", time_start, time_end).where(store: store).sum(:deficiency).to_f
@@ -72,12 +73,13 @@ class AccountBalance
       last_balancing = last_balancing_s.to_datetime.end_of_day
       store.cash = kas
       store.modals_before = transfer
-      
+
       if last_balancing.to_date != Date.today      
         store.grand_total_before = penjualan
         store.modals_before = transfer
       else
         store.grand_total_before = 0
+        store.modals_before = 0
       end
       
       store.save!
