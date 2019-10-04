@@ -286,11 +286,6 @@ class TransfersController < ApplicationController
           if qty != sent_qty 
             status = false
           end 
-          store_item.stock =  store_item.stock.to_i + qty
-          from_store.equity = from_store.equity + (buy * qty)
-          to_store.equity = to_store.equity - (buy * qty)
-          from_store.save!
-          to_store.save!
           store_item.save!
         end
       end

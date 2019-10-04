@@ -31,6 +31,8 @@ class AccountBalance
 
       kas += penjualan
       
+      # transfer value
+      transfer = transfers(store, time_start, time_end).to_f
       # outcome
       pengeluaran = outcomes(store, time_start, time_end).to_f
       #income
@@ -42,6 +44,8 @@ class AccountBalance
       income_outcome = pemasukan - pengeluaran 
       # modal
       modals = store.equity.to_f
+      modals = modals - store.modals_before.to_f
+      modals+= transfer
       # debt
       hutang_sebelumnya = Debt.where("created_at < ? AND deficiency > 0", time_start).where(store: store).sum(:deficiency).to_f
       hutang = hutang_sebelumnya + Debt.where("created_at >= ? AND created_at <= ? AND deficiency > 0", time_start, time_end).where(store: store).sum(:deficiency).to_f
@@ -69,6 +73,7 @@ class AccountBalance
       store.cash = kas
       if last_balancing.to_date != Date.today      
         store.grand_total_before = penjualan
+        store.modals_before = transfer
       else
         store.grand_total_before = 0
       end
@@ -148,6 +153,30 @@ class AccountBalance
       end
     end
     return loss_val
+  end
+
+  def self.transfers store, time_start, time_end
+    val = 0
+    request_transfers = Transfer("created_at >= ? AND created_at <= ?", time_start, time_end).where(from_store: store)
+    sent_transfers = Transfer("created_at >= ? AND created_at <= ?", time_start, time_end).where(to_store: store)
+
+    request_transfers.each do |req_trf|
+      req_items = req_trf.transfer_items
+      req_items.each do |req_item|
+        item = req_item.item
+        val += req_item.receive_quantity * item.buy
+      end
+    end
+
+    sent_transfers.each do |sent_trf|
+      sent_items = req_trf.transfer_items
+      sent_items.each do |sent_item|
+        item = sent_item.item
+        val -= sent_item.sent_quantity * item.buy
+      end
+    end
+
+    return val
   end
 
   def self.salary 
