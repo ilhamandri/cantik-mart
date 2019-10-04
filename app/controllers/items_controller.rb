@@ -70,7 +70,14 @@ class ItemsController < ApplicationController
     item.image = params[:item][:image]
     item.assign_attributes item_params
     changes = item.changes
-    if changes["sell"].present? || changes["discount"].present?
+    change = false
+    if changes["margin"].present?
+      margin = (item.buy * margin / 100)
+      item.sell = item.buy + margin 
+      change = true
+    end
+
+    if change == true ||changes["sell"].present? || changes["discount"].present?
       item.price_updated = DateTime.now
       to_users = User.where(level: ["owner", "super_admin", "super_visi"])
       Store.all.each do |store|

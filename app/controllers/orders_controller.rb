@@ -383,8 +383,11 @@ class OrdersController < ApplicationController
     end
     debt.save!
     urls = order_path(id: params[:id])
-    set_notification(current_user, User.find_by(store: current_user.store, level: User::FINANCE), 
+    user = User.find_by(store: current_user.store, level: User::FINANCE)
+    if user.present?
+      set_notification(current_user, user, 
         Notification::INFO, "Pembayaran "+order.invoice+" sebesar "+number_to_currency(new_total, unit: "Rp. ")+ " Telah Dikonfirmasi", urls)
+    end
     return redirect_success urls, "Pembayaran Order " + order.invoice + " Sebesar " + nominal.to_s + " Telah Dikonfirmasi"
   end
 

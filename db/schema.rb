@@ -203,7 +203,7 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
     t.string "invoice", null: false
     t.integer "transaction_type", default: 1, null: false
     t.string "transaction_invoice", null: false
-    t.integer "nominal", default: 0, null: false
+    t.float "nominal", default: 0.0, null: false
     t.datetime "date_created"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -222,9 +222,9 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
   create_table "items", force: :cascade do |t|
     t.string "code", default: "DEFAULT_CODE", null: false
     t.string "name", default: "DEFAULT_NAME", null: false
-    t.integer "stock", default: 0, null: false
-    t.integer "buy", default: 0, null: false
-    t.integer "sell", default: 0, null: false
+    t.float "stock", default: 0.0, null: false
+    t.float "buy", default: 0.0, null: false
+    t.float "sell", default: 0.0, null: false
     t.bigint "item_cat_id", null: false
     t.string "brand", null: false
     t.float "wholesale", default: 0.0, null: false
@@ -293,7 +293,7 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
 
   create_table "order_invs", force: :cascade do |t|
     t.string "invoice", null: false
-    t.integer "nominal", null: false
+    t.float "nominal", null: false
     t.bigint "order_id", null: false
     t.datetime "date_paid"
     t.datetime "created_at", null: false
@@ -303,8 +303,8 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
 
   create_table "order_items", force: :cascade do |t|
     t.integer "receive"
-    t.integer "quantity", null: false
-    t.integer "price", null: false
+    t.float "quantity", null: false
+    t.float "price", null: false
     t.bigint "item_id", null: false
     t.bigint "order_id", null: false
     t.string "description", default: "-"
@@ -327,10 +327,10 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
     t.bigint "supplier_id", null: false
     t.bigint "store_id", null: false
     t.integer "total_items", null: false
-    t.integer "total", null: false
+    t.float "total", null: false
     t.datetime "date_paid_off"
     t.boolean "editable", default: true, null: false
-    t.bigint "old_total", default: 0, null: false
+    t.float "old_total", default: 0.0, null: false
     t.datetime "date_change"
     t.bigint "user_id", null: false
     t.bigint "received_by"
@@ -546,9 +546,9 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
   create_table "transaction_items", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "transaction_id", null: false
-    t.integer "price", null: false
-    t.integer "discount", default: 0
-    t.integer "quantity", null: false
+    t.float "price", null: false
+    t.float "discount", default: 0.0
+    t.float "quantity", null: false
     t.datetime "date_created"
     t.integer "retur"
     t.integer "replace"

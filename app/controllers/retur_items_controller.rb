@@ -90,9 +90,9 @@ class ReturItemsController < ApplicationController
         item = retur_item.item
         diff_stock_val_cash += (nominal_value - (item.buy * accept_item))
         if receivable.nil?
-          desc = "RECEIVABLE FROM RETUR #"+retur.invoice
+          desc = "FROM RETUR #"+retur.invoice
           receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
-                        description: desc, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: retur.supplier_id,
+                        description: "RECEIVABLE "+desc, finance_type: Receivable::RETUR, deficiency:nominal_value, to_user: retur.supplier_id,
                         ref_id: urls, due_date: DateTime.now + 2.months
         else
           receivable.nominal = receivable.nominal+nominal_value
@@ -101,7 +101,6 @@ class ReturItemsController < ApplicationController
         end
         retur_item.ref_id = receivable.id
         retur_item.nominal = nominal_value
-
       elsif value[0] == "loss"
         if loss.nil?
           invoice = "LOSS-" + Time.now.to_i.to_s
@@ -118,17 +117,17 @@ class ReturItemsController < ApplicationController
       retur_item.feedback = value[0]
       retur_item.save!
     end
-
     if diff_stock_val_cash != 0
       if diff_stock_val_cash > 0
         invoice = " IN-"+Time.now.to_i.to_s
-        cash_flow_in = CashFlow.create user: user, store: store, nominal: diff_stock_val_cash, date_created: date_created, description: desc, 
+        cash_flow_in = CashFlow.create user: current_user, store: current_user.store, nominal: diff_stock_val_cash, date_created: DateTime.now, description: desc, 
                       finance_type: CashFlow::INCOME, invoice: invoice
       else
         invoice = " OUT-"+Time.now.to_i.to_s
-        cash_flow_in = CashFlow.create user: user, store: store, nominal: diff_stock_val_cash, date_created: date_created, description: desc, 
+        cash_flow_in = CashFlow.create user: current_user, store: current_user.store, nominal: diff_stock_val_cash, date_created: DateTime.now, description: desc, 
                       finance_type: CashFlow::INCOME, invoice: invoice
       end
+      binding.pry
     end
 
     retur.status = Time.now

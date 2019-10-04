@@ -30,6 +30,7 @@
 	* due date
 	* confirm order / transfer					
 
+--> di order terima , step input ke 5
 
 ======================================================================
 PENDING
@@ -51,6 +52,7 @@ tmux attach -t 0
 
 
 sudo -u postgres psql
+postgres
 
 DROP DATABASE cantik_mart;
 CREATE DATABASE cantik_mart;
@@ -70,17 +72,18 @@ User.create name:"USER 2", email: "admin2@pardev.id", password: "admin123", leve
 Department.create name: "Snack"
 ItemCat.create department: Department.first, name: "CABE"
 
+
 localhost:3000/controllers
 localhost:3000/items
 
 
+StoreItem.delete_all
 TransactionItem.delete_all
 Transaction.delete_all
 ReturItem.delete_all
 Retur.delete_all
 TransferItem.delete_all
 Transfer.delete_all
-
 OrderItem.delete_all
 Order.delete_all
 Debt.delete_all
