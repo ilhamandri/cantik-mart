@@ -4,7 +4,7 @@ class CreateItem < ActiveRecord::Migration[5.2]
       t.string :code, null: false, default: 'DEFAULT_CODE'
       t.string :name, null: false, default: 'DEFAULT_NAME'
       t.bigint :stock, null: false, default: 0
-      t.bigint :buy, null: false, default: 0
+      t.float :buy, null: false, default: 0
       t.bigint :sell, null: false, default: 0
       t.references :item_cat, null: false, foreign_key: true
       t.string :brand, null: false, defautl: "DEFAULT BRAND"
