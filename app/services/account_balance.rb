@@ -171,7 +171,7 @@ class AccountBalance
     end
 
     sent_transfers.each do |sent_trf|
-      sent_items = req_trf.transfer_items
+      sent_items = sent_trf.transfer_items
       sent_items.each do |sent_item|
         item = sent_item.item
         val -= sent_item.sent_quantity * item.buy
