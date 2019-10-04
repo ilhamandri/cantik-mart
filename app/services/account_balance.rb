@@ -72,7 +72,7 @@ class AccountBalance
       last_balancing = last_balancing_s.to_datetime.end_of_day
       store.cash = kas
       store.modals_before = transfer
-      binding.pry
+      
       if last_balancing.to_date != Date.today      
         store.grand_total_before = penjualan
         store.modals_before = transfer
