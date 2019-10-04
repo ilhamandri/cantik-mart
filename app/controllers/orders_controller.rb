@@ -291,7 +291,7 @@ class OrdersController < ApplicationController
         end
 
         new_buy = (item_grand_total + old_buy_total.to_f) / (receive_qty + store_stock.stock.to_i) 
-
+        new_buy = new_buy.ceil 
         if this_item.local_item
           store_stock.buy = new_buy
           store_stock.save!
