@@ -6,7 +6,7 @@ tr
 	td #{number_with_delimiter(aktiva.to_i, delimiter: ".", separator: ",")}
 	td #{number_with_delimiter(passiva.to_i, delimiter: ".", separator: ",")}
 	td 
-		- if aktiva == passiva
+		- if aktiva.to_i == passiva.to_i
 			.text-success
 				| BALANCE
 		- else

@@ -101,7 +101,7 @@ function addNewRowComplain(result_arr, qty){
    let cat = "<input type='text' class='md-form form-control' value='"+result[2]+"' readonly />";
    let price = "<input readonly type='number' class='md-form form-control' value="+result[3]+"  name='complain[new_complain_items]["+add_counter+"][price]'/>";
    let discount = "<input readonly type='number' class='md-form form-control' value="+result[4]+"  name='complain[new_complain_items]["+add_counter+"][discount]'/>";
-   let quantity = "<input type='number' readonly min=1 class='md-form form-control' value='"+qty+"' name='complain[new_complain_items]["+add_counter+"][quantity]'/>"
+   let quantity = "<input step='0.05' type='number' readonly min=1 class='md-form form-control' value='"+qty+"' name='complain[new_complain_items]["+add_counter+"][quantity]'/>"
    let remove = "<i class='fa fa-trash text-danger' onclick='removeRowComplain(this)'></i>"; 
    cell1.innerHTML = code;
    cell2.innerHTML = name;
@@ -341,7 +341,7 @@ function addNewRowOrder(result_arr){
    let name = "<input type='text' class='md-form form-control' value='"+result[1]+"' readonly name='order[order_items]["+add_counter+"][name]'/>";
    let cat = "<input type='text' class='md-form form-control' value='"+result[2]+"' readonly name='order[order_items]["+add_counter+"][item_cat]'/>";
    let quantity = "<input type='number' min=1 class='md-form form-control' value='1' name='order[order_items]["+add_counter+"][quantity]'/>";
-   let price = "<input type='number' class='md-form form-control' value='"+result[3]+"' min=100 name='order[order_items]["+add_counter+"][price]'/>";
+   let price = "<input type='number' class='md-form form-control' value='"+result[3]+"' min=100 name='order[order_items]["+add_counter+"][price]'  step='0.05'/>";
    let desc = "<input type='text' class='md-form form-control' value=''  name='order[order_items]["+add_counter+"][description]'/>";
    let remove = "<i class='fa fa-trash text-danger' onclick='removeThisRow(this)'></i>"; 
    cell1.innerHTML = code;

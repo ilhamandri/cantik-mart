@@ -365,6 +365,7 @@ class OrdersController < ApplicationController
     order_inv.save!
     deficiency = paid - nominal
     debt = Debt.find_by(finance_type: Debt::ORDER, ref_id: order.id)
+
     if params[:order_pay][:user_receivable] == "on"
       dec_receivable = decrease_receivable order.supplier_id, nominal, order
       return redirect_back_data_error orders_path, "Data Order Tidak Valid" unless dec_receivable
@@ -375,6 +376,7 @@ class OrdersController < ApplicationController
       store.cash = store.cash - nominal
       store.save!
     end
+
     debt.deficiency = deficiency
     if deficiency <= 0
       order.date_paid_off = DateTime.now 
@@ -543,16 +545,8 @@ class OrdersController < ApplicationController
             curr_receivable = curr_receivable - nominal
             receivable.deficiency = curr_receivable
             receivable.save!
-            CashFlow.create user: current_user, store: current_user.store, description: order.invoice, nominal: nominal, 
-                    date_created: params[:order_pay][:date_paid], finance_type: CashFlow::INCOME, ref_id: order.id
-            CashFlow.create user: current_user, store: current_user.store, description: order.invoice, nominal: nominal*-1, 
-                    date_created: params[:order_pay][:date_paid], finance_type: CashFlow::OUTCOME, ref_id: order.id
             return true
           else
-            CashFlow.create user: current_user, store: current_user.store, description: order.invoice, nominal: curr_receivable, 
-                    date_created: params[:order_pay][:date_paid], finance_type: CashFlow::INCOME, ref_id: order.id
-            CashFlow.create user: current_user, store: current_user.store, description: order.invoice, nominal: curr_receivable*-1, 
-                    date_created: params[:order_pay][:date_paid], finance_type: CashFlow::OUTCOME, ref_id: order.id
             nominal -= curr_receivable
             receivable.deficiency = 0
             receivable.save!
