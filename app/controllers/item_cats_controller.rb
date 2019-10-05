@@ -19,6 +19,15 @@ class ItemCatsController < ApplicationController
     else
       return redirect_back_data_error departments_path, "ID Departemen Tidak Ditemukan"
     end
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "item_cats/print.html.slim"
+      end
+    end
   end
 
   def show

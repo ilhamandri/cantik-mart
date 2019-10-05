@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   get '/clean/prints', to: 'prints#clean', as: "clean_prints"
   
   resources :items
+  resources :points
   resources :salaries
   resources :grocer_items
   resources :item_cats

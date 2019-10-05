@@ -18,10 +18,15 @@ br
         = form_for :item_cats, url: item_cats_path, method: 'GET' do |form|
           .row
             .col
-              input type="text" class="form-control md-form" id="search" name="search"
+              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nama Sub Departemen ..."
             .col-12.text-center
               button class="btn btn-rounded btn-primary"
                 | Cari
+          br
+            .col-md-12.text-center.grey-text
+              a href="#{item_cats_path(dept_id: @dept.id,format: :pdf)}"
+                b
+                  | CETAK
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4

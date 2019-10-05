@@ -44,7 +44,8 @@
               thead
                 th Min
                 th Max
-                th Harga
+                th Normal
+                th Member
                 th Diskon
                 th Profit
                 th
@@ -53,11 +54,18 @@
                   td 0
                   td 1
                   td #{number_to_currency(@item.sell, delimiter: ".", separator: ",", unit: "Rp. ")}
+                  td
+                    - if @item.sell_member == 0 || @item.sell_member == @item.sell 
+                      | -
+                    - else
+                      | #{number_to_currency(@item.sell_member, delimiter: ".", separator: ",", unit: "Rp. ")}
                   - disc = @item.discount
                   - disc = @item.discount * @item.sell / 100 if disc <= 100
                   td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
                   td #{number_to_currency((@item.sell - @item.buy - disc), delimiter: ".", separator: ",", unit: "Rp. ")}
-                  td
+                  td.text-right
+                    a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
+                      |   + Cetak
                 - item_grocers = @item.grocer_items
                 - if item_grocers.present?
                   -item_grocers.each do |item|

@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
   include Clearance::Controller
   include PublicActivity::StoreController 
   
+  BASE_POINT = 10000
+  
   def self.finance_recap
     print "CRON OK"
   end

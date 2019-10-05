@@ -14,13 +14,21 @@ br
         h5.font-weight-500.my-1
           | Pencarian
       .card-body
-        = form_for :store_item, url: supplier_items_path, method: 'GET' do |form|
-        .row
-          .col-12.text-center
-            input type="text" class="form-control md-form" id="search" name="search"
-          .col-12.text-center
-            button class="btn btn-rounded btn-primary"
-              | Cari      
+        = form_for :items, url: supplier_items_path(id: @supplier.id), method: 'GET' do |form|
+          .row
+            .col-12
+              input style="display: none;" name="id" value="#{@supplier.id}"
+              input type="text" class="form-control md-form" id="search" name="search" placeholder="Cari Kode / Nama Barang ..."
+            .col-12.text-center
+              button class="btn btn-rounded btn-primary"
+                | Cari
+            .col-md-12.text-center.grey-text
+              b
+                | #{@search}
+            .col-md-12.text-center.grey-text
+              a href="#{supplier_items_path(id: @supplier.id,format: :pdf)}"
+                b
+                  | CETAK     
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4

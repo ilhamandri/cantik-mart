@@ -71,10 +71,19 @@ class ItemsController < ApplicationController
     item.assign_attributes item_params
     changes = item.changes
     change = false
+
+    if params[:item][:sell_member].to_i <= 0
+      item.sell_member = item.sell
+    end
+
     if changes["margin"].present?
       margin = (item.buy * item.margin / 100)
       item.sell = item.buy + margin 
       change = true
+    end
+
+    if changes["sell_member"].present?
+      change = true if item.sell_member != 0 && item.sell_member != item.sell
     end
 
     if change == true ||changes["sell"].present? || changes["discount"].present?
@@ -109,7 +118,7 @@ class ItemsController < ApplicationController
   private
     def item_params
       params.require(:item).permit(
-        :name, :code, :item_cat_id, :margin, :brand, :sell, :buy, :discount, :local_item
+        :name, :code, :item_cat_id, :margin, :brand, :sell, :buy, :discount, :local_item, :sell_member
       )
     end
 

@@ -42,6 +42,9 @@
             label for="sell" Harga Jual Satuan
             = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", min: "0", value: "#{@item.sell.to_i}"
           .form-group
+            label for="sell" Harga Jual Satuan MEMBER
+            = form.number_field :sell_member, required: true, class: "form-control md-form", id: "sell", min: "0", value: "#{@item.sell_member.to_i}"
+          .form-group
             label for="item" Jenis Barang
             select name="item[local_item]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
               - if @item.local_item == "false"

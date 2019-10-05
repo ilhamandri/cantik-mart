@@ -21,5 +21,5 @@ tr
 
 		| #{time}
 	td 
-		- message = truncate(notification.message, length: 50)
-		| #{message}
+		a href="#{notification.link}"
+			| #{notification.message}

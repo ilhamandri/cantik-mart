@@ -9,6 +9,12 @@ class TransactionsController < ApplicationController
     @transactions = filter[1]
     @params = params.to_s
 
+    if params[:member_card].present?
+      @member = Member.find_by(card_number: params[:member_card])
+      @member_name = @member.name
+      @transactions = @transactions.where(member_card: params[:member_card])
+    end
+    
     respond_to do |format|
       format.html
       format.pdf do

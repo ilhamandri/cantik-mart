@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_29_180829) do
+ActiveRecord::Schema.define(version: 2019_10_05_171920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -184,6 +184,7 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
     t.float "discount", default: 0.0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "member", default: false, null: false
     t.index ["item_id"], name: "index_grocer_items_on_item_id"
   end
 
@@ -237,6 +238,7 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
     t.boolean "local_item", default: false
     t.integer "margin", default: 0
     t.datetime "price_updated"
+    t.bigint "sell_member", default: 0, null: false
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 
@@ -273,6 +275,7 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
     t.bigint "store_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "point", default: 0, null: false
     t.index ["store_id"], name: "index_members_on_store_id"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
@@ -358,6 +361,17 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
     t.datetime "updated_at", null: false
     t.index ["store_id"], name: "index_outcomes_on_store_id"
     t.index ["user_id"], name: "index_outcomes_on_user_id"
+  end
+
+  create_table "points", force: :cascade do |t|
+    t.bigint "member_id", null: false
+    t.bigint "transaction_id"
+    t.integer "point", null: false
+    t.integer "point_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id"], name: "index_points_on_member_id"
+    t.index ["transaction_id"], name: "index_points_on_transaction_id"
   end
 
   create_table "prints", force: :cascade do |t|
@@ -579,6 +593,7 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
     t.float "sub_from_complain", default: 0.0, null: false
     t.boolean "from_complain", default: false, null: false
     t.bigint "complain_id"
+    t.bigint "point", default: 0, null: false
     t.index ["store_id"], name: "index_transactions_on_store_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
@@ -698,6 +713,8 @@ ActiveRecord::Schema.define(version: 2019_09_29_180829) do
   add_foreign_key "orders", "users"
   add_foreign_key "outcomes", "stores"
   add_foreign_key "outcomes", "users"
+  add_foreign_key "points", "members"
+  add_foreign_key "points", "transactions"
   add_foreign_key "prints", "grocer_items"
   add_foreign_key "prints", "items"
   add_foreign_key "prints", "promotions"

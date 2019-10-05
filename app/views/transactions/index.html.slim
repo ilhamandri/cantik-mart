@@ -1,7 +1,7 @@
 .row
   .col.text-left
     h5
-      | Daftar Transaksi
+      | Daftar Transaksi #{@member_name}
   / .col.text-right
     a href="#{new_transaction_path}"
       button.btn.btn-rounded.btn-primary type="button" 
@@ -61,7 +61,7 @@ br
             th Tanggal
             th Toko
             th Member
-            th Jumlah Item
+            th Poin
             th Total
             th Aksi
           tbody

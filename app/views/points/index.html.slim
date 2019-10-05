@@ -1,0 +1,27 @@
+.row
+  .col
+    h5
+      | Riwayat Perolehan Poin - #{@member.name}
+  .col.text-right
+    a href="#{new_point_path(member_id: @member.id)}"
+      button.btn.btn-rounded.btn-success type="button" 
+        i.fas.fa-plus 
+        |   Tukar Poin
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Riwayat
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Tanggal
+            th Poin
+            th Jenis
+            th Transaksi
+          tbody
+            = render partial: 'list', collection: @points, as: :point
+        = paginate @points
+
