@@ -3,6 +3,7 @@ class Point < ApplicationRecord
   
   belongs_to :trx, class_name: "Transaction", foreign_key: "transaction_id", optional: true
   belongs_to :member
+  belongs_to :exchange_point
 
   enum point_type: {
     get: 0,

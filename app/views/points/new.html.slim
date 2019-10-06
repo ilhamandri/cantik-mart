@@ -1,0 +1,26 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Penukaran Poin - #{@member.name}
+      .card-body
+
+        = form_for :point, url: points_path(id: @member.id), method: "POST" do |form|
+          .form-group
+            label for="name" Jumlah poin saat ini
+            input class="form-control md-form" disabled="disabled" value="#{@member.point}"
+          .form-group
+            label for="name" Ditukar dengan
+            select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="point[exchange_point_id]"
+              - exchanges = ExchangePoint.where(status: true).where("point <= ?", @member.point).order("point ASC")
+              - exchanges.each do |exchange|
+                - item = Item.find_by(code: exchange.name)
+                - if item.present?
+                  option value="#{exchange.id}"
+                    | #{exchange.point} poin - #{item.name}
+                - else
+                  option value="#{exchange.id}"
+                    |  #{exchange.point} poin - #{exchange.name}
+          .form-group.text-center
+            = form.submit "Tukar Poin", class: "btn btn-rounded btn-primary"

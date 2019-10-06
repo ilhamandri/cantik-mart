@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_05_171920) do
+ActiveRecord::Schema.define(version: 2019_10_06_190127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,6 +161,14 @@ ActiveRecord::Schema.define(version: 2019_10_05_171920) do
     t.string "name", default: "DEFAULT (NO DEPARTMENT)", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "exchange_points", force: :cascade do |t|
+    t.integer "point", null: false
+    t.string "name", null: false
+    t.bigint "hit", default: 0, null: false
+    t.integer "quantity", null: false
+    t.boolean "status", default: true, null: false
   end
 
   create_table "finances", force: :cascade do |t|
@@ -368,8 +376,10 @@ ActiveRecord::Schema.define(version: 2019_10_05_171920) do
     t.bigint "transaction_id"
     t.integer "point", null: false
     t.integer "point_type", null: false
+    t.bigint "exchange_point_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["exchange_point_id"], name: "index_points_on_exchange_point_id"
     t.index ["member_id"], name: "index_points_on_member_id"
     t.index ["transaction_id"], name: "index_points_on_transaction_id"
   end
@@ -713,6 +723,7 @@ ActiveRecord::Schema.define(version: 2019_10_05_171920) do
   add_foreign_key "orders", "users"
   add_foreign_key "outcomes", "stores"
   add_foreign_key "outcomes", "users"
+  add_foreign_key "points", "exchange_points"
   add_foreign_key "points", "members"
   add_foreign_key "points", "transactions"
   add_foreign_key "prints", "grocer_items"

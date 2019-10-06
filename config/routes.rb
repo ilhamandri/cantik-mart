@@ -51,7 +51,8 @@ Rails.application.routes.draw do
 
   get '/download/:type', to: 'downloads#serve_file', as: "download"
   get '/file/download', to: 'downloads#get_file', as: "download_file"
-  get '/file/print/:type/:id', to: 'download#print', as: "print"
+
+  get '/set/exchange_points', to: 'exchange_points#set_on_off', as: 'set_exchange_point'
   resources :pays, only: %i[new create]
 
   resources :balances
@@ -61,6 +62,7 @@ Rails.application.routes.draw do
   
   resources :items
   resources :points
+  resources :exchange_points
   resources :salaries
   resources :grocer_items
   resources :item_cats

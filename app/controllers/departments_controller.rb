@@ -49,8 +49,10 @@ class DepartmentsController < ApplicationController
     department.assign_attributes department_params
     item_name = params[:department][:name].camelize
     department.name = item_name
-    department.save! if department.changed?
-    department.create_activity :edit, owner: current_user
+    changes = department.changes
+    if department.changed?
+      department.save! 
+      department.create_activity :edit, owner: current_user, params: changes
     urls = item_cats_path dept_id: department.id
     set_notification(User.last, current_user, Notification::PRIMARY, "Data Dapartemen - " + department.name + " - Berhasil Diubah", urls)
     return redirect_success urls, "Data Dapartemen - " + department.name + " - Berhasil Diubah"

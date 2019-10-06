@@ -27,6 +27,10 @@ li
         li
           a.waves-effect href="#{members_path}"  Member
 
+      - if Controller.find_by(name: 'exchange_points').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        li
+          a.waves-effect href="#{exchange_points_path}"  Kriterian Penukaran Poin
+
 
 - if Controller.find_by(name: 'stores').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
   li

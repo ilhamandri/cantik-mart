@@ -1,12 +1,12 @@
 .row
   .col
     h5
-      | Riwayat Poin - #{@member.name}
+      | Daftar Penukaran Poin
   .col.text-right
-    a href="#{new_point_path(id: @member.id)}"
+    a href="#{new_exchange_point_path}"
       button.btn.btn-rounded.btn-success type="button" 
         i.fas.fa-plus 
-        |   Tukar Poin
+        |   Tambah Kriteria
 br
 .container-fluid
   .col-lg-12.col-md-12
@@ -17,11 +17,13 @@ br
       .card-body.table-responsive.text-nowrap
         table class="table"
           thead
-            th Tanggal
             th Poin
             th Jenis
-            th Keterangan
+            th Jumlah
+            th Ditukar
+            th
+            th
           tbody
-            = render partial: 'list', collection: @points, as: :point
-        = paginate @points
+            = render partial: 'list', collection: @EPoints, as: :epoint
+        = paginate @EPoints
 

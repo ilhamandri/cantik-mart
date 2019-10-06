@@ -97,8 +97,10 @@ class ItemsController < ApplicationController
         set_notification current_user, to_user, "info", message, prints_path
       end
     end
-    item.save! if item.changed?
-    item.create_activity :edit, owner: current_user, params: changes
+    if item.changed?
+      item.save! 
+      item.create_activity :edit, owner: current_user, params: changes
+    end
     urls = item_path id: item.id
     return redirect_success urls, "Data Barang - " + item.name + " - Berhasil Diubah"
   end
