@@ -47,8 +47,12 @@ PENDING
 ssh root@193.168.195.145 -p 22
 tmux attach -t 0
 
+tmux new -s 0
 rails s -p 80 -e production
 
+rm -rf cantik-mart
+git clone https://github.com/ilhamandri/cantik-mart.git
+yarn install
 rm -rf config/credentials.ymc.enc
 rm -rf config/master.key
 EDITOR="atom --wait" rails credentials:edit
