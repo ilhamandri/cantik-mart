@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "member", default: false, null: false
+    t.bigint "member_price", default: 0
     t.index ["item_id"], name: "index_grocer_items_on_item_id"
   end
 
@@ -379,9 +380,11 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.bigint "exchange_point_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "voucher_id"
     t.index ["exchange_point_id"], name: "index_points_on_exchange_point_id"
     t.index ["member_id"], name: "index_points_on_member_id"
     t.index ["transaction_id"], name: "index_points_on_transaction_id"
+    t.index ["voucher_id"], name: "index_points_on_voucher_id"
   end
 
   create_table "prints", force: :cascade do |t|
@@ -547,6 +550,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.float "grand_total_before", default: 0.0
+    t.float "modals_before", default: 0.0, null: false
   end
 
   create_table "supplier_items", force: :cascade do |t|
@@ -604,8 +608,10 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.boolean "from_complain", default: false, null: false
     t.bigint "complain_id"
     t.bigint "point", default: 0, null: false
+    t.bigint "voucher_id"
     t.index ["store_id"], name: "index_transactions_on_store_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
+    t.index ["voucher_id"], name: "index_transactions_on_voucher_id"
   end
 
   create_table "transfer_items", force: :cascade do |t|
@@ -683,6 +689,12 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.index ["store_id"], name: "index_users_on_store_id"
   end
 
+  create_table "vouchers", force: :cascade do |t|
+    t.bigint "exchange_point_id", null: false
+    t.bigint "voucher_code", null: false
+    t.index ["exchange_point_id"], name: "index_vouchers_on_exchange_point_id"
+  end
+
   add_foreign_key "absents", "users"
   add_foreign_key "assets", "stores"
   add_foreign_key "assets", "users"
@@ -726,6 +738,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   add_foreign_key "points", "exchange_points"
   add_foreign_key "points", "members"
   add_foreign_key "points", "transactions"
+  add_foreign_key "points", "vouchers"
   add_foreign_key "prints", "grocer_items"
   add_foreign_key "prints", "items"
   add_foreign_key "prints", "promotions"
@@ -754,6 +767,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   add_foreign_key "transaction_items", "transactions"
   add_foreign_key "transactions", "stores"
   add_foreign_key "transactions", "users"
+  add_foreign_key "transactions", "vouchers"
   add_foreign_key "transfer_items", "items"
   add_foreign_key "transfer_items", "transfers"
   add_foreign_key "transfers", "stores", column: "from_store_id"
@@ -761,4 +775,5 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   add_foreign_key "transfers", "users"
   add_foreign_key "user_methods", "controller_methods"
   add_foreign_key "user_salaries", "users"
+  add_foreign_key "vouchers", "exchange_points"
 end

@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   
   resources :items
   resources :points
+  resources :vouchers
   resources :exchange_points
   resources :salaries
   resources :grocer_items

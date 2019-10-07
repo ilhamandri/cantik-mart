@@ -95,7 +95,7 @@
 
         h5.col-12.text-center
           hr.primary-color-dark
-          - if activa.to_i == passiva.to_i
+          - if activa.round == passiva.round
             .text-success
               | BALANCE
           - else

@@ -107,9 +107,9 @@ class DownloadsController < ApplicationController
 			sheet.add_row ["Kode", "Nama","Stok", "Harga", "Total"]
 			store_stocks = StoreItem.where(store: store).where("stock > 0")
 			store_stocks.each do |stocks|
-				buy = stocks.item.buy if stocks.buy==0
-				buy = stocks.buy if stocks.buy>0
-				total = stocks.stock.to_f * buy.to_f
+				buy = stocks.item.buy if stocks.buy.round==0
+				buy = stocks.buy if stocks.buy.round>0
+				total = (stocks.stock.to_f * buy.to_f).round
 				sheet.add_row [stocks.item.code, stocks.item.name, stocks.stock, buy, total]
 			end
 		end

@@ -90,7 +90,7 @@ class TransactionsController < ApplicationController
       discount: item_par[3],
       date_created: DateTime.now
       store_stock = StoreItem.find_by(store: current_user.store, item: item)
-      hpp_total += item_par[1].to_i * item.buy.to_i
+      hpp_total += (item_par[1].to_i * item.buy).round.to_f
       next if store_stock.nil?
       store_stock.stock = store_stock.stock.to_i - item_par[1].to_i
       store_stock.save!

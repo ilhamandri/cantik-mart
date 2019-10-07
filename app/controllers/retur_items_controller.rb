@@ -88,7 +88,7 @@ class ReturItemsController < ApplicationController
         return redirect_back_data_error urls, "Nominal Potong Nota > 100" if nominal_value < 100
 
         item = retur_item.item
-        diff_stock_val_cash += (nominal_value - (item.buy * accept_item))
+        diff_stock_val_cash += (nominal_value - (item.buy * accept_item).round)
         if receivable.nil?
           desc = "FROM RETUR #"+retur.invoice
           receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 

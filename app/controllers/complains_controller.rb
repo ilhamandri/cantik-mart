@@ -135,7 +135,7 @@ class ComplainsController < ApplicationController
         price = new_item[2].to_f
         disc = new_item[3].to_f
 
-        hpp += buy * qty
+        hpp += (buy * qty).round
 
         discount += disc * qty
         total += price * qty

@@ -21,6 +21,7 @@ class PointsController < ApplicationController
     exchange_point = ExchangePoint.find_by(id: params[:point][:exchange_point_id])
     return redirect_back_data_error new_exchange_point_path, "Data Tidak Valid" if exchange_point.nil?
     item = Item.find_by(code: exchange_point.name)
+    voucher = nil
     if item.present?
       stock = StoreItem.where(item: item, store: current_user.store).first
       if stock.present?
@@ -29,11 +30,18 @@ class PointsController < ApplicationController
       else
         return redirect_back_data_error new_exchange_point_path, "Barang yang Akan Ditukar Sudah Habis"
       end
+    else
+      ename = exchange_point.name
+      if ename.downcase.include? "voucher"
+        voucher = Voucher.create exchange_point: exchange_point, voucher_code: params[:point][:voucher_code]
+      end
     end
+    binding.pry
     point = Point.new point_params
     point.member = member
     point.point = exchange_point.point
     point.point_type = Point::EXCHANGE
+    point.voucher = voucher
     point.save!
     member.point = member.point - point.point
     member.save!

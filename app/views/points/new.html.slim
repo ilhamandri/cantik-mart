@@ -22,5 +22,10 @@
                 - else
                   option value="#{exchange.id}"
                     |  #{exchange.point} poin - #{exchange.name}
+          .form-group
+            label for="name" Kode Voucher
+            br
+            label.text-danger * Isi bagian ini jika memilih voucher
+            = form.text_field :voucher_code, required: true, class: "form-control md-form", title:"Kode voucher", placeholder:"Harga Jual Satuan",minlength:"3", maxlength: "13", pattern:"[0-9]+", title:"Kode voucher", placeholder:"Kode voucher"
           .form-group.text-center
             = form.submit "Tukar Poin", class: "btn btn-rounded btn-primary"

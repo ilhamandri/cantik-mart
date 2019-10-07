@@ -5,7 +5,7 @@ tr
 		td #{epoint.name}
 	- else
 		td Barang - #{item.name} ( #{item.code} )
-	td #{epoint.quantity}
+	td #{number_with_delimiter(epoint.quantity, delimiter: " ")}
 	- hit = epoint.points.count
 	- if hit <= 0
 		td 0

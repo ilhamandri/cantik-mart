@@ -16,6 +16,10 @@
 	            = form.text_field :name, required: true, class: "form-control md-form", placeholder: "PLU, voucher, dsb ... ", title: "Jenis penawaran yang diberikan"
 	        .form-group
 	            label for="id-card" Jumlah
-	            = form.text_field :quantity, required: true, class: "form-control md-form", id: "id-card", minlength:"1", maxlength:"18", minimum:"0", pattern:"[0-9]+", title:"Jumlah barang yang diberikan", placeholder: "Jumlah barang yang akan diberikan"
+	            br
+	            label.text-danger * Jika ditukar barang, isi dengan jumlah yang akan diberikan
+	            br
+	            label.text-danger * Jika ditukar voucher, isi dengan nominal voucher
+	            = form.text_field :quantity, required: true, class: "form-control md-form", id: "id-card", minlength:"1", maxlength:"18", minimum:"0", pattern:"[0-9]+", title:"Jumlah barang yang diberikan", placeholder: "Nominal"
 	        .form-group.text-center
 	        	= form.submit "Tambah Kriteria", class: "btn btn-rounded btn-primary"

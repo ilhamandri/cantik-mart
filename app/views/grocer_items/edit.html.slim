@@ -8,13 +8,16 @@
         = form_for :grocer_item, url: grocer_item_path(id: @grocer_item.id), method: "PUT" do |form|
           .form-group
             label for="name" Min
-            = form.number_field :min, required: true, class: "form-control md-form", id: "name", min: "2"
+            = form.number_field :min, required: true, class: "form-control md-form", id: "name", min: "@grocer_item.min"
           .form-group
             label for="name" Max
-            = form.number_field :max, required: true, class: "form-control md-form", id: "name", min:"3"
+            = form.number_field :max, required: true, class: "form-control md-form", id: "name", min:"@grocer_item.max"
           .form-group
-            label for="name" Harga
+            label for="name" Harga Jual Satuan
             = form.number_field :price, required: true, class: "form-control md-form", id: "price", min: "100"
+          .form-group
+            label for="name" Harga Jual Satuan MEMBER
+            = form.number_field :member_price, required: true, class: "form-control md-form", id: "price", min: "100"
           .form-group
             label for="name" Diskon
             = form.number_field :discount, required: true, class: "form-control md-form", id: "price", min: "0"

@@ -12,4 +12,4 @@ tr
 			- if item.present?
 				| #{point.exchange_point.quantity} buah - #{item.name}
 			- else
-				| #{point.exchange_point.quantity} - #{point.exchange_point.name}
+				| #{point.exchange_point.name} ( #{point.voucher.voucher_code} )

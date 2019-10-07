@@ -75,6 +75,11 @@
                       td #{number_to_currency(item.price, delimiter: ".", separator: ",", unit: "Rp. ")}
                       - disc = item.discount
                       - disc = item.discount / 100 * item.price if disc < 100
+                      - member_price = item.member_price
+                      - if member_price == item.price
+                       td -
+                      - else
+                        td #{number_to_currency(item.member_price, delimiter: ".", separator: ",", unit: "Rp. ")}
                       td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
                       td #{number_to_currency(item.price - @item.buy - disc, delimiter: ".", separator: ",", unit: "Rp. ")}
                       td.text-right

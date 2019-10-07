@@ -276,9 +276,7 @@ class TransfersController < ApplicationController
         transfer_item.receive_quantity = qty
         transfer_item.save!
         store_item = StoreItem.find_by(item: transfer_item.item, store_id: current_user.store.id)
-        
-        buy = transfer_item.item.buy
-
+      
         if store_item.nil?
           StoreItem.create store: current_user.store, item_id: item[0], stock: qty
         else

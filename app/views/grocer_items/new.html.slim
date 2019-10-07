@@ -20,7 +20,12 @@
             label for="name" Harga Jual Satuan
             br
             label.text-danger * Default adalah harga jual saat ini
-            = form.text_field :price, required: true, class: "form-control md-form", value: "#{item.sell}", min:"100", title:"Harga Jual Satuan", placeholder:"Harga Jual Satuan",minlength:"3", maxlength: "13", pattern:"[0-9]+", title:"harga jual satuan", placeholder:"Harga satuan"
+            = form.text_field :price, required: true, class: "form-control md-form", value: "#{item.sell.to_i}", min:"100", title:"Harga Jual Satuan", placeholder:"Harga Jual Satuan",minlength:"3", maxlength: "13", pattern:"[0-9]+", title:"harga jual satuan", placeholder:"Harga satuan"
+          .form-group
+            label for="name" Harga Jual Satuan MEMBER
+            br
+            label.text-danger * Default adalah harga jual saat ini
+            = form.text_field :member, required: true, class: "form-control md-form", value: "#{item.sell.to_i}", min:"100", title:"Harga Jual Satuan", placeholder:"Harga Jual Satuan",minlength:"3", maxlength: "13", pattern:"[0-9]+", title:"harga jual satuan", placeholder:"Harga satuan"
           .form-group
             label for="name" Diskon
             br

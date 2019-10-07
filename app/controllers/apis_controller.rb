@@ -92,7 +92,7 @@ class ApisController < ApplicationController
     item << find_item.code
     item << find_item.name
     item << find_item.item_cat.name
-    item << find_item.buy
+    item << find_item.buy.round
     item << find_item.id
     item << find_item.sell
     json_result << item

@@ -1,0 +1,19 @@
+.row
+  .col
+    h5
+      | Daftar Voucher
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data
+    .card.mb-4
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Jenis
+            th Kode Voucher
+          tbody
+            = render partial: 'list', collection: @vouchers, as: :voucher
+          = paginate @vouchers

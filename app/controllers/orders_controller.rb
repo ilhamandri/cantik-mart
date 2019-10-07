@@ -285,9 +285,9 @@ class OrdersController < ApplicationController
 
       if !order_from_retur
         if this_item.local_item
-          old_buy_total = store_stock.stock.to_i * store_stock.buy.to_f 
+          old_buy_total = (store_stock.stock.to_i * store_stock.buy).to_f 
         else
-          old_buy_total = store_stock.stock.to_i * this_item.buy.to_f 
+          old_buy_total = (store_stock.stock.to_i * this_item.buy).to_f 
         end
 
         new_buy = (item_grand_total + old_buy_total.to_f) / (receive_qty + store_stock.stock.to_i)  

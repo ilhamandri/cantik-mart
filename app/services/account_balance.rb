@@ -65,8 +65,8 @@ class AccountBalance
       balances = StoreBalance.where(store: store).where("created_at >= ? AND created_at <= ?",curr_day_start, curr_day_end)
       filenames = balances.pluck(:filename)
       balances.delete_all
-      balance = StoreBalance.create store: store, cash: kas, receivable: piutang, stock_value: nilai_stok,
-          asset_value: nilai_aset, transaction_value: profit, equity: modals, debt: hutang, outcome: income_outcome
+      balance = StoreBalance.create store: store, cash: kas.round, receivable: piutang.round, stock_value: nilai_stok.round,
+          asset_value: nilai_aset.round, transaction_value: profit.round, equity: modals.round, debt: hutang.round, outcome: income_outcome.round
       
       last_balancing_s = @@salary_date+"-"+Date.today.month.to_s+"-"+Date.today.year.to_s
       last_balancing = last_balancing_s.to_datetime.end_of_day
@@ -104,8 +104,8 @@ class AccountBalance
     stocks = StoreItem.where(store: store).where('stock != 0')
     values = 0
     stocks.each do |store_stock|
-      values += store_stock.stock * store_stock.item.buy if !store_stock.item.local_item
-      values += store_stock.buy * store_stock.stock if store_stock.item.local_item
+      values += (store_stock.stock * store_stock.item.buy).round if !store_stock.item.local_item
+      values += (store_stock.buy * store_stock.stock).round if store_stock.item.local_item
     end
     time_start = DateTime.now.beginning_of_day
     time_end = DateTime.now.end_of_day
@@ -151,8 +151,8 @@ class AccountBalance
       losses_items = loss.loss_items
       losses_items.each do |loss|
         store_stock = StoreItem.find_by(store: store, item: loss.item)
-        loss_val += loss.quantity * store_stock.item.buy if !store_stock.item.local_item
-        loss_val += loss.quantity * store_stock.buy if store_stock.item.local_item
+        loss_val += (loss.quantity * store_stock.item.buy).round if !store_stock.item.local_item
+        loss_val += (loss.quantity * store_stock.buy).round if store_stock.item.local_item
       end
     end
     return loss_val
@@ -167,7 +167,7 @@ class AccountBalance
       req_items = req_trf.transfer_items
       req_items.each do |req_item|
         item = req_item.item
-        val += req_item.receive_quantity * item.buy
+        val += (req_item.receive_quantity * item.buy).round
       end
     end
 
@@ -175,7 +175,7 @@ class AccountBalance
       sent_items = sent_trf.transfer_items
       sent_items.each do |sent_item|
         item = sent_item.item
-        val -= sent_item.sent_quantity * item.buy
+        val -= (sent_item.sent_quantity * item.buy).round
       end
     end
 

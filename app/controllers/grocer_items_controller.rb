@@ -49,8 +49,10 @@ class GrocerItemsController < ApplicationController
         end
       end
     end
+
     item.price_updated = DateTime.now
     item.save!
+
 
     to_users = User.where(level: ["owner", "super_admin", "super_visi"])
       
@@ -79,6 +81,7 @@ class GrocerItemsController < ApplicationController
     grocer_item = GrocerItem.find_by_id params[:id]
     return redirect_back_data_error new_grocer_item_path, "Data tidak valid" unless grocer_item.present?
     grocer_item.assign_attributes grocer_item_params
+    
     min = grocer_item.min
     max = grocer_item.max
     grocer = GrocerItem.where(item: grocer_item.item)
@@ -86,6 +89,9 @@ class GrocerItemsController < ApplicationController
 
     if grocer_item.price == 0
       grocer_item.price = item.sell
+    end
+    if grocer_item.member_price == 0
+      grocer_item.member_price = grocer_item.price
     end
     if grocer_item.discount == 0
       if grocer_item.price == item.sell
@@ -158,7 +164,7 @@ class GrocerItemsController < ApplicationController
   private
     def grocer_item_params
       params.require(:grocer_item).permit(
-        :min, :max, :price, :discount
+        :min, :max, :price, :discount, :member_price
       )
     end
 
