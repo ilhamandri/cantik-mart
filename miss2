@@ -4,6 +4,8 @@
 
 --> catat activity jika data dihapus
 
+--> jumlah promo yang terpakai untuk setiap toko
+
 =====================================================================
 
 --> aktifin cron balance (config/schedule.rb => whenever --update-crontab)
@@ -19,8 +21,6 @@
 
 ======================================================================
 
---> jumlah promo yang terpakai untuk setiap toko
-
 --> print struk
 
 --> konten di home untuk setiap level
@@ -31,10 +31,6 @@
 	* confirm order / transfer					
 
 --> post ==> trx item price ? include cat (for adding point)?
-
---> harga member
-
---> keuangan semua ".buy" round ke biar balance
 
 --> check komplain pelanggan
 
