@@ -15,5 +15,12 @@
           .form-group
             label for="phone" Nomor Telepon
             = form.number_field :phone, required: true, class: "form-control md-form", id: "phone"
+          .form-group
+            label for="type" Tipe Toko
+            select class="mdb-select md-form colorful-select dropdown-primary md-outline"  name="store[store_type]"
+              option value="retail"
+                | Retail
+              option value="warehouse"
+                | Gudang
           .form-group.text-center
             = form.submit "Ubah Toko - #{@store.name}", class: "btn btn-rounded btn-primary"

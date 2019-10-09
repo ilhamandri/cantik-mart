@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_06_190127) do
+ActiveRecord::Schema.define(version: 2019_10_08_192741) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "assets", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
-    t.float "nominal", null: false
+    t.bigint "nominal", null: false
     t.datetime "date_created", null: false
     t.string "description", null: false
     t.integer "finance_type", null: false
@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "capitals", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
-    t.float "nominal", null: false
+    t.bigint "nominal", null: false
     t.datetime "date_created", null: false
     t.string "description", null: false
     t.datetime "created_at", null: false
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "cash_flows", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "store_id", null: false
-    t.float "nominal", null: false
+    t.bigint "nominal", null: false
     t.integer "finance_type", default: 1, null: false
     t.datetime "date_created"
     t.string "description"
@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "cashes", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
-    t.float "nominal", null: false
+    t.bigint "nominal", null: false
     t.datetime "date_created", null: false
     t.string "description", null: false
     t.datetime "created_at", null: false
@@ -121,7 +121,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.datetime "updated_at", null: false
     t.bigint "transaction_id", null: false
     t.bigint "member_card"
-    t.float "nominal", default: 0.0, null: false
+    t.bigint "nominal", default: 0, null: false
     t.index ["store_id"], name: "index_complains_on_store_id"
     t.index ["transaction_id"], name: "index_complains_on_transaction_id"
     t.index ["user_id"], name: "index_complains_on_user_id"
@@ -144,8 +144,8 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "debts", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
-    t.float "nominal", null: false
-    t.float "deficiency", null: false
+    t.bigint "nominal", null: false
+    t.bigint "deficiency", null: false
     t.datetime "date_created", null: false
     t.string "description", null: false
     t.integer "ref_id"
@@ -168,13 +168,15 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.string "name", null: false
     t.bigint "hit", default: 0, null: false
     t.integer "quantity", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "status", default: true, null: false
   end
 
   create_table "finances", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "store_id", null: false
-    t.float "nominal", null: false
+    t.bigint "nominal", null: false
     t.integer "finance_type", default: 1, null: false
     t.datetime "date_created"
     t.string "description"
@@ -188,8 +190,8 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.bigint "item_id", null: false
     t.integer "min", null: false
     t.integer "max", null: false
-    t.float "price", null: false
-    t.float "discount", default: 0.0, null: false
+    t.bigint "price", null: false
+    t.bigint "discount", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "member", default: false, null: false
@@ -200,7 +202,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "incomes", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
-    t.float "nominal", null: false
+    t.bigint "nominal", null: false
     t.datetime "date_created", null: false
     t.string "description", null: false
     t.datetime "created_at", null: false
@@ -213,7 +215,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.string "invoice", null: false
     t.integer "transaction_type", default: 1, null: false
     t.string "transaction_invoice", null: false
-    t.float "nominal", default: 0.0, null: false
+    t.bigint "nominal", default: 0, null: false
     t.datetime "date_created"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -226,22 +228,23 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "department_id"
+    t.boolean "use_in_point", default: true, null: false
     t.index ["department_id"], name: "index_item_cats_on_department_id"
   end
 
   create_table "items", force: :cascade do |t|
     t.string "code", default: "DEFAULT_CODE", null: false
     t.string "name", default: "DEFAULT_NAME", null: false
-    t.float "stock", default: 0.0, null: false
+    t.bigint "stock", default: 0, null: false
     t.float "buy", default: 0.0, null: false
-    t.float "sell", default: 0.0, null: false
+    t.bigint "sell", default: 0, null: false
     t.bigint "item_cat_id", null: false
     t.string "brand", null: false
-    t.float "wholesale", default: 0.0, null: false
-    t.float "box", default: 0.0, null: false
+    t.bigint "wholesale", default: 0, null: false
+    t.bigint "box", default: 0, null: false
     t.string "image"
-    t.float "buy_grocer", default: 0.0
-    t.float "discount", default: 0.0, null: false
+    t.bigint "buy_grocer", default: 0
+    t.bigint "discount", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "local_item", default: false
@@ -284,7 +287,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.bigint "store_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "point", default: 0, null: false
+    t.bigint "point"
     t.index ["store_id"], name: "index_members_on_store_id"
     t.index ["user_id"], name: "index_members_on_user_id"
   end
@@ -305,7 +308,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
 
   create_table "order_invs", force: :cascade do |t|
     t.string "invoice", null: false
-    t.float "nominal", null: false
+    t.bigint "nominal", null: false
     t.bigint "order_id", null: false
     t.datetime "date_paid"
     t.datetime "created_at", null: false
@@ -315,8 +318,8 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
 
   create_table "order_items", force: :cascade do |t|
     t.integer "receive"
-    t.float "quantity", null: false
-    t.float "price", null: false
+    t.bigint "quantity", null: false
+    t.bigint "price", null: false
     t.bigint "item_id", null: false
     t.bigint "order_id", null: false
     t.string "description", default: "-"
@@ -339,10 +342,10 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.bigint "supplier_id", null: false
     t.bigint "store_id", null: false
     t.integer "total_items", null: false
-    t.float "total", null: false
+    t.bigint "total", null: false
     t.datetime "date_paid_off"
     t.boolean "editable", default: true, null: false
-    t.float "old_total", default: 0.0, null: false
+    t.bigint "old_total", default: 0, null: false
     t.datetime "date_change"
     t.bigint "user_id", null: false
     t.bigint "received_by"
@@ -362,7 +365,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "outcomes", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
-    t.float "nominal", null: false
+    t.bigint "nominal", null: false
     t.datetime "date_created", null: false
     t.string "description", null: false
     t.integer "outcome_type", default: 4, null: false
@@ -377,7 +380,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.bigint "transaction_id"
     t.integer "point", null: false
     t.integer "point_type", null: false
-    t.bigint "exchange_point_id", null: false
+    t.bigint "exchange_point_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "voucher_id"
@@ -403,7 +406,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "profit_losses", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
-    t.float "nominal", null: false
+    t.bigint "nominal", null: false
     t.datetime "date_created", null: false
     t.string "description", null: false
     t.integer "finance_type", null: false
@@ -433,8 +436,8 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "receivables", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
-    t.float "nominal", null: false
-    t.float "deficiency", null: false
+    t.bigint "nominal", null: false
+    t.bigint "deficiency", null: false
     t.datetime "date_created", null: false
     t.string "description", null: false
     t.string "ref_id"
@@ -449,14 +452,14 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
 
   create_table "reports", force: :cascade do |t|
     t.bigint "store_id", null: false
-    t.float "cash", default: 0.0, null: false
-    t.float "stock_value", default: 0.0, null: false
-    t.float "receivable", default: 0.0, null: false
-    t.float "asset", default: 0.0, null: false
-    t.float "capital", default: 0.0, null: false
-    t.float "debt", default: 0.0, null: false
-    t.float "outcome", default: 0.0, null: false
-    t.float "sales", default: 0.0, null: false
+    t.bigint "cash", default: 0, null: false
+    t.bigint "stock_value", default: 0, null: false
+    t.bigint "receivable", default: 0, null: false
+    t.bigint "asset", default: 0, null: false
+    t.bigint "capital", default: 0, null: false
+    t.bigint "debt", default: 0, null: false
+    t.bigint "outcome", default: 0, null: false
+    t.bigint "sales", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["store_id"], name: "index_reports_on_store_id"
@@ -469,7 +472,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.string "description", null: false
     t.integer "feedback", default: 0
     t.integer "accept_item", default: 0
-    t.float "nominal", default: 0.0, null: false
+    t.bigint "nominal", default: 0, null: false
     t.bigint "ref_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -509,14 +512,14 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   end
 
   create_table "store_balances", force: :cascade do |t|
-    t.float "cash", null: false
-    t.float "receivable", null: false
-    t.float "stock_value", null: false
-    t.float "asset_value", null: false
-    t.float "equity", null: false
-    t.float "debt", null: false
-    t.float "transaction_value", null: false
-    t.float "outcome", null: false
+    t.bigint "cash", null: false
+    t.bigint "receivable", null: false
+    t.bigint "stock_value", null: false
+    t.bigint "asset_value", null: false
+    t.bigint "equity", null: false
+    t.bigint "debt", null: false
+    t.bigint "transaction_value", null: false
+    t.bigint "outcome", null: false
     t.bigint "store_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -529,9 +532,9 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.bigint "item_id", null: false
     t.integer "stock", default: 0, null: false
     t.integer "min_stock", default: 0, null: false
-    t.float "buy", default: 0.0, null: false
-    t.float "sell", default: 0.0, null: false
-    t.float "head_buy", default: 0.0, null: false
+    t.bigint "buy", default: 0, null: false
+    t.bigint "sell", default: 0, null: false
+    t.bigint "head_buy", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["item_id"], name: "index_store_items_on_item_id"
@@ -543,14 +546,14 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.string "address", default: "DEFAULT STORE ADDRESS", null: false
     t.string "phone", default: "1234567", null: false
     t.integer "store_type", default: 1, null: false
-    t.float "cash", default: 100000000.0, null: false
-    t.float "equity", default: 100000000.0, null: false
-    t.float "debt", default: 0.0, null: false
-    t.float "receivable", default: 0.0, null: false
+    t.bigint "cash", default: 100000000, null: false
+    t.bigint "equity", default: 100000000, null: false
+    t.bigint "debt", default: 0, null: false
+    t.bigint "receivable", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.float "grand_total_before", default: 0.0
-    t.float "modals_before", default: 0.0, null: false
+    t.bigint "grand_total_before", default: 0
+    t.bigint "modals_before", default: 0
   end
 
   create_table "supplier_items", force: :cascade do |t|
@@ -574,9 +577,9 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "transaction_items", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "transaction_id", null: false
-    t.float "price", null: false
-    t.float "discount", default: 0.0
-    t.float "quantity", null: false
+    t.bigint "price", null: false
+    t.bigint "discount", default: 0
+    t.bigint "quantity", null: false
     t.datetime "date_created"
     t.integer "retur"
     t.integer "replace"
@@ -590,25 +593,26 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "transactions", force: :cascade do |t|
     t.string "invoice", null: false
     t.bigint "user_id", null: false
-    t.float "total", null: false
-    t.float "discount", default: 0.0
-    t.float "grand_total", null: false
+    t.bigint "total", null: false
+    t.bigint "discount", default: 0
+    t.bigint "grand_total", null: false
     t.integer "items", null: false
     t.integer "payment_type", default: 1
     t.integer "bank", default: 0
-    t.float "edc_inv", default: 0.0
+    t.bigint "edc_inv", default: 0
     t.datetime "date_created", null: false
-    t.float "hpp_total", default: 0.0, null: false
+    t.bigint "hpp_total", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "card_number"
     t.bigint "member_card"
     t.bigint "store_id", default: 1, null: false
-    t.float "sub_from_complain", default: 0.0, null: false
+    t.bigint "sub_from_complain", default: 0, null: false
     t.boolean "from_complain", default: false, null: false
     t.bigint "complain_id"
     t.bigint "point", default: 0, null: false
     t.bigint "voucher_id"
+    t.bigint "voucher"
     t.index ["store_id"], name: "index_transactions_on_store_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
     t.index ["voucher_id"], name: "index_transactions_on_voucher_id"
@@ -675,7 +679,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
     t.string "address", default: "DEFAULT ADDRESS", null: false
     t.integer "sex", default: 0, null: false
     t.bigint "id_card", default: 123456789123456, null: false
-    t.float "salary", default: 0.0, null: false
+    t.bigint "salary", default: 0, null: false
     t.string "image"
     t.integer "fingerprint"
     t.datetime "created_at", null: false
@@ -692,6 +696,9 @@ ActiveRecord::Schema.define(version: 2019_10_06_190127) do
   create_table "vouchers", force: :cascade do |t|
     t.bigint "exchange_point_id", null: false
     t.bigint "voucher_code", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "used"
     t.index ["exchange_point_id"], name: "index_vouchers_on_exchange_point_id"
   end
 

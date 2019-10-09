@@ -6,12 +6,12 @@ class User < ApplicationRecord
   enum level: { 
                 owner: 1,
                 super_admin: 2,
+
                 stock_admin: 3,
                 cashier: 4,
                 super_visi: 5,
                 finance: 6,
-                stock_user: 7,
-                driver: 8
+                head_stock: 7
   }
 
   enum sex: {
@@ -24,22 +24,20 @@ class User < ApplicationRecord
 
   default_scope { order(created_at: :desc) }
 
-  # PARDEV
-  SUPER_ADMIN = 'super_admin'
+
   # KINDI / SYIFA
   OWNER = 'owner'
+  # PARDEV
+  SUPER_ADMIN = 'super_admin'
   # KEPALA GUDANG
   STOCK_ADMIN = 'stock_admin' 
-  # PEGAWAI GUDANG
-  STOCK_USER = 'stock_user'
   # KASIR
   CASHIER = 'cashier'
   # SUPER VISI TOKO
   SUPERVISI = 'super_visi'
   # KEUANGAN
   FINANCE = 'finance'
-  # SUPIR
-  DRIVER = 'driver'
+
 
   MALE = 'laki_laki'
   FEMALE = 'perempuan'

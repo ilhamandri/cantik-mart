@@ -17,10 +17,7 @@ class PostsController < ApplicationController
 				json_trx_data1 = JSON.parse(string_data1)
 				json_trx_data2 = JSON.parse(string_data2)
 				json_trx_data3 = JSON.parse(string_data3)
-				json_trx_data2.each do |data|
-					data.delete("id")
-					Member.create data
-				end
+				
 				json_trx_data1.each do |data|
 					trx_data = JSON.parse(data[0])
 					trx_items_datas = JSON.parse(data[1])
@@ -33,11 +30,6 @@ class PostsController < ApplicationController
 						trx_item.delete("id")
 						trx_item["transaction_id"] = trx.id
 						new_trx_item = TransactionItem.create trx_item 
-						
-						item = new_trx_item.item
-						if !["CIGARETTE", "IBU HAMIL"].include? item.item_cat.name 
-							trx_total_for_point += new_trx_item.price
-						end
 
 						if new_trx_item.reason.present?
 							if new_trx_item.reason.include? "PROMO-"
@@ -52,14 +44,24 @@ class PostsController < ApplicationController
 					    store_stock.stock = store_stock.stock.to_i - new_trx_item.quantity.to_i
 					    store_stock.save!
 					end
-					new_point = trx_total_for_point / @@point
-					trx.point = new_point
-					trx.save!
 					
+					trx.save!
+
+					voucher = Voucher.find_by(voucher_code: trx.voucher)
+					if voucher.present?
+						voucher.used = trx.created_at
+						voucher.save!
+						trx.voucher_id = voucher.id
+						trx.save!
+					end
+
 					if trx.member_card.present?
 						member = Member.find_by(card_number: trx.member_card)
 						next if member.nil?
-						member.point = member.point + new_point
+						member.point = member.point + trx.point
+
+						Point.create member: member, point: trx.point, point_type: Point::GET, transaction_id: trx.id
+						
 						member.save!
 					end
 				end

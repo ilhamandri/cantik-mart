@@ -6,8 +6,11 @@ class GetsController < ApplicationController
 		 	store = Store.find_by(id: params[:store_id])
 		 end
 		 if store.present?
-			 from = params[:from].to_time - 7.hours
-			 to = params[:to].to_time - 7.hours
+			 # from = params[:from].to_time - 7.hours
+			 # to = params[:to].to_time - 7.hours
+
+			 from = params[:from].to_time
+			 to = params[:to].to_time 
 
 			 render :json =>json_result if store.nil?
 			 json_result["stores"] = Store.where("updated_at >= ? AND updated_at <= ?", from, to)
@@ -19,6 +22,9 @@ class GetsController < ApplicationController
 			 json_result["stocks"] = StoreItem.where(store: store).where("updated_at >= ? AND updated_at <= ?", from, to)
 			 json_result["grocers"] = GrocerItem.where("updated_at >= ? AND updated_at <= ?", from, to)
 			 json_result["promotions"] = Promotion.where("updated_at >= ? AND updated_at <= ?", from, to)
+		 	 json_result["exchange_points"] = ExchangePoint.where("updated_at >= ? AND updated_at <= ?", from, to)
+		 	 json_result["vouchers"] = Voucher.where("updated_at >= ? AND updated_at <= ?", from, to)
+		 
 		 end
 		 render :json => json_result
 	end

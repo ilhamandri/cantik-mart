@@ -36,7 +36,6 @@ class PointsController < ApplicationController
         voucher = Voucher.create exchange_point: exchange_point, voucher_code: params[:point][:voucher_code]
       end
     end
-    binding.pry
     point = Point.new point_params
     point.member = member
     point.point = exchange_point.point

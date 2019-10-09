@@ -36,6 +36,8 @@ class ReturItemsController < ApplicationController
           receivable.delete
           OrderItem.where(order: order).delete_all
           order.delete
+          LossItem.where(loss: loss).delete_all
+          loss.delete
           break
       end
       accept_item = retur_item.accept_item
@@ -85,7 +87,14 @@ class ReturItemsController < ApplicationController
       elsif value[0] == "cash"
         nominal_value = value[2].to_i
 
-        return redirect_back_data_error urls, "Nominal Potong Nota > 100" if nominal_value < 100
+        if nominal_value < 100
+          receivable.delete
+          OrderItem.where(order: order).delete_all
+          order.delete
+          LossItem.where(loss: loss).delete_all
+          loss.delete
+          return redirect_back_data_error urls, "Nominal Potong Nota > 100" 
+        end
 
         item = retur_item.item
         diff_stock_val_cash += (nominal_value - (item.buy * accept_item).round)
@@ -104,14 +113,13 @@ class ReturItemsController < ApplicationController
       elsif value[0] == "loss"
         if loss.nil?
           invoice = "LOSS-" + Time.now.to_i.to_s
-          Loss.create user: current_user, store: current_user.store, from_retur: true, ref_id: retur.id, total_item: accept_item, invoice: invoice
-          LossItem.create item: retur_item.item, quantity: accept_item, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
+          loss = Loss.create user: current_user, store: current_user.store, from_retur: true, ref_id: retur.id, total_item: accept_item, invoice: invoice
+          LossItem.create loss: loss, item: retur_item.item, quantity: accept_item, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
         else
           loss.total_item = loss.total_item + retur_item.quantity
           loss.save!
           LossItem.create item: retur_item.item, quantity: accept_item, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
         end
-        retur_item.ref_id = receivable.id
       end
 
       retur_item.feedback = value[0]
@@ -125,7 +133,7 @@ class ReturItemsController < ApplicationController
       else
         invoice = " OUT-"+Time.now.to_i.to_s
         cash_flow_in = CashFlow.create user: current_user, store: current_user.store, nominal: diff_stock_val_cash, date_created: DateTime.now, description: desc, 
-                      finance_type: CashFlow::INCOME, invoice: invoice
+                      finance_type: CashFlow::OUTCOME, invoice: invoice
       end
     end
 

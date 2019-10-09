@@ -89,7 +89,7 @@ class DownloadsController < ApplicationController
 				if receivable.finance_type == "EMPLOYEE"
 					target = User.find_by(id: receivable.user_id).name
 				elsif receivable.finance_type == "RETUR"
-					target = Supplier.find_by(id: receivable.user_id).name
+					target = Supplier.find_by(id: receivable.to_user).name
 				end		
 				sheet.add_row [receivable.created_at.to_date.to_s, target,receivable.description, receivable.nominal, receivable.deficiency]
 			end
@@ -193,7 +193,7 @@ class DownloadsController < ApplicationController
 				created_at = complain.created_at
 
 				member_name = "-"
-				member_name = Member.find_by(card_number: trx.member_card).name if complain.member_card.present?
+				member_name = Member.find_by(card_number: complain.member_card).name if complain.member_card.present?
 				number_items = complain.complain_items.count
 
 				sheet.add_row [invoice, store_name, user_name, created_at, member_name, number_items]

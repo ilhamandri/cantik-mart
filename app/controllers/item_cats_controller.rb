@@ -90,7 +90,7 @@ class ItemCatsController < ApplicationController
   private
     def item_cat_params
       params.require(:item_cat).permit(
-        :name, :department_id
+        :use_in_point, :name, :department_id
       )
     end
 

@@ -15,5 +15,18 @@
           .form-group
     		    label for="name" Nama
     		    = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+          .form-group
+            label for="name" Perhitungan Poin
+            select name="item_cat[use_in_point]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
+              - if @item_cat.use_in_point
+                option value="true" selected="selected"
+                  | Termasuk Perhitungan
+                option value="false"
+                  | Tidak Termasuk Perhitungan
+              - else
+                option value="true"
+                  | Termasuk Perhitungan
+                option value="false" selected="selected"
+                  | Tidak Termasuk Perhitungan
           .form-group.text-center
             = form.submit "Ubah Sub Departemen", class: "btn btn-rounded btn-warning"

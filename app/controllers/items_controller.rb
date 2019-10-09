@@ -120,7 +120,7 @@ class ItemsController < ApplicationController
   private
     def item_params
       params.require(:item).permit(
-        :name, :code, :item_cat_id, :margin, :brand, :sell, :buy, :discount, :local_item, :sell_member
+        :name, :code, :item_cat_id, :margin, :brand, :sell, :discount, :local_item, :sell_member
       )
     end
 

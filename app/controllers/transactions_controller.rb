@@ -28,6 +28,12 @@ class TransactionsController < ApplicationController
           template: "transactions/print_all.html.slim"
       end
     end
+
+    transactions = transactions_profit_graph @transactions, "month"
+    gon.grand_totals = transactions[0]
+    gon.hpp_totals = transactions[1]
+    gon.profits = transactions[2]
+
   end
 
   def new
@@ -104,6 +110,32 @@ class TransactionsController < ApplicationController
   end
 
   private
+    def transactions_profit_graph transactions, group
+      transaction_datas = nil
+      if group == "month" 
+        transaction_datas = transactions.group_by{ |m| m.created_at.beginning_of_month}
+      end
+
+      grand_totals = [0,0,0,0,0,0,0,0,0,0,0,0]
+      hpp_totals = [0,0,0,0,0,0,0,0,0,0,0,0]
+      profits = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+      transaction_datas.each do |trxs|
+        grand_total = 0
+        hpp_total = 0
+        month_idx = trxs[0].month.to_i - 1
+        trxs[1].each do |trx|
+          grand_total += trx.grand_total
+          hpp_total += trx.hpp_total
+        end
+        profit = grand_total - hpp_total
+        grand_totals[month_idx] = grand_total
+        hpp_totals[month_idx] = hpp_total
+        profits[month_idx] = profit
+      end
+
+      return [grand_totals, hpp_totals, profits]
+    end
     def filter_search params, r_type
       results = []
       @transactions = Transaction.all

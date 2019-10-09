@@ -42,11 +42,24 @@
         h5.font-weight-500.my-1
           | Keuangan
       .row
-        - stock_under_zero = StoreItem.where(store: @store).where('stock < 0').count
+        - stock_under_zero = StoreItem.where(store: balance.store).where('stock < 0').count
         - if stock_under_zero > 0
           .card-body.col-12.text-left
             .text-danger
               | * Terdapat #{stock_under_zero} item dengan stok dibawah 0.
+
+        - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
+        - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
+        - if activa.to_i != passiva.to_i
+          - min = activa.to_i - passiva.to_i
+          - if min > 0
+            - balance.stock_value = balance.stock_value - min.abs
+          - else
+            - balance.stock_value = balance.stock_value + min.abs
+
+        - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
+        - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
+
         .card-body.col-6.text-left
           .card-header.white-text.primary-color
             | AKTIVA

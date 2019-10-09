@@ -32,7 +32,7 @@ class ComplainsController < ApplicationController
     @transaction = Transaction.find id
     return redirect_back_data_error complains_path, "Data tidak ditemukan" if @transaction.nil?
     complain = (@transaction.created_at >= (DateTime.now - @@max_complain.days))
-    return redirect_back_data_error complains_path, "Data tidak valid" if complain
+    return redirect_back_data_error complains_path, "Data tidak valid" if !complain
     return redirect_back_data_error complains_path, "Data tidak valid" if @transaction.user.store != current_user.store
     @transaction_items = @transaction.transaction_items
     return redirect_back_data_error complains_path, "Tidak dapat melakukan komplain" if Complain.find_by(transaction_id: @transaction).present?
@@ -44,7 +44,7 @@ class ComplainsController < ApplicationController
     @transaction = Transaction.find id
     return redirect_back_data_error complains_path, "Data tidak ditemukan" if @transaction.nil?
     complain = (@transaction.created_at >= (DateTime.now - @@max_complain.days))
-    return redirect_back_data_error complains_path, "Data tidak valid" if complain
+    return redirect_back_data_error complains_path, "Data tidak valid" if !complain
     return redirect_back_data_error complains_path, "Data tidak valid" if @transaction.user.store != current_user.store
     return redirect_back_data_error complains_path, "Tidak dapat melakukan komplain" if Complain.find_by(transaction_id: @transaction).present?
     invoice = "CMP-" + Time.now.to_i.to_s
@@ -58,7 +58,6 @@ class ComplainsController < ApplicationController
       member_card: @transaction.member_card,
       user_id: current_user.id,
       transaction_id: @transaction.id
-
     items_retur_total = 0
     nominal = 0
     items.each do |complain_item|
@@ -164,7 +163,7 @@ class ComplainsController < ApplicationController
   end
 
   def show
-    return redirect_back_data_error, "Data tidak ditemukan" unless params[:id].present?
+    return redirect_back_data_error complains_path, "Data tidak ditemukan" unless params[:id].present?
     id = params[:id]
     @complain = Complain.find_by(id: id)
     @transaction = Transaction.find_by(id: @complain.transaction_id)

@@ -104,11 +104,12 @@ class AccountBalance
     stocks = StoreItem.where(store: store).where('stock != 0')
     values = 0
     stocks.each do |store_stock|
-      values += (store_stock.stock * store_stock.item.buy).round if !store_stock.item.local_item
-      values += (store_stock.buy * store_stock.stock).round if store_stock.item.local_item
+      values += (store_stock.stock * store_stock.item.buy) if !store_stock.item.local_item
+      values += (store_stock.buy * store_stock.stock) if store_stock.item.local_item
     end
     time_start = DateTime.now.beginning_of_day
     time_end = DateTime.now.end_of_day
+    values = values
     # record tiap hari
     stock_value = StockValue.where(store: store).where("created_at >= ? AND created_at <= ?", time_start.beginning_of_day, time_end.end_of_day).first
     if stock_value.nil?
@@ -132,14 +133,75 @@ class AccountBalance
   end
 
   def self.outcomes store, time_start, time_end
-    cash_flow = CashFlow.where(finance_type: ["Tax", "Fix_Cost", "Operational", "Outcome"])
-    values = cash_flow.where("created_at >= ? AND created_at <= ?", time_start, time_end).where(store: store, payment: nil).sum(:nominal)
+    cash_flows = CashFlow.where(finance_type: ["Tax", "Fix_Cost", "Operational", "Outcome"]).where("created_at >= ? AND created_at <= ?", time_start, time_end).where(store: store, payment: nil)
+    values = 0
+    cash_flows.each do |cash_flow|
+      desc = cash_flow.description.split("#")
+      if desc.count == 2
+        inv = desc[1]
+        retur = Retur.find_by(invoice: inv)
+        if retur.present?
+          retur_items = ReturItem.where(retur: retur, feedback: "cash")
+          if retur_items.present?
+            val = 0
+            retur_items.each do |ret_item|
+              item = ret_item.item
+              store_item = StoreItem.where(store: cash_flow.store, item: item)
+              buy = item.buy
+              buy = store_item.buy if item.local_item
+              val += ( ret_item.accept_item * buy) - ret_item.nominal
+            end
+            if val >= 0
+              cash_flow.finance_type = CashFlow::INCOME
+            else
+              cash_flow.finance_type = CashFlow::OUTCOME
+            end
+            cash_flow.nominal = val.round
+            cash_flow.save!
+          end
+        end
+      end
+
+      nominal = cash_flow.nominal
+      values += nominal
+    end
     return values
   end
 
   def self.incomes store, time_start, time_end
-    cash_flow = CashFlow.where(finance_type: ["Income"])
-    values = cash_flow.where("created_at >= ? AND created_at <= ?", time_start, time_end).where(store: store, payment: nil).sum(:nominal)
+    values = 0
+    cash_flows = CashFlow.where(finance_type: ["Income"]).where("created_at >= ? AND created_at <= ?", time_start, time_end).where(store: store, payment: nil)
+
+    cash_flows.each do |cash_flow|
+      desc = cash_flow.description.split("#")
+      if desc.count == 2
+        inv = desc[1]
+        retur = Retur.find_by(invoice: inv)
+        if retur.present?
+          retur_items = ReturItem.where(retur: retur, feedback: "cash")
+          if retur_items.present?
+            val = 0
+            retur_items.each do |ret_item|
+              item = ret_item.item
+              store_item = StoreItem.where(store: cash_flow.store, item: item)
+              buy = item.buy
+              buy = store_item.buy if item.local_item
+              val += ret_item.nominal - ( ret_item.accept_item * buy)
+            end
+            if val >= 0
+              cash_flow.finance_type = CashFlow::INCOME
+            else
+              cash_flow.finance_type = CashFlow::OUTCOME
+            end
+            cash_flow.nominal = val.round
+            cash_flow.save!
+          end
+        end
+      end
+
+      nominal = cash_flow.nominal
+      values += nominal
+    end
     
     return values
   end
@@ -151,8 +213,8 @@ class AccountBalance
       losses_items = loss.loss_items
       losses_items.each do |loss|
         store_stock = StoreItem.find_by(store: store, item: loss.item)
-        loss_val += (loss.quantity * store_stock.item.buy).round if !store_stock.item.local_item
-        loss_val += (loss.quantity * store_stock.buy).round if store_stock.item.local_item
+        loss_val += (loss.quantity * store_stock.item.buy) if !store_stock.item.local_item
+        loss_val += (loss.quantity * store_stock.buy) if store_stock.item.local_item
       end
     end
     return loss_val

@@ -69,6 +69,95 @@ html
       - flash.each do |key, value|
         javascript:
           toastr.#{key}('#{value}');
+
+    - if ["homes"].include? controller_name
+      javascript:
+        var ctxP = document.getElementById("higher_sales").getContext('2d');
+        var myPieChart = new Chart(ctxP, {
+          type: 'doughnut',
+          data: {
+            labels: gon.higher_item_cats_label,
+            datasets: [{
+              data: gon.higher_item_cats_data,
+              backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
+              hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+            }]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+
+        var ctxP = document.getElementById("lower_sales").getContext('2d');
+        var myPieChart = new Chart(ctxP, {
+          type: 'doughnut',
+          data: {
+            labels: gon.lower_item_cats_label,
+            datasets: [{
+              data: gon.lower_item_cats_data,
+              backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)",
+                "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)",
+                "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"
+              ],
+              hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+            }]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+    - if ["transactions", "homes"].include? controller_name
+      javascript:
+        var ctxL = document.getElementById("transactions").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+          type: 'line',
+          data: {
+            labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+            datasets: [
+              {
+                label: "Profit",
+                data: gon.profits,
+                backgroundColor: [
+                'rgba(255, 206, 86, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 206, 86, 1)',
+                ],
+                borderWidth: 2
+              },
+              {
+                label: "Omzet",
+                data: gon.grand_totals,
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 2
+              },
+              {
+                label: "HPP",
+                data: gon.hpp_totals,
+                backgroundColor: [
+                'rgba(54, 162, 235, 0.1)',
+                ],
+                borderColor: [
+                'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 2
+              }
+
+            ]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+
     javascript:
       const autoNumericOption = {
         decimalCharacter: AutoNumeric.options.decimalCharacter.comma,

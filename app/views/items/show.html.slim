@@ -28,7 +28,13 @@
             - price_updated = @item.created_at
             - price_updated = @item.price_updated if @item.price_updated.present?
             label for="item" Harga Beli
-            input class="md-form form-control" value="#{number_with_delimiter(@item.buy, delimiter: ".")} ( #{price_updated} )" disabled="disabled"
+            - if @item.local_item
+              - stock = StoreItem.where(item: @item, store: current_user.store)
+              - buy = 0
+              - buy = stock.buy if stock.present?
+              input class="md-form form-control" value="#{number_with_delimiter(buy.round, delimiter: ".")} " disabled="disabled"
+            - else
+              input class="md-form form-control" value="#{number_with_delimiter(@item.buy.round, delimiter: ".")} ( #{price_updated} )" disabled="disabled"
           .form-group
             label for="item" Margin
             input class="md-form form-control" value="#{@item.margin}" disabled="disabled"
@@ -44,8 +50,8 @@
               thead
                 th Min
                 th Max
-                th Normal
-                th Member
+                th Harga Normal
+                th Harga Member
                 th Diskon
                 th Profit
                 th
@@ -60,9 +66,15 @@
                     - else
                       | #{number_to_currency(@item.sell_member, delimiter: ".", separator: ",", unit: "Rp. ")}
                   - disc = @item.discount
-                  - disc = @item.discount * @item.sell / 100 if disc <= 100
-                  td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
-                  td #{number_to_currency((@item.sell - @item.buy - disc), delimiter: ".", separator: ",", unit: "Rp. ")}
+                  - if disc < 100
+                    - if disc != 0
+                      td #{disc} %
+                    - else
+                      td -
+                  - else
+                    td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
+                  - disc = (@item.discount / 100 * @item.sell) if disc >= 100
+                  td #{number_to_currency((@item.sell - @item.buy - disc).round, delimiter: ".", separator: ",", unit: "Rp. ")}
                   td.text-right
                     a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
                       |   + Cetak
@@ -73,15 +85,21 @@
                       td #{item.min}
                       td #{item.max}
                       td #{number_to_currency(item.price, delimiter: ".", separator: ",", unit: "Rp. ")}
-                      - disc = item.discount
-                      - disc = item.discount / 100 * item.price if disc < 100
                       - member_price = item.member_price
                       - if member_price == item.price
                        td -
                       - else
                         td #{number_to_currency(item.member_price, delimiter: ".", separator: ",", unit: "Rp. ")}
-                      td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
-                      td #{number_to_currency(item.price - @item.buy - disc, delimiter: ".", separator: ",", unit: "Rp. ")}
+                      - if item.discount < 100
+                        - if item.discount > 0
+                          td #{item.discount} %
+                        - else
+                          td -
+                      - else
+                        td #{number_to_currency(item.discount, delimiter: ".", separator: ",", unit: "Rp. ")}
+                      - disc = item.discount
+                      - disc = (disc * item.price / 100) if disc >= 100
+                      td #{number_to_currency((item.price - @item.buy - disc).round, delimiter: ".", separator: ",", unit: "Rp. ")}
                       td.text-right
                         a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
                           |   + Cetak

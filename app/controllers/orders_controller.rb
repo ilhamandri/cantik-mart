@@ -240,12 +240,15 @@ class OrdersController < ApplicationController
       if this_item.local_item
         last_price = store_stock.buy
         if new_price > last_price
+          old_price = store_stock.sell
           store_stock.sell = new_price
           store_stock.save!
 
           to_users = User.where(level: ["owner", "super_admin", "super_visi"]).where(store: current_user.store)
-      
-          Print.create item: this_item, store: current_user.store
+
+          if old_price != store_stock.sell
+            Print.create item: this_item, store: current_user.store
+          end
 
           message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
           to_users.each do |to_user|
@@ -256,18 +259,22 @@ class OrdersController < ApplicationController
       else
         last_price = this_item.sell
         if new_price > last_price
+          old_price = this_item.sell
           this_item.sell = new_price
           this_item.save!
 
           to_users = User.where(level: ["owner", "super_admin", "super_visi"])
-      
-          Store.all.each do |store|
-            Print.create item: this_item, store: store
+
+          if old_price != this_item.sell
+            Store.all.each do |store|
+              Print.create item: this_item, store: store
+            end
+            message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
+            to_users.each do |to_user|
+              set_notification current_user, to_user, "info", message, prints_path
+            end
           end
-          message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
-          to_users.each do |to_user|
-            set_notification current_user, to_user, "info", message, prints_path
-          end
+          
         end
       end
 
@@ -291,11 +298,13 @@ class OrdersController < ApplicationController
         end
 
         new_buy = (item_grand_total + old_buy_total.to_f) / (receive_qty + store_stock.stock.to_i)  
+
         if this_item.local_item
           store_stock.buy = new_buy
           store_stock.save!
         else
           this_item.buy = new_buy
+          StoreItem.where(item: this_item).update_all(buy: new_buy)
           this_item.save!
         end
       end

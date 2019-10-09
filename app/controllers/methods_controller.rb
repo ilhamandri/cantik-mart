@@ -2,7 +2,7 @@ class MethodsController < ApplicationController
   before_action :require_login
 
   def index
-    return redirect_back_data_error, "Data Tidak Ditemukan" if params[:id].nil?
+    return redirect_back_data_error controllers_path, "Data Tidak Ditemukan" if params[:id].nil?
   	@methods = ControllerMethod.where(controller_id: params[:id]).order("name ASC").page param_page
   end
 

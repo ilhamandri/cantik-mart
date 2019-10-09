@@ -2,7 +2,7 @@ class VouchersController < ApplicationController
   before_action :require_login
 
   def index
-  	@vouchers = Voucher.page param_page
+  	@vouchers = Voucher.order("used ASC").page param_page
   end
 
   private 

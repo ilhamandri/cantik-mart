@@ -12,27 +12,22 @@
 
 --> aktifin notifikasi (js)
 
---> set tanggal pehitungan absent + store_id (service/finance)
+--> set tanggal pehitungan absent + store_id + work_day (services/AccountBalance)
+
 --> set @@max_complain ==> complains
 
-======================================================================
-
---> recap untuk bulanan --> klik bulanan --> grand_total_before = 0
+--> set @@store_id di local server (services/SyncData)
 
 ======================================================================
+
+--> button buat download laporan akhir bulan
 
 --> print struk
-
---> konten di home untuk setiap level
 
 --> cek semua notifikasi
 	* payment
 	* due date
 	* confirm order / transfer					
-
---> post ==> trx item price ? include cat (for adding point)?
-
---> check komplain pelanggan
 
 ======================================================================
 PENDING
@@ -55,11 +50,10 @@ git clone https://github.com/ilhamandri/cantik-mart.git
 yarn install
 rm -rf config/credentials.ymc.enc
 rm -rf config/master.key
+
+EDITOR="mate --wait" bin/rails credentials:edit
 EDITOR="atom --wait" rails credentials:edit
 =============================================================
-
-
-
 
 
 
@@ -83,7 +77,7 @@ Store.create name:"Store Bandung 2", cash: 10000000, equity: 10000000
 User.create name:"USER 2", email: "admin2@pardev.id", password: "admin123", level: 1, store: Store.second 
 Department.create name: "Snack"
 ItemCat.create department: Department.first, name: "CABE"
-
+exit
 
 localhost:3000/controllers
 localhost:3000/items
@@ -101,6 +95,8 @@ Order.delete_all
 Debt.delete_all
 CashFlow.delete_all
 Receivable.delete_all
+LossItem.delete_all
+Loss.delete_all
 
 StoreItem.update_all(stock: 0)
 Store.update_all(cash: 5000000000, equity: 5000000000)

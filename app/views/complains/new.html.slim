@@ -1,5 +1,5 @@
 - member = "NO MEMBER"
-- member = Member.find_by(card_number: @transaction.member_card) if @transaction.member_card.present?
+- member = Member.find_by(card_number: @transaction.member_card).name if @transaction.member_card.present?
 .row
   .col.text-left
     h5
@@ -41,7 +41,7 @@ br
                 td hidden=true
                   input type="text" required=true class="form-control" id="description" name="complain[complain_items][#{index}][item_id]" value="#{trx_item.id}" 
                 td
-                  | #{trx_item.item.name}
+                  input type="text" required=true class="form-control" value="#{trx_item.item.name}" disabled="disabled"
                 td 
                   input type="number" required=true class="form-control" id="price#{index}" name="complain[complain_items][#{index}][price]" value="#{trx_item.price}" readonly=true
                 td 

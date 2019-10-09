@@ -5,6 +5,8 @@ class CreateTablePoint < ActiveRecord::Migration[5.2]
         t.string :name, null: false
         t.bigint :hit, null: false, default: 0
         t.integer :quantity, null: false
+
+        t.timestamps
     end
 
     add_column :transactions, :point, :bigint, null: false, default: 0

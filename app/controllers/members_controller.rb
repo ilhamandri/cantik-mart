@@ -32,6 +32,7 @@ class MembersController < ApplicationController
     member.name = params[:member][:name].camelize
     member.user = current_user
     member.store = current_user.store
+    member.point = 10
     return redirect_back_data_error new_member_path, "Data Member - " + member.name + " - Tidak Valid" if member.invalid?
     member.save!
     member.create_activity :create, owner: current_user

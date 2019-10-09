@@ -4,6 +4,11 @@ tr
   	- items_count = Item.where(item_cat: item_cat).count
   	| #{items_count}
   td
+    - if item_cat.use_in_point
+      | Ya
+    - else
+      | Tidak
+  td
     a href='#{edit_item_cat_path(id: item_cat.id)}'
     	button.btn.btn-rounded.btn-warning.black-text type="button" 
 	       	| Edit

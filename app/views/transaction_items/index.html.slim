@@ -31,8 +31,15 @@
             label Tgl. Transaksi
             input disabled="disabled" class="form-control md-form" value="#{transaction.created_at}"
           .col
-            label Total
+            label Total Belanja
             input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total, delimiter: ".")}"
+          .col 
+            label Profit
+            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total - transaction.hpp_total, delimiter: ".")}"
+          - if  transaction.voucher_id.present?
+            .col
+              label Voucher
+              input disabled="disabled" class="form-control md-form" value="#{Voucher.find_by(id: transaction.voucher_id).exchange_point.name}"
           .col
             label Pembayaran
             input disabled="disabled" class="form-control md-form" value="#{transaction.payment_type}"
@@ -65,21 +72,23 @@
             = render partial: 'list', collection: @transaction_items, as: :transaction_item
         = paginate @transaction_items
 
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Promo Barang
-      .card-body.table-responsive.text-nowrap
-        table class="table"
-          thead
-            th Kode Promo
-            th Promo
-            th Jumlah Gratis 
-          tbody
-            = render partial: 'promo', collection: @transaction_items, as: :transaction_item
-        = paginate @transaction_items
+- contains_promo = @transaction_items.where("lower(reason) like ?", "%promo%")
+- contains_promo.present?
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Barang Promo
+        .card-body.table-responsive.text-nowrap
+          table class="table"
+            thead
+              th Kode Promo
+              th Promo
+              th Jumlah Gratis 
+            tbody
+              = render partial: 'promo', collection: @transaction_items, as: :transaction_item
+          = paginate @transaction_items
 
 - check_complain = Complain.find_by(transaction_id: transaction.id)
 - if check_complain.present? || transaction.from_complain?

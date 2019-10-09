@@ -79,9 +79,19 @@
                <div class="ui tab" data-tab="transaction">
                   <div class="row">
                     <div class="col-sm-8">
-                      <label>MEMBER</label>
-                      <input type="text" placeholder="Nomor Kartu Member ..." id="memberId"/>
-                      <input type="text" style="display: none", disabled="disabled" id="memberName">
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <label>MEMBER</label>
+                          <input type="text" placeholder="Nomor Kartu Member ..." id="memberId"/>
+                          <input type="text" style="display: none", disabled="disabled" id="memberName">
+                        </div>
+                        <div class="col-sm-6">
+                          <label>VOUCHER</label>
+                          <input type="text" placeholder="Nomor Voucher ..." id="voucher_code"/>
+                          <input type="text" style="display: none", disabled="disabled" id="voucher_name">
+                          <input type="number" style="display: none", disabled="disabled" id="voucher_nominal">
+                        </div>
+                      </div>
                     </div>
                     <div class="col-sm-4">
                       <label style="font-size: 15px;">TOTAL BELANJA</label>
@@ -126,7 +136,7 @@
                <div class="ui tab" data-tab="member">
                   <div class="row">
                     <div class="col-md-12 text-right">
-                        <a href="localhost:3030/members/new"><button class="text-right btn btn-primary">+ MEMBER</button></a>
+                        <a href="www.cantikmart.com/members/new"><button class="text-right btn btn-primary">+ MEMBER</button></a>
                     </div>
                     <div class="col-md-12">
                       <label>CARI MEMBER</label>
@@ -191,14 +201,36 @@
             <hr>
             <div class="row">
                <div class="col s3" style="vertical-align: middle;">
+                  <h5>Sub Total </h5>
+                  <br>
+                  <h5>Voucher </h5>
+                  <br>
+                  <hr>
+                  <br>
                   <h5>Total </h5>
                </div>
                <div class="col s1" style="vertical-align: middle;">
                   <h5>: </h5>
+                  <br>
+                  <h5>: </h5>
+                  <br>
+                  <hr>
+                  <br>
+                  <h5>: </h5>
                </div>
                <div class="col s8">
                   <b>
-                     <h5 id="total-h5"></h5>
+                     <h5 id="total-h5">0</h5>
+                  </b>
+                  <br>
+                  <b>
+                     <h5 id="voucher-h5">0</h5>
+                  </b>
+                  <br>
+                  <hr>
+                  <br>
+                  <b>
+                     <h5 id="end-h5">0</h5>
                   </b>
                </div>
             </div>
@@ -284,12 +316,14 @@
                      qty: data[i][3],
                      price: data[i][4],
                      disc: data[i][5],
-                     total: data[i][6]
+                     total: data[i][6],
+                     promo: data[i][2]
                  };
                  items.push(obj);
              }
          
              var nominal = $('#label-total').html();
+             var voucher_code = $("#voucher_code").val();
              var payment = $("#payment-method-select").val();
              var member = $("#memberId").val();
              var change = "0";
@@ -316,6 +350,7 @@
              map["edc"] = edc;
              map["card"] = card;
              map["member"] = member;
+             map["voucher"] = voucher_code
              jQuery.ajax({
                        url: "/api/trx/post",
                        type: "POST",
@@ -414,19 +449,27 @@
            $('select').formSelect();
          });
 
-         function GrandTotal() {
+         function SUMGrandTotal() {
            total = 0;
            var table = $('#itemList').DataTable();
            var data = table.rows().data();
-           for (var i = 0; i < data.length; i++) {
+           for (var i = 0; i <data.length; i++) {
             total += parseFloat(data[i][6]);
            }
            var bilangan = total;
-           
            var reverse = bilangan.toString().split('').reverse().join(''),
            ribuan = reverse.match(/\d{1,3}/g);
            ribuan = ribuan.join('.').split('').reverse().join('');
-           
+           var voucher = $('#voucher_nominal').val();
+           var end = total -  voucher
+           if(end < 0){
+            end = total
+           }
+           bilangan = end;
+           reverse = bilangan.toString().split('').reverse().join(''),
+           ribuan2 = reverse.match(/\d{1,3}/g);
+           ribuan2= ribuan2.join('.').split('').reverse().join('');
+           $("#end-h5").html(ribuan2);
            $("#total-h5").html(ribuan);
            document.getElementById("label-total").innerHTML = ribuan;
          }
@@ -458,6 +501,9 @@
              
              $("#change-h5").html(ribuan);
              return bilangan;
+           }else{
+             $("#change-h5").html("-");
+             return "-";
            }
          }
          
@@ -482,19 +528,59 @@
              $.ajax({
              method: "GET",
              cache: false,
-             url: "/api/member_trx?search=" + member,
+             url: "/api/member?search=" + member,
              success: function(result_arr) {
-                 if (result_arr.length == 0){
-                  return;
+                 if(result_arr == ""){
+                  alert("Member Tidak Ditemukan")
                  }
-                 name = result_arr[0][1]
-                 phone = result_arr[0][3]
-                 $("#memberName").val(name + " - " + phone);
-                 $("#memberName").show();
-                 $("#memberId").hide();
+                 if(result_arr.size > 1){
+                  alert("Member Tidak Ditemukan")
+                 }else{
+                   name = result_arr[0][1]
+                   phone = result_arr[0][3]
+                   $("#memberName").val(name + " - " + phone);
+                   $("#memberName").show();
+                   $("#memberId").hide();
+                 }
              },
              error: function(error) {
-                 
+                 alert("Member Tidak Ditemukan")
+             }
+             });
+           }, 300);
+         };
+
+         voucher_code.onkeyup = function(e) {
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+             var voucher = document.getElementById("voucher_code").value;
+             $.ajax({
+             method: "GET",
+             cache: false,
+             url: "/api/voucher?search=" + voucher,
+             success: function(result_arr) {
+                 if(result_arr == ""){
+                  alert("Voucher Tidak Ditemukan")
+                 }
+                 if(result_arr.size > 1){
+                  alert("Voucher Tidak Ditemukan")
+                 }else{
+                   name = result_arr[0][0]
+                   nominal = result_arr[0][1]
+                   $("#voucher_name").val(name);
+                   $("#voucher_nominal").val(nominal);
+                   $("#voucher_name").show();
+                   $("#voucher_code").hide();
+                   var bilangan = nominal;
+                   var reverse = bilangan.toString().split('').reverse().join(''),
+                   ribuan = reverse.match(/\d{1,3}/g);
+                   ribuan = ribuan.join('.').split('').reverse().join('');
+                   
+                   document.getElementById("voucher-h5").innerHTML = ribuan;
+                 }
+             },
+             error: function(error) {
+                 alert("Voucher Tidak Ditemukan")
              }
              });
            }, 300);
@@ -525,30 +611,30 @@
          };
          
          itemSearchId.onkeyup = function(e) {
-         clearTimeout(timeout);
-         timeout = setTimeout(function() {
-         var item_id = document.getElementById("itemSearchId").value;
-         var table = $('#itemSearchList').DataTable();
-         $.ajax({
-         method: "GET",
-         cache: false,
-         url: "/api/item?search=" + item_id,
-         success: function(result_arr) {
-             table.clear().draw();
-             for (var i = 0; i < result_arr.length; i++) {
-                 var result = result_arr[i];
-                 var reverse = result[3].toString().split('').reverse().join(''),
-                 ribuan = reverse.match(/\d{1,3}/g);
-                 ribuan = ribuan.join('.').split('').reverse().join('');
-                 var dataSet = [result[0], result[1], result[2], ribuan, result[4]];
-                 table.row.add(dataSet).draw();
-             }
-         },
-         error: function(error) {
-             table.clear().draw();
-         }
-         });
-         }, 300);
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+           var item_id = document.getElementById("itemSearchId").value;
+           var table = $('#itemSearchList').DataTable();
+           $.ajax({
+           method: "GET",
+           cache: false,
+           url: "/api/item?search=" + item_id,
+           success: function(result_arr) {
+               table.clear().draw();
+               for (var i = 0; i < result_arr.length; i++) {
+                   var result = result_arr[i];
+                   var reverse = result[3].toString().split('').reverse().join(''),
+                   ribuan = reverse.match(/\d{1,3}/g);
+                   ribuan = ribuan.join('.').split('').reverse().join('');
+                   var dataSet = [result[0], result[1], result[2], ribuan, result[4]];
+                   table.row.add(dataSet).draw();
+               }
+           },
+           error: function(error) {
+               table.clear().draw();
+           }
+           });
+           }, 300);
          };
          
          itemId.onkeyup = function(e) {
@@ -556,10 +642,11 @@
            timeout = setTimeout(function() {
            var item_id = document.getElementById("itemId").value;
            var item_qty = document.getElementById("item_qty").value;
+           var member_id = document.getElementById("memberId").value;
            $.ajax({
              method: "GET",
              cache: false,
-             url: "/api/trx?search=" + item_id + "&qty=" + item_qty,
+             url: "/api/trx?search=" + item_id + "&qty=" + item_qty+"&member="+member_id,
              success: function(result_arr) {
                  updateTable(result_arr);
              },
@@ -575,81 +662,126 @@
          function updateTable(result_arr){
            var table = $('#itemList').DataTable();
            var result = result_arr[0];
-           var qty = qtyInput.value;
+           var qty = parseInt(qtyInput.value);
            var total = parseFloat(qty) * (parseFloat(result[3]) - parseFloat(result[4]));
 
            var code= result[0];
 
-           if (table.rows().count()<1) {
+          if (table.rows().count()<1) {
             var dataSet = [code, result[1], result[2], qty, result[3], result[4], total];
             table.row.add(dataSet).draw();
-            GrandTotal();
+            checkPromo(result);
             document.getElementById("itemId").value = "";
             document.getElementById("item_qty").value = 1;
             document.getElementById("itemId").focus();
-            return;
+            SUMGrandTotal();
+           }else{
+             var existing = false;
+             var curr_code = "";
+             var curr_qty = "";
+             var curr_price = "";
+             var curr_disc = "";
+             var rowIdx = 0;
+
+             var t_size = $('#itemList').DataTable().rows().count();
+
+             for (var i = 0; i < t_size; i++) {
+              var this_code = table.cell(i,0).data();
+              var promo_item = table.cell(i,2).data().includes("PROMO-");
+              // alert(promo_item.includes("PROMO-"));
+              if ((this_code == code) && !promo_item){
+                existing = true;
+                curr_code = table.cell(i,0).data();
+                curr_qty = table.cell(i,3).data();
+                curr_price = table.cell(i,4).data();
+                curr_disc = table.cell(i,5).data();
+                rowIdx = i;
+                break;
+              }
+              table.draw();
+              SUMGrandTotal();
+             };
+
+              if (existing){
+                qty += parseInt(curr_qty);
+                var urls = "/api/trx?search=" + curr_code + "&qty=" + qty;
+                $.ajax({
+                   method: "GET",
+                   cache: false,
+                   url: urls,
+                   success: function(result_arr2) {
+                      result = result_arr2[0];
+
+                      var new_price = parseFloat(result[3]);
+                      var new_disc = parseFloat(result[4]);
+                      var new_total = parseFloat(qty) * (new_price-new_disc);
+
+                      table.cell(rowIdx,3).data(qty);
+                      table.cell(rowIdx,4).data(new_price);
+                      table.cell(rowIdx,5).data(new_disc);
+                      table.cell(rowIdx,6).data(new_total);
+
+                      table.draw();
+
+                      checkPromo(result_arr2[0]);
+                      SUMGrandTotal();
+                   },
+                   error: function(error) {
+                       document.getElementById("itemId").value = "";
+                       document.getElementById("item_qty").value = 1;
+                       document.getElementById("itemId").focus();
+                   }
+                 });
+              }else{
+                var dataSet = [code, result[1], result[2], qty, result[3], result[4], total];
+
+                table.row.add(dataSet).draw();
+
+                checkPromo(result)
+              }
            }
 
-           var existing = false
-           var curr_code = "";
-           var curr_qty = "";
-           var curr_price = "";
-           var curr_disc = "";
-           var rowIdx = 0
+           table.draw();
+           SUMGrandTotal();
+           document.getElementById("itemId").value = "";
+           document.getElementById("item_qty").value = 1;
+           document.getElementById("itemId").focus();
 
-           var t_size = $('#itemList').DataTable().rows().count();
-
-           for (var i = 0; i < t_size; i++) {
-            this_code = table.cell(i,0).data();
-            if (this_code == code){
-              existing = true;
-              curr_code = table.cell(i,0).data();
-              curr_qty = table.cell(i,3).data();
-              curr_price = table.cell(i,4).data();
-              curr_disc = table.cell(i,5).data();
-              rowIdx = i;
-              break;
-            }
-           };
-
-           if (existing){
-            new_qty = parseInt(curr_qty)+parseInt(qty);
-            $.ajax({
-               method: "GET",
-               cache: false,
-               url: "/api/trx?search=" + curr_code + "&qty=" + new_qty,
-               success: function(result_arr) {
-                  var result = result_arr[0];
-                  var new_price = parseFloat(result[3]);
-                  var new_disc = parseFloat(result[4]);
-                  var new_total = parseFloat(new_qty) * (new_price-new_disc);
-
-                  table.cell(rowIdx,3).data(new_qty);
-                  table.cell(rowIdx,4).data(new_price);
-                  table.cell(rowIdx,5).data(new_disc);
-                  table.cell(rowIdx,6).data(new_total);
-
-                  table.draw();
-               },
-               error: function(error) {
-                   document.getElementById("itemId").value = "";
-                   document.getElementById("item_qty").value = 1;
-                   document.getElementById("itemId").focus();
-               }
-             });
-          }else{
-            var dataSet = [code, result[1], result[2], qty, result[3], result[4], total];
-            table.row.add(dataSet).draw();
-          } 
-          table.draw();
-          GrandTotal();
-          document.getElementById("itemId").value = "";
-          document.getElementById("item_qty").value = 1;
-          document.getElementById("itemId").focus();
-          return;
+           return;
          }
+
+         function checkPromo(result){
+          var table = $('#itemList').DataTable();
+          var t_size = $('#itemList').DataTable().rows().count();
+          var promo_present = false;
+          var row_idx = 0;
+          if(result.length>6){
+            for (var i = 0; i < t_size; i++) {
+              this_promo = table.cell(i,2).data();
+              if(this_promo == result[6]){
+                promo_present = true;
+                row_idx = i;
+                break;
+              }
+            };
+          } 
+
+          if(promo_present){
+            qty_free = result[9];
+            table.cell(row_idx,3).data(qty_free);
+            table.draw();
+          }else{
+            if(result.length == 10){
+              var dataSet = [result[7], result[8],result[6], result[9], 0, 0, 0];
+              table.row.add(dataSet).draw();
+            }
+          }
+          table.draw();
+         }
+
+
          
-         function GrandTotal() {
+        function GrandTotal() {
            total = 0;
            var table = $('#itemList').DataTable();
            var data = table.rows().data();
@@ -666,69 +798,87 @@
            document.getElementById("label-total").innerHTML = ribuan;
          }
          
-         var head_html = '<html> <table style="font-family: monospace; width: 100%"> <tr style="height: 2cm; " > <td valign="top"  width="70%">CANTIK MART <br> Plered, Purwakarta <br> 022 - 12345678 </td> <td style="text-align: right;" width="30%"> <img src="127.0.0.1:8080/assets/images/icon2.png" width="100%"> </td> </tr> </table><hr>';
-         var footer_html = '<hr> <table style="font-family: monospace; width: 100%"> <tr style="height: 0.3cm;"> <td valign="middle" style="text-align: center; font-size: 0.3cm;" > Powered by </td></tr><tr> <td valign="middle" style="text-align: center; font-size: 0.25cm;" >www.pardev.id</td></tr></table> </html>';
-         var body_html = '';
+         
+         var header = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> <style type="text/css"> td { font-size: 18px; } </style> <title></title> </head> <body> <div class="row"> <div class="col-sm-12 text-center"> <h3 class=""> CANTIK MART </h3> <p class="medium"> Jl. Raya Plered,Purwakarta No.17 <br> Kec. Plered, Kabupaten Purwakarta, Jawa Barat <br> =========================================================== </p> </div>';
+
+         var footer = '<p class="medium"> =========================================================== </p> <div class="text-center"> <h4> Terima kasih atas kunjungan Anda </h4> </div> </div> </div> </body> </html>';
+
+         var separator = '<p class="medium">===========================================================</p>';
+
+         var items = ' <div class="col-sm-12"><table class="table">';
+         var HTML_totals = '<table class="table">';
          
          function PrintBill() {
              body_html = '';
-             body_html += '<table style="font-family: monospace;width: 100%;">';
          
-             var diskon = 0;
+             var total_diskon = 0;
              var subtotal = 0;
              var table = $('#itemList').DataTable();
+             table.draw();
+
              var data = table.rows().data();
              for (var i = 0; i < data.length; i++) {
-                 diskon += parseFloat(data[i][3])*parseFloat(data[i][5]);
-                 subtotal += parseFloat(data[i][3])*parseFloat(data[i][4]);
-                 var reverse = data[i][6].toString().split('').reverse().join(''),
-                 ribuan = reverse.match(/\d{1,3}/g);
-                 ribuan = ribuan.join('.').split('').reverse().join('');
-         
-                 reverse = data[i][4].toString().split('').reverse().join(''),
-                 satuan = reverse.match(/\d{1,3}/g);
-                 satuan = satuan.join('.').split('').reverse().join('');
-         
-                 //body_html += '<tr style="height: 0.5cm;"><td valign="top" colspan="3" ><b>'+data[i][1]+'</b></td></tr>'
-                 body_html += '<tr style="height: 0.5cm;"><td valign="top" style="text-align: center;" colspan="3"><b>'+data[i][1]+'</b></td></tr>';
-                 body_html += '<tr style="height: 0.5cm;"><td valign="top" style="text-align: center;"> *'+data[i][3]+'</td><td valign="top" style="text-align: center;"> @'+satuan+' </td><td valign="top" style="text-align: right;">'+ ribuan+'</td> </tr>';
+                 item_name = data[i][1];
+                 qty = data[i][3];
+                 price = splitRibuan(data[i][4]);
+                 disc = splitRibuan(data[i][5]);
+
+                 total = parseFloat(data[i][3])*parseFloat(data[i][4]);
+                 diskon = parseFloat(data[i][3])*parseFloat(data[i][5]);
+                 total_diskon += diskon;
+                 subtotal += total;
+
+                 items += '<tr><td colspan="4">'+item_name+'</td> </tr>'
+                 items += '<tr><td class="text-center">'+qty+'</td><td class="text-center">x</td><td class="text-center">'+price+'</td><td class="text-right">'+splitRibuan(total)+'</td></tr>';
+                 if(diskon > 0){
+                  items += '<tr><td class="text-center" colspan="3">DISKON :</td><td class="text-right">-'+splitRibuan(diskon)+'</td></tr>';
+                 }
              }
-         
-             var reverse = diskon.toString().split('').reverse().join(''),
-             diskon = reverse.match(/\d{1,3}/g);
-             diskon = diskon.join('.').split('').reverse().join('');
-         
-             reverse = subtotal.toString().split('').reverse().join(''),
-             sub = reverse.match(/\d{1,3}/g);
-             sub = sub.join('.').split('').reverse().join('');
-         
-             var nominal = $('#label-total').html();
-             
-             var change = "0";
-         
-             if ($("#payment-method-select")==1){
-                 change = $('#change-h5').html();
-                 reverse = $('#nominal').val().toString().split('').reverse().join(''),
-                 nominal = reverse.match(/\d{1,3}/g);
-                 nominal = nominal.join('.').split('').reverse().join('');
+
+             items += "</table>";
+
+             var pay = $('#nominal').val();
+
+             var payment = $("#payment-method-select").val();
+
+             var payment_method = "";
+             var bank_opt = document.getElementById("bank-select");
+             var bank = bank_opt.options[bank_opt.selectedIndex].text;
+             if(payment == 1){
+              payment_method = "CASH"
+             }else if (payment == 2){
+              payment_method = "DEBIT ("+bank+")"
+              pay = subtotal-total_diskon;
+             }else{
+              payment_method = "KREDIT ("+bank+")"
+              pay = subtotal-total_diskon;
              }
+
+             HTML_totals += '<tr><td> Subtotal </td><td class="text-right">'+splitRibuan(subtotal)+' </td></tr><tr><td> Total Diskon</td><td class="text-right">'+splitRibuan(total_diskon)+'</td></tr><tr><td>Total</td><td class="text-right">'+splitRibuan(subtotal-total_diskon)+'</td></tr><tr><td> Bayar - '+payment_method+' </td><td class="text-right">'+splitRibuan(pay)+'</td></tr><tr><td> Kembali</td><td class="text-right">'+$("#change-h5").html()+'</td></tr>';
+
+             HTML_totals +="</table>"
+
          
-             body_html += '</table>';
-             body_html += '<hr>';
-         
-             body_html += '<table style="font-family: monospace; width: 100%">'
-             body_html += '<tr style="height: 0.3cm;"> <td valign="middle" style="text-align: left; font-size: 0.3cm;" > subtotal </td><td valign="middle" style="text-align: left; font-size: 0.3cm;" >:</td><td valign="middle" style="text-align: right; font-size: 0.3cm;" >'+sub+'</td></tr>';
-             body_html += '<tr style="height: 0.3cm;"> <td valign="middle" style="text-align: left; font-size: 0.3cm;" > discount </td><td valign="middle" style="text-align: left; font-size: 0.3cm;" >:</td><td valign="middle" style="text-align: right; font-size: 0.3cm;" >'+diskon+'</td></tr>';
-             body_html += '<tr style="height: 0.3cm;"> <td valign="middle" style="text-align: left; font-size: 0.3cm;" > TOTAL </td><td valign="middle" style="text-align: left; font-size: 0.3cm;" >:</td><td valign="middle" style="text-align: right; font-size: 0.3cm;" >'+$('#label-total').html()+'</td></tr>';
-             body_html += '<tr style="height: 0.3cm;"> <td valign="middle" style="text-align: left; font-size: 0.3cm;" > CASH </td><td valign="middle" style="text-align: left; font-size: 0.3cm;" >:</td><td valign="middle" style="text-align: right; font-size: 0.3cm;" >'+ nominal +'</td></tr>';
-             body_html += '<tr style="height: 0.3cm;"> <td valign="middle" style="text-align: left; font-size: 0.3cm;" > CHANGE </td><td valign="middle" style="text-align: left; font-size: 0.3cm;" >:</td><td valign="middle" style="text-align: right; font-size: 0.3cm;" >'+change+'</td></tr>';
-             body_html += '</table>';
-         
-             printHTML(head_html+body_html+footer_html);
+             printHTML(header+items+separator+HTML_totals+footer);
          }  
          
          function printHTML(html) {
-             
+            var myWindow = window.open("about:blank", "", "_blank");
+            myWindow.document.write(html);
+            myWindow.print();
+            myWindow.close();
+            myWindow.document.close();
+            items = ' <div class="col-sm-12"><table class="table">';
+            HTML_totals = '<table class="table">';
+         }
+
+         function splitRibuan(total){
+          var bilangan = total;
+           
+           var reverse = bilangan.toString().split('').reverse().join(''),
+           ribuan = reverse.match(/\d{1,3}/g);
+           ribuan = ribuan.join('.').split('').reverse().join('');
+           return ribuan;
          }
          
          

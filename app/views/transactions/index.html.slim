@@ -9,45 +9,54 @@
         |   Buat Transaksi
 br
 .container-fluid
-  .col-lg-12.col-md-12
-    .card-header.white-text.info-color
+  .row 
+    .col-xl-6.col-lg-12.col-md-12.pb-2
+      .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Pencarian
+      .card.mb-4 
+        .card-body
+          = form_for :transaction, url: transactions_path, method: 'GET' do |form|
+            .row
+              - if ["owner", "super_admin", "super_finance"].include? current_user.level
+                .col-md-12
+                  select class="mdb-select md-form" id="months" name="store_id"
+                    option value="0"
+                      | Semua Toko
+                    - Store.all.each do |store|
+                      option value="#{store.id}"
+                        | #{store.name}
+
+              .col-md-6
+                select class="mdb-select md-form" id="months" name="months"
+                  option value="1"
+                    | 1 Bulan
+                  option value="3"
+                    | 3 Bulan
+                  option value="6"
+                    | 6 Bulan
+                  option value="12"
+                    | 12 Bulan
+
+              .col-md-6
+                input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice ..."
+              .col-md-12.text-center
+                button class="btn btn-rounded btn-primary"
+                  | Cari
+          br
+          .col-md-12.text-center.grey-text
+            a href="#{transactions_path(option: @params.to_s, format: :pdf)}"
+              b
+                | #{@search}
+
+    .col-xl-6.col-lg-12.col-md-12.pb-2
+      .card-header.white-text.info-color 
         h5.font-weight-500.my-1
-          | Pencarian
-    .card.mb-4 
-      
-      .card-body
-        = form_for :transaction, url: transactions_path, method: 'GET' do |form|
-          .row
-            - if ["owner", "super_admin", "super_finance"].include? current_user.level
-              .col-md-12
-                select class="mdb-select md-form" id="months" name="store_id"
-                  option value="0"
-                    | Semua Toko
-                  - Store.all.each do |store|
-                    option value="#{store.id}"
-                      | #{store.name}
+          | PENJUALAN 
+      .card.mb-4 
+        .card-body.table-responsive.text-nowrap
+          canvas id="transactions"
 
-            .col-md-6
-              select class="mdb-select md-form" id="months" name="months"
-                option value="1"
-                  | 1 Bulan
-                option value="3"
-                  | 3 Bulan
-                option value="6"
-                  | 6 Bulan
-                option value="12"
-                  | 12 Bulan
-
-            .col-md-6
-              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice ..."
-            .col-md-12.text-center
-              button class="btn btn-rounded btn-primary"
-                | Cari
-        br
-        .col-md-12.text-center.grey-text
-          a href="#{transactions_path(option: @params.to_s, format: :pdf)}"
-            b
-              | #{@search}
 .container-fluid
   .col-lg-12.col-md-12
     .card-header.white-text.info-color 
@@ -62,7 +71,7 @@ br
             th Toko
             th Member
             th Poin
-            th Total
+            th Profit
             th Aksi
           tbody
             = render partial: 'list', collection: @transactions, as: :transaction

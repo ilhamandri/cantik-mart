@@ -31,14 +31,9 @@
           .form-group
             label for="level" Peran 
             select name="user[level]" required=true class="mdb-select md-form colorful-select dropdown-primary" id="level" 
-              option value='owner'
-                | Owner
-              option value='super_visi'
-                | Supervisi
-              option value='super_admin'
-                | Super Admin
-              option value='cashier'
-                | Kasir
+              - User::levels.each do |user_level|
+                option value='#{user_level[0]}'
+                  | #{user_level[0].upcase.gsub('_', ' ')}
           .form-group
             label for="id-card" KTP
             = form.text_field :id_card, required: true, class: "form-control md-form", id: "id-card", minlength:"16", maxlength:"18", pattern:"[0-9]+", title:"16 digit nomor KTP"

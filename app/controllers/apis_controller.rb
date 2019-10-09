@@ -3,7 +3,7 @@ class ApisController < ApplicationController
 
   def index
     api_type = params[:api_type]
-  	if api_type == "item"
+    if api_type == "item"
       get_item params
     elsif api_type == "order"
       get_item_order params
@@ -11,11 +11,25 @@ class ApisController < ApplicationController
       get_item_trx params
     elsif api_type == "member"
       get_member params
+    elsif api_type == "voucher"
+      get_voucher params
     elsif api_type == "get_notification"
       get_notification params
     elsif api_type == "update_notification"
       update_notification params
-    end  	
+    end   
+  end
+
+  def get_voucher params
+    json_result = []
+    search = params[:search].squish
+    return render :json => json_result unless search.present?
+    voucher = Voucher.find_by(voucher_code: search.to_i)
+    if voucher.present?
+      epoint = voucher.exchange_point
+      json_result << [epoint.name, epoint.quantity]
+    end
+    render :json => json_result
   end
 
   def get_notification params
@@ -47,7 +61,7 @@ class ApisController < ApplicationController
     search = params[:search].squish
     return render :json => json_result unless search.present?
     search = search.gsub(/\s+/, "")
-    members = Member.where('lower(name) like ?', "%"+search.downcase+"%")
+    members = Member.where('lower(name) like ? OR card_number = ?', "%"+search.downcase+"%", search)
     members.each do|member|
       json_result << [member.card_number, member.name, member.address, member.phone]
     end
@@ -79,15 +93,8 @@ class ApisController < ApplicationController
     return render :json => json_result unless search.present?
     search = search.gsub(/\s+/, "")
     find_item = Item.find_by(code: search)
-    
-    if !find_item.local_item
-      curr_store_type = current_user.store.store_type
-      if curr_store_type != "warehouse"
-        return render :json => json_result unless find_item.present?
-      end
-    end
-
     return render :json => json_result unless find_item.present?
+    
     item = []
     item << find_item.code
     item << find_item.name
@@ -95,16 +102,28 @@ class ApisController < ApplicationController
     item << find_item.buy.round
     item << find_item.id
     item << find_item.sell
-    json_result << item
+
+    if current_user.store.store_type == "retail"
+      if find_item.local_item 
+        json_result << item
+      end
+    else
+      json_result << item
+    end
     render :json => json_result
   end
 
   def get_item_trx params
     json_result = []
     qty = params[:qty]
+    member = nil
+    if params[:member].present?
+      member = Member.find_by(card_number: params[:member])
+    end
     search = params[:search].squish
     return render :json => json_result unless search.present?
     return render :json => json_result unless qty.present?
+    return render :json => json_result if qty.to_i <= 0
     search = search.gsub(/\s+/, "")
     item_id = Item.find_by(code: search)
     item_store = StoreItem.find_by(store_id: current_user.store.id, item: item_id)
@@ -115,14 +134,22 @@ class ApisController < ApplicationController
     item << item_store.item.name
     item << item_store.item.item_cat.name
     curr_item = item_store.item
-    grocer_price = curr_item.grocer_items
+
+    grocer_price = nil 
+    grocer_price = curr_item.grocer_items if qty.to_i > 1
     if grocer_price.present?
       find_price = grocer_price.where('max >= ? AND min <= ?', qty, qty).order("max ASC")
       if find_price.present?
-        price = find_price.first.price
+        price = find_price.first
         disc = find_price.first.discount
-        disc = (disc * price) / 100 if disc <= 100
-        item << price
+        disc = (disc * price.price) / 100 if disc <= 100
+        if member.present?
+          disc = find_price.first.discount
+          disc = (disc * price.member_price) / 100 if disc <= 100
+          item << price.member_price
+        else
+          item << price.price
+        end
         item << disc
       else
         find_price = grocer_price.order("max ASC")
@@ -133,10 +160,15 @@ class ApisController < ApplicationController
         item << disc
       end
     else
-      price = item_store.item.sell
       disc = item_id.discount
-      disc = (disc * price) / 100 if disc <= 100
-      item << price
+      disc = (disc * item_id.sell) / 100 if disc <= 100
+      if member.present?
+        disc = item_id.discount
+        disc = (disc * item_id.sell_member) / 100 if disc <= 100
+        item << item_id.sell_member
+      else
+        item << item_id.sell
+      end
       item << disc
     end
 

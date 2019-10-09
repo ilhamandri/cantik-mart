@@ -3,6 +3,8 @@ class AddColEPoints < ActiveRecord::Migration[5.2]
   	create_table :vouchers do |t|
   		t.references :exchange_point, foreign_key: true, null: false
   		t.bigint :voucher_code, null: false
+
+      t.timestamps
   	end
   	add_column :exchange_points,:status, :boolean, null: false, default: true
   	add_reference :points, :voucher, foreign_key: true

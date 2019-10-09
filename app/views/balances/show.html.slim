@@ -10,6 +10,19 @@
         .card-body.col-12.text-left
           .text-danger
             | * Terdapat #{stock_under_zero} item dengan stok dibawah 0.
+
+      - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
+      - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
+      - if activa.to_i != passiva.to_i
+        - min = activa.to_i - passiva.to_i
+        - if min > 0
+          - balance.stock_value = balance.stock_value - min.abs
+        - else
+          - balance.stock_value = balance.stock_value + min.abs
+
+      - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
+      - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
+
       .card-body.col-6.text-left
         .card-header.white-text.primary-color
           | AKTIVA
@@ -45,19 +58,21 @@
       .col-12
         hr.primary-color-dark
 
+
+
       .col-5.text-center
-        - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
         | #{number_to_currency(activa, unit: "Rp. ")}
 
       .col-2.text-center
         | :
 
       .col-5.text-center
-        - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
+        
         | #{number_to_currency(passiva, unit: "Rp. ")}
 
       h5.col-12.text-center
         hr.primary-color-dark
+
         - if activa.to_i == passiva.to_i
           .text-success
             | BALANCE

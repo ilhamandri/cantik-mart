@@ -26,7 +26,7 @@
                 p
                   | Penjualan Bulan Lalu:
 
-                  - sum_grand_total = Transaction.where("date_created BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
+                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
 
                   strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.month).strftime("%B")}") type="button" 
@@ -35,8 +35,8 @@
                 p
                   | Profit Bulan Lalu:
 
-                  - sum_grand_total = Transaction.where("date_created BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
-                  - sum_hpp_total = Transaction.where("date_created BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
+                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
+                  - sum_hpp_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
 
                   strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.month).strftime("%B")}") type="button" 
@@ -47,7 +47,7 @@
                 p
                   | Penjualan Bulan Ini:
 
-                  - sum_grand_total = Transaction.where("date_created > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
+                  - sum_grand_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
 
                   strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now).strftime("%B")}") type="button" 
@@ -56,9 +56,9 @@
                 p
                   | Profit Bulan Ini:
 
-                  - sum_grand_total = Transaction.where("date_created > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
+                  - sum_grand_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
 
-                  - sum_hpp_total = Transaction.where("date_created > ? ", DateTime.now.beginning_of_month).sum(:hpp_total)
+                  - sum_hpp_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:hpp_total)
 
                   strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now).strftime("%B")}") type="button" 
@@ -70,7 +70,7 @@
                 p
                   | Penjualan Kemarin:
 
-                  - sum_grand_total = Transaction.where("date_created BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:grand_total)
+                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:grand_total)
 
                   strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.day).to_date}") type="button" 
@@ -79,8 +79,8 @@
 
                 p 
                   | Profit Kemarin
-                  - sum_grand_total = Transaction.where("date_created BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:grand_total)
-                  - sum_hpp_total = Transaction.where("date_created BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:hpp_total)
+                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:grand_total)
+                  - sum_hpp_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:hpp_total)
 
                   strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.day).to_date}") type="button" 
@@ -91,7 +91,7 @@
                 p
                   | Penjualan Hari Ini:
 
-                  - sum_grand_total = Transaction.where("date_created > ? ", DateTime.now.beginning_of_day).sum(:grand_total)
+                  - sum_grand_total = Transaction.where("created_at >= ? ", DateTime.now.beginning_of_day).sum(:grand_total)
 
                   strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
@@ -99,8 +99,8 @@
 
                 p 
                   | Profit Hari Ini
-                  - sum_grand_total = Transaction.where("date_created > ? ", DateTime.now.beginning_of_day).sum(:grand_total)
-                  - sum_hpp_total = Transaction.where("date_created > ? ", DateTime.now.beginning_of_day).sum(:hpp_total)
+                  - sum_grand_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_day).sum(:grand_total)
+                  - sum_hpp_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_day).sum(:hpp_total)
 
                   strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
@@ -140,11 +140,9 @@
                       i.fas.fa-plus &nbsp
                       i.fas.fa-donate
 
-                
-
         .col-xl-7.col-lg-6.mb-4.pb-2
           .view.view-cascade.gradient-card-header.light-blue.lighten-1
-            h2.h2-responsive.mb-0.font-weight-500 PENJUALAN
+            h2.h2-responsive.mb-0.font-weight-500 ITEM
           .card-body.card-body-cascade.pb-0
             .row.py-3.pl-4
               .col-md-6.text-center-pl-xl-2.my-md-0.my-3
@@ -176,4 +174,15 @@
                       th Terjual
                     tbody
                       = render partial: 'list', collection: @lower_item, as: :item
+
+        .col-xl-12.col-lg-12.mb-4.pb-2
+          .view.view-cascade.gradient-card-header.light-blue.lighten-1
+            h2.h2-responsive.mb-0.font-weight-500 PENJUALAN #{Date.today.year}
+          .card-body.card-body-cascade.pb-0
+            .row.py-3.pl-4
+              .col-md-12.text-center-pl-xl-2.my-md-0.my-3
+                .view.view-cascade.gradient-card-header.cloudy-knoxville-gradient
+                  
+                  canvas id="transactions"
+
 
