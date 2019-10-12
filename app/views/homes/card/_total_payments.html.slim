@@ -9,7 +9,7 @@
         b
          | #{@total_payments} 
         | order yan belum lunas.
-      a.btn.btn-rounded.btn-warning[href="#{orders_path(type: 'payment')}"]
+      a.btn.btn-warning[href="#{orders_path(type: 'payment')}"]
         | Cek Order&nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
 - else
   .card.bg-success.text-white
@@ -19,5 +19,5 @@
         | PEMBAYARAN
       p.card-text.text-white
         | Semua tagihan order telah lunas.
-      a.btn.btn-rounded.btn-success[href="#{orders_path}"]
+      a.btn.btn-success[href="#{orders_path}"]
         | Cek Order &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>

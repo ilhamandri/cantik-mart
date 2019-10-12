@@ -47,12 +47,12 @@
               input type="text" name="order_pay[user_receivable]" value='on'
             .form-group
               label for="nominal" Piutang yang Digunakan
-              = form.number_field :receivable_nominal, required: true, class: "form-control md-form", id: "nominal", value:0
+              = form.number_field :receivable_nominal, required: true, class: "form-control md-form", id: "nominal", value:100, min: 100
             .form-group
               label for="date" Tanggal Pembayaran
               input type="date" class="form-control md-form" name="order_pay[date_paid]" value="#{Date.today}"
             .form-group.text-center
-              = form.submit "Bayar", class: "btn btn-rounded btn-primary"
+              = form.submit "Bayar", class: "btn btn-primary"
               
 .container-fluid
   .col-lg-12.col-md-12
@@ -64,10 +64,13 @@
         = form_for :order_pay, url: order_paid_path, method: "POST" do |form|
           .form-group
             label for="nominal" Nominal yang Dibayarkan
-            = form.number_field :nominal, required: true, class: "form-control md-form", id: "nominal", value:0
+            = form.number_field :nominal, required: true, class: "form-control md-form", id: "nominal", value:100, min: 100
           .form-group
             label for="date" Tanggal Pembayaran
             input type="date" class="form-control md-form" name="order_pay[date_paid]" value="#{Date.today}"
+          .form-group
+            label for="date" Catatan
+            = form.text_field :description, required: true, class: "form-control md-form", id: "nominal", placeholder:"Contoh: nomor transaksi transfer, nama bank, metode pembayaran, dsb ..."
 
           .form-group
-            = form.submit "Bayar", class: "btn btn-rounded btn-primary"
+            = form.submit "Bayar", class: "btn btn-primary"

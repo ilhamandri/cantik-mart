@@ -112,14 +112,14 @@
 
           .form-group.text-center
             a href="#{edit_item_path(id: @item.id)}"
-              button.btn.btn-rounded.btn-warning type="button" 
+              button.btn.btn-warning type="button" 
                 |   Edit
             a href="#{new_grocer_item_path(id: @item.id)}"
-              button.btn.btn-rounded.btn-info type="button" 
+              button.btn.btn-info type="button" 
                 i.fas.fa-plus 
                 |   Tambah Harga
             a href='#{item_suppliers_path(id: @item.id)}'
-              button.btn.btn-rounded.btn-primary type="button" 
+              button.btn.btn-primary type="button" 
                 | Supplier
             - if !@item.store_items.present? && !@item.supplier_items.present?
-              = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-rounded btn-danger"
+              = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-danger"

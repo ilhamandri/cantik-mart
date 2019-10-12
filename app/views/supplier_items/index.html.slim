@@ -4,7 +4,7 @@
       | Daftar Barang #{@supplier.name}
   .col.text-right
     a href='#{new_order_path(supplier_id: @supplier.id)}'
-        button.btn.btn-rounded.btn-success type="button" 
+        button.btn.btn-success type="button" 
             | Order
 br
 .container-fluid
@@ -20,7 +20,7 @@ br
               input style="display: none;" name="id" value="#{@supplier.id}"
               input type="text" class="form-control md-form" id="search" name="search" placeholder="Cari Kode / Nama Barang ..."
             .col-12.text-center
-              button class="btn btn-rounded btn-primary"
+              button class="btn btn-primary"
                 | Cari
             .col-md-12.text-center.grey-text
               b

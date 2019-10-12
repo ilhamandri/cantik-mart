@@ -9,7 +9,7 @@
         b
          | #{@total_limit_items} 
         | barang dibawah limit.
-      a.btn.btn-rounded.btn-danger[href="#{warning_items_path}"]
+      a.btn.btn-danger[href="#{warning_items_path}"]
         | Cek item &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
 - else
   .card.bg-success.text-white
@@ -19,5 +19,5 @@
         | STOCK TERSEDIA
       p.card-text.text-white
         | Tidak ada barang dibawah limit.
-      a.btn.btn-rounded.btn-success[href="#{stocks_path}"]
+      a.btn.btn-success[href="#{stocks_path}"]
         | Cek item &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>

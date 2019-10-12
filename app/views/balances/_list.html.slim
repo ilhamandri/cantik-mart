@@ -14,11 +14,11 @@ tr
 				| TIDAK BALANCE
 	td 
 		a href="#{balance_path(id: balance.id)}"
-	      button.btn.btn-rounded.btn-primary type="button" 
+	      button.btn.btn-primary type="button" 
 	        | Detil Laporan 
 	    - file = balance.filename.split("/").last
 	    - file_exist = File.exist?("./report/"+file)
 	    - if file_exist
 		    a href="#{download_file_path(name: file)}"
-		      button.btn.btn-rounded.btn-success type="button" 
+		      button.btn.btn-success type="button" 
 		        | Unduh

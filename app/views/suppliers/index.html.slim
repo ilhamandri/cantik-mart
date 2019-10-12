@@ -4,7 +4,7 @@
       | Daftar Supplier
   .col.text-right
     a href="#{new_supplier_path}"
-      button.btn.btn-rounded.btn-success type="button" 
+      button.btn.btn-success type="button" 
         i.fas.fa-plus 
         |   Tambah Supplier
 br
@@ -21,8 +21,14 @@ br
             .col-md-12
               input type="text" class="form-control md-form" id="search" name="search"
             .col-md-12.text-center
-              button class="btn btn-rounded btn-primary"
+              button class="btn btn-primary"
                 | Cari
+                
+            .col-md-12.text-center.grey-text
+              a href="#{suppliers_path(option: @params.to_s, format: :pdf)}"
+                br
+                b
+                  | #{@search}
 
 .container-fluid 
   .col-lg-12.col-md-12
@@ -36,6 +42,8 @@ br
             th Nama
             th Alamat
             th Telepon
+            th Hutang
+            th Piutang
             th Aksi
           tbody
             = render partial: 'list', collection: @suppliers, as: :supplier

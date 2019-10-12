@@ -82,11 +82,17 @@ class StocksController < ApplicationController
 
   def update
     return redirect_back_data_error stocks_path, "Data Stok Barang Tidak Ditemukan" unless params[:id].present?
-    item = StoreItem.find_by_id params[:id]
-    item.assign_attributes stock_params
-    changes = item.changes
-    item.save! if item.changed?
-    item.create_activity :edit, owner: current_user, parameters: changes
+    store_item = StoreItem.find_by_id params[:id]
+    store_item.assign_attributes edit_stock_params
+    changes = store_item.changes
+    store_item.save! if store_item.changed?
+    binding.pry
+    if changes.include? "min_stock"
+      if store_item.stock <= store_item.min_stock
+        set_notification current_user, current_user, "warning", store_item.item.name + " berada dibawah limit", warning_items_path
+      end
+    end
+    store_item.create_activity :edit, owner: current_user, parameters: changes
     return redirect_success stocks_path, "Data Stok Barang Berhasil Diubah"
   end
 
@@ -101,6 +107,12 @@ class StocksController < ApplicationController
     def stock_params
       {
         stock: params[:item][:stock],
+        min_stock: params[:item][:min_stock]
+      }
+    end
+
+    def edit_stock_params
+      {
         min_stock: params[:item][:min_stock]
       }
     end

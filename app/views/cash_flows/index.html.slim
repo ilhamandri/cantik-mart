@@ -4,7 +4,7 @@
       | Arus Kas
   .col.text-right
     a href="#{new_cash_flow_path}"
-      button.btn.btn-rounded.btn-primary type="button" 
+      button.btn.btn-primary type="button" 
         i.fas.fa-plus 
         |   Tambah 
 br
@@ -59,7 +59,7 @@ br
                 option[value="asc"]
                   | secara A - Z
             .col-12.text-center
-              button class="btn btn-rounded btn-primary"
+              button class="btn btn-primary"
                 | Cari
           .col-md-12.text-center.grey-text
             a href="#{cash_flows_path(option: @params.to_s, format: :pdf)}"

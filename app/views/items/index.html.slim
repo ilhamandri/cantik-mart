@@ -5,7 +5,7 @@
       / = link_to "PRINT", '#', onclick: "printpage()" 
   .col.text-right
     a href="#{new_item_path}"
-      button.btn.btn-rounded.btn-success type="button" 
+      button.btn.btn-success type="button" 
         i.fas.fa-plus 
         |   Tambah Barang
 br
@@ -38,7 +38,7 @@ br
                 option[value="desc"]
                   | secara Z - A
             .col-12.text-center
-              button class="btn btn-rounded btn-primary"
+              button class="btn btn-primary"
                 | Cari
             br
         - if @search.present?

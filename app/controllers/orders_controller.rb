@@ -359,8 +359,10 @@ class OrdersController < ApplicationController
     order_invs = InvoiceTransaction.where(invoice: order.invoice)
     totals = order.grand_total.to_f 
     paid = totals- order_invs.sum(:nominal) 
+    desc = params[:order_pay][:description]
     nominal = params[:order_pay][:nominal].to_i 
     nominal = params[:order_pay][:receivable_nominal].to_i if params[:order_pay][:user_receivable] == "on"
+    return redirect_back_data_error orders_path, "Nominal harus lebih besar atau sama dengan 100" if nominal == 0
     return redirect_back_data_error orders_path, 
       "Data Order Tidak Valid (Pembayaran > Jumlah / Pembayaran < 100 )" if (totals-paid+nominal) > totals || nominal < 100 || ( ((totals - nominal) < 100) && ((totals - nominal) > 1))
     order_inv = InvoiceTransaction.new 
@@ -369,7 +371,9 @@ class OrdersController < ApplicationController
     order_inv.transaction_invoice = "PAID-" + Time.now.to_i.to_s
     order_inv.date_created = params[:order_pay][:date_paid]
     order_inv.nominal = nominal.to_f
+    order_inv.description = desc
     order_inv.user_id = current_user.id
+    binding.pry
     order_inv.save!
     deficiency = paid - nominal
     debt = Debt.find_by(finance_type: Debt::ORDER, ref_id: order.id)
@@ -473,6 +477,8 @@ class OrdersController < ApplicationController
           @orders = @orders.where("date_paid_off  is not null").order("date_created DESC")
         end
       end
+
+      @orders = @orders.order("date_receive DESC, created_at DESC, date_paid_off DESC")
 
       results << @search
       results << @orders

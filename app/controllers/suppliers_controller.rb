@@ -2,12 +2,36 @@ class SuppliersController < ApplicationController
   before_action :require_login
   before_action :require_fingerprint
   def index
-    @suppliers = Supplier.page param_page
+    @suppliers = Supplier.order("name ASC").page param_page
     @suppliers = @suppliers.where(supplier_type: 0)
+    @search = "Pencarian "
     if params[:search].present?
-      @search = params[:search].downcase
-      search = "%"+@search+"%"
-      @suppliers = @suppliers.where("lower(pic) like ? OR phone like ?", search, search)
+      @search += "Suplier '"+params[:search]+"'"
+      search = "%"+params[:search].downcase+"%"
+      @suppliers = @suppliers.where("lower(name) like ? OR phone like ?", search, search)
+    else
+      @search += "semua data"
+    end
+    @params = params
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        new_params = eval(params[:option])
+        @suppliers = Supplier.order("name ASC")
+        @suppliers = @suppliers.where(supplier_type: 0)
+        @search = "Pencarian "
+        if new_params["search"].present?
+          @search += "Suplier '"+new_params["search"]+"'"
+          search = "%"+new_params["search"].downcase+"%"
+          @suppliers = @suppliers.where("lower(name) like ? OR phone like ?", search, search)
+        else
+          @search += "semua data"
+        end
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "suppliers/print.html.slim"
+      end
     end
   end
 

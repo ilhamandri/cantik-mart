@@ -20,8 +20,8 @@
         - else
           - balance.stock_value = balance.stock_value + min.abs
 
-      - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
-      - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
+      / - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
+      / - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
 
       .card-body.col-6.text-left
         .card-header.white-text.primary-color
@@ -85,5 +85,5 @@
         - file_exist = File.exist?("./report/"+file)
         - if file_exist
           a href="#{download_file_path(name: file)}"
-            button.btn.btn-rounded.btn-success type="button" 
+            button.btn.btn-success type="button" 
               | Unduh

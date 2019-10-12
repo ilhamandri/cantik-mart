@@ -38,9 +38,9 @@
             - if @activity.trackable.present?
               - class_name = @activity.trackable.class.name 
               - if ["GrocerItem", "StoreItem"].include? class_name
-                = link_to @activity.trackable.item.name, item_path(id: @activity.trackable.item_id), :class => "btn btn-rounded btn-warning"
+                = link_to @activity.trackable.item.name, item_path(id: @activity.trackable.item_id), :class => "btn btn-warning"
               - elsif ["ORDER", "TRANSFER", "RETUR", "COMPLAINS"].include? class_name.upcase
-                = link_to @activity.trackable.invoice, @activity.trackable, :class => "btn btn-rounded btn-warning"
+                = link_to @activity.trackable.invoice, @activity.trackable, :class => "btn btn-warning"
               - else
-                = link_to @activity.trackable.name, @activity.trackable, :class => "btn btn-rounded btn-warning"
+                = link_to @activity.trackable.name, @activity.trackable, :class => "btn btn-warning"
                 

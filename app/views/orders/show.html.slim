@@ -6,17 +6,17 @@
       | Data #{@order_items.first.order.invoice}
   .col.text-right
     a href="#{order_path(id: order_id, format: :pdf)}"
-      button.btn.btn-rounded.btn-success type="button" 
+      button.btn.btn-success type="button" 
         | CETAK
   - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
     .col.text-right
       a href="#{order_confirmation_path(id: order_id)}"
-        button.btn.btn-rounded.btn-success type="button" 
+        button.btn.btn-success type="button" 
           | Terima
   - if order.editable && @pay !=0 && order.date_receive!=nil
       .col.text-right
         a href="#{edit_order_confirmation_path(id: order_id)}"
-          button.btn.btn-rounded.btn-warning type="button" 
+          button.btn.btn-warning type="button" 
             | Ubah
 br
 .container-fluid
@@ -37,7 +37,7 @@ br
               .col-md-6.text-center
                 / center v-align
                 - retur = ReturItem.find_by(ref_id: order.id).retur
-                a href="#{retur_path(id: retur.id)}" class="btn btn-primary btn-rounded"
+                a href="#{retur_path(id: retur.id)}" class="btn btn-primary"
                   | #{retur.invoice}
               
             .col-md-4
@@ -119,7 +119,7 @@ br
     - if @order_items.first.order.date_receive.present? && @order_items.first.order.date_paid_off.nil? && @pay != 0
       .col.text-right
         a href="#{order_pay_path(id: order_id)}"
-          button.btn.btn-rounded.btn-success type="button" 
+          button.btn.btn-success type="button" 
             | Bayar
   br
 .container-fluid
@@ -134,7 +134,8 @@ br
             th Invoice
             th Dibayar
             th Tanggal
-            th Total
+            th Nominal
+            th Catatan
           tbody
             = render partial: 'list_payment', collection: @order_invs, as: :order_inv
 

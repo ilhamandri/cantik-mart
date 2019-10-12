@@ -18,7 +18,7 @@ tr
         - class_name = @activity.trackable.class.name 
         - if class_name == "GrocerItem"
           = link_to @activity.trackable.item.name, item_path(id: @activity.trackable.item_id)
-        - elsif ["Order", "Retur"].include? class_name
+        - elsif ["Order", "Retur", "Loss"].include? class_name
           = link_to @activity.trackable.invoice, @activity.trackable
         - elsif class_name == "Transfer"
           = link_to @activity.trackable.invoice, transfer_items_path(id: @activity.trackable.id)

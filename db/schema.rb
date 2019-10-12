@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_08_192741) do
+ActiveRecord::Schema.define(version: 2019_10_12_151131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -153,7 +153,9 @@ ActiveRecord::Schema.define(version: 2019_10_08_192741) do
     t.datetime "due_date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "supplier_id"
     t.index ["store_id"], name: "index_debts_on_store_id"
+    t.index ["supplier_id"], name: "index_debts_on_supplier_id"
     t.index ["user_id"], name: "index_debts_on_user_id"
   end
 
@@ -220,6 +222,7 @@ ActiveRecord::Schema.define(version: 2019_10_08_192741) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description", default: "-", null: false
     t.index ["user_id"], name: "index_invoice_transactions_on_user_id"
   end
 
@@ -717,6 +720,7 @@ ActiveRecord::Schema.define(version: 2019_10_08_192741) do
   add_foreign_key "complains", "users"
   add_foreign_key "controller_methods", "controllers"
   add_foreign_key "debts", "stores"
+  add_foreign_key "debts", "suppliers"
   add_foreign_key "debts", "users"
   add_foreign_key "finances", "stores"
   add_foreign_key "finances", "users"

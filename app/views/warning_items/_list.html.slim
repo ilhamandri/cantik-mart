@@ -24,8 +24,9 @@ tr
           -if order_item.item.id == inventory.item.id
             - total += order_item.quantity
         | #{total}
+    - else
+      | -
   td
-    a href='#{new_order_path(item_id: inventory.item.id)}'
-      button.btn.btn-rounded.btn-primary type="button" 
-            | Order
+    a.btn.btn-primary href='#{new_order_path(item_id: inventory.item.id)}'
+      | Order
 

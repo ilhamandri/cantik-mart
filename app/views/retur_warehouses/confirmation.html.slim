@@ -29,9 +29,9 @@ hr style="border-top: 1px solid black;"
     .form-group
       = form_for :retur, url: transfer_accept_path, method: "POST" do |form|
         input type="hidden" value=0 name="retur[cancel]"
-        = form.submit "Batalkan Permintaan", class: "btn btn-rounded btn-danger"
+        = form.submit "Batalkan Permintaan", class: "btn btn-danger"
   .col.text-center
     .form-group
       = form_for :retur, url: transfer_accept_path, method: "POST" do |form|
-        = form.submit "Konfirmasi Permintaan", class: "btn btn-rounded btn-primary"
+        = form.submit "Konfirmasi Permintaan", class: "btn btn-primary"
   

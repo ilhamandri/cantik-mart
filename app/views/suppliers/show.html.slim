@@ -18,15 +18,15 @@
           
       .col-12.text-center
         a href='#{edit_supplier_path(id: @supplier.id)}'
-          button.btn.btn-rounded.btn-warning type="button" 
+          button.btn.btn-warning type="button" 
               | Edit
         a href='#{supplier_items_path(id: @supplier.id)}'
-          button.btn.btn-rounded.btn-primary type="button" 
+          button.btn.btn-primary type="button" 
             | Item
         a href='#{new_order_path(supplier_id: @supplier.id)}'
-          button.btn.btn-rounded.btn-success type="button" 
+          button.btn.btn-success type="button" 
               | Order
         - if !@supplier.supplier_items.present?
-          = button_to "Hapus Supplier", @supplier, :method=>:delete, :class=>"btn btn-rounded btn-danger"
+          = button_to "Hapus Supplier", @supplier, :method=>:delete, :class=>"btn btn-danger"
       p
         | 

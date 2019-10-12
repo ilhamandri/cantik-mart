@@ -9,6 +9,7 @@ class Debt < ApplicationRecord
 
   belongs_to :store
   belongs_to :user
+  belongs_to :supplier, optional: true
 
   ORDER=1
   OTHER=2

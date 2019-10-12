@@ -9,7 +9,7 @@
         | #{@total_orders} 
       | pesanan
     .card-body.text-center
-      a.btn.btn-rounded.btn-warning[href="#{orders_path(type: 'ongoing')}"]
+      a.btn.btn-warning[href="#{orders_path(type: 'ongoing')}"]
         | Cek &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
   - else
     .card-header.white-text.grey.darken-1
@@ -19,7 +19,7 @@
       i.fas.fa-arrow-up.blue-text.mr-3[aria-hidden="true"]
       | Tidak ada pesanan
     .card-body.text-center
-      a.btn.btn-rounded.btn-primary[href="#{orders_path}"]
+      a.btn.btn-primary[href="#{orders_path}"]
         | Cek  &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
 
       

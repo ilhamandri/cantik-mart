@@ -6,23 +6,23 @@
       | Data (#{@retur_items.first.retur.invoice})
   .col.text-right
     a href="#{retur_path(id: retur_id, format: :pdf)}"
-      button.btn.btn-rounded.btn-success type="button" 
+      button.btn.btn-success type="button" 
         | CETAK
   .col.text-right
   - if retur.date_approve.present? && retur.date_picked.present? && retur.status.nil?
     a href="#{retur_feedback_path(id: retur_id)}"
-      button class="btn btn-rounded btn-primary"
+      button class="btn btn-primary"
         | FEEDBACK
     |  &nbsp &nbsp 
   - if retur.date_approve.nil?
     a href="#{retur_confirmation_path(id: retur_id)}"
-      button class="btn btn-rounded btn-warning"
+      button class="btn btn-warning"
         | KONFIRMASI
     |  &nbsp &nbsp 
   - if retur.date_picked.nil? && retur.date_approve.present?
     = form_for :retur_items, url: "#{retur_picked_path(id: retur_id)}", method: "POST" do |form|
       .col
-        = form.submit "Ambil", class: "btn btn-rounded btn-success"
+        = form.submit "Ambil", class: "btn btn-success"
 br
 .container-fluid
   .col-lg-12.col-md-12

@@ -4,7 +4,7 @@
       | Daftar Promo
   .col.text-right
     a href="#{new_promotion_path}"
-      button.btn.btn-rounded.btn-success type="button" 
+      button.btn.btn-success type="button" 
         i.fas.fa-plus 
         |   Tambah Promo
 br
@@ -28,7 +28,7 @@ br
                 option[value="asc"]
                   | urutkan dari pertama
             .col-12.text-center
-              button class="btn btn-rounded btn-primary"
+              button class="btn btn-primary"
                 | Cari
         .col-md-12.text-center.grey-text
           a href="#{promotions_path(option: @params.to_s, format: :pdf)}"

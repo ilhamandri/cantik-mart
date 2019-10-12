@@ -9,7 +9,7 @@
         b
          | #{@total_orders} 
         | order dalam proses.
-      a.btn.btn-rounded.btn-warning[href="#{orders_path(type: 'ongoing')}"]
+      a.btn.btn-warning[href="#{orders_path(type: 'ongoing')}"]
         | Cek Order&nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
 - else
   .card.bg-primary.text-white
@@ -19,5 +19,5 @@
         | ORDER
       p.card-text.text-white
         | Tidak ada proses order.
-      a.btn.btn-rounded.btn-primary[href="#{orders_path}"]
+      a.btn.btn-primary[href="#{orders_path}"]
         | Cek Order &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>

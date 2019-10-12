@@ -22,12 +22,15 @@
 
 --> button buat download laporan akhir bulan
 
---> print struk
-
 --> cek semua notifikasi
-	* payment
-	* due date
-	* confirm order / transfer					
+	* payment --> FINANCE
+	* due date --> FINANCE
+	* confirm order / transfer --> SUPER_VISI
+		
+
+--> activity trackable
+
+--> after bayar new_total ?				
 
 ======================================================================
 PENDING

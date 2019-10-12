@@ -10,12 +10,12 @@ tr
       | Tidak
   td
     a href='#{edit_item_cat_path(id: item_cat.id)}'
-    	button.btn.btn-rounded.btn-warning.black-text type="button" 
+    	button.btn.btn-warning.black-text type="button" 
 	       	| Edit
 
     a href='#{item_cat_path(id: item_cat.id)}'
-    	button.btn.btn-rounded.btn-info type="button" 
+    	button.btn.btn-info type="button" 
 	       	| Detil
     - item_cat_count = Item.where(item_cat: item_cat).count
     - if item_cat_count == 0
-      = button_to "Hapus", item_cat, :method=>:delete, :class=>"btn btn-rounded btn-danger", data: {confirm: "Are you sure you want to reset the indexes?" }
+      = button_to "Hapus", item_cat, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Are you sure you want to reset the indexes?" }

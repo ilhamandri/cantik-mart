@@ -23,7 +23,7 @@
               label for="name" Kekurangan
               input type="text" class="form-control md-form" value="#{number_with_delimiter(@debt.deficiency, delimiter: ".", separator: ",")}"
           .col-12.text-center
-            a href='#{new_pay_path(id: @debt.id, type: "debt")}' class="btn btn-warning btn-rounded"
+            a href='#{new_pay_path(id: @debt.id, type: "debt")}' class="btn btn-warning"
               | Bayar
 
 .container-fluid
@@ -39,12 +39,14 @@
             th  Dibayarkan              
             th  Tanggal
             th  Nominal
-          - pays = CashFlow.where(finance_type: "Outcome", payment: "debt")
+            th  Catatan
+          - pays = CashFlow.where(finance_type: "Outcome", payment: "debt", ref_id: @debt.id)
           - pays.each do |pay|
             tr
               td #{pay.invoice}
               td #{pay.user.name} - #{pay.store.name}
               td #{pay.created_at}
               td #{number_with_delimiter(pay.nominal, delimiter: ".", separator: ",")}
+              td #{pay.description}
         
         

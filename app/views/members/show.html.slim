@@ -32,13 +32,13 @@
           input type="text" class="form-control md-form" value='#{@member.user.name}' disabled="disabled"
         .form-group.text-center
           a href='#{edit_member_path(id: @member.id)}'
-            button.btn.btn-rounded.btn-warning type="button" 
+            button.btn.btn-warning type="button" 
                 | Edit
 
           a href='#{transactions_path(member_card: @member.card_number)}'
-            button.btn.btn-rounded.btn-primary type="button" 
+            button.btn.btn-primary type="button" 
                 | Daftar Transaksi
 
           a href='#{points_path(id: @member.id)}'
-            button.btn.btn-rounded.btn-info type="button" 
+            button.btn.btn-info type="button" 
                 | Riwayat Poin

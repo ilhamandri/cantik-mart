@@ -32,9 +32,9 @@ tr
   - unless transfer.date_approve.present?
     td
       = form_for :transfer, url: transfer_path(id: transfer.id), method: "DELETE" do |form|
-        = form.submit "Hapus", class: "btn btn-rounded btn-danger"
+        = form.submit "Hapus", class: "btn btn-danger"
   td
     a href='#{transfer_items_path(id: transfer.id)}'
-      button class="btn btn-rounded btn-primary"
+      button class="btn btn-primary"
         | Item
 

@@ -13,7 +13,7 @@ tr
     td
       - if finance.finance_type == "EMPLOYEE"
         - if finance.deficiency.abs > 0 
-          a href='#{receivable_path(id: finance.id)}' class="btn btn-rounded btn-warning"
+          a href='#{receivable_path(id: finance.id)}' class="btn btn-warning"
             | #{finance.description}
         - else
           | #{finance.description}

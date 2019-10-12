@@ -4,6 +4,8 @@ tr
 	    - if inventory.item.image.present?
 	      	img src="#{inventory.item.image}" width="50px"
 	    - else
+      		=image_tag("/images/default_item.jpg", height: '70', width: '70')
+  
 	td #{inventory.item.name}
 	td #{inventory.item.item_cat.name}
 	td #{inventory.stock.to_i}
@@ -11,18 +13,12 @@ tr
 	td #{number_with_delimiter(inventory.item.sell, delimiter: ".")}
 	td
 	  	a href='#{stock_path(id: inventory.id)}'
-	  		button.btn.btn-rounded.btn-primary type="button" 
+	  		button.btn.btn-primary type="button" 
         		| Detil
        	| &nbsp &nbsp
        	- if inventory.min_stock > inventory.stock
-       		a href='#{new_order_path(item_id: inventory.item.id)}'
-		  		button.btn.btn-rounded.btn-danger type="button" 
-	        		| Order
+       		a.btn.btn-danger href='#{new_order_path(item_id: inventory.item.id)}'
+	        	| Order
 		- elsif inventory.min_stock == inventory.stock
-			a href='#{new_order_path(item_id: inventory.item.id)}'
-		  		button.btn.btn-rounded.btn-warning type="button" 
-	        		| Order
-	    - else
-	    	a href='#{new_order_path(item_id: inventory.item.id)}'
-			  	button.btn.btn-rounded.btn-outline-success type="button" 
-		        	| Order
+			a.btn.btn-warning href='#{new_order_path(item_id: inventory.item.id)}'
+	        	| Order

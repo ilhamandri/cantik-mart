@@ -9,7 +9,7 @@
        | #{@total_payments} 
       | pesanan.
     .card-body.text-center
-      a.btn.btn-rounded.btn-warning[href="#{orders_path(type: 'payment')}"]
+      a.btn.btn-warning[href="#{orders_path(type: 'payment')}"]
         | Cek &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
   - else
     .card-header.white-text.grey.darken-1
@@ -19,7 +19,7 @@
       i.fas.fa-arrow-up.blue-text.mr-3[aria-hidden="true"]
       | LUNAS
     .card-body.text-center
-      a.btn.btn-rounded.btn-success[href="#{debts_path(type: '1')}"]
+      a.btn.btn-success[href="#{debts_path(type: '1')}"]
         | Cek &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
 
       

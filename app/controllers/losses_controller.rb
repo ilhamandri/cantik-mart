@@ -37,7 +37,12 @@ class LossesController < ApplicationController
     	store_item.stock = store_item.stock - qty
     	store_item.save!
       loss.create_activity :create, owner: current_user
+
+      if store_item.stock <= store_item.min_stock
+        set_notification current_user, current_user, "warning", item.name + " berada dibawah limit", warning_items_path
+      end
     end
+          
 
     return redirect_success loss_path(id: loss.id), "Laporan Barang Loss Berhasil Disimpan." 
   end

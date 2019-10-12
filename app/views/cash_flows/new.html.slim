@@ -33,9 +33,14 @@
             label.text-primary for="nominal" Nominal
             = form.number_field :nominal, required: true, class: "form-control md-form", id: "nominal"
           .form-group
-            label.text-primary for="description" Deskripsi
+            label.text-primary for="description" Catatan
             = form.text_field :description, required: true, class: "form-control md-form", id: "description"
-
+          .form-group
+            label.text-primary for="store" Toko
+            select name="finance[store_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store" searchable="Cari..."
+              - Store.all.each do |store|
+                option value="#{store.id}"
+                  | #{store.name}
           .form-group
             label.text-danger for="type" (*isi jika diperlukan)
           .form-group
@@ -48,4 +53,4 @@
             label.text-primary for="type" Tanggal Jatuh Tempo 
             input class="form-control md-form" type="date" name="finance[due_date]" id="date_from"
           .form-group
-            = form.submit "Tambah", class: "btn btn-rounded btn-primary"
+            = form.submit "Tambah", class: "btn btn-primary"

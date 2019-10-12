@@ -34,7 +34,7 @@
                   | #{user}, 
         .text-center
           - if !@store.users.present? && !@store.store_items.present?
-            = button_to "Hapus Toko", @store, :method=>:delete, :class=>"btn btn-rounded btn-danger"
+            = button_to "Hapus Toko", @store, :method=>:delete, :class=>"btn btn-danger"
 
   .col-lg-12.col-md-12
     .card.mb-4
@@ -121,5 +121,5 @@
           - file_exist = File.exist?("./report/"+file)
           - if file_exist
             a href="#{download_file_path(name: file)}"
-              button.btn.btn-rounded.btn-success type="button" 
+              button.btn.btn-success type="button" 
                 | Unduh

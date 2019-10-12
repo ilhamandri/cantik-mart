@@ -3,11 +3,10 @@ nav.navbar.fixed-top.navbar-expand-lg.scrolling-navbar.double-nav
     a.button-collapse data-activates="slide-out" href="#" 
       i.fas.fa-bars
   .breadcrumb-dn.mr-auto
-    p PT. Parahyangan Digital Dev
+    p CANTIK MART
   .d-flex.change-mode
     ul.nav.navbar-nav.nav-flex-icons.ml-auto
       li.nav-item.dropdown.notifications-nav
-
         - total_notifications = Notification.where(to_user: current_user, read: 0).order("date_created DESC").count
       
         a#navbarDropdownMenuLink.nav-link.dropdown-toggle.waves-effect aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" onclick="update_notification()"
@@ -66,4 +65,4 @@ nav.navbar.fixed-top.navbar-expand-lg.scrolling-navbar.double-nav
               br
               hr
             .col-12
-              = button_to "Keluar", sign_out_path, method: :delete, class: "btn btn-rounded btn-danger"
+              = button_to "Keluar", sign_out_path, method: :delete, class: "btn btn-danger"

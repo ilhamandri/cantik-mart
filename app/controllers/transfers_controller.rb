@@ -137,7 +137,7 @@ class TransfersController < ApplicationController
       return redirect_success transfers_path, "Item Transfer Telah Disimpan"
     end
     
-    return redirect_success transfers_path, "Item Transfer Telah Disimpan"
+    return redirect_success transfers_path, "Transfer "+transfer.invoice+" telah dikirim"
   end
 
   def receive
@@ -261,6 +261,10 @@ class TransfersController < ApplicationController
         new_stock = store_item.stock.to_i - qty
         store_item.stock = new_stock
         store_item.save!
+
+        if store_item.stock <= store_item.min_stock
+          set_notification current_user, current_user, "warning", store_item.item.name + " berada dibawah limit", warning_items_path
+        end
       end
       return status
     end
