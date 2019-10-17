@@ -86,7 +86,6 @@ class StocksController < ApplicationController
     store_item.assign_attributes edit_stock_params
     changes = store_item.changes
     store_item.save! if store_item.changed?
-    binding.pry
     if changes.include? "min_stock"
       if store_item.stock <= store_item.min_stock
         set_notification current_user, current_user, "warning", store_item.item.name + " berada dibawah limit", warning_items_path

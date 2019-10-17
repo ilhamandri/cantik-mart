@@ -15,6 +15,16 @@
           .form-group
             label for="phone" Nomor Telepon
             input class="form-control md-form" value="#{number_to_phone(@supplier.phone, country_code: 62)}" disabled="disabled"
+          - debts = Debt.where(finance_type: Debt::ORDER, supplier: @supplier).where("deficiency > 0").sum(:deficiency)
+          .form-group
+            label for="phone" Total Hutang
+            input class="form-control md-form" value="#{number_with_delimiter(debts.to_i, delimiter: ".", separator: ",")}" disabled="disabled"
+
+
+          - receivables = Receivable.where(finance_type: Receivable::RETUR, to_user: @supplier.id).where("deficiency > 0").sum(:deficiency)
+          .form-group
+            label for="phone" Total Piutang
+            input class="form-control md-form" value=" #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}" disabled="disabled"
           
       .col-12.text-center
         a href='#{edit_supplier_path(id: @supplier.id)}'

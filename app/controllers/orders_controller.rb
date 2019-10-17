@@ -28,6 +28,8 @@ class OrdersController < ApplicationController
     @suppliers = Supplier.select(:id, :name, :address).order("supplier_type DESC").all
     if params[:item_id].present?
       @add_item = Item.find_by(id: params[:item_id])
+      supplier_items = SupplierItem.where(item: @add_item).pluck(:supplier_id)
+      @suppliers = @suppliers.where(id: supplier_items)
       # return redirect_back_data_error new_order_path if @add_items.nil?
     end
     if params[:supplier_id].present?
@@ -373,7 +375,6 @@ class OrdersController < ApplicationController
     order_inv.nominal = nominal.to_f
     order_inv.description = desc
     order_inv.user_id = current_user.id
-    binding.pry
     order_inv.save!
     deficiency = paid - nominal
     debt = Debt.find_by(finance_type: Debt::ORDER, ref_id: order.id)

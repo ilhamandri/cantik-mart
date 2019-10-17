@@ -5,4 +5,8 @@ tr
   td #{item.name}
   td #{item.brand}
   td #{item.item_cat.name}
-  td.text-center #{number_with_delimiter(order_qty, delimiter: ".")}
+  td.text-center #{number_with_delimiter(order_qty.to_i, delimiter: ".")}
+  td
+	a href='#{new_order_path(supplier_id: @supplier.id, item_id: item.id)}'
+		button.btn.btn-success type="button"
+	        | Order
