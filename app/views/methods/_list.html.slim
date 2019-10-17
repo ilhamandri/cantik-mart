@@ -5,6 +5,7 @@
 		- users_level_name += user_level.underscore.humanize.upcase
 	- else
 		- users_level_name += user_level.underscore.humanize.upcase + ", "
+- if !["show", "update", "create"].include? method.name
 tr
 	td #{method.name.camelize}
 	td #{users_level_name}

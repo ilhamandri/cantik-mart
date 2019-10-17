@@ -3,10 +3,11 @@
     h5
       | Daftar Pesanan
   .col.text-right
-    a href="#{new_order_path}"
-      button.btn.btn-primary type="button" 
-        i.fas.fa-plus 
-        |   Buat Order
+    - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+      a href="#{new_order_path}"
+        button.btn.btn-primary type="button" 
+          i.fas.fa-plus 
+          |   Buat Order
 br
 .container-fluid
   .col-lg-12.col-md-12

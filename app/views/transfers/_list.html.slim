@@ -42,11 +42,13 @@ tr
       | #{transfer.confirmed_by.name} (#{transfer.status.to_date})
   td #{transfer.description}
   td
-    a href='#{transfer_items_path(id: transfer.id)}'
+    a href='#{transfers_path(id: transfer.id)}'
       button class="btn btn-primary"
         | Item
-  - unless transfer.date_approve.present?
-    td
-      = form_for :transfer, url: transfer_path(id: transfer.id), method: "DELETE" do |form|
-        = form.submit "Hapus", class: "btn btn-danger"
+
+  - if Controller.find_by(name: 'transfers').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
+    - unless transfer.date_approve.present?
+      td
+        = form_for :transfer, url: transfer_path(id: transfer.id), method: "DELETE" do |form|
+          = form.submit "Hapus", class: "btn btn-danger"
 

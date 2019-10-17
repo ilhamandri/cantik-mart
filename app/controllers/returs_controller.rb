@@ -141,7 +141,6 @@ class RetursController < ApplicationController
     set_notification(current_user, User.find_by(store: current_user.store, level: User::SUPERVISI), 
         Notification::INFO, "Retur "+retur.invoice+" telah diambil", urls)
     decrease_stock params[:id]
-
     return redirect_success urls, "Retur Telah Diambil Suplier"
   end
 

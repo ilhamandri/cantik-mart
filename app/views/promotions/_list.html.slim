@@ -6,12 +6,13 @@ tr
 	td #{promotion.start_promo.to_date}
 	td #{promotion.end_promo.to_date}
 	td #{promotion.hit}
-	td 
-		- if promotion.end_promo >= DateTime.now.end_of_day
-			= button_to "Hapus", promotion, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Apakah Anda akan menghapus promo ?" }
-		- else
-			- if promotion.hit <= 0
+	- if Controller.find_by(name: 'promotions').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
+        td 
+			- if promotion.end_promo >= DateTime.now.end_of_day
 				= button_to "Hapus", promotion, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Apakah Anda akan menghapus promo ?" }
+			- else
+				- if promotion.hit <= 0
+					= button_to "Hapus", promotion, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Apakah Anda akan menghapus promo ?" }
 	td
 		a href='#{promotion_path(id: promotion.id)}'
 			button class="btn btn-primary"

@@ -8,16 +8,20 @@
     a href="#{order_path(id: order_id, format: :pdf)}"
       button.btn.btn-success type="button" 
         | CETAK
-  - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
-    .col.text-right
-      a href="#{order_confirmation_path(id: order_id)}"
-        button.btn.btn-success type="button" 
-          | Terima
-  - if order.editable && @pay !=0 && order.date_receive!=nil
+
+  - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'confirmation').user_methods.pluck(:user_level).include? current_user.level
+    - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
       .col.text-right
-        a href="#{edit_order_confirmation_path(id: order_id)}"
-          button.btn.btn-warning type="button" 
-            | Ubah
+        a href="#{order_confirmation_path(id: order_id)}"
+          button.btn.btn-success type="button" 
+            | Terima
+            
+  - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'edit_confirmation').user_methods.pluck(:user_level).include? current_user.level
+    - if order.editable && @pay !=0 && order.date_receive!=nil
+        .col.text-right
+          a href="#{edit_order_confirmation_path(id: order_id)}"
+            button.btn.btn-warning type="button" 
+              | Ubah
 br
 .container-fluid
     .col-lg-12.col-md-12

@@ -3,10 +3,11 @@
     h5       
       | Daftar Toko
   .col.text-right
-    a href="#{new_store_path}"
-      button.btn.btn-success type="button" 
-        i.fas.fa-plus 
-        |   Tambah Toko
+    - if Controller.find_by(name: 'stores').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+      a href="#{new_store_path}"
+        button.btn.btn-success type="button" 
+          i.fas.fa-plus 
+          |   Tambah Toko
 br
 .container-fluid
   .col-lg-12.col-md-12

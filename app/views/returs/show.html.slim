@@ -9,20 +9,25 @@
       button.btn.btn-success type="button" 
         | CETAK
   .col.text-right
-  - if retur.date_approve.present? && retur.date_picked.present? && retur.status.nil?
-    a href="#{retur_feedback_path(id: retur_id)}"
-      button class="btn btn-primary"
-        | FEEDBACK
-    |  &nbsp &nbsp 
-  - if retur.date_approve.nil?
-    a href="#{retur_confirmation_path(id: retur_id)}"
-      button class="btn btn-warning"
-        | KONFIRMASI
-    |  &nbsp &nbsp 
-  - if retur.date_picked.nil? && retur.date_approve.present?
-    = form_for :retur_items, url: "#{retur_picked_path(id: retur_id)}", method: "POST" do |form|
-      .col
-        = form.submit "Ambil", class: "btn btn-success"
+  - if Controller.find_by(name: 'retur_items').controller_methods.find_by(name: 'feedback').user_methods.pluck(:user_level).include? current_user.level
+    - if retur.date_approve.present? && retur.date_picked.present? && retur.status.nil?
+      a href="#{retur_feedback_path(id: retur_id)}"
+        button class="btn btn-primary"
+          | FEEDBACK
+      |  &nbsp &nbsp 
+
+  - if Controller.find_by(name: 'returs').controller_methods.find_by(name: 'confirmation').user_methods.pluck(:user_level).include? current_user.level  
+    - if retur.date_approve.nil?
+      a href="#{retur_confirmation_path(id: retur_id)}"
+        button class="btn btn-warning"
+          | KONFIRMASI
+      |  &nbsp &nbsp 
+
+  - if Controller.find_by(name: 'returs').controller_methods.find_by(name: 'picked').user_methods.pluck(:user_level).include? current_user.level
+    - if retur.date_picked.nil? && retur.date_approve.present?
+      a href="#{retur_picked_path(id: retur_id)}"
+        button class="btn btn-warning"
+          | AMBIL
 br
 .container-fluid
   .col-lg-12.col-md-12

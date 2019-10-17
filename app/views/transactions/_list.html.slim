@@ -18,14 +18,16 @@ tr
       .text-danger
         | #{number_with_delimiter(profit, delimiter: ".", separator:",", precision: 2)}
   td
-    a href='#{transaction_items_path(id: transaction.id)}'
-      button class="btn  btn-primary"
-        | Item
+    - if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'show').user_methods.pluck(:user_level).include? current_user.level
+      a href='#{transaction_path(id: transaction.id)}'
+        button class="btn  btn-primary"
+          | Detil
 
-    - complain = Complain.where(transaction_id: transaction).first
-    - in_range_complain = (transaction.created_at >= (DateTime.now - 3.days))
-    - if in_range_complain && !transaction.from_complain && complain.nil?
-      a href='#{new_complain_path(id: transaction.id)}'
-        button class="btn btn-danger"
-          | Retur
+    - if Controller.find_by(name: 'returs').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+      - complain = Complain.where(transaction_id: transaction).first
+      - in_range_complain = (transaction.created_at >= (DateTime.now - 3.days))
+      - if in_range_complain && !transaction.from_complain && complain.nil?
+        a href='#{new_complain_path(id: transaction.id)}'
+          button class="btn btn-danger"
+            | Retur
 

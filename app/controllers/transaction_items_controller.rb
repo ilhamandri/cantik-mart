@@ -1,7 +1,6 @@
 class TransactionItemsController < ApplicationController
   before_action :require_login
-  skip_before_action :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
-
+  before_action :require_fingerprint
   def index
     return redirect_back_data_error transactions_path, "Data Transaksi Tidak Ditemukan" if params[:id].nil?
     @transaction_items = TransactionItem.where(transaction_id: params[:id]).page param_page

@@ -3,10 +3,11 @@
     h5
       | Daftar Promo
   .col.text-right
-    a href="#{new_promotion_path}"
-      button.btn.btn-success type="button" 
-        i.fas.fa-plus 
-        |   Tambah Promo
+    - if Controller.find_by(name: 'promotions').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+        a href="#{new_promotion_path}"
+          button.btn.btn-success type="button" 
+            i.fas.fa-plus 
+            |   Tambah Promo
 br
 .container-fluid
   .col-lg-12.col-md-12

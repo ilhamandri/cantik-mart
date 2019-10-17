@@ -22,8 +22,9 @@
               input type="text" class="form-control md-form" value="Ya" disabled= "disabled"
             - else
               input type="text" class="form-control md-form" value="Tidak" disabled= "disabled"
-      .col-12.text-center
-        a href='#{edit_item_cat_path(id: @item_cat.id)}'
-          button.btn.btn-warning type="button" 
-            | Ubah Sub Departemen
+      - if Controller.find_by(name: 'item_cats').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+        .col-12.text-center
+          a href='#{edit_item_cat_path(id: @item_cat.id)}'
+            button.btn.btn-warning type="button" 
+              | Ubah Sub Departemen
       br

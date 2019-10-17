@@ -11,11 +11,13 @@ tr
     td #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}
     
   	td 
-  		a href='#{supplier_path(id: supplier.id)}'
+      a href='#{supplier_path(id: supplier.id)}'
     		button.btn.btn-info type="button" 
-	       		| Detil
-	    a href='#{edit_supplier_path(id: supplier.id)}'
-    		button.btn.btn-warning type="button" 
+	    		| Detil
+      
+      - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+        a href='#{edit_supplier_path(id: supplier.id)}'
+    		  button.btn.btn-warning type="button" 
 	       		| Edit
 	       		
 	    

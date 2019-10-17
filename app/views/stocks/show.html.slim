@@ -84,6 +84,7 @@
                         a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
                           |   + Cetak
 
-        .col-12.text-center
-          a href='#{edit_stock_path(id: @stock.id)}' class="btn btn-warning" type="button" 
-                | Edit
+        - if Controller.find_by(name: 'stocks').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+          .col-12.text-center
+            a href='#{edit_stock_path(id: @stock.id)}' class="btn btn-warning" type="button" 
+                  | Edit

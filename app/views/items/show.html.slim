@@ -111,15 +111,22 @@
                           |   Hapus
 
           .form-group.text-center
-            a href="#{edit_item_path(id: @item.id)}"
-              button.btn.btn-warning type="button" 
-                |   Edit
-            a href="#{new_grocer_item_path(id: @item.id)}"
-              button.btn.btn-info type="button" 
-                i.fas.fa-plus 
-                |   Tambah Harga
-            a href='#{item_suppliers_path(id: @item.id)}'
-              button.btn.btn-primary type="button" 
-                | Supplier
-            - if !@item.store_items.present? && !@item.supplier_items.present?
-              = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-danger"
+            - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+              a href="#{edit_item_path(id: @item.id)}"
+                button.btn.btn-warning type="button" 
+                  |   Edit
+
+            - if Controller.find_by(name: 'grocer_items').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+              a href="#{new_grocer_item_path(id: @item.id)}"
+                button.btn.btn-info type="button" 
+                  i.fas.fa-plus 
+                  |   Tambah Harga
+
+            - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+              a href='#{item_suppliers_path(id: @item.id)}'
+                    button.btn.btn-primary type="button" 
+                      | Supplier
+
+            - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
+              - if !@item.store_items.present? && !@item.supplier_items.present?
+                = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-danger"

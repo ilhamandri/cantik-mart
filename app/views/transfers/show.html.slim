@@ -67,5 +67,4 @@
             th Jumlah Terima
             th Keterangan
           tbody
-            = render partial: 'list', collection: @transfer_items, as: :trf_item
-        = paginate @transfer_items
+            = render partial: 'show_list', collection: @transfer_items, as: :trf_item

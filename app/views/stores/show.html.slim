@@ -35,8 +35,8 @@
         .text-center
           - if !@store.users.present? && !@store.store_items.present?
             = button_to "Hapus Toko", @store, :method=>:delete, :class=>"btn btn-danger"
-
-  .col-lg-12.col-md-12
+    - if ["owner", "super_admin", "finance"].include? current_user.level
+      .col-lg-12.col-md-12
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1

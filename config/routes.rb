@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   get 'order/:id/pay', to: 'orders#pay', as: 'order_pay'
   post 'order/:id/pay', to: 'orders#paid', as: 'order_paid'
 
-  post '/retur/:id/picked', to: 'returs#picked', as: 'retur_picked'
+  get '/retur/:id/picked', to: 'returs#picked', as: 'retur_picked'
   get '/retur/:id/feedback', to: 'retur_items#feedback', as: 'retur_feedback'
   post '/retur/:id/confirm_feedback', to: 'retur_items#feedback_confirmation', as: 'retur_feedback_confirmation'
 
@@ -88,7 +88,6 @@ Rails.application.routes.draw do
   resources :absents, only: %i[index show]
 
   resources :transfers
-  resources :transfer_items
   
   resources :losses
   resources :loss_items
@@ -98,8 +97,7 @@ Rails.application.routes.draw do
   resources :orders
   resources :order_items
 
-  resources :transactions, only: %i[index new create]
-  resources :transaction_items, only: %i[index show]
+  resources :transactions, only: %i[index new create show]
 
   resources :cash_flows, only: %i[index new create]
   resources :debts, only: %i[index new create show]

@@ -9,9 +9,10 @@ tr
     - else
       | Tidak
   td
-    a href='#{edit_item_cat_path(id: item_cat.id)}'
-    	button.btn.btn-warning.black-text type="button" 
-	       	| Edit
+    - if Controller.find_by(name: 'item_cats').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+      a href='#{edit_item_cat_path(id: item_cat.id)}'
+      	button.btn.btn-warning.black-text type="button" 
+  	       	| Edit
 
     a href='#{item_cat_path(id: item_cat.id)}'
     	button.btn.btn-info type="button" 

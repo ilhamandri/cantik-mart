@@ -36,6 +36,12 @@ class TransactionsController < ApplicationController
 
   end
 
+  def show
+    return redirect_back_data_error transactions_path, "Data Transaksi Tidak Ditemukan" if params[:id].nil?
+    @transaction_items = TransactionItem.where(transaction_id: params[:id])
+    return redirect_back_data_error transactions_path, "Data Transaksi Tidak Ditemukan" if @transaction_items.empty?
+  end
+
   def new
     respond_to do |format|
       format.html { render "transactions/new", :layout => false  } 

@@ -3,10 +3,11 @@
     h5
       | Daftar Sub-Department (#{@dept.name})
   .col.text-right
-    a href="#{new_item_cat_path(dept_id: @dept.id)}"
-      button.btn.btn-success type="button" 
-        i.fas.fa-plus 
-        |   Tambah Sub-Department
+    - if Controller.find_by(name: 'departments').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? current_user.level
+      a href="#{new_item_cat_path(dept_id: @dept.id)}"
+        button.btn.btn-success type="button" 
+          i.fas.fa-plus 
+          |   Tambah Sub-Department
 br
 .container-fluid
   .col-lg-12.col-md-12

@@ -69,8 +69,7 @@
             th Diskon
             th Total
           tbody
-            = render partial: 'list', collection: @transaction_items, as: :transaction_item
-        = paginate @transaction_items
+            = render partial: 'list_show', collection: @transaction_items, as: :transaction_item
 
 - contains_promo = @transaction_items.where("lower(reason) like ?", "%promo%")
 - contains_promo.present?

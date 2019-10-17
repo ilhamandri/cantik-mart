@@ -22,6 +22,12 @@ class TransfersController < ApplicationController
     end
   end
 
+  def index
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
+    @transfer_items = TransferItem.where(transfer_id: params[:id])
+    @item = Item.page param_page
+  end
+
   def new
     @stores = Store.all
     @inventories = StoreItem.page param_page

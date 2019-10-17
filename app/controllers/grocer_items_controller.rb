@@ -19,14 +19,27 @@ class GrocerItemsController < ApplicationController
     min = grocer_item.min
     max = grocer_item.max
     grocer = GrocerItem.where(item: item)
+    
     if grocer_item.price == 0
       grocer_item.price = item.sell
+      if grocer_item.price <= item.buy
+        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Harga Jual Lebih Besar dari Harga Beli"
+      end
     end
+    
     if grocer_item.discount == 0
       if grocer_item.price == item.sell
         return redirect_back_data_error new_grocer_item_path, "Tidak ada data yang disimpan"
       end
+      new_price = grocer_item.price - (grocer_item.price * grocer_item.discount / 100) if grocer_item.discount < 100
+      new_price = grocer_item.price - (grocer_item.price - grocer_item.discount) if grocer_item.discount > 100
+      if new_price <= item.buy
+        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Diskon Supaya Harga Jual Lebih Besar dari Harga Beli"
+      end
     end
+
+
+
     if min < 2
       return redirect_back_data_error new_grocer_item_path, "Data tidak valid"
     else
