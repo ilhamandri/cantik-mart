@@ -52,7 +52,7 @@ class UsersController < ApplicationController
     changes = user.changes
     user.save! if user.changed?
     user.create_activity :edit, owner: current_user, parameters: changes
-    return redirect_success users_path, "Data Pengguna - " + user.name + " - Berhasil Diubah"
+    return redirect_success user_path(id: user.id), "Data Pengguna - " + user.name + " - Berhasil Diubah"
   end
 
   def destroy

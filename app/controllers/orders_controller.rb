@@ -238,45 +238,49 @@ class OrdersController < ApplicationController
 
 
       profit_margin = this_item.margin
-      new_price = based_item_price + (based_item_price * profit_margin / 100).round(-2)
-      if this_item.local_item
-        last_price = store_stock.buy
-        if new_price > last_price
-          old_price = store_stock.sell
-          store_stock.sell = new_price
-          store_stock.save!
 
-          to_users = User.where(level: ["owner", "super_admin", "super_visi"]).where(store: current_user.store)
+      if this_item.sell < based_item_price
+        new_price = based_item_price + (based_item_price * profit_margin / 100).ceil(-2)
 
-          if old_price != store_stock.sell
-            Print.create item: this_item, store: current_user.store
-          end
+        if this_item.local_item
+          last_price = store_stock.buy
+          if new_price > last_price
+            old_price = store_stock.sell
+            store_stock.sell = new_price
+            store_stock.save!
 
-          message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
-          to_users.each do |to_user|
-            set_notification current_user, to_user, "info", message, prints_path
-          end
+            to_users = User.where(level: ["owner", "super_admin", "super_visi"]).where(store: current_user.store)
 
-        end
-      else
-        last_price = this_item.sell
-        if new_price > last_price
-          old_price = this_item.sell
-          this_item.sell = new_price
-          this_item.save!
-
-          to_users = User.where(level: ["owner", "super_admin", "super_visi"])
-
-          if old_price != this_item.sell
-            Store.all.each do |store|
-              Print.create item: this_item, store: store
+            if old_price != store_stock.sell
+              Print.create item: this_item, store: current_user.store
             end
+
             message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
             to_users.each do |to_user|
               set_notification current_user, to_user, "info", message, prints_path
             end
+
           end
-          
+        else
+          last_price = this_item.sell
+          if new_price > last_price
+            old_price = this_item.sell
+            this_item.sell = new_price
+            this_item.save!
+
+            to_users = User.where(level: ["owner", "super_admin", "super_visi"])
+
+            if old_price != this_item.sell
+              Store.all.each do |store|
+                Print.create item: this_item, store: store
+              end
+              message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
+              to_users.each do |to_user|
+                set_notification current_user, to_user, "info", message, prints_path
+              end
+            end
+            
+          end
         end
       end
 
@@ -300,7 +304,6 @@ class OrdersController < ApplicationController
         end
 
         new_buy = (item_grand_total + old_buy_total.to_f) / (receive_qty + store_stock.stock.to_i)  
-
         if this_item.local_item
           store_stock.buy = new_buy
           store_stock.save!

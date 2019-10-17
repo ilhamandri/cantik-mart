@@ -30,10 +30,15 @@
                 input class="form-control md-form" value="#{number_to_phone(@user.phone, country_code: 62)}" disabled="disabled"
               .form-group
                 label for="sex" Jenis Kelamin
-                input class="form-control md-form" value="#{@user.sex}" disabled="disabled"
+                - sex = @user.sex
+                - if sex == "laki_laki"
+                  - sex = "Laki - laki"
+                - else
+                  - sex = "Perempuan"
+                input class="form-control md-form" value="#{sex}" disabled="disabled"
               .form-group
                 label for="level" Peran 
-                input class="form-control md-form" value="#{@user.level}" disabled="disabled"
+                input class="form-control md-form" value="#{@user.level.upcase.gsub("_", "")}" disabled="disabled"
               .form-group
                 label for="id-card" KTP
                 input class="form-control md-form" value="#{number_with_delimiter(@user.id_card, delimiter: " ")}" disabled="disabled"
@@ -45,7 +50,7 @@
                 input class="form-control md-form" value="#{number_with_delimiter(@user.salary, delimiter: " ")}" disabled="disabled"
               .form-group
                 label for="id-card" Terakhir Update
-                input type="text" value="#{@user.updated_at}" class="form-control md-form"
+                input type="text" value="#{@user.updated_at}" class="form-control md-form" disabled="disabled"
           .col-12.text-center
             a href='#{edit_user_path(id: @user.id)}' 
               button.btn.btn-warning.black-text type="button" 

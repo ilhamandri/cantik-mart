@@ -19,8 +19,6 @@ class MethodsController < ApplicationController
     controller = @method.controller
     user_method = UserMethod.where(controller_method: @method)
     user_method.delete_all if user_method.present?
-    UserMethod.create controller_method: @method, user_level: 'owner'
-    UserMethod.create controller_method: @method, user_level: 'super_admin'
     if params[:method].nil?
       if @method.name == 'index'
         all_method_id = ControllerMethod.where(controller: controller).where.not(name: 'index').pluck(:id)
@@ -31,14 +29,15 @@ class MethodsController < ApplicationController
       return redirect_success urls , "Perubahan Hak Akses Gagal"
     end
     new_access_levels = params[:method][:access_levels]
+    levels = []
     new_access_levels.each do |access_level|
       level = User.levels.key(access_level.to_i)
       next if level.nil?
-      index_id = @method.controller.controller_methods.find_by(name: 'index')
-      having_index_access = UserMethod.find_by(user_level: level, controller_method: index_id)
-      # next if @method.name != 'index' && !having_index_access
+      levels << level
+      check_index @method, level
       UserMethod.create controller_method: @method, user_level: level
     end
+    end_check @method, levels
     urls = methods_path(id: @method.controller.id)
     return redirect_success urls, "Perubahan Hak Akses - (" + controller.name + " | " + @method.name + ") - Berhasil Disimpan"
   end
@@ -47,4 +46,25 @@ class MethodsController < ApplicationController
   	def param_page
       params[:page]
     end
+
+    def check_index check_method, level
+      if !["index", "show"].include? check_method.name
+        index_id = check_method.controller.controller_methods.find_by(name: 'index')
+        show_id = check_method.controller.controller_methods.find_by(name: 'show')
+        have_index_access = UserMethod.find_by(user_level: level, controller_method: index_id)
+        have_show_access = UserMethod.find_by(user_level: level, controller_method: show_id)
+        
+        a = UserMethod.create controller_method: index_id, user_level: level if have_index_access.nil?
+        s = UserMethod.create controller_method: show_id, user_level: level if have_show_access.nil?        
+      end
+    end
+
+    def end_check check_method, levels
+      if ["index", "show"].include? check_method.name
+        all_method_id = ControllerMethod.where(controller: check_method.controller).pluck(:id)
+        all_user_access = UserMethod.where(controller_method_id: all_method_id).where.not(user_level: levels)
+        all_user_access.delete_all
+      end
+    end
+
 end

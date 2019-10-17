@@ -25,14 +25,13 @@
             .form-group
               label for="level" Peran 
               select name="user[level]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="level" searchable="Cari..."
-                option value='owner'
-                  | Owner
-                option value='super_visi' 
-                  | Supervisi
-                option value='super_admin'
-                  | Super Admin
-                option value='cashier'
-                  | Kasir
+                - User::levels.each do |user_level|
+                  - if user_level[0] == @user.level
+                    option value='#{user_level[0]}' selected="selected"
+                      | #{user_level[0].upcase.gsub('_', ' ')}
+                  - else
+                    option value='#{user_level[0]}'
+                      | #{user_level[0].upcase.gsub('_', ' ')}
             .form-group
               label for="store" Toko
               select name="user[store_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store" searchable="Cari..."
