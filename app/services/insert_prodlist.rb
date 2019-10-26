@@ -11,6 +11,7 @@ class InsertProdlist
 		files = Dir["data/*.xlsx"]
 		files.each do |file|
 			xlsx = Roo::Spreadsheet.open("./"+file, extension: :xlsx)
+			store_id = file.gsub('data/','').split('-').first
 			xlsx.each_with_index do |row, idx|
 				next if xlsx.first == row
 				binding.pry if row[0].nil?
@@ -22,10 +23,14 @@ class InsertProdlist
 				sell = row[5]
 				wholesale = row[6]
 				box = row[7]
+				# limit = row[8]
+				limit = 10
+				# stock = row[9]
+				stock = 0
 				brand = row[2].split[0]
 				category = find_cat cat_name
 				cat_id = category.id
-	 			insert_prod code, name, buy, sell, wholesale, box, cat_id, brand, file
+	 			insert_prod code, name, buy, sell, wholesale, box, cat_id, brand, file, store_id, stock, limit
 			end
 		end
 	end
@@ -37,6 +42,7 @@ class InsertProdlist
 		Item.delete_all
 		ItemCat.delete_all
 		Department.delete_all
+
 
 		xlsx = Roo::Spreadsheet.open('./DEPARTMENTS.xlsx', extension: :xlsx)
 		xlsx.each do |row|
@@ -52,11 +58,11 @@ class InsertProdlist
 		end
 	end
 
-	def insert_prod code, name, buy, sell, wholesale, box, cat_id, brand, file
+	def insert_prod code, name, buy, sell, wholesale, box, cat_id, brand, file, store_id, stock, limit
 		item = Item.create code: code, name: name, buy: buy, 
 		sell: sell, wholesale: wholesale, box: box, 
 		item_cat_id: cat_id, brand: brand
-		StoreItem.create store: Store.first, stock: 0, item: item
+		# StoreItem.create store_id1; store_id.to_i, stock: stock, item: item, limit: limit
 	end
 
 	def find_cat cat_name

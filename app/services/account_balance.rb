@@ -1,6 +1,5 @@
 class AccountBalance
-  
-  @@store_id = 1
+
   # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
   @@work_day = [1,2,3,4,5]
   @@salary_date = "25"

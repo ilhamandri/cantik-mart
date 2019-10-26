@@ -6,24 +6,36 @@
           | Tambah Member
       .card-body
         = form_for :member, url: members_path, method: "POST" do |form|
-          .form-group
-            label for="name" Nama
-            = form.text_field :name, required: true, class: "form-control md-form", id: "name"
-          .form_group
-            label for="address" Alamat
-            = form.text_field :address, required: true, class: "form-control md-form", id: "address"
-          .form-group
-            label for="phone" Nomor Telepon
-            = form.number_field :phone, required: true, class: "form-control md-form", id: "phone", minlength:"6", maxlength: "13", pattern:"[0-9]+", title:"6-13 digit nomor telepon"
-          .form-group
-            label for="sex" Jenis Kelamin
-            select name="member[sex]" required=true class="mdb-select md-form colorful-select dropdown-primary" id="level"
-              option value="laki_laki"
-                | Laki - laki
-              option value="perempuan"
-                | Perempuan
-          .form-group
-            label for="card-card" Nomor Kartu
-            = form.text_field :card_number, required: true, class: "form-control md-form", id: "card_number", minlength:"1", pattern:"[0-9]+", title:"berisi nomor kartu"
-          .form-group.text-center
-            = form.submit "Tambah Member", class: "btn btn-primary"
+          .form-row
+            .form-group.md-form.col-6
+              label for="name" Nama
+              = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+
+            .form-group.md-form.col-6
+              label for="phone" Nomor Telepon
+              = form.text_field :phone, required: true, class: "form-control md-form", id: "phone", minlength:"6", maxlength: "13", pattern:"[0-9]+", title:"6-13 digit nomor telepon"
+
+            .form_group.md-form.col-12
+              label for="address" Alamat
+              = form.text_field :address, required: true, class: "form-control md-form", id: "address"
+            
+            .form-group.md-form.col-12
+              label for="card-card" Nomor Kartu
+              = form.text_field :card_number, required: true, class: "form-control md-form", id: "card_number", minlength:"1", pattern:"[0-9]+", title:"Masukkan hanya berupa angka"
+
+            .form-group.col-6
+              label class="mdb-main-label"
+                | Jenis Kelamin
+
+              select name="member[sex]" required=true class="mdb-select md-form" id="level"
+                option value="laki_laki"
+                  | Laki - laki
+                option value="perempuan"
+                  | Perempuan
+
+
+            
+
+            .form-group.col-6.text-center
+              .align-bottom
+                = form.submit "Tambah Member", class: "btn btn-lg btn-primary"

@@ -263,23 +263,40 @@ class OrdersController < ApplicationController
           end
         else
           last_price = this_item.sell
-          if new_price > last_price
-            old_price = this_item.sell
-            this_item.sell = new_price
+          if profit_margin > 0
+            if new_price > last_price
+              old_price = this_item.sell
+              this_item.sell = new_price.ceil(-2)
+              this_item.save!
+
+              to_users = User.where(level: ["owner", "super_admin", "super_visi"])
+
+              if old_price != this_item.sell
+                Store.all.each do |store|
+                  Print.create item: this_item, store: store
+                end
+                message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
+                to_users.each do |to_user|
+                  set_notification current_user, to_user, "info", message, prints_path
+                end
+              end  
+            end
+          else
+            this_item.sell = new_price.ceil(-2)
             this_item.save!
 
             to_users = User.where(level: ["owner", "super_admin", "super_visi"])
 
-            if old_price != this_item.sell
-              Store.all.each do |store|
-                Print.create item: this_item, store: store
-              end
-              message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
-              to_users.each do |to_user|
-                set_notification current_user, to_user, "info", message, prints_path
-              end
+            Store.all.each do |store|
+              Print.create item: this_item, store: store
             end
             
+            message = "Silahkan untuk melakukan set MARGIN / HARGA JUAL "+this_item.name
+            
+            to_users.each do |to_user|
+              set_notification current_user, to_user, "info", message, prints_path
+            end
+
           end
         end
       end

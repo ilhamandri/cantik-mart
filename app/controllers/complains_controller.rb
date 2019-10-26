@@ -184,8 +184,11 @@ class ComplainsController < ApplicationController
   private
     def filter_search params, r_type
       results = []
-      @complains = Complain.page param_page if r_type=="html"
-      @complains = Complain.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      @complains = Complain.all 
+      if r_type=="html"
+        @complains = @complains.page param_page
+      end
+      @complains = @complains.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
       @search = ""
       if params["search"].present?
         @search += "Pencarian "+params["search"]

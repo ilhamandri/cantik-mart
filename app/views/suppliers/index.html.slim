@@ -8,6 +8,11 @@
         button.btn.btn-success type="button" 
           i.fas.fa-plus 
           |   Tambah Supplier
+
+    - if ["owner", "finance", "super_admin"].include? current_user.level
+      a href="#{supplier_path(format: :pdf, id: 0)}"
+        button.btn.btn-warning.text-dark type="button" 
+          |   Daftar Hutang Piutang
 br
 .container-fluid
   .col-lg-12.col-md-12
@@ -20,7 +25,7 @@ br
         = form_for :supplier, url: suppliers_path, method: 'GET' do |form|
           .row.align-middle
             .col-md-12
-              input type="text" class="form-control md-form" id="search" name="search"
+              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nama supplier ..."
             .col-md-12.text-center
               button class="btn btn-primary"
                 | Cari

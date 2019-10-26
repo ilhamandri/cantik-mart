@@ -1,7 +1,7 @@
 .row
   .col.text-left
     h5
-      | Daftar Transaksi #{@member_name}
+      | Daftar Transaksi #{@member_name} #{@from}
 
   - if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
     .col.text-right
@@ -28,7 +28,8 @@ br
                     - Store.all.each do |store|
                       option value="#{store.id}"
                         | #{store.name}
-
+              - if @member.present?
+                input type="hidden" name="member_card" value="#{@member.card_number}"
               .col-md-6
                 select class="mdb-select md-form" id="months" name="months"
                   option value="1"
@@ -54,7 +55,7 @@ br
     .col-xl-6.col-lg-12.col-md-12.pb-2
       .card-header.white-text.info-color 
         h5.font-weight-500.my-1
-          | PENJUALAN 
+          | Grafik Transaksi 
       .card.mb-4 
         .card-body.table-responsive.text-nowrap
           canvas id="transactions"

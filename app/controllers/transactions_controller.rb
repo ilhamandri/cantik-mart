@@ -5,13 +5,13 @@ class TransactionsController < ApplicationController
 
   def index
     filter = filter_search params, "html"
-    @search = filter[0]
+    @search = "Rekap transaksi " + filter[0]
     @transactions = filter[1]
     @params = params.to_s
 
     if params[:member_card].present?
       @member = Member.find_by(card_number: params[:member_card])
-      @member_name = @member.name
+      @member_name = " - "+@member.name
       @transactions = @transactions.where(member_card: params[:member_card])
     end
     
@@ -142,13 +142,22 @@ class TransactionsController < ApplicationController
 
       return [grand_totals, hpp_totals, profits]
     end
+
     def filter_search params, r_type
       results = []
       @transactions = Transaction.all
+      if params[:from].present?
+        if params[:from] == "complain"
+          curr_date = Date.today - 3.days
+          @from = " Komplain ("+curr_date.to_s+" - "+Date.today.to_s+")"
+          @transactions = @transactions.where("created_at > ?", curr_date)
+        end
+      end
       if r_type == "html"
         @transactions = @transactions.page param_page if r_type=="html"
       end
       @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      
       @search = ""
       if params["search"].present?
         @search += "Pencarian "+params["search"]

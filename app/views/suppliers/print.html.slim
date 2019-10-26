@@ -24,19 +24,27 @@ table#items
     th Piutang
 
   - @suppliers.each do |supplier|
-    tr.item-row
-      td #{supplier.name}
-      td #{supplier.address}
-      td #{number_to_phone(supplier.phone, country_code: 62)}
-      
-      - debts = Debt.where(finance_type: Debt::ORDER, supplier: supplier).where("deficiency > 0").sum(:deficiency)
-      - total_debt += debts
-      td #{number_with_delimiter(debts.to_i, delimiter: ".", separator: ",")}
 
+    - debts = Debt.where(finance_type: Debt::ORDER, supplier: supplier).where("deficiency > 0").sum(:deficiency)
+    - total_debt += debts
+    - receivables = Receivable.where(finance_type: Receivable::RETUR, to_user: supplier.id).where("deficiency > 0").sum(:deficiency)
+    - total_receivable += receivables
 
-      - receivables = Receivable.where(finance_type: Receivable::RETUR, to_user: supplier.id).where("deficiency > 0").sum(:deficiency)
-      - total_receivable += receivables
-      td #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}
+    - if @type.nil?
+      tr.item-row
+        td #{supplier.name}
+        td #{supplier.address}
+        td #{number_to_phone(supplier.phone, country_code: 62)}      
+        td #{number_with_delimiter(debts.to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}
+    - else
+      - if debts > 0 || receivables > 0
+        tr.item-row
+          td #{supplier.name}
+          td #{supplier.address}
+          td #{number_to_phone(supplier.phone, country_code: 62)}      
+          td #{number_with_delimiter(debts.to_i, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}
 
   tr
     th colspan=3

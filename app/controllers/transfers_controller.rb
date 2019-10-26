@@ -22,12 +22,6 @@ class TransfersController < ApplicationController
     end
   end
 
-  def index
-    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
-    @transfer_items = TransferItem.where(transfer_id: params[:id])
-    @item = Item.page param_page
-  end
-
   def new
     @stores = Store.all
     @inventories = StoreItem.page param_page
@@ -69,7 +63,7 @@ class TransfersController < ApplicationController
 
 
     transfer.create_activity :create, owner: current_user
-    urls = transfer_items_path id: transfer.id
+    urls = transfer_path id: transfer.id
 
     if !trf_status
       transfer.date_approve = "01-01-1999".to_date
@@ -112,7 +106,7 @@ class TransfersController < ApplicationController
     end
     
     transfer.save!
-    urls = transfer_items_path id: params[:id]
+    urls = transfers_path id: params[:id]
     return redirect_success urls, "Data Transfer " + transfer.invoice + " Telah Dikonfirmasi"
   end
 
@@ -180,6 +174,8 @@ class TransfersController < ApplicationController
   def show
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     @transfer = Transfer.find_by_id params[:id]
+    @transfer_items = TransferItem.where(transfer: @transfer)
+    @item = Item.page param_page
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless @transfer.present?
     respond_to do |format|
       format.html
@@ -196,9 +192,9 @@ class TransfersController < ApplicationController
       results = []
       @transfers = Transfer.all
       if r_type == "html"
-        @transfers = @transfers.page param_page if r_type=="html"
+        @transfers = @transfers.page param_page
       end
-      @transfers = @transfers.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      @transfers = @transfers.where("to_store_id = ? OR from_store_id= ?" , current_user.store.id, current_user.store.id) if  !["owner", "super_admin", "finance"].include? current_user.level
       @search = ""
       if params["search"].present?
         @search += "Pencarian "+params["search"]
@@ -226,7 +222,7 @@ class TransfersController < ApplicationController
           @search += " di Semua Toko"
         end
       end
-
+      
       results << @search
       results << @transfers
       results << store_name

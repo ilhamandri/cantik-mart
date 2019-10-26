@@ -37,8 +37,23 @@ class SuppliersController < ApplicationController
 
   def show
     return redirect_back_data_error suppliers_path, "Data Supplier Tidak Ditemukan" unless params[:id].present?
-    @supplier = Supplier.find_by_id params[:id]
+    id = params[:id]
+    id = Supplier.first.id if params[:id] == "0"
+    @supplier = Supplier.find_by_id id
     return redirect_back_data_error suppliers_path, "Data Supplier Tidak Ditemukan" unless @supplier.present?
+    respond_to do |format|
+      format.html
+      format.pdf do
+        @suppliers = Supplier.order("name ASC")
+        @suppliers = @suppliers.where(supplier_type: 0)
+        @search = "Daftar Hutang Piutang Semua Supplier"
+        @type = "debtlist"
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "suppliers/print.html.slim"
+      end
+    end
+    
   end
 
   def new

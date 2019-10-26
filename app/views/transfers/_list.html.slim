@@ -42,7 +42,7 @@ tr
       | #{transfer.confirmed_by.name} (#{transfer.status.to_date})
   td #{transfer.description}
   td
-    a href='#{transfers_path(id: transfer.id)}'
+    a href='#{transfer_path(id: transfer.id)}'
       button class="btn btn-primary"
         | Item
 

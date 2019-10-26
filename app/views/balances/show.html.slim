@@ -13,16 +13,8 @@
 
       - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
       - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
-      - if activa.to_i != passiva.to_i
-        - min = activa.to_i - passiva.to_i
-        - if min > 0
-          - balance.stock_value = balance.stock_value - min.abs
-        - else
-          - balance.stock_value = balance.stock_value + min.abs
-
-      / - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
-      / - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
-
+      
+      
       .card-body.col-6.text-left
         .card-header.white-text.primary-color
           | AKTIVA

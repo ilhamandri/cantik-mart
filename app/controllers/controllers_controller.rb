@@ -21,6 +21,8 @@ class ControllersController < ApplicationController
       datas[controller_name] << action_name if !datas[controller_name].include? action_name
 	 end
    insert_new_method datas
+
+   Grant.insert_access_grant
   end
 
   def insert_new_method datas
@@ -39,16 +41,42 @@ class ControllersController < ApplicationController
   def insert_new_user_method new_method
     user_method = UserMethod.find_by(user_level: current_user.level, controller_method: new_method)
     return if user_method.present?
+    UserMethod.create controller_method: new_method, user_level: 'owner'
+    UserMethod.create controller_method: new_method, user_level: 'super_admin'
   end
 
   def show
-    return redirect_back_data_error controllers_path unless params[:id].present?
-    @controller = Controller.find_by_id params[:id]
-    return redirect_back_data_error controllers_path unless @controller.present?
+    # return redirect_back_data_error controllers_path unless params[:id].present?
+    # @controller = Controller.find_by_id params[:id]
+    # return redirect_back_data_error controllers_path unless @controller.present?
+    
+    filename = "./report/access/"+DateTime.now.to_i.to_s+".xlsx"
+
+    download_excel filename
+    send_file(filename)
   end
 
   private
   	def param_page
       params[:page]
+    end
+
+    def download_excel filename
+      p = Axlsx::Package.new
+      wb = p.workbook
+
+      controllers = Controller.all
+
+      controllers.each do |controller|
+        wb.add_worksheet(:name => controller.name) do |sheet|
+          sheet.add_row ["METHOD", "LEVEL " + User::levels.keys.to_s]
+          controller.controller_methods.each do |c_method|
+            # sheet.add_row [c_method.name, UserMethod.where(controller_method: c_method).pluck(:user_level)]
+            sheet.add_row [c_method.name]
+          end
+        end
+      end
+
+      p.serialize(filename)
     end
 end
