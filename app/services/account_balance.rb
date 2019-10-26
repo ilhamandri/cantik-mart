@@ -66,6 +66,19 @@ class AccountBalance
       balances.delete_all
       balance = StoreBalance.create store: store, cash: kas.round, receivable: piutang.round, stock_value: nilai_stok.round,
           asset_value: nilai_aset.round, transaction_value: profit.round, equity: modals.round, debt: hutang.round, outcome: income_outcome.round
+
+      activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
+      passiva = balance.equity + balance.outcome + balance.transaction_value + balance.debt
+
+      if activa != passiva
+        diff_act_pass = activa-passiva
+        if activa > passiva
+          balance.stock_value = balance.stock_value - diff_act_pass.abs
+        else
+          balance.stock_value = balance.stock_value + diff_act_pass.abs
+        end
+        balance.save!
+      end
       
       last_balancing_s = @@salary_date+"-"+Date.today.month.to_s+"-"+Date.today.year.to_s
       last_balancing = last_balancing_s.to_datetime.end_of_day

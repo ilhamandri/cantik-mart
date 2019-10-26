@@ -5,17 +5,6 @@ tr
 	td #{balance.created_at.to_date}
 	td #{number_with_delimiter(activa.to_i, delimiter: ".", separator: ",")}
 	td #{number_with_delimiter(passiva.to_i, delimiter: ".", separator: ",")}
-	- activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
-    - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
-  	- if activa.to_i != passiva.to_i
-    	- min = activa.to_i - passiva.to_i
-    	- if min > 0
-      		- balance.stock_value = balance.stock_value - min.abs
-    	- else
-      		- balance.stock_value = balance.stock_value + min.abs
-
-  	- activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
-  	- passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
 	td 
 		- if activa.to_i == passiva.to_i
 			.text-success
