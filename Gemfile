@@ -29,8 +29,6 @@ gem 'roo', '~> 2.8.0'
 gem 'rails_12factor', group: :production
 gem 'public_activity'
 gem 'usagewatch'
-# gem 'chartkick'
-# gem 'savon', '~> 2.12.0'
 gem 'activity_notification'
 gem 'whenever'
 gem 'zip-zip'
