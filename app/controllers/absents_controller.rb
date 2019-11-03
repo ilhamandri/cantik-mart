@@ -4,37 +4,47 @@ class AbsentsController < ApplicationController
   def index
     status = false
     status = get_data
-    AccountBalance.salary
+    # AccountBalance.salary
     if !status
       @status = "Fingerprint tidak terhubung."
     end
     @search_text = "Pencarian  "
     @absents = Absent.page param_page
+    new_params = nil
     if params[:option].present?
       new_params = eval(params[:option])
     end
-    params = new_params
     @params = params
     if ["owner", "super_admin", "finance"].include? current_user.level 
-      if params[:id].present?
-        @search_id = params[:id]
-        @absents = @absents.where(user_id: params[:id])
+      if new_params.present?
+        @search_id = new_params["id"] if new_params["id"].present?
+        search_params = new_params["search"]
+        search_from_date = new_params["date_from_search"]
+        search_to_date = new_params["date_to_search"]
+      else
+        @search_id = params[:id] if params[:id].present?
+        search_params = params[:search]
+        search_from_date = params[:date_from_search]
+        search_to_date = params[:date_to_search]
       end
 
-      if params[:search].present?
-        search = "%"+params[:search]+"%".downcase
-        @search_text+= " '"+params[:search]+"' "
+      if @search_id.present?
+        @absents = @absents.where(user_id: @search_id)
+      end
+
+      if search_params.present?
+        search = "%"+search_params+"%".downcase
+        @search_text+= " '"+search_params+"' "
         users = User.where("lower(name) like ?", search).pluck(:id)
         @absents = @absents.where(user_id: users)
       end
 
-      if params[:date_from_search].present?
-        @search_date = params[:date_from_search].to_date
-        @search_text+= "dari "+@search_date.to_s
-        @absents = @absents.where("DATE(check_in) >= ?", @search_date)
-        if params[:date_to_search].present?
-          if params[:date_to_search] != params[:date_from_search]
-            @search_date = params[:date_to_search].to_date
+      if search_from_date.present?
+        @search_text+= "dari "+search_from_date.to_s
+        @absents = @absents.where("DATE(check_in) >= ?", search_from_date)
+        if search_to_date.present?
+          if search_to_date != search_from_date
+            @search_date = search_to_date.to_date
             @search_text+= " hingga "+@search_date.to_s
             @absents = @absents.where("DATE(check_in) <= ?", @search_date)
           end
@@ -43,6 +53,7 @@ class AbsentsController < ApplicationController
     else
       @absents = @absents.where(user: current_user)
     end
+
     respond_to do |format|
       format.html
       format.xlsx do

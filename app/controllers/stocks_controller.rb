@@ -47,7 +47,7 @@ class StocksController < ApplicationController
         @search += " di Toko "+store.name
         store_name = store.name
       else
-        @search += "Penacarian " if @search==""
+        @search += "Pencarian " if @search==""
         @search += " di Semua Toko" 
       end
     end
@@ -58,10 +58,10 @@ class StocksController < ApplicationController
         items = Item.all if items.nil?
         items = items.where(item_cat: item_cat)
         @inventories = @inventories.where(item: items)
-        @search += "Penacarian " if @search==""
+        @search += "Pencarian " if @search==""
         @search += " pada kategori "+item_cat.name
       else
-        @search += "Penacarian " if @search==""
+        @search += "Pencarian " if @search==""
         @search += " pada Semua Kategori"
       end
     end

@@ -181,7 +181,7 @@ class TransactionsController < ApplicationController
           @search += "Pencarian" if @search==""
           @search += " di Toko '"+store.name+"'"
         else
-          @search += "Penacarian" if @search==""
+          @search += "Pencarian" if @search==""
           @search += " di Semua Toko"
         end
       end

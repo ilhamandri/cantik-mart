@@ -4,7 +4,7 @@ tr
   - item_order_count = order.order_items.sum(:quantity)
   - if order.order_items.sum(:receive) != 0
     - item_order_count = order.order_items.sum(:receive)
-  td #{item_order_count}
+  td #{item_order_count.to_i}
   td #{number_with_delimiter(order.grand_total, delimiter: ".")}
   td #{order.user.name} (#{order.date_created.to_date})
   td
@@ -26,5 +26,5 @@ tr
   td
     a href='#{order_path(id: order.id)}'
       button class="btn btn-primary"
-        | Item
+        | Detil
 

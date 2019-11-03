@@ -377,7 +377,7 @@ class OrdersController < ApplicationController
     if !order_from_retur
       Debt.create user: current_user, store: current_user.store, nominal: order.grand_total, 
                 deficiency: order.grand_total, date_created: DateTime.now, ref_id: order.id,
-                description: order.invoice, finance_type: Debt::ORDER, due_date: due_date
+                description: order.invoice, finance_type: Debt::ORDER, due_date: due_date, supplier_id: order.supplier.id
 
       set_notification(current_user, User.find_by(store: current_user.store, level: User::FINANCE), 
         Notification::INFO, "Pembayaran "+order.invoice+" sebesar "+number_to_currency(new_total, unit: "Rp. "), urls)
@@ -410,6 +410,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Nominal harus lebih besar atau sama dengan 100" if nominal == 0
     return redirect_back_data_error orders_path, 
       "Data Order Tidak Valid (Pembayaran > Jumlah / Pembayaran < 100 )" if (totals-paid+nominal) > totals || nominal < 100 || ( ((totals - nominal) < 100) && ((totals - nominal) > 1))
+    return redirect_back_data_error orders_path, "Tanggal pembayaran harus diisi." if params[:order_pay][:date_paid].nil?
     order_inv = InvoiceTransaction.new 
     order_inv.invoice = order.invoice
     order_inv.transaction_type = 0
@@ -444,7 +445,7 @@ class OrdersController < ApplicationController
     user = User.find_by(store: current_user.store, level: User::FINANCE)
     if user.present?
       set_notification(current_user, user, 
-        Notification::INFO, "Pembayaran "+order.invoice+" sebesar "+number_to_currency(new_total, unit: "Rp. ")+ " Telah Dikonfirmasi", urls)
+        Notification::INFO, "Pembayaran "+order.invoice+" sebesar "+number_to_currency(nominal, unit: "Rp. ")+ " Telah Dikonfirmasi", urls)
     end
     return redirect_success urls, "Pembayaran Order " + order.invoice + " Sebesar " + nominal.to_s + " Telah Dikonfirmasi"
   end
@@ -498,7 +499,7 @@ class OrdersController < ApplicationController
           @search += "Pencarian" if @search==""
           @search += " di Toko '"+store.name+"'"
         else
-          @search += "Penacarian" if @search==""
+          @search += "Pencarian" if @search==""
           @search += " di Semua Toko"
         end
       end
