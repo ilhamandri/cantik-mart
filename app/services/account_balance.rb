@@ -58,6 +58,7 @@ class AccountBalance
       store.save!
 
       curr_day_start = DateTime.now.beginning_of_day
+      
       curr_day_end = DateTime.now.end_of_day
 
       balance = nil
@@ -70,27 +71,30 @@ class AccountBalance
       activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
       passiva = balance.equity + balance.outcome + balance.transaction_value + balance.debt
 
-      if activa != passiva
-        diff_act_pass = activa-passiva
-        if activa > passiva
-          balance.stock_value = balance.stock_value - diff_act_pass.abs
-        else
-          balance.stock_value = balance.stock_value + diff_act_pass.abs
-        end
-        balance.save!
-      end
+      # if activa != passiva
+      #   diff_act_pass = activa-passiva
+      #   if activa > passiva
+      #     balance.stock_value = balance.stock_value - diff_act_pass.abs
+      #   else
+      #     balance.stock_value = balance.stock_value + diff_act_pass.abs
+      #   end
+      #   balance.save!
+      # end
       
-      last_balancing_s = @@salary_date+"-"+Date.today.month.to_s+"-"+Date.today.year.to_s
-      last_balancing = last_balancing_s.to_datetime.end_of_day
+      dt_now = DateTime.now
+      end_month = DateTime.now.end_of_month - 1.hour - 30.minutes
       store.cash = kas
       store.equity = modals
 
-      if last_balancing.to_date != Date.today      
-        store.grand_total_before = penjualan
-        store.modals_before = transfer
-      else
-        store.grand_total_before = 0
-        store.modals_before = 0
+
+      store.grand_total_before = penjualan
+      store.modals_before = transfer
+      
+      if  dt_now.month == end_month.month
+        if dt_now > end_month
+          store.grand_total_before = 0
+          store.modals_before = 0
+        end
       end
       
       store.save!

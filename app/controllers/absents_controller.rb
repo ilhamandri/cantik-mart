@@ -10,7 +10,11 @@ class AbsentsController < ApplicationController
     end
     @search_text = "Pencarian  "
     @absents = Absent.page param_page
-
+    if params[:option].present?
+      new_params = eval(params[:option])
+    end
+    params = new_params
+    @params = params
     if ["owner", "super_admin", "finance"].include? current_user.level 
       if params[:id].present?
         @search_id = params[:id]
@@ -24,13 +28,40 @@ class AbsentsController < ApplicationController
         @absents = @absents.where(user_id: users)
       end
 
-      if params[:date_search].present?
-        @search_date = params[:date_search].to_date
-        @search_text+= "tanggal "+@search_date.to_s
-        @absents = @absents.where("DATE(check_in) = ?", @search_date)
+      if params[:date_from_search].present?
+        @search_date = params[:date_from_search].to_date
+        @search_text+= "dari "+@search_date.to_s
+        @absents = @absents.where("DATE(check_in) >= ?", @search_date)
+        if params[:date_to_search].present?
+          if params[:date_to_search] != params[:date_from_search]
+            @search_date = params[:date_to_search].to_date
+            @search_text+= " hingga "+@search_date.to_s
+            @absents = @absents.where("DATE(check_in) <= ?", @search_date)
+          end
+        end
       end
     else
       @absents = @absents.where(user: current_user)
+    end
+    respond_to do |format|
+      format.html
+      format.xlsx do
+        filename = "./report/absent/"+DateTime.now.to_i.to_s+".xlsx"
+        p = Axlsx::Package.new
+        wb = p.workbook
+        users_id = @absents.pluck(:user_id).uniq
+        users = User.where(id: users_id)
+        users.each do |user|
+          wb.add_worksheet(:name => user.name+" - "+user.store.name) do |sheet|
+            sheet.add_row ["Masuk", "Pulang", "Jam Kerja", " ", "Mulai Lembur", "Selesai Lembur", " Jam Lembur"]
+            @absents.where(user: user).order("check_in ASC").each do |data|
+              sheet.add_row [data.check_in.to_s, data.check_out.to_s, data.work_hour, "", data.overtime_in.to_s, data.overtime_out.to_s, data.overtime_hour]
+            end
+          end
+        end
+        p.serialize(filename)
+        send_file(filename)
+      end
     end
   end
 

@@ -12,21 +12,13 @@
 
 --> aktifin notifikasi (js)
 
---> set tanggal pehitungan absent + store_id + work_day (services/AccountBalance)
-
 --> set @@max_complain ==> complains
 
 --> set @@store_id di local server (services/SyncData)
 
 ======================================================================
 
---> button buat download laporan akhir bulan
-
---> cek semua notifikasi
-	* payment --> FINANCE
-	* due date --> FINANCE
-	* confirm order / transfer --> SUPER_VISI
-		
+--> button buat download laporan akhir bulan		
 
 --> activity trackable
 
@@ -39,6 +31,7 @@ PENDING
 	* CETAK
 		- price tag (zebra)
 
+--> set tanggal pehitungan absent + store_id + work_day (services/AccountBalance)
 
 
 =============================================================

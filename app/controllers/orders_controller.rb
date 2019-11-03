@@ -239,7 +239,7 @@ class OrdersController < ApplicationController
 
       profit_margin = this_item.margin
 
-      if this_item.sell < based_item_price
+      if this_item.buy < based_item_price
         new_price = based_item_price + (based_item_price * profit_margin / 100).ceil(-2)
 
         if this_item.local_item
@@ -314,6 +314,29 @@ class OrdersController < ApplicationController
       old_buy_total = 0
 
       if !order_from_retur
+
+        # diff = 0
+        # if !this_item.local_item
+        #   if this_item.buy < based_item_price
+        #     diff = ( (store_stock.stock + receive_qty) * based_item_price ) - ( (store_stock.stock.to_i * this_item.buy) + (new_buy_total) )
+        #     this_item.buy = based_item_price
+        #   else
+        #     diff = ( (store_stock.stock + receive_qty) * this_item.buy ) - ( (store_stock.stock.to_i * this_item.buy) + (new_buy_total) )
+        #   end
+        # else
+        #   if store_stock.buy < based_item_price
+        #     diff = ( (store_stock.stock + receive_qty) * based_item_price ) - ( (store_stock.stock.to_i * store_stock.buy) + (new_buy_total) )
+        #     store_stock.buy = based_item_price
+        #   else
+        #     diff = ( (store_stock.stock + receive_qty) * store_stock.buy ) - ( (store_stock.stock.to_i * store_stock.buy) + (new_buy_total) )
+        #   end
+        # end
+        
+        # this_item.save!
+        # store.equity = store.equity + diff
+        # store.save! 
+
+
         if this_item.local_item
           old_buy_total = (store_stock.stock.to_i * store_stock.buy).to_f 
         else

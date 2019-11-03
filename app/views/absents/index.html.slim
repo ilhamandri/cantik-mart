@@ -14,10 +14,7 @@ br
   .col-lg-12.col-md-12
     .card-header.white-text.info-color
       h5.font-weight-500.my-1
-        - if @search_text.present?
-          | #{@search_text}
-        - else
-          | Pencarian
+        | Pencarian
     .card.mb-4
       .card-body
         = form_for :user, url: absents_path, method: 'GET' do |form|
@@ -25,8 +22,7 @@ br
             input type="number" class="form-control md-form" name="id" value="#{@search_id}" style="display: none"
           .row.align-middle
             - if ["owner", "super_admin", "super_finance"].include? current_user.level
-              .col-md-12.text-center
-                label Toko
+              .col-md-6.text-center
                 select class="mdb-select md-form" id="months" name="store_id"
                   option value="0"
                     | Semua Toko
@@ -35,14 +31,17 @@ br
                       | #{store.name}
               .col-md-6.text-center
                 input type="text" class="form-control md-form" id="search" name="search" placeholder="Cari nama..."
-              .col-md-6.text-center
-                input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date_search"]        
-            - else
-              .col-md-12.text-center
-                input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date_search"]            
+            .col-md-6.text-center
+              input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date_from_search"]        
+            .col-md-6.text-center
+              input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date_to_search"]            
             .col-md-12.text-center
               button class="btn btn-primary"
                 | Cari
+            .col-md-12.text-center.grey-text
+              a href="#{absents_path(option: @params.to_s, format: :xlsx)}"
+                b
+                  | #{@search_text}
 .container-fluid
   .col-lg-12.col-md-12
     .card-header.white-text.info-color
