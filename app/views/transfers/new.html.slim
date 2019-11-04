@@ -15,8 +15,9 @@
                 label for="from" Kepada
                 select class="mdb-select md-form md-outline colorful-select dropdown-primary" searchable="Cari..." name="transfer[store_id]"
                   - @stores.each do |store|
-                    option data-subtext="#{store.address}" value="#{store.id}"
-                      | #{store.name}
+                    - if store != current_user.store
+                      option data-subtext="#{store.address}" value="#{store.id}"
+                        | #{store.name}
   .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4

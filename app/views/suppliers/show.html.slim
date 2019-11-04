@@ -35,7 +35,7 @@
         - if Controller.find_by(name: 'supplier_items').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? current_user.level
           a href='#{supplier_items_path(id: @supplier.id)}'
             button.btn.btn-primary type="button" 
-              | Lihat Daftar Barang
+              | Riwayat Pembelian Barang
         - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
           a href='#{new_order_path(supplier_id: @supplier.id)}'
             button.btn.btn-success type="button" 

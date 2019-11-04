@@ -12,7 +12,7 @@
         button class="btn btn-primary"
           | TERIMA
       |  
-  - if transfer.date_approve.nil? && transfer.to_store.id == current_user.store.id && ( current_user.level == User::SUPERVISI || current_user.level == User::OWNER || current_user.level == User::SUPERADMIN )
+  - if transfer.date_approve.nil? && transfer.to_store.id == current_user.store.id && ( current_user.level == User::SUPERVISI || current_user.level == User::OWNER || current_user.level == User::SUPER_ADMIN )
     .col.text-right
     .col-md-6.text-right
       a href="#{transfer_confirmation_path(id: transfer_id)}"

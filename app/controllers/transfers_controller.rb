@@ -96,17 +96,21 @@ class TransfersController < ApplicationController
     return redirect redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless transfer.present?
     return redirect_back_data_error transfers_path "Data Transfer Tidak Valid" if transfer.date_confirm.present? || transfer.date_picked.present?
     if params[:transfer][:status]=="0"
+      transfer.approved_by = current_user
       transfer.description = "Dibatalkan oleh " + current_user.name + "("+current_user.store.name+") pada "+DateTime.now.to_date.to_s
       transfer.date_approve = "01-01-1999".to_date
       transfer.date_picked = "01-01-1999".to_date
       transfer.status = "01-01-1999".to_date
+      set_notification current_user, transfer.user, "danger", "Transfer #"+transfer.invoice+" dibatalkan oleh " + current_user.name + "("+current_user.store.name+") pada "+DateTime.now.to_date.to_s, transfer_path(id: transfer.id)
     else
       transfer.date_approve = DateTime.now
       transfer.approved_by = current_user
+      set_notification current_user, transfer.user, "success", "Transfer #"+transfer.invoice+" diterima oleh " + current_user.name + "("+current_user.store.name+") pada "+DateTime.now.to_date.to_s, transfer_path(id: transfer.id)
+    
     end
     
     transfer.save!
-    urls = transfers_path id: params[:id]
+    urls = transfer_path id: params[:id]
     return redirect_success urls, "Data Transfer " + transfer.invoice + " Telah Dikonfirmasi"
   end
 
@@ -127,17 +131,17 @@ class TransfersController < ApplicationController
     status = sent_items params[:id] 
     transfer.date_picked = DateTime.now
     transfer.picked_by = current_user
+    transfer.save!
     if status==false
       transfer.status = "01-01-1999".to_date
       transfer.description = "Dibatalkan otomatis oleh sistem (tidak ada barang yang dikirim)" 
       transfer.save!
-      return redirect_back_data_error transfers_path, "Dibatalkan otomatis oleh sistem (tidak ada barang yang dikirim)"
+      set_notification current_user, transfer.approved_by, "danger", "Transfer #"+transfer.invoice+" dibatalkan oleh sistem (Tidak ada item yang dikirim).", transfer_path(id: transfer.id)
+      return redirect_to transfer_path(id: transfer.id)
     else
-      transfer.save!
-      return redirect_success transfers_path, "Item Transfer Telah Disimpan"
+      return redirect_success transfers_path, "Transfer "+transfer.invoice+" telah dikirim"
     end
     
-    return redirect_success transfers_path, "Transfer "+transfer.invoice+" telah dikirim"
   end
 
   def receive
@@ -222,6 +226,8 @@ class TransfersController < ApplicationController
           @search += " di Semua Toko"
         end
       end
+
+      @transfers = @transfers.order("created_at DESC")
       
       results << @search
       results << @transfers
