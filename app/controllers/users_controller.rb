@@ -5,8 +5,7 @@ class UsersController < ApplicationController
     
     Grant.insert_access_grant
     Grant.insert_user
-    insert_prod = InsertProdlist.new
-    insert_prod.read
+    InsertProdlist.read
 
     @users = User.page param_page
     if params[:search].present?

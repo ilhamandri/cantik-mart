@@ -24,6 +24,8 @@ class Grant
 				level = row[3]
 				store = row[4].to_i
 
+				next if User.find_by(email: email).present?
+				
 				user = User.new
 				user.name = name
 				user.email = email

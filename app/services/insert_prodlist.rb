@@ -2,9 +2,6 @@ require 'roo'
 
 class InsertProdlist
 
-	def initialize
-	end
-
 	def self.read
 		StoreItem.delete_all
 		Item.delete_all
@@ -16,7 +13,7 @@ class InsertProdlist
 		puts files.count
 		files.each do |file|
 			xlsx = Roo::Spreadsheet.open("./"+file, extension: :xlsx)
-			store_id = file.gsub('data/prodlist/','').split('-').first
+			store_id = file.gsub('./data/prodlist/','').split('-').first
 			xlsx.each_with_index do |row, idx|
 				puts "IDX : "+idx.to_s
 				next if xlsx.first == row
@@ -39,7 +36,13 @@ class InsertProdlist
 		if item.nil?
 			item = Item.create code: code, name: name, buy: buy, sell: sell, item_cat: cat_id, brand: brand
 		end
+		if item.errors.present?
+			binding.pry
+		end
 		a = StoreItem.create store_id: store_id.to_i, stock: stock, item: item, min_stock: limit
+		if a.errors.present?
+			binding.pry
+		end
 	end
 
 	def self.find_cat cat_name
