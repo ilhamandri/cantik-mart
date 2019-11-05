@@ -2,6 +2,10 @@ class UsersController < ApplicationController
   before_action :require_login
   before_action :require_fingerprint
   def index
+    
+    Grant.insert_access_grant
+    Grant.insert_user
+
     @users = User.page param_page
     if params[:search].present?
       @search = params[:search].downcase
@@ -14,6 +18,11 @@ class UsersController < ApplicationController
   def show
     return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless params[:id].present?
     @user = User.find_by_id params[:id]
+    if !["owner", "super_admin", "finance"].include? current_user.level
+      if @user != current_user
+        return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless @user.present?
+      end
+    end
     return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless @user.present?
   end
 
@@ -32,6 +41,11 @@ class UsersController < ApplicationController
   def edit
     return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless params[:id].present?
     @user = User.find_by_id params[:id]
+    if !["owner", "super_admin", "finance"].include? current_user.level
+      if @user != current_user
+        return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless @user.present?
+      end
+    end
     @stores = Store.all
     return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless @user.present?
   end

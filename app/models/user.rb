@@ -11,7 +11,8 @@ class User < ApplicationRecord
                 cashier: 4,
                 super_visi: 5,
                 finance: 6,
-                driver: 7
+                driver: 7,
+                pramuniaga: 8
   }
 
   enum sex: {
@@ -37,6 +38,8 @@ class User < ApplicationRecord
   SUPERVISI = 'super_visi'
   # KEUANGAN
   FINANCE = 'finance'
+
+  PRAMUNIAGA = 'pramuniaga'
 
   DRIVER = 'driver'
 

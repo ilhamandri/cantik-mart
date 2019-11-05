@@ -22,7 +22,6 @@ class ControllersController < ApplicationController
 	 end
    insert_new_method datas
 
-   Grant.insert_access_grant
   end
 
   def insert_new_method datas

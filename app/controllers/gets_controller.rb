@@ -7,8 +7,8 @@ class GetsController < ApplicationController
 		 end
 		 if store.present?
 		 	 # CANTIKMART.COM
-			 from = params[:from].gsub("  "." +").to_timestamp
-			 to = params[:to].gsub("  "." +").to_timestamp
+			 from = params[:from].gsub("  "," +").to_timestamp
+			 to = params[:to].gsub("  "," +").to_timestamp
 
 			 # LOCALHOST
 			 # from = params[:from].to_time
