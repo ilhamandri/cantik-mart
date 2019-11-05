@@ -5,11 +5,11 @@ class GetsController < ApplicationController
 		 if params[:type].present? || params[:from].present? || params[:to].present?
 		 	store = Store.find_by(id: params[:store_id])
 		 end
+		 
 		 if store.present?
 		 	 # CANTIKMART.COM
-			 from = params[:from].gsub("  "," +").to_timestamp
-			 to = params[:to].gsub("  "," +").to_timestamp
-
+			 from = params[:from].gsub("  "," +").to_time
+			 to = params[:to].gsub("  "," +").to_time
 			 # LOCALHOST
 			 # from = params[:from].to_time
 			 # to = params[:to].to_time 
@@ -26,7 +26,7 @@ class GetsController < ApplicationController
 			 json_result["promotions"] = Promotion.where("updated_at >= ? AND updated_at <= ?", from, to)
 		 	 json_result["exchange_points"] = ExchangePoint.where("updated_at >= ? AND updated_at <= ?", from, to)
 		 	 json_result["vouchers"] = Voucher.where("updated_at >= ? AND updated_at <= ?", from, to)
-		 
+		 	
 		 end
 		 render :json => json_result
 	end
