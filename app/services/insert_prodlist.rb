@@ -12,7 +12,7 @@ class InsertProdlist
 		Department.delete_all
 		department = Department.create name: "DEFAULT"
 		itemcat_id = ItemCat.create name: "DEFAULT", department: department
-		files = Dir["data/prodlist/*.xlsx"]
+		files = Dir["./data/prodlist/*.xlsx"]
 		puts files.count
 		files.each do |file|
 			xlsx = Roo::Spreadsheet.open("./"+file, extension: :xlsx)

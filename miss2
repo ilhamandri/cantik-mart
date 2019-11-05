@@ -66,13 +66,12 @@ CREATE DATABASE cantik_mart_local;
 
 rails db:migrate
 rails c
-Supplier.create name: "Supplier 1", address: "BANDUNG", phone: "123123123"
-Store.create name:"Store Bandung", cash: 10000000, equity: 10000000
-User.create name:"USER 1", email: "admin@pardev.id", password: "admin123", level: 1, store: Store.first 
-Store.create name:"Store Bandung 2", cash: 10000000, equity: 10000000
-User.create name:"USER 2", email: "admin2@pardev.id", password: "admin123", level: 1, store: Store.second 
-Department.create name: "Snack"
-ItemCat.create department: Department.first, name: "CABE"
+Store.create name:"Gudang Cirata", cash: 10000000, equity: 10000000
+Store.create name:"Toko Cirata", cash: 10000000, equity: 10000000
+Store.create name:"Toko Plered", cash: 10000000, equity: 10000000
+
+User.create id: 99, name:"PARDEV", email: "admin@pardev.id", password: "admin123", level: 1, store: Store.first 
+
 exit
 
 localhost:3000/controllers

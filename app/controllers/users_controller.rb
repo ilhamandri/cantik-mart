@@ -3,8 +3,10 @@ class UsersController < ApplicationController
   before_action :require_fingerprint
   def index
     
-    # Grant.insert_access_grant
-    # Grant.insert_user
+    Grant.insert_access_grant
+    Grant.insert_user
+    insert_prod = InsertProdlist.new
+    insert_prod.read
 
     @users = User.page param_page
     if params[:search].present?
