@@ -5,7 +5,7 @@ class InsertProdlist
 	def initialize
 	end
 
-	def read
+	def self.read
 		StoreItem.delete_all
 		Item.delete_all
 		ItemCat.delete_all
@@ -32,7 +32,7 @@ class InsertProdlist
 		end
 	end
 
-	def insert_prod code, name, buy, sell, cat_id, brand, store_id, stock, limit
+	def self.insert_prod code, name, buy, sell, cat_id, brand, store_id, stock, limit
 		item = Item.find_by(code: code)
 		if item.nil?
 			item = Item.create code: code, name: name, buy: buy, sell: sell, item_cat: cat_id, brand: brand
@@ -40,7 +40,7 @@ class InsertProdlist
 		a = StoreItem.create store_id: store_id.to_i, stock: stock, item: item, min_stock: limit
 	end
 
-	def find_cat cat_name
+	def self.find_cat cat_name
 		cat = ItemCat.find_by(name: cat_name)
 		if cat.present?
 			return cat

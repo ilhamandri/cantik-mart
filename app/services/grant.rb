@@ -1,6 +1,7 @@
 class Grant
 
 	def self.insert_user
+		puts "INSERT USER!"
 		store_1 = nil
 		store_2 = nil
 		store_3 = nil
@@ -50,32 +51,33 @@ class Grant
 				next if xlsx.first == row
 				controller = Controller.find_by(name: name)
 				controller_method = ControllerMethod.find_by(controller: controller,name: row)
-
-					if row[1]==nil
-						User::levels.keys.each do |level|
-							a = UserMethod.create controller_method: controller_method, user_level: level
-							binding.pry if a.errors.present?
-						end
+				if controller_method.nil?
+				end
+				if row[1]==nil
+					User::levels.keys.each do |level|
+						a = UserMethod.create controller_method: controller_method, user_level: level
+						binding.pry if a.errors.present?
+					end
+				else
+					levels = row[1].split(',')
+				if levels.include? "-"
+					UserMethod.create controller_method: controller_method, user_level: "owner"
+						UserMethod.create controller_method: controller_method, user_level: "super_admin"
 					else
 						levels = row[1].split(',')
-					if levels.include? "-"
-						UserMethod.create controller_method: controller_method, user_level: "owner"
-							UserMethod.create controller_method: controller_method, user_level: "super_admin"
-  					else
-							levels = row[1].split(',')
-  						levels.each do |level|
-  							level = level.gsub(' ','')
-  							UserMethod.create controller_method: controller_method, user_level: level
-  						end
-  						
-  						UserMethod.create controller_method: controller_method, user_level: "super_admin"
-  						
+						levels.each do |level|
+							level = level.gsub(' ','')
+							UserMethod.create controller_method: controller_method, user_level: level
+						end
+						
+						UserMethod.create controller_method: controller_method, user_level: "super_admin"
+						
 
-  						if levels.include? "owner"
-  							UserMethod.create controller_method: controller_method, user_level: "owner"
-  						end
+						if levels.include? "owner"
+							UserMethod.create controller_method: controller_method, user_level: "owner"
 						end
 					end
+				end
 			end
 		end
 	end
