@@ -25,6 +25,6 @@ env :PATH, ENV['PATH']
 
 # set :environment, 'development'
 # set :output, "log/cron.log"
-every 1.day, at: '11:00 pm'
+every :hour do
 	runner "AccountBalance.balance_account"
 end
