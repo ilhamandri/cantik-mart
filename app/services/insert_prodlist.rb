@@ -23,8 +23,9 @@ class InsertProdlist
 				name = row[1]
 				buy = row[3]
 				sell = row[4]
-				limit = 5
+				limit = 1
 				stock = row[5]
+				next if stock.nil?
 				brand = row[1].split[0]
 	 			insert_prod code, name, buy, sell, itemcat_id, brand, store_id, stock, limit
 			end
