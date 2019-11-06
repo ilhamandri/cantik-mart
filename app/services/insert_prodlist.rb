@@ -26,6 +26,8 @@ class InsertProdlist
 				limit = 1
 				stock = row[5]
 				next if stock.nil?
+				next if stock == "\n"
+				next if stock == "  "
 				brand = row[1].split[0]
 	 			insert_prod code, name, buy, sell, itemcat_id, brand, store_id, stock, limit
 			end
@@ -40,9 +42,11 @@ class InsertProdlist
 		if item.errors.present?
 			binding.pry
 		end
-		a = StoreItem.create store_id: store_id.to_i, stock: stock, item: item, min_stock: limit
-		if a.errors.present?
-			binding.pry
+		if StoreItem.find_by(store_id: store_id, item: item).nil?
+			a = StoreItem.create store_id: store_id.to_i, stock: stock, item: item, min_stock: limit
+			if a.errors.present?
+				binding.pry
+			end
 		end
 	end
 
