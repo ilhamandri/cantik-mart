@@ -57,7 +57,10 @@ class InsertProdlist
 
 	def self.cross_check
 		department = Department.create name: "DEFAULT" if Department.find_by(name: "DEFAULT").nil?
-		itemcat_id = ItemCat.create name: "DEFAULT", department: department if Department.find_by(name: "DEFAULT").nil?
+		itemcat_id = ItemCat.find_by(name: "DEFAULT")
+		if itemcat_id.nil?
+			itemcat_id = ItemCat.create name: "DEFAULT", department: department 
+		end
 		files = Dir["./data/prodlist/*.xlsx"]
 		puts files.count
 		files.each do |file|
