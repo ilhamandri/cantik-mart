@@ -6,7 +6,7 @@ class UsersController < ApplicationController
     # Grant.insert_access_grant
     # Grant.insert_user
     # InsertProdlist.read
-    InsertProdlist.crosscheck
+    InsertProdlist.cross_check
 
     @users = User.page param_page
     if params[:search].present?

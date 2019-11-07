@@ -3,12 +3,8 @@ require 'roo'
 class InsertProdlist
 
 	def self.read
-		StoreItem.delete_all
-		Item.delete_all
-		ItemCat.delete_all
-		Department.delete_all
-		department = Department.create name: "DEFAULT"
-		itemcat_id = ItemCat.create name: "DEFAULT", department: department
+		department = Department.create name: "DEFAULT"  if Department.find_by(name: "DEFAULT").nil?
+		itemcat_id = ItemCat.create name: "DEFAULT", department: department if Department.find_by(name: "DEFAULT").nil?
 		files = Dir["./data/prodlist/*.xlsx"]
 		puts files.count
 		files.each do |file|
@@ -60,12 +56,8 @@ class InsertProdlist
 	end
 
 	def self.cross_check
-		StoreItem.delete_all
-		Item.delete_all
-		ItemCat.delete_all
-		Department.delete_all
-		department = Department.create name: "DEFAULT"
-		itemcat_id = ItemCat.create name: "DEFAULT", department: department
+		department = Department.create name: "DEFAULT" if Department.find_by(name: "DEFAULT").nil?
+		itemcat_id = ItemCat.create name: "DEFAULT", department: department if Department.find_by(name: "DEFAULT").nil?
 		files = Dir["./data/prodlist/*.xlsx"]
 		puts files.count
 		files.each do |file|
