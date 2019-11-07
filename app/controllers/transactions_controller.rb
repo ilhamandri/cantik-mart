@@ -29,7 +29,7 @@ class TransactionsController < ApplicationController
       end
     end
 
-    transactions = transactions_profit_graph @transactions, "month"
+    transactions = transactions_profit_graph "month"
     gon.grand_totals = transactions[0]
     gon.hpp_totals = transactions[1]
     gon.profits = transactions[2]
@@ -116,10 +116,10 @@ class TransactionsController < ApplicationController
   end
 
   private
-    def transactions_profit_graph transactions, group
+    def transactions_profit_graph group
       transaction_datas = nil
       if group == "month" 
-        transaction_datas = transactions.group_by{ |m| m.created_at.beginning_of_month}
+        transaction_datas = Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_year, DateTime.now.end_of_year).group_by{ |m| m.created_at.beginning_of_month}
       end
 
       grand_totals = [0,0,0,0,0,0,0,0,0,0,0,0]
