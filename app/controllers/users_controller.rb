@@ -5,8 +5,11 @@ class UsersController < ApplicationController
     
     # Grant.insert_access_grant
     # Grant.insert_user
-    # InsertProdlist.read
-    InsertProdlist.cross_check
+    # InsertProdlist.cross_check "3-prodlist.xlsx"
+
+    InsertProdlist.cross_check "1-prodlist.xlsx"
+    InsertProdlist.cross_check "2-prodlist.xlsx"
+    InsertProdlist.additional_file "3-additional.xlsx"
 
     @users = User.page param_page
     if params[:search].present?

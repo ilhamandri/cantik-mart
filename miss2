@@ -12,27 +12,21 @@
 
 --> aktifin notifikasi (js)
 
---> set @@max_complain ==> complains
-
 --> set @@store_id di local server (services/SyncData)
 
 ======================================================================
 
---> button buat download laporan akhir bulan		
+--> button buat download laporan akhir bulan	
 
---> activity trackable
+--> ubah dari bulan ke tgl => trx
 
---> after bayar new_total ?				
+--> stock di toko > dari sistem, bijimana ?	
 
-======================================================================
-PENDING
+--> telor kadang blakangnya ikut ke "ribuan"
 
---> perubahan harga
-	* CETAK
-		- price tag (zebra)
+--> activity trackable		
 
---> set tanggal pehitungan absent + store_id + work_day (services/AccountBalance)
-
+--> di /transaction/daily/recap.pdf : super_visi , profit di hide
 
 =============================================================
 ssh root@193.168.195.145 -p 22
