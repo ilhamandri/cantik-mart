@@ -48,7 +48,7 @@ Rails.application.routes.draw do
   get '/get/:store_id', to: 'gets#index'
   post '/api/post/:type', to: 'posts#index'
   get '/refresh/balance', to: 'balances#refresh'
-
+  get '/transaction/daily/recap', to: 'transactions#daily_recap', as: "daily_trx_recap"
   get '/download/:type', to: 'downloads#serve_file', as: "download"
   get '/file/download', to: 'downloads#get_file', as: "download_file"
 

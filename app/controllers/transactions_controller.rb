@@ -36,6 +36,19 @@ class TransactionsController < ApplicationController
 
   end
 
+  def daily_recap
+    @transactions = Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_day.to_s, DateTime.now.end_of_day.to_s)
+    @transactions = @transactions.order("created_at ASC")
+    respond_to do |format|
+      format.pdf do
+        @kriteria = "Rekap Harian - "+Date.today.to_s
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "transactions/print_recap.html.slim"
+      end
+    end
+  end
+
   def show
     return redirect_back_data_error transactions_path, "Data Transaksi Tidak Ditemukan" if params[:id].nil?
     @transaction_items = TransactionItem.where(transaction_id: params[:id])
@@ -145,7 +158,7 @@ class TransactionsController < ApplicationController
 
     def filter_search params, r_type
       results = []
-      @transactions = Transaction.all
+      @transactions = Transaction.all.order("created_at DESC")
       if params[:from].present?
         if params[:from] == "complain"
           curr_date = Date.today - 3.days

@@ -1,0 +1,62 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Dibuat  
+      td
+        textarea #{DateTime.now.to_s}
+    tr
+      td.meta-head Oleh
+      td 
+        textarea #{current_user.name.to_s} ( #{current_user.store.name} )
+    tr
+      td.meta-head Tanggal
+      td
+        b  
+          | Rekap Harian - #{Date.today}
+
+
+table#items
+  tr colspan="5"
+  tr
+    th
+    th Invoice
+    th Tanggal
+    th Toko
+    th Member
+    th Jumlah Item
+    th Total
+    th Profit
+
+  - idx = 1
+  - @transactions.each do |transaction|
+    tr.item-row
+      td #{idx}
+      td #{transaction.invoice}
+      td #{transaction.date_created.to_date}
+      td #{transaction.user.store.name}
+      td 
+        - member = Member.find_by(card_number: transaction.member_card)
+        - if member.nil?
+          | -
+        - else 
+          | #{member.name}
+      td #{transaction.items}
+      td style="text-align: right;"
+        | #{number_with_delimiter(transaction.grand_total, delimiter: ".", separator:",", precision: 2)}
+      td style="text-align: right;"
+        | #{number_with_delimiter(transaction.grand_total - transaction.hpp_total, delimiter: ".", separator:",", precision: 2)}
+
+      - idx += 1
+
+  - grand_totals = @transactions.sum(:grand_total)
+  - hpp_totals = @transactions.sum(:hpp_total)
+
+  tr
+    th colspan=6
+      | TOTAL
+    th style="text-align: left !important"
+      | #{number_with_delimiter(grand_totals.to_i, delimiter: ".", separator: ",")}
+    th style="text-align: left !important"
+      | #{number_with_delimiter(hpp_totals.to_i, delimiter: ".", separator: ",")}
+
+
