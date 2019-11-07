@@ -57,6 +57,6 @@ table#items
     th style="text-align: left !important"
       | #{number_with_delimiter(grand_totals.to_i, delimiter: ".", separator: ",")}
     th style="text-align: left !important"
-      | #{number_with_delimiter(hpp_totals.to_i, delimiter: ".", separator: ",")}
+      | #{number_with_delimiter(grand_totals.to_i - hpp_totals.to_i, delimiter: ".", separator: ",")}
 
 
