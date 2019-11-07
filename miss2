@@ -19,14 +19,11 @@
 --> button buat download laporan akhir bulan	
 
 --> ubah dari bulan ke tgl => trx
+--> owner kasi hak akses trx
 
 --> stock di toko > dari sistem, bijimana ?	
 
 --> telor kadang blakangnya ikut ke "ribuan"
-
---> activity trackable		
-
---> di /transaction/daily/recap.pdf : super_visi , profit di hide
 
 =============================================================
 ssh root@193.168.195.145 -p 22

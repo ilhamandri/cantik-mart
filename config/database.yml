@@ -5,18 +5,18 @@ default: &default
 
 development:
   <<: *default
-  database: cantik_mart
+  database: cantik_mart_test
   username: postgres
   password: postgres
 
 test:
   <<: *default
-  database: cantik_mart
+  database: cantik_mart_test
   username: postgres
   password: postgres
 
 production:
   <<: *default
-  database: cantik_mart
+  database: cantik_mart_test
   username: postgres
   password: postgres

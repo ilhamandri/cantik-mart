@@ -25,7 +25,8 @@ table#items
     th Member
     th Jumlah Item
     th Total
-    th Profit
+    - if current_user.level != "super_visi"
+      th Profit
 
   - idx = 1
   - @transactions.each do |transaction|
@@ -43,8 +44,10 @@ table#items
       td #{transaction.items}
       td style="text-align: right;"
         | #{number_with_delimiter(transaction.grand_total, delimiter: ".", separator:",", precision: 2)}
-      td style="text-align: right;"
-        | #{number_with_delimiter(transaction.grand_total - transaction.hpp_total, delimiter: ".", separator:",", precision: 2)}
+
+      - if current_user.level != "super_visi"
+        td style="text-align: right;"
+          | #{number_with_delimiter(transaction.grand_total - transaction.hpp_total, delimiter: ".", separator:",", precision: 2)}
 
       - idx += 1
 
@@ -52,11 +55,17 @@ table#items
   - hpp_totals = @transactions.sum(:hpp_total)
 
   tr
-    th colspan=6
-      | TOTAL
+
+    - if current_user.level != "super_visi"
+      th colspan=6
+        | TOTAL
+    - else
+      th colspan=5
+      
     th style="text-align: left !important"
       | #{number_with_delimiter(grand_totals.to_i, delimiter: ".", separator: ",")}
     th style="text-align: left !important"
       | #{number_with_delimiter( (grand_totals - hpp_totals).to_i, delimiter: ".", separator: ",")}
+
 
 
