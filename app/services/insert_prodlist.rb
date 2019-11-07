@@ -58,4 +58,36 @@ class InsertProdlist
 			binding.pry
 		end
 	end
+
+	def self.cross_check
+		StoreItem.delete_all
+		Item.delete_all
+		ItemCat.delete_all
+		Department.delete_all
+		department = Department.create name: "DEFAULT"
+		itemcat_id = ItemCat.create name: "DEFAULT", department: department
+		files = Dir["./data/prodlist/*.xlsx"]
+		puts files.count
+		files.each do |file|
+			xlsx = Roo::Spreadsheet.open("./"+file, extension: :xlsx)
+			store_id = file.gsub('./data/prodlist/','').split('-').first
+			xlsx.each_with_index do |row, idx|
+				puts "IDX : "+idx.to_s
+				next if xlsx.first == row
+				binding.pry if row[0].nil?
+				binding.pry if row[0]=="#NAME?"
+				code = row[0]
+				name = row[1]
+				buy = row[3]
+				sell = row[4]
+				limit = 1
+				stock = row[5]
+				if stock.nil? || stock == "\n" || stock == "  "
+					stock = 0
+				end
+				brand = row[1].split[0]
+	 			insert_prod code, name, buy, sell, itemcat_id, brand, store_id, stock, limit
+			end
+		end
+	end
 end
