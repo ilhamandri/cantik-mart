@@ -25,7 +25,6 @@ class InsertProdlist
 		end
 		xlsx = Roo::Spreadsheet.open("./data/prodlist/"+file, extension: :xlsx)
 		store_id = file.gsub('./data/prodlist/','').split('-').first
-		binding.pry
 		xlsx.each_with_index do |row, idx|
 			puts "IDX : "+idx.to_s
 			next if xlsx.first == row
