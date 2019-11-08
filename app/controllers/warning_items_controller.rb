@@ -17,7 +17,7 @@ class WarningItemsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        @items = @inventories
+        @items = StoreItem.where(store: current_user.store).where("stock < 0")
         render pdf: DateTime.now.to_i.to_s,
           layout: 'pdf_layout.html.erb',
           template: "warning_items/print_under.html.slim"
