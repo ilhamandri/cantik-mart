@@ -15,7 +15,7 @@
           | Barang yang belum sempat diinfut
 
 
-table#items
+table style="width: 100%"
   tr colspan="5"
   tr
     th
@@ -24,9 +24,10 @@ table#items
     th Stok
 
   - idx = 1
-  - @items.each do |item|
+  - @items.each do |inv|
     tr.item-row
       td #{idx}
-      td #{item.code}
-      td #{item.name}
+      td #{inv.item.code}
+      td #{inv.item.name}
       td 
+      - idx+=1
