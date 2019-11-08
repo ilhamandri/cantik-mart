@@ -17,13 +17,13 @@
 ======================================================================
 
 --> button buat download laporan akhir bulan	
-
 --> ubah dari bulan ke tgl => trx
 --> owner kasi hak akses trx
 
---> stock di toko > dari sistem, bijimana ?	
+--> resize struk
+--> tambah jumlah stok target transfer 
 
---> telor kadang blakangnya ikut ke "ribuan"
+--> stock di toko > dari sistem, bijimana ?	
 
 =============================================================
 ssh root@193.168.195.145 -p 22

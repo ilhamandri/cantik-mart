@@ -13,6 +13,17 @@ class WarningItemsController < ApplicationController
       @inventories = @inventories.where(item_id: items)
     end
     @ongoing_orders = Order.where('date_receive is null and date_paid_off is null')
+    
+    respond_to do |format|
+      format.html
+      format.pdf do
+        @items = @inventories.where("stock < 0")
+        binding.pry
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "warning_items/print_under.html.slim"
+      end
+    end
   end
 
   private
