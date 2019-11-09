@@ -17,13 +17,17 @@
             = form.text_field :brand, required: true, class: "form-control md-form", id: "brand"
           .form-group
             label for="tipe" Jenis Barang
-            select name="item[local_item]"
+            select name="item[local_item]" class="mdb-select md-form md-outline colorful-select dropdown-primary"
               - if @item.local_item
                 option value="true" selected="selected"
                   | Barang Lokal
+                option value="false"
+                  | Barang Pusat
               - else
                 option value="false" selected="selected"
                   | Barang Pusat
+                option value="true"
+                  | Barang Lokal
 
           .form-group
             label for="item" Kategori
