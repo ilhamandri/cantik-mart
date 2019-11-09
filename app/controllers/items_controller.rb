@@ -8,7 +8,7 @@ class ItemsController < ApplicationController
       buy = item.buy
       sell = item.sell
       margin = ((sell.to_f-buy.to_f) / buy)*100
-      item.margin = item.margin.ceil.to_i
+      item.margin = margin.ceil.to_i
       item.save!
     end
 
