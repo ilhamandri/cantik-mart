@@ -3,7 +3,7 @@
     h5
       | Daftar Transaksi #{@member_name} #{@from}
 
-  - if ["owner", "super_visi", "finance"].include? current_user.level
+  - if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
     .col.text-right
       a href="#{daily_trx_recap_path(format: :pdf)}"
         button.btn.btn-rounded.btn-success.text-body type="button" 
