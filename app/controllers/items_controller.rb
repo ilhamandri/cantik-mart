@@ -3,7 +3,16 @@ class ItemsController < ApplicationController
   # before_action :require_fingerprint
   
   def index
-    
+    items = Item.all
+    items.each do |item|
+      buy = item.buy
+      sell = item.sell
+      margin = ((buy-sell) / buy)*100
+      item.margin = margin
+      item.save!
+      
+    end
+
     @items = Item.page param_page
     if params[:search].present?
       @search = params[:search].downcase
