@@ -10,7 +10,7 @@ class ItemsController < ApplicationController
     #   margin = ((sell-buy) / buy)*100
     #   item.margin = item.margin.abs
     #   item.save!
-    end
+    # end
 
     @items = Item.page param_page
     if params[:search].present?
