@@ -10,6 +10,7 @@ class ItemsController < ApplicationController
       margin = ((sell.to_f-buy.to_f) / buy)*100
       item.margin = margin.ceil.to_i
       item.save!
+      binding.pry
     end
 
     @items = Item.page param_page
