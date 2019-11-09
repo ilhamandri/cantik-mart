@@ -7,8 +7,8 @@ class ItemsController < ApplicationController
     items.each do |item|
       buy = item.buy
       sell = item.sell
-      margin = ((sell-buy) / buy)*100
-      item.margin = item.margin
+      margin = ((sell.to_f-buy.to_f) / buy)*100
+      item.margin = item.margin.ceil.to_i
       item.save!
     end
 
