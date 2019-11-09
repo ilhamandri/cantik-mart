@@ -7,11 +7,10 @@ class ItemsController < ApplicationController
     items.each do |item|
       buy = item.buy
       sell = item.sell
-      if sell == 0 && buy == 0
-        margin = ((sell.to_f-buy.to_f) / buy)*100
-        item.margin = margin.ceil.to_i
-        item.save!
-      end
+      next if sell == 0 || buy == 0
+      margin = ((sell.to_f-buy.to_f) / buy)*100
+      item.margin = margin.ceil.to_i
+      item.save!
     end
 
     @items = Item.page param_page
