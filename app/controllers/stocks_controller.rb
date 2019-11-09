@@ -112,6 +112,7 @@ class StocksController < ApplicationController
 
     def edit_stock_params
       {
+        stock: params[:item][:stock],
         min_stock: params[:item][:min_stock]
       }
     end

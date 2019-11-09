@@ -15,11 +15,11 @@
           - if current_user.level == "super_admin"
             .form_group
               label for="category" Stok
-              = form.text_field :stock, required: true, class: "form-control md-form"
+              = form.number_field :stock, required: true, class: "form-control md-form"
           - else
             .form_group
               label for="category" Stok
-              = form.text_field :stock, required: true, class: "form-control md-form", disabled: true
+              = form.number_field :stock, required: true, class: "form-control md-form", disabled: true
 
           .form-group
             label for="stock" Limit
