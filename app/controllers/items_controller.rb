@@ -5,10 +5,10 @@ class ItemsController < ApplicationController
   def index
     items = Item.all
     items.each do |item|
-      # buy = item.buy
-      # sell = item.sell
-      # margin = ((sell-buy) / buy)*100
-      item.margin = item.margin.abs
+      buy = item.buy
+      sell = item.sell
+      margin = ((sell-buy) / buy)*100
+      item.margin = item.margin
       item.save!
     end
 
