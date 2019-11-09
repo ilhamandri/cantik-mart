@@ -12,15 +12,15 @@
           .form-group
             label for="name" Nama
             = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: true
-          .form-group
-              label for="item" Kategori
-              select name="supplier_item[item_cat_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" searchable="Cari..."
-                - @item_cats.each do |item_cat|
-                  option value="#{item_cat.id}"
-                    | #{item_cat.name}   
-          .form_group
-            label for="category" Stok
-            = form.text_field :stock, required: true, class: "form-control md-form", id: "name", disabled: true
+          - if current_user.level == "super_admin"
+            .form_group
+              label for="category" Stok
+              = form.text_field :stock, required: true, class: "form-control md-form"
+          - else
+            .form_group
+              label for="category" Stok
+              = form.text_field :stock, required: true, class: "form-control md-form", disabled: true
+
           .form-group
             label for="stock" Limit
             = form.number_field :min_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.min_stock}"
