@@ -37,7 +37,7 @@ class TransactionsController < ApplicationController
   end
 
   def daily_recap
-    @transactions = Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_day, DateTime.now.end_of_day)
+    @transactions = Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_day, DateTime.now.end_of_day).where(store: current_user.store)
     @transactions = @transactions.order("created_at ASC")
     respond_to do |format|
       format.pdf do
