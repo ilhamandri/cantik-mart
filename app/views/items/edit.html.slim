@@ -16,6 +16,16 @@
             label for="brand" Merek
             = form.text_field :brand, required: true, class: "form-control md-form", id: "brand"
           .form-group
+            label for="tipe" Jenis Barang
+            select name="item[local_item]"
+              - if @item.local_item
+                option value="true" selected="selected"
+                  | Barang Lokal
+              - else
+                option value="false" selected="selected"
+                  | Barang Pusat
+
+          .form-group
             label for="item" Kategori
             select name="item[item_cat_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" searchable="Cari..."
               - @item_cats.each do |item_cat|
