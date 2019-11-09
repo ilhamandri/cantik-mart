@@ -29,8 +29,9 @@
             - price_updated = @item.price_updated if @item.price_updated.present?
             label for="item" Harga Beli
             - if @item.local_item
-              - stock = StoreItem.where(item: @item, store: current_user.store)
+              - stock = StoreItem.find_by(item: @item, store: current_user.store)
               - buy = 0
+              - binding.pry
               - buy = stock.buy if stock.present?
               input class="md-form form-control" value="#{number_with_delimiter(buy.round, delimiter: ".")} " disabled="disabled"
             - else
