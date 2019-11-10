@@ -75,13 +75,8 @@ table#items
   - total = 0
   - transfer_items.each do |transfer_item|
     tr.item-row
-      td.item-name
-        textarea #{transfer_item.item.name}
-      td.description
-        textarea #{transfer_item.description}
-      td
-        textarea #{transfer_item.request_quantity}
-      td
-        textarea #{transfer_item.sent_quantity}
-      td
-        textarea #{transfer_item.receive_quantity}
+      td #{transfer_item.item.name}
+      td #{transfer_item.description}
+      td #{transfer_item.request_quantity}
+      td #{transfer_item.sent_quantity}
+      td #{transfer_item.receive_quantity}

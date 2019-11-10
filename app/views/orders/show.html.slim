@@ -6,8 +6,9 @@
       | Data #{@order_items.first.order.invoice}
   .col.text-right
     a href="#{order_path(id: order_id, format: :pdf)}"
-      button.btn.btn-success type="button" 
-        | CETAK
+      button.btn.btn-primary type="button" 
+        i.fas.fa-print 
+        | &nbsp&nbsp&nbsp CETAK
 
   - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'confirmation').user_methods.pluck(:user_level).include? current_user.level
     - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?

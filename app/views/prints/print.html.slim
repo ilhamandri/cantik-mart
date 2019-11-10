@@ -25,7 +25,7 @@ html
     						- if disc != 0
     							.price1 style="font-size: 20px; text-decoration: line-through; float: left;"
     								| #{number_to_currency(price, unit: "Rp. ")}
-    						.price2 style="font-size: 25px; font-weight: bold; float: right;"
+    						.price2 style="font-size: 25px; font-weight: bold; float: right; color: red;"
     							| #{number_to_currency(price-disc, unit: "Rp. ")}
 
     			- n_times = 3-prints.size

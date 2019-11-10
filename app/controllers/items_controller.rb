@@ -59,6 +59,9 @@ class ItemsController < ApplicationController
     item.margin = 100*((item.sell - item.buy) / item.buy) 
     return redirect_back_data_error new_item_path, "Data Barang Tidak Valid" if item.invalid?
     item.save!
+    Store.each do |store|
+      StoreItem.create item: item, stock: 0, store: store
+    end
     item.create_activity :create, owner: current_user
     urls = item_path id: item.id
     return redirect_success urls, "Data Barang Berhasil Ditambahkan"

@@ -51,7 +51,29 @@ class CashFlowsController < ApplicationController
       store.receivable = store.receivable + nominal
       store.save!
       cash_flow.create_activity :create, owner: current_user
-      receivable.create_activity :create, owner: current_user         
+      receivable.create_activity :create, owner: current_user     
+    elsif finance_type == "Sent"
+      invoice = " TRF-S-"+inv_number
+      a = cash_flow = CashFlow.create user: user, store: current_user.store, nominal: nominal, date_created: date_created, description: description, 
+                      finance_type: CashFlow::OUTCOME, invoice: invoice
+      b = cash_flow = CashFlow.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
+                      finance_type: CashFlow::INCOME, invoice: invoice
+      store.cash = store.cash+nominal
+      store.save!
+      gudang = current_user.store
+      gudang.cash = gudang.cash-nominal
+      gudang.save!
+    elsif finance_type == "Receive"  
+      invoice = " TRF-R-"+inv_number
+      a = CashFlow.create user: user, store: current_user.store, nominal: nominal, date_created: date_created, description: description, 
+                      finance_type: CashFlow::INCOME, invoice: invoice
+      b = CashFlow.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
+                      finance_type: CashFlow::OUTCOME, invoice: invoice
+      store.cash = store.cash-nominal
+      store.save!
+      gudang = current_user.store
+      gudang.cash = gudang.cash+nominal
+      gudang.save!
     elsif finance_type == "BankLoan"
       return redirect_back_data_error new_cash_flow_path, "Tanggal jatuh tempo harus diisi." if due_date.nil?
       return redirect_back_data_error new_cash_flow_path, "Tanggal yang dimasukkan harus lebih dari tanggal hari ini." if due_date.to_date <= Date.today

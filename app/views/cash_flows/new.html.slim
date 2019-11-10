@@ -29,6 +29,10 @@
                 | Modal
               option value="Withdraw"
                 | Tarik Modal
+              option value="Receive"
+                | Transfer Kas TOKO ke GUDANG
+              option value="Sent"
+                | Transfer Kas GUDANG ke TOKO
           .form-group
             label.text-primary for="nominal" Nominal
             = form.number_field :nominal, required: true, class: "form-control md-form", id: "nominal"

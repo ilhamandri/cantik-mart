@@ -117,7 +117,7 @@ function addNewRowComplain(result_arr, qty){
    var result = result_arr[0];
    var total = parseFloat(qty) * (parseFloat(result[3]) - parseFloat(result[4]));
    
-   var row = table.insertRow(-1);
+   var row = table.insertRow(1);
    var cell1 = row.insertCell(0);
    var cell2 = row.insertCell(1);
    var cell3 = row.insertCell(2);
@@ -378,7 +378,7 @@ function addNewRowOrder(result_arr){
    var qty = 1;
    var total = parseFloat(qty) * (parseFloat(result[3]) - parseFloat("100"));
    
-   var row = table.insertRow(-1);
+   var row = table.insertRow(1);
    var cell1 = row.insertCell(0);
    var cell2 = row.insertCell(1);
    var cell3 = row.insertCell(2);
@@ -411,7 +411,7 @@ function addNewRowRetur(result_arr){
    var qty = 1;
    var total = parseFloat(qty) * (parseFloat(result[3]) - parseFloat("100"));
    
-   var row = table.insertRow(-1);
+   var row = table.insertRow(1);
    var cell1 = row.insertCell(0);
    var cell2 = row.insertCell(1);
    var cell3 = row.insertCell(2);
@@ -443,7 +443,7 @@ function addNewRowTransfer(result_arr){
    var qty = 1;
    var total = parseFloat(qty) * (parseFloat(result[3]) - parseFloat("100"));
    
-   var row = table.insertRow(-1);
+   var row = table.insertRow(1);
    var cell1 = row.insertCell(0);
    var cell2 = row.insertCell(1);
    var cell3 = row.insertCell(2);

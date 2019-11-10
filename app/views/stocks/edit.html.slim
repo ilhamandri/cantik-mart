@@ -12,10 +12,9 @@
           .form-group
             label for="name" Nama
             = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: true
-          - if current_user.level == "super_admin"
-            .form_group
-              label for="category" Stok
-              = form.number_field :stock, required: true, class: "form-control md-form"
+          .form_group
+            label for="category" Stok
+            = form.number_field :stock, required: true, class: "form-control md-form"
           - else
             .form_group
               label for="category" Stok
