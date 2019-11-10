@@ -7,6 +7,7 @@ tr
   - buy = r_item.item.buy
   - store_item = StoreItem.find_by(item: r_item.item, store: r_item.order.store)
   - if store_item.present?
+    - binding.pry
     - store_item.buy > 0
       - buy = store_item.buy 
   - desc = "-"
