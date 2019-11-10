@@ -10,21 +10,21 @@ class HomesController < ApplicationController
   	# UserMailer.welcome_email("kevin.rizkhy85@gmail.com", "Subject 1").deliver
   	
 
-    item_cats_data = higher_item_cats_graph
-    gon.higher_item_cats_data = item_cats_data.values
-    gon.higher_item_cats_label = item_cats_data.keys
+    # item_cats_data = higher_item_cats_graph
+    # gon.higher_item_cats_data = item_cats_data.values
+    # gon.higher_item_cats_label = item_cats_data.keys
 
-    item_cats_data = lower_item_cats_graph
-    gon.lower_item_cats_data = item_cats_data.values
-    gon.lower_item_cats_label = item_cats_data.keys
+    # item_cats_data = lower_item_cats_graph
+    # gon.lower_item_cats_data = item_cats_data.values
+    # gon.lower_item_cats_label = item_cats_data.keys
 
-    transactions = transactions_profit_graph
-    gon.grand_totals = transactions[0]
-    gon.hpp_totals = transactions[1]
-    gon.profits = transactions[2]
+    # transactions = transactions_profit_graph
+    # gon.grand_totals = transactions[0]
+    # gon.hpp_totals = transactions[1]
+    # gon.profits = transactions[2]
 
-    @higher_item = higher_item
-    @lower_item = lower_item
+    # @higher_item = higher_item
+    # @lower_item = lower_item
 
     @debt = Debt.where("deficiency > ?",0)
     @receivable = Receivable.where("deficiency > ?",0)

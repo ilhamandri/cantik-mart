@@ -15,57 +15,49 @@
           | Rekap Harian - #{Date.today}
 
 
-table#items
-  tr colspan="5"
-  tr
-    th
-    th Invoice
-    th Tanggal
-    th Toko
-    th Member
-    th Jumlah Item
-    th Total
-    - if current_user.level != "super_visi"
-      th Profit
 
-  - idx = 1
-  - @transactions.each do |transaction|
-    tr.item-row
-      td #{idx}
-      td #{transaction.invoice}
-      td #{transaction.date_created.to_date}
-      td #{transaction.user.store.name}
-      td 
-        - member = Member.find_by(card_number: transaction.member_card)
-        - if member.nil?
-          | -
-        - else 
-          | #{member.name}
-      td #{transaction.items}
-      td style="text-align: right;"
-        | #{number_with_delimiter(transaction.grand_total, delimiter: ".", separator:",", precision: 2)}
+  - if current_user.level == "super_visi"
+    - total = @transactions.sum(:grand_total)
+    - cashiers = @transaction.pluck(:user_id)
+    h3
+      | #{current_user.store.name}.upcase
+    table#items
+      tr
+        th Kasir
+        th Cash
+        th Kredit
+        th Total
+      - cashiers.each do |cashier_id|
+        - cashier = Cashier.find_by(id: cashier_id)
+        tr
+          th #{cashier.name}
+          - cash = @transactions.where(payment_type: "CASH", user: cashier).sum(:grand_total)
+          th #{number_with_delimiter( cash.to_i, delimiter: ".", separator: ",")}
+          - debit = @transactions.where(payment_type: "DEBIT", user: cashier).sum(:grand_total)
+          th #{number_with_delimiter( debit.to_i, delimiter: ".", separator: ",")}
+          th #{number_with_delimiter( (debit+cash).to_i, delimiter: ".", separator: ",")}
+  - else
+    - Store.all.each do |store|
+      h3
+        | #{store.name}.upcase
+      table#items
+        tr
+          th Kasir
+          th Cash
+          th Kredit
+          th Total
+        - cashiers.each do |cashier_id|
+          - cashier = Cashier.find_by(id: cashier_id)
+          tr
+            th #{cashier.name}
+            - cash = @transactions.where(payment_type: "CASH", user: cashier).sum(:grand_total)
+            th #{number_with_delimiter( cash.to_i, delimiter: ".", separator: ",")}
+            - debit = @transactions.where(payment_type: "DEBIT", user: cashier).sum(:grand_total)
+            th #{number_with_delimiter( debit.to_i, delimiter: ".", separator: ",")}
+            th #{number_with_delimiter( (debit+cash).to_i, delimiter: ".", separator: ",")}
 
-      - if current_user.level != "super_visi"
-        td style="text-align: right;"
-          | #{number_with_delimiter(transaction.grand_total - transaction.hpp_total, delimiter: ".", separator:",", precision: 2)}
 
-      - idx += 1
 
-  - grand_totals = @transactions.sum(:grand_total)
-  - hpp_totals = @transactions.sum(:hpp_total)
-
-  tr
-
-    - if current_user.level != "super_visi"
-      th colspan=6
-        | TOTAL
-    - else
-      th colspan=5
-      
-    th style="text-align: left !important"
-      | #{number_with_delimiter(grand_totals.to_i, delimiter: ".", separator: ",")}
-    th style="text-align: left !important"
-      | #{number_with_delimiter( (grand_totals - hpp_totals).to_i, delimiter: ".", separator: ",")}
 
 
 
