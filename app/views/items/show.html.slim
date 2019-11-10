@@ -31,7 +31,6 @@
             - if @item.local_item
               - stock = StoreItem.find_by(item: @item, store: current_user.store)
               - buy = 0
-              - binding.pry
               - buy = stock.buy if stock.present?
               input class="md-form form-control" value="#{number_with_delimiter(buy.round, delimiter: ".")} " disabled="disabled"
             - else

@@ -42,6 +42,7 @@ class TransactionsController < ApplicationController
     respond_to do |format|
       format.pdf do
         @kriteria = "Rekap Harian - "+Date.today.to_s
+        @cashiers = @transactions.pluck(:user_id)
         render pdf: DateTime.now.to_i.to_s,
           layout: 'pdf_layout.html.erb',
           template: "transactions/print_recap.html.slim"
