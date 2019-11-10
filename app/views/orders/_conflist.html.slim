@@ -1,12 +1,12 @@
 tr
   td #{r_item.item.code}
   td #{r_item.item.name}
+  - buy = 0
   - margin = r_item.item.margin
   - prev_sell = r_item.item.sell
   - buy = r_item.item.buy
   - store_item = StoreItem.find_by(item: r_item.item, store: r_item.order.store)
   - buy = store_item.buy if store_item.present?
-  - binding.pry
   - desc = "-"
   - desc = r_item.description if r_item.description.present?
   td 
