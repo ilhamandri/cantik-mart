@@ -14,7 +14,7 @@
             = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: true
           .form_group
             label for="category" Stok
-            = form.number_field :stock, required: true, class: "form-control md-form"
+            = form.number_field :stock, required: true, class: "form-control md-form" value="#{@stock.stock}"
           .form-group
             label for="stock" Limit
             = form.number_field :min_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.min_stock}"
