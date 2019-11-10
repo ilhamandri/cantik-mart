@@ -293,9 +293,11 @@ class TransfersController < ApplicationController
           StoreItem.create store: current_user.store, item_id: item[0], stock: qty
         else
           sent_qty = transfer_item.sent_quantity
+          store_item.stock = store_item.stock + qty
           if qty != sent_qty 
             status = false
           end 
+
           store_item.save!
         end
       end

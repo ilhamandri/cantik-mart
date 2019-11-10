@@ -50,7 +50,8 @@ br
         th Kredit
         th Total
       - @cashiers.each do |cashier_id|
-        - cashier = Cashier.find_by(id: cashier_id)
+        - cashier = User.find_by(id: cashier_id)
+        - next if cashier.store != store
         tr
           th #{cashier.name}
           - cash = @transactions.where(payment_type: "CASH", user: cashier).sum(:grand_total)
@@ -61,8 +62,8 @@ br
 
       tr
         th 
-        - cash_total = @transactions.where(payment_type: "CASH").sum(:grand_total)
-        - debit_total = @transactions.where(payment_type: "DEBIT",).sum(:grand_total)
+        - cash_total = @transactions.where(store: store).where(payment_type: "CASH").sum(:grand_total)
+        - debit_total = @transactions.where(store: store).where(payment_type: "DEBIT",).sum(:grand_total)
         - total = cash_total+debit_total
         th #{number_with_delimiter( (cash_total).to_i, delimiter: ".", separator: ",")}
         th #{number_with_delimiter( (debit_total).to_i, delimiter: ".", separator: ",")}

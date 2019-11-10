@@ -37,7 +37,7 @@
               .col-6
                 .form-group
                   label for="from" PPn (%)
-                  input type="number" class="form-control md-form" value="0" name="order[ppn]" required=true
+                  input type="number" class="form-control md-form" value="0" name="order[ppn]" required=true id="ppn"  
   .container-fluid
   .container-fluid
     .col-lg-12.col-md-12
@@ -48,16 +48,20 @@
         .card-body.table-responsive.text-nowrap
             table class="table"
               thead
+                th Kode
                 th Barang
-                th Deskripsi
                 th Pesan
                 th Terima
                 - if !@order.from_retur
                   th Harga Satuan
                   th Diskon 1
                   th Diskon 2
+                  th Total
+                  th Harga Jual
               tbody
                 = render partial: 'conflist', collection: @order_items, as: :r_item
             .form-group.text-center
               = form.submit "TERIMA", class: "btn btn-success"
+
+
 

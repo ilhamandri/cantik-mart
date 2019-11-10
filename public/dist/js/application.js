@@ -1,4 +1,35 @@
-// setInterval(get_notification, 10000);
+setInterval(get_notification, 10000);
+
+function changePrice(id){
+  var receive = $("#"+id+"Receive").val();
+  var price = $("#"+id+"Price").val();
+  var disc_1 = $("#"+id+"Disc1").val();
+  var disc_2 = $("#"+id+"Disc2").val();
+  var margin = $("#"+id+"Margins").val();
+  var ppn = $("#ppn").val();
+
+
+  if(disc_1 <= 99){
+    disc_1 = parseInt(price * disc_1 / 100);
+  }
+
+  price -= disc_1
+
+  if(disc_2 <= 99){
+    disc_2 = parseInt(price * disc_2 / 100);
+  }
+
+  price -= disc_2;
+
+  price -= (price*ppn/100);
+  var grand_total = price * receive;
+
+  $("#"+id+"Total").val(grand_total);
+
+
+  price += price * margin / 100;
+  $("#"+id+"Sell").val(price);
+}
 
 function complain_check(index){
   var qty = $("#quantity"+index).val();

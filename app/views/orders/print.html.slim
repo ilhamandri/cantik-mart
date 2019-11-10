@@ -30,8 +30,8 @@
 
 table#items
   tr
+    th Kode
     th Barang
-    th Deskripsi
     th Pesan
     th Terima
     th Harga
@@ -44,36 +44,33 @@ table#items
   - @order_items.each do |order_item|
     - total += order_item.price * order_item.quantity
     tr.item-row
-      td.item-name
-        textarea #{order_item.item.name}
-      td.description
-        textarea #{order_item.description}
-      td
-        textarea #{order_item.quantity}
+      td #{order_item.item.code}
+      td  #{order_item.item.name}
+      td  #{order_item.quantity}
       td
         - receive = "-"
         - receive = order_item.receive if order_item.receive.present?
-        textarea #{receive}
+        | #{receive}
       td
         - price = "-"
         - price = order_item.price if received
-        textarea #{number_with_delimiter(price, delimiter: ".", separator: ",")}
+        | #{number_with_delimiter(price, delimiter: ".", separator: ",")}
       td
         - discount_1 = "-"
         - discount_1 = order_item.discount_1.to_s+"%" if received
-        textarea #{discount_1}
+        | #{discount_1}
       td
         - discount_2 = "-"
         - discount_2 = order_item.discount_2.to_s+"%" if received
-        textarea #{discount_2}
+        | #{discount_2}
       td
         - ppn = "-"
         - ppn = order_item.ppn.to_s+"%" if received
-        textarea #{ppn}
+        | #{ppn}
       td
         - grand_total = "-"
         - grand_total = order_item.grand_total if received
-        span #{number_with_delimiter(grand_total, delimiter: ".", separator: ",")}
+        | #{number_with_delimiter(grand_total, delimiter: ".", separator: ",")}
 
   - if received
     tr#hiderow

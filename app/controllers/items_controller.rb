@@ -101,14 +101,6 @@ class ItemsController < ApplicationController
       change = true if item.sell_member != 0 && item.sell_member != item.sell
     end
 
-    if changes["sell"].present?
-      if item.sell <= item.buy
-        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Harga Jual Lebih Besar dari Harga Beli"
-      end
-      margin = ( (item.sell - item.buy ) / item.buy) * 100;
-      item.margin = margin
-    end
-
 
     if changes["discount"].present?
       new_price = item.sell - (item.sell * item.discount / 100) if item.discount < 100
@@ -130,6 +122,16 @@ class ItemsController < ApplicationController
         set_notification current_user, to_user, "info", message, prints_path
       end
     end
+
+
+    if changes["sell"].present?
+      if item.sell <= item.buy
+        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Harga Jual Lebih Besar dari Harga Beli"
+      end
+      margin = ( (item.sell - item.buy ) / item.buy) * 100;
+      item.margin = margin
+    end
+    
     if item.changed?
       item.save! 
       item.create_activity :edit, owner: current_user, params: changes
@@ -153,7 +155,7 @@ class ItemsController < ApplicationController
   private
     def item_params
       params.require(:item).permit(
-        :name, :code, :item_cat_id, :margin, :brand, :sell, :discount, :local_item, :sell_member
+        :name, :code, :item_cat_id, :margin, :brand, :sell, :discount, :local_item, :sell_member, :buy
       )
     end
 

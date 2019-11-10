@@ -190,6 +190,7 @@ class OrdersController < ApplicationController
     disc_percentage = 0
     disc_percentage = params[:order][:discount].to_i if params[:order][:discount].present?
     disc = 0
+    ppn = params[:order][:ppn].to_f
 
     items.each do |item|
       order_item = OrderItem.find item[0]
@@ -200,7 +201,6 @@ class OrdersController < ApplicationController
       price = item[2].to_f
       disc_1 = item[3].to_f
       disc_2 = item[4].to_f
-      ppn = item[5].to_f
       
       if !order_from_retur && (receive_qty <= 0 || price <= 0)
         order_item.receive = 0
@@ -229,8 +229,12 @@ class OrdersController < ApplicationController
       store_stock = StoreItem.create store: current_user.store, item: this_item, stock: 0, min_stock: 5 if store_stock.nil?
 
 
-      price_1 = price - (price*disc_1/100) 
-      price_2 = price_1 - (price_1*disc_2/100)
+      price_1 = price - (price*disc_1/100) if  disc_1 < 99
+      price_1 = price - disc_1
+
+      price_2 = price_1 - (price_1*disc_2/100) if  disc_2 < 99
+      price_2 = price_1 - disc_2
+
       price_3 = price_2 + (price_2*ppn/100)
       based_item_price = price_3 - (price_3 * disc_percentage / 100)
       new_buy_total = price_3 * receive_qty
@@ -460,15 +464,20 @@ class OrdersController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: @order.invoice,
-          layout: 'pdf_layout.html.erb',
-          template: "orders/print.html.slim"
+        if @order.date_receive.nil?
+          render pdf: @order.invoice,
+            layout: 'pdf_layout.html.erb',
+            template: "orders/print_sup.html.slim"
+        else
+          render pdf: @order.invoice,
+            layout: 'pdf_layout.html.erb',
+            template: "orders/print.html.slim"
+        end
       end
     end
   end
 
   private
-
     def filter_search params, r_type
       results = []
       @orders = Order.all
