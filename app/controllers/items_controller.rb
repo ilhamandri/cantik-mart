@@ -53,9 +53,10 @@ class ItemsController < ApplicationController
   def create
     item = Item.new item_params
     item.brand = "-" if params[:item][:brand].nil?
-    item.buy = 0
+    item.buy = params[:item][:buy]
     item.local_item = params[:item][:local_item]
     item.price_updated = DateTime.now
+    item.margin = 100*((item.sell - item.buy) / item.buy) 
     return redirect_back_data_error new_item_path, "Data Barang Tidak Valid" if item.invalid?
     item.save!
     item.create_activity :create, owner: current_user
