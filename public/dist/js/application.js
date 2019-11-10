@@ -290,6 +290,8 @@ function getData(table_types) {
              document.getElementById("itemId").focus();
          }
        });
+     }else if {
+        
      }else{
       $.ajax({
          method: "GET",
