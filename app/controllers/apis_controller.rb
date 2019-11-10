@@ -131,6 +131,8 @@ class ApisController < ApplicationController
     item << find_item.id
     item << find_item.sell
 
+    json_result << item
+    
     render :json => json_result
   end
 
