@@ -121,8 +121,9 @@ class ApisController < ApplicationController
     return render :json => json_result unless search.present?
     search = search.gsub(/\s+/, "")
     find_item = Item.find_by(code: search)
+    binding.pry
     return render :json => json_result unless find_item.present?
-    
+    binding.pry
     return render :json => json_result if find_item.local_item
 
     binding.pry
