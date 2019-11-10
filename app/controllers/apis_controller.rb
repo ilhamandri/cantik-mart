@@ -123,6 +123,7 @@ class ApisController < ApplicationController
     find_item = Item.find_by(code: search)
     return render :json => json_result unless find_item.present?
     
+    return render :json => json_result if find_item.local_item
     item = []
     item << find_item.code
     item << find_item.name
@@ -132,7 +133,7 @@ class ApisController < ApplicationController
     item << find_item.sell
 
     json_result << item
-    
+
     render :json => json_result
   end
 
