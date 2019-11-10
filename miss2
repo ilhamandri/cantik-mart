@@ -15,7 +15,8 @@
 --> set @@store_id di local server (services/SyncData)
 
 ======================================================================
---> sendMail auto to drg.kindiial
+--> sendMail auto to drg.kindiialfarabi@gmail.com
+
 --> button buat download laporan akhir bulan	
 --> ubah dari bulan ke tgl => trx
 --> owner kasi hak akses trx
@@ -27,10 +28,10 @@
 --> stock di toko > dari sistem, bijimana ?	
 
 --> bikin bypass transfer ke gudang
+--> bikin transfer uang buat keuangan
 --> terakhir scan taruh diatas
 --> di nota kasi no trx ke berapa
 
---> harga jual
 
 =============================================================
 ssh root@193.168.195.145 -p 22

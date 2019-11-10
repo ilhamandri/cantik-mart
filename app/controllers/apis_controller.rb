@@ -124,6 +124,8 @@ class ApisController < ApplicationController
     return render :json => json_result unless find_item.present?
     
     return render :json => json_result if find_item.local_item
+
+    binding.pry
     item = []
     item << find_item.code
     item << find_item.name
