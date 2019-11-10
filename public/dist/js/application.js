@@ -290,8 +290,26 @@ function getData(table_types) {
              document.getElementById("itemId").focus();
          }
        });
-     }else if {
-        
+     }else if (table_types == "transfer") {
+      $.ajax({
+         method: "GET",
+         cache: false,
+         url: "/api/transfer?search=" + item_id,
+         success: function(result_arr) {
+            if(result_arr == ""){
+              document.getElementById("itemId").value = "";
+              alert("Data Barang Tidak Ditemukan / Barang merupakan barang lokal")
+              return
+            }else{
+                addNewRowTransfer(result_arr);
+             }
+         },
+         error: function(error) {
+             document.getElementById("itemId").value = "";
+             document.getElementById("item_qty").value = 1;
+             document.getElementById("itemId").focus();
+         }
+       });
      }else{
       $.ajax({
          method: "GET",

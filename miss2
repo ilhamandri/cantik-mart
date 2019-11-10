@@ -24,6 +24,10 @@
 --> tambah jumlah stok target transfer 
 
 --> stock di toko > dari sistem, bijimana ?	
+nambah kode barang, auto sell, jumlah grand total di order
+bikin bypass transfer ke gudang
+
+di nota kasi no trx ke berapa
 
 =============================================================
 ssh root@193.168.195.145 -p 22
