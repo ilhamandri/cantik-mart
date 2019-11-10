@@ -1,7 +1,12 @@
 .row
   .col.text-left
     h5
-      | Daftar Pengguna Sistem    
+      | Daftar Pengguna Sistem   
+  .col.text-right
+    a href="#{users_path(format: :pdf)}"
+      button.btn.btn-warning. type="button" 
+        i.fas.fa-download
+        |   PDF Daftar Pengguna 
   .col.text-right
     a href="#{new_user_path}"
       button.btn.btn-success. type="button" 
@@ -22,6 +27,7 @@ br
             .col-md-12.text-center
               button class="btn btn-primary"
                 | Cari
+
 .container-fluid
   .col-lg-12.col-md-12
     .card-header.white-text.info-color

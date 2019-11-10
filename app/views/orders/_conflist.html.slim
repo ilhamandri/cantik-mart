@@ -1,5 +1,7 @@
 tr
   td #{r_item.item.name}
+  - margin = r_item.item.margin
+  - prev_sell = r_item.item.sell
   - desc = "-"
   - desc = r_item.description if r_item.description.present?
   td #{desc}
@@ -14,8 +16,11 @@ tr
     td 
       input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[discount1]]" value="0" required="required" min="0"  step="0.1"
     td 
-      input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[discount2]]" required="required" min="0" value="0"  step="0.1"
+      input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[discount2]]" required="required" min="0" value="#{prev_sell}" disabled="disabled" 
     td 
-      input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[ppn]]" value="0" required="required" min="0"  step="0.1"
+      input type="number" class="form-control" value="0" required="required" min="0"  step="0.1" id="#{r_item.id}"
+    td style="display: none;"
+      | #{margin}
+
 
     

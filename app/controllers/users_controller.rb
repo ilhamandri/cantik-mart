@@ -18,6 +18,15 @@ class UsersController < ApplicationController
       @users = @users.where("lower(name) like ? OR phone like ?", search, search)
     end
 
+    respond_to do |format|
+      format.html
+      format.pdf do
+        @users = User.all
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "users/print.html.slim"
+      end
+    end
   end
 
   def show

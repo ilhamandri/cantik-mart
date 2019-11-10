@@ -34,8 +34,9 @@
 
     #items { clear: both; width: 100%; margin: 30px 0 0 0; border: 1px solid black; }
     #items th { background: #eee; }
+    #items tr.item-row { border-bottom: 1px solid #000; }
     #items textarea { width: 80px; height: 50px; }
-    #items tr.item-row td { border: 0; vertical-align: top; }
+    #items tr.item-row td { border: 0; vertical-align: center; }
     #items td.description { width: 300px; }
     #items td.item-name { width: 175px; }
     #items td.description textarea, #items td.item-name textarea { width: 100%; }
@@ -66,7 +67,8 @@
     
             <textarea id="address">CANTIK MART
 
-Jl. Raya Plered,Purwakarta No.17 
+<%= current_user.address %>
+Jl. Raya Plered,Purwakarta No.17
 Kec. Plered, Kabupaten Purwakarta, Jawa Barat 
 </textarea>
 

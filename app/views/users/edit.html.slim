@@ -12,9 +12,10 @@
           .form-group
             label for="name" Nama
             = form.text_field :name, required: true, class: "form-control md-form", id: "name"
-          .form-group
-            label for="name" Password
-            = form.password_field :password, required: true, class: "form-control md-form", id: "password"
+          - if current_user == @user || current_user.level == "super_admin"
+            .form-group
+              label for="name" Password
+              = form.password_field :password, required: true, class: "form-control md-form", id: "password"
           .form-group
             label for="id-card" KTP
             = form.text_field :id_card, required: true, class: "form-control md-form", id: "id-card"
@@ -39,8 +40,12 @@
               label for="store" Toko
               select name="user[store_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store" searchable="Cari..."
                 - @stores.each do |store|
-                  option value="#{store.id}"
-                    | #{store.name}
+                  - if store == @user.store
+                    option value="#{store.id}" selected="selected"
+                      | #{store.name}
+                  - else
+                    option value="#{store.id}"
+                      | #{store.name}
             .form-group
               label for="id-card" Gaji
               = form.number_field :salary, required: true, class: "form-control md-form", id: "id-card"

@@ -30,10 +30,14 @@
                 .form-group
                   label for="from" Tanggal Jatuh Tempo Pembayaran
                   input type="date" class="form-control md-form" value="#{(Date.today+2.weeks).strftime("%m/%d/%Y")}" name="order[due_date]" required=true
-              .col-12
+              .col-6
                 .form-group
-                  label for="from" Diskon Total ( % )
+                  label for="from" Diskon Total
                   input type="number" class="form-control md-form" value="0" name="order[discount]" required=true
+              .col-6
+                .form-group
+                  label for="from" PPn (%)
+                  input type="number" class="form-control md-form" value="0" name="order[ppn]" required=true
   .container-fluid
   .container-fluid
     .col-lg-12.col-md-12
@@ -50,9 +54,8 @@
                 th Terima
                 - if !@order.from_retur
                   th Harga Satuan
-                  th Diskon 1 ( % )
-                  th Diskon 2 ( % )
-                  th PPN (%)
+                  th Diskon 1
+                  th Diskon 2
               tbody
                 = render partial: 'conflist', collection: @order_items, as: :r_item
             .form-group.text-center

@@ -1,11 +1,11 @@
 #customer
   table#meta
     tr
-      td.meta-head Dibuat  
+      td.meta-head Tanggal Buat  
       td
         textarea #{DateTime.now.in_time_zone.to_s}
     tr
-      td.meta-head Oleh
+      td.meta-head Dibuat Oleh
       td 
         textarea #{current_user.name.to_s} ( #{current_user.store.name} )
     tr

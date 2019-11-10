@@ -153,7 +153,7 @@ class TransfersController < ApplicationController
   end
 
   def received
-    return redirect_back_data_error, "Data Transfer Tidak Ditemukan" unless params[:id].present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     transfer = Transfer.find params[:id]
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" if transfer.nil?
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" unless transfer.from_store_id == current_user.store.id
