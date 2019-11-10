@@ -6,7 +6,9 @@ tr
   - prev_sell = r_item.item.sell
   - buy = r_item.item.buy
   - store_item = StoreItem.find_by(item: r_item.item, store: r_item.order.store)
-  - buy = store_item.buy if store_item.present?
+  - if store_item.present?
+    - store_item.buy > 0
+      - buy = store_item.buy 
   - desc = "-"
   - desc = r_item.description if r_item.description.present?
   td 
