@@ -31,7 +31,6 @@
 
 --> bikin bypass transfer ke gudang
 --> terakhir scan taruh diatas --> kasir
---> laporan transaksi 
 
 =============================================================
 ssh root@193.168.195.145 -p 22
