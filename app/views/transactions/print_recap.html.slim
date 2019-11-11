@@ -50,7 +50,7 @@ br
         th Cash
         th Kredit
         th Total
-      - @cashiers.each do |cashier_id|
+      - @cashiers.uniq.each do |cashier_id|
         - cashier = User.find_by(id: cashier_id)
         - next if cashier.store != store
         tr
