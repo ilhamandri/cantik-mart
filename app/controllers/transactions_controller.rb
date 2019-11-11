@@ -37,19 +37,16 @@ class TransactionsController < ApplicationController
   end
 
   def daily_recap
-    start_day = DateTime.now.beginning_of_day-1.day
-    end_day = DateTime.now.end_of_day
+    start_day = params[:date].to_datetime
+    end_day = start_day.end_of_day
     @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     @transactions = @transactions.order("created_at ASC")
-    respond_to do |format|
-      format.pdf do
-        @kriteria = "Rekap Harian - "+Date.today.to_s
-        @cashiers = @transactions.pluck(:user_id)
-        render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "transactions/print_recap.html.slim"
-      end
-    end
+    @start_day = start_day
+    @kriteria = "Rekap Harian - "+Date.today.to_s
+    @cashiers = @transactions.pluck(:user_id)
+    render pdf: DateTime.now.to_i.to_s,
+      layout: 'pdf_layout.html.erb',
+      template: "transactions/print_recap.html.slim"
   end
 
   def show

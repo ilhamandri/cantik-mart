@@ -73,8 +73,8 @@ class TransfersController < ApplicationController
       transfer.save!
       return redirect_back_data_error urls, "Dibatalkan otomatis oleh sistem (tidak ada barang yang dikirim / terdapat item dengan local item)"
     else
-      user = User.find_by(store: transfer.to_store, level: User::SUPERVISI)
-      if user.present?
+      users = User.where(store: transfer.to_store, level: User::SUPERVISI)
+      users.each do |user|
         set_notification(current_user, user, 
           Notification::INFO, "Permintaan transfer"+transfer.invoice, urls)
       end

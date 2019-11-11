@@ -1,32 +1,26 @@
 --> check semua params is required ==> mengurangi error params not found
-
 --> jangan catat activity jika data tidak ada perubahan
-
 --> catat activity jika data dihapus
-
 --> jumlah promo yang terpakai untuk setiap toko
-
 =====================================================================
 
 --> aktifin cron balance (config/schedule.rb => whenever --update-crontab)
-
 --> aktifin notifikasi (js)
-
 --> set @@store_id di local server (services/SyncData)
 
 ======================================================================
+
 --> sendMail auto to drg.kindiialfarabi@gmail.com
 
 --> button buat download laporan akhir bulan	
---> ubah dari bulan ke tgl => trx
---> owner kasi hak akses trx
 
 --> resize struk (PLERED -> pull)
 
 --> bikin bypass transfer ke gudang
 --> terakhir scan taruh diatas --> kasir
 
---> check di order pas terima barang sesuai ga 
+--> check di order pas terima barang sesuai ga (beda grandtotal)
+--> CRON di cirata blm aktif
 
 =============================================================
 ssh root@193.168.195.145 -p 22
@@ -68,8 +62,8 @@ User.create id: 99, name:"PARDEV", email: "admin@pardev.id", password: "admin123
 
 exit
 
+
 localhost:3000/controllers
-localhost:3000/items
 
 
 StoreItem.delete_all
@@ -86,17 +80,3 @@ CashFlow.delete_all
 Receivable.delete_all
 LossItem.delete_all
 Loss.delete_all
-
-StoreItem.update_all(stock: 0)
-Store.update_all(cash: 5000000000, equity: 5000000000)
-
-
-
-
-
-
-
-
-
-
-binding port 3000 -> 80

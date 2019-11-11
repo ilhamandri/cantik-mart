@@ -24,10 +24,14 @@ env :PATH, ENV['PATH']
 
 
 # set :environment, 'development'
-# set :output, "log/cron.log"
+set :output, "log/cron.log"
 
-every 1.day, at: '11:00 pm' do
-  runner "AccountBalance.send_trx"
+# every 1.day, at: '11:00 pm' do
+#   runner "AccountBalance.send_trx"
+# end
+
+every :minutes do
+	puts "OKE"
 end
 
 every :hour do

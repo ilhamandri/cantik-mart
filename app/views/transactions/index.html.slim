@@ -3,13 +3,6 @@
     h5
       | Daftar Transaksi #{@member_name} #{@from}
 
-  - if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
-    .col.text-right
-      a href="#{daily_trx_recap_path(format: :pdf)}"
-        button.btn.btn-rounded.btn-success.text-body type="button" 
-          i.fas.fa-book
-          |   Rekap Transaksi Hari Ini
-
   - if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
     .col.text-right
       a href="#{new_transaction_path}"
@@ -17,10 +10,34 @@
           i.fas.fa-plus 
           |   Buat Transaksi
 
-
-br
-.container-fluid
+- if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
+  br
+  .container-fluid
   .row 
+    .col-xl-12.col-lg-12.col-md-12.pb-2
+      .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Rekap Perhari
+      .card.mb-4 
+        .card-body
+          = form_for :transaction, url: daily_trx_recap_path, method: 'GET' do |form|
+            .row
+              .col-md-12
+                label Pilih Tanggal Transaksi
+                input type="date" class="form-control md-form" value="#{(Date.today+2.weeks).strftime("%d/%m/%Y")}" name="date" required=true
+              .col-md-12.text-center
+                button class="btn btn-info "
+                  i.fas.fa-book
+                  |   Download Rekap Transaksi
+
+    .col-xl-6.col-lg-12.col-md-12.pb-2
+      .card-header.white-text.info-color 
+        h5.font-weight-500.my-1
+          | Grafik Transaksi 
+      .card.mb-4 
+        .card-body.table-responsive.text-nowrap
+          canvas id="transactions"
+
     .col-xl-6.col-lg-12.col-md-12.pb-2
       .card-header.white-text.info-color
           h5.font-weight-500.my-1
@@ -60,14 +77,6 @@ br
             a href="#{transactions_path(option: @params.to_s, format: :pdf)}"
               b
                 | #{@search}
-
-    .col-xl-6.col-lg-12.col-md-12.pb-2
-      .card-header.white-text.info-color 
-        h5.font-weight-500.my-1
-          | Grafik Transaksi 
-      .card.mb-4 
-        .card-body.table-responsive.text-nowrap
-          canvas id="transactions"
 
 .container-fluid
   .col-lg-12.col-md-12

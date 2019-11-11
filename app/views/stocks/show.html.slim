@@ -3,7 +3,7 @@
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Detil Stok - #{@item.name} (#{@item.code})
+          | Detil Stok #{@stock.store.name} - #{@item.name} (#{@item.code})
       .card-body
         = form_for :item, url: "" do |form|
           .form-group
