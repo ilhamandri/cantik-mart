@@ -32,7 +32,7 @@ class ControllersController < ApplicationController
       order.total = total
       order.grand_total = total
       order.save!
-      debt = Debt.find_by(finance_type: "ORDER", ref_id: 6)
+      debt = Debt.find_by(finance_type: "ORDER", ref_id: order.id)
       debt.nominal = total
       debt.deficiency = total
       debt.save!
