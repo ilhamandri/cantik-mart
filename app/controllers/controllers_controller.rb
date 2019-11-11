@@ -2,7 +2,7 @@ class ControllersController < ApplicationController
   before_action :require_login
 
   def index
-    Transfer.each do |transfer|
+    Transfer.all.each do |transfer|
       store = transfer.from_store
       transfer.transfer_items.each do |trf_item|
         item = trf_item.item
