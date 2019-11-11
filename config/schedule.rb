@@ -30,7 +30,7 @@ set :output, "log/cron.log"
 #   runner "AccountBalance.send_trx"
 # end
 
-every :minutes do
+every :minute do
 	puts "OKE"
 end
 
