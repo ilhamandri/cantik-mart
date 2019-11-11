@@ -36,6 +36,7 @@ class ControllersController < ApplicationController
       debt.nominal = total
       debt.deficiency = total
       debt.save!
+      binding.pry
     end
 
     check_new_controllers
