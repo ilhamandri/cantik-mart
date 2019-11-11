@@ -124,6 +124,10 @@ class ApisController < ApplicationController
     return render :json => json_result unless find_item.present?
     
     return render :json => json_result if find_item.local_item
+    
+    target_store = Store.find_by(id: params[:target].to_i)
+    return render :json => json_result if target_store.nil?
+    store_item = StoreItem.find_by(store: target_store, item: find_item)
     item = []
     item << find_item.code
     item << find_item.name
@@ -131,6 +135,7 @@ class ApisController < ApplicationController
     item << find_item.buy.round
     item << find_item.id
     item << find_item.sell
+    item << store_item.stock
 
     json_result << item
 

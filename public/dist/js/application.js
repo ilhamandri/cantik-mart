@@ -141,6 +141,8 @@ function addNewRowComplain(result_arr, qty){
    cell5.innerHTML = price;
    cell6.innerHTML = discount;
    cell7.innerHTML = remove;
+
+
    add_counter++;
    document.getElementById("itemId").value = "";
 
@@ -300,6 +302,7 @@ function getData(table_types) {
    clearTimeout(timeout);
    timeout = setTimeout(function() {
      var item_id = document.getElementById("itemId").value;
+     var store_id = $("#storeId").val();
      if(table_types=="complain"){
         var item_qty = document.getElementById("searchqty").value;
         $.ajax({
@@ -325,7 +328,7 @@ function getData(table_types) {
       $.ajax({
          method: "GET",
          cache: false,
-         url: "/api/transfer?search=" + item_id,
+         url: "/api/transfer?search=" + item_id+"&target="+store_id,
          success: function(result_arr) {
             if(result_arr == ""){
               document.getElementById("itemId").value = "";
@@ -357,8 +360,6 @@ function getData(table_types) {
                }
                else if(table_types == "retur"){
                 addNewRowRetur(result_arr);
-               }else if (table_types == "transfer"){
-                addNewRowTransfer(result_arr);
                }
              }
          },
@@ -450,21 +451,24 @@ function addNewRowTransfer(result_arr){
    var cell4 = row.insertCell(3);
    var cell5 = row.insertCell(4);
    var cell6 = row.insertCell(5);
+   var cell7 = row.insertCell(6);
 
 
    let id = "<input style='display: none;' type='text' class='md-form form-control' value='"+result[4]+"' readonly name='transfer[transfer_items]["+add_counter+"][item_id]'/>";
    let code = id+"<input type='text' class='md-form form-control' value='"+result[0]+"' readonly />";
    let name = "<input type='text' class='md-form form-control' value='"+result[1]+"' readonly />";
    let cat = "<input type='text' class='md-form form-control' value='"+result[2]+"' readonly />";
+   let stock = "<input type='text' class='md-form form-control' value='"+result[6]+"' />";
    let quantity = "<input type='number' min=1 class='md-form form-control' value='1' name='transfer[transfer_items]["+add_counter+"][quantity]'/>";
    let desc = "<input type='text' class='md-form form-control' value=''  name='transfer[transfer_items]["+add_counter+"][description]'/>";
    let remove = "<i class='fa fa-trash text-danger' onclick='removeThisRow(this)'></i>"; 
    cell1.innerHTML = code;
    cell2.innerHTML = name;
    cell3.innerHTML = cat;
-   cell4.innerHTML = quantity;
-   cell5.innerHTML = desc;
-   cell6.innerHTML = remove;
+   cell4.innerHTML = stock;
+   cell5.innerHTML = quantity;
+   cell6.innerHTML = desc;
+   cell7.innerHTML = remove;
    add_counter++;
    document.getElementById("itemId").value = "";
 }

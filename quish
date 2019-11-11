@@ -1,0 +1,27 @@
+
+[1mFrom:[0m /home/zerd/Work/cantik-mart/app/controllers/apis_controller.rb @ line 135 ApisController#get_item_trf:
+
+    [1;34m118[0m: [32mdef[0m [1;34mget_item_trf[0m params
+    [1;34m119[0m:   json_result = []
+    [1;34m120[0m:   search = params[[33m:search[0m].squish
+    [1;34m121[0m:   [32mreturn[0m render [33m:json[0m => json_result [32munless[0m search.present?
+    [1;34m122[0m:   search = search.gsub([35m[1;35m/[0m[35m[1;35m\s[0m[35m+[1;35m/[0m[35m[0m, [31m[1;31m"[0m[31m[1;31m"[0m[31m[0m)
+    [1;34m123[0m:   find_item = [1;34;4mItem[0m.find_by([35mcode[0m: search)
+    [1;34m124[0m:   [32mreturn[0m render [33m:json[0m => json_result [32munless[0m find_item.present?
+    [1;34m125[0m: 
+    [1;34m126[0m:   [32mreturn[0m render [33m:json[0m => json_result [32mif[0m find_item.local_item
+    [1;34m127[0m:   item = []
+    [1;34m128[0m:   item << find_item.code
+    [1;34m129[0m:   item << find_item.name
+    [1;34m130[0m:   item << find_item.item_cat.name
+    [1;34m131[0m:   item << find_item.buy.round
+    [1;34m132[0m:   item << find_item.id
+    [1;34m133[0m:   item << find_item.sell
+    [1;34m134[0m: 
+ => [1;34m135[0m:   binding.pry
+    [1;34m136[0m: 
+    [1;34m137[0m:   json_result << item
+    [1;34m138[0m: 
+    [1;34m139[0m:   render [33m:json[0m => json_result
+    [1;34m140[0m: [32mend[0m
+

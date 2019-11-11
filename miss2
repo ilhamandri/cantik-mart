@@ -21,13 +21,7 @@
 --> ubah dari bulan ke tgl => trx
 --> owner kasi hak akses trx
 
---> stock di transfer belum masuk
-
 --> resize struk (PLERED -> pull)
-
---> tambah jumlah stok target di transfer 
-
---> stock di toko > dari sistem, bijimana ?	
 
 --> bikin bypass transfer ke gudang
 --> terakhir scan taruh diatas --> kasir
