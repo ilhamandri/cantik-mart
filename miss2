@@ -26,6 +26,8 @@
 --> bikin bypass transfer ke gudang
 --> terakhir scan taruh diatas --> kasir
 
+--> check di order pas terima barang sesuai ga 
+
 =============================================================
 ssh root@193.168.195.145 -p 22
 tmux attach -t 0
