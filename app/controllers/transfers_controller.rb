@@ -284,24 +284,21 @@ class TransfersController < ApplicationController
       status = true
       transfer_items.each do |item|
         transfer_item = TransferItem.find item[2]
-        qty = item[1].to_i.abs
+        qty = item[1].to_f.abs
         transfer_item.receive_quantity = qty
-        transfer_item.save!
         store_item = StoreItem.find_by(item: transfer_item.item, store_id: current_user.store.id)
       
         if store_item.nil?
           StoreItem.create store: current_user.store, item_id: item[0], stock: qty
         else
           sent_qty = transfer_item.sent_quantity
-          store_item.stock = store_item.stock + qty
-          if qty != sent_qty 
-            status = false
-          end 
-
+          new_stock = store_item.stock.to_f + qty
+          store_item.stock = new_stock
           store_item.save!
+          binding.pry
+          transfer_item.save!
         end
       end
-      return status
     end
 
     def param_page
