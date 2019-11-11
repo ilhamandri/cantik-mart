@@ -21,13 +21,13 @@
                 - @item_cats.each do |item_cat|
                   option value="#{item_cat.id}"
                     | #{item_cat.name} 
-          .form-group
+          /.form-group
             label for="buy" Margin
             = form.number_field :margin, required: true, class: "form-control md-form", id: "buy", min: "0", value: "0"
-          .form-group style="display: none"
+          .form-group
             label for="buy" Harga Beli Satuan
             = form.number_field :buy, required: true, class: "form-control md-form", id: "buy", min: "0", value: "0"
-          .form-group style="display: none"
+          .form-group
             label for="buy" Harga Jual Satuan
             = form.number_field :sell, required: true, class: "form-control md-form", id: "buy", min: "0", value: "0"  
           .form-group style="display: none"

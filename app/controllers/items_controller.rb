@@ -59,6 +59,7 @@ class ItemsController < ApplicationController
     item = Item.new item_params
     item.brand = "-" if params[:item][:brand].nil?
     item.buy = params[:item][:buy]
+    item.sell = params[:item][:sell]
     item.local_item = params[:item][:local_item]
     item.price_updated = DateTime.now
     item.margin = 100*((item.sell - item.buy) / item.buy) 
