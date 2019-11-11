@@ -48,7 +48,7 @@ br
       tr
         th Kasir
         th Cash
-        th Kredit
+        th Debit
         th Total
       - @cashiers.uniq.each do |cashier_id|
         - cashier = User.find_by(id: cashier_id)
