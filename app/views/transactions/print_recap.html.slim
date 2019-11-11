@@ -30,7 +30,7 @@ br
       th Cash
       th Kredit
       th Total
-    - @cashiers.each do |cashier_id|
+    - @cashiers.uniq.each do |cashier_id|
       - cashier = Cashier.find_by(id: cashier_id)
       tr
         th #{cashier.name.upcase}

@@ -2,6 +2,15 @@ class ControllersController < ApplicationController
   before_action :require_login
 
   def index
+    Transfer.each do |transfer|
+      store = transfer.from_store
+      transfer.transfer_items.each do |trf_item|
+        item = trf_item.item
+        store_item = StoreItem.find_by(store: store, item: item)
+        store_item.stock = store_item.stock + trf_item.receive_quantity
+        store_item.save!
+      end
+    end
     check_new_controllers
   	@controllers = Controller.order("name ASC").page param_page
   end
