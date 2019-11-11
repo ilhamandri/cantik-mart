@@ -295,7 +295,6 @@ class TransfersController < ApplicationController
           new_stock = store_item.stock.to_f + qty
           store_item.stock = new_stock
           store_item.save!
-          binding.pry
           transfer_item.save!
         end
       end
