@@ -9,9 +9,8 @@
 --> set @@store_id di local server (services/SyncData)
 
 ======================================================================
---> gudang bisa melakukan transaksi (copy trx.new dari cantikmart-local)
 --> order jumlah (id: 11), persen belum masuk
---> transfer rokok masih minus (cek) (id: 9)
+--> order id: 16 total belum, grand_total, debt
 --> bikin bypass transfer ke gudang
 --> terakhir scan taruh diatas --> kasir
 --> check di order pas terima barang sesuai ga (beda grandtotal)

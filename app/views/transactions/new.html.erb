@@ -5,17 +5,15 @@
       <meta http-equiv=“Pragma” content=”no-cache”>
       <meta http-equiv=“Expires” content=”-1″>
       <meta http-equiv=“CACHE-CONTROL” content=”NO-CACHE”>
-      <title>Cantik Mart</title>
+      <title>CANTIK MART </title>
 
       <link rel="stylesheet" href="/assets/css/cashier.css">
-      <link rel='stylesheet' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css'>
-      <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
-      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-      <!-- Compiled and minified CSS -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
+      <%= stylesheet_link_tag '/dist/css/semantic.min.css' %>
+      <%= stylesheet_link_tag '/dist/css/font-awesome.min.css' %>
+      <%= stylesheet_link_tag '/dist/css/materialize.min.css' %>
+      <%= stylesheet_link_tag '/dist/css/bootstrap.min.css' %>
+      <%= stylesheet_link_tag '/dist/css/jquery.dataTables.min.css' %>
       
       <style>
          .overflow {
@@ -73,7 +71,7 @@
             <div class="ui segment">
                <div class="ui menu top">
                   <a class="active item" data-tab="transaction"><i class="icon edit sign"></i>TRANSAKSI</a>
-                  <a class="item" data-tab="stock">STOK</a>
+                  <!-- <a class="item" data-tab="stock">STOK</a> -->
                   <a class="item" data-tab="member">MEMBER</a>
                </div>
                <div class="ui tab" data-tab="transaction">
@@ -106,7 +104,7 @@
                     </div>
                     <div class="col-sm-4">
                       <label>JUMLAH</label>
-                      <input type="number" value="1" min="1" id="item_qty"/>
+                      <input type="number" value="1" min="0.1" id="item_qty" step="0.005" />
                     </div>
                     <div class="col-sm-4 text-right">
                       <button data-target="modal1" class="btn btn-primary btn-large modal-trigger">BAYAR</button>
@@ -292,20 +290,16 @@
 
 
 
+      <%= include_gon %>
+      <%= javascript_include_tag '/dist/js/jquery.min.js' %>
+      <%= javascript_include_tag '/dist/js/bootstrap.min.js' %>
+      <%= javascript_include_tag '/dist/js/semantic.min.js' %>
+      <%= javascript_include_tag '/dist/js/jquery.address.min.js' %>
+      <%= javascript_include_tag '/dist/js/jquery.dataTables.min.js' %>
+      <%= javascript_include_tag '/dist/js/materialize.min.js' %>
 
-
-
-
-
-
-
-      <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/javascript/semantic.min.js'></script>
-      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js'></script>
-      <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
-      <!-- Compiled and minified JavaScript -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
       <script type="text/javascript">
+
          function CheckOut() {
              var table = $('#itemList').DataTable();
              var data = table.rows().data();
@@ -350,7 +344,10 @@
              map["edc"] = edc;
              map["card"] = card;
              map["member"] = member;
-             map["voucher"] = voucher_code
+             map["voucher"] = voucher_code;
+             map["invoice"] = gon.invoice;
+
+             PrintBill();
              jQuery.ajax({
                        url: "/api/trx/post",
                        type: "POST",
@@ -370,13 +367,19 @@
                           document.getElementById("label-total").innerHTML = "0";
                           document.location.reload();
                           window.location.reload()
-                        }
+                        }, 
+                       error: function(result){
+                          alert("ERROR")
+                       }
              });
          }
          
          $('.top.menu .item').tab();
 
          $(document).ready(function() {
+            $('#modal1').on("shown.bs.modal", function(){
+              $('#nominal').focus();
+            });
             $('#itemList').DataTable({
              scrollY: '50vh',
              scrollCollapse: true,
@@ -444,6 +447,7 @@
                searching: false,
                lengthChange: false
             });
+
            document.getElementById("itemId").focus();
            $('.modal').modal();
            $('select').formSelect();
@@ -463,7 +467,7 @@
            var voucher = $('#voucher_nominal').val();
            var end = total -  voucher
            if(end < 0){
-            end = total
+            end = bilangan;
            }
            bilangan = end;
            reverse = bilangan.toString().split('').reverse().join(''),
@@ -662,12 +666,12 @@
          function updateTable(result_arr){
            var table = $('#itemList').DataTable();
            var result = result_arr[0];
-           var qty = parseInt(qtyInput.value);
-           var total = parseFloat(qty) * (parseFloat(result[3]) - parseFloat(result[4]));
-
+           var qty = parseFloat(qtyInput.value);
+           var total = parseInt(parseFloat(qty) * (parseFloat(result[3]) - parseFloat(result[4])));
+           total = Math.round(total);
            var code= result[0];
 
-          if (table.rows().count()<1) {
+           if (table.rows().count()<1) {
             var dataSet = [code, result[1], result[2], qty, result[3], result[4], total];
             table.row.add(dataSet).draw();
             checkPromo(result);
@@ -750,7 +754,7 @@
            return;
          }
 
-         function checkPromo(result){
+        function checkPromo(result){
           var table = $('#itemList').DataTable();
           var t_size = $('#itemList').DataTable().rows().count();
           var promo_present = false;
@@ -798,8 +802,13 @@
            document.getElementById("label-total").innerHTML = ribuan;
          }
          
+         var invoice = gon.invoice
+         var cashier = gon.cashier
+         var time = gon.current_time
          
-         var header = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> <style type="text/css"> td { font-size: 18px; } </style> <title></title> </head> <body> <div class="row"> <div class="col-sm-12 text-center"> <img style="width: 150px;" src="http://localhost:3000/images/logo.png"/> </div><div class="col-sm-12 text-center"> <p class="medium"> Jl. Raya Plered,Purwakarta No.17 <br> Kec. Plered, Kabupaten Purwakarta, Jawa Barat <br> =========================================================== </p> </div>';
+         var header = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> <style type="text/css"> td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> <div class="row"> <div class="col-sm-12 text-center"> <img src="/images/logo.png" style="width: 150px"/> </div><div class="col-sm-12 text-center"> <p class="medium"> Jl. Cirata - Cilangkap, Ds. Cadassari <br> Kec. Tegalwaru, Kabupaten Purwakarta, Jawa Barat <br> =========================================================== <br> ' + invoice + ' <br> '+ cashier + ' - ' + time +' <br> =========================================================== </p>  </div>';
+
+         // var header = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> <style type="text/css"> td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> <div class="row"> <div class="col-sm-12 text-center"> <img src="/images/logo.png" /> </div><div class="col-sm-12 text-center"> <p class="medium"> Jl. Raya Plered,Purwakarta No.17 <br> Kec. Plered, Kabupaten Purwakarta, Jawa Barat <br> =========================================================== <br> ' + invoice + ' <br> '+ cashier + ' - ' + time +' <br> =========================================================== </p>  </div>';
 
          var footer = '<p class="medium"> =========================================================== </p> <div class="text-center"> <h4> Terima kasih atas kunjungan Anda </h4> </div> </div> </div> </body> </html>';
 
@@ -826,10 +835,13 @@
                  total = parseFloat(data[i][3])*parseFloat(data[i][4]);
                  diskon = parseFloat(data[i][3])*parseFloat(data[i][5]);
                  total_diskon += diskon;
-                 subtotal += total;
+                 total = Math.round(total);
+                 var p_total = parseInt(total);
+
+                 subtotal += p_total;
 
                  items += '<tr><td colspan="4">'+item_name+'</td> </tr>'
-                 items += '<tr><td class="text-center">'+qty+'</td><td class="text-center">x</td><td class="text-center">'+price+'</td><td class="text-right">'+splitRibuan(total)+'</td></tr>';
+                 items += '<tr><td class="text-center">'+qty+'</td><td class="text-center">x</td><td class="text-center">'+price+'</td><td class="text-right">'+splitRibuan(p_total)+'</td></tr>';
                  if(diskon > 0){
                   items += '<tr><td class="text-center" colspan="3">DISKON :</td><td class="text-right">-'+splitRibuan(diskon)+'</td></tr>';
                  }
@@ -853,7 +865,9 @@
               payment_method = "KREDIT ("+bank+")"
               pay = subtotal-total_diskon;
              }
-
+             subtotal = parseInt(subtotal);
+             total_diskon = parseInt(total_diskon);
+             pay = parseInt(pay);
              HTML_totals += '<tr><td> Subtotal </td><td class="text-right">'+splitRibuan(subtotal)+' </td></tr><tr><td> Total Diskon</td><td class="text-right">'+splitRibuan(total_diskon)+'</td></tr><tr><td>Total</td><td class="text-right">'+splitRibuan(subtotal-total_diskon)+'</td></tr><tr><td> Bayar - '+payment_method+' </td><td class="text-right">'+splitRibuan(pay)+'</td></tr><tr><td> Kembali</td><td class="text-right">'+$("#change-h5").html()+'</td></tr>';
 
              HTML_totals +="</table>"
@@ -865,7 +879,7 @@
          function printHTML(html) {
             var wnd = window.open("about:blank", "", "_blank");
             wnd.document.write(html);
-            wnd..print();
+            wnd.print();
             items = ' <div class="col-sm-12"><table class="table">';
             HTML_totals = '<table class="table">';
          }

@@ -32,8 +32,11 @@ tr
         i.fas.fa-arrow-right
       | &nbsp #{order_item.new_receive.to_i}
     td #{number_with_delimiter(price, delimiter: ".", separator: ",")}
-    td #{number_with_delimiter(order_item.discount_1 + order_item.discount_2, delimiter: ".", separator: ",")}
-    td #{number_with_delimiter(ppn, delimiter: ".", separator: ",")}
+    - disc_i = order_item.discount_1 + order_item.discount_2
+    - disc = ""
+    - if disc_i < 100
+      - disc = disc_i + " %"
+    td #{number_with_delimiter(disc, delimiter: ".", separator: ",")}
     td.text-danger.text-right
 		  | #{number_with_delimiter(order_item.total, delimiter: ".", separator: ",")}
 

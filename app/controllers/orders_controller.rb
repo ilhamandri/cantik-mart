@@ -235,11 +235,13 @@ class OrdersController < ApplicationController
 
       disc_2 = price_1*disc_2/100 if  disc_2 < 99
       price_2 = price_1 - disc_2
+      # 10802.45
+      # 1080.245
+      item_grand_total = (price_2 + (price_2*ppn/100)).round
 
-      item_grand_total = price_2 + (price_2*ppn/100)
 
+      total_item_without_disc_global = item_grand_total
       item_grand_total = item_grand_total - (item_grand_total * disc_percentage / 100)
-      new_buy_total = item_grand_total
       based_item_price = item_grand_total / receive_qty;
 
       profit_margin = this_item.margin
@@ -311,7 +313,7 @@ class OrdersController < ApplicationController
       order_item.discount_2 = disc_2
       order_item.ppn = ppn
       order_item.price = price
-      order_item.total = new_buy_total
+      order_item.total = total_item_without_disc_global
       order_item.grand_total = item_grand_total
 
       order_item.save!
@@ -341,7 +343,7 @@ class OrdersController < ApplicationController
       store_stock.stock = store_stock.stock + receive_qty
       store_stock.save!
       
-      new_total +=  new_buy_total
+      new_total +=  total_item_without_disc_global
     end
 
     order.total = new_total
@@ -349,7 +351,7 @@ class OrdersController < ApplicationController
     order.discount = (new_total*disc_percentage/100)
     order.date_receive = DateTime.now
     order.received_by = current_user
-    order.grand_total = order.total - order.discount
+    order.grand_total = new_total- order.discount
     order.save!
     
     if order.total == 0
