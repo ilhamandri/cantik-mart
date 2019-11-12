@@ -184,6 +184,7 @@ class OrdersController < ApplicationController
     due_date = DateTime.now if order_from_retur
     urls = order_path(id: params[:id])
     return redirect_back_data_error order_confirmation_path(id: order.id), "Tanggal Jatuh Tempo Harus Diisi" if due_date.nil? 
+    binding.pry
     items = order_items
     new_total = 0
     receivable = nil
@@ -359,6 +360,8 @@ class OrdersController < ApplicationController
       order.save!
       return redirect_success urls, "Order " + order.invoice + " Telah Diterima"
     end
+
+    binding.pry
 
     if !order_from_retur
       Debt.create user: current_user, store: current_user.store, nominal: order.grand_total, 

@@ -9,7 +9,6 @@
 --> set @@store_id di local server (services/SyncData)
 
 ======================================================================
---> order jumlah (id: 11), persen belum masuk
 --> order id: 16 total belum, grand_total, debt
 --> bikin bypass transfer ke gudang
 --> terakhir scan taruh diatas --> kasir

@@ -25,34 +25,34 @@ class ControllersController < ApplicationController
 
 
 
-    orders_id = [11]
-    Order.where(id: orders_id).each do |order|
-      total = 0
-      order.order_items.each do |order_item|
-        price = order_item.price
-        receive = order_item.receive
-        disc = (price*receive*order_item.discount_1)/100
-        grand_total = (price * receive)-disc
-        total+= grand_total
-        per_item = grand_total.to_f / receive.to_f
-        item = order_item.item
-        item.buy = per_item
-        item.save!
-        order_item.total = grand_total;
-        order_item.save!
-      end
-      order.total = total
-      order.grand_total = total
-      order.save!
-      debt = Debt.find_by(finance_type: "ORDER", ref_id: order.id)
-      debt.nominal = total
-      debt.deficiency = total
-      debt.save!
-    end
+  #   orders_id = [11]
+  #   Order.where(id: orders_id).each do |order|
+  #     total = 0
+  #     order.order_items.each do |order_item|
+  #       price = order_item.price
+  #       receive = order_item.receive
+  #       disc = (price*receive*order_item.discount_1)/100
+  #       grand_total = (price * receive)-disc
+  #       total+= grand_total
+  #       per_item = grand_total.to_f / receive.to_f
+  #       item = order_item.item
+  #       item.buy = per_item
+  #       item.save!
+  #       order_item.total = grand_total;
+  #       order_item.save!
+  #     end
+  #     order.total = total
+  #     order.grand_total = total
+  #     order.save!
+  #     debt = Debt.find_by(finance_type: "ORDER", ref_id: order.id)
+  #     debt.nominal = total
+  #     debt.deficiency = total
+  #     debt.save!
+  #   end
 
-    check_new_controllers
-  	@controllers = Controller.order("name ASC").page param_page
-  end
+  #   check_new_controllers
+  # 	@controllers = Controller.order("name ASC").page param_page
+  # end
 
   def check_new_controllers
     datas = Hash.new
