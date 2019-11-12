@@ -18,7 +18,6 @@
 
 6. Belum paham utang pi hutang 
 7. Belum paham fitur keuangan
--8. Input terima pesanan belum singkron antara nominal / persen
 9. Grand total dynamic di waktu input terima
 13. Untuk opname harian sistem bagaimana
 
@@ -29,6 +28,9 @@
 3. Untuk di kasir minta laporan print out penjualan tiap per kasir, tidak hanya muncul jumlah nominal di layar
 4. Dalam print out penjualan/lembar pengesahan tiap kasir terdapat
 5. Label nominal Rp 1.000 bukan Rp 1.000,00 berwarna kontras merah beserta tanggal dikeluarkannya label
+
+
+8. Input terima pesanan belum singkron antara nominal / persen
 
 10. Logout tanpa sebab (server di restart --> perpanjan usia session)
 11. Tambah stok yang ad di gudang sebelum melakukan transfer

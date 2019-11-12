@@ -4,6 +4,9 @@ class SendBacksController < ApplicationController
   	def index
   		@send_backs = SendBack.page param_page
   		@send_backs = @send_backs.order("date_receive DESC")
+  		if !["owner", "super_admin"].include? current_user.level
+  			@send_backs = @send_backs.where(store: current_user.store)
+  		end
   		search = ""
   		if params[:search].present?
   			search += params[:search]+" "
@@ -122,6 +125,7 @@ class SendBacksController < ApplicationController
 	  	@send_back = SendBack.find_by(id: params[:id])
 	  	return redirect_back_data_error send_back_path , "Data Tidak Ditemukan" if @send_back.nil?
 	  	send_back = @send_back
+	  	SendBackItem.where(send_back: send_back).delete_all
 	  	@send_back.delete
 	  	urls = send_backs_path
 	  	return redirect_success urls, "Retur barang BS ke Gudang berhasil dihapus"

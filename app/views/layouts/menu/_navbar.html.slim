@@ -78,7 +78,11 @@ li
 
         - if Controller.find_by(name: 'transfers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
           li
-            a.collapsible-header.waves-effect.arrow-r  href="#{transfers_path}" Transfer
+            a.collapsible-header.waves-effect.arrow-r  href="#{transfers_path}" Minta Barang ke GUDANG
+
+        - if Controller.find_by(name: 'send_backs').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.collapsible-header.waves-effect.arrow-r  href="#{send_backs_path}" Kirim BS
         
         - if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
           li
