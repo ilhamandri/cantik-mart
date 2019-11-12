@@ -321,15 +321,18 @@ class OrdersController < ApplicationController
 
       old_buy_total = 0
 
+      curr_stock = 0
+      curr_stock = store_stock.stock.to_i if store_stock.stock.to_i > 0
+
       if !order_from_retur
 
         if this_item.local_item
-          old_buy_total = (store_stock.stock.to_i * store_stock.buy).to_f 
+          old_buy_total = (curr_stock * store_stock.buy).to_f 
         else
-          old_buy_total = (store_stock.stock.to_i * this_item.buy).to_f 
+          old_buy_total = (curr_stock.to_i * this_item.buy).to_f 
         end
-
-        new_buy = (item_grand_total + old_buy_total.to_f) / (receive_qty + store_stock.stock.to_i)  
+        new_buy = (item_grand_total + old_buy_total.to_f) / (receive_qty + curr_stock)  
+        if (receive_qty + store_stock.stock.to_i) == 0
         if this_item.local_item
           store_stock.buy = new_buy
           binding.pry
