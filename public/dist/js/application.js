@@ -11,18 +11,24 @@ function changePrice(id){
 
   if(disc_1 <= 99){
     disc_1 = parseInt(price * disc_1 / 100);
+    price -= disc_1;
   }
 
-  price -= disc_1
 
   if(disc_2 <= 99){
     disc_2 = parseInt(price * disc_2 / 100);
+    price -= disc_2;
   }
 
-  price -= disc_2;
-
-  price -= (price*ppn/100);
+  price += (price*ppn/100);
   var grand_total = price * receive;
+  if(disc_1 > 100){
+    grand_total -= disc_1;
+  }
+
+  if(disc_2 > 100){
+    grand_total -= disc_2;
+  }
 
   $("#"+id+"Total").val(grand_total);
 

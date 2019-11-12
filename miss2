@@ -9,9 +9,9 @@
 --> set @@store_id di local server (services/SyncData)
 
 ======================================================================
---> order id: 16 total belum, grand_total, debt
+
 --> bikin bypass transfer ke gudang
---> terakhir scan taruh diatas --> kasir
+--> buat local --> address ambil dari user.store.address biar orang cm bisa pull
 --> check di order pas terima barang sesuai ga (beda grandtotal)
 --> button buat download laporan akhir bulan	
 

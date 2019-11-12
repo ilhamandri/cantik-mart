@@ -235,8 +235,6 @@ class OrdersController < ApplicationController
 
       disc_2 = price_1*disc_2/100 if  disc_2 < 99
       price_2 = price_1 - disc_2
-      # 10802.45
-      # 1080.245
       item_grand_total = (price_2 + (price_2*ppn/100)).round
 
 
