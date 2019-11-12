@@ -438,7 +438,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
     @order = Order.find_by(id: params[:id])
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless @order.present?
-    @order_items = OrderItem.where(order_id: params[:id]).page param_page
+    @order_items = OrderItem.where(order_id: params[:id])
     @order_invs = InvoiceTransaction.where(invoice: @order.invoice)
     @pay = @order.grand_total.to_i - @order_invs.sum(:nominal) 
     respond_to do |format|

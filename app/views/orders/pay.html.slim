@@ -1,4 +1,4 @@
-- receive = Receivable.where("to_user=? AND deficiency > 0", @order.supplier.id).group(:to_user).sum(:deficiency).values.first
+- receive = Receivable.where(finance_type: "RETUR").where("to_user=? AND deficiency > 0", @order.supplier.id).group(:to_user).sum(:deficiency).values.first
 - max = 0
 - if receive.present?
   - max = receive if @pay >= receive

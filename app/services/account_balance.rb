@@ -7,6 +7,10 @@ class AccountBalance
   def initialize
   end
 
+  def self.send_trx
+    puts "OKE"
+  end
+
   def self.balance_account
     stores = Store.all
     time_start = DateTime.now.beginning_of_month.beginning_of_day

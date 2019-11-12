@@ -24,9 +24,9 @@ html
 						.price style="position: relative;"
     						- if disc != 0
     							.price1 style="font-size: 20px; text-decoration: line-through; float: left;"
-    								| #{number_to_currency(price, unit: "Rp. ")}
+    								| #{number_to_currency(price, unit: "Rp. ", :precision => 0)}
     						.price2 style="font-size: 25px; font-weight: bold; float: right; color: red;"
-    							| #{number_to_currency(price-disc, unit: "Rp. ")}
+    							| #{number_to_currency(price-disc, unit: "Rp. ", :precision => 0)}
 
     			- n_times = 3-prints.size
     			- n_times.times do 
@@ -56,9 +56,9 @@ html
 						.price style="position: relative;"
 							- if disc != 0
 								.price1 style="float: left; text-decoration: line-through; font-size: 20px;"
-	    							| #{number_to_currency(price, unit: "Rp. ")}
+	    							| #{number_to_currency(price, unit: "Rp. ", :precision => 0)}
     						.price2 style="float: right; font-size: 29px; font-weight: bold;"
-    							| #{number_to_currency(price-disc, unit: "Rp. ")}
+    							| #{number_to_currency(price-disc, unit: "Rp. ", :precision => 0)}
 
     			- n_times = 2-prints.size
     			- n_times.times do 
