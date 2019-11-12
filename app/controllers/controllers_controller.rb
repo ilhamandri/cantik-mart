@@ -50,9 +50,9 @@ class ControllersController < ApplicationController
   #     debt.save!
   #   end
 
-  #   check_new_controllers
-  # 	@controllers = Controller.order("name ASC").page param_page
-  # end
+    check_new_controllers
+  	@controllers = Controller.order("name ASC").page param_page
+  end
 
   def check_new_controllers
     datas = Hash.new
