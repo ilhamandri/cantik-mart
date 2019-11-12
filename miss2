@@ -10,13 +10,6 @@
 
 ======================================================================
 
---> bikin bypass transfer ke gudang
---> buat local --> address ambil dari user.store.address biar orang cm bisa pull
---> check di order pas terima barang sesuai ga (beda grandtotal)
---> button buat download laporan akhir bulan	
-
-
-
 --> resize struk (PLERED -> pull)
 --> CRON di cirata blm aktif
 --> sendMail auto to drg.kindiialfarabi@gmail.com

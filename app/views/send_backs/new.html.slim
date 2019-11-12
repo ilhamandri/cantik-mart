@@ -1,0 +1,38 @@
+= form_for :retur, url: send_backs_path, method: "POST" do |form|
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Data Buat Kirim Ke GUDANG
+      .card.mb-4
+        .card-body
+          .row
+            .col-12
+              label for="from" Kode Barang
+              input class="md-form form-control" placeholder="Barcode Barang..." id="itemId" onkeyup="getData('retur')"
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Daftar Barang
+        .card-body
+          .row
+            .col-md-12  
+              table.table id="myTable"
+                tr
+                  th
+                    | Kode
+                  th
+                    | Nama 
+                  th
+                    | Kategori
+                  th
+                    | Jumlah
+                  th
+                    | Deskripsi
+                  th
+        
+            .col-md-12.text-center
+              .form-group.text-center
+                = form.submit "Buat Retur", class: "btn btn-primary"

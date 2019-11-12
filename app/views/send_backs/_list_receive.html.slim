@@ -1,0 +1,7 @@
+tr
+	td #{send_back_item.item.code}
+	td #{send_back_item.item.name}
+	td #{send_back_item.quantity}
+	td #{send_back_item.description}
+	td 
+		input type="number" value="#{send_back_item.quantity}" step="1" class="form-control" name="send_back[#{send_back_item.id}]"

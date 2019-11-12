@@ -1,0 +1,9 @@
+tr
+	td #{send_back_item.item.code}
+	td #{send_back_item.item.name}
+	td #{send_back_item.quantity}
+	- if send_back_item.receive < 0
+		td -
+	- else
+		td #{send_back_item.receive}
+	td #{send_back_item.description}
