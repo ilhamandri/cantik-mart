@@ -21,7 +21,7 @@ tr
     td 
       input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[price]]" value="#{buy.to_i}" required="required" min="0"  step="1" id="#{r_item.id.to_s + "Price"}"  onchange="changePrice(#{r_item.id})"
     td 
-      input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[discount1]]" value="0" required="required" min="0"  step="0.1"  onchange="changePrice(#{r_item.id})"  id="#{r_item.id.to_s+"Disc1"}"
+      input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[discount1]]" value="0" required="required" min="0"  step="0.01"  onchange="changePrice(#{r_item.id})"  id="#{r_item.id.to_s+"Disc1"}"
     td 
       input type="number" class="form-control" value=0 name="order[order_items][#{r_item_counter}][[discount2]]" required="required" min="0"  onchange="changePrice(#{r_item.id})" id="#{r_item.id.to_s+"Disc2"}"
     td 

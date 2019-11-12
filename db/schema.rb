@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_12_151131) do
+ActiveRecord::Schema.define(version: 2019_11_12_083920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -502,6 +502,31 @@ ActiveRecord::Schema.define(version: 2019_10_12_151131) do
     t.index ["user_id"], name: "index_returs_on_user_id"
   end
 
+  create_table "send_back_items", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "send_back_id", null: false
+    t.integer "quantity", null: false
+    t.integer "receive", null: false
+    t.string "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_send_back_items_on_item_id"
+    t.index ["send_back_id"], name: "index_send_back_items_on_send_back_id"
+  end
+
+  create_table "send_backs", force: :cascade do |t|
+    t.string "invoice", null: false
+    t.integer "total_items", null: false
+    t.bigint "store_id", null: false
+    t.datetime "date_receive"
+    t.bigint "user_id", null: false
+    t.bigint "received_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_send_backs_on_store_id"
+    t.index ["user_id"], name: "index_send_backs_on_user_id"
+  end
+
   create_table "stock_values", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
@@ -767,6 +792,10 @@ ActiveRecord::Schema.define(version: 2019_10_12_151131) do
   add_foreign_key "returs", "stores"
   add_foreign_key "returs", "suppliers"
   add_foreign_key "returs", "users"
+  add_foreign_key "send_back_items", "items"
+  add_foreign_key "send_back_items", "send_backs"
+  add_foreign_key "send_backs", "stores"
+  add_foreign_key "send_backs", "users"
   add_foreign_key "stock_values", "stores"
   add_foreign_key "stock_values", "users"
   add_foreign_key "store_balances", "stores"

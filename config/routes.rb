@@ -58,6 +58,8 @@ Rails.application.routes.draw do
   resources :balances
   resources :promotions
   resources :prints
+
+  resources :send_backs
   get '/clean/prints', to: 'prints#clean', as: "clean_prints"
   
   resources :items
