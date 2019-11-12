@@ -217,7 +217,7 @@ class TransfersController < ApplicationController
       if params["store_id"].present?
         store = Store.find_by(id: params["store_id"])
         if store.present?
-          @transfers = @transfers.where(store: store)
+          @transfers = @transfers.where("from_store_id = ? OR to_store_id = ?", store.id, store.id)
           store_name = store.name
           @search += "Pencarian" if @search==""
           @search += " di Toko '"+store.name+"'"

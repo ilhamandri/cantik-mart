@@ -12,6 +12,17 @@ class ControllersController < ApplicationController
     #   end
     # end
 
+    transfer = Transfer.find_by(id: 9)
+    store = transfer.from_store
+    transfer.transfer_items.each do |trf_item|
+      item = trf_item.item
+      trf_item.receive_quantity = trf_item.sent_quantity
+      trf_item.save!
+      store_item = StoreItem.find_by(store: store, item: item)
+      store_item.stock = store_item.stock + trf_item.receive_quantity
+      store_item.save!
+    end
+
     orders_id = [8,10,11]
     # orders_id = [6]
     # Order.where(id: orders_id).each do |order|
