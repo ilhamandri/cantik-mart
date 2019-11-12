@@ -334,7 +334,6 @@ class OrdersController < ApplicationController
         new_buy = (item_grand_total + old_buy_total.to_f) / (receive_qty + curr_stock)  
         if this_item.local_item
           store_stock.buy = new_buy
-          binding.pry
           store_stock.save!
         else
           this_item.buy = new_buy
