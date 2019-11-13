@@ -5,7 +5,7 @@
         h5.font-weight-500.my-1
           | Form Opname #{current_user.store.name} ( #{DateTime.now.to_s} )
       .card-body
-        = form_for :opname, url: opname_path, method: "POST" do |form|
+        = form_for :opname, url: opname_path, html: { multipart: true }, method: "POST" do |form|
 			.form-group
                 label for="store" File Opname (.xlsx)
                 .input-group

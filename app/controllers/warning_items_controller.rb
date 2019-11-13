@@ -26,7 +26,7 @@ class WarningItemsController < ApplicationController
           sheet.add_row ["Kode", "Nama", "STOK SISTEM", "OPNAME"]
           items.each do |store_item|
             item = store_item.item
-            sheet.add_row [item.code, item.name, store_item.stock]
+            a = sheet.add_row [item.code.to_s+" ", item.name, store_item.stock]
           end
         end
 
@@ -40,7 +40,55 @@ class WarningItemsController < ApplicationController
   end
 
   def update_stock
-    binding.pry
+    file = params[:file]
+    if File.extname(file.path) == ".xlsx"
+      excel = Roo::Excelx.new(file.path)
+      excel.each_with_pagename do |name, sheet|
+        is_file_ok = check_excel sheet
+        return redirect_back_data_error opname_form_path, "File tidak valid" if !is_file_ok
+        
+        sheet.each do |row|
+          next if sheet.first == row
+          code = row[0].gsub(" ","")
+          item = Item.find_by(code: code)
+          next if item.nil?
+          store_item = StoreItem.find_by(store: current_user.store, item: item)
+          next if store_item.nil?
+          last_stock = row[2]
+          curr_stock = store_item.stock
+          real_stock = row[3]
+          new_stock = curr_stock + (last_stock * -1) + real_stock
+          store_item.stock = new_stock
+          store_item.save!
+        end
+      end
+    else
+      return redirect_back_data_error opname_form_path, "File tidak valid" 
+    end 
+  end
+
+  def check_excel sheet
+    sheet.each do |row|
+      next if sheet.first == row
+      code = row[0].gsub(" ","")
+      item = Item.find_by(code: code)
+      if item.nil?
+        return false
+      end
+      store_item = StoreItem.find_by(store: current_user.store, item: item)
+      if store_item.nil?
+        return false
+      end
+      last_stock = row[2]
+      real_stock = row[3]
+      if last_stock.nil?
+        return false
+      end
+      if real_stock.nil?
+        return false
+      end
+    end
+    return true
   end
 
   private

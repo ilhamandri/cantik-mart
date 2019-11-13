@@ -143,7 +143,7 @@ class SendBacksController < ApplicationController
 	  	end
 
 	  	def item_params
-	  		items = params[:retur][:retur_items].values
+	  		items = params[:transfer][:transfer_items].values
 	  		return items
 	  	end
 
