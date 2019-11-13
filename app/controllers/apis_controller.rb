@@ -92,13 +92,10 @@ class ApisController < ApplicationController
   def get_item_order params
     json_result = []
     search = params[:search].squish
-    binding.pry
     return render :json => json_result unless search.present?
     search = search.gsub(/\s+/, "")
     find_item = Item.find_by(code: search)
-    binding.pry
     return render :json => json_result unless find_item.present?
-    binding.pry
     item = []
     item << find_item.code
     item << find_item.name

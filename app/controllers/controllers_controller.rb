@@ -50,6 +50,16 @@ class ControllersController < ApplicationController
   #     debt.save!
   #   end
 
+
+    items = Item.all
+    items.each do |item|
+      item.code = item.codev.gsub!(/\s+/, '')
+      if item.margin == 0
+        item.margin = 15
+      end
+      item.save!
+    end
+    
     check_new_controllers
   	@controllers = Controller.order("name ASC").page param_page
   end
