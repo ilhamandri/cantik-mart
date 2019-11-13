@@ -45,7 +45,7 @@
           .form-group
             label for="sell" Harga Beli Satuan
             - if@item.local_item
-              - store_item = StoreItem.find_by(store: current_user.store, item: item)
+              - store_item = StoreItem.find_by(store: current_user.store, item: @item)
                 - if store_item.present?
                   = form.number_field :buy, required: true, class: "form-control md-form", id: "sell", min: "0", value:"#{store_item.buy.to_i}"
                 - else
