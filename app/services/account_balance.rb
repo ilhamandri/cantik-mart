@@ -78,9 +78,9 @@ class AccountBalance
       if activa != passiva
         diff_act_pass = activa-passiva
         if activa > passiva
-          balance.stock_value = balance.stock_value - diff_act_pass.abs
+          balance.equity = balance.stock_value - diff_act_pass.abs
         else
-          balance.stock_value = balance.stock_value + diff_act_pass.abs
+          balance.equity = balance.stock_value + diff_act_pass.abs
         end
         balance.save!
       end
@@ -176,7 +176,7 @@ class AccountBalance
             else
               cash_flow.finance_type = CashFlow::OUTCOME
             end
-            cash_flow.nominal = val.round
+            cash_flow.nominal = val
             cash_flow.save!
           end
         end
@@ -213,7 +213,7 @@ class AccountBalance
             else
               cash_flow.finance_type = CashFlow::OUTCOME
             end
-            cash_flow.nominal = val.round
+            cash_flow.nominal = val
             cash_flow.save!
           end
         end
@@ -249,7 +249,7 @@ class AccountBalance
       req_items = req_trf.transfer_items
       req_items.each do |req_item|
         item = req_item.item
-        val += (req_item.receive_quantity * item.buy).round
+        val += (req_item.receive_quantity.to_f * item.buy)
       end
     end
 
@@ -257,7 +257,40 @@ class AccountBalance
       sent_items = sent_trf.transfer_items
       sent_items.each do |sent_item|
         item = sent_item.item
-        val -= (sent_item.sent_quantity * item.buy).round
+        val -= (sent_item.sent_quantity.to_f * item.buy)
+      end
+    end
+
+    return val
+  end
+
+  def self.send_backs store, time_start, time_end
+    val = 0
+    send_backs = SendBack.where("created_at >= ? AND created_at <= ?", time_start, time_end)
+    if store.store_type != "warehouse"
+      send_backs = send_backs.where(store: store)
+    end
+
+    send_backs.each do |send_back|
+      send_back.send_back_items.each do |send_back_item|
+        item = send_back_item.item
+        val += (send_back_item.quantity * item.buy)
+      end
+    end
+
+    request_transfers.each do |req_trf|
+      req_items = req_trf.transfer_items
+      req_items.each do |req_item|
+        item = req_item.item
+        val += (req_item.receive_quantity * item.buy)
+      end
+    end
+
+    sent_transfers.each do |sent_trf|
+      sent_items = sent_trf.transfer_items
+      sent_items.each do |sent_item|
+        item = sent_item.item
+        val -= (sent_item.sent_quantity * item.buy)
       end
     end
 
