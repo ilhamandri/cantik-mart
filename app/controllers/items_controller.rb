@@ -100,6 +100,7 @@ class ItemsController < ApplicationController
       if item.local_item
         store_item = StoreItem.find_by(item: item, store: current_user.store)
         store_item.buy = buy
+        store_item.save!
       end
     end
 
