@@ -17,7 +17,10 @@ class CashFlow < ApplicationRecord
     Bank_Loan: 13,
     Supplier_Loan: 14,
     Modal: 15,
-    Withdraw: 16
+    Withdraw: 16,
+    OtherLoan: 17,
+    Send: 18,
+    Receive: 19
   }
 
   belongs_to :store
@@ -39,5 +42,8 @@ class CashFlow < ApplicationRecord
   SUPPLIER_LOAN = 14
   MODAL = 15
   WITHDRAW = 16
+  OTHERLOAN = 17
+  SEND = 18
+  RECEIVE = 19
 
 end

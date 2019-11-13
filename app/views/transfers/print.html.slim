@@ -66,8 +66,8 @@ table#items
         | #{transfer.confirmed_by.name} (#{transfer.status.to_date})
 table#items
   tr
+    th Kode
     th Barang
-    th Deskripsi
     th Minta
     th Kirim
     th Terima
@@ -75,8 +75,8 @@ table#items
   - total = 0
   - transfer_items.each do |transfer_item|
     tr.item-row
+      td #{transfer_item.item.code}
       td #{transfer_item.item.name}
-      td #{transfer_item.description}
       td #{transfer_item.request_quantity}
       td #{transfer_item.sent_quantity}
       td #{transfer_item.receive_quantity}

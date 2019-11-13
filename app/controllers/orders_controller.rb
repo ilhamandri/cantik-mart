@@ -93,6 +93,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path unless params[:id].present?
     @order = Order.find params[:id]
     @order_items = OrderItem.where(order_id: @order.id)
+    gon.ids = @order_items.pluck(:id)
     return redirect_back_data_error orders_path, "Data Order Tidak Valid" if @order.date_receive.present? || @order.date_paid_off.present?
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if @order.nil?
   end

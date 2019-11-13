@@ -19,7 +19,7 @@ br
 br
 
 
-- if current_user.level != "super_visi"
+- if current_user.level == "super_visi"
   - trx = @transactions.order("created_at DESC").limit(1).first
   - trx_last_timestamp = "Tidak ada transaksi"
   - trx_last_timestamp = trx.created_at if trx.present?

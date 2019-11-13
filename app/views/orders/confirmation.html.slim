@@ -60,6 +60,13 @@
                   th Harga Jual
               tbody
                 = render partial: 'conflist', collection: @order_items, as: :r_item
+            .col-md-12.text-center
+              h3
+                b
+                  | TOTAL : 
+                b id="grand_total_all"
+                  | -
+                br
             .form-group.text-center
               = form.submit "TERIMA", class: "btn btn-success"
 

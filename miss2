@@ -9,7 +9,7 @@
 --> set @@store_id di local server (services/SyncData)
 
 ======================================================================
-
+--> equity buat awal bulan gimana ?
 --> resize struk (PLERED -> pull)
 --> CRON di cirata blm aktif
 --> CRON di cloud blm aktif

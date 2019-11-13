@@ -1,16 +1,21 @@
 setInterval(get_notification, 10000);
 
+
 function changePrice(id){
+  var ids = gon.ids
   var receive = $("#"+id+"Receive").val();
   var price = $("#"+id+"Price").val();
   var disc_1 = $("#"+id+"Disc1").val();
   var disc_2 = $("#"+id+"Disc2").val();
-  var margin = $("#"+id+"Margins").val();
+  var margin = parseInt($("#"+id+"Margins").html());
   var ppn = $("#ppn").val();
 
+  price = price * receive
 
   if(disc_1 <= 99){
     disc_1 = parseInt(price * disc_1 / 100);
+    price -= disc_1;
+  }else{
     price -= disc_1;
   }
 
@@ -18,23 +23,25 @@ function changePrice(id){
   if(disc_2 <= 99){
     disc_2 = parseInt(price * disc_2 / 100);
     price -= disc_2;
+  }else{
+    price -= disc_2;
   }
 
-  price += (price*ppn/100);
-  var grand_total = price * receive;
-  if(disc_1 > 100){
-    grand_total -= disc_1;
-  }
-
-  if(disc_2 > 100){
-    grand_total -= disc_2;
-  }
-
-  $("#"+id+"Total").val(grand_total);
+  price += parseInt(price*ppn/100);
 
 
-  price += price * margin / 100;
-  $("#"+id+"Sell").val(price);
+  $("#"+id+"Total").html(price);
+
+
+  base_price = parseInt(price/receive) * parseInt(margin / 100);
+  alert(parseInt(margin / 100))
+  $("#"+id+"Sell").html(base_price);
+
+  g_total = 0
+  for (i = 0; i < ids.length; i++) {
+    g_total += parseInt($("#"+ids[i]+"Total").html());
+  } 
+  $("#grand_total_all").html(g_total);
 }
 
 function complain_check(index){
@@ -395,9 +402,9 @@ function addNewRowOrder(result_arr){
 
 
    let id = "<input style='display: none;' type='text' class='md-form form-control' value='"+result[4]+"' readonly name='order[order_items]["+add_counter+"][item_id]'/>";
-   let code = id+"<input type='text' class='md-form form-control' value='"+result[0]+"' readonly name='order[order_items]["+add_counter+"][code]'/>";
-   let name = "<input type='text' class='md-form form-control' value='"+result[1]+"' readonly name='order[order_items]["+add_counter+"][name]'/>";
-   let cat = "<input type='text' class='md-form form-control' value='"+result[2]+"' readonly name='order[order_items]["+add_counter+"][item_cat]'/>";
+   let code = id+result[0]+"<input style='display:none;' type='text' class='md-form form-control' value='"+result[0]+"' readonly name='order[order_items]["+add_counter+"][code]'/>";
+   let name = result[1]+"<input style='display: none;' type='text' class='md-form form-control' value='"+result[1]+"' readonly name='order[order_items]["+add_counter+"][name]'/>";
+   let cat = result[2]+"<input style='display: none;' type='text' class='md-form form-control' value='"+result[2]+"' readonly name='order[order_items]["+add_counter+"][item_cat]'/>";
    let quantity = "<input type='number' min=1 class='md-form form-control' value='1' name='order[order_items]["+add_counter+"][quantity]'/>";
    let price = "<input type='number' class='md-form form-control' value='"+result[3]+"' min=100 name='order[order_items]["+add_counter+"][price]'  step='0.05'/>";
    let desc = "<input type='text' class='md-form form-control' value=''  name='order[order_items]["+add_counter+"][description]'/>";
@@ -428,9 +435,9 @@ function addNewRowRetur(result_arr){
 
 
    let id = "<input style='display: none;' type='text' class='md-form form-control' value='"+result[4]+"' readonly name='retur[retur_items]["+add_counter+"][item_id]'/>";
-   let code = id+"<input type='text' class='md-form form-control' value='"+result[0]+"' readonly name='retur[retur_items]["+add_counter+"][code]'/>";
-   let name = "<input type='text' class='md-form form-control' value='"+result[1]+"' readonly name='retur[retur_items]["+add_counter+"][name]'/>";
-   let cat = "<input type='text' class='md-form form-control' value='"+result[2]+"' readonly name='retur[retur_items]["+add_counter+"][item_cat]'/>";
+   let code = id+result[0]+"<input type='text' style='display:none;' class='md-form form-control' value='"+result[0]+"' readonly name='retur[retur_items]["+add_counter+"][code]'/>";
+   let name = result[1]+"<input type='text' style='display: none' class='md-form form-control' value='"+result[1]+"' readonly name='retur[retur_items]["+add_counter+"][name]'/>";
+   let cat = result[2]+"<input style='display: none;' type='text' class='md-form form-control' value='"+result[2]+"' readonly name='retur[retur_items]["+add_counter+"][item_cat]'/>";
    let quantity = "<input type='number' min=1 class='md-form form-control' value='1' name='retur[retur_items]["+add_counter+"][quantity]'/>";
    let desc = "<input type='text' class='md-form form-control' value=''  name='retur[retur_items]["+add_counter+"][description]'/>";
    let remove = "<i class='fa fa-trash text-danger' onclick='removeThisRow(this)'></i>"; 
@@ -461,10 +468,10 @@ function addNewRowTransfer(result_arr){
 
 
    let id = "<input style='display: none;' type='text' class='md-form form-control' value='"+result[4]+"' readonly name='transfer[transfer_items]["+add_counter+"][item_id]'/>";
-   let code = id+"<input type='text' class='md-form form-control' value='"+result[0]+"' readonly />";
-   let name = "<input type='text' class='md-form form-control' value='"+result[1]+"' readonly />";
-   let cat = "<input type='text' class='md-form form-control' value='"+result[2]+"' readonly />";
-   let stock = "<input type='text' class='md-form form-control' value='"+result[6]+"' />";
+   let code = id+result[0]+"<input style='display: none;' type='text' class='md-form form-control' value='"+result[0]+"' readonly />";
+   let name = result[1]+"<input style='display: none;' type='text' class='md-form form-control' value='"+result[1]+"' readonly />";
+   let cat = result[2]+"<input style='display: none;' type='text' class='md-form form-control' value='"+result[2]+"' readonly />";
+   let stock = result[6]+"<input style='display: none;' type='text' class='md-form form-control' value='"+result[6]+"' />";
    let quantity = "<input type='number' min=1 class='md-form form-control' value='1' name='transfer[transfer_items]["+add_counter+"][quantity]'/>";
    let desc = "<input type='text' class='md-form form-control' value=''  name='transfer[transfer_items]["+add_counter+"][description]'/>";
    let remove = "<i class='fa fa-trash text-danger' onclick='removeThisRow(this)'></i>"; 

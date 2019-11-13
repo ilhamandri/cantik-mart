@@ -24,12 +24,15 @@ tr
       input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[discount1]]" value="0" required="required" min="0"  step="0.01"  onchange="changePrice(#{r_item.id})"  id="#{r_item.id.to_s+"Disc1"}"
     td 
       input type="number" class="form-control" value=0 name="order[order_items][#{r_item_counter}][[discount2]]" required="required" min="0"  onchange="changePrice(#{r_item.id})" id="#{r_item.id.to_s+"Disc2"}"
-    td 
-      input type="number" class="form-control"  required="required" min="0" value="#{buy*r_item.quantity}" onchange="changePrice(#{r_item.id})" id="#{r_item.id.to_s+"Total"}" disabled="disabled"   
-    td 
-      input type="text" class="form-control" required="required" min="0"  value="#{prev_sell}" disabled="disabled"   id="#{r_item.id.to_s+"Sell"}"
-    td style="display: none;"
-      input type="text" class="form-control" required="required" min="0"  value="#{r_item.item.margin}" disabled="disabled"   id="#{r_item.id.to_s+"Margins"}"
+
+    td id="#{r_item.id.to_s+"Total"}"
+      | #{buy*r_item.quantity}
+
+    td id="#{r_item.id.to_s+"Sell"}"
+      | #{prev_sell}
+
+    td style="display: none;" id="#{r_item.id.to_s+"Margins"}"
+      | #{r_item.item.margin}
 
 
     
