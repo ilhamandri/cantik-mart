@@ -32,7 +32,8 @@
               - stock = StoreItem.find_by(item: @item, store: current_user.store)
               - buy = 0
               - buy = stock.buy if stock.present?
-              input class="md-form form-control" value="#{number_with_delimiter(buy.round, delimiter: ".")} " disabled="disabled"
+              - binding.pry
+              input class="md-form form-control" value="#{number_with_delimiter(buy.to_i, delimiter: ".")} " disabled="disabled"
             - else
               input class="md-form form-control" value="#{number_with_delimiter(@item.buy.round, delimiter: ".")} ( #{price_updated} )" disabled="disabled"
           .form-group
