@@ -81,19 +81,18 @@ br
           td #{number_with_delimiter( debit.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter( (debit+cash).to_i, delimiter: ".", separator: ",")}
           - hpp_total = @transactions.where(user: cashier).sum(:hpp_total)
-          - binding.pry
           td #{number_with_delimiter( (debit+cash-hpp_total).to_i, delimiter: ".", separator: ",")}
 
       tr
         td 
         - cash_total = @transactions.where(store: store).where(payment_type: "CASH").sum(:grand_total)
         - debit_total = @transactions.where(store: store).where(payment_type: "DEBIT",).sum(:grand_total)
-        - total = cash_total+debit_total
         td #{number_with_delimiter( (cash_total).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (debit_total).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (total).to_i, delimiter: ".", separator: ",")}
+        - grand_total = @transactions.where(store: store).sum(:hpp_total)
         - hpp_total = @transactions.where(store: store).sum(:hpp_total)
-        td #{number_with_delimiter( (total-hpp_total).to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter( (grand_total-hpp_total).to_i, delimiter: ".", separator: ",")}
 
     br
     hr
