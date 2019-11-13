@@ -57,11 +57,17 @@ table#items
         | #{number_with_delimiter(price, delimiter: ".", separator: ",")}
       td
         - discount_1 = "-"
-        - discount_1 = order_item.discount_1.to_s+"%" if received
+        - if received
+          - disc_1 = order_item.discount_1
+          - discount_1 = number_with_delimiter(disc_1, delimiter: ".", separator: ",") if disc_1 > 100
+          - discount_1 = disc_1.to_s+"%" if disc_1 < 100
         | #{discount_1}
       td
         - discount_2 = "-"
-        - discount_2 = order_item.discount_2.to_s+"%" if received
+        - if received
+          - disc_2 = order_item.discount_2
+          - discount_2 = disc_2.to_s+"%" if disc_2 < 100
+          - discount_2 = number_with_delimiter(disc_2, delimiter: ".", separator: ",") if disc_2 > 100
         | #{discount_2}
       td
         - ppn = "-"
