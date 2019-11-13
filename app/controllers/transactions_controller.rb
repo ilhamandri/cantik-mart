@@ -40,7 +40,7 @@ class TransactionsController < ApplicationController
     start_day = params[:date].to_datetime
     end_day = start_day.end_of_day
     @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
-    @transactions = @transactions.order("created_at ASC")
+    @transactions = @transactions.order("created_at DESC")
     @start_day = start_day
     @kriteria = "Rekap Harian - "+Date.today.to_s
     @cashiers = @transactions.pluck(:user_id)
