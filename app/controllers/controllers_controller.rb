@@ -57,6 +57,7 @@ class ControllersController < ApplicationController
       if item.margin == 0
         item.margin = 15
       end
+      binding.pry
       item.save!
     end
 

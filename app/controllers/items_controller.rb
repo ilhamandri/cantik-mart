@@ -57,6 +57,7 @@ class ItemsController < ApplicationController
     return redirect_back_data_error new_item_path, "Kode  "+code.to_s+" telah terdaftar." if exist.present?
    
     item = Item.new item_params
+    item.code = item.code.gsub!(/\s+/, '')
     item.brand = "-" if params[:item][:brand].nil?
     item.buy = params[:item][:buy]
     item.sell = params[:item][:sell]
