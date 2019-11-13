@@ -34,7 +34,6 @@ function changePrice(id){
 
 
   base_price = parseInt(price/receive) * parseInt(margin / 100);
-  alert(parseInt(margin / 100))
   $("#"+id+"Sell").html(base_price);
 
   g_total = 0
