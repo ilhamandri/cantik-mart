@@ -4,9 +4,15 @@ class SendBacksController < ApplicationController
   	def index
   		@send_backs = SendBack.page param_page
   		@send_backs = @send_backs.order("date_receive DESC")
-  		if !["owner", "super_admin"].include? current_user.level
+  		
+  		if current_user.store != Store.first
   			@send_backs = @send_backs.where(store: current_user.store)
   		end
+
+  		if !["owner", "super_admin"].include? current_user.level
+  			@send_backs = SendBack.page param_page
+  		end
+
   		search = ""
   		if params[:search].present?
   			search += params[:search]+" "

@@ -1,5 +1,13 @@
-h5
-  | Daftar Stok Barang Menipis 
+
+.row
+  .col.text-left
+    h5
+      | Daftar Stok Barang Menipis 
+  .col.text-right
+    a href="#{opname_form_path}"
+      button.btn.btn-success. type="button" 
+        i.fas.fa-plus 
+        |   OPNAME
 br
 .container-fluid
   .col-lg-12.col-md-12
@@ -17,7 +25,7 @@ br
               | Cari
           br
           .col-md-12.text-center.grey-text
-            a href="#{warning_items_path(format: :pdf)}"
+            a href="#{warning_items_path(format: :xlsx)}"
               b
                 | DOWNLOAD ITEM (STOCK < 0)
         

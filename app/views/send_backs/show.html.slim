@@ -4,7 +4,7 @@
       button.btn.btn-primary type="button" 
         i.fas.fa-print 
         | &nbsp&nbsp&nbsp CETAK
-  - if @send_back.received_by.nil? && @send_back.store == current_user.store
+  - if @send_back.received_by.nil? && current_user.store == Store.first
     .col.text-right
     .col-md-6.text-right
       a href="#{send_back_receive_path(id: @send_back.id)}"

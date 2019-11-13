@@ -57,6 +57,10 @@ Rails.application.routes.draw do
 
   get 'bs/receive', to: 'send_backs#receive', as: 'send_back_receive'
   post 'bs/receive', to: 'send_backs#received', as: 'send_back_received'
+
+
+  get 'opname', to: 'warning_items#opname', as: 'opname_form'
+  post 'opname', to: 'warning_items#update_stock', as: 'opname'
   
 
 

@@ -16,13 +16,31 @@ class WarningItemsController < ApplicationController
     
     respond_to do |format|
       format.html
-      format.pdf do
-        @items = StoreItem.where(store: current_user.store).where("stock < 0")
-        render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "warning_items/print_under.html.slim"
+      format.xlsx do
+        filename = "./report/opname/"+DateTime.now.to_i.to_s+".xlsx"
+        p = Axlsx::Package.new
+        wb = p.workbook
+
+        wb.add_worksheet(:name => "OPNAME") do |sheet|
+          items = StoreItem.where(store: current_user.store).where("stock < 0")
+          sheet.add_row ["Kode", "Nama", "STOK SISTEM", "OPNAME"]
+          items.each do |store_item|
+            item = store_item.item
+            sheet.add_row [item.code, item.name, store_item.stock]
+          end
+        end
+
+        p.serialize(filename)
+        send_file(filename)
       end
     end
+  end
+
+  def opname
+  end
+
+  def update_stock
+    binding.pry
   end
 
   private

@@ -1,0 +1,20 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Form Opname #{current_user.store.name} ( #{DateTime.now.to_s} )
+      .card-body
+        = form_for :opname, url: opname_path, method: "POST" do |form|
+			.form-group
+                label for="store" File Opname (.xlsx)
+                .input-group
+                  .input-group-prepend
+                    span#inputGroupFileAddon01.input-group-text
+                      | Upload
+                  .custom-file
+                    input#inputGroupFile01.custom-file-input[type="file" name="file" aria-describedby="inputGroupFileAddon01"]
+                    label.custom-file-label[for="inputGroupFile01"]
+                      | Choose file
+            .form-group.text-center
+            	= form.submit "OPNAME", class: "btn btn-warning black-text"
