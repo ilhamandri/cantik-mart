@@ -7,13 +7,13 @@ function changePrice(id){
   var price = $("#"+id+"Price").val();
   var disc_1 = $("#"+id+"Disc1").val();
   var disc_2 = $("#"+id+"Disc2").val();
-  var margin = parseInt($("#"+id+"Margins").html());
+  var margin = parseFloat($("#"+id+"Margins").html());
   var ppn = $("#ppn").val();
 
   price = price * receive
 
   if(disc_1 <= 99){
-    disc_1 = parseInt(price * disc_1 / 100);
+    disc_1 = parseFloat(price * disc_1 / 100);
     price -= disc_1;
   }else{
     price -= disc_1;
@@ -21,26 +21,27 @@ function changePrice(id){
 
 
   if(disc_2 <= 99){
-    disc_2 = parseInt(price * disc_2 / 100);
+    disc_2 = parseFloat(price * disc_2 / 100);
     price -= disc_2;
   }else{
     price -= disc_2;
   }
 
-  price += parseInt(price*ppn/100);
+  price += parseFloat(price*ppn/100);
 
 
   $("#"+id+"Total").html(price);
 
 
-  base_price = parseInt(price/receive) * parseInt(margin / 100);
-  $("#"+id+"Sell").html(base_price);
+  base_price = (price*1.0/receive*1.0) + ((price*1.0/receive*1.0) * margin / 100);
+
+  $("#"+id+"Sell").html(parseInt(base_price));
 
   g_total = 0
   for (i = 0; i < ids.length; i++) {
     g_total += parseInt($("#"+ids[i]+"Total").html());
   } 
-  $("#grand_total_all").html(g_total);
+  $("#grand_total_all").html(parseInt(g_total));
 }
 
 function complain_check(index){
