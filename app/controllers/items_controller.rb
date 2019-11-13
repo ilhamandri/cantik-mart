@@ -95,6 +95,7 @@ class ItemsController < ApplicationController
     if params[:item][:sell_member].to_i <= 0
       item.sell_member = item.sell
     end
+    binding.pry
     if params[:item][:buy].present?
       binding.pry
       if item.local_item
