@@ -96,7 +96,7 @@ class ApisController < ApplicationController
     search = search.gsub(/\s+/, "")
     find_item = Item.find_by(code: search)
     return render :json => json_result unless find_item.present?
-    
+    binding.pry
     item = []
     item << find_item.code
     item << find_item.name
