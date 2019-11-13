@@ -92,7 +92,7 @@ br
         td #{number_with_delimiter( (cash_total).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (debit_total).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (total).to_i, delimiter: ".", separator: ",")}
-        - hpp_total = @transactions.sum(:hpp_total)
+        - hpp_total = @transactions.where(store: store).sum(:hpp_total)
         td #{number_with_delimiter( (total-hpp_total).to_i, delimiter: ".", separator: ",")}
 
     br
