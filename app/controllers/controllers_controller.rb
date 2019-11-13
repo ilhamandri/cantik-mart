@@ -53,11 +53,10 @@ class ControllersController < ApplicationController
 
     items = Item.all
     items.each do |item|
-      item.code = item.code.gsub!(/\s+/, '')
+      code = item.code.gsub(" ", "")
       if item.margin == 0
         item.margin = 15
       end
-      binding.pry
       item.save!
     end
 
