@@ -95,7 +95,6 @@ class ItemsController < ApplicationController
     if params[:item][:sell_member].to_i <= 0
       item.sell_member = item.sell
     end
-    binding.pry
     if changes["buy"].present?
       if item.local_item
         store_item = StoreItem.find_by(item: item, store: current_user.store)
