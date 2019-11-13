@@ -47,7 +47,7 @@
             - if@item.local_item
               - store_item = StoreItem.find_by(store: current_user.store, item: @item)
               - if store_item.present?
-                input type="number" required="required" class="form-control md-form" id="buy" min= "0" value="#{store_item.buy.to_i}" name="item[:buy]"
+                input type="number" required="required" class="form-control md-form" id="buy" min= "0" value="#{store_item.buy.to_i}" name="item[buy]"
               - else
                 = form.number_field :buy, required: true, class: "form-control md-form", id: "buy", min: "0", value:"#{@item.buy.to_i}"
             - else
