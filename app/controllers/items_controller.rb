@@ -85,13 +85,22 @@ class ItemsController < ApplicationController
   def update
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless params[:id].present?
     item = Item.find_by_id params[:id]
+    buy = item.buy
     item.image = params[:item][:image]
+    item.buy = buy
     item.assign_attributes item_params
     changes = item.changes
     change = false
 
     if params[:item][:sell_member].to_i <= 0
       item.sell_member = item.sell
+    end
+
+    if changes["buy"].present?
+      if item.local_item
+        store_item = StoreItem.find_by(item: item, store: current_user.store)
+        store_item.buy = buy
+      end
     end
 
     if changes["margin"].present?
