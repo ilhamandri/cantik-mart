@@ -87,6 +87,7 @@ class ItemsController < ApplicationController
     item = Item.find_by_id params[:id]
     buy = item.buy
     item.image = params[:item][:image]
+    code = params[:item][:code].gsub(" ","")
     item.buy = buy
     item.assign_attributes item_params
     changes = item.changes
@@ -108,7 +109,7 @@ class ItemsController < ApplicationController
       new_price = item.buy.round + margin 
       new_price = new_price.ceil(-2)
       if new_price <= item.buy
-        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Margin Supaya Harga Jual Lebih Besar dari Harga Beli"
+        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Ulang Margin Supaya Harga JUAL Lebih Besar dari Harga Beli"
       end
       item.sell = new_price
       change = true
@@ -116,7 +117,7 @@ class ItemsController < ApplicationController
 
     if changes["sell_member"].present?
       if item.sell_member <= item.buy
-        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Harga Jual MEMBER Lebih Besar dari Harga Beli"
+        return redirect_back_data_error item_path(id: item.id), "Silahkan Ulang Set Harga Jual MEMBER Lebih Besar dari Harga Beli"
       end
       change = true if item.sell_member != 0 && item.sell_member != item.sell
     end
@@ -126,7 +127,7 @@ class ItemsController < ApplicationController
       new_price = item.sell - (item.sell * item.discount / 100) if item.discount < 100
       new_price = item.sell - (item.sell - item.discount) if item.discount > 100
       if new_price <= item.buy
-        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Diskon Supaya Harga Jual Lebih Besar dari Harga Beli"
+        return redirect_back_data_error item_path(id: item.id), "Silahkan Ulang Set DISKON Supaya Harga Jual Lebih Besar dari Harga Beli"
       end
     end
 
