@@ -81,7 +81,6 @@ br
           td #{number_with_delimiter( debit.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter( (debit+cash).to_i, delimiter: ".", separator: ",")}
           - hpp_total = @transactions.where(user: cashier).sum(:hpp_total)
-          - binding.pry
           td #{number_with_delimiter( (debit+cash-hpp_total).to_i, delimiter: ".", separator: ",")}
 
       tr
