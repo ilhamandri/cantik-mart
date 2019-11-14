@@ -57,14 +57,13 @@ class ItemsController < ApplicationController
     return redirect_back_data_error new_item_path, "Kode  "+code.to_s+" telah terdaftar." if exist.present?
    
     item = Item.new item_params
-    item.code = item.code.gsub!(/\s+/, '')
+    item.code = code.gsub(" ", "")
     item.brand = "-" if params[:item][:brand].nil?
     item.buy = params[:item][:buy]
     item.sell = params[:item][:sell]
     item.local_item = params[:item][:local_item]
     item.price_updated = DateTime.now
     item.margin = 100*((item.sell - item.buy) / item.buy)
-    binding.pry
     return redirect_back_data_error new_item_path, "Data Barang Tidak Valid" if item.invalid?
     item.save!
     Store.all.each do |store|
