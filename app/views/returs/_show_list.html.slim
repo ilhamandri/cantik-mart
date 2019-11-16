@@ -10,7 +10,11 @@ tr
   td #{ret_item.item.name}
   td.text-center #{ret_item.quantity}
   - if ret_item.accept_item.present?
-    td.text-center #{ret_item.accept_item}
+    - if ret_item.accept_item > 0
+      td.text-center #{ret_item.accept_item}
+    - else
+      td.text-center
+        i.fas.fa-times
   - else
     td.text-center
       i.fas.fa-times
