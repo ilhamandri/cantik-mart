@@ -77,12 +77,11 @@ class AccountBalance
 
       if activa != passiva
         diff_act_pass = activa-passiva
-        binding.pry
         if diff_act_pass <= 10000
           if activa > passiva
-            balance.equity = balance.equity - diff_act_pass.abs
-          else
             balance.equity = balance.equity + diff_act_pass.abs
+          else
+            balance.equity = balance.equity - diff_act_pass.abs
           end
           balance.save!
         end
