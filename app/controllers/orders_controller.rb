@@ -189,7 +189,7 @@ class OrdersController < ApplicationController
     new_total = 0
     receivable = nil
     disc_percentage = 0
-    disc_percentage = params[:order][:discount].to_i if params[:order][:discount].present?
+    disc_percentage = params[:order][:discount].to_f if params[:order][:discount].present?
     disc = 0
     ppn = params[:order][:ppn].to_f
 

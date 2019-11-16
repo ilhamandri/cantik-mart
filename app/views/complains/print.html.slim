@@ -24,10 +24,12 @@
       td 
         .due #{@transaction.created_at} - #{@transaction.user.name}
 
-
+h3
+  | Daftar Barang yang Diretur
 table#items
   tr
-    th #
+    th No
+    th Kode
     th Barang
     th Harga
     th Beli
@@ -37,11 +39,37 @@ table#items
 
   - @transaction_items.each_with_index do |trx_item, index|
     - if trx_item.retur.present?
-      tr.item-row
+      tr
         td #{index+1}
+        td #{trx_item.item.code}
         td #{trx_item.item.name}
         td #{number_with_delimiter(trx_item.price, delimiter: ".")}
         td #{trx_item.quantity}
         td #{trx_item.retur}
         td #{trx_item.replace}
         td #{trx_item.reason}
+
+- trx_retur = Transaction.find_by(from_complain: true, complain: @complain)
+br
+- if trx_retur.present? 
+  h3
+    | Tambahan Barang waktu Retur ( #{@complain.invoice} )
+
+  table#items
+    tr
+      th No
+      th Kode
+      th Barang
+      th Qty
+      th Harga
+      th Total
+
+    - trx_retur.transaction_items.each_with_index do |transaction_item, index|
+        tr
+          td #{transaction_item.item.code}
+          td #{transaction_item.item.name}
+          td #{transaction_item.quantity}
+          td #{number_with_delimiter(transaction_item.price, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter(transaction_item.discount, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter((transaction_item.price - transaction_item.discount) * transaction_item.quantity, delimiter: ".", separator: ",")}
+

@@ -3,6 +3,8 @@ class TransactionsController < ApplicationController
   before_action :require_fingerprint
   skip_before_action :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
 
+  @@point = 10000
+
   def index
     filter = filter_search params, "html"
     @search = "Rekap transaksi " + filter[0]
@@ -56,6 +58,10 @@ class TransactionsController < ApplicationController
   end
 
   def new
+    gon.invoice = Time.now.to_i.to_s + "-" + current_user.store.id.to_s + "-" + current_user.id.to_s
+    gon.cashier = current_user.name.upcase
+    gon.current_time = DateTime.now.to_s
+
     respond_to do |format|
       format.html { render "transactions/new", :layout => false  } 
     end
@@ -70,15 +76,18 @@ class TransactionsController < ApplicationController
     grand_total = 0
     hpp_total = 0
 
+    promotions_code  = []
     items.each do |trx_item|
       item += trx_item[1].to_i
       discount += trx_item[1].to_i * trx_item[3].to_i
       total += trx_item[1].to_i * trx_item[2].to_i
       grand_total += trx_item[4].to_i
+      promo = trx_item[5]
+      promotions_code << promo if promo.include? "PROMO-"
     end
 
     trx = Transaction.new
-    trx.invoice = "TRX-" + Time.now.to_i.to_s + "-" + current_user.store.id.to_s + "-" + current_user.id.to_s
+    trx.invoice = "TRX-" + params[:invoice]
     trx.user = current_user
     member_card = nil
     if params[:member] != ""
@@ -91,6 +100,7 @@ class TransactionsController < ApplicationController
     trx.date_created = Time.now
     trx.payment_type = params[:payment].to_i
     trx.store = current_user.store
+    trx.voucher = params[:voucher]
 
     trx.items = item.to_i
     trx.discount = discount.to_i
@@ -102,30 +112,46 @@ class TransactionsController < ApplicationController
       trx.edc_inv = params[:edc].to_s
       trx.card_number = params[:card].to_s
     end
-
     trx.save!
     
+    trx_total_for_point = 0
     items.each do |item_par|
       item = Item.find_by(code: item_par[0])
       next if item.nil?
-      TransactionItem.create item: item,  
+
+      item_cats = ItemCat.where(use_in_point: true).pluck(:id)
+
+      if item_cats.include? item.item_cat.id 
+        trx_total_for_point += item_par[2].to_i
+      end
+
+      trx_item = TransactionItem.create item: item,  
       transaction_id: trx.id,
       quantity: item_par[1], 
       price: item_par[2],
       discount: item_par[3],
       date_created: DateTime.now
+
+      if trx_item.price == 0
+        promo = item_par[5]
+        trx_item.reason = promo
+        trx_item.save!
+      end
       store_stock = StoreItem.find_by(store: current_user.store, item: item)
-      hpp_total += (item_par[1].to_i * item.buy).round.to_f
+      hpp_total += (item_par[1].to_i * item.buy).round
       next if store_stock.nil?
       store_stock.stock = store_stock.stock.to_i - item_par[1].to_i
       store_stock.save!
     end
     trx.hpp_total = hpp_total
+    new_point = trx_total_for_point / @@point
+    trx.point = new_point
     trx.save!
 
     render status: 200, json: {
       message: "Transaksi Berhasil"
     }.to_json
+
   end
 
   private

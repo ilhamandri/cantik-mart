@@ -12,7 +12,7 @@
           - if transaction.from_complain?
             - complain = Complain.find_by(id: transaction.complain_id)
             .col-6
-              label DARI RETUR
+              label RETUR
               input disabled="disabled" class="form-control md-form" value="#{complain.invoice}"
             .col-6
               label NOMINAL
@@ -58,7 +58,10 @@
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Daftar Belanja 
+          - if transaction.from_complain?
+            | Daftar Tambahan Item
+          - else
+            | Daftar Belanja 
       .card-body.table-responsive.text-nowrap
         table class="table"
           thead

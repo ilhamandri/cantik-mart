@@ -1,0 +1,59 @@
+.row
+  .col-md-9.text-left
+    h5
+      | Loss & Profits
+br
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Data ( #{@start.to_date.to_s + " - " + DateTime.now.to_date.to_s} )
+    .card.mb-4 
+      .card-body.table-responsive.text-nowrap	
+      	table class="table"
+      		tr
+      			td Pendapatan Toko Plered
+      			td 
+      				b #{@margin_plered}
+      			td Operasional
+      			td 
+      				b #{@operational}
+      		tr
+      			td Pendapatan Toko Cirata
+      			td 
+      				b #{@margin_cirata}
+      			td Biaya Pasti
+      			td 
+      				b #{@fix_cost}
+      		tr
+      			td Pendapatan Supplier
+      			td 
+      				b #{@supplier_income}
+      			td Barang Hangus
+      			td 
+      				b #{@losses}
+      		tr
+      			td Bonus
+      			td
+      				b #{@bonus}
+      			td Pengeluaran Lainnya
+      			td 
+      				b #{@other_outcome}
+      		tr 	
+      			td Pendapatan Lainnya
+      			td 
+      				b #{@other_income}
+      			td
+      			td
+      		tr
+      			td colspan="4"
+      		tr
+      			td TOTAL
+      			td 
+      				b #{@total_income}
+      			td
+      			td
+      				b #{@total_outcome}
+
+

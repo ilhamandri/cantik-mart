@@ -4,6 +4,7 @@ class LossesController < ApplicationController
 
   def index
   	@losses = Loss.page param_page
+    @losses = @losses.order("created_at DESC")
   end
 
   def create

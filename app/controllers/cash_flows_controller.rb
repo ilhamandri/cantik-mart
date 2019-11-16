@@ -122,6 +122,14 @@ class CashFlowsController < ApplicationController
       
       store.cash = store.cash + nominal
       store.save!
+      cash_flow.create_activity :create, owner: current_user   
+    elsif finance_type == "Bonus"
+      invoice = " BNS-"+inv_number
+      cash_flow = CashFlow.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
+                      finance_type: CashFlow::BONUS, invoice: invoice
+      
+      store.cash = store.cash + nominal
+      store.save!
       cash_flow.create_activity :create, owner: current_user         
     elsif finance_type == "Asset"
       invoice = " AST-"+inv_number
