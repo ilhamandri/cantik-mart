@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
 
     def authorization
       return if current_user.level == "owner" || current_user.level == "super_admin"
-      if (request.original_fullpath.include? "confirm_feedback") || ( request.original_fullpath.include? "received" )
+      if (request.original_fullpath.include? "confirm_feedback") || ( request.original_fullpath.include? "received" ) || ( request.original_fullpath.include? "pays" )
         return
       end
       extracted_path = Rails.application.routes.recognize_path(request.original_url)
