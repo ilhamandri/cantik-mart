@@ -75,15 +75,17 @@ class AccountBalance
       activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
       passiva = balance.equity + balance.outcome + balance.transaction_value + balance.debt
 
-      # if activa != passiva
-      #   diff_act_pass = activa-passiva
-      #   if activa > passiva
-      #     balance.equity = balance.equity - diff_act_pass.abs
-      #   else
-      #     balance.equity = balance.equity + diff_act_pass.abs
-      #   end
-      #   balance.save!
-      # end
+      if activa != passiva
+        diff_act_pass = activa-passiva
+        if diff_act_pass <= 10000
+          if activa > passiva
+            balance.equity = balance.equity - diff_act_pass.abs
+          else
+            balance.equity = balance.equity + diff_act_pass.abs
+          end
+          balance.save!
+        end
+      end
       
       dt_now = DateTime.now
       end_month = DateTime.now.end_of_month - 1.hour - 30.minutes
