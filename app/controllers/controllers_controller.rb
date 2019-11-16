@@ -60,29 +60,29 @@ class ControllersController < ApplicationController
     #   item.save!
     # end
 
-    orders = Order.where(id: [16, 91, 94])
-    orders.each do |order|
-      store = order.store
-      order_items = order.order_items
-      order_items.each do |order_item|
-        item = order_item.item
-        item.buy = 0
-        store_item = StoreItem.find_by(item: item,store: store)
-        store_item.stock = store_item.stock - order_item.receive.to_f
-        store_item.buy = 0
-        store_item.save!
-        order_item.delete
-      end
-      debt = Debt.find_by(ref_id: order.id)
-      binding.pry
-      cfs = CashFlow.where(finance_type: "Outcome", payment: "debt", ref_id: debt.id)
-      cfs.each do |cf|
-        cf.delete
-      end
-      debt.delete
-      OrderInv.where(order: order).delete_all
-      order.delete
-    end
+    # orders = Order.where(id: [16, 91, 94])
+    # orders.each do |order|
+    #   store = order.store
+    #   order_items = order.order_items
+    #   order_items.each do |order_item|
+    #     item = order_item.item
+    #     item.buy = 0
+    #     store_item = StoreItem.find_by(item: item,store: store)
+    #     store_item.stock = store_item.stock - order_item.receive.to_f
+    #     store_item.buy = 0
+    #     store_item.save!
+    #     order_item.delete
+    #   end
+    #   debt = Debt.find_by(ref_id: order.id)
+    #   binding.pry
+    #   cfs = CashFlow.where(finance_type: "Outcome", payment: "debt", ref_id: debt.id)
+    #   cfs.each do |cf|
+    #     cf.delete
+    #   end
+    #   debt.delete
+    #   OrderInv.where(order: order).delete_all
+    #   order.delete
+    # end
 
     # check_new_controllers
   	@controllers = Controller.order("name ASC").page param_page
