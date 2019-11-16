@@ -7,10 +7,13 @@ tr
   td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
   td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}
   td #{finance.due_date.to_date}
+  td 
+    a href='#{edit_debt_path(id: finance.id)}' class="btn btn-danger"
+          | EDIT
   td
-    - if finance.finance_type == "BANK"
+    - if ["BANK", "OTHERLOAN"].include? finance.finance_type 
       - if finance.deficiency.abs > 0 
-        a href='#{debt_path(id: finance.id)}' class="btn btn-warning"
+        a href='#{debt_path(id: finance.id)}' class="btn btn-info"
           | #{finance.description}
       - else
         | #{finance.description}

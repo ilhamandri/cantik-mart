@@ -18,6 +18,7 @@
         .due #{@retur.supplier.name}
 table#items
   tr
+    th No
     th Barang
     th Deskripsi
     th Jumlah
@@ -25,16 +26,13 @@ table#items
     th Hasil
     th Nominal
 
-  - @retur_items.each do |retur_item|
+  - @retur_items.each_with_index do |retur_item, idx|
     tr.item-row
-      td.item-name
-        textarea #{retur_item.item.name}
-      td.description
-        textarea #{retur_item.description}
-      td
-        textarea #{retur_item.quantity}
-      td
-        textarea #{retur_item.accept_item}
+      td #{idx+1}
+      td #{retur_item.item.name}
+      td #{retur_item.description}
+      td #{retur_item.quantity}
+      td #{retur_item.accept_item}
       td
         - if retur_item.feedback == "retur_item"
           | TUKAR BARANG

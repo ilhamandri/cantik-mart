@@ -30,12 +30,14 @@
 
 table#items
   tr
+    th No
     th Kode
     th Barang
     th Pesan
     
-  - @order_items.each do |order_item|
+  - @order_items.each_with_index do |order_item, idx|
     tr.item-row
+      td #{idx+1}
       td #{order_item.item.code}
       td  #{order_item.item.name}
       td  #{order_item.quantity}

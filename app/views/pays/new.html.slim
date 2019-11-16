@@ -10,28 +10,28 @@
             label.text-primary for="type" Tipe
             - tipe = "Hutang"
             - tipe = "Piutang" if @type=="receivable"
-            input type="text" value="#{tipe}" class="form-control md-form"
+            input type="text" value="#{tipe}" class="form-control md-form" disabled="disabled"
             input type="text" value="#{@type}" name="pay[type]" style="display: none;" 
             input type="number" value="#{@data.id}" name="pay[id]" style="display: none;" 
           .form-group
             - if @type == "debt"
               label.text-primary for="type" Kepada
-              input type="text" value="#{@data.description}" name="pay[from_to]" class="form-control md-form"
+              input type="text" value="#{@data.description}" name="pay[from_to]" class="form-control md-form" disabled="disabled"
             - else
               label.text-primary for="type" Dari
               - if @data.finance_type == "EMPLOYEE"
-                input type="text" value="#{User.find_by(id: @data.to_user).name}" name="pay[from_to]" class="form-control md-form"
+                input type="text" value="#{User.find_by(id: @data.to_user).name}" name="pay[from_to]" class="form-control md-form" disabled="disabled"
               - else
 
           .form-group
             label.text-primary for="type" Nominal
-            input type="text" value="#{@data.nominal}" name="pay[nominal]" class="form-control md-form"
+            input type="text" value="#{@data.nominal}" name="pay[nominal]" class="form-control md-form"disabled="disabled"
           .form-group
             label.text-primary for="type" Kekurangan
-            input type="text" value="#{@data.deficiency}" name="pay[deficiency]" class="form-control md-form"
+            input type="text" value="#{@data.deficiency}" name="pay[deficiency]" class="form-control md-form" disabled="disabled"
           .form-group
             label.text-primary for="nominal" Bayar
-            = form.number_field :pay_nominal, required: true, class: "form-control md-form", id: "nominal", value:"100", min:"100"
+            = form.number_field :pay_nominal, required: true, class: "form-control md-form", id: "nominal", value:"100", min:"100" 
           .form-group
             label.text-primary for="nominal" Catatan
             = form.text_field :description, required: true, class: "form-control md-form", id: "nominal", placeholder:"Contoh: nomor transfer, nama bank, metode pembayaran, dsb ..."

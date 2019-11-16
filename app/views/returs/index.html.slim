@@ -18,7 +18,7 @@ br
       .card-body
         = form_for :retur, url: returs_path, method: 'GET' do |form|
           .row  
-            - if ["owner", "super_admin", "super_finance"].include? current_user.level
+            - if ["owner", "super_admin", "finance"].include? current_user.level
               .col-md-12
                 select class="mdb-select md-form" id="months" name="store_id"
                   option value="0"

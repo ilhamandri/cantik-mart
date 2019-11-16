@@ -7,6 +7,7 @@ function changePrice(id){
   var price = $("#"+id+"Price").val();
   var disc_1 = $("#"+id+"Disc1").val();
   var disc_2 = $("#"+id+"Disc2").val();
+  var global_disc = $("#globalDisc").val();
   var margin = parseFloat($("#"+id+"Margins").html());
   var ppn = $("#ppn").val();
 
@@ -27,20 +28,29 @@ function changePrice(id){
     price -= disc_2;
   }
 
+  if(global_disc <= 99){
+    price -= parseFloat(price * global_disc / 100);
+  }else{
+    alert("INPUT DISKON FAKTUR BERUPA %")
+  }
+
   price += parseFloat(price*ppn/100);
 
 
   $("#"+id+"Total").html(price);
 
 
-  base_price = (price*1.0/receive*1.0) + ((price*1.0/receive*1.0) * margin / 100);
+  sell_price = (price*1.0/receive*1.0) + ((price*1.0/receive*1.0) * margin / 100);
 
-  $("#"+id+"Sell").html(parseInt(base_price));
+  $("#"+id+"Sell").html(parseInt(sell_price));
 
   g_total = 0
   for (i = 0; i < ids.length; i++) {
     g_total += parseInt($("#"+ids[i]+"Total").html());
   } 
+
+  
+
   $("#grand_total_all").html(parseInt(g_total));
 }
 

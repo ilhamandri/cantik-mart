@@ -113,8 +113,8 @@ Rails.application.routes.draw do
   resources :transactions, only: %i[index new create show]
 
   resources :cash_flows, only: %i[index new create]
-  resources :debts, only: %i[index new create show]
-  resources :receivables, only: %i[index new create show]
+  resources :debts
+  resources :receivables
   resources :taxs, only: %i[index new create]
   resources :fix_costs, only: %i[index new create]
   resources :operationals, only: %i[index new create]

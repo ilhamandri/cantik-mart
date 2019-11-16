@@ -29,6 +29,28 @@ class ReceivablesController < ApplicationController
     return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless @receivable.present?
   end
 
+  def edit
+    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless params[:id].present?
+    @receivable = Receivable.find_by_id params[:id]
+    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless @receivable.present?
+  end
+
+  def update
+    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless params[:id].present?
+    @receivable = Receivable.find_by_id params[:id]
+    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless @receivable.present?
+    new_nominal = params[:receivable][:nominal].to_i
+    old_nominal = @receivable.nominal
+
+    if new_nominal != old_nominal
+      diff = new_nominal - old_nominal
+      @receivable.nominal = new_nominal
+      @receivable.deficiency = @receivable.deficiency + diff
+    end
+    @receivable.save!
+    return redirect_success receivables_path, "PIUTANG - " + @receivable.description + " telah diubah."
+  end
+
   private
     def param_page
       params[:page]

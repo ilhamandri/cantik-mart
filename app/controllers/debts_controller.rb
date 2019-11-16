@@ -29,6 +29,33 @@ class DebtsController < ApplicationController
     @debt = Debt.find_by_id params[:id]
     return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless @debt.present?
   end
+
+  def edit
+    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless params[:id].present?
+    @debt = Debt.find_by_id params[:id]
+    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless @debt.present?
+  end
+
+  def update
+    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless params[:id].present?
+    @debt = Debt.find_by_id params[:id]
+    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless @debt.present?
+    new_nominal = params[:debt][:nominal].to_i
+    old_nominal = @debt.nominal
+
+    if new_nominal != old_nominal
+      diff = new_nominal - old_nominal
+      @debt.nominal = new_nominal
+      @debt.deficiency = @debt.deficiency + diff
+      if @debt.finance_type == "ORDER"
+        order = Order.find_by(id: @debt.ref_id)
+        order.grand_total = new_nominal
+        order.save!
+      end
+    end
+    @debt.save!
+    return redirect_success debts_path, "HUTANG - " + @debt.description + " telah diubah."
+  end
   
   private
     def param_page

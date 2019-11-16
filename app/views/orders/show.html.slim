@@ -1,5 +1,6 @@
 - order = @order_items.first.order
 - order_id = order.id
+- @idx = 1
 .row
   .col
     h5
@@ -69,6 +70,7 @@ br
       .card-body.table-responsive.text-nowrap
         table class="table"
           thead
+            th No
             th Kode
             / th Foto
             th Nama
@@ -87,6 +89,7 @@ br
               td
               td
               td
+              td
               td.font-weight-bold SUB TOTAL
               td
               td.font-weight-bold #{number_with_delimiter(order.total, separator: ",", delimiter: ".")}
@@ -96,10 +99,12 @@ br
               td
               td
               td
+              td
               td.font-weight-bold DISKON (#{order.discount_percentage}% )
               td
               td.font-weight-bold #{number_with_delimiter(order.discount, separator: ",", delimiter: ".")}
             tr
+              td
               td
               td
               td

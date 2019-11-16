@@ -1,3 +1,4 @@
+- @idx = 1
 = form_for :order, url: order_receive_path, method: "POST" do |form|
   .container-fluid
     .col-lg-12.col-md-12
@@ -32,12 +33,12 @@
                   input type="date" class="form-control md-form" value="#{(Date.today+2.weeks).strftime("%m/%d/%Y")}" name="order[due_date]" required=true
               .col-6
                 .form-group
-                  label for="from" Diskon Total
-                  input type="number" class="form-control md-form" value="0" name="order[discount]" required=true
+                  label for="from" Diskon Total (%)
+                  input type="number" class="form-control md-form" value="0" name="order[discount]" required=true id="globalDisc"
               .col-6
                 .form-group
                   label for="from" PPn (%)
-                  input type="number" class="form-control md-form" value="0" name="order[ppn]" required=true id="ppn"  
+                  input type="number" class="form-control md-form" value="0" name="order[ppn]" required=true id="ppn" step="0.01"
   .container-fluid
   .container-fluid
     .col-lg-12.col-md-12
@@ -48,6 +49,7 @@
         .card-body.table-responsive.text-nowrap
             table class="table"
               thead
+                th No
                 th Kode
                 th Barang
                 th Pesan

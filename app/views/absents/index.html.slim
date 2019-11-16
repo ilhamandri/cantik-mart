@@ -21,7 +21,7 @@ br
           - if @search_id.nil?
             input type="number" class="form-control md-form" name="id" value="#{@search_id}" style="display: none"
           .row.align-middle
-            - if ["owner", "super_admin", "super_finance"].include? current_user.level
+            - if ["owner", "super_admin", "finance"].include? current_user.level
               .col-md-6.text-center
                 select class="mdb-select md-form" id="months" name="store_id"
                   option value="0"

@@ -9,18 +9,22 @@
 --> set @@store_id di local server (services/SyncData)
 
 ======================================================================
+--> myroti salah input po
+--> syarif salah input po
+
+--> harga jual myroti 4275jadi 4100
+--> item ad promo, tpi di trx kalau beli 1 keambil yang promo
 --> equity buat awal bulan gimana ?
---> resize struk (PLERED -> pull)
+
+
 --> CRON di cirata blm aktif
 --> CRON di cloud blm aktif
 --> sendMail auto to drg.kindiialfarabi@gmail.com
 
 =============================================================
 
-6. Belum paham utang pi hutang 
+6. Belum paham hutang piutang 
 7. Belum paham fitur keuangan
-9. Grand total dynamic di waktu input terima
-13. Untuk opname harian sistem bagaimana (exce?)
 
 ================================================================
 
@@ -32,10 +36,11 @@
 
 
 8. Input terima pesanan belum singkron antara nominal / persen
-
+9. Grand total dynamic di waktu input terima
 10. Logout tanpa sebab (server di restart --> perpanjan usia session)
 11. Tambah stok yang ad di gudang sebelum melakukan transfer
 12. Di PLERED kesulitan input barang lokal (pastiin semua barang lokal sudah diinput -> cek di item apakah item tersebut barang lokal / tidak)
+13. Untuk opname harian sistem bagaimana (exce?)
 14. Retur barang ke supplier masih belum bisa (belum diajarin)
 15. Di CIRATA kalo bikin PO dari toko ke gudang tiba2 error (server di restart --> perpanjan usia session)
 16. Suka keluar akun dengan sendirinya. Dan itu sangat menghambat, apalagi kalo orderan buat ke gudang sudah lumayan banyak. Tiba2 hilang dan harus mulai dari awal. (server di restart --> perpanjan usia session)

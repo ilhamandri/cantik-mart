@@ -1,5 +1,8 @@
 - if @retur.date_approve.nil?
 	tr
+	  td #{@idx}
+	  - @idx += 1
+	  td #{r_item.item.code}
 	  td #{r_item.item.name}
 	  td #{r_item.item.item_cat.name}
 	  td #{r_item.quantity.to_i}
@@ -10,6 +13,9 @@
 - else
 	- if r_item.accept_item > 0 
 		tr
+		  td #{@idx}
+		  - @idx += 1
+		  td #{r_item.item.code}
 		  td #{r_item.item.name}
 		  td #{r_item.item.item_cat.name}
 		  td #{r_item.quantity.to_i}

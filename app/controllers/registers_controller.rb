@@ -15,7 +15,6 @@ class RegistersController < ApplicationController
 
     redirect_success sign_in_path, flash: {success: 'Success'}
   end
-
   private
 
     def user_params

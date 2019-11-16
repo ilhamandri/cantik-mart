@@ -236,11 +236,12 @@ class OrdersController < ApplicationController
 
       disc_2 = price_1*disc_2/100 if  disc_2 < 99
       price_2 = price_1 - disc_2
-      item_grand_total = (price_2 + (price_2*ppn/100)).round
 
+      total_item_without_disc_global = price_2
 
-      total_item_without_disc_global = item_grand_total
-      item_grand_total = item_grand_total - (item_grand_total * disc_percentage / 100)
+      price_3 = (price_2 + (price_2*disc_percentage/100)).round
+      item_grand_total = (price_3 + (price_3*ppn/100)).round
+
       based_item_price = item_grand_total / receive_qty;
 
       profit_margin = this_item.margin
@@ -404,6 +405,7 @@ class OrdersController < ApplicationController
     order_inv.transaction_invoice = "PAID-" + Time.now.to_i.to_s
     order_inv.date_created = params[:order_pay][:date_paid]
     order_inv.nominal = nominal.to_f
+    desc = "Menggunakan piutang"
     order_inv.description = desc
     order_inv.user_id = current_user.id
     order_inv.save!
@@ -588,9 +590,9 @@ class OrdersController < ApplicationController
     end
 
     def decrease_receivable supplier_id, nominal, order
-      receivable_nominal = Receivable.where("to_user=? AND deficiency > 0", supplier_id).group(:to_user).sum(:deficiency).values.first
+      receivable_nominal = Receivable.where(finance_type: "RETUR").where("to_user=? AND deficiency > 0", supplier_id).group(:to_user).sum(:deficiency).values.first
       if receivable_nominal >= nominal
-        receivables = Receivable.where("to_user=? AND deficiency > 0", supplier_id).order("date_created ASC")
+        receivables = Receivable.where(finance_type: "RETUR").where("to_user=? AND deficiency > 0", supplier_id).order("date_created ASC")
         receivables.each do |receivable|
           curr_receivable = receivable.deficiency.to_i
           if curr_receivable >= nominal

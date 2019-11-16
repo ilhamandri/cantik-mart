@@ -10,10 +10,10 @@ tr
     td #{finance.date_created}
   	td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
     td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}
+    td 
+      a href='#{edit_receivable_path(id: finance.id)}' class="btn btn-danger"
+            | EDIT
     td
-      - if finance.finance_type == "EMPLOYEE"
-        - if finance.deficiency.abs > 0 
-          a href='#{receivable_path(id: finance.id)}' class="btn btn-warning"
-            | #{finance.description}
-        - else
+      - if finance.deficiency.abs > 0 
+        a href='#{receivable_path(id: finance.id)}' class="btn btn-warning"
           | #{finance.description}

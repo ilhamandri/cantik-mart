@@ -1,5 +1,7 @@
 - order = @order_items.first.order
 tr
+  td #{@idx}
+  - @idx += 1
   td #{order_item.item.code} 
   / td
     - if order_item.item.image.present?

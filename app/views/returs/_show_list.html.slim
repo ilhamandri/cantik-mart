@@ -1,4 +1,6 @@
 tr
+  td #{@idx}
+  - @idx += 1
   td #{ret_item.item.code} 
   td
     - if ret_item.item.image.present?

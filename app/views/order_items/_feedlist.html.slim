@@ -1,8 +1,10 @@
 tr
+  td #{@idx}
+  - @idx += 1
+  td #{r_item.item.code}
   td #{r_item.item.name}
   td #{r_item.item.item_cat.name}
   td #{r_item.quantity.to_i}
-  td #{r_item.description}
   td
     select name="retur[retur_items][#{r_item_counter}][feedback]" required=true
       option value="retur_item"

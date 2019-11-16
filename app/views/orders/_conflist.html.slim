@@ -1,4 +1,6 @@
 tr
+  td #{@idx}
+  - @idx +=1
   td #{r_item.item.code}
   td #{r_item.item.name}
   - buy = 0
@@ -23,7 +25,7 @@ tr
     td 
       input type="number" class="form-control" name="order[order_items][#{r_item_counter}][[discount1]]" value="0" required="required" min="0"  step="0.01"  onchange="changePrice(#{r_item.id})"  id="#{r_item.id.to_s+"Disc1"}"
     td 
-      input type="number" class="form-control" value=0 name="order[order_items][#{r_item_counter}][[discount2]]" required="required" min="0"  onchange="changePrice(#{r_item.id})" id="#{r_item.id.to_s+"Disc2"}"
+      input type="number" class="form-control" value=0 name="order[order_items][#{r_item_counter}][[discount2]]" required="required" min="0"  step="0.01" onchange="changePrice(#{r_item.id})" id="#{r_item.id.to_s+"Disc2"}"
 
     td id="#{r_item.id.to_s+"Total"}"
       | #{buy*r_item.quantity}
