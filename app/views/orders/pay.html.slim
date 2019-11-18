@@ -23,12 +23,13 @@
           .col-6.text-left
             | #{@order.supplier.name}
           .col-6.text-right
-            - if receive.present?
-              h5.text-success
-                | Piutang : #{number_to_currency(receive, unit: "Rp. ")}
-            - else
-              h5
-                | Piutang : #{number_to_currency(0, unit: "Rp. ")}
+            - if current_user.store == Store.find_by(id: 1)
+              - if receive.present?
+                h5.text-success
+                  | Piutang : #{number_to_currency(receive, unit: "Rp. ")}
+              - else
+                h5
+                  | Piutang : #{number_to_currency(0, unit: "Rp. ")}
 
 - if current_user.store == Store.find_by(id: 1)
   - if receive.present?

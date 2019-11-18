@@ -253,6 +253,7 @@ class OrdersController < ApplicationController
           last_price = store_stock.buy
           if new_price > last_price
             old_price = store_stock.sell
+            this_item.sell = new_price
             store_stock.sell = new_price
             store_stock.save!
 
