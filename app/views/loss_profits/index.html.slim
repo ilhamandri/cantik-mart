@@ -15,35 +15,35 @@ br
       		tr
       			td Pendapatan Toko Plered
       			td 
-      				b #{@margin_plered}
+      				b #{number_with_delimiter(@margin_plered.to_i, delimiter: ".")}
       			td Operasional
       			td 
-      				b #{@operational}
+      				b #{number_with_delimiter(@operational.to_i, delimiter: ".")}
       		tr
       			td Pendapatan Toko Cirata
       			td 
-      				b #{@margin_cirata}
+      				b #{number_with_delimiter(@margin_cirata.to_i, delimiter: ".")}
       			td Biaya Pasti
       			td 
-      				b #{@fix_cost}
+      				b #{number_with_delimiter(@fix_cost.to_i, delimiter: ".")}
       		tr
       			td Pendapatan Supplier
       			td 
-      				b #{@supplier_income}
+      				b #{number_with_delimiter(@supplier_income.to_i, delimiter: ".")}
       			td Barang Hangus
       			td 
-      				b #{@losses}
+      				b #{number_with_delimiter(@losses.to_i, delimiter: ".")}
       		tr
       			td Bonus
       			td
-      				b #{@bonus}
+      				b #{number_with_delimiter(@bonus.to_i, delimiter: ".")}
       			td Pengeluaran Lainnya
       			td 
-      				b #{@other_outcome}
+      				b #{number_with_delimiter(@other_outcome.to_i, delimiter: ".")}
       		tr 	
       			td Pendapatan Lainnya
       			td 
-      				b #{@other_income}
+      				b #{number_with_delimiter(@other_income.to_i, delimiter: ".")}
       			td
       			td
       		tr
@@ -51,9 +51,9 @@ br
       		tr
       			td TOTAL
       			td 
-      				b #{@total_income}
+      				b #{number_with_delimiter(@total_income.to_i, delimiter: ".")}
       			td
       			td
-      				b #{@total_outcome}
+      				b #{number_with_delimiter(@total_outcome.to_i, delimiter: ".")}
 
 

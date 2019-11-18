@@ -15,6 +15,16 @@
 
     #header { height: 15px; width: 100%; margin: 20px 0; background: #222; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
 
+    #header_order { height: 15px; width: 100%; margin: 20px 0; background: #FFC0CB; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+
+    #header_retur { height: 15px; width: 100%; margin: 20px 0; background: yellow; text-align: center; color: black; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+
+    #header_bs { height: 15px; width: 100%; margin: 20px 0; background: red; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decbisaoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+
+    #header_transfer { height: 15px; width: 100%; margin: 20px 0; background: green; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+
+    #header_send { height: 15px; width: 100%; margin: 20px 0; background: blue; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+
     #address { width: 250px; height: 150px; float: left; }
     #customer { overflow: hidden; }
 
@@ -50,7 +60,6 @@
     #terms h5 { text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 10px; border-bottom: 1px solid black; padding: 0 0 8px 0; margin: 0 0 8px 0; }
     #terms textarea { width: 100%; text-align: center;}
 
-    .text-danger { color: red; }
     .delete-wpr { position: relative; }
     .delete { display: block; color: #000; text-decoration: none; position: absolute; background: #EEEEEE; font-weight: bold; padding: 0px 3px; border: 1px solid; top: -6px; left: -22px; font-family: Verdana; font-size: 12px; }
   </style>
@@ -60,17 +69,30 @@
 <body>
 
   <div id="page-wrap">
-
-    <textarea id="header" class="text-danger">LAPORAN</textarea>
+    <% if @recap_type.present? %>
+        <% recap_type = @recap_type %>
+        <% if recap_type == "order" %>
+            <textarea id="header_order" >ORDER</textarea>
+        <% elsif recap_type == "retur" %>
+            <textarea id="header_retur" >RETUR</textarea>
+        <% elsif recap_type == "bs" %>
+            <textarea id="header_bs" >RETUR GUDANG (BS)</textarea>
+        <% elsif recap_type == "req_transfer" %>
+            <textarea id="header_transfer" >PERMINTAAN TRANSFER</textarea>
+        <% elsif recap_type == "send_transfer" %>
+            <textarea id="header_send" >SURAT JALAN TRANSFER</textarea>
+        <% else %>
+            <textarea id="header" class="text-danger">LAPORAN</textarea>
+        <% end %>
+    <% else %>
+        <textarea id="header" >LAPORAN</textarea>
+    <% end %>
     
     <div id="identity">
-    
-            <textarea id="address">CANTIK MART
+        <textarea id="address">CANTIK MART
 Jl. Raya Plered,Purwakarta No.17
 Kec. Plered, Kabupaten Purwakarta, Jawa Barat 
-</textarea>
-
-            
+        </textarea>
     </div>
     
     <%= yield %>

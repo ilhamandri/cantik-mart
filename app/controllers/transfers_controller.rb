@@ -184,6 +184,11 @@ class TransfersController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
+        if @transfer.approved_by.nil?
+          @recap_type = "req_transfer"
+        elsif @transfer.picked_by.present?
+          @recap_type = "send_transfer"
+        end
         render pdf: @transfer.invoice,
           layout: 'pdf_layout.html.erb',
           template: "transfers/print.html.slim"

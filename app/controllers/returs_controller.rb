@@ -162,6 +162,7 @@ class RetursController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
+        @recap_type = "retur"
         render pdf: @retur.invoice,
           layout: 'pdf_layout.html.erb',
           template: "returs/print.html.slim"

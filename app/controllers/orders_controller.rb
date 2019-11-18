@@ -451,6 +451,7 @@ class OrdersController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
+        @recap_type = "order"
         @order_items = OrderItem.where(order_id: params[:id])
         if @order.date_receive.nil?
           render pdf: @order.invoice,

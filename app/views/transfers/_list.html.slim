@@ -3,7 +3,7 @@ tr
   td #{transfer.from_store.name}
   td #{transfer.to_store.name}
   td #{transfer.total_items}
-  td #{transfer.date_created.to_date}
+  td #{transfer.date_created}
   td
     - if transfer.date_approve.nil?
       | - 
@@ -15,7 +15,7 @@ tr
           | DIBATALKAN SISTEM
     - else
       .text-success
-        | DISETUJUI #{transfer.approved_by.name} (#{transfer.date_approve.to_date})
+        | DISETUJUI #{transfer.approved_by.name} (#{transfer.date_approve})
   td
     - if transfer.date_picked.nil?
       | - 
@@ -27,19 +27,19 @@ tr
         - if transfer.status.present?
           - if transfer.status.to_date == "01-01-1999".to_date
             .text-danger
-              | #{transfer.picked_by.name} (#{transfer.date_picked.to_date})
+              | #{transfer.picked_by.name} (#{transfer.date_picked})
           - else
-            | #{transfer.picked_by.name} (#{transfer.date_picked.to_date})
+            | #{transfer.picked_by.name} (#{transfer.date_picked})
         - else
-          | #{transfer.picked_by.name} (#{transfer.date_picked.to_date})
+          | #{transfer.picked_by.name} (#{transfer.date_picked})
   td
     - if transfer.status.nil?
-      | -
+      | 
     - elsif transfer.status.to_date == "01-01-1999".to_date
       .text-danger
         | x
     - else
-      | #{transfer.confirmed_by.name} (#{transfer.status.to_date})
+      | #{transfer.confirmed_by.name} (#{transfer.status})
   td #{transfer.description}
   td
     a href='#{transfer_path(id: transfer.id)}'

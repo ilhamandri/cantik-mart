@@ -28,11 +28,11 @@ class HomesController < ApplicationController
 
 
 
-    # start_day = DateTime.now.beginning_of_day-1.day
-    # end_day = start_day.end_of_day
-    # @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
-    # @transactions = @transactions.order("created_at DESC")
-    # @cashiers = @transactions.pluck(:user_id)
+    start_day = DateTime.now.beginning_of_day
+    end_day = start_day.end_of_day
+    @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+    @transactions = @transactions.order("created_at DESC")
+    @cashiers = @transactions.pluck(:user_id)
     # RecapMailer.new_recap_email(@transactions, @cashiers).deliver_now
 
   end

@@ -1,6 +1,6 @@
 tr
   td #{transaction.invoice}
-  td #{transaction.date_created.to_date}
+  td #{transaction.date_created}
   td #{transaction.user.store.name}
   td 
     - member = Member.find_by(card_number: transaction.member_card)

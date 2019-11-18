@@ -78,6 +78,7 @@ class SendBacksController < ApplicationController
 	  	respond_to do |format|
 	      format.html
 	      format.pdf do
+        	@recap_type = "bs"
 	        render pdf: DateTime.now.to_i.to_s,
 	          layout: 'pdf_layout.html.erb',
 	          template: "send_backs/print.html.slim"
