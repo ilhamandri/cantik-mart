@@ -393,7 +393,7 @@ class OrdersController < ApplicationController
     order_invs = InvoiceTransaction.where(invoice: order.invoice)
     totals = order.grand_total.to_f 
     paid = totals- order_invs.sum(:nominal) 
-    desc = params[:order_pay][:description]
+    
     nominal = params[:order_pay][:nominal].to_i 
     nominal = params[:order_pay][:receivable_nominal].to_i if params[:order_pay][:user_receivable] == "on"
     return redirect_back_data_error orders_path, "Nominal harus lebih besar atau sama dengan 100" if nominal == 0
@@ -406,7 +406,8 @@ class OrdersController < ApplicationController
     order_inv.transaction_invoice = "PAID-" + Time.now.to_i.to_s
     order_inv.date_created = params[:order_pay][:date_paid]
     order_inv.nominal = nominal.to_f
-    desc = "Menggunakan piutang"
+    desc = params[:order_pay][:description]
+    desc = "Menggunakan piutang" if params[:order_pay][:user_receivable] == "on"
     order_inv.description = desc
     order_inv.user_id = current_user.id
     order_inv.save!
