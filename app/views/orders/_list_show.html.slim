@@ -16,7 +16,6 @@ tr
   - disc_1 = price*order_item.discount_1/100 if order_item.discount_1 < 60
   - price_1 = price - disc_1
 
-
   - disc_2 = order_item.discount_1
   - disc_2 = price_1*order_item.discount_2/100 if order_item.discount_2 < 60
   - price_2 = price_1 - disc_2
@@ -40,7 +39,7 @@ tr
       - disc = disc_i + " %"
     td #{number_with_delimiter(disc, delimiter: ".", separator: ",")}
     td.text-danger.text-right
-		  | #{number_with_delimiter(order_item.total, delimiter: ".", separator: ",")}
+		  | #{number_with_delimiter(order_item.grant_total, delimiter: ".", separator: ",")}
 
 
   - else
@@ -48,7 +47,6 @@ tr
       td #{order_item.receive}
       td #{number_with_delimiter(price, delimiter: ".", separator: ",")}
       td #{number_with_delimiter(order_item.discount_2 + order_item.discount_1, delimiter: ".", separator: ",")}
-      td #{number_with_delimiter(ppn, delimiter: ".", separator: ",")}
       td.text-danger.text-right
         | #{number_with_delimiter(order_item.total, delimiter: ".", separator: ",")}
     - else

@@ -59,8 +59,6 @@
                       - hpp_total = @transactions.where(store: store).sum(:hpp_total)
                       td #{number_with_delimiter( (grand_total-hpp_total).to_i, delimiter: ".", separator: ",")}
 
-                p.lead.pt-3.pb-4
-                  span.badge.primary-color.p-2 Toko Cirata
         .col-xl-6.col-lg-12.mr-0.pb-2
           .view.view-cascade.gradient-card-header.light-blue.lighten-1
             h2.h2-responsive.mb-0.font-weight-500 REVIEW KEUANGAN 
