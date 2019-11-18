@@ -6,15 +6,15 @@ class User < ApplicationRecord
   validates_uniqueness_of :email
 
   enum level: { 
-                owner: 1,
-                super_admin: 2,
+    owner: 1,
+    super_admin: 2,
 
-                stock_admin: 3,
-                cashier: 4,
-                super_visi: 5,
-                finance: 6,
-                driver: 7,
-                pramuniaga: 8
+    stock_admin: 3,
+    cashier: 4,
+    super_visi: 5,
+    finance: 6,
+    driver: 7,
+    pramuniaga: 8
   }
 
   enum sex: {
@@ -40,9 +40,7 @@ class User < ApplicationRecord
   SUPERVISI = 'super_visi'
   # KEUANGAN
   FINANCE = 'finance'
-
   PRAMUNIAGA = 'pramuniaga'
-
   DRIVER = 'driver'
 
   MALE = 'laki_laki'

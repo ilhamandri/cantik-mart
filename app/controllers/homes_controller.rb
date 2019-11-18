@@ -7,9 +7,6 @@ class HomesController < ApplicationController
     @total_orders = Order.where(store_id: current_user.store.id).where('date_receive is null').count
     @total_payments = Order.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null').count
     @total_returs = Retur.where(store_id: current_user.store.id).where('date_picked is null').count
-  	# UserMailer.welcome_email("kevin.rizkhy85@gmail.com", "Subject 1").deliver
-  	
-
     # item_cats_data = higher_item_cats_graph
     # gon.higher_item_cats_data = item_cats_data.values
     # gon.higher_item_cats_label = item_cats_data.keys
@@ -27,7 +24,16 @@ class HomesController < ApplicationController
     # @lower_item = lower_item
 
     @debt = Debt.where("deficiency > ?",0)
-    @receivable = Receivable.where("deficiency > ?",0)
+    @receivable = Receivable.where("deficiency > ?",0)\
+
+
+
+    # start_day = DateTime.now.beginning_of_day-1.day
+    # end_day = start_day.end_of_day
+    # @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+    # @transactions = @transactions.order("created_at DESC")
+    # @cashiers = @transactions.pluck(:user_id)
+    # RecapMailer.new_recap_email(@transactions, @cashiers).deliver_now
 
   end
 

@@ -29,31 +29,33 @@
             - else
               h5
                 | Piutang : #{number_to_currency(0, unit: "Rp. ")}
-- if receive.present?
-  .container-fluid
-    .col-lg-12.col-md-12
-      .card.mb-4
-        .card-header.white-text.success-color
-          h5.font-weight-500.my-1
-            | Piutang
-        .card-body
-          = form_for :order_pay, url: order_paid_path, method: "POST" do |form|
-            .form-group
-              .form-check
-                input#materialChecked2.form-check-input[type="checkbox",name="order_pay[user_receivable]", checked]
-                label.form-check-label[for="materialChecked2"] 
-                  | Gunakan Piutang
-            .form-group style="display: none;"
-              input type="text" name="order_pay[user_receivable]" value='on'
-            .form-group
-              label for="nominal" Piutang yang Digunakan
-              = form.number_field :receivable_nominal, required: true, class: "form-control md-form", id: "nominal", value:100, min: 100
-            .form-group
-              label for="date" Tanggal Pembayaran
-              input type="date" class="form-control md-form" name="order_pay[date_paid]" value="#{Date.today}"
-            .form-group.text-center
-              = form.submit "Bayar", class: "btn btn-primary"
-              
+
+- if current_user.store == Store.find_by(id: 1)
+  - if receive.present?
+    .container-fluid
+      .col-lg-12.col-md-12
+        .card.mb-4
+          .card-header.white-text.success-color
+            h5.font-weight-500.my-1
+              | Piutang
+          .card-body
+            = form_for :order_pay, url: order_paid_path, method: "POST" do |form|
+              .form-group
+                .form-check
+                  input#materialChecked2.form-check-input[type="checkbox",name="order_pay[user_receivable]", checked]
+                  label.form-check-label[for="materialChecked2"] 
+                    | Gunakan Piutang
+              .form-group style="display: none;"
+                input type="text" name="order_pay[user_receivable]" value='on'
+              .form-group
+                label for="nominal" Piutang yang Digunakan
+                = form.number_field :receivable_nominal, required: true, class: "form-control md-form", id: "nominal", value:100, min: 100
+              .form-group
+                label for="date" Tanggal Pembayaran
+                input type="date" class="form-control md-form" name="order_pay[date_paid]" value="#{Date.today}"
+              .form-group.text-center
+                = form.submit "Bayar", class: "btn btn-primary"
+                
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4

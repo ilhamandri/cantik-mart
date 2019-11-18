@@ -192,7 +192,7 @@ class AccountBalance
 
   def self.incomes store, time_start, time_end
     values = 0
-    cash_flows = CashFlow.where(finance_type: ["Income"]).where("created_at >= ? AND created_at <= ?", time_start, time_end).where(store: store, payment: nil)
+    cash_flows = CashFlow.where(finance_type: ["Income", "Bonus"]).where("created_at >= ? AND created_at <= ?", time_start, time_end).where(store: store, payment: nil)
 
     cash_flows.each do |cash_flow|
       desc = cash_flow.description.split("#")
