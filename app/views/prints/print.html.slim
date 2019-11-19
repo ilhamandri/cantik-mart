@@ -30,6 +30,9 @@ html
     						.price2 style="font-size: 25px; font-weight: bold; float: right; color: red;"
     							| #{number_to_currency(price-disc, unit: "Rp. ", :precision => 0)}
 
+                        div style="size: 15px"
+                            | #{print.item.updated_at.to_date}
+
     			- n_times = 3-prints.size
     			- n_times.times do 
     				td style="border: 0px !important;"

@@ -190,6 +190,7 @@ class OrdersController < ApplicationController
     receivable = nil
     disc_percentage = 0
     disc_percentage = params[:order][:discount].to_f if params[:order][:discount].present?
+    return redirect_back_data_error order_confirmation_path(id: order.id), "Diskon faktur harus berupa persen" if disc_percentage > 100
     disc = 0
     ppn = params[:order][:ppn].to_f
     new_grand_total = 0

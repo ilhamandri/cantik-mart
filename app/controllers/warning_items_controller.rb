@@ -24,9 +24,11 @@ class WarningItemsController < ApplicationController
         wb.add_worksheet(:name => "OPNAME") do |sheet|
           items = StoreItem.where(store: current_user.store).where("stock < 0")
           sheet.add_row ["Kode", "Nama", "STOK SISTEM", "OPNAME"]
+          idx = 1
           items.each do |store_item|
             item = store_item.item
-            a = sheet.add_row [item.code.to_s+" ", item.name, store_item.stock]
+            a = sheet.add_row [idx, item.code.to_s+" ", item.name, store_item.stock]
+            idx+=1
           end
         end
 
@@ -49,14 +51,14 @@ class WarningItemsController < ApplicationController
         
         sheet.each do |row|
           next if sheet.first == row
-          code = row[0].gsub(" ","")
+          code = row[1].gsub(" ","")
           item = Item.find_by(code: code)
           next if item.nil?
           store_item = StoreItem.find_by(store: current_user.store, item: item)
           next if store_item.nil?
-          last_stock = row[2]
+          last_stock = row[3]
           curr_stock = store_item.stock
-          real_stock = row[3]
+          real_stock = row[4]
           new_stock = curr_stock + (last_stock * -1) + real_stock
           store_item.stock = new_stock
           store_item.save!
@@ -79,8 +81,8 @@ class WarningItemsController < ApplicationController
       if store_item.nil?
         return false
       end
-      last_stock = row[2]
-      real_stock = row[3]
+      last_stock = row[3]
+      real_stock = row[4]
       if last_stock.nil?
         return false
       end
