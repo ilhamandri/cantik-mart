@@ -67,7 +67,7 @@ class ItemsController < ApplicationController
     return redirect_back_data_error new_item_path, "Data Barang Tidak Valid" if item.invalid?
     item.save!
     Store.all.each do |store|
-      StoreItem.create item: item, stock: 0, store: store
+      a = StoreItem.create item: item, stock: 0, store: store
     end
     item.create_activity :create, owner: current_user
     urls = item_path id: item.id

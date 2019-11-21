@@ -84,8 +84,20 @@ class ControllersController < ApplicationController
     #   order.delete
     # end
 
-    # check_new_controllers
-  	@controllers = Controller.order("name ASC").page param_page
+    store_items = StoreItem.where(store_id: 3).where("stock < 0")
+    store_items.each do |store_item|
+      old_stock = store_item.stock
+      new_stock = ( old_stock * -1 ) 
+      if new_stock > 30
+        new_stock = new_stock / 2;
+      end
+      new_stock = new_stock.round
+      store_item.stock = new_stock
+      store_item.save!
+    end
+
+  	# check_new_controllers
+    @controllers = Controller.order("name ASC").page param_page
   end
 
   def check_new_controllers
