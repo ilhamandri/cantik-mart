@@ -1,5 +1,6 @@
 tr
   td #{retur.invoice}
+  - binding.pry
   - trx = Transaction.find_by(id: retur.transaction_id)
   td #{trx.invoice}
   td 

@@ -83,7 +83,9 @@ class StocksController < ApplicationController
   def update
     return redirect_back_data_error stocks_path, "Data Stok Barang Tidak Ditemukan" unless params[:id].present?
     store_item = StoreItem.find_by_id params[:id]
+    curr_stock = store_item.stock
     store_item.assign_attributes edit_stock_params
+    store_item.stock = curr_stock if !["super_admin", 'owner'].include? current_user.level
     changes = store_item.changes
     store_item.save! if store_item.changed?
     if changes.include? "min_stock"
