@@ -23,7 +23,7 @@ class WarningItemsController < ApplicationController
 
         wb.add_worksheet(:name => "OPNAME") do |sheet|
           items = StoreItem.where(store: current_user.store).where("stock < 0")
-          sheet.add_row ["Kode", "Nama", "STOK SISTEM", "OPNAME"]
+          sheet.add_row ["No", "Kode", "Nama", "STOK SISTEM", "OPNAME"]
           idx = 1
           items.each do |store_item|
             item = store_item.item
@@ -67,12 +67,13 @@ class WarningItemsController < ApplicationController
     else
       return redirect_back_data_error opname_form_path, "File tidak valid" 
     end 
+    return redirect_success warning_items_path, "Item telah selesai diopname."
   end
 
   def check_excel sheet
     sheet.each do |row|
       next if sheet.first == row
-      code = row[0].gsub(" ","")
+      code = row[1].gsub(" ","")
       item = Item.find_by(code: code)
       if item.nil?
         return false
