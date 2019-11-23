@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_12_083920) do
+ActiveRecord::Schema.define(version: 2019_11_23_120545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -254,6 +254,11 @@ ActiveRecord::Schema.define(version: 2019_11_12_083920) do
     t.integer "margin", default: 0
     t.datetime "price_updated"
     t.bigint "sell_member", default: 0, null: false
+    t.integer "color", default: 0, null: false
+    t.string "size", default: "-", null: false
+    t.string "drat", default: "-", null: false
+    t.integer "kunci", default: 0, null: false
+    t.float "panjang", default: 0.0, null: false
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 
@@ -331,7 +336,7 @@ ActiveRecord::Schema.define(version: 2019_11_12_083920) do
     t.datetime "updated_at", null: false
     t.integer "discount_1", default: 0
     t.integer "discount_2", default: 0
-    t.integer "ppn", default: 0
+    t.float "ppn", default: 0.0
     t.bigint "grand_total", default: 0
     t.bigint "total", default: 0, null: false
     t.index ["item_id"], name: "index_order_items_on_item_id"
@@ -357,7 +362,7 @@ ActiveRecord::Schema.define(version: 2019_11_12_083920) do
     t.string "salesman", default: "-"
     t.string "no_faktur", default: "-"
     t.integer "discount", default: 0
-    t.bigint "discount_percentage", default: 0
+    t.float "discount_percentage", default: 0.0
     t.boolean "from_retur", default: false
     t.bigint "grand_total", default: 0
     t.index ["store_id"], name: "index_orders_on_store_id"
@@ -641,6 +646,8 @@ ActiveRecord::Schema.define(version: 2019_11_12_083920) do
     t.bigint "point", default: 0, null: false
     t.bigint "voucher_id"
     t.bigint "voucher"
+    t.integer "trx_type", default: 0, null: false
+    t.float "deficiency", default: 0.0, null: false
     t.index ["store_id"], name: "index_transactions_on_store_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
     t.index ["voucher_id"], name: "index_transactions_on_voucher_id"
@@ -680,6 +687,17 @@ ActiveRecord::Schema.define(version: 2019_11_12_083920) do
     t.index ["from_store_id"], name: "index_transfers_on_from_store_id"
     t.index ["to_store_id"], name: "index_transfers_on_to_store_id"
     t.index ["user_id"], name: "index_transfers_on_user_id"
+  end
+
+  create_table "trx_invs", force: :cascade do |t|
+    t.string "invoice", null: false
+    t.float "nominal", null: false
+    t.bigint "user_id", null: false
+    t.bigint "transaction_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["transaction_id"], name: "index_trx_invs_on_transaction_id"
+    t.index ["user_id"], name: "index_trx_invs_on_user_id"
   end
 
   create_table "user_methods", force: :cascade do |t|
@@ -813,6 +831,8 @@ ActiveRecord::Schema.define(version: 2019_11_12_083920) do
   add_foreign_key "transfers", "stores", column: "from_store_id"
   add_foreign_key "transfers", "stores", column: "to_store_id"
   add_foreign_key "transfers", "users"
+  add_foreign_key "trx_invs", "transactions"
+  add_foreign_key "trx_invs", "users"
   add_foreign_key "user_methods", "controller_methods"
   add_foreign_key "user_salaries", "users"
   add_foreign_key "vouchers", "exchange_points"
