@@ -41,6 +41,33 @@ class WarningItemsController < ApplicationController
   def opname
   end
 
+  def opname_day
+    return redirect_back_data_error opname_path, "Data tidak valid (opname hari harus diisi)" if params[:day].nil?
+    day = params[:day].to_i
+    start_limit = (day * 100) - 100
+
+
+    items = StoreItem.where(store: current_user.store)
+    items = items.limit(100).offset(start_limit)
+
+    filename = "./report/opname/"+DateTime.now.to_i.to_s+".xlsx"
+    p = Axlsx::Package.new
+    wb = p.workbook
+
+    wb.add_worksheet(:name => "OPNAME") do |sheet|
+      sheet.add_row ["No", "Kode", "Nama", "STOK SISTEM", "OPNAME"]
+      idx = 1
+      items.each do |store_item|
+        item = store_item.item
+        a = sheet.add_row [idx, item.code.to_s+" ", item.name, store_item.stock]
+        idx+=1
+      end
+    end
+
+    p.serialize(filename)
+    send_file(filename)
+  end
+
   def update_stock
     file = params[:file]
     if File.extname(file.path) == ".xlsx"
