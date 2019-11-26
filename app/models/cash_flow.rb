@@ -21,7 +21,9 @@ class CashFlow < ApplicationRecord
     OtherLoan: 17,
     Send: 18,
     Receive: 19,
-    Bonus: 20
+    Bonus: 20,
+    WithdrawBank: 21,
+    SendBank: 22
   }
 
   belongs_to :store
@@ -47,5 +49,7 @@ class CashFlow < ApplicationRecord
   SEND = 18
   RECEIVE = 19
   BONUS = 20
+  WITHDRAW_BANK = 21
+  SEND_BANK = 22
 
 end

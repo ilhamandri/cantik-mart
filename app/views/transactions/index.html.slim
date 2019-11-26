@@ -13,7 +13,6 @@
 - if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
   br
   .container-fluid
-  .row 
     .col-xl-12.col-lg-12.col-md-12.pb-2
       .card-header.white-text.info-color
           h5.font-weight-500.my-1
@@ -24,13 +23,13 @@
             .row
               .col-md-12
                 label Pilih Tanggal Transaksi
-                input type="date" class="form-control md-form" value="#{(Date.today+2.weeks).strftime("%d/%m/%Y")}" name="date" required=true
+                input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date" required=true
               .col-md-12.text-center
                 button class="btn btn-info "
                   i.fas.fa-book
                   |   Download Rekap Transaksi
 
-    .col-xl-6.col-lg-12.col-md-12.pb-2
+    .col-xl-12.col-lg-12.col-md-12.pb-2
       .card-header.white-text.info-color 
         h5.font-weight-500.my-1
           | Grafik Transaksi 
@@ -38,7 +37,7 @@
         .card-body.table-responsive.text-nowrap
           canvas id="transactions"
 
-    .col-xl-6.col-lg-12.col-md-12.pb-2
+    .col-xl-12.col-lg-12.col-md-12.pb-2
       .card-header.white-text.info-color
           h5.font-weight-500.my-1
             | Pencarian
@@ -47,28 +46,32 @@
           = form_for :transaction, url: transactions_path, method: 'GET' do |form|
             .row
               - if ["owner", "super_admin", "super_finance"].include? current_user.level
-                .col-md-12
+                .col-6
                   select class="mdb-select md-form" id="months" name="store_id"
                     option value="0"
                       | Semua Toko
                     - Store.all.each do |store|
                       option value="#{store.id}"
                         | #{store.name}
+                .col-6
+                  select class="mdb-select md-form" id="months" name="user_id"
+                    option value="0"
+                      | Semua Kasir
+                    - User.all.each do |user|
+                      option value="#{user.id}"
+                        | #{user.name}
               - if @member.present?
                 input type="hidden" name="member_card" value="#{@member.card_number}"
-              .col-md-6
-                select class="mdb-select md-form" id="months" name="months"
-                  option value="1"
-                    | 1 Bulan
-                  option value="3"
-                    | 3 Bulan
-                  option value="6"
-                    | 6 Bulan
-                  option value="12"
-                    | 12 Bulan
+              .col-md-3
+                | Dari
+                input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date_start" required=true
+              .col-md-3
+                | Sampai
+                input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date_end" required=true
 
               .col-md-6
-                input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice ..."
+                | Nomor Invoice
+                input type="text" class="form-control md-form" id="search" name="search" placeholder="123456789-11-22"
               .col-md-12.text-center
                 button class="btn btn-primary"
                   | Cari

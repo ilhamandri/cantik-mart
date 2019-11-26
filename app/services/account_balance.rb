@@ -18,6 +18,7 @@ class AccountBalance
     stores.each do |store|
       # kas
       kas = store.cash.to_f - store.grand_total_before.to_f
+      bank = store.bank.to_f - store.grand_total_card_before.to_f
       # piutang
       piutang_sebelumnya = Receivable.where("created_at < ? AND deficiency > 0", time_start).where(store: store).sum(:deficiency).to_f
       piutang =  piutang_sebelumnya + Receivable.where("created_at >= ? AND created_at <= ? AND deficiency > 0", time_start, time_end).where(store: store).sum(:deficiency).to_f
@@ -30,9 +31,11 @@ class AccountBalance
       # trx
       transaksi_arr = transaksi(store, time_start, time_end)
       profit = transaksi_arr[0]
-      penjualan = transaksi_arr[1]
+      penjualan_cash = transaksi_arr[1]
+      penjualan_bank = transaksi_arr[2]
 
-      kas += penjualan
+      kas += penjualan_cash
+      bank += penjualan_bank
       
       # transfer value
       transfer = transfers(store, time_start, time_end).to_f
@@ -53,7 +56,7 @@ class AccountBalance
       hutang_sebelumnya = Debt.where("created_at < ? AND deficiency > 0", time_start).where(store: store).sum(:deficiency).to_f
       hutang = hutang_sebelumnya + Debt.where("created_at >= ? AND created_at <= ? AND deficiency > 0", time_start, time_end).where(store: store).sum(:deficiency).to_f
 
-      aktiva = kas + piutang + nilai_stok + nilai_aset
+      aktiva = bank + kas + piutang + nilai_stok + nilai_aset
       passiva = profit + income_outcome + modals + hutang
 
 
@@ -70,7 +73,7 @@ class AccountBalance
       filenames = balances.pluck(:filename)
       balances.delete_all
       balance = StoreBalance.create store: store, cash: kas.round, receivable: piutang.round, stock_value: nilai_stok.round,
-          asset_value: nilai_aset.round, transaction_value: profit.round, equity: modals.round, debt: hutang.round, outcome: income_outcome.round
+          asset_value: nilai_aset.round, transaction_value: profit.round, equity: modals.round, debt: hutang.round, outcome: income_outcome.round, bank: bank.round
 
       activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
       passiva = balance.equity + balance.outcome + balance.transaction_value + balance.debt
@@ -90,15 +93,18 @@ class AccountBalance
       dt_now = DateTime.now
       end_month = DateTime.now.end_of_month - 1.hour - 30.minutes
       store.cash = kas
+      store.bank = bank
       store.equity = modals
 
 
-      store.grand_total_before = penjualan
+      store.grand_total_before = penjualan_cash
+      store.grand_total_card_before = penjualan_bank
       store.modals_before = transfer
       
       if  dt_now.month == end_month.month
         if dt_now > end_month
           store.grand_total_before = 0
+          store.grand_total_card_before = 0
           store.modals_before = 0
         end
       end
@@ -149,9 +155,14 @@ class AccountBalance
   end
 
   def self.transaksi store, time_start, time_end
-    hpp_totals = Transaction.where("created_at >= ? AND created_at <= ?", time_start, time_end).where(store: store).sum(:hpp_total)
-    grand_totals = Transaction.where("created_at >= ? AND created_at <= ?", time_start, time_end).where(store: store).sum(:grand_total)
-    return [(grand_totals-hpp_totals), grand_totals]
+    trx = Transaction.where("created_at >= ? AND created_at <= ?", time_start, time_end).where(store: store)
+    hpp_totals = trx.sum(:hpp_total)
+    grand_totals = trx.sum(:grand_total)
+
+    trx_cash = trx.where(payment_type: ["CASH"]).sum(:grand_total)
+    trx_card = trx.where(payment_type: ["DEBIT", "CREDIT"]).sum(:grand_total)
+
+    return [(grand_totals-hpp_totals), trx_cash, trx_card]
   end
 
   def self.outcomes store, time_start, time_end

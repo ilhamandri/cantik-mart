@@ -19,8 +19,11 @@
         .card-header.white-text.primary-color
           | AKTIVA
         .card-body
-          label for="phone" Kas
+          label for="phone" Tunai
           input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.cash.to_i, delimiter: ".", separator: ",")}' 
+
+          label for="phone" Saldo Bank
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.bank.to_i, delimiter: ".", separator: ",")}' 
 
           label for="phone" Piutang
           input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.receivable.to_i, delimiter: ".", separator: ",")}'
@@ -73,9 +76,10 @@
             | NOT BALANCE (#{number_to_currency((activa-passiva).abs, unit: "Rp. ")})
 
         br
-        - file = balance.filename.split("/").last
-        - file_exist = File.exist?("./report/"+file)
-        - if file_exist
-          a href="#{download_file_path(name: file)}"
-            button.btn.btn-success type="button" 
-              | Unduh
+        - if balance.filename.present?
+          - file = balance.filename.split("/").last
+          - file_exist = File.exist?("./report/"+file)
+          - if file_exist
+            a href="#{download_file_path(name: file)}"
+              button.btn.btn-success type="button" 
+                | Unduh

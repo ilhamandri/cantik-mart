@@ -125,7 +125,7 @@ class ItemsController < ApplicationController
 
     if changes["discount"].present?
       new_price = item.sell - (item.sell * item.discount / 100) if item.discount < 100
-      new_price = item.sell - (item.sell - item.discount) if item.discount > 100
+      new_price = item.sell - item.discount if item.discount > 100
       if new_price <= item.buy
         return redirect_back_data_error item_path(id: item.id), "Silahkan Ulang Set DISKON Supaya Harga Jual Lebih Besar dari Harga Beli"
       end

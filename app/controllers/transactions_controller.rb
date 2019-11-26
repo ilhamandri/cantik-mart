@@ -204,12 +204,20 @@ class TransactionsController < ApplicationController
         @transactions =@transactions.where("invoice like ?", "%"+ search+"%")
       end
 
-      before_months = params["months"].to_i
-      if before_months != 0
-        @search += before_months.to_s + " bulan terakhir "
-        start_months = (DateTime.now - before_months.months).beginning_of_month.beginning_of_day 
-        @transactions = @transactions.where("created_at >= ?", start_months)
+      date_start = params["date_start"]
+      date_end = params["date_end"]
+      if date_start.present?
+        @search += " pada " + date_start + " hingga " + date_end
+        @transactions = @transactions.where("created_at >= ? AND created_at <= ?", date_start.to_time ,date_end.to_time.end_of_day)
       end
+
+      if params["user_id"].present?
+        user = User.find_by(id: params["user_id"].to_i)
+        if user.present?
+          @search += " dengan user '" + user.name + "'"
+          @transactions = @transactions.where(user: user)
+        end
+      end 
 
       store_name = "SEMUA TOKO"
       if params["store_id"].present?

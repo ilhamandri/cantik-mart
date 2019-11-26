@@ -1,6 +1,6 @@
 - time_start = DateTime.now.beginning_of_day-1.days
 - time_end = DateTime.now.end_of_day
-- AccountBalance.balance_account
+/ - AccountBalance.balance_account
 - balance = StoreBalance.where(store: @store).order("created_at DESC").first
 .container-fluid
   .col-lg-12.col-md-12
@@ -55,8 +55,11 @@
           .card-header.white-text.primary-color
             | AKTIVA
           .card-body
-            label for="phone" Kas
+            label for="phone" Tunai
             input class="form-control md-form text-right" value='#{number_with_delimiter(balance.cash, delimiter: ".", separator: ",")}' 
+
+            label for="phone" Saldo Bank
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.bank, delimiter: ".", separator: ",")}' 
 
             label for="phone" Piutang
             input class="form-control md-form text-right" value='#{number_with_delimiter(balance.receivable, delimiter: ".", separator: ",")}'

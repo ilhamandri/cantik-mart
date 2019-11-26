@@ -2,7 +2,7 @@ tr
   - nominal = finance.nominal.abs
   td #{finance.user.name} (#{finance.store.name})
   td #{finance.finance_type.gsub("_", " ")}
-  - if !["Employee_Loan", "Outcome", "Operational", "FixCost", "Tax", "Withdraw", "Send"].include? finance.finance_type
+  - if !["Employee_Loan", "Outcome", "Operational", "FixCost", "Tax", "Withdraw", "Send", "SendBank"].include? finance.finance_type
     td #{number_with_delimiter(nominal.to_i, delimiter: ".", separator: ",")}
     td 0
   - else
