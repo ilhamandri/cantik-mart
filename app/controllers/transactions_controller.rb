@@ -128,7 +128,7 @@ class TransactionsController < ApplicationController
       trx_item = TransactionItem.create item: item,  
       transaction_id: trx.id,
       quantity: item_par[1], 
-      price: item_par[2],
+      price: item_par[2].to_f * item_par[1].to_f,
       discount: item_par[3],
       date_created: DateTime.now
 
@@ -140,7 +140,7 @@ class TransactionsController < ApplicationController
       store_stock = StoreItem.find_by(store: current_user.store, item: item)
       hpp_total += (item_par[1].to_i * item.buy).round
       next if store_stock.nil?
-      store_stock.stock = store_stock.stock.to_i - item_par[1].to_i
+      store_stock.stock = store_stock.stock.to_f - item_par[1].to_f
       store_stock.save!
     end
     trx.hpp_total = hpp_total

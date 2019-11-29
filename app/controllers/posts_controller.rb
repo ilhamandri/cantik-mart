@@ -41,7 +41,7 @@ class PostsController < ApplicationController
 
 						store_stock = StoreItem.find_by(store: trx.user.store, item: new_trx_item.item)
 					    next if store_stock.nil?
-					    store_stock.stock = store_stock.stock.to_i - new_trx_item.quantity.to_i
+					    store_stock.stock = store_stock.stock.to_f - new_trx_item.quantity.to_f
 					    store_stock.save!
 					end
 					

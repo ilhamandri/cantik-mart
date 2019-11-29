@@ -2,98 +2,11 @@ class ControllersController < ApplicationController
   before_action :require_login
 
   def index
-    # Transfer.all.each do |transfer|
-    #   store = transfer.from_store
-    #   transfer.transfer_items.each do |trf_item|
-    #     item = trf_item.item
-    #     store_item = StoreItem.find_by(store: store, item: item)
-    #     store_item.stock = store_item.stock + trf_item.receive_quantity
-    #     store_item.save!
-    #   end
-    # end
-
-    # transfer = Transfer.find_by(id: 9)
-    # store = transfer.from_store
-    # transfer.transfer_items.each do |trf_item|
-    #   item = trf_item.item
-    #   trf_item.receive_quantity = trf_item.sent_quantity
-    #   trf_item.save!
-    #   store_item = StoreItem.find_by(store: store, item: item)
-    #   store_item.stock = store_item.stock + trf_item.receive_quantity
-    #   store_item.save!
-    # end
-
-
-
-    #   orders_id = [11]
-    #   Order.where(id: orders_id).each do |order|
-    #     total = 0
-    #     order.order_items.each do |order_item|
-    #       price = order_item.price
-    #       receive = order_item.receive
-    #       disc = (price*receive*order_item.discount_1)/100
-    #       grand_total = (price * receive)-disc
-    #       total+= grand_total
-    #       per_item = grand_total.to_f / receive.to_f
-    #       item = order_item.item
-    #       item.buy = per_item
-    #       item.save!
-    #       order_item.total = grand_total;
-    #       order_item.save!
-    #     end
-    #     order.total = total
-    #     order.grand_total = total
-    #     order.save!
-    #     debt = Debt.find_by(finance_type: "ORDER", ref_id: order.id)
-    #     debt.nominal = total
-    #     debt.deficiency = total
-    #     debt.save!
-    #   end
-
-
-    # items = Item.all
-    # items.each do |item|
-    #   code = item.code.gsub(" ", "")
-    #   if item.margin == 0
-    #     item.margin = 15
-    #   end
-    #   item.save!
-    # end
-
-    # orders = Order.where(id: [16, 91, 94])
-    # orders.each do |order|
-    #   store = order.store
-    #   order_items = order.order_items
-    #   order_items.each do |order_item|
-    #     item = order_item.item
-    #     item.buy = 0
-    #     store_item = StoreItem.find_by(item: item,store: store)
-    #     store_item.stock = store_item.stock - order_item.receive.to_f
-    #     store_item.buy = 0
-    #     store_item.save!
-    #     order_item.delete
-    #   end
-    #   debt = Debt.find_by(ref_id: order.id)
-    #   binding.pry
-    #   cfs = CashFlow.where(finance_type: "Outcome", payment: "debt", ref_id: debt.id)
-    #   cfs.each do |cf|
-    #     cf.delete
-    #   end
-    #   debt.delete
-    #   OrderInv.where(order: order).delete_all
-    #   order.delete
-    # end
-
-    store_items = StoreItem.where(store_id: 3).where("stock < 0")
-    store_items.each do |store_item|
-      old_stock = store_item.stock
-      new_stock = ( old_stock * -1 ) 
-      if new_stock > 30
-        new_stock = new_stock / 2;
-      end
-      new_stock = new_stock.round
-      store_item.stock = new_stock
-      store_item.save!
+    items = Item.all
+    items.each do |item|
+      margin = item.margin
+      item.buy = item.sell / (1.0 + (margin.to_f/100))
+      item.save!
     end
 
   	# check_new_controllers

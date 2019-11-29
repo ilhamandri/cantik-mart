@@ -152,7 +152,7 @@ class ApisController < ApplicationController
     search = params[:search].squish
     return render :json => json_result unless search.present?
     return render :json => json_result unless qty.present?
-    return render :json => json_result if qty.to_i <= 0
+    return render :json => json_result if qty.to_f <= 0
     search = search.gsub(/\s+/, "")
     item_id = Item.find_by(code: search)
     item_store = StoreItem.find_by(store_id: current_user.store.id, item: item_id)
@@ -165,7 +165,7 @@ class ApisController < ApplicationController
     curr_item = item_store.item
 
     grocer_price = nil 
-    grocer_price = curr_item.grocer_items if qty.to_i > 1
+    grocer_price = curr_item.grocer_items if qty.to_f > 1
     if grocer_price.present?
       find_price = grocer_price.where('max >= ? AND min <= ?', qty, qty).order("max ASC")
       if find_price.present?
@@ -204,7 +204,7 @@ class ApisController < ApplicationController
     item << item_id.id
 
 
-    promo = Promotion.where(buy_item: item_id).where("start_promo <= ? AND end_promo >= ? AND buy_quantity <= ?", DateTime.now, DateTime.now, qty).first
+    promo = Promotion.where(buy_item: item_id).where("start_promo <= ? AND end_promo >= ? AND buy_quantity <= ?", DateTime.now, DateTime.now, qty.to_i).first
     if promo.present?
       hit_promo = qty.to_i / promo.buy_quantity
       item << promo.promo_code
