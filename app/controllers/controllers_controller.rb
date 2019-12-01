@@ -2,11 +2,18 @@ class ControllersController < ApplicationController
   before_action :require_login
 
   def index
-    items = Item.all
-    items.each do |item|
-      margin = item.margin
-      item.buy = item.sell / (1.0 + (margin.to_f/100))
-      item.save!
+    Transaction.all.each do |trx|
+      hpp_totals = 0
+      trx.transaction_items.each do |trx_item|
+        store_stock = StoreItem.find_by(store: trx.user.store, item: trx_item.item)
+        if trx_item.item.local_item
+          hpp_totals += store_stock.buy * trx_item.quantity
+        else
+          hpp_totals += trx_item.item.buy * trx_item.quantity
+        end
+      end
+      trx.hpp_total = hpp_totals
+      trx.save!
     end
 
   	# check_new_controllers

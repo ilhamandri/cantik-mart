@@ -26,10 +26,19 @@ class PostsController < ApplicationController
 					next if check_trx.present?
 					trx = Transaction.create trx_data
 					trx_total_for_point = 0
+					hpp_totals = 0
 					trx_items_datas.each do |trx_item|
 						trx_item.delete("id")
 						trx_item["transaction_id"] = trx.id
 						new_trx_item = TransactionItem.create trx_item 
+
+						store_stock = StoreItem.find_by(store: trx.user.store, item: new_trx_item.item)
+
+						if new_trx_item.item.local_item
+							hpp_totals += store_stock.buy * new_trx_item.quantity
+						else
+							hpp_totals += new_trx_item.item.buy * new_trx_item.quantity
+						end
 
 						if new_trx_item.reason.present?
 							if new_trx_item.reason.include? "PROMO-"
@@ -39,11 +48,11 @@ class PostsController < ApplicationController
 							end
 						end
 
-						store_stock = StoreItem.find_by(store: trx.user.store, item: new_trx_item.item)
 					    next if store_stock.nil?
 					    store_stock.stock = store_stock.stock.to_f - new_trx_item.quantity.to_f
 					    store_stock.save!
 					end
+					trx_data.hpp_total = hpp_totals
 					
 					trx.save!
 

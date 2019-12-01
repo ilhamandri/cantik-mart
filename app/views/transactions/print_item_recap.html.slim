@@ -23,6 +23,7 @@ table#items
   tr style="font-weight: bold"
     td Kode
     td Nama
+    th Status
     td Margin
     td Harga Beli
     td Harga Jual
@@ -38,6 +39,10 @@ table#items
       tr
         td #{item.code}
         td #{item.name}
+        - if item.local_item
+          td LOCAL
+        - else
+          td PUSAT
         td #{item.margin}
         - buy = item.buy
         - if item.local_item
@@ -53,7 +58,7 @@ table#items
         td #{number_with_delimiter( profit.to_i, delimiter: ".", separator: ",")}
 
   tr style="font-weight: bold; text-align: right;"
-    td colspan=6
+    td colspan=7
       | TOTAL
     td #{items}
     td #{number_with_delimiter( profits.to_i, delimiter: ".", separator: ",")}
