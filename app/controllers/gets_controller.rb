@@ -15,7 +15,7 @@ class GetsController < ApplicationController
 			 # to = params[:to].to_time 
 
 			 render :json =>json_result if store.nil?
-			 json_result["stores"] = Store.where("updated_at >= ? AND updated_at <= ?", from, to)
+			 # json_result["stores"] = Store.where("updated_at >= ? AND updated_at <= ?", from, to)
 			 json_result["users"] = User.where("updated_at >= ? AND updated_at <= ?", from, to)
 			 json_result["members"] = Member.where("updated_at >= ? AND updated_at <= ?", from, to)
 			 json_result["departments"] = Department.where("updated_at >= ? AND updated_at <= ?", from, to)
