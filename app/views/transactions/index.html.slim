@@ -29,6 +29,23 @@
                   i.fas.fa-book
                   |   Download Rekap Transaksi
 
+  .container-fluid
+    .col-xl-12.col-lg-12.col-md-12.pb-2
+      .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Rekap Penjualan Item
+      .card.mb-4 
+        .card-body
+          = form_for :transaction, url: daily_trx_item_recap_path, method: 'GET' do |form|
+            .row
+              .col-md-12
+                label Pilih Tanggal Transaksi
+                input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date" required=true
+              .col-md-12.text-center
+                button class="btn btn-info "
+                  i.fas.fa-book
+                  |  Download Item Terjual
+
     .col-xl-12.col-lg-12.col-md-12.pb-2
       .card-header.white-text.info-color 
         h5.font-weight-500.my-1

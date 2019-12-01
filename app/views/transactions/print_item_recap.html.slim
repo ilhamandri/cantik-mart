@@ -1,0 +1,59 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Tanggal Buat  
+      td
+        textarea #{DateTime.now.in_time_zone.to_s}
+    tr
+      td.meta-head Dibuat Oleh
+      td 
+        textarea #{current_user.name.to_s} ( #{current_user.store.name} )
+    tr
+      td.meta-head Tanggal
+      td
+        b  
+          | Rekap Item Harian - #{@start_day.to_date}
+
+br
+br
+br
+- profits = 0
+- items = 0
+table#items
+  tr style="font-weight: bold"
+    td Kode
+    td Nama
+    td Margin
+    td Harga Beli
+    td Harga Jual
+    td Profit/Item
+    td Terjual
+    td Total Profit
+  - @transaction_items.each do |trx_item|
+    - item_id = trx_item[0]
+    - sell_qty = trx_item[1]
+    - items += sell_qty
+    - item =  Item.find_by(id: item_id)
+    - if item.present?
+      tr
+        td #{item.code}
+        td #{item.name}
+        td #{item.margin}
+        - buy = item.buy
+        - if item.local_item
+          - store_item = StoreItem.find_by(item: item, store: current_user.store)
+          - if store_item.present?
+            - buy = store_item.buy
+        td #{number_with_delimiter( buy.to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter( item.sell.to_i, delimiter: ".", separator: ",")}
+        - profit = (item.sell - buy)*sell_qty
+        - profits += profit
+        td #{number_with_delimiter( (item.sell - buy).to_i, delimiter: ".", separator: ",")}
+        td #{sell_qty}
+        td #{number_with_delimiter( profit.to_i, delimiter: ".", separator: ",")}
+
+  tr style="font-weight: bold; text-align: right;"
+    td colspan=6
+      | TOTAL
+    td #{items}
+    td #{number_with_delimiter( profits.to_i, delimiter: ".", separator: ",")}

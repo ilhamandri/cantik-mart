@@ -39,7 +39,7 @@ class TransactionsController < ApplicationController
   end
 
   def daily_recap
-    start_day = params[:date].to_datetime
+    start_day = params[:date].to_time
     end_day = start_day.end_of_day
     @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     @transactions = @transactions.order("created_at DESC")
@@ -49,6 +49,17 @@ class TransactionsController < ApplicationController
     render pdf: DateTime.now.to_i.to_s,
       layout: 'pdf_layout.html.erb',
       template: "transactions/print_recap.html.slim"
+  end
+
+  def daily_recap_item
+    start_day = params[:date].to_time
+    end_day = start_day.end_of_day
+    @transaction_items = TransactionItem.where("created_at >= ? AND created_at <= ?", start_day, end_day).group(:item_id).count
+    @start_day = start_day
+    @kriteria = "Rekap Item Terjual - "+Date.today.to_s
+    render pdf: DateTime.now.to_i.to_s,
+      layout: 'pdf_layout.html.erb',
+      template: "transactions/print_item_recap.html.slim"
   end
 
   def show
