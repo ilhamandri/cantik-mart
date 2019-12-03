@@ -33,7 +33,6 @@ class PostsController < ApplicationController
 						new_trx_item = TransactionItem.create trx_item 
 
 						store_stock = StoreItem.find_by(store: trx.user.store, item: new_trx_item.item)
-
 						if new_trx_item.item.local_item
 							hpp_totals += store_stock.buy * new_trx_item.quantity
 						else
@@ -52,7 +51,8 @@ class PostsController < ApplicationController
 					    store_stock.stock = store_stock.stock.to_f - new_trx_item.quantity.to_f
 					    store_stock.save!
 					end
-					trx_data.hpp_total = hpp_totals
+
+					trx.hpp_total = hpp_totals
 					
 					trx.save!
 
@@ -89,6 +89,6 @@ class PostsController < ApplicationController
 				end
 			end	
 		end
-		
+		render status: 200
 	end
 end

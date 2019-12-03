@@ -16,7 +16,7 @@ class ControllersController < ApplicationController
       trx.save!
     end
 
-  	# check_new_controllers
+  	check_new_controllers
     @controllers = Controller.order("name ASC").page param_page
   end
 

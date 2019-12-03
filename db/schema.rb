@@ -254,11 +254,6 @@ ActiveRecord::Schema.define(version: 2019_11_29_041055) do
     t.integer "margin", default: 0
     t.datetime "price_updated"
     t.bigint "sell_member", default: 0, null: false
-    t.integer "color", default: 0, null: false
-    t.string "size", default: "-", null: false
-    t.string "drat", default: "-", null: false
-    t.integer "kunci", default: 0, null: false
-    t.float "panjang", default: 0.0, null: false
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 
@@ -649,8 +644,6 @@ ActiveRecord::Schema.define(version: 2019_11_29_041055) do
     t.bigint "point", default: 0, null: false
     t.bigint "voucher_id"
     t.bigint "voucher"
-    t.integer "trx_type", default: 0, null: false
-    t.float "deficiency", default: 0.0, null: false
     t.index ["store_id"], name: "index_transactions_on_store_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
     t.index ["voucher_id"], name: "index_transactions_on_voucher_id"
@@ -690,17 +683,6 @@ ActiveRecord::Schema.define(version: 2019_11_29_041055) do
     t.index ["from_store_id"], name: "index_transfers_on_from_store_id"
     t.index ["to_store_id"], name: "index_transfers_on_to_store_id"
     t.index ["user_id"], name: "index_transfers_on_user_id"
-  end
-
-  create_table "trx_invs", force: :cascade do |t|
-    t.string "invoice", null: false
-    t.float "nominal", null: false
-    t.bigint "user_id", null: false
-    t.bigint "transaction_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["transaction_id"], name: "index_trx_invs_on_transaction_id"
-    t.index ["user_id"], name: "index_trx_invs_on_user_id"
   end
 
   create_table "user_methods", force: :cascade do |t|
@@ -834,8 +816,6 @@ ActiveRecord::Schema.define(version: 2019_11_29_041055) do
   add_foreign_key "transfers", "stores", column: "from_store_id"
   add_foreign_key "transfers", "stores", column: "to_store_id"
   add_foreign_key "transfers", "users"
-  add_foreign_key "trx_invs", "transactions"
-  add_foreign_key "trx_invs", "users"
   add_foreign_key "user_methods", "controller_methods"
   add_foreign_key "user_salaries", "users"
   add_foreign_key "vouchers", "exchange_points"
