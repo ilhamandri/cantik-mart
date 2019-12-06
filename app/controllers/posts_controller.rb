@@ -87,7 +87,9 @@ class PostsController < ApplicationController
 					if absent.nil?
 						absent = Absent.create data
 					else
+						binding.pry
 						absent.assign_attributes data
+						binding.pry
 						absent.save!
 					end
 
