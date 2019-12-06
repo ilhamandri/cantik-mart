@@ -80,10 +80,10 @@ class PostsController < ApplicationController
 					
 					absent = Absent.where(user_id: data["user_id"]).where("created_at >= ? AND created_at <= ?", start_date, end_date).first
 
-					binding.pry
+					data.delete("id")
 					
 					if absent.nil?
-						Absent.create data
+						absent = Absent.create data
 					else
 						absent.assign_attributes data
 						absent.save!
