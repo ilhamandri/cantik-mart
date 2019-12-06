@@ -6,6 +6,7 @@ class DebtsController < ApplicationController
   	filter = filter_search params
     @search = filter[0]
     @finances = filter[1]
+    @count_debt = filter[2]
     @debt_totals = debt_total
     @params = params.to_s
     @debt = Debt.where("deficiency > ?",0)
@@ -68,7 +69,7 @@ class DebtsController < ApplicationController
     def filter_search params
       results = []
       search_text = "Pencarian "
-      filters = Debt.page param_page
+      filters = Debt.all
       filter = filters.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
       due_date = params["due_date"]
 
@@ -138,10 +139,12 @@ class DebtsController < ApplicationController
         filters = filters.where(finance_type: Debt.finance_types.key(params["type"].to_i))
         filters = filters.where("deficiency > ?",0)
       end
-
+      count_debt = filters.count
+      filters = filters.page param_page
       results << search_text
       results << filters
       results << store_name
+      results << count_debt
       return results
     end
 
