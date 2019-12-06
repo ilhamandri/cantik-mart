@@ -173,7 +173,7 @@ class RetursController < ApplicationController
   private
     def filter_search params, r_type
       results = []
-      @returs = Retur.all
+      @returs = Retur.all.order("created_at DESC")
       if r_type == "html"
         @returs = @returs.page param_page if r_type=="html"
       end
