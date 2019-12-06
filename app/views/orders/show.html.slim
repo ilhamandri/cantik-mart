@@ -20,7 +20,7 @@
             
   - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'edit_confirmation').user_methods.pluck(:user_level).include? current_user.level
     - if order.editable && @pay !=0 && order.date_receive!=nil
-        .col.text-right
+        / .col.text-right
           a href="#{edit_order_confirmation_path(id: order_id)}"
             button.btn.btn-warning type="button" 
               | Ubah

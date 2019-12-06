@@ -34,8 +34,8 @@ class PaysController < ApplicationController
   	pay_nominal = params[:pay][:pay_nominal].to_i
   	f_type = params[:pay][:type]
   	return redirect_back_data_error cash_flows_path, "Data tidak valid" if pay_nominal.nil?
-  	if pay_nominal <= 100 || pay_nominal > @data.deficiency
-  		return redirect_back_data_error cash_flows_path, "Nominal harus lebih besar dari 100 atau kurang dari jumlah yang ditentukan"
+  	if pay_nominal < 0 || pay_nominal > @data.deficiency
+  		return redirect_back_data_error cash_flows_path, "Nominal harus lebih besar dari 0 atau kurang dari jumlah yang ditentukan"
   	end
   	@data.deficiency = @data.deficiency.to_i - pay_nominal.to_i
   	user = current_user

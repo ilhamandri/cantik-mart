@@ -31,7 +31,7 @@
             input type="text" value="#{@data.deficiency}" name="pay[deficiency]" class="form-control md-form" disabled="disabled"
           .form-group
             label.text-primary for="nominal" Bayar
-            = form.number_field :pay_nominal, required: true, class: "form-control md-form", id: "nominal", value:"100", min:"100" 
+            = form.number_field :pay_nominal, required: true, class: "form-control md-form", id: "nominal", value:"0", min:"0" 
           .form-group
             label.text-primary for="nominal" Catatan
             = form.text_field :description, required: true, class: "form-control md-form", id: "nominal", placeholder:"Contoh: nomor transfer, nama bank, metode pembayaran, dsb ..."

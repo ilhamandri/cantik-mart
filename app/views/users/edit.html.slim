@@ -12,7 +12,7 @@
           .form-group
             label for="name" Nama
             = form.text_field :name, required: true, class: "form-control md-form", id: "name"
-          - if current_user == @user || current_user.level == "super_admin"
+          - if current_user == @user
             .form-group
               label for="name" Password
               = form.password_field :password, required: true, class: "form-control md-form", id: "password"

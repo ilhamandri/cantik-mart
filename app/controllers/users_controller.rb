@@ -102,6 +102,12 @@ class UsersController < ApplicationController
       )
     end
 
+    def user_edit_params
+      params.require(:user).permit(
+        :name, :email, :level, :phone, :sex, :store_id, :id_card, :address, :fingerprint, :salary
+      )
+    end
+
     def param_page
       params[:page]
     end

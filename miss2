@@ -6,3 +6,26 @@
 
 --> CRON di cloud blm aktif
 --> sendMail auto to drg.kindiialfarabi@gmail.com --> kurang boootstrap blm jalan
+
+=====================================================================
+ - Retur barang di print jadi double 			| x |
+ - Hide button 'ubah' di show order				| x |
+ - Harga Roti berubah
+ 	- Confirm anisa								|   |
+- Harga TELOR tidak berubah 					| x |
+- Yakult harga udah diubah tpi ga keubah		| x |
+- PO Prima rasa tapi masuk ke santini			| x |
+- Retur order by created_at	DESC				| x |
+- Hapus PO d.c. BELUM BAYAR						
+	- recall harga beli sebelumnya				|   |
+- ORD-1574065948								|   |
+- LOSS-1574065884 (DELETE)						|   |
+- Di RETUR , kalo pilih LOSS cek qty			| x |
+- Payment hapus limit Rp. 100					| x |
+- Terima PO, GRAND TOTAL jadi bonus supp		
+  tidak ikut perhitungan						|   |
+- Rekap PO per supplier							|   |
+
+
+- absent										| - |
+- Upload gambar									|   |

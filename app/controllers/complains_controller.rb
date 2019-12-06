@@ -150,7 +150,7 @@ class ComplainsController < ApplicationController
       new_trx.discount = discount
       new_trx.total = total
       new_trx.hpp_total = hpp
-      new_trx.grand_total = total - discount
+      new_trx.grand_total = total - discount - nominal
       new_trx.save!
 
 
