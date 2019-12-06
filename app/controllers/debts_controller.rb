@@ -6,7 +6,7 @@ class DebtsController < ApplicationController
   	filter = filter_search params
     @search = filter[0]
     @finances = filter[1]
-    @count_debt = filter[2]
+    @count_debt = filter[4]
     @debt_totals = debt_total
     @params = params.to_s
     @debt = Debt.where("deficiency > ?",0)

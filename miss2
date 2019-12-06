@@ -11,7 +11,7 @@
  - Retur barang di print jadi double 			| x |
  - Hide button 'ubah' di show order				| x |
  - Harga Roti berubah
- 	- Confirm anisa								|   |
+ 	- Confirm anisa								| x |
 - Harga TELOR tidak berubah 					| x |
 - Yakult harga udah diubah tpi ga keubah		| x |
 - PO Prima rasa tapi masuk ke santini			| x |
@@ -27,5 +27,9 @@
 - Rekap PO per supplier							|   |
 
 
-- absent										| - |
+- absent										| x |
+
+
+
+---------------------------  NEXT ---------------------------------
 - Upload gambar									|   |
