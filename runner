@@ -1,4 +1,8 @@
+sudo apt install php libapache2-mod-php
+sudo systemctl restart apache2
+
 ssh root@193.168.195.145 -p 22
+ssh root@45.13.132.52 -p 22
 tmux attach -t 0
 
 tmux new -s 0
