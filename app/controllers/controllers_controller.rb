@@ -2,15 +2,6 @@ class ControllersController < ApplicationController
   before_action :require_login
 
   def index
-  	StoreItem.all.each do |store_item|
-      next if store_item.buy > 0
-      item = store_item.item
-      margin = item.margin
-      sell = item.sell
-      buy = item.sell / ( 1.0 + (margin.to_f/100.0))
-      store_item.buy = buy.to_i
-      store_item.save!
-    end
 
     # check_new_controllers
     @controllers = Controller.order("name ASC").page param_page
