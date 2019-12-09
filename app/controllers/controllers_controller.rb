@@ -3,6 +3,7 @@ class ControllersController < ApplicationController
 
   def index
   	StoreItem.all.each do |store_item|
+      next if store_item.buy > 0
       item = store_item.item
       margin = item.margin
       sell = item.sell
