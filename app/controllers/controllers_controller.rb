@@ -7,9 +7,8 @@ class ControllersController < ApplicationController
       item = store_item.item
       margin = item.margin
       sell = item.sell
-      buy = item.sell / ( 1.0 - (margin.to_f/100.0))
-      binding.pry
-      store_item.buy = buy
+      buy = item.sell / ( 1.0 + (margin.to_f/100.0))
+      store_item.buy = buy.to_i
       store_item.save!
     end
 
