@@ -22,9 +22,10 @@
             .form-group
               label for="name" Kekurangan
               input type="text" class="form-control md-form" value="#{@receivable.deficiency}"
-          .col-12.text-center
-            a href='#{new_pay_path(id: @receivable.id, type: "receivable")}' class="btn btn-warning"
-              | Bayar
+          - if @receivable.deficiency > 0
+            .col-12.text-center
+              a href='#{new_pay_path(id: @receivable.id, type: "receivable")}' class="btn btn-warning"
+                | Bayar
 
 .container-fluid
   .col-lg-12.col-md-12

@@ -25,7 +25,7 @@ tr
 
     - if Controller.find_by(name: 'returs').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
       - complain = Complain.where(transaction_id: transaction).first
-      - in_range_complain = (transaction.created_at >= (DateTime.now - 3.days))
+      - in_range_complain = (transaction.created_at >= (DateTime.now - 30.days))
       - if in_range_complain && !transaction.from_complain && complain.nil?
         a href='#{new_complain_path(id: transaction.id)}'
           button class="btn btn-danger"
