@@ -8,6 +8,7 @@ class ControllersController < ApplicationController
       margin = item.margin
       sell = item.sell
       buy = item.sell / ( 1.0 - (margin.to_f/100.0))
+      binding.pry if buy == nil
       store_item.buy = buy
       store_item.save!
     end
