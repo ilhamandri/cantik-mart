@@ -179,7 +179,7 @@ class AccountBalance
             val = 0
             retur_items.each do |ret_item|
               item = ret_item.item
-              store_item = StoreItem.where(store: cash_flow.store, item: item)
+              store_item = StoreItem.find_by(store: cash_flow.store, item: item)
               buy = item.buy
               buy = store_item.buy if item.local_item
               val += ( ret_item.accept_item * buy) - ret_item.nominal
