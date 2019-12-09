@@ -2,10 +2,6 @@ class ControllersController < ApplicationController
   before_action :require_login
 
   def index
-
-    Complain.all.each do |complain|
-      trx = Transaction.find_by(id: complain.transaction_id)
-    end
   	
     check_new_controllers
     @controllers = Controller.order("name ASC").page param_page

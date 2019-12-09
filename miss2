@@ -16,14 +16,16 @@
 - Yakult harga udah diubah tpi ga keubah		| x |
 - PO Prima rasa tapi masuk ke santini			| x |
 - Retur order by created_at	DESC				| x |
-- Hapus PO d.c. BELUM BAYAR						
-	- recall harga beli sebelumnya				|   |
 - ORD-1574065948								| x |
 - LOSS-1574065884								| x |
 - Di RETUR , kalo pilih LOSS cek qty			| x |
 - Payment hapus limit Rp. 100					| x |
+
+- Hapus PO d.c. BELUM BAYAR						
+	- recall harga beli sebelumnya				|   |
 - Terima PO, GRAND TOTAL jadi bonus supp		
   tidak ikut perhitungan						|   |
+  
 - Rekap PO per supplier							|   |
 - Cek ulang retur (profit, hpp)					| x |
 - absent										| x |
@@ -33,3 +35,4 @@
 
 ---------------------------  NEXT ---------------------------------
 - Upload gambar									|   |
+- manajemen SDM 								|   |
