@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_29_041055) do
+ActiveRecord::Schema.define(version: 2019_12_10_074802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -334,6 +334,8 @@ ActiveRecord::Schema.define(version: 2019_11_29_041055) do
     t.float "ppn", default: 0.0
     t.bigint "grand_total", default: 0
     t.bigint "total", default: 0, null: false
+    t.float "last_buy", default: 0.0, null: false
+    t.float "last_sell", default: 0.0, null: false
     t.index ["item_id"], name: "index_order_items_on_item_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
   end
@@ -561,9 +563,9 @@ ActiveRecord::Schema.define(version: 2019_11_29_041055) do
     t.bigint "item_id", null: false
     t.float "stock", default: 0.0, null: false
     t.integer "min_stock", default: 0, null: false
-    t.bigint "buy", default: 0, null: false
+    t.float "buy", default: 0.0, null: false
     t.bigint "sell", default: 0, null: false
-    t.bigint "head_buy", default: 0, null: false
+    t.float "head_buy", default: 0.0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["item_id"], name: "index_store_items_on_item_id"

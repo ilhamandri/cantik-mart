@@ -83,8 +83,27 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
     order = Order.find params[:id]
     return redirect_back_data_error orders_path, "Data Order Tidak Dapat Dihapus" unless order.present?
-    return redirect_back_data_error orders_path, "Data Order Tidak Dapat Dihapus" if order.date_receive.present?
-    OrderItem.where(order_id: params[:id]).destroy_all
+    order_invs = InvoiceTransaction.where(invoice: order.invoice)
+    return redirect_back_data_error orders_path, "Data Order Tidak Dapat Dihapus" if order_invs.present?
+    if order.date_receive.present?
+      order.order_items.each do |order_item|
+        item = order_item.item
+        store_item = StoreItem.find_by(item: item, store: order.user.store)
+        store_item.stock = store_item.stock - order_item.receive
+        if item.local_item
+          store_item.buy = order_item.last_buy
+        else
+          item.buy = order_item.last_buy
+        end
+
+        item.sell = order_item.last_sell
+        store_item.save!
+        item.save!
+      end
+    end
+
+    Debt.find_by(finance_type: Debt::ORDER, ref_id: order.id).destroy
+    order.order_items.destroy_all
     order.destroy
     return redirect_success orders_path, "Data Order Behasil Dihapus"
   end
@@ -190,7 +209,6 @@ class OrdersController < ApplicationController
     receivable = nil
     disc_percentage = 0
     disc_percentage = params[:order][:discount].to_f if params[:order][:discount].present?
-    return redirect_back_data_error order_confirmation_path(id: order.id), "Diskon faktur harus berupa persen" if disc_percentage > 100
     disc = 0
     ppn = params[:order][:ppn].to_f
     new_grand_total = 0
@@ -240,8 +258,8 @@ class OrdersController < ApplicationController
 
       total_item_without_disc_global = price_2
 
-      price_3 = (price_2 - (price_2*disc_percentage/100)).round
-      item_grand_total = (price_3 + (price_3*ppn/100)).round
+      # price_3 = (price_2 - (price_2*disc_percentage/100)).round
+      item_grand_total = (price_2 + (price_2*ppn/100)).round
 
       based_item_price = item_grand_total / receive_qty;
 
@@ -295,7 +313,7 @@ class OrdersController < ApplicationController
       order_item.price = price
       order_item.total = total_item_without_disc_global
       order_item.grand_total = item_grand_total
-
+      order_item.last_sell = this_item.sell
       order_item.save!
 
 
@@ -305,11 +323,12 @@ class OrdersController < ApplicationController
       curr_stock = store_stock.stock.to_i if store_stock.stock.to_i > 0
 
       if !order_from_retur
-
         if this_item.local_item
           old_buy_total = (curr_stock * store_stock.buy).to_f 
+          order_item.last_buy = store_stock.buy
         else
           old_buy_total = (curr_stock.to_i * this_item.buy).to_f 
+          order_item.last_buy = this_item.buy
         end
         new_buy = (item_grand_total + old_buy_total.to_f) / (receive_qty + curr_stock)  
         if this_item.local_item
@@ -327,11 +346,13 @@ class OrdersController < ApplicationController
       
       new_total +=  total_item_without_disc_global
       new_grand_total += item_grand_total
+      order_item.save!
     end
 
     order.total = new_total
-    order.discount_percentage = disc_percentage
-    order.discount = (new_total*disc_percentage/100)
+    order.discount_percentage = 0
+    # order.discount = (new_total*disc_percentage/100)
+    order.discount = 0
     order.date_receive = DateTime.now
     order.received_by = current_user
     order.grand_total = new_grand_total

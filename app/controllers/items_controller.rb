@@ -55,7 +55,7 @@ class ItemsController < ApplicationController
     exist = Item.find_by(code: code)
 
     return redirect_back_data_error new_item_path, "Kode  "+code.to_s+" telah terdaftar." if exist.present?
-   
+    return redirect_back_data_error new_item_path, "Silahkan cek kembali harga beli dan harga jual" if params[:item][:buy].to_i == 0 || params[:item][:sell].to_i == 0
     item = Item.new item_params
     item.code = code.gsub(" ", "")
     item.brand = "-" if params[:item][:brand].nil?

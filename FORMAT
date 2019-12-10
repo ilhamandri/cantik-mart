@@ -1,8 +1,0 @@
-FORMAT
-
-number_to_phone(supplier.supplier.phone, country_code: 62)
-
-number_to_currency(price, unit: "Rp. ", separator: ",", delimiter: ".")
-
-number_with_delimiter(12345678, delimiter: ".", separator: ",")
-

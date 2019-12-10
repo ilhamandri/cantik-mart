@@ -80,7 +80,11 @@ class ComplainsController < ApplicationController
       trx_item.reason = reason
 
       nominal += (retur-replace) * (trx_item.price - trx_item.discount)
-      nominal_hpp += (retur-replace) * (trx_item.buy)
+      if item.local_item
+        nominal_hpp += (retur-replace) * (store_stock.buy)
+      else
+        nominal_hpp += (retur-replace) * (item.buy)
+      end
       new_stock = store_stock.stock + retur - replace
       store_stock.stock = new_stock
       store_stock.save!
@@ -150,13 +154,9 @@ class ComplainsController < ApplicationController
 
       new_trx.discount = discount
       new_trx.total = total
-      new_trx.hpp_total = hpp
-      new_trx.grand_total = total - discount 
+      new_trx.hpp_total = hpp - nominal_hpp
+      new_trx.grand_total = total - discount - nominal
       new_trx.save!
-
-      @transaction.hpp_total = @transaction.hpp_total - nominal_hpp
-      @transaction.grand_total = @transcation.grand_total - nominal
-      @transaction.save!
 
 
       new_trx.create_activity :create, owner: current_user

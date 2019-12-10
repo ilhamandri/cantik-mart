@@ -7,7 +7,6 @@ function changePrice(id){
   var price = $("#"+id+"Price").val();
   var disc_1 = $("#"+id+"Disc1").val();
   var disc_2 = $("#"+id+"Disc2").val();
-  var global_disc = $("#globalDisc").val();
   var margin = parseFloat($("#"+id+"Margins").html());
   var ppn = $("#ppn").val();
 
@@ -26,12 +25,6 @@ function changePrice(id){
     price -= disc_2;
   }else{
     price -= disc_2;
-  }
-
-  if(global_disc <= 99){
-    price -= parseFloat(price * global_disc / 100);
-  }else{
-    alert("INPUT DISKON FAKTUR BERUPA %")
   }
 
   price += parseFloat(price*ppn/100);

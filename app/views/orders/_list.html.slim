@@ -20,7 +20,8 @@ tr
 
   td
     - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
-      - if order.date_receive.nil? && order.total == 0
+      - order_invs = InvoiceTransaction.find_by(invoice: order.invoice)
+      - if order_invs.nil?
         = form_for :order, url: "#{order_path(id: order.id)}", method: "DELETE" do |form|
           = form.submit "Hapus", class: "btn btn-danger"
   td

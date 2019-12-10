@@ -132,6 +132,7 @@ class AccountBalance
     stocks = StoreItem.where(store: store).where('stock != 0')
     values = 0
     stocks.each do |store_stock|
+      next if store_stock.stock <= 0
       values += (store_stock.stock * store_stock.item.buy) if !store_stock.item.local_item
       values += (store_stock.buy * store_stock.stock) if store_stock.item.local_item
     end
