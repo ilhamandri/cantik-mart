@@ -30,7 +30,7 @@ br
                     option value="#{store.id}"
                       | #{store.name}
               .col-md-6.text-center
-                select class="mdb-select md-form" id="months" name="user_id"
+                select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="user_id" id="supplierId"
                   - User.all.each do |user|
                     option value="#{user.id}"
                       | #{user.name}

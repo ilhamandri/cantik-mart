@@ -15,9 +15,7 @@ class AbsentsController < ApplicationController
       new_params = eval(params[:option])
     end
     
-    if params[:user].present?
-      @absents = @absents.where(user: params[:user])
-    end
+    
 
     @params = params
     if ["owner", "super_admin", "finance"].include? current_user.level 
@@ -37,11 +35,12 @@ class AbsentsController < ApplicationController
         @absents = @absents.where(user_id: @search_id)
       end
 
-      if search_params.present?
-        search = "%"+search_params+"%".downcase
-        @search_text+= " '"+search_params+"' "
-        users = User.where("lower(name) like ?", search).pluck(:id)
-        @absents = @absents.where(user_id: users)
+      if params[:user_id].present?
+        user = User.find_by(id: params[:user_id])
+        if user.present?
+          @absents = @absents.where(user: params[:user_id])
+          @search += " '" + user.name + "'"
+        end
       end
 
       if search_from_date.present?
