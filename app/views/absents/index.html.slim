@@ -30,7 +30,10 @@ br
                     option value="#{store.id}"
                       | #{store.name}
               .col-md-6.text-center
-                input type="text" class="form-control md-form" id="search" name="search" placeholder="Cari nama..."
+                select class="mdb-select md-form" id="months" name="user_id"
+                  - User.all.each do |user|
+                    option value="#{user.id}"
+                      | #{user.name}
             .col-md-6.text-center
               input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date_from_search"]        
             .col-md-6.text-center

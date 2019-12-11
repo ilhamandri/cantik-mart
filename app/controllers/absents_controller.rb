@@ -9,11 +9,16 @@ class AbsentsController < ApplicationController
       @status = "Fingerprint tidak terhubung."
     end
     @search_text = "Pencarian  "
-    @absents = Absent.page param_page
+    @absents = Absent.order("created_at DESC").page param_page
     new_params = nil
     if params[:option].present?
       new_params = eval(params[:option])
     end
+    
+    if params[:user].present?
+      @absents = @absents.where(user: params[:user])
+    end
+
     @params = params
     if ["owner", "super_admin", "finance"].include? current_user.level 
       if new_params.present?
