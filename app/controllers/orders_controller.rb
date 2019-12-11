@@ -399,7 +399,7 @@ class OrdersController < ApplicationController
     nominal = params[:order_pay][:receivable_nominal].to_i if params[:order_pay][:user_receivable] == "on"
     return redirect_back_data_error orders_path, "Nominal harus lebih besar atau sama dengan 100" if nominal == 0
     return redirect_back_data_error orders_path, 
-      "Data Order Tidak Valid (Pembayaran > Jumlah / Pembayaran < 100 )" if (totals-paid+nominal) > totals || nominal < 100 || ( ((totals - nominal) < 100) && ((totals - nominal) > 1))
+      "Data Order Tidak Valid (Pembayaran > Jumlah / Pembayaran < 100 )" if (totals-paid+nominal) > totals || nominal < 100 || ( ((totals - nominal) < 100) && ((totals - nominal) > 0))
     return redirect_back_data_error orders_path, "Tanggal pembayaran harus diisi." if params[:order_pay][:date_paid].nil?
     order_inv = InvoiceTransaction.new 
     order_inv.invoice = order.invoice
