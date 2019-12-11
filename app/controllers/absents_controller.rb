@@ -39,7 +39,7 @@ class AbsentsController < ApplicationController
         user = User.find_by(id: params[:user_id])
         if user.present?
           @absents = @absents.where(user: params[:user_id])
-          @search += " '" + user.name + "'"
+          @search_text += " '" + user.name + "'"
         end
       end
 
