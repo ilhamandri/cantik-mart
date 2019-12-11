@@ -43,19 +43,18 @@ class AbsentsController < ApplicationController
         end
       end
 
-      # if search_from_date.present?
-      #   @search_text+= " dari "+search_from_date.to_s
-      #   @absents = @absents.where("DATE(check_in) >= ?", search_from_date)
-      #   if search_to_date.present?
-      #     if search_to_date != search_from_date
-      #       @search_date = search_to_date.to_date
-      #       @search_text+= " hingga "+@search_date.to_s
-      #       @absents = @absents.where("DATE(check_in) <= ?", @search_date)
-      #     end
-      #   end
-      # end
-
-      # binding.pry
+      if search_from_date.present?
+        @search_text+= " dari "+search_from_date.to_s
+        @absents = @absents.where("DATE(check_in) >= ?", search_from_date)
+        binding.pry
+        if search_to_date.present?
+          if search_to_date != search_from_date
+            @search_date = search_to_date.to_date
+            @search_text+= " hingga "+@search_date.to_s
+            @absents = @absents.where("DATE(check_in) <= ?", @search_date)
+          end
+        end
+      end
     else
       @absents = @absents.where(user: current_user)
     end
@@ -69,7 +68,7 @@ class AbsentsController < ApplicationController
         users_id = @absents.pluck(:user_id).uniq
         users = User.where(id: users_id)
         users.each do |user|
-          wb.add_worksheet(:name => user.name+" - "+user.store.name) do |sheet|
+          wb.add_worksheet(:name => user.name) do |sheet|
             sheet.add_row ["Masuk", "Pulang", "Jam Kerja", " ", "Mulai Lembur", "Selesai Lembur", " Jam Lembur"]
             @absents.where(user: user).order("check_in ASC").each do |data|
               sheet.add_row [data.check_in.to_s, data.check_out.to_s, data.work_hour, "", data.overtime_in.to_s, data.overtime_out.to_s, data.overtime_hour]
