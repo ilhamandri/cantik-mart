@@ -43,19 +43,19 @@ class AbsentsController < ApplicationController
         end
       end
 
-      if search_from_date.present?
-        @search_text+= " dari "+search_from_date.to_s
-        @absents = @absents.where("DATE(check_in) >= ?", search_from_date)
-        if search_to_date.present?
-          if search_to_date != search_from_date
-            @search_date = search_to_date.to_date
-            @search_text+= " hingga "+@search_date.to_s
-            @absents = @absents.where("DATE(check_in) <= ?", @search_date)
-          end
-        end
-      end
+      # if search_from_date.present?
+      #   @search_text+= " dari "+search_from_date.to_s
+      #   @absents = @absents.where("DATE(check_in) >= ?", search_from_date)
+      #   if search_to_date.present?
+      #     if search_to_date != search_from_date
+      #       @search_date = search_to_date.to_date
+      #       @search_text+= " hingga "+@search_date.to_s
+      #       @absents = @absents.where("DATE(check_in) <= ?", @search_date)
+      #     end
+      #   end
+      # end
 
-      binding.pry
+      # binding.pry
     else
       @absents = @absents.where(user: current_user)
     end
