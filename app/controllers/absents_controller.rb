@@ -34,7 +34,7 @@ class AbsentsController < ApplicationController
       if @search_id.present?
         @absents = @absents.where(user_id: @search_id)
       end
-      binding.pry
+
       if params[:user_id].present?
         user = User.find_by(id: params[:user_id])
         if user.present?
@@ -54,6 +54,8 @@ class AbsentsController < ApplicationController
           end
         end
       end
+
+      binding.pry
     else
       @absents = @absents.where(user: current_user)
     end
