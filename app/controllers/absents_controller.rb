@@ -34,7 +34,7 @@ class AbsentsController < ApplicationController
       if @search_id.present?
         @absents = @absents.where(user_id: @search_id)
       end
-
+      binding.pry
       if params[:user_id].present?
         user = User.find_by(id: params[:user_id])
         if user.present?
@@ -44,7 +44,7 @@ class AbsentsController < ApplicationController
       end
 
       if search_from_date.present?
-        @search_text+= "dari "+search_from_date.to_s
+        @search_text+= " dari "+search_from_date.to_s
         @absents = @absents.where("DATE(check_in) >= ?", search_from_date)
         if search_to_date.present?
           if search_to_date != search_from_date
