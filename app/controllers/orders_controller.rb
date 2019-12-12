@@ -207,9 +207,8 @@ class OrdersController < ApplicationController
     items = order_items
     new_total = 0
     receivable = nil
-    disc_percentage = 0
-    disc_percentage = params[:order][:discount].to_f if params[:order][:discount].present?
-    disc = 0
+    disc_supp = 0
+    disc_supp = params[:order][:discount].to_f if params[:order][:discount].present?
     ppn = params[:order][:ppn].to_f
     new_grand_total = 0
     items.each do |item|
@@ -358,6 +357,17 @@ class OrdersController < ApplicationController
     order.grand_total = new_grand_total
     order.save!
     
+    if disc_supp > 0
+      user = current_user
+      store = current_user.store
+      invoice = "IN-OR-SUP-" + DateTime.now.to_i.to_s
+      cash_flow = CashFlow.create user: user, store: store, nominal: disc_supp, date_created: DateTime.now, description: order.invoice, 
+                      finance_type: CashFlow::INCOME, invoice: invoice, ref_id: order.id
+      
+      store.cash = store.cash + disc_supp
+      store.save!
+    end
+
     if order.total == 0
       order.date_paid_off = DateTime.now
       order.save!

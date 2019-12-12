@@ -15,8 +15,13 @@ tr
         a href="#{debt_path(id: finance.ref_id)}"
           | #{finance.description}
       - elsif finance.finance_type == "Income"
-        a href="#{receivable_path(id: finance.ref_id)}"
-          | #{finance.description}
+        - ord = Order.find_by(invoice: finance.description)
+        - if ord.present?
+          a href="#{order_path(id: ord.id)}"
+            | #{finance.description}
+        - else
+          a href="#{receivable_path(id: finance.ref_id)}"
+            | #{finance.description}
       - elsif finance.finance_type == "Debt"
         a href="#{debt_path(id: finance.ref_id)}"
           | #{finance.description}

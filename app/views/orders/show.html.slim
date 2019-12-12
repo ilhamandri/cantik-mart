@@ -45,6 +45,12 @@ br
                 - retur = ReturItem.find_by(ref_id: order.id).retur
                 a href="#{retur_path(id: retur.id)}" class="btn btn-primary"
                   | #{retur.invoice}
+
+            - bonus = CashFlow.find_by(description: order.invoice)
+            - if bonus.present?
+              .col-md-12
+                label for="form" Diskon Supplier / Faktur
+                input type="text" class="form-control md-form" disabled=true value="#{number_with_delimiter(bonus.nominal, separator: ",", delimiter: ".")}"
               
             .col-md-4
               label for="form" Jumlah Item
