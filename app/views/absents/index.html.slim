@@ -10,6 +10,25 @@
         - user = User.find @search_id
         | Absensi #{user.name}
 br
+- if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
+  br
+  .container-fluid
+    .col-xl-12.col-lg-12.col-md-12.pb-2
+      .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Rekap Perhari
+      .card.mb-4 
+        .card-body
+          = form_for :absent, url: daily_absent_recap_path, method: 'GET' do |form|
+            .row
+              .col-md-12
+                label Pilih Tanggal Absensi
+                input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
+              .col-md-12.text-center
+                button class="btn btn-info "
+                  i.fas.fa-book
+                  |   Download Rekap Absensi
+
 .container-fluid
   .col-lg-12.col-md-12
     .card-header.white-text.info-color

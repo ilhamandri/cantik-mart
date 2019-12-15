@@ -81,7 +81,17 @@ class AbsentsController < ApplicationController
     end
   end
 
-  
+  def daily_recap
+    start_day = params[:date].to_time
+    end_day = start_day.end_of_day
+    @absents = Absent.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+    @absents = @absents.order("created_at DESC")
+    @start_day = start_day
+    @kriteria = "Rekap Absensi Harian - "+Date.today.to_s
+    render pdf: DateTime.now.to_i.to_s,
+      layout: 'pdf_layout.html.erb',
+      template: "absents/print_recap.html.slim"
+  end
 
   def show
     return redirect_back_data_error absents_path unless params[:id].present?

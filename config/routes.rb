@@ -56,7 +56,8 @@ Rails.application.routes.draw do
 
   get '/set/exchange_points', to: 'exchange_points#set_on_off', as: 'set_exchange_point'
   
-
+  get '/absent/daily/recap', to: 'absents#daily_recap', as: "daily_absent_recap"
+  
   get 'bs/receive', to: 'send_backs#receive', as: 'send_back_receive'
   post 'bs/receive', to: 'send_backs#received', as: 'send_back_received'
 
@@ -106,6 +107,7 @@ Rails.application.routes.draw do
 
   resources :transfers
   
+  resources :direct_transfers
   resources :losses
   resources :loss_items
 
