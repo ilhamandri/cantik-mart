@@ -82,7 +82,7 @@ class AbsentsController < ApplicationController
   end
 
   def daily_recap
-    start_day = params[:date].to_time
+    start_day = (params[:date].to_s + " 00:00:00 +0700").to_time
     end_day = start_day.end_of_day
     @absents = Absent.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     @absents = @absents.order("created_at DESC")
