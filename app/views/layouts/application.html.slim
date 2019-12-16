@@ -157,6 +157,43 @@ html
           }
         });
 
+    - if ["absents"].include? controller_name
+      javascript:
+        var ctxL = document.getElementById("workhour").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+          type: 'line',
+          data: {
+            labels: gon.label_work_hour,
+            datasets: [
+              {
+                label: "Jam Kerja",
+                data: gon.work_hour,
+                backgroundColor: [
+                'rgba(255, 206, 86, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 206, 86, 1)',
+                ],
+                borderWidth: 2
+              },
+              {
+                label: "Lembur",
+                data: gon.overtime_hour,
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 2
+              }
+
+            ]
+          },
+          options: {
+            responsive: true
+          }
+        });
 
     javascript:
       const autoNumericOption = {

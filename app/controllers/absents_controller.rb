@@ -71,7 +71,7 @@ class AbsentsController < ApplicationController
           wb.add_worksheet(:name => user.name) do |sheet|
             sheet.add_row ["Masuk", "Pulang", "Jam Kerja", " ", "Mulai Lembur", "Selesai Lembur", " Jam Lembur"]
             @absents.where(user: user).order("check_in ASC").each do |data|
-              sheet.add_row [data.check_in.to_s, data.check_out.to_s, data.work_hour, "", data.overtime_in.to_s, data.overtime_out.to_s, data.overtime_hour]
+              sheet.add_row [data.check_in.to_s, data.check_out.to_s, data.work_hour, "", data.overtime_in.to_s, data.overtime_out.to_s, data.overtime_hours]
             end
           end
         end
@@ -79,6 +79,75 @@ class AbsentsController < ApplicationController
         send_file(filename)
       end
     end
+  end
+
+  def user_recap
+    return redirect_back_data_error absents, "User tidak ditemukan" if params[:id].nil?
+    @user = User.find_by(id: params[:id])
+    return redirect_back_data_error absents, "User tidak ditemukan" if @user.nil?
+    
+    if params[:month].present?
+      start_date = ("01-" + params[:month].to_s + "-" + params[:year].to_s).to_time.beginning_of_month
+      @filter = start_date.strftime("%B %Y")
+      end_date = start_date.end_of_month
+      @absents = Absent.where(user: @user).order("check_in ASC").where("check_in >= ? AND check_in <= ?", start_date, end_date)
+    else
+      start_date = DateTime.current.beginning_of_month
+      end_date = start_date.end_of_month
+      @filter = start_date.strftime("%B %Y")
+      @absents = Absent.where(user: @user).order("check_in ASC").where("check_in >= ? AND check_in <= ?", start_date, end_date)
+    end
+
+    @rawdata = @absents.pluck(:check_in, :work_hour, :overtime_hour)
+    date = []
+    work_hours = []
+    overtime_hours = []
+    @work_totals = 0
+    @overtime_totals = 0
+    @no_check_out = 0
+    @no_check_out_overtime = 0
+
+    @rawdata.each do |rawdata|
+      tanggal = rawdata.first.to_date.to_s
+      work_hour = rawdata.second.split(":")
+      hour = work_hour[0].to_i
+      minutes = work_hour[1].to_i
+      hour += 1 if minutes >= 25
+      date << tanggal
+      work_hours << hour
+      @work_totals += hour
+      @no_check_out += 1 if hour == 0
+
+      work_hour = rawdata.third.split(":")
+      hour = work_hour[0].to_i
+      minutes = work_hour[1].to_i
+      hour += 1 if minutes >= 25
+      overtime_hours << hour
+      @overtime_totals += hour
+      @no_check_out_overtime += 1 if hour == 0
+    end
+
+    if  work_hours.sum.to_f > 0 && (work_hours.count - @no_check_out).to_f > 0
+      average_work = work_hours.sum.to_f / (work_hours.count - @no_check_out).to_f
+      average_work_hour = average_work.modulo(24).to_i
+      average_work_minute = (average_work.modulo(1) * 60).to_i
+      @average_work = average_work_hour.to_s + " jam " + average_work_minute.to_s + " menit"
+    else
+      @average_work = "-"
+    end
+
+    if  overtime_hours.sum.to_f > 0 && (overtime_hours.count - @no_check_out).to_f > 0
+      average_work = overtime_hours.sum.to_f / (overtime_hours.count - @no_check_out).to_f
+      average_work_hour = average_work.modulo(24).to_i
+      average_work_minute = (average_work.modulo(1) * 60).to_i
+      @average_overtime = average_work_hour.to_s + " jam " + average_work_minute.to_s + " menit"
+    else
+      @average_overtime = "-"
+    end
+
+    gon.work_hour = work_hours
+    gon.label_work_hour = date
+    gon.overtime_hours = overtime_hours 
   end
 
   def daily_recap

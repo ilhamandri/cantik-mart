@@ -1,5 +1,7 @@
 tr
-  	td #{absent.user.name}
+  	td 
+      a href="#{user_path(id: absent.user.id)}"
+        | #{absent.user.name}
   	td #{absent.user.store.name}
   	td #{absent.check_in}
     - if absent.check_out.nil?

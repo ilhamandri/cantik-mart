@@ -1,0 +1,110 @@
+.row
+  .col.text-left
+    h5
+      - if @search_id.nil?
+        | Rekap Absensi - #{@user.name} 
+br
+.container-fluid
+  .row
+    .col-4.pb-2
+      .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Pencarian
+      .card.mb-4 
+        .card-body
+          = form_for :absent, url: user_absent_recap_path, method: 'GET' do |form|
+            .row
+              .col-5
+                label Bulan
+                input type="number" min="1" max="31" name="month" class="form-control md-form" value="#{Date.today.month}"
+              .col-2
+                label 
+                  | /
+              .col-5
+                label Tahun
+                input type="number" min="2019" max="2022" name="year" class="form-control md-form" value="#{Date.today.year}"
+              .col-md-12.text-center
+                button class="btn btn-info "
+                  |   Cari Rekap Absensi #{@user.name}
+
+    .col-8.pb-2
+      .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Informasi #{@filter}
+      .card.mb-4 
+        .card-body
+          table class="table"
+            tr
+              th 
+              th Rata-rata
+              th Waktu Kerja
+              th Tidak Check-out
+            tr 
+              td Jam Kerja
+              td #{@average_work}
+              td #{@work_totals} jam
+              td #{@no_check_out} x
+            tr
+              td Jam Lemur
+              td #{@average_overtime}
+              td #{@overtime_totals} jam
+              td #{@no_check_out_overtime} x
+
+
+
+    .col-xl-12.col-lg-12.col-md-12.pb-2
+      .card-header.white-text.info-color 
+        h5.font-weight-500.my-1
+          | Grafik Jam Kerja 
+      .card.mb-4 
+        .card-body.table-responsive.text-nowrap
+          canvas id="workhour"
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Data Absensi
+        .card-body.table-responsive.text-nowrap
+          table class="table"
+            thead
+              th Tanggal
+              th Masuk
+              th Keluar
+              th Mulai Lembur
+              th Selesai Lembur
+              th Jam Kerja
+              th Jam Lembur
+            tbody
+              - @absents.each do |absent|
+                tr
+                  td #{absent.created_at.to_date}
+                  td #{absent.check_in.strftime("%I:%M%p")}
+                  - if absent.check_out.present?
+                    td #{absent.check_out.strftime("%I:%M%p")}
+                    - if absent.overtime_in.present?
+                      td #{absent.overtime_in.strftime("%I:%M%p")}
+                      - if absent.overtime_out.present?
+                        td #{absent.overtime_out.strftime("%I:%M%p")}
+                      - else
+                        td
+                    - else
+                      td
+                      td
+                  - else
+                    td
+                    td
+                    td
+                  td
+                    - if absent.check_out.present?
+                      - time_split = absent.work_hour.split(":")
+                      | #{time_split[0]} Jam #{time_split[1]} Menit #{time_split[2]} Detik
+                    - else
+                      .text-danger
+                        i.fas.fa-times
+                  td
+                    - if absent.overtime_out.present?
+                      - time_split = absent.overtime_hour.split(":")
+                      | #{time_split[0]} Jam #{time_split[1]} Menit #{time_split[2]} Detik
+                    - else
+                      .text-danger
+                        i.fas.fa-times
