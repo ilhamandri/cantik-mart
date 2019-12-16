@@ -136,7 +136,7 @@ GEM
     email_validator (1.6.0)
       activemodel
     erubi (1.8.0)
-    excon (0.62.0)
+    excon (0.71.0)
     execjs (2.7.0)
     factory_bot (5.0.1)
       activesupport (>= 4.2.0)
