@@ -45,10 +45,16 @@ br
               td #{@work_totals} jam
               td #{@no_check_out} x
             tr
-              td Jam Lemur
+              td Jam Lembur
               td #{@average_overtime}
-              td #{@overtime_totals} jam
-              td #{@no_check_out_overtime} x
+              - if @overtime_totals > 0
+                td #{@overtime_totals} jam
+              - else
+                td -
+              - if @no_check_out_overtime > 0 
+                td #{@no_check_out_overtime} x
+              - else 
+                td -
 
 
 

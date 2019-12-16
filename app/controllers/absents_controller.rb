@@ -98,7 +98,7 @@ class AbsentsController < ApplicationController
       @absents = Absent.where(user: @user).order("check_in ASC").where("check_in >= ? AND check_in <= ?", start_date, end_date)
     end
 
-    @rawdata = @absents.pluck(:check_in, :work_hour, :overtime_hour)
+    @rawdata = @absents.pluck(:check_in, :work_hour, :overtime_hour, :overtime_in)
     date = []
     work_hours = []
     overtime_hours = []
@@ -118,13 +118,18 @@ class AbsentsController < ApplicationController
       @work_totals += hour
       @no_check_out += 1 if hour == 0
 
+      
       work_hour = rawdata.third.split(":")
       hour = work_hour[0].to_i
       minutes = work_hour[1].to_i
       hour += 1 if minutes >= 25
       overtime_hours << hour
       @overtime_totals += hour
-      @no_check_out_overtime += 1 if hour == 0
+      if rawdata[3].present?
+        @no_check_out_overtime += 1 if hour == 0
+      else
+        overtime_hours << hour
+      end
     end
 
     if  work_hours.sum.to_f > 0 && (work_hours.count - @no_check_out).to_f > 0
