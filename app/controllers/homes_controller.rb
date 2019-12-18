@@ -7,21 +7,26 @@ class HomesController < ApplicationController
     @total_orders = Order.where(store_id: current_user.store.id).where('date_receive is null').count
     @total_payments = Order.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null').count
     @total_returs = Retur.where(store_id: current_user.store.id).where('date_picked is null').count
-    # item_cats_data = higher_item_cats_graph
-    # gon.higher_item_cats_data = item_cats_data.values
-    # gon.higher_item_cats_label = item_cats_data.keys
+    
+    if current_user.level == "super_admin"
+      item_cats_data = higher_item_cats_graph
+      gon.higher_item_cats_data = item_cats_data.values
+      gon.higher_item_cats_label = item_cats_data.keys
 
-    # item_cats_data = lower_item_cats_graph
-    # gon.lower_item_cats_data = item_cats_data.values
-    # gon.lower_item_cats_label = item_cats_data.keys
+      # item_cats_data = lower_item_cats_graph
+      # gon.lower_item_cats_data = item_cats_data.values
+      # gon.lower_item_cats_label = item_cats_data.keys
+
+      
+      @higher_item = higher_item
+      # @lower_item = lower_item
+    end
 
     # transactions = transactions_profit_graph
     # gon.grand_totals = transactions[0]
     # gon.hpp_totals = transactions[1]
     # gon.profits = transactions[2]
 
-    # @higher_item = higher_item
-    # @lower_item = lower_item
 
     @debt = Debt.where("deficiency > ?",0)
     @receivable = Receivable.where("deficiency > ?",0)\
@@ -67,14 +72,14 @@ class HomesController < ApplicationController
     end
 
     def higher_item
-      item_sells = TransactionItem.group(:item_id).count
+      item_sells = TransactionItem.where("created_at >= ?", DateTime.now - 1.month).group(:item_id).count
       sort_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
       result = sort_results.first(5)
       return Hash[result]
     end
 
     def lower_item
-      item_sells = TransactionItem.group(:item_id).count
+      item_sells = TransactionItem.where("created_at >= ?", DateTime.now - 1.month).group(:item_id).count
       sort_results = Hash[item_sells.sort_by{|k, v| v}]
       result = sort_results.first(5)
       return Hash[result]
@@ -82,7 +87,7 @@ class HomesController < ApplicationController
 
     def higher_item_cats_graph
       item_cats = {}
-      item_sells = TransactionItem.pluck(:item_id, :quantity)
+      item_sells = TransactionItem.where("created_at >= ?", DateTime.now - 1.month).pluck(:item_id, :quantity)
       item_sells.each do |item_sell|
         item_id = item_sell[0]
         sell_qty = item_sell[1]
@@ -101,7 +106,7 @@ class HomesController < ApplicationController
 
     def lower_item_cats_graph
       item_cats = {}
-      item_sells = TransactionItem.pluck(:item_id, :quantity)
+      item_sells = TransactionItem.where("created_at >= ?", DateTime.now - 1.month).pluck(:item_id, :quantity)
       item_sells.each do |item_sell|
         item_id = item_sell[0]
         sell_qty = item_sell[1]

@@ -25,6 +25,19 @@
           .form-group
             label for="phone" Nomor Telepon
             = form.number_field :phone, required: true, class: "form-control md-form", id: "phone"
+          .form-group
+            label for="sex" Jenis Kelamin
+            select name="user[sex]" required=true class="mdb-select md-form colorful-select dropdown-primary" 
+              - if @user.sex == "laki_laki"
+                option value='laki_laki' selected="selected"
+                  | Laki - laki
+                option value='perempuan'
+                  | Perempuan
+              - else
+                option value='laki_laki'
+                  | Laki - laki
+                option value='perempuan' selected="selected"
+                  | Perempuan
           - if current_user.level == User::SUPER_ADMIN || current_user.level == User::OWNER
             .form-group
               label for="level" Peran 
@@ -50,8 +63,7 @@
               label for="id-card" Gaji
               = form.number_field :salary, required: true, class: "form-control md-form", id: "id-card"
               
-            - if @user == current_user
-              .form-group
+            .form-group
                 label for="store" Foto
                 .input-group
                   .input-group-prepend

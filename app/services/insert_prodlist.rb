@@ -5,8 +5,10 @@ class InsertProdlist
 	def self.read_file_category
 		files = Dir["./data/prodlist/category/*.xlsx"]
 		files.each do |file|
+
 			xlsx = Roo::Spreadsheet.open(file, extension: :xlsx)
 
+			department = nil
 			department_name = nil
 			subdept_name = nil
 			item_cat = nil
@@ -16,12 +18,12 @@ class InsertProdlist
 			  		next if name.nil?
 			  		if code.nil?
 			  			if department_name.nil?
-			  				department_name = name.split(":")[1].gsub(" ", "")
+			  				department_name = name.split(":")[1]
 			  				department = Department.find_by(name: department_name)
 							department = Department.create name: department_name if department.nil?
 							next
 				  		else
-				  			subdept_name = name.split(":")[1].gsub(" ", "")
+				  			subdept_name = name.split(":")[1]
 							item_cat = ItemCat.find_by(name: subdept_name)
 							item_cat = ItemCat.create department: department, name: subdept_name if item_cat.nil?
 							next

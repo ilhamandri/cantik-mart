@@ -66,6 +66,8 @@ class UsersController < ApplicationController
 
   def update
     return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless params[:id].present?
+    user = User.find_by_id params[:id]
+    return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless user.present?
     file = params[:user][:image]
     upload_io = params[:user][:image]
     if file.present?
@@ -73,9 +75,14 @@ class UsersController < ApplicationController
       File.open(Rails.root.join('public', 'uploads', 'profile_picture', filename), 'wb') do |file|
         file.write(upload_io.read)
       end
+      user.image = filename
     end
-    user = User.find_by_id params[:id]
-    user.image = filename
+
+    param = user_params
+    if user != current_user
+      param = user_params.delete("password")
+    end
+
     user.assign_attributes user_params
     changes = user.changes
     user.save! if user.changed?
@@ -99,12 +106,6 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(
         :name, :email, :password, :level, :phone, :sex, :store_id, :id_card, :address, :fingerprint, :salary
-      )
-    end
-
-    def user_edit_params
-      params.require(:user).permit(
-        :name, :email, :level, :phone, :sex, :store_id, :id_card, :address, :fingerprint, :salary
       )
     end
 
