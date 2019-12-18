@@ -110,9 +110,9 @@ class AbsentsController < ApplicationController
     @rawdata.each do |rawdata|
       tanggal = rawdata.first.to_date.to_s
       work_hour = rawdata.second.split(":")
-      hour = work_hour[0].to_i
-      minutes = work_hour[1].to_i
-      hour += 1 if minutes >= 25
+      hour = work_hour[0].to_f
+      minutes = work_hour[1].to_f
+      hour += minutes/60
       date << tanggal
       work_hours << hour
       @work_totals += hour
@@ -120,9 +120,9 @@ class AbsentsController < ApplicationController
 
       
       work_hour = rawdata.third.split(":")
-      hour = work_hour[0].to_i
-      minutes = work_hour[1].to_i
-      hour += 1 if minutes >= 25
+      hour = work_hour[0].to_f
+      minutes = work_hour[1].to_f
+      hour += minutes/60
       overtime_hours << hour
       @overtime_totals += hour
       if rawdata[3].present?

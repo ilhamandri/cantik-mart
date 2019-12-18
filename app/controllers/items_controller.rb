@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
-  # before_action :require_login
-  # before_action :require_fingerprint
+  before_action :require_login
+  before_action :require_fingerprint
   
   def index
     # items = Item.all
@@ -12,6 +12,8 @@ class ItemsController < ApplicationController
     #   item.margin = margin.ceil.to_i
     #   item.save!
     # end
+
+    InsertProdlist.read_file_category
 
     @items = Item.page param_page
     if params[:search].present?
