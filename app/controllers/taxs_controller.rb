@@ -12,6 +12,7 @@ class TaxsController < ApplicationController
       format.pdf do
         new_params = eval(params[:option])
         filter = filter_search new_params
+        new_params["type"] = "print"
         @search = filter[0]
         @finances = filter[1]
         @store_name= filter[2]
@@ -30,7 +31,10 @@ class TaxsController < ApplicationController
     def filter_search params
       results = []
       search_text = "Pencarian "
-      filters = CashFlow.where(finance_type: CashFlow::TAX).page param_page
+      filters = CashFlow.where(finance_type: CashFlow::TAX)
+
+      filters = filters.page param_page if params["type"].nil? 
+
       filters = filters.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
       before_months = 5
       if params["months"].present?

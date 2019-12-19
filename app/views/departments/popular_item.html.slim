@@ -1,0 +1,58 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Data Barang 
+      td
+        textarea PER DEPARTEMEN
+    tr
+      td.meta-head Departemen
+      td
+        b  
+          | #{@department.name}
+    tr
+      td.meta-head Pencarian
+      td
+        - last = PopularItem.last.created_at
+        | TOP 25 
+        br
+        | ( #{last} - #{last-1.month} )
+
+table#items
+  tr
+    th Kode
+    th Nama
+    th Sub Departemen
+    th Terjual 
+  - data =  PopularItem.where(department: @department).order("created_at ASC, n_sell DESC").limit(25)
+  - data.each do |pop_item|
+    - item = pop_item.item
+    tr.item-row
+      td #{item.code}
+      td #{item.name}
+      td #{item.item_cat.name}
+      td #{pop_item.n_sell}
+ 
+br
+br
+ 
+
+- @department.item_cat.each do |item_cat|
+  - data = PopularItem.where(item_cat: item_cat).order("created_at ASC, n_sell DESC").limit(25)
+  - next if data.empty?
+  table#items
+    tr
+      th Kode
+      th Nama
+      th Sub Departemen
+      th Terjual 
+
+    - data.each do |pop_item|
+      - item = pop_item.item
+      tr.item-row
+        td #{item.code}
+        td #{item.name}
+        td #{item_cat.name}
+        td #{pop_item.n_sell}
+ 
+  br
+  br

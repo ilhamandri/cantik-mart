@@ -40,7 +40,7 @@
             th  Dibayarkan              
             th  Tanggal
             th  Nominal
-          - pays = CashFlow.where(finance_type: "Income", payment: "receivable")
+          - pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivable.id)
           - pays.each do |pay|
             tr
               td #{pay.invoice}

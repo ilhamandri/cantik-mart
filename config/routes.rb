@@ -57,7 +57,9 @@ Rails.application.routes.draw do
   get '/set/exchange_points', to: 'exchange_points#set_on_off', as: 'set_exchange_point'
   
   get '/absent/daily/recap', to: 'absents#daily_recap', as: "daily_absent_recap"
+  
   get '/user/absent/:id', to: 'absents#user_recap', as: "user_absent_recap"
+  get '/user/receivable/:id', to: 'receivables#user_recap', as: "user_receivable_recap"
   
   get 'bs/receive', to: 'send_backs#receive', as: 'send_back_receive'
   post 'bs/receive', to: 'send_backs#received', as: 'send_back_received'
@@ -68,6 +70,7 @@ Rails.application.routes.draw do
   post 'opname', to: 'warning_items#update_stock', as: 'opname'
   
 
+   get 'popular/items/departments', to: 'departments#popular_items', as: 'departments_popular_items'
 
   resources :pays, only: %i[new create]
 

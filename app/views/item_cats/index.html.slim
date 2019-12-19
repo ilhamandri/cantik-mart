@@ -23,11 +23,22 @@ br
             .col-12.text-center
               button class="btn btn-primary"
                 | Cari
-          br
-            .col-md-12.text-center.grey-text
-              a href="#{item_cats_path(dept_id: @dept.id,format: :pdf)}"
-                b
-                  | CETAK
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Utilitas
+      .card-body
+        .row
+          .col-6.text-center.grey-text
+            a href="#{item_cats_path(dept_id: @dept.id,format: :pdf)}" class="btn btn-primary"
+              b
+                | CETAK SEMUA BARANG
+          .col-6.text-center.grey-text
+            a href="#{departments_popular_items_path(id: @dept.id,format: :pdf)}" class="btn btn-success"
+              b
+                | TOP 25
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4

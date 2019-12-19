@@ -12,7 +12,10 @@ tr
   td #{retur.created_at} ( #{retur.user.name}- #{retur.user.store.name} )
   td #{retur.total_items}
   td
+    a href='#{transaction_path(id: retur.transaction_id)}'
+      button class="btn btn-warning"
+        | Transaksi
+  td
     a href='#{complain_path(id: retur.id)}'
       button class="btn btn-primary"
-        | Item
-
+        | Detil

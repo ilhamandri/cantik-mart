@@ -102,6 +102,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def recap
+    return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless params[:id].present?
+    @user = User.find_by_id params[:id]
+    @kasbon = 0
+    @piutang = 0
+
+  end
+
   private
     def user_params
       params.require(:user).permit(

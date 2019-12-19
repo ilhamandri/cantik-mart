@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_10_074802) do
+ActiveRecord::Schema.define(version: 2019_12_19_045500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -393,6 +393,19 @@ ActiveRecord::Schema.define(version: 2019_12_10_074802) do
     t.index ["member_id"], name: "index_points_on_member_id"
     t.index ["transaction_id"], name: "index_points_on_transaction_id"
     t.index ["voucher_id"], name: "index_points_on_voucher_id"
+  end
+
+  create_table "popular_items", force: :cascade do |t|
+    t.date "date", null: false
+    t.bigint "item_id", null: false
+    t.bigint "item_cat_id", null: false
+    t.bigint "department_id", null: false
+    t.integer "n_sell", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["department_id"], name: "index_popular_items_on_department_id"
+    t.index ["item_cat_id"], name: "index_popular_items_on_item_cat_id"
+    t.index ["item_id"], name: "index_popular_items_on_item_id"
   end
 
   create_table "prints", force: :cascade do |t|
@@ -780,6 +793,9 @@ ActiveRecord::Schema.define(version: 2019_12_10_074802) do
   add_foreign_key "points", "members"
   add_foreign_key "points", "transactions"
   add_foreign_key "points", "vouchers"
+  add_foreign_key "popular_items", "departments"
+  add_foreign_key "popular_items", "item_cats"
+  add_foreign_key "popular_items", "items"
   add_foreign_key "prints", "grocer_items"
   add_foreign_key "prints", "items"
   add_foreign_key "prints", "promotions"

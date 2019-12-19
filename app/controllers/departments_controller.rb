@@ -15,6 +15,20 @@ class DepartmentsController < ApplicationController
     end
   end
 
+  def popular_items
+    return redirect_back_data_error departments_path, "Data Dapartemen Tidak Ditemukan" unless params[:id].present?
+    @department = Department.find_by_id params[:id]
+    return redirect_back_data_error departments_path, "Data Dapartemen Tidak Ditemukan" if @department.nil?
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "departments/popular_item.html.slim"
+      end
+    end
+  end
+
   def show
     return redirect_back_data_error departments_path unless params[:id].present?
     @department = Department.find_by_id params[:id]

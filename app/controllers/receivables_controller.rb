@@ -51,6 +51,23 @@ class ReceivablesController < ApplicationController
     return redirect_success receivables_path, "PIUTANG - " + @receivable.description + " telah diubah."
   end
 
+  def user_recap
+    return redirect_back_data_error absents, "User tidak ditemukan" if params[:id].nil?
+    @user = User.find_by(id: params[:id])
+    return redirect_back_data_error absents, "User tidak ditemukan" if @user.nil?
+    
+
+    @receivables = Receivable.where(user: @user)
+    @receivable_not_paid = @receivables.where("created_at <= ?", DateTime.now - 6.months)
+    @receivable_now = @receivables.where("created_at >= ?", DateTime.now - 6.months)
+
+    pinjaman_belum_lunas = @receivables.sum(:deficiency)
+    @limit_pinjaman = 5000000 - pinjaman_belum_lunas
+    @total_pinjaman = pinjaman_belum_lunas
+    @avg_pinjaman = @receivables.average(:nominal).to_i
+
+  end
+
   private
     def param_page
       params[:page]

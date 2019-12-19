@@ -219,8 +219,11 @@ class TransactionsController < ApplicationController
       date_start = params["date_start"]
       date_end = params["date_end"]
       if date_start.present?
-        @search += " pada " + date_start + " hingga " + date_end
-        @transactions = @transactions.where("created_at >= ? AND created_at <= ?", date_start.to_time ,date_end.to_time.end_of_day)
+        date_start += " " + params["hour_start"]
+        date_end += " " + params["hour_end"]
+        @search += " pada " + params["date_start"] + " hingga " + params["date_end"]
+        @transactions = @transactions.where("created_at >= ? AND created_at <= ?", date_start.to_time ,date_end.to_time)
+        binding.pry
       end
 
       if params["user_id"].present?

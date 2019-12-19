@@ -42,7 +42,7 @@ br
             tr 
               td Jam Kerja
               td #{@average_work}
-              td #{@work_totals} jam
+              td #{@work_totals.to_i} jam #{((@work_totals%1)*60).to_i} menit
               td #{@no_check_out} x
             tr
               td Jam Lembur
