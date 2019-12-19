@@ -27,7 +27,7 @@ class HomesController < ApplicationController
     # gon.hpp_totals = transactions[1]
     # gon.profits = transactions[2]
 
-    popular_item
+    # popular_item
 
     @debt = Debt.where("deficiency > ?",0)
     @receivable = Receivable.where("deficiency > ?",0)\
