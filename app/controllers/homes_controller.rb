@@ -13,13 +13,13 @@ class HomesController < ApplicationController
       gon.higher_item_cats_data = item_cats_data.values
       gon.higher_item_cats_label = item_cats_data.keys
 
-      # item_cats_data = lower_item_cats_graph
-      # gon.lower_item_cats_data = item_cats_data.values
-      # gon.lower_item_cats_label = item_cats_data.keys
+      item_cats_data = lower_item_cats_graph
+      gon.lower_item_cats_data = item_cats_data.values
+      gon.lower_item_cats_label = item_cats_data.keys
 
       
       @higher_item = higher_item
-      # @lower_item = lower_item
+      @lower_item = lower_item
     end
 
     # transactions = transactions_profit_graph
@@ -43,7 +43,7 @@ class HomesController < ApplicationController
 
   end
 
-  def popular_item
+  def popular_items
     item_sells = TransactionItem.where("created_at >= ?", DateTime.now - 1.month).group(:item_id).count
     high_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
     low_results = Hash[item_sells.sort_by{|k, v| v}]
@@ -60,7 +60,14 @@ class HomesController < ApplicationController
        department: department, n_sell: sell, date: Date.today
     end
     lows.each do |data|
+      item = Item.find_by(id: data[0])
+      item_cat = item.item_cat
+      department = item_cat.department
+      sell = data[1]
+      pop_item = NotPopularItem.create item: item, item_cat: item_cat,
+       department: department, n_sell: sell, date: Date.today
     end
+    redirect_success root_path, "Refresh rekap item selesai."
   end
 
   private
@@ -93,52 +100,40 @@ class HomesController < ApplicationController
     end
 
     def higher_item
-      item_sells = PopularItem.order("created_at ASC, n_sell DESC").limit(5).pluck(:item_id, :n_sell)
+      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell DESC").limit(20).pluck(:item_id, :n_sell)
       return Hash[item_sells]
     end
 
     def lower_item
-      item_sells = TransactionItem.where("created_at >= ?", DateTime.now - 1.month).group(:item_id).count
-      sort_results = Hash[item_sells.sort_by{|k, v| v}]
-      result = sort_results.first(5)
-      return Hash[result]
+      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell ASC").limit(20).pluck(:item_id, :n_sell)
+      return Hash[item_sells]
     end
 
     def higher_item_cats_graph
       item_cats = {}
-      item_sells = PopularItem.order("created_at ASC, n_sell DESC").limit(25).pluck(:item_id, :n_sell)
+      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell DESC").limit(100).pluck(:item_id, :n_sell)
       item_sells.each do |item_sell|
         item_id = item_sell[0]
         sell_qty = item_sell[1]
         item_cat_name = Item.find(item_id).item_cat.name
-        if item_cats[item_cat_name].present?
-          new_total_qty = item_cats[item_cat_name] + sell_qty
-          item_cats[item_cat_name] = new_total_qty
-        else
-          item_cats[item_cat_name] = sell_qty
-        end
+        item_cats[item_cat_name] = sell_qty
       end
       sort_results = Hash[item_cats.sort_by{|k, v| v}.reverse]
-      results = sort_results.first(5)
+      results = sort_results.first(10)
       return Hash[results]
     end
 
     def lower_item_cats_graph
       item_cats = {}
-      item_sells = TransactionItem.where("created_at >= ?", DateTime.now - 1.month).pluck(:item_id, :quantity)
+      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell ASC").limit(100).pluck(:item_id, :n_sell)
       item_sells.each do |item_sell|
         item_id = item_sell[0]
         sell_qty = item_sell[1]
         item_cat_name = Item.find(item_id).item_cat.name
-        if item_cats[item_cat_name].present?
-          new_total_qty = item_cats[item_cat_name] + sell_qty
-          item_cats[item_cat_name] = new_total_qty
-        else
-          item_cats[item_cat_name] = sell_qty
-        end
+        item_cats[item_cat_name] = sell_qty
       end
-      sort_results = Hash[item_cats.sort_by{|k, v| v}]
-      results = sort_results.first(5)
+      sort_results = Hash[item_cats.sort_by{|k, v| v}.reverse]
+      results = sort_results.first(10)
       return Hash[results]
     end
 

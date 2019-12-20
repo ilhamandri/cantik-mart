@@ -53,6 +53,7 @@
             .col
               label No. Kartu
               input disabled="disabled" class="form-control md-form" value="#{transaction.card_number.to_s}"
+
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
@@ -99,7 +100,7 @@
       .card.mb-4
         .card-header.white-text.danger-color
           h5.font-weight-500.my-1
-            | Daftar Retur 
+            | Barang yang di Retur 
         .card-body.table-responsive.text-nowrap
           table class="table"
             thead
@@ -130,5 +131,12 @@
                     td #{trx_item.retur}
                     td #{trx_item.replace}
                     td #{trx_item.reason}
+
+    - if check_complain.present? 
+      .col-12.text-center
+        - trx_from_retur = Transaction.find_by(from_complain: true, complain_id: check_complain.id)
+        - if trx_from_retur.present?
+          a href="#{transaction_path(id: trx_from_retur.id)}" class="btn btn-primary"
+            | Transaksi Baru -> #{trx_from_retur.invoice}
 
 

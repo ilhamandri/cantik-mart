@@ -1,5 +1,5 @@
 class Debt < ApplicationRecord
-  validates :user_id, :store_id, :nominal, :date_created, :finance_type, presence: true
+  validates :n_term, :nominal_term, :user_id, :store_id, :nominal, :date_created, :finance_type, presence: true
   
   enum finance_type: { 
     ORDER:1,

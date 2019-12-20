@@ -65,4 +65,7 @@
             label.text-primary for="type" Tanggal Jatuh Tempo 
             input class="form-control md-form" type="date" name="finance[due_date]" id="date_from"
           .form-group
+            label.text-primary for="type" Banyak Cicilan 
+            input class="form-control md-form" type="number" name="finance[n_term]" id="date_from" default="1" min="1"
+          .form-group
             = form.submit "Tambah", class: "btn btn-primary"

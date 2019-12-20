@@ -46,14 +46,14 @@ br
               td #{@limit_kasbon}
               td #{@total_kasbon}
               td #{@avg_kasbon}
-              td #{@avg_paid_kasbon}
+              td #{@avg_pay_complete_kasbon}
             tr
               td 
                 b Pinjaman
               td #{number_with_delimiter(@limit_pinjaman.to_i, delimiter: ".", separator: ",")}
               td #{number_with_delimiter(@total_pinjaman.to_i, delimiter: ".", separator: ",")}
               td #{number_with_delimiter(@avg_pinjaman.to_i, delimiter: ".", separator: ",")}
-              td #{number_with_delimiter(@avg_paid_pinjaman.to_i, delimiter: ".", separator: ",")}
+              td #{number_with_delimiter(@avg_pay_complete_pinjaman.to_i, delimiter: ".", separator: ",")} x
 
 
 

@@ -70,7 +70,8 @@ Rails.application.routes.draw do
   post 'opname', to: 'warning_items#update_stock', as: 'opname'
   
 
-   get 'popular/items/departments', to: 'departments#popular_items', as: 'departments_popular_items'
+  get 'popular/items/refresh', to: 'homes#popular_items', as: 'refresh_popular_items'
+  get 'popular/items/departments', to: 'departments#popular_items', as: 'departments_popular_items'
 
   resources :pays, only: %i[new create]
 

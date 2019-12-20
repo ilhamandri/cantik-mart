@@ -210,9 +210,14 @@
                       i.fas.fa-plus &nbsp
                       i.fas.fa-donate
 
-        .col-xl-6.col-lg-6.mb-4.pb-2
+        .col-xl-12.col-lg-12.mb-4.pb-2
           .view.view-cascade.gradient-card-header.light-blue.lighten-1
-            h2.h2-responsive.mb-0.font-weight-500 ITEM ( #{PopularItem.last.created_at.to_date} )
+            .row
+              .col-12
+                h2.h2-responsive.mb-0.font-weight-500 ITEM ( #{PopularItem.last.created_at.to_date} )
+              .col-12
+                a href="#{refresh_popular_items_path}" class="btn btn-warning"
+                  | Refresh Recap Item
           .card-body.card-body-cascade.pb-0
             .row.py-3.pl-4
               .col-md-6.text-center-pl-xl-2.my-md-0.my-3
@@ -221,13 +226,22 @@
                     span.badge.info-color.p-2 Kategori Paling Laku
                   
                   canvas id="higher_sales"
+                  .row
+                    .col-xl-6.col-lg-12.mr-0.pb-2
+                      table class="table"
+                        thead
+                          th Nama
+                          th Terjual
+                        tbody
+                          = render partial: 'list', collection: @higher_item.first(10), as: :item
 
-                  table class="table"
-                    thead
-                      th Nama
-                      th Terjual
-                    tbody
-                      = render partial: 'list', collection: @higher_item, as: :item
+                    .col-xl-6.col-lg-12.mr-0.pb-2
+                      table class="table"
+                        thead
+                          th Nama
+                          th Terjual
+                        tbody
+                          = render partial: 'list', collection: @higher_item.to_a.reverse.to_h.first(10), as: :item
 
               .col-md-6.text-center-pl-xl-2.my-md-0.my-3
                 .view.view-cascade.gradient-card-header.cloudy-knoxville-gradient
@@ -235,14 +249,23 @@
                     span.badge.info-color.p-2 Kategori Kurang Laku
                   
                   canvas id="lower_sales"
+                  .row
+                    .col-xl-6.col-lg-12.mr-0.pb-2
+                      table class="table"
+                        thead
+                          th Nama
+                          th Terjual
+                        tbody
+                          = render partial: 'list', collection: @lower_item.first(10), as: :item
 
-                  table class="table"
-                    thead
-                      th Nama
-                      th Terjual
-                    tbody
-                      = render partial: 'list', collection: @lower_item, as: :item
-
+                    .col-xl-6.col-lg-12.mr-0.pb-2
+                      table class="table"
+                        thead
+                          th Nama
+                          th Terjual
+                        tbody
+                          = render partial: 'list', collection: @lower_item.to_a.reverse.to_h.first(10), as: :item
+                          
         .col-xl-12.col-lg-12.mb-4.pb-2
           .view.view-cascade.gradient-card-header.light-blue.lighten-1
             h2.h2-responsive.mb-0.font-weight-500 PENJUALAN #{Date.today.year}

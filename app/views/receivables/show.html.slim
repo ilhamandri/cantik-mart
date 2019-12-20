@@ -6,7 +6,7 @@
           | Data Hutang
       .card-body 
         .row
-          .col-12
+          .col-8
             .form-group
               label for="name" Deskripsi
               input type="text" class="form-control md-form" value="#{@receivable.description}"
@@ -14,14 +14,25 @@
             .form-group
               label for="name" Dibuat Oleh
               input type="text" class="form-control md-form" value="#{@receivable.user.name} - #{@receivable.user.store.name}"
-          .col-4
+          .col-3
             .form-group
               label for="name" Nominal
-              input type="text" class="form-control md-form" value="#{@receivable.nominal}"
-          .col-4
+              input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.nominal, delimiter: ".", separator: ",")}"
+          .col-3
             .form-group
-              label for="name" Kekurangan
-              input type="text" class="form-control md-form" value="#{@receivable.deficiency}"
+              label for="name" Jumlah Cicilan
+              input type="text" class="form-control md-form" value="#{@receivable.n_term} x"
+          .col-3
+            .form-group
+              label for="name" Nominal Percicilan
+              - if @receivable.nominal_term == 0
+                input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.nominal, delimiter: ".", separator: ",")}"
+              - else
+                input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.nominal_term, delimiter: ".", separator: ",")}"
+          .col-3
+            .form-group
+              label for="name" Kurang
+              input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.deficiency, delimiter: ".", separator: ",")}"
           - if @receivable.deficiency > 0
             .col-12.text-center
               a href='#{new_pay_path(id: @receivable.id, type: "receivable")}' class="btn btn-warning"
@@ -37,7 +48,7 @@
         table.table
           tr
             th  No. Invoice
-            th  Dibayarkan              
+            th  Diterima Oleh              
             th  Tanggal
             th  Nominal
           - pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivable.id)
@@ -46,6 +57,6 @@
               td #{pay.invoice}
               td #{pay.user.name} - #{pay.store.name}
               td #{pay.created_at}
-              td #{pay.nominal}
+              td #{number_with_delimiter(pay.nominal, delimiter: ".", separator: ",")}
         
         

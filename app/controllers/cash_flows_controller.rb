@@ -36,15 +36,20 @@ class CashFlowsController < ApplicationController
     finance_types = []
     to_user = params[:finance][:to_user]
     due_date = params[:finance][:due_date]
+    n_term = params[:finance][:n_term]
     inv_number = Time.now.to_i.to_s
     if finance_type == "Loan" 
       invoice = " EL-"+inv_number
+      return redirect_back_data_error new_cash_flow_path, "Banyak cicilan harus diisi." if n_term.nil?
       return redirect_back_data_error new_cash_flow_path, "Tanggal jatuh tempo harus diisi." if due_date.nil?
       return redirect_back_data_error new_cash_flow_path, "Yang berkenaan harus diisi." if to_user.nil?
       return redirect_back_data_error new_cash_flow_path, "Tanggal jatuh tempo harus diisi." if due_date==""
       return redirect_back_data_error new_cash_flow_path, "Tanggal jatuh tempo yang dimasukkan harus lebih dari tanggal hari ini." if due_date.to_date <= Date.today
+
+      nominal_term = nominal.to_f / n_term.to_i
+
       receivable = Receivable.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
-                    finance_type: Receivable::EMPLOYEE, deficiency:nominal, to_user: to_user, due_date: due_date
+                    finance_type: Receivable::EMPLOYEE, deficiency:nominal, to_user: to_user, due_date: due_date, n_term: n_term, nominal_term: nominal_term
       cash_flow = CashFlow.create user: user, store: store, nominal: nominal, date_created: date_created, description: description, 
                       finance_type: CashFlow::EMPLOYEE_LOAN, invoice: invoice
       

@@ -66,6 +66,10 @@ class ReceivablesController < ApplicationController
     @total_pinjaman = pinjaman_belum_lunas
     @avg_pinjaman = @receivables.average(:nominal).to_i
 
+    n_pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivables.pluck(:id)).count
+    total_n_term = @receivables.sum(:n_term)
+    @avg_pay_complete_pinjaman = total_n_term.to_f / n_pays.to_f
+
   end
 
   private
