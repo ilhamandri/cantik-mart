@@ -1,6 +1,15 @@
 class ActivitiesController < ApplicationController
   before_action :require_login
 	def index
+
+		InsertProdlist.read_file_category
+		orders = Order.where("created_at >= ? AND grand_total > 0", DateTime.now.beginning_of_day)
+		orders.each do |order|
+			Debt.create user: order.user, store: order.user.store, nominal: order.grand_total, 
+                deficiency: order.grand_total, date_created: DateTime.now, ref_id: order.id,
+                description: order.invoice, finance_type: Debt::ORDER, due_date: DateTime.now + 14.days, supplier_id: order.supplier.id
+		end
+
 		@models = PublicActivity::Activity.pluck(:trackable_type)
 	  	@activities = PublicActivity::Activity.order("created_at desc").page param_page
 		@search_text = ""

@@ -82,19 +82,22 @@ table#items
 
   - if received
     tr#hiderow
-      td colspan="9" 
+      td colspan="10" 
     tr style="text-align: right;"
-      td.blank colspan="6" 
+      td.blank colspan="7" 
       td.total-line colspan="2"  Sub Total
       td.total-value
         #subtotal #{number_with_delimiter(@order.total, delimiter: ".", separator: ",")}
     tr style="text-align: right;"
-      td.blank colspan="6" 
-      td.total-line colspan="2"  Diskon Total ( #{@order.discount_percentage}% )
+      td.blank colspan="7" 
+      td.total-line colspan="2"  
+        | Diskon Total 
+        br
+        | ( #{@order.discount_percentage}% )
       td.total-value
         #total #{number_with_delimiter(@order.discount, delimiter: ".", separator: ",")}
     tr style="text-align: right;font-weight: bold;"
-      td.blank colspan="6" 
+      td.blank colspan="7" 
       td.total-line.balance colspan="2"  Grand Total
       td.total-value.balance
         .due #{number_with_delimiter(@order.grand_total, delimiter: ".", separator: ",")}
