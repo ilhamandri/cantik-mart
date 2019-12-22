@@ -61,8 +61,8 @@ Rails.application.routes.draw do
   get '/user/absent/:id', to: 'absents#user_recap', as: "user_absent_recap"
   get '/user/receivable/:id', to: 'receivables#user_recap', as: "user_receivable_recap"
   
-  get 'bs/receive', to: 'send_backs#receive', as: 'send_back_receive'
-  post 'bs/receive', to: 'send_backs#received', as: 'send_back_received'
+  get '/bs/receive', to: 'send_backs#receive', as: 'send_back_receive'
+  post '/bs/receive', to: 'send_backs#received', as: 'send_back_received'
 
 
   post 'opname_day', to: 'warning_items#opname_day', as: 'opname_day'

@@ -3,7 +3,7 @@ class DirectTransfersController < ApplicationController
   before_action :require_fingerprint
 
   def new
-    @stores = Store.where(store_type: 1)
+    @stores = Store.where(store_type: "retail")
     gon.inv_count = 2
   end
 
