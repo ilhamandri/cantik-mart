@@ -74,6 +74,7 @@ GEM
       momentjs-rails (~> 2.8)
       sass-rails (~> 5.0)
       selectize-rails (~> 0.6)
+    apriori-ruby (0.0.9)
     arel (9.0.0)
     autoprefixer-rails (9.4.8)
       execjs
@@ -584,6 +585,7 @@ PLATFORMS
 DEPENDENCIES
   activity_notification
   administrate
+  apriori-ruby
   axlsx
   axlsx_rails
   brakeman

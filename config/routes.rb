@@ -69,10 +69,15 @@ Rails.application.routes.draw do
   get 'opname', to: 'warning_items#opname', as: 'opname_form'
   post 'opname', to: 'warning_items#update_stock', as: 'opname'
   
+  get '/clean/prints', to: 'prints#clean', as: "clean_prints"
 
   get 'popular/items/refresh', to: 'homes#popular_items', as: 'refresh_popular_items'
   get 'popular/items/departments', to: 'departments#popular_items', as: 'departments_popular_items'
 
+  get '/refresh/predict/item/:id', to: 'items#refresh_predict', as: 'refresh_predict_item'
+  get '/predict/item/:id', to: 'items#predict', as: 'predict_item'
+
+  resources :discounts
   resources :pays, only: %i[new create]
 
   resources :balances
@@ -81,7 +86,6 @@ Rails.application.routes.draw do
   resources :loss_profits
 
   resources :send_backs
-  get '/clean/prints', to: 'prints#clean', as: "clean_prints"
   
   resources :items
   resources :points

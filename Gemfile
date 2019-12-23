@@ -35,6 +35,7 @@ gem 'zip-zip'
 gem 'rubyzip'
 gem 'axlsx'
 gem 'axlsx_rails'
+gem 'apriori-ruby'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

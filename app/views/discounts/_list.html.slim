@@ -1,0 +1,15 @@
+tr
+	td #{discount.code}
+	td #{discount.item.code}
+	td #{discount.item.name}
+	- disc = ""
+	- if discount.discount < 100
+		- disc = discount.discount.to_s + " %"
+	- else
+		- disc = number_with_delimiter(discount.discount.to_i, delimiter: ".")
+	td #{disc}
+	td #{discount.start}
+	td #{discount.end}
+
+	td
+		= button_to "Hapus", discount, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Are you sure you want to reset the indexes?" }

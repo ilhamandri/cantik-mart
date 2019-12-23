@@ -63,7 +63,6 @@
           | Data
     .card.mb-4
       .card-body.table-responsive.text-nowrap
-        = paginate @finances
         table class="table"
           thead
             th Tipe
@@ -77,3 +76,4 @@
             th Keterangan
           tbody
             = render partial: 'list', collection: @finances, as: :finance
+        = paginate @finances

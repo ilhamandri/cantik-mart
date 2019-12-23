@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_20_130452) do
+ActiveRecord::Schema.define(version: 2019_12_23_095338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,6 +165,18 @@ ActiveRecord::Schema.define(version: 2019_12_20_130452) do
     t.string "name", default: "DEFAULT (NO DEPARTMENT)", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "discounts", force: :cascade do |t|
+    t.string "code", null: false
+    t.date "start", null: false
+    t.date "end", null: false
+    t.integer "discount", null: false
+    t.bigint "item_id", null: false
+    t.boolean "status", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_discounts_on_item_id"
   end
 
   create_table "exchange_points", force: :cascade do |t|
@@ -421,6 +433,26 @@ ActiveRecord::Schema.define(version: 2019_12_20_130452) do
     t.index ["department_id"], name: "index_popular_items_on_department_id"
     t.index ["item_cat_id"], name: "index_popular_items_on_item_cat_id"
     t.index ["item_id"], name: "index_popular_items_on_item_id"
+  end
+
+  create_table "predict_categories", force: :cascade do |t|
+    t.bigint "buy_id", null: false
+    t.bigint "usually_id", null: false
+    t.float "percentage", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["buy_id"], name: "index_predict_categories_on_buy_id"
+    t.index ["usually_id"], name: "index_predict_categories_on_usually_id"
+  end
+
+  create_table "predict_items", force: :cascade do |t|
+    t.bigint "buy_id", null: false
+    t.bigint "usually_id", null: false
+    t.float "percentage", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["buy_id"], name: "index_predict_items_on_buy_id"
+    t.index ["usually_id"], name: "index_predict_items_on_usually_id"
   end
 
   create_table "prints", force: :cascade do |t|
@@ -782,6 +814,7 @@ ActiveRecord::Schema.define(version: 2019_12_20_130452) do
   add_foreign_key "debts", "stores"
   add_foreign_key "debts", "suppliers"
   add_foreign_key "debts", "users"
+  add_foreign_key "discounts", "items"
   add_foreign_key "finances", "stores"
   add_foreign_key "finances", "users"
   add_foreign_key "grocer_items", "items"
@@ -816,6 +849,10 @@ ActiveRecord::Schema.define(version: 2019_12_20_130452) do
   add_foreign_key "popular_items", "departments"
   add_foreign_key "popular_items", "item_cats"
   add_foreign_key "popular_items", "items"
+  add_foreign_key "predict_categories", "item_cats", column: "buy_id"
+  add_foreign_key "predict_categories", "item_cats", column: "usually_id"
+  add_foreign_key "predict_items", "items", column: "buy_id"
+  add_foreign_key "predict_items", "items", column: "usually_id"
   add_foreign_key "prints", "grocer_items"
   add_foreign_key "prints", "items"
   add_foreign_key "prints", "promotions"

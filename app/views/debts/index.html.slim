@@ -90,7 +90,6 @@
           | Data ( #{@count_debt} )
     .card.mb-4
       .card-body.table-responsive.text-nowrap
-        = paginate @finances
         table class="table"
           thead
             th Dibuat
@@ -101,3 +100,4 @@
             th Keterangan
           tbody
             = render partial: 'list', collection: @finances, as: :finance
+        = paginate @finances
