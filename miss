@@ -2,9 +2,7 @@
 --> Ubah disemua date picker ke mdbootstrap classes
 --> DateTime.now --> DateTime.current
 
-- order 500jt -> tunggu nomer order baru 
-	--> ORD-1576910151 DAN ORD-1576910680
+--> set promo pakai range date
+	--> Update Diskon per tarik data
 
-- sync data di cirata blm masuk 
-
-- set promo pakai range date
+--> Absent tanggal masi bermasalah 

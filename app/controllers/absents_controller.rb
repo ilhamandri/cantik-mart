@@ -15,8 +15,6 @@ class AbsentsController < ApplicationController
       new_params = eval(params[:option])
     end
     
-    
-
     @params = params
     if ["owner", "super_admin", "finance"].include? current_user.level 
       if new_params.present?
@@ -42,19 +40,6 @@ class AbsentsController < ApplicationController
           @search_text += " '" + user.name + "'"
         end
       end
-
-      # if search_from_date.present?
-      #   @search_text+= " dari "+search_from_date.to_date.to_s
-      #   @absents = @absents.where("check_in >= ?", search_from_date.to_time)
-      #   binding.pry
-      #   if search_to_date.present?
-      #     if search_to_date != search_from_date
-      #       @search_date = search_to_date.to_date
-      #       @search_text+= " hingga "+@search_date.to_s
-      #       @absents = @absents.where("check_in <= ?", search_to_date.to_time.end_of_day)
-      #     end
-      #   end
-      # end
     else
       @absents = @absents.where(user: current_user)
     end
@@ -156,7 +141,7 @@ class AbsentsController < ApplicationController
   end
 
   def daily_recap
-    start_day = (params[:date].to_s + " 00:00:00 +0700").to_time
+    start_day = params[:date].to_time
     end_day = start_day.end_of_day
     @absents = Absent.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     @absents = @absents.order("created_at DESC")
