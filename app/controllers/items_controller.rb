@@ -38,6 +38,19 @@ class ItemsController < ApplicationController
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless params[:id].present?
     @item = Item.find_by_id params[:id]
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless @item.present?
+    
+    raw_trx_items = TransactionItem.where(item: @item).group_by { |m| m.created_at.beginning_of_month }
+    months = []
+    sells = []
+    raw_trx_items.each do |trx_items|
+      months << trx_items.first.to_date.strftime("%B %Y")
+      sell = 0
+      trx_items[1].each do |trx_item|
+        sell += trx_item.quantity.to_i
+      end
+      sells << sell
+    end
+    
     respond_to do |format|
       format.html
       format.pdf do
