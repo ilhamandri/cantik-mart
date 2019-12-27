@@ -3,7 +3,7 @@ class ControllersController < ApplicationController
 
   def index
 
-    # check_new_controllers
+    check_new_controllers
     @controllers = Controller.order("name ASC").page param_page
   end
 

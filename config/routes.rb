@@ -77,6 +77,8 @@ Rails.application.routes.draw do
   get '/refresh/predict/item/:id', to: 'items#refresh_predict', as: 'refresh_predict_item'
   get '/predict/item/:id', to: 'items#predict', as: 'predict_item'
 
+  get '/recap/item/:id', to: 'items#recap_item', as: 'recap_item'
+
   resources :discounts
   resources :pays, only: %i[new create]
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_23_095338) do
+ActiveRecord::Schema.define(version: 2019_12_27_025307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -247,6 +247,16 @@ ActiveRecord::Schema.define(version: 2019_12_23_095338) do
     t.bigint "department_id"
     t.boolean "use_in_point", default: true, null: false
     t.index ["department_id"], name: "index_item_cats_on_department_id"
+  end
+
+  create_table "item_prices", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.integer "month", null: false
+    t.integer "year", null: false
+    t.float "price", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_item_prices_on_item_id"
   end
 
   create_table "items", force: :cascade do |t|
@@ -822,6 +832,7 @@ ActiveRecord::Schema.define(version: 2019_12_23_095338) do
   add_foreign_key "incomes", "users"
   add_foreign_key "invoice_transactions", "users"
   add_foreign_key "item_cats", "departments"
+  add_foreign_key "item_prices", "items"
   add_foreign_key "items", "item_cats"
   add_foreign_key "loss_items", "items"
   add_foreign_key "loss_items", "losses"

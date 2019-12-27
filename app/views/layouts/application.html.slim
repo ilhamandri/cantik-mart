@@ -155,6 +155,69 @@ html
           }
         });
 
+    - if ["items"].include? controller_name
+      javascript:
+        var ctxL = document.getElementById("buy_sell").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+          type: 'line',
+          data: {
+            labels: gon.month,
+            datasets: [
+              {
+                label: "Pembelian",
+                data: gon.buy,
+                backgroundColor: [
+                'rgba(255, 206, 86, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 206, 86, 1)',
+                ],
+                borderWidth: 2
+              },
+              {
+                label: "Penjualan",
+                data: gon.sell,
+                backgroundColor: [
+                'rgba(54, 162, 235, 0.1)',
+                ],
+                borderColor: [
+                'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 2
+              }
+
+            ]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+        var ctxL = document.getElementById("price").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+          type: 'line',
+          data: {
+            labels: gon.month,
+            datasets: [
+              {
+                label: "Harga",
+                data: gon.price,
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 2
+              }
+
+            ]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
     - if ["absents"].include? controller_name
       javascript:
         var ctxL = document.getElementById("workhour").getContext('2d');

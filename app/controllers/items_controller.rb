@@ -39,18 +39,6 @@ class ItemsController < ApplicationController
     @item = Item.find_by_id params[:id]
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless @item.present?
     
-    raw_trx_items = TransactionItem.where(item: @item).group_by { |m| m.created_at.beginning_of_month }
-    months = []
-    sells = []
-    raw_trx_items.each do |trx_items|
-      months << trx_items.first.to_date.strftime("%B %Y")
-      sell = 0
-      trx_items[1].each do |trx_item|
-        sell += trx_item.quantity.to_i
-      end
-      sells << sell
-    end
-    
     respond_to do |format|
       format.html
       format.pdf do
@@ -58,6 +46,74 @@ class ItemsController < ApplicationController
         return redirect_success items_path, "Data Barang Telah Ditambahkan di Daftar Cetak"
       end
     end
+  end
+
+  def recap_item
+    return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless params[:id].present?
+    @item = Item.find_by_id params[:id]
+    return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless @item.present?
+    
+    graphs_buy_sell = {}
+
+    13.times do |i|
+      date = Date.today - i.month
+      month = date.strftime("%B %Y")
+      graphs_buy_sell[month] = [0,0,0]
+    end
+
+    raw_trx_items = TransactionItem.where(item: @item).group_by { |m| m.created_at.beginning_of_month }
+    raw_trx_items.each do |trx_items|
+      month = trx_items.first.to_date.strftime("%B %Y")
+      sell = 0
+      trx_items[1].each do |trx_item|
+        sell += trx_item.quantity.to_i
+      end
+      next if graphs_buy_sell[month].nil?
+      graphs_buy_sell[month] = [0, sell, 0]
+    end
+
+    raw_order_items = OrderItem.where(item: @item).group_by { |m| m.created_at.beginning_of_month }
+    raw_order_items.each do |order_items|
+      month = order_items.first.to_date.strftime("%B %Y")
+      buy = 0
+      order_items[1].each do |order_item|
+        buy += order_item.quantity.to_i
+      end
+      data = graphs_buy_sell[month]
+      next if graphs_buy_sell[month].nil?
+      data[0] = buy
+      graphs_buy_sell[month] = data
+    end
+
+    raw_prices = ItemPrice.where(item: @item)
+    raw_prices.each do |item_price|
+      month = Date::MONTHNAMES[item_price.month] + " " + item_price.year.to_s
+      price = item_price.price
+
+      next if graphs_buy_sell[month].nil?
+      data = graphs_buy_sell[month]
+      data[2] = price
+      graphs_buy_sell[month] = data
+    end
+
+    gon.month = graphs_buy_sell.keys.reverse
+
+    graphs_buy_sell_val = graphs_buy_sell.values
+    gon.sell = graphs_buy_sell_val.collect{|ind| ind[1]}.reverse
+    gon.buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse
+    
+    prices = graphs_buy_sell_val.collect{|ind| ind[2]}.reverse
+    before = 0
+    prices.each_with_index do |price, idx|
+      if price == 0
+        prices[idx] = before
+      else
+        before = price
+      end
+    end
+    gon.price = prices
+    
+    @buy_sell = graphs_buy_sell
   end
 
   def new

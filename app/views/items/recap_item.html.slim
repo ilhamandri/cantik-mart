@@ -1,0 +1,33 @@
+.row
+  .col.text-left
+    h5
+      - if @search_id.nil?
+        | Rekap Item - #{@item.name} 
+br
+.container-fluid
+  .row
+    .col-xl-12.col-lg-12.col-md-12.pb-2
+      .card-header.white-text.info-color 
+        h5.font-weight-500.my-1
+          | Grafik Harga 
+      .card.mb-4 
+        .card-body.table-responsive.text-nowrap
+          canvas id="price"
+
+    .col-xl-12.col-lg-12.col-md-12.pb-2
+      .card-header.white-text.info-color 
+        h5.font-weight-500.my-1
+          | Grafik Pembelian & Penjualan 
+      .card.mb-4 
+        .card-body.table-responsive.text-nowrap
+          canvas id="buy_sell"
+        table.table
+          tr
+            th Bulan
+            th Pembelian
+            th Penjualan
+          - @buy_sell.each do|buy_sell|
+            tr
+              td #{buy_sell[0]}
+              td #{buy_sell[1][0]}
+              td #{buy_sell[1][1]}
