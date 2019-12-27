@@ -143,18 +143,18 @@ class AbsentsController < ApplicationController
         if check_in > morning_shift
           @late_morning << check_in - morning_shift  
           @late_general << check_in - morning_shift  
-          @work_hours_morning << hour
-          @work_morning += hour
-          @no_check_out_morning += 1 if hour == 0 && minutes == 0 
         end
+        @work_hours_morning << hour
+        @work_morning += hour
+        @no_check_out_morning += 1 if hour == 0 && minutes == 0 
       else
         if check_in > afternoon_shift
           @late_afternoon << check_in - afternoon_shift  
           @late_general << check_in - afternoon_shift  
-          @work_hours_afternoon << hour
-          @work_afternoon += hour
-          @no_check_out_afternoon += 1 if hour == 0 && minutes == 0 
         end
+        @work_hours_afternoon << hour
+        @work_afternoon += hour
+        @no_check_out_afternoon += 1 if hour == 0 && minutes == 0 
       end 
 
       
