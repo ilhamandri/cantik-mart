@@ -226,7 +226,7 @@ class AbsentsController < ApplicationController
     
     work_days = (start_date..end_date).to_a.select {|k| days.include?(k.wday)}
 
-    @performance = (date.count.to_f) - (@late_general.count * 2) 
+    @performance = (date.count.to_f) - (@late_general.count * 0.5) 
     @performance = @performance / work_days.count.to_f
     @performance = (@performance * 10000.0 ).round / 100.0
 
