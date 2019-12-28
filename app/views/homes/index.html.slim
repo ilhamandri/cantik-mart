@@ -242,7 +242,7 @@
                           th Nama
                           th Terjual
                         tbody
-                          = render partial: 'list', collection: @higher_item.to_a.reverse.to_h.first(10), as: :item
+                          = render partial: 'list', collection: @higher_item.to_a.pop(10), as: :item
 
               .col-md-6.text-center-pl-xl-2.my-md-0.my-3
                 .view.view-cascade.gradient-card-header.cloudy-knoxville-gradient
@@ -265,7 +265,7 @@
                           th Nama
                           th Terjual
                         tbody
-                          = render partial: 'list', collection: @lower_item.to_a.reverse.to_h.first(10), as: :item
+                          = render partial: 'list', collection: @lower_item.to_a.pop(10), as: :item
                           
         .col-xl-12.col-lg-12.mb-4.pb-2
           .view.view-cascade.gradient-card-header.light-blue.lighten-1

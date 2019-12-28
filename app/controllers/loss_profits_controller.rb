@@ -5,12 +5,12 @@ class LossProfitsController < ApplicationController
   	curr_date = DateTime.now
   	start_day = curr_date.beginning_of_month
   	@start = start_day
- 	end_day = curr_date.end_of_month
- 	@end = end_day
- 	cirata = Store.find_by(id: 2)
- 	plered = Store.find_by(id: 3)
+   	end_day = curr_date.end_of_month
+   	@end = end_day
+   	cirata = Store.find_by(id: 2)
+   	plered = Store.find_by(id: 3)
 
- 	cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+   	cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
   	trx = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
   	
   	grand_total_plered = trx.where(store: plered).sum(:grand_total)

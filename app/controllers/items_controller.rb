@@ -99,8 +99,10 @@ class ItemsController < ApplicationController
     gon.month = graphs_buy_sell.keys.reverse
 
     graphs_buy_sell_val = graphs_buy_sell.values
-    gon.sell = graphs_buy_sell_val.collect{|ind| ind[1]}.reverse
-    gon.buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse
+    sell = graphs_buy_sell_val.collect{|ind| ind[1]}.reverse
+    gon.sell = sell
+    buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse
+    gon.buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse 
     
     prices = graphs_buy_sell_val.collect{|ind| ind[2]}.reverse
     before = 0
@@ -114,6 +116,11 @@ class ItemsController < ApplicationController
     gon.price = prices
     
     @buy_sell = graphs_buy_sell
+
+    model = LightGBM::Regressor.new
+    # a = model.predict(buy)
+    model.predict(buy)
+    binding.pry
   end
 
   def new
