@@ -216,7 +216,12 @@ class AbsentsController < ApplicationController
     end
 
     start_date = @rawdata.first.first.beginning_of_month.to_date # your start
-    end_date = @rawdata.first.first.end_of_month # your end
+    end_date = nil
+    if Date.today != @rawdata.first.first.end_of_month
+      end_date = Date.today
+    else
+      end_date = @rawdata.first.first.end_of_month # your end
+    end
     days = nil
     if ['super_visi', 'pramuniaga', 'cashier', 'super_admin'].include? @user.level
       days = [1,2,3,4,5,6,7] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
