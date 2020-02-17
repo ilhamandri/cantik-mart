@@ -1,0 +1,62 @@
+.row
+  .col.text-left
+    h5
+      | Daftar Stok Barang    
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pencarian
+      .card-body
+        = form_for :store_item, url: stocks_path, method: 'GET' do |form|
+          .row
+            - if ["owner", "super_admin", "super_finance"].include? current_user.level
+              .col-md-12
+                select class="mdb-select md-form" id="months" name="store_id"
+                  option value="0"
+                    | Semua Toko
+                  - Store.all.each do |store|
+                    option value="#{store.id}"
+                      | #{store.name}
+            .col-6.text-center
+              input type="text" class="form-control md-form" id="search" name="search" placeholder="Kode Barang..."
+            .col-6
+              select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari Kategori..." name="item_cat_id" id="supplierId"
+                option value="0"
+                  | SEMUA KATEGORI
+                - ItemCat.all.each do |item_cat|
+                  option value="#{item_cat.id}"
+                    | #{item_cat.name}
+
+            .col-12.text-center
+              button class="btn btn-primary"
+                | Cari
+
+        .col-md-12.text-center.grey-text
+          a href="#{stocks_path(option: @params.to_s, format: :pdf)}"
+            b
+              | #{@search}
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Toko
+            th Kode
+            th Foto
+            th Name
+            th Kategori
+            th Stok
+            th Limit
+            th Harga
+            th Aksi
+          tbody
+            = render partial: 'list', collection: @inventories, as: :inventory
+        = paginate @inventories

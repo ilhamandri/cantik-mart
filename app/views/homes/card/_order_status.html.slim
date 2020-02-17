@@ -1,0 +1,23 @@
+- if @total_orders > 0
+  .card.bg-warning[style="color: black"]
+    .card-body
+      h5.card-title
+        | <i class="fa fa-edit"></i>&nbsp&nbsp
+        | ORDER
+      p.card-text[style="color: black"]
+        | Terdapat 
+        b
+         | #{@total_orders} 
+        | order dalam proses.
+      a.btn.btn-warning[href="#{orders_path(type: 'ongoing')}"]
+        | Cek Order&nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
+- else
+  .card.bg-primary.text-white
+    .card-body.text-white
+      h5.card-title
+        | <i class="fa fa-edit"></i>&nbsp&nbsp
+        | ORDER
+      p.card-text.text-white
+        | Tidak ada proses order.
+      a.btn.btn-primary[href="#{orders_path}"]
+        | Cek Order &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>

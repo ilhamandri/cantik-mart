@@ -1,0 +1,32 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Ubah Sub Departemen (#{@item_cat.name})
+      .card-body 
+        = form_for :item_cat, url: item_cat_path, method: "PUT" do |form|
+          .form-group
+            label for="name" Departemen
+            select name="item_cat[department_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
+              - @department.each do |department|
+                option value="#{department.id}"
+                  | #{department.name} 
+          .form-group
+    		    label for="name" Nama
+    		    = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+          .form-group
+            label for="name" Perhitungan Poin
+            select name="item_cat[use_in_point]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
+              - if @item_cat.use_in_point
+                option value="true" selected="selected"
+                  | Termasuk Perhitungan
+                option value="false"
+                  | Tidak Termasuk Perhitungan
+              - else
+                option value="true"
+                  | Termasuk Perhitungan
+                option value="false" selected="selected"
+                  | Tidak Termasuk Perhitungan
+          .form-group.text-center
+            = form.submit "Ubah Sub Departemen", class: "btn btn-warning"

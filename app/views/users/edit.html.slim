@@ -1,0 +1,81 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Ubah Pengguna - #{@user.name} (#{@user.address})
+      .card-body  
+        = form_for :user, url: user_path(id: @user.id), html: { multipart: true }, method: "PUT" do |form|
+          .form-group
+            label for="email" Email
+            = form.text_field :email, required: true, class: "form-control md-form", id: "email", disabled: true
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+          - if current_user == @user
+            .form-group
+              label for="name" Password
+              = form.password_field :password, required: true, class: "form-control md-form", id: "password"
+          .form-group
+            label for="id-card" KTP
+            = form.text_field :id_card, required: true, class: "form-control md-form", id: "id-card"
+          .form-group
+            label for="address" Alamat
+            = form.text_field :address, required: true, class: "form-control md-form", id: "address"
+          .form-group
+            label for="phone" Nomor Telepon
+            = form.number_field :phone, required: true, class: "form-control md-form", id: "phone"
+          .form-group
+            label for="sex" Jenis Kelamin
+            select name="user[sex]" required=true class="mdb-select md-form colorful-select dropdown-primary" 
+              - if @user.sex == "laki_laki"
+                option value='laki_laki' selected="selected"
+                  | Laki - laki
+                option value='perempuan'
+                  | Perempuan
+              - else
+                option value='laki_laki'
+                  | Laki - laki
+                option value='perempuan' selected="selected"
+                  | Perempuan
+          - if current_user.level == User::SUPER_ADMIN || current_user.level == User::OWNER
+            .form-group
+              label for="level" Peran 
+              select name="user[level]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="level" searchable="Cari..."
+                - User::levels.each do |user_level|
+                  - if user_level[0] == @user.level
+                    option value='#{user_level[0]}' selected="selected"
+                      | #{user_level[0].upcase.gsub('_', ' ')}
+                  - else
+                    option value='#{user_level[0]}'
+                      | #{user_level[0].upcase.gsub('_', ' ')}
+            .form-group
+              label for="store" Toko
+              select name="user[store_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store" searchable="Cari..."
+                - @stores.each do |store|
+                  - if store == @user.store
+                    option value="#{store.id}" selected="selected"
+                      | #{store.name}
+                  - else
+                    option value="#{store.id}"
+                      | #{store.name}
+            .form-group
+              label for="id-card" Gaji
+              = form.number_field :salary, required: true, class: "form-control md-form", id: "id-card"
+              
+            .form-group
+                label for="store" Foto
+                .input-group
+                  .input-group-prepend
+                    span#inputGroupFileAddon01.input-group-text
+                      | Upload
+                  .custom-file
+                    input#inputGroupFile01.custom-file-input[type="file" name="user[image]" aria-describedby="inputGroupFileAddon01"]
+                    label.custom-file-label[for="inputGroupFile01"]
+                      | Choose file
+            .form-group
+              label for="id-card" ID Fingerprint
+              = form.text_field :fingerprint, required: true, class: "form-control md-form", id: "id-card", disabled: true
+            
+          .form-group.text-center
+            = form.submit "Ubah - #{@user.name}", class: "btn btn-warning black-text"

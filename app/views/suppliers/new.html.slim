@@ -1,0 +1,19 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Tambah Supplier
+      .card-body
+        = form_for :supplier, url: suppliers_path, method: "POST" do |form|
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+          .form_group
+            label for="address" Alamat
+            = form.text_field :address, required: true, class: "form-control md-form", id: "address"
+          .form-group
+            label for="phone" Nomor Telepon
+            = form.number_field :phone, required: true, class: "form-control md-form", id: "phone", minlength:"6", maxlength: "13", pattern:"[0-9]+", title:"6-13 digit nomor telepon"
+          .form-group.text-center
+            = form.submit "Tambah Supplier", class: "btn btn-primary"

@@ -1,0 +1,59 @@
+.row
+  .col-md-9.text-left
+    h5
+      | Loss & Profits
+br
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Data ( #{@start.to_date.to_s + " - " + DateTime.now.to_date.to_s} )
+    .card.mb-4 
+      .card-body.table-responsive.text-nowrap	
+      	table class="table"
+      		tr
+      			td Pendapatan Toko Plered
+      			td 
+      				b #{number_with_delimiter(@margin_plered.to_i, delimiter: ".")}
+      			td Operasional
+      			td 
+      				b #{number_with_delimiter(@operational.to_i, delimiter: ".")}
+      		tr
+      			td Pendapatan Toko Cirata
+      			td 
+      				b #{number_with_delimiter(@margin_cirata.to_i, delimiter: ".")}
+      			td Biaya Pasti
+      			td 
+      				b #{number_with_delimiter(@fix_cost.to_i, delimiter: ".")}
+      		tr
+      			td Pendapatan Supplier
+      			td 
+      				b #{number_with_delimiter(@supplier_income.to_i, delimiter: ".")}
+      			td Barang Hangus
+      			td 
+      				b #{number_with_delimiter(@losses.to_i, delimiter: ".")}
+      		tr
+      			td Bonus
+      			td
+      				b #{number_with_delimiter(@bonus.to_i, delimiter: ".")}
+      			td Pengeluaran Lainnya
+      			td 
+      				b #{number_with_delimiter(@other_outcome.to_i, delimiter: ".")}
+      		tr 	
+      			td Pendapatan Lainnya
+      			td 
+      				b #{number_with_delimiter(@other_income.to_i, delimiter: ".")}
+      			td
+      			td
+      		tr
+      			td colspan="4"
+      		tr
+      			td TOTAL
+      			td 
+      				b #{number_with_delimiter(@total_income.to_i, delimiter: ".")}
+      			td
+      			td
+      				b #{number_with_delimiter(@total_outcome.to_i, delimiter: ".")}
+
+

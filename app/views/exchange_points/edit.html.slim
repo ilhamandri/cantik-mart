@@ -1,0 +1,21 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Ubah Kriteria Penukaran Poin - #{@point.name}
+      .card-body
+        = form_for :point, url: exchange_point_path, method: "PUT" do |form|
+        	.form-group
+	            label for="id-card" Jumlah Poin
+	            = form.text_field :point, required: true, class: "form-control md-form", id: "id-card", minlength:"1", maxlength:"18", pattern:"[0-9]+", title:"Jumlah poin yang akan ditukar", placeholder: "Jumlah poin yang akan ditukarkan"
+        	.form-group
+	            label Ditukar dengan
+	            br
+	            label.text-danger * Jika ditukar dengan barang, isi dengan PLU
+	            = form.text_field :name, required: true, class: "form-control md-form", placeholder: "PLU, voucher, dsb ... ", title: "Jenis penawaran yang diberikan"
+	        .form-group
+	            label for="id-card" Jumlah
+	            = form.text_field :quantity, required: true, class: "form-control md-form", id: "id-card", minlength:"1", maxlength:"18", minimum:"0", pattern:"[0-9]+", title:"Jumlah barang yang diberikan", placeholder: "Jumlah barang yang akan diberikan"
+	        .form-group.text-center
+	        	= form.submit "ubah Kriteria", class: "btn btn-primary"

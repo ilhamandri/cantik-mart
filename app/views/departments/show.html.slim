@@ -1,0 +1,15 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Kategori Barang - #{@item_cat.name}
+      .card-body 
+        = form_for :item_cat, url: "" do |form|
+  		  .form-group
+  		    label for="name" Nama
+  		    = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+        .form-group
+          label for="name" Total Item
+          - items_count = Item.where(item_cat: @item_cat).count
+          input type="text" class="form-control md-form" value="#{items_count}"

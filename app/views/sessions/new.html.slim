@@ -1,0 +1,30 @@
+.row
+  .col.text-center
+    br
+      img.header__img alt=("CANTIK MART") src="images/logo.png" width="400px"/
+= form_for :session, url: session_path do |form|
+  .row
+    .col-12.text-center
+      br
+      | Silahkan Masukkan E-mail dan Kata Sandi Anda
+      br
+      br
+      br
+    .col-12.text-center
+      | Email
+    .col-4
+    .col-4.text-center
+      = form.text_field :email, required: true, class: "form-control md-form", id: "email", placeholer: "Kata Sandi"
+    .col-4
+      
+    .col-12.text-center
+      | Kata Sandi
+    .col-4
+    .col-4.text-center
+      = form.password_field :password, required: true, class: "form-control md-form", id: "password"
+    .col-4
+      
+    .col-4
+    .col-4.text-center
+      br
+      = form.submit "Masuk", class: "btn btn-primary"

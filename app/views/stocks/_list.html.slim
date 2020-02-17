@@ -1,0 +1,28 @@
+tr 
+	td #{inventory.store.name}
+	td #{inventory.item.code}
+	td
+	    - if inventory.item.image.present?
+	      	img src="#{inventory.item.image}" width="50px"
+	    - else
+      		=image_tag("/images/default_item.jpg", height: '70', width: '70')
+  
+	td #{inventory.item.name}
+	td #{inventory.item.item_cat.name}
+	- stock = inventory.stock
+	- stock = stock.to_i if stock.to_i == stock
+	td #{stock}
+	td #{inventory.min_stock.to_i}
+	td #{number_with_delimiter(inventory.item.sell, delimiter: ".")}
+	td
+	  	a href='#{stock_path(id: inventory.id)}'
+	  		button.btn.btn-primary type="button" 
+        		| Detil
+       	| &nbsp &nbsp
+       	- if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+	       	- if inventory.min_stock > inventory.stock
+	       		a.btn.btn-danger href='#{new_order_path(item_id: inventory.item.id)}'
+		        	| Order
+			- elsif inventory.min_stock == inventory.stock
+				a.btn.btn-warning href='#{new_order_path(item_id: inventory.item.id)}'
+		        	| Order

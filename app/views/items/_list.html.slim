@@ -1,0 +1,28 @@
+tr
+  td #{item.code}
+  td
+    - if item.image.present?
+      img src="#{item.image}" width="50px"
+    - else
+      =image_tag("/images/default_item.jpg", height: '70', width: '70')
+  td #{item.name}
+  / td #{item.brand}
+  td 
+    - department = item.item_cat.department.name
+    - item_cat = item.item_cat.name
+    - if department == item_cat
+      | #{item_cat}
+    - else
+      | #{department} - #{item_cat}
+  - buy = item.buy
+  - buy = StoreItem.find_by(store: current_user.store, item: item).buy if item.local_item && StoreItem.find_by(store: current_user.store, item: item).present?
+  td #{number_with_delimiter(item.buy.to_i, delimiter: ".")}
+  td #{number_with_delimiter(item.sell.to_i, delimiter: ".")}
+  td
+    a href='#{item_path(id: item.id)}'
+      button.btn.btn-primary type="button" 
+        | Detil
+    a href='#{item_path(id: item.id, format: :pdf)}'
+      button.btn.btn-success type="button" 
+        | + Cetak
+

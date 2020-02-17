@@ -1,0 +1,38 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Invoice #
+      td
+        textarea #{@send_back.invoice}
+    tr
+      td.meta-head Tanggal
+      td
+        textarea #{@send_back.created_at.to_date} - #{@send_back.user.name}
+    tr
+      td.meta-head Dari
+      td
+        .due #{@send_back.store.name}
+        
+table#items
+  tr
+    th No
+    th Kode
+    th Barang
+    th Deskripsi
+    th Kirim
+    th Terima
+
+  - @send_back_items.each_with_index do |send_back_item, idx|
+    tr.item-row
+      td #{idx+1}
+      td #{send_back_item.item.code}
+      td #{send_back_item.item.name}
+      td #{send_back_item.description}
+      td #{send_back_item.quantity}
+      td
+        - if send_back_item.receive < 0
+          | -
+        - else
+          | #{send_back_item.receive}
+      
+  

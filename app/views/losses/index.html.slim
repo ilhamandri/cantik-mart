@@ -1,0 +1,52 @@
+.row
+  .col.text-left
+    h5
+      | Daftar Barang Loss
+  .col.text-right
+    - if Controller.find_by(name: 'losses').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+      a href="#{new_loss_path}"
+        button.btn.btn-danger type="button" 
+          i.fas.fa-plus 
+          |   Tambah Barang Loss
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4 style="overflow-x:auto;"
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pencarian
+      .card-body
+        = form_for :loss, url: losses_path, method: 'GET' do |form|
+          .row
+            - if ["owner", "super_admin", "finance"].include? current_user.level
+              .col-md-12.text-center
+                label Toko
+                select class="mdb-select md-form" id="months" name="store_id"
+                  option value="0"
+                    | Semua Toko
+                  - Store.all.each do |store|
+                    option value="#{store.id}"
+                      | #{store.name}
+            .col-12.text-center
+              input type="text" class="form-control md-form" id="search" name="search"
+            .col-12.text-center
+              button class="btn btn-primary"
+                | Cari
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4 style="overflow-x:auto;"
+      .card-header.white-text.primary-color
+        h5.font-weight-500.my-1
+          | Menunggu Konfirmasi
+      .card-body
+        table class="table"
+          thead
+            th Invoice
+            th Toko
+            th Jumlah Item
+            th Tgl. Buat
+            th Aksi
+          tbody
+            = render partial: 'list', collection: @losses, as: :loss
+        = paginate @losses

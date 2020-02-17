@@ -1,0 +1,37 @@
+.row
+  .col-md-6.text-left
+    h5
+      | Daftar Supplier Barang "#{@item.name}"
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pencarian
+      .card-body
+        = form_for :inventory, url: item_suppliers_path, method: 'GET' do |form|
+          .row
+            .col-12
+              input type="text" class="form-control md-form" id="search" name="search"
+            .col-12.text-center
+              button class="btn btn-primary"
+                | Cari
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Nama
+            th Alamat
+            th Telepon
+            th Terakhir Order
+            th Harga
+            th Aksi
+          tbody
+            = render partial: 'list', collection: @suppliers, as: :supplier
+        = paginate @suppliers

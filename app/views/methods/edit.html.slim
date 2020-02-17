@@ -1,0 +1,23 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Ubah Hak Akses - #{@method.controller.name.underscore.humanize.upcase} => #{@method.name.underscore.humanize.upcase}
+      .card-body
+       = form_for :method, url: method_path(id: @method.id), method: "PUT" do |form|
+        .form-group
+          label.mdb-main-label Hak Akses
+          select.mdb-select.colorful-select.dropdown-primary.md-form multiple="multiple" searchable=("Cari hak akses..")  name="method[access_levels][]"
+            - users_level = UserMethod.where(controller_method: @method).pluck(:user_level)
+            - levels = User.levels
+            - levels.keys.each do |level|
+              - next if level == "owner" || level == "super_admin"
+              - if users_level.include? level
+                option selected="selected" value="#{levels[level]}"  #{level.underscore.humanize.upcase}
+              - else
+                option value="#{levels[level]}"  #{level.underscore.humanize.upcase}
+          label.mdb-main-label Label example
+
+        .form-group.text-center
+          = form.submit "Ubah Hak Akses", class: "btn btn-warning"

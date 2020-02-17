@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv=“Pragma” content=”no-cache”>
+      <meta http-equiv=“Expires” content=”-1″>
+      <meta http-equiv=“CACHE-CONTROL” content=”NO-CACHE”>
+      <title>CANTIK MART </title>
+
+      <link rel="stylesheet" href="/assets/css/cashier.css">
+
+      <%= stylesheet_link_tag '/dist/css/semantic.min.css' %>
+      <%= stylesheet_link_tag '/dist/css/font-awesome.min.css' %>
+      <%= stylesheet_link_tag '/dist/css/materialize.min.css' %>
+      <%= stylesheet_link_tag '/dist/css/bootstrap.min.css' %>
+      <%= stylesheet_link_tag '/dist/css/jquery.dataTables.min.css' %>
+      
+      <style>
+         .overflow {
+         height: 65vh;
+         }
+
+         .dataTables_scrollHead {
+          font-size: large;
+         }
+
+         tr{
+          font-size: medium;
+         }
+
+         label {
+          font-size: unset;
+          font-weight: unset;
+          color: unset;
+         }
+
+         .ui.page.grid {
+         padding: 0 !important; 
+         }
+         .column {
+         height: 85vh;
+         }
+         .align-right{
+         text-align: right;
+         }
+         .button {
+         border-radius: 8px;
+         background-color: #4CAF50; 
+         border: none;
+         color: white;
+         padding: 16px 32px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 16px;
+         margin: 4px 2px;
+         -webkit-transition-duration: 0.4s; 
+         transition-duration: 0.4s;
+         cursor: pointer;
+         }
+         .modal{
+          background: none;
+          max-height: unset;
+          bottom: unset;
+        }
+      </style>
+   </head>
+   <body>
+      <div class="ui grid page">
+         <div class="column">
+            <div class="ui segment">
+               <div class="ui menu top">
+                  <a class="active item" data-tab="transaction"><i class="icon edit sign"></i>TRANSAKSI</a>
+                  <!-- <a class="item" data-tab="stock">STOK</a> -->
+                  <a class="item" data-tab="member">MEMBER</a>
+               </div>
+               <div class="ui tab" data-tab="transaction">
+                  <div class="row">
+                    <div class="col-sm-8">
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <label>MEMBER</label>
+                          <input type="text" placeholder="Nomor Kartu Member ..." id="memberId"/>
+                          <input type="text" style="display: none", disabled="disabled" id="memberName">
+                        </div>
+                        <div class="col-sm-6">
+                          <label>VOUCHER</label>
+                          <input type="text" placeholder="Nomor Voucher ..." id="voucher_code"/>
+                          <input type="text" style="display: none", disabled="disabled" id="voucher_name">
+                          <input type="number" style="display: none", disabled="disabled" id="voucher_nominal">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <label style="font-size: 15px;">TOTAL BELANJA</label>
+                      <br>
+                      <label style="font-size: 40px; font-weight: 990;" id="label-total">0</label>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="field">
+                         <label>KODE BARANG</label>
+                         <input type="text" placeholder="Kode Barang ..." id="itemId"/>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <label>JUMLAH</label>
+                      <input type="number" value="1" min="0.1" id="item_qty" step="0.005" />
+                    </div>
+                    <div class="col-sm-4 text-right">
+                      <button data-target="modal1" class="btn btn-primary btn-large modal-trigger">BAYAR</button>
+                    </div>
+                    <div class="col-sm-12">
+                      <table id="itemList">
+                        <thead>
+                           <tr>
+                              <th class="width10">Kode</th>
+                              <th class="width55">Nama Barang</th>
+                              <th class="width15">Kategori</th>
+                              <th class="width15">Jumlah</th>
+                              <th class="width15">Harga</th>
+                              <th class="width15">Diskon</th>
+                              <th class="width15">Total</th>
+                              <th class="width15" style="display: none;">#</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="col-sm-12 text-center">
+                      <button id="button-remove" class="btn btn-danger">HAPUS BARANG</button>
+                    </div>
+                  </div>
+               </div>
+               <div class="ui tab" data-tab="member">
+                  <div class="row">
+                    <div class="col-md-12 text-right">
+                        <a href="www.cantikmart.com/members/new"><button class="text-right btn btn-primary">+ MEMBER</button></a>
+                    </div>
+                    <div class="col-md-12">
+                      <label>CARI MEMBER</label>
+                      <input type="text" placeholder="Nama Member / No. Telp / Alamat" id="memberSearchId"/>
+                    </div>
+                  </div>
+                  <div class="one fields">
+                     <br>
+                     <div class="overflow">
+                        <table id="memberSearchList" style="width:100%">
+                           <thead>
+                              <tr> 
+                                 <th class="width50">No. Kartu</th> 
+                                 <th class="width10">Nama</th>
+                                 <th class="width55">Alamat</th>
+                                 <th class="width15">Telepon</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <div class="ui tab" data-tab="stock">
+                  <div class="four fields">
+                     <div class="field">
+                        <label>CARI BARANG</label>
+                        <input type="text" placeholder="Nama Barang..." id="itemSearchId"/>
+                     </div>
+                  </div>
+                  <div class="one fields">
+                     <br>
+                     <div class="overflow">
+                        <table id="itemSearchList" style="width:100%">
+                           <thead>
+                              <tr>
+                                 <th class="width10">Kode</th>
+                                 <th class="width55">Nama Barang</th>
+                                 <th class="width15">Kategori</th>
+                                 <th class="width15">Harga</th>
+                                 <th class="width15">Stok</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Modal Structure -->
+      <div id="modal1" class="modal">
+         <div class="modal-content">
+            <div style="text-align: right;">
+               <b>
+                  <h8>PEMBAYARAN</h8>
+               </b>
+            </div>
+            <hr>
+            <div class="row">
+               <div class="col s3" style="vertical-align: middle;">
+                  <h5>Sub Total </h5>
+                  <br>
+                  <h5>Voucher </h5>
+                  <br>
+                  <hr>
+                  <br>
+                  <h5>Total </h5>
+               </div>
+               <div class="col s1" style="vertical-align: middle;">
+                  <h5>: </h5>
+                  <br>
+                  <h5>: </h5>
+                  <br>
+                  <hr>
+                  <br>
+                  <h5>: </h5>
+               </div>
+               <div class="col s8">
+                  <b>
+                     <h5 id="total-h5">0</h5>
+                  </b>
+                  <br>
+                  <b>
+                     <h5 id="voucher-h5">0</h5>
+                  </b>
+                  <br>
+                  <hr>
+                  <br>
+                  <b>
+                     <h5 id="end-h5">0</h5>
+                  </b>
+               </div>
+            </div>
+            <hr>
+            <br>
+            <div class="row">
+               <div class="input-field col s6">
+                  <select id="payment-method-select" onchange="PaymentMethod()">
+                     <option value="1" selected>Tunai</option>
+                     <option value="2">Debit</option>
+                     <option value="3">Kredit</option>
+                  </select>
+                  <label>Tipe Pembayaran</label>
+               </div>
+               <div style="display: none;" id="card">
+                  <div class="input-field col s6">
+                     <select id="bank-select">
+                        <option value="1" selected>BCA</option>
+                        <option value="2">Mandiri</option>
+                        <option value="3">BNI</option>
+                        <option value="4">BRI</option>
+                        <option value="5">Permata</option>
+                     </select>
+                     <label>Bank</label>
+                  </div>
+                  <div class="input-field col s6">
+                     <input type="number" placeholder="123456789" id="edc-number" autocomplete="off"/>
+                     <label>Nomor TRX (EDC)</label>
+                  </div>
+                  <div class="input-field col s6">
+                     <input type="number" placeholder="123456789" id="card-number" autocomplete="off"/>
+                     <label>Nomor Kartu</label>
+                  </div>
+               </div>
+               <div class="input-field col s12" id="nominal-div">
+                  <input type="number" placeholder="123456789" id="nominal" min="0" onkeyup="exchange()" autocomplete="off", value="0" />
+                  <label>Jumlah Uang</label>
+               </div>
+            </div>
+            <div class="row" id="change-div">
+               <div class="col s3" style="vertical-align: middle;">
+                  <h5>Kembali </h5>
+               </div>
+               <div class="col s1" style="vertical-align: middle;">
+                  <h5>: </h5>
+               </div>
+               <div class="col s8">
+                  <b>
+                     <h5 id="change-h5">0</h5>
+                  </b>
+               </div>
+            </div>
+           <div class="modal-footer">
+              <a onclick="PrintBill()" style="color: blue;">TEST CETAK</a>
+              <a class="modal-close btn btn-success" onclick="CheckOut()">SELESAI</a>
+           </div>
+         </div>
+      </div>
+
+
+
+      <%= include_gon %>
+      <%= javascript_include_tag '/dist/js/jquery.min.js' %>
+      <%= javascript_include_tag '/dist/js/bootstrap.min.js' %>
+      <%= javascript_include_tag '/dist/js/semantic.min.js' %>
+      <%= javascript_include_tag '/dist/js/jquery.address.min.js' %>
+      <%= javascript_include_tag '/dist/js/jquery.dataTables.min.js' %>
+      <%= javascript_include_tag '/dist/js/materialize.min.js' %>
+
+      <script type="text/javascript">
+
+         var idx = 1;
+         function CheckOut() {
+             var table = $('#itemList').DataTable();
+             var data = table.rows().data();
+
+             table.order( [ 7, 'asc' ] ).draw();
+             var items = [];
+             for (var i = 0; i < data.length; i++) {
+                 var obj = { 
+                     id: data[i][0],
+                     qty: data[i][3],
+                     price: data[i][4],
+                     disc: data[i][5],
+                     total: data[i][6],
+                     promo: data[i][2]
+                 };
+                 items.push(obj);
+             }
+         
+             var nominal = $('#label-total').html();
+             var voucher_code = $("#voucher_code").val();
+             var payment = $("#payment-method-select").val();
+             var member = $("#memberId").val();
+             var change = "0";
+             var bank = $("#bank-select").val();
+             var edc = $("#edc-nnumber").val();
+             var card = $("#card-number").val();
+         
+             if (payment==1){
+                 change = $('#change-h5').html();
+                 var nominal = parseFloat($('#nominal').val());
+                 if (total > nominal) {
+                   var bilangan = nominal - total;
+                   alert("Jumlah Uang Kurang.")
+                   return false;
+                 }
+             }else{
+                 bank = $("#bank-select").val();
+                 edc = $("#edc-number").val();
+             }
+             var map = {};
+             map["items"] = items;
+             map["payment"] = payment;
+             map["bank"] = bank;
+             map["edc"] = edc;
+             map["card"] = card;
+             map["member"] = member;
+             map["voucher"] = voucher_code;
+             map["invoice"] = gon.invoice;
+
+             PrintBill();
+             jQuery.ajax({
+                       url: "/api/trx/post",
+                       type: "POST",
+                       data: map,
+                       dataType: "json",
+                       beforeSend: function(x) {
+                         if (x && x.overrideMimeType) {
+                           x.overrideMimeType("application/j-son;charset=UTF-8");
+                         }
+                       },
+                       success: function(result) {
+                          $("#payment-method-select").val(0);
+                          $("#nominal").val();
+                          var table = $('#itemList').DataTable();
+                          table.clear().draw();
+                          $("#total-h5").html("0");
+                          document.getElementById("label-total").innerHTML = "0";
+                          document.location.reload();
+                          window.location.reload()
+                        }, 
+                       error: function(result){
+                          alert("ERROR")
+                       }
+             });
+         }
+         
+         $('.top.menu .item').tab();
+
+         $(document).ready(function() {
+            $('#modal1').on("shown.bs.modal", function(){
+              $('#nominal').focus();
+            });
+            $('#itemList').DataTable({
+             scrollY: '50vh',
+             scrollCollapse: true,
+             paging: false,
+             ordering: [[7, 'desc']],
+             pageLength: 10,
+             paging: false,
+             searching: false,
+             columns: [{
+                     "width": "10%"
+                 },
+                 {
+                     "width": "25%"
+                 },
+                 {
+                     "width": "15%"
+                 },
+                 {
+                     "width": "5%"
+                 },
+                 {
+                     "width": "15%"
+                 },
+                 {
+                     "width": "15%"
+                 },
+                 {
+                     "width": "15%"
+                 },
+                 {
+                     "width": "0%",
+                     "visible": false
+                 },
+                ]
+            });
+
+
+            var table = $('#itemList').DataTable();
+
+
+            $('#itemList tbody').on( 'click', 'tr', function () {
+              if ( $(this).hasClass('selected') ) {
+                  $(this).removeClass('selected');
+              }
+              else {
+                  table.$('tr.selected').removeClass('selected');
+                  $(this).addClass('selected');
+              }
+            } );
+       
+            $('#button-remove').click( function () {
+              table.row('.selected').remove().draw( false );
+              GrandTotal();
+            } );
+
+            $('#itemSearchList').DataTable({
+               scrollY: '50vh',
+               scrollCollapse: true,
+               pageLength: 10,
+               searching: false,
+                  order: [
+                   [1, "asc"]
+                   ],
+                  lengthChange: false
+            });
+            $('#memberSearchList').DataTable({
+               scrollY: '50vh',
+               scrollCollapse: true,
+               pageLength: 10,
+               searching: false,
+               lengthChange: false
+            });
+
+           document.getElementById("itemId").focus();
+           $('.modal').modal();
+           $('select').formSelect();
+         });
+
+         function SUMGrandTotal() {
+           total = 0;
+           var table = $('#itemList').DataTable();
+           table.order( [ 7, 'desc' ] ).draw();
+           var data = table.rows().data();
+           for (var i = 0; i <data.length; i++) {
+            total += parseFloat(data[i][6]);
+           }
+           var bilangan = total;
+           var reverse = bilangan.toString().split('').reverse().join(''),
+           ribuan = reverse.match(/\d{1,3}/g);
+           ribuan = ribuan.join('.').split('').reverse().join('');
+           var voucher = $('#voucher_nominal').val();
+           var end = total -  voucher
+           if(end < 0){
+            end = bilangan;
+           }
+           bilangan = end;
+           reverse = bilangan.toString().split('').reverse().join(''),
+           ribuan2 = reverse.match(/\d{1,3}/g);
+           ribuan2= ribuan2.join('.').split('').reverse().join('');
+           $("#end-h5").html(ribuan2);
+           $("#total-h5").html(ribuan);
+           document.getElementById("label-total").innerHTML = ribuan;
+         }
+         
+         
+         var total = 0;
+         
+         function PaymentMethod() {
+           var method = $('#payment-method-select').val();
+           if (method != 1) {
+             $("#card").css("display", "block");
+             $("#nominal-div").css("display", "none");
+             $("#change-div").css("display", "none");
+           } else {
+             $("#nominal-div").css("display", "block");
+             $("#change-div").css("display", "block");
+             $("#card").css("display", "none");
+           }
+         }
+         
+         function exchange() {
+           var nominal = parseFloat($('#nominal').val());
+           if (total <= nominal) {
+             var bilangan = nominal - total;
+             
+             var reverse = bilangan.toString().split('').reverse().join(''),
+             ribuan = reverse.match(/\d{1,3}/g);
+             ribuan = ribuan.join('.').split('').reverse().join('');
+             
+             $("#change-h5").html(ribuan);
+             return bilangan;
+           }else{
+             $("#change-h5").html("-");
+             return "-";
+           }
+         }
+         
+         var itemId = document.getElementById('itemId');
+         var itemSearchId = document.getElementById('itemSearchId');
+         var memberId = document.getElementById('memberId');
+         var memberSearchId = document.getElementById('memberSearchId');
+         var qtyInput = document.getElementById('item_qty');
+         var timeout = null;
+         
+         qtyInput.onkeyup = function(e) {
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+            document.getElementById("itemId").focus();
+           }, 600);
+         };
+
+         memberId.onkeyup = function(e) {
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+             var member = document.getElementById("memberId").value;
+             $.ajax({
+             method: "GET",
+             cache: false,
+             url: "/api/member?search=" + member,
+             success: function(result_arr) {
+                 if(result_arr == ""){
+                  alert("Member Tidak Ditemukan")
+                 }
+                 if(result_arr.size > 1){
+                  alert("Member Tidak Ditemukan")
+                 }else{
+                   name = result_arr[0][1]
+                   phone = result_arr[0][3]
+                   $("#memberName").val(name + " - " + phone);
+                   $("#memberName").show();
+                   $("#memberId").hide();
+                 }
+             },
+             error: function(error) {
+                 alert("Member Tidak Ditemukan")
+             }
+             });
+           }, 300);
+         };
+
+         voucher_code.onkeyup = function(e) {
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+             var voucher = document.getElementById("voucher_code").value;
+             $.ajax({
+             method: "GET",
+             cache: false,
+             url: "/api/voucher?search=" + voucher,
+             success: function(result_arr) {
+                 if(result_arr == ""){
+                  alert("Voucher Tidak Ditemukan")
+                 }
+                 if(result_arr.size > 1){
+                  alert("Voucher Tidak Ditemukan")
+                 }else{
+                   name = result_arr[0][0]
+                   nominal = result_arr[0][1]
+                   $("#voucher_name").val(name);
+                   $("#voucher_nominal").val(nominal);
+                   $("#voucher_name").show();
+                   $("#voucher_code").hide();
+                   var bilangan = nominal;
+                   var reverse = bilangan.toString().split('').reverse().join(''),
+                   ribuan = reverse.match(/\d{1,3}/g);
+                   ribuan = ribuan.join('.').split('').reverse().join('');
+                   
+                   document.getElementById("voucher-h5").innerHTML = ribuan;
+                 }
+             },
+             error: function(error) {
+                 alert("Voucher Tidak Ditemukan")
+             }
+             });
+           }, 300);
+         };
+         
+         memberSearchId.onkeyup = function(e) {
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+             var member = document.getElementById("memberSearchId").value;
+             var table = $('#memberSearchList').DataTable();
+             $.ajax({
+             method: "GET",
+             cache: false,
+             url: "/api/member?search=" + member,
+             success: function(result_arr) {
+                 table.clear().draw();
+                 for (var i = 0; i < result_arr.length; i++) {
+                     var result = result_arr[i];
+                     var dataSet = [result[0], result[1], result[2], result[3], idx];
+                    idx+=1;
+                     table.row.add(dataSet).draw();
+                 }
+             },
+             error: function(error) {
+                 table.clear().draw();
+             }
+             });
+           }, 300);
+         };
+         
+         itemSearchId.onkeyup = function(e) {
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+           var item_id = document.getElementById("itemSearchId").value;
+           var table = $('#itemSearchList').DataTable();
+           $.ajax({
+           method: "GET",
+           cache: false,
+           url: "/api/item?search=" + item_id,
+           success: function(result_arr) {
+               table.clear().draw();
+               for (var i = 0; i < result_arr.length; i++) {
+                   var result = result_arr[i];
+                   var reverse = result[3].toString().split('').reverse().join(''),
+                   ribuan = reverse.match(/\d{1,3}/g);
+                   ribuan = ribuan.join('.').split('').reverse().join('');
+                   var dataSet = [result[0], result[1], result[2], ribuan, result[4], idx];
+                   idx+=1;
+                   table.row.add(dataSet).draw();
+               }
+           },
+           error: function(error) {
+               table.clear().draw();
+           }
+           });
+           }, 300);
+         };
+         
+         itemId.onkeyup = function(e) {
+           clearTimeout(timeout);
+           timeout = setTimeout(function() {
+           var item_id = document.getElementById("itemId").value;
+           var item_qty = document.getElementById("item_qty").value;
+           var member_id = document.getElementById("memberId").value;
+           $.ajax({
+             method: "GET",
+             cache: false,
+             url: "/api/trx?search=" + item_id + "&qty=" + item_qty+"&member="+member_id,
+             success: function(result_arr) {
+                 updateTable(result_arr);
+             },
+             error: function(error) {
+                 document.getElementById("itemId").value = "";
+                 document.getElementById("item_qty").value = 1;
+                 document.getElementById("itemId").focus();
+             }
+           });
+           }, 300);
+         };
+
+
+         function updateTable(result_arr){
+           var table = $('#itemList').DataTable();
+           var result = result_arr[0];
+           var qty = parseFloat(qtyInput.value);
+           var total = parseInt(parseFloat(qty) * (parseFloat(result[3]) - parseFloat(result[4])));
+           total = Math.round(total);
+           var code= result[0];
+
+           if (table.rows().count()<1) {
+            var dataSet = [code, result[1], result[2], qty, result[3], result[4], total, idx];
+            idx+=1;
+            table.row.add(dataSet).draw();
+            checkPromo(result);
+            document.getElementById("itemId").value = "";
+            document.getElementById("item_qty").value = 1;
+            document.getElementById("itemId").focus();
+            SUMGrandTotal();
+           }else{
+             var existing = false;
+             var curr_code = "";
+             var curr_qty = "";
+             var curr_price = "";
+             var curr_disc = "";
+             var rowIdx = 0;
+
+             var t_size = $('#itemList').DataTable().rows().count();
+
+             for (var i = 0; i < t_size; i++) {
+              var this_code = table.cell(i,0).data();
+              var promo_item = table.cell(i,2).data().includes("PROMO-");
+              // alert(promo_item.includes("PROMO-"));
+              if ((this_code == code) && !promo_item){
+                existing = true;
+                curr_code = table.cell(i,0).data();
+                curr_qty = table.cell(i,3).data();
+                curr_price = table.cell(i,4).data();
+                curr_disc = table.cell(i,5).data();
+                rowIdx = i;
+                break;
+              }
+              table.draw();
+              SUMGrandTotal();
+             };
+
+              if (existing){
+                qty += parseInt(curr_qty);
+                var urls = "/api/trx?search=" + curr_code + "&qty=" + qty;
+                $.ajax({
+                   method: "GET",
+                   cache: false,
+                   url: urls,
+                   success: function(result_arr2) {
+                      result = result_arr2[0];
+
+                      var new_price = parseFloat(result[3]);
+                      var new_disc = parseFloat(result[4]);
+                      var new_total = parseFloat(qty) * (new_price-new_disc);
+
+                      table.cell(rowIdx,3).data(qty);
+                      table.cell(rowIdx,4).data(new_price);
+                      table.cell(rowIdx,5).data(new_disc);
+                      table.cell(rowIdx,6).data(new_total);
+
+                      table.draw();
+
+                      checkPromo(result_arr2[0]);
+                      SUMGrandTotal();
+                   },
+                   error: function(error) {
+                       document.getElementById("itemId").value = "";
+                       document.getElementById("item_qty").value = 1;
+                       document.getElementById("itemId").focus();
+                   }
+                 });
+              }else{
+                var dataSet = [code, result[1], result[2], qty, result[3], result[4], total, idx];
+                idx+=1;
+
+                table.row.add(dataSet).draw();
+
+                checkPromo(result)
+              }
+           }
+
+           table.draw();
+           SUMGrandTotal();
+           document.getElementById("itemId").value = "";
+           document.getElementById("item_qty").value = 1;
+           document.getElementById("itemId").focus();
+
+           return;
+         }
+
+        function checkPromo(result){
+          var table = $('#itemList').DataTable();
+          var t_size = $('#itemList').DataTable().rows().count();
+          var promo_present = false;
+          var row_idx = 0;
+          if(result.length>6){
+            for (var i = 0; i < t_size; i++) {
+              this_promo = table.cell(i,2).data();
+              if(this_promo == result[6]){
+                promo_present = true;
+                row_idx = i;
+                break;
+              }
+            };
+          } 
+
+          if(promo_present){
+            qty_free = result[9];
+            table.cell(row_idx,3).data(qty_free);
+            table.draw();
+          }else{
+            if(result.length == 10){
+              var dataSet = [result[7], result[8],result[6], result[9], 0, 0, 0, idx];
+              idx+=1;
+              table.row.add(dataSet).draw();
+            }
+          }
+          table.draw();
+         }
+
+
+         
+        function GrandTotal() {
+           total = 0;
+           var table = $('#itemList').DataTable();
+           var data = table.rows().data();
+           for (var i = 0; i < data.length; i++) {
+            total += parseFloat(data[i][6]);
+           }
+           var bilangan = total;
+           
+           var reverse = bilangan.toString().split('').reverse().join(''),
+           ribuan = reverse.match(/\d{1,3}/g);
+           ribuan = ribuan.join('.').split('').reverse().join('');
+           
+           $("#total-h5").html(ribuan);
+           document.getElementById("label-total").innerHTML = ribuan;
+         }
+         
+         var invoice = gon.invoice
+         var cashier = gon.cashier
+         var time = gon.current_time
+         
+         var header = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> <style type="text/css"> td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> <div class="row"> <div class="col-sm-12 text-center"> <img src="/images/logo.png" style="width: 150px"/> </div><div class="col-sm-12 text-center"> <p class="medium"> Jl. Cirata - Cilangkap, Ds. Cadassari <br> Kec. Tegalwaru, Kabupaten Purwakarta, Jawa Barat <br> =========================================================== <br> ' + invoice + ' <br> '+ cashier + ' - ' + time +' <br> =========================================================== </p>  </div>';
+
+         // var header = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> <style type="text/css"> td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> <div class="row"> <div class="col-sm-12 text-center"> <img src="/images/logo.png" /> </div><div class="col-sm-12 text-center"> <p class="medium"> Jl. Raya Plered,Purwakarta No.17 <br> Kec. Plered, Kabupaten Purwakarta, Jawa Barat <br> =========================================================== <br> ' + invoice + ' <br> '+ cashier + ' - ' + time +' <br> =========================================================== </p>  </div>';
+
+         var footer = '<p class="medium"> =========================================================== </p> <div class="text-center"> <h4> Terima kasih atas kunjungan Anda </h4> </div> </div> </div> </body> </html>';
+
+         var separator = '<p class="medium">===========================================================</p>';
+
+         var items = ' <div class="col-sm-12"><table class="table">';
+         var HTML_totals = '<table class="table">';
+         
+         function PrintBill() {
+             body_html = '';
+         
+             var total_diskon = 0;
+             var subtotal = 0;
+             var table = $('#itemList').DataTable();
+             table.draw();
+
+             var data = table.rows().data();
+             for (var i = 0; i < data.length; i++) {
+                 item_name = data[i][1];
+                 qty = data[i][3];
+                 price = splitRibuan(data[i][4]);
+                 disc = splitRibuan(data[i][5]);
+
+                 total = parseFloat(data[i][3])*parseFloat(data[i][4]);
+                 diskon = parseFloat(data[i][3])*parseFloat(data[i][5]);
+                 total_diskon += diskon;
+                 total = Math.round(total);
+                 var p_total = parseInt(total);
+
+                 subtotal += p_total;
+
+                 items += '<tr><td colspan="4">'+item_name+'</td> </tr>'
+                 items += '<tr><td class="text-center">'+qty+'</td><td class="text-center">x</td><td class="text-center">'+price+'</td><td class="text-right">'+splitRibuan(p_total)+'</td></tr>';
+                 if(diskon > 0){
+                  items += '<tr><td class="text-center" colspan="3">DISKON :</td><td class="text-right">-'+splitRibuan(diskon)+'</td></tr>';
+                 }
+             }
+
+             items += "</table>";
+
+             var pay = $('#nominal').val();
+
+             var payment = $("#payment-method-select").val();
+
+             var payment_method = "";
+             var bank_opt = document.getElementById("bank-select");
+             var bank = bank_opt.options[bank_opt.selectedIndex].text;
+             if(payment == 1){
+              payment_method = "CASH"
+             }else if (payment == 2){
+              payment_method = "DEBIT ("+bank+")"
+              pay = subtotal-total_diskon;
+             }else{
+              payment_method = "KREDIT ("+bank+")"
+              pay = subtotal-total_diskon;
+             }
+             subtotal = parseInt(subtotal);
+             total_diskon = parseInt(total_diskon);
+             pay = parseInt(pay);
+             HTML_totals += '<tr><td> Subtotal </td><td class="text-right">'+splitRibuan(subtotal)+' </td></tr><tr><td> Total Diskon</td><td class="text-right">'+splitRibuan(total_diskon)+'</td></tr><tr><td>Total</td><td class="text-right">'+splitRibuan(subtotal-total_diskon)+'</td></tr><tr><td> Bayar - '+payment_method+' </td><td class="text-right">'+splitRibuan(pay)+'</td></tr><tr><td> Kembali</td><td class="text-right">'+$("#change-h5").html()+'</td></tr>';
+
+             HTML_totals +="</table>"
+
+         
+             printHTML(header+items+separator+HTML_totals+footer);
+         }  
+         
+         function printHTML(html) {
+            var wnd = window.open("about:blank", "", "_blank");
+            wnd.document.write(html);
+            wnd.print();
+            items = ' <div class="col-sm-12"><table class="table">';
+            HTML_totals = '<table class="table">';
+         }
+
+         function splitRibuan(total){
+          var bilangan = total;
+           
+           var reverse = bilangan.toString().split('').reverse().join(''),
+           ribuan = reverse.match(/\d{1,3}/g);
+           ribuan = ribuan.join('.').split('').reverse().join('');
+           return ribuan;
+         }
+         
+         
+      </script>
+   </body>
+</html>

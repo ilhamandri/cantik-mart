@@ -1,0 +1,29 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Data Barang 
+      td
+        textarea PER DEPARTEMEN
+    tr
+      td.meta-head Departemen
+      td
+        b  
+          | #{@dept.name}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Kode
+    th Nama
+    th Sub Departemen
+
+  - @dept.item_cat.each do |item_cat|
+      - item_cat.item.each do |item|
+        tr.item-row
+          td #{item.code}
+          td #{item.name}
+          td #{item_cat.name}
+   

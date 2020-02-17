@@ -1,0 +1,119 @@
+- time_start = DateTime.now.beginning_of_day-1.days
+- time_end = DateTime.now.end_of_day
+/ - AccountBalance.balance_account
+- balance = StoreBalance.where(store: @store).order("created_at DESC").first
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Detil Toko - #{@store.name}
+      .card-body
+        = form_for :store, url: "" do |form|
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
+          .form_group
+            label for="address" Alamat
+            = form.text_field :address, required: true, class: "form-control md-form", id: "address", disabled: "disabled"
+          .form-group
+            label for="phone" Nomor Telepon
+            input class="form-control md-form" value="#{number_to_phone(@store.phone, country_code: 62)}" disabled= "disabled"
+          .form-group
+            label for="phone" Jumlah Member
+            - members_count = Member.where(store: @store).count
+            input type="number" class="form-control md-form" value='#{number_with_delimiter(members_count, delimiter: ".")}' disabled= "disabled"
+          .form-group
+            label for="user" Karyawan
+            textarea class="form-control md-form" disabled="disabled"
+              - users = User.where(store: @store).pluck(:name)
+              - users.each do |user|
+                -if users.last == user
+                  | #{user}
+                - else
+                  | #{user}, 
+        .text-center
+          - if !@store.users.present? && !@store.store_items.present?
+            = button_to "Hapus Toko", @store, :method=>:delete, :class=>"btn btn-danger"
+    - if ["owner", "super_admin", "finance"].include? current_user.level
+      .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Keuangan
+      .row
+        - stock_under_zero = StoreItem.where(store: balance.store).where('stock < 0').count
+        - if stock_under_zero > 0
+          .card-body.col-12.text-left
+            .text-danger
+              | * Terdapat #{stock_under_zero} item dengan stok dibawah 0.
+
+        - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
+        - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
+
+        .card-body.col-6.text-left
+          .card-header.white-text.primary-color
+            | AKTIVA
+          .card-body
+            label for="phone" Tunai
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.cash, delimiter: ".", separator: ",")}' 
+
+            label for="phone" Saldo Bank
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.bank, delimiter: ".", separator: ",")}' 
+
+            label for="phone" Piutang
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.receivable, delimiter: ".", separator: ",")}'
+
+            label for="phone" Nilai Stok
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.stock_value, delimiter: ".", separator: ",")}'
+
+            label for="phone" Nilai Aset
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.asset_value, delimiter: ".", separator: ",")}'
+
+        .card-body.col-6.text-left
+          .card-header.white-text.primary-color
+            | PASSIVA
+          .card-body
+            label for="phone" Modal
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.equity, delimiter: ".", separator: ",")}'
+
+            label for="phone" Hutang
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.debt, delimiter: ".", separator: ",")}'
+
+            label for="phone" Transaksi(Profit) & Loss
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.transaction_value, delimiter: ".", separator: ",")}'
+
+            label for="phone" Pemasukkan & Pengeluaran
+            input class="form-control md-form text-right" value='#{number_with_delimiter(balance.outcome, delimiter: ".", separator: ",")}'
+
+        .col-12
+          hr.primary-color-dark
+
+        .col-5.text-center
+          - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
+          | #{number_to_currency(activa, unit: "Rp. ")}
+
+        .col-2.text-center
+          | :
+
+        .col-5.text-center
+          - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
+          | #{number_to_currency(passiva, unit: "Rp. ")}
+
+        h5.col-12.text-center
+          hr.primary-color-dark
+          - if activa.round == passiva.round
+            .text-success
+              | BALANCE
+          - else
+            .text-danger
+              | NOT BALANCE (#{number_to_currency((activa-passiva).abs, unit: "Rp. ")})
+
+          br
+          - balance = StoreBalance.where(store: @store).where("created_at > ?", DateTime.now.beginning_of_day).first
+          - file = balance.filename.split("/").last
+          - file_exist = File.exist?("./report/"+file)
+          - if file_exist
+            a href="#{download_file_path(name: file)}"
+              button.btn.btn-success type="button" 
+                | Unduh

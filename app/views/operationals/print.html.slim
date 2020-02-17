@@ -1,0 +1,33 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Toko 
+      td
+        textarea #{@store_name}
+    tr
+      td.meta-head Jenis
+      td 
+        textarea Operasional
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | #{@search}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Dibuat Oleh
+    th Tanggal
+    th Nominal
+    th Keterangan
+
+  - @finances.each do |finance|
+    tr.item-row
+      td #{finance.user.name}
+      td #{finance.created_at}
+      td #{finance.nominal}
+      td #{finance.description}

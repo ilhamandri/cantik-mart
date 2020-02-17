@@ -1,0 +1,29 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Ubah Member - #{@member.name}
+      .card-body
+       = form_for :member, url: member_path(id: @member.id), method: "PUT" do |form|
+        .form-group
+          label for="name" Nama
+          = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+        .form_group
+          label for="address" Alamat
+          = form.text_field :address, required: true, class: "form-control md-form", id: "address"
+        .form-group
+          label for="phone" Nomor Telepon
+          = form.number_field :phone, required: true, class: "form-control md-form", id: "phone", minlength:"6", maxlength: "13", pattern:"[0-9]+", title:"6-13 digit nomor telepon"
+        .form-group
+          label for="sex" Jenis Kelamin
+          select name="member[sex]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary"
+            option value='laki_laki'
+              | Laki - laki
+            option value='perempuan'
+              | Perempuan
+        .form-group
+          label for="card-card" Nomor Kartu
+          = form.text_field :card_number, required: true, class: "form-control md-form", id: "card_number", minlength:"51", pattern:"[0-9]+", title:"nomor kartu"
+        .form-group.text-center
+          = form.submit "Ubah Member", class: "btn btn-warning"

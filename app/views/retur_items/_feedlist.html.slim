@@ -1,0 +1,17 @@
+tr
+  td #{r_item.item.name}
+  td #{r_item.item.item_cat.name}
+  td #{r_item.accept_item.to_i}
+  td #{r_item.description}
+  td
+    select class="mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="retur[retur_items][#{r_item_counter}][feedback]" required=true
+      option value="retur_item"
+        | Tukar Barang
+      option value="cash"
+        | Potong Nota
+      option value="loss"
+        | Musnah
+  td 
+    input type="number" class="form-control md-form" name="retur[retur_items][#{r_item_counter}][item_id]" value="#{r_item.id}" style="display: none;"
+    input type="number" class="form-control" name="retur[retur_items][#{r_item_counter}][nominal]" value=0
+    

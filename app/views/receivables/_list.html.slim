@@ -1,0 +1,27 @@
+tr
+    td #{finance.finance_type}
+    td #{finance.user.name} (#{finance.store.name})
+   	- if finance.finance_type == "RETUR"
+   		- to_user = Supplier.find finance.to_user
+  	 	td #{to_user.name}
+    - else
+      - user = User.find(finance.to_user)
+      td #{user.name} (#{user.store.name}) 
+    td #{finance.date_created}
+  	td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
+    td #{finance.n_term} x
+    - if finance.nominal_term == 0
+      td #{number_with_delimiter(finance.nominal, delimiter: ".", separator: ",")}
+    - else
+      td #{number_with_delimiter(finance.nominal_term, delimiter: ".", separator: ",")}
+    td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}
+    td 
+      a href='#{edit_receivable_path(id: finance.id)}' class="btn btn-danger"
+            | EDIT
+    td
+      - if finance.deficiency.abs > 0 
+        a href='#{receivable_path(id: finance.id)}' class="btn btn-warning"
+          | #{finance.description}
+      - else
+        a href='#{receivable_path(id: finance.id)}' class="btn btn-success"
+          | #{finance.description}

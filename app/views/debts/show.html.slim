@@ -1,0 +1,53 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data Hutang
+      .card-body 
+        .row
+          .col-12
+            .form-group
+              label for="name" Deskripsi
+              input type="text" class="form-control md-form" value="#{@debt.description}"
+          .col-4
+            .form-group
+              label for="name" Dibuat Oleh
+              input type="text" class="form-control md-form" value="#{@debt.user.name} - #{@debt.user.store.name}"
+          .col-4
+            .form-group
+              label for="name" Nominal
+              input type="text" class="form-control md-form" value="#{number_with_delimiter(@debt.nominal, delimiter: ".", separator: ",")}"
+          .col-4
+            .form-group
+              label for="name" Kekurangan
+              input type="text" class="form-control md-form" value="#{number_with_delimiter(@debt.deficiency, delimiter: ".", separator: ",")}"
+          - if @debt.deficiency > 0
+            .col-12.text-center
+              a href='#{new_pay_path(id: @debt.id, type: "debt")}' class="btn btn-warning"
+                | Bayar
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Riwayat Pembayaran
+      .card-body 
+        table.table
+          tr
+            th  No. Invoice
+            th  Dibayarkan              
+            th  Tanggal
+            th  Nominal
+            th  Catatan
+          - pays = CashFlow.where(finance_type: "Outcome", payment: "debt", ref_id: @debt.id)
+          - pays.each do |pay|
+            tr
+              td #{pay.invoice}
+              td #{pay.user.name} - #{pay.store.name}
+              td #{pay.created_at}
+              td #{number_with_delimiter(pay.nominal, delimiter: ".", separator: ",")}
+              td #{pay.description}
+        
+        

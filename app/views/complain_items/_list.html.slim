@@ -1,0 +1,10 @@
+tr
+  td #{ret_item.item.code} 
+  td
+    - if ret_item.item.image.present?
+      img src="#{ret_item.item.image}" width="50px"
+    - else
+      =image_tag("/images/default_item.jpg", height: '70', width: '70')
+  td #{ret_item.item.name}
+  td #{ret_item.quantity}
+  td #{ret_item.description}

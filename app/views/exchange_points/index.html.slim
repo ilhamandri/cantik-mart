@@ -1,0 +1,29 @@
+.row
+  .col
+    h5
+      | Daftar Penukaran Poin
+  .col.text-right
+    a href="#{new_exchange_point_path}"
+      button.btn.btn-success type="button" 
+        i.fas.fa-plus 
+        |   Tambah Kriteria
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Riwayat
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Poin
+            th Jenis
+            th Jumlah
+            th Ditukar
+            th
+            th
+          tbody
+            = render partial: 'list', collection: @EPoints, as: :epoint
+        = paginate @EPoints
+

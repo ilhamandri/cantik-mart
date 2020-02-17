@@ -1,0 +1,71 @@
+nav.navbar.fixed-top.navbar-expand-lg.scrolling-navbar.double-nav
+  .float-left
+    a.button-collapse data-activates="slide-out" href="#" 
+      i.fas.fa-bars
+  .breadcrumb-dn.mr-auto
+    p CANTIK MART
+  .d-flex.change-mode
+    ul.nav.navbar-nav.nav-flex-icons.ml-auto
+      li.nav-item.dropdown.notifications-nav
+        - total_notifications = Notification.where(to_user: current_user, read: 0).order("date_created DESC").count
+      
+        a#navbarDropdownMenuLink.nav-link.dropdown-toggle.waves-effect aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" onclick="update_notification()"
+          - if total_notifications > 0
+            span.badge.red id="notif_number_badge"
+              | #{total_notifications}
+          - else
+            span.badge.red id="notif_number_badge" style="display: none;"
+              | #{total_notifications}
+          i.fas.fa-bell
+          span.d-none.d-md-inline-block Notifications
+          
+        input type="text" style="display: none;" value="#{DateTime.now}" id="last_check"
+        .dropdown-menu.dropdown-primary aria-labelledby="navbarDropdownMenuLink" id="notification_list"
+
+          = render "layouts/menu/notif"            
+
+      li.nav-item.dropdown
+        a#userDropdown.nav-link.dropdown-toggle.waves-effect aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="#" 
+          - if current_user.image.present?
+            =image_tag("/uploads/profile_picture/#{current_user.image}", height: '20', width: '20', class:"rounded-circle ")
+          - else
+            =image_tag("/uploads/profile_picture/default.png", height: '20', width: '20', class:"rounded-circle ")
+          - if current_user.level == "driver"
+            span.clearfix.d-none.d-sm-inline-block &nbsp&nbsp&nbsp#{current_user.name} - Visitor
+          - else
+            span.clearfix.d-none.d-sm-inline-block &nbsp&nbsp&nbsp#{current_user.name} - #{current_user.level}
+        .dropdown-menu.dropdown-menu-right aria-labelledby="userDropdown" 
+          .row.text-center
+            .col-6
+              =image_tag("/uploads/profile_picture/#{current_user.image}", height: '100', width: '100', class:"rounded-circle ")
+            .col-6.align-middle
+              br
+              | #{current_user.name} - #{current_user.level}
+              - absent = Absent.find_by("DATE(check_in) = ? AND user_id = ?", DateTime.now.to_date, current_user.id)
+              - if absent.present?
+                - check_in = absent.check_in
+                - divide_hour = DateTime.now.to_time - check_in.to_time
+                - raw_hour = divide_hour / 1.hour
+                - hour = raw_hour.to_i.to_s
+                - divide_min = raw_hour - raw_hour.to_i
+                - raw_min = divide_min*60
+                - minute = raw_min.to_i.to_s
+                br
+                  .font-weight-bold.red-text
+                    | #{hour} Jam #{minute} Menit
+              - else
+                br
+                  .font-weight-bold.red-text
+                    | Silahkan melakukan absensi
+              #txt
+            .col-12
+              hr
+              a.dropdown-item href="#{user_path(id: current_user.id)}"  Akun
+              br
+            .col-12
+              hr
+              a.dropdown-item href="#{absents_path(id: current_user.id)}"  Absensi
+              br
+              hr
+            .col-12
+              = button_to "Keluar", sign_out_path, method: :delete, class: "btn btn-danger"

@@ -1,0 +1,23 @@
+- if @total_payments > 0
+  .card.bg-warning[style="color: black"]
+    .card-body
+      h5.card-title
+        | <i class="fa fa-hand-holding-usd"></i>&nbsp&nbsp
+        | PEMBAYARAN
+      p.card-text[style="color: black"]
+        | Terdapat 
+        b
+         | #{@total_payments} 
+        | order yan belum lunas.
+      a.btn.btn-warning[href="#{orders_path(type: 'payment')}"]
+        | Cek Order&nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
+- else
+  .card.bg-success.text-white
+    .card-body.text-white
+      h5.card-title
+        | <i class="fa fa-hand-holding-usd"></i>&nbsp&nbsp
+        | PEMBAYARAN
+      p.card-text.text-white
+        | Semua tagihan order telah lunas.
+      a.btn.btn-success[href="#{orders_path}"]
+        | Cek Order &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>

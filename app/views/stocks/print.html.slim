@@ -1,0 +1,32 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Toko 
+      td
+        textarea #{@store_name}
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | #{@search}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Kode
+    th Nama
+    th Kategori
+    th Limit
+    th Stok
+
+  - @inventories.each do |inventory|
+    tr.item-row
+      td #{inventory.item.code}
+      td #{inventory.item.name}
+      td #{inventory.item.item_cat.name}
+      td #{inventory.min_stock}
+      td #{inventory.stock}
+   

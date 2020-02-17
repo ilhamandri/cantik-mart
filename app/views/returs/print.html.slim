@@ -1,0 +1,46 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Invoice #
+      td
+        textarea #{@retur.invoice}
+    tr
+      td.meta-head Tanggal
+      td
+        textarea #{@retur.created_at.to_date} - #{@retur.user.name}
+    tr
+      td.meta-head Toko
+      td
+        .due #{@retur.store.name}
+    tr
+      td.meta-head Suplier
+      td
+        .due #{@retur.supplier.name}
+table#items
+  tr
+    th No
+    th Barang
+    th Deskripsi
+    th Jumlah
+    th Dikembalikan
+    th Hasil
+    th Nominal
+
+  - @retur_items.each_with_index do |retur_item, idx|
+    tr.item-row
+      td #{idx+1}
+      td #{retur_item.item.name}
+      td #{retur_item.description}
+      td #{retur_item.quantity}
+      td #{retur_item.accept_item}
+      td
+        - if retur_item.feedback == "retur_item"
+          | TUKAR BARANG
+        - elsif retur_item.feedback == "cash"
+          | PIUTANG
+        - elsif retur_item.feedback == "loss"
+          | LOSS
+      td
+        span #{number_with_delimiter(retur_item.nominal, delimiter: ".", separator: ",")}
+
+  

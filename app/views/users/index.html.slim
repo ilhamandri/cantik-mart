@@ -1,0 +1,52 @@
+.row
+  .col.text-left
+    h5
+      | Daftar Pengguna Sistem   
+  .col.text-right
+    a href="#{users_path(format: :pdf)}"
+      button.btn.btn-warning. type="button" 
+        i.fas.fa-download
+        |   PDF Daftar Pengguna 
+  .col.text-right
+    a href="#{new_user_path}"
+      button.btn.btn-success. type="button" 
+        i.fas.fa-plus 
+        |   Tambah Pengguna
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pencarian
+    .card.mb-4
+      .card-body
+        = form_for :user, url: users_path, method: 'GET' do |form|
+          .row.align-middle
+            .col-md-12
+              input type="text" class="form-control md-form" id="search" name="search"
+            .col-md-12.text-center
+              button class="btn btn-primary"
+                | Cari
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data
+    .card.mb-4 
+      .card-body.table-responsive.text-nowrap
+        table class="table" 
+          thead
+            th Foto
+            th Nama
+            th Jabatan
+            th Alamat
+            th No. Telp
+            th Jenis Kelamin
+            th Aksi
+          tbody
+            = render partial: 'list', collection: @users, as: :user
+        = paginate @users
+
+
+

@@ -1,0 +1,81 @@
+- notifications = Notification.where(to_user: current_user).order("date_created DESC, read DESC ").limit(5)
+- notifications.each do |notification|
+  - from = notification.from_user.name
+  - type = notification.m_type
+  - message = truncate(notification.message, length: 30)
+  - t = Time.now - notification.date_created
+  - mm, ss = t.divmod(60)            
+  - hh, mm = mm.divmod(60)           
+  - dd, hh = hh.divmod(24)  
+  - time = ""
+  - if dd != 0
+    - if dd > 30
+      - new_dd = dd / 30
+      - time+= pluralize(new_dd, 'month')
+    - else
+      - time+= pluralize(dd, 'day')
+  - elsif hh != 0
+    - time+= pluralize(hh,'hour')
+  - elsif mm != 0
+    - time+= pluralize(mm,'minute')
+  - else
+    - time+= pluralize(ss.to_i,'sec')
+
+  - if type == 'primary'
+    a.bq-primary.dropdown-item href="#{notification.link}"
+      i.fas.fa-star.mr-2 aria-hidden="true" 
+      span #{from}
+      br
+      span #{message}
+      br
+      p.span.float-right
+        small  
+          | #{" "+time}
+
+  - elsif type == 'warning'
+    a.bq-warning.dropdown-item href="#{notification.link}" 
+      i.fas.fa-exclamation-triangle.mr-2 aria-hidden="true" 
+      span #{from}
+      br
+      span #{message}
+      br
+      p.span.float-right
+        small  
+          | #{" "+time}
+
+  - elsif type == 'success'
+    a.bq-success.dropdown-item href="#{notification.link}" 
+      i.fas.fa-check.mr-2 aria-hidden="true" 
+      span #{from}
+      br
+      span #{message}
+      br
+      p.span.float-right
+        small  
+          | #{" "+time}
+
+  - elsif type == 'danger'
+    a.bq-danger.dropdown-item href="#{notification.link}" 
+      i.fas.fa-times.mr-2 aria-hidden="true" 
+      span #{from}
+      br
+      span #{message}
+      br
+      p.span.float-right
+        small  
+          | #{" "+time}
+
+  - elsif type == 'info'
+    a.bq-info.dropdown-item href="#{notification.link}" 
+      i.fas.fa-info-circle.mr-2 aria-hidden="true" 
+      span #{from}
+      br
+      span #{message}
+      br
+      p.span.float-right
+        small  
+          | #{" "+time}
+
+a.dropdown-item href="#{notifications_path}" 
+  p.span.float-right
+    | Semua Notifikasi

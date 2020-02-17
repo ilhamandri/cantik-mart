@@ -1,0 +1,69 @@
+.row
+  .col-md-9.text-left
+    h5
+      | Pengembalian Konsumen
+  .col.text-right
+    a href="#{transactions_path(from: "complain")}"
+      button.btn.btn-danger type="button" 
+        i.fas.fa-plus 
+        |   Buat Retur     
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pencarian
+    .card.mb-4
+      .card-body
+       = form_for :complain, url: complains_path, method: 'GET' do |form|
+        .row   
+          - if ["owner", "super_admin", "super_finance"].include? current_user.level
+            .col-md-12
+              select class="mdb-select md-form" name="store_id"
+                option value="0"
+                  | Semua Toko
+                - Store.all.each do |store|
+                  option value="#{store.id}"
+                    | #{store.name}
+            .col-md-6
+              select class="mdb-select md-form" id="months" name="months"
+                option value="1"
+                  | 1 Bulan
+                option value="3"
+                  | 3 Bulan
+                option value="6"
+                  | 6 Bulan
+                option value="12"
+                  | 12 Bulan
+          .col-6.text-center
+            input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice ... "
+          .col-12.text-center
+            button class="btn btn-primary"
+              | Cari
+        br
+        .col-md-12.text-center.grey-text
+          a href="#{complains_path(option: @params.to_s, format: :pdf)}"
+            b
+              | #{@search}
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data
+    .card.mb-4
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Invoice
+            th Transaksi
+            th Member
+            th Tgl. Transaksi
+            th Tgl. Retur
+            th Total Item
+            th Aksi
+          tbody
+            = render partial: 'list', collection: @complains, as: :retur
+        = paginate @complains
+
+
+

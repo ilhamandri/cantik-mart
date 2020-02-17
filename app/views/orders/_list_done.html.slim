@@ -1,0 +1,26 @@
+tr
+  td #{order.invoice}
+  td #{order.supplier.name}
+  td #{order.total_items.to_i}
+  td #{number_with_delimiter(order.total, delimiter: ".")}
+  td #{order.user.name} (#{order.date_created.to_date})
+  td
+    - if order.date_receive.nil?
+      | - 
+    - else
+      | #{order.received_by.name} (#{order.date_receive.to_date})
+  td
+    - if order.date_paid_off.nil?
+      | - 
+    - else
+      | LUNAS (#{order.date_paid_off.to_date})
+
+  td
+    - if order.date_receive.nil? && order.total != 0
+      = form_for :order, url: "#{order_path(id: order.id)}", method: "DELETE" do |form|
+        = form.submit "Hapus", class: "btn btn-danger"
+  td
+    a href='#{order_path(id: order.id)}'
+      button class="btn btn-primary"
+        | Item
+

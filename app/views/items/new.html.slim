@@ -1,0 +1,44 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Tambah Barang
+      .card-body
+        = form_for :item, url: items_path, method: "POST" do |form|
+          .form-group
+            label for="code" Kode
+            = form.text_field :code, required: true, class: "form-control md-form", id: "code"
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+          / .form-group
+            label for="brand" Merek
+            = form.text_field :brand, required: true, class: "form-control md-form", id: "brand"
+          .form-group
+              label for="item" Kategori
+              select name="item[item_cat_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" searchable="Cari..."
+                - @item_cats.each do |item_cat|
+                  option value="#{item_cat.id}"
+                    | #{item_cat.name} 
+          /.form-group
+            label for="buy" Margin
+            = form.number_field :margin, required: true, class: "form-control md-form", id: "buy", min: "0", value: "0"
+          .form-group
+            label for="buy" Harga Beli Satuan
+            = form.number_field :buy, required: true, class: "form-control md-form", id: "buy", min: "0", value: "0"
+          .form-group
+            label for="buy" Harga Jual Satuan
+            = form.number_field :sell, required: true, class: "form-control md-form", id: "buy", min: "0", value: "0"  
+          .form-group style="display: none"
+            label for="buy" Harga Jual Member
+            = form.number_field :sell_member, required: true, class: "form-control md-form", id: "buy", min: "0", value: "0"
+          .form-group
+              label for="item" Jenis Barang
+              select name="item[local_item]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
+                option value="false"
+                  | Barang Pusat 
+                option value="true"
+                  | Barang Lokal 
+          .form-group.text-center
+            = form.submit "Tambah Barang", class: "btn btn-primary"

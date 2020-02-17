@@ -1,0 +1,36 @@
+tr
+  td #{@idx}
+  - @idx += 1
+  td #{ret_item.item.code} 
+  td
+    - if ret_item.item.image.present?
+      img src="#{ret_item.item.image}" width="50px"
+    - else
+      =image_tag("/images/default_item.jpg", height: '70', width: '70')
+  td #{ret_item.item.name}
+  td.text-center #{ret_item.quantity}
+  - if ret_item.accept_item.present?
+    - if ret_item.accept_item > 0
+      td.text-center #{ret_item.accept_item}
+    - else
+      td.text-center
+        i.fas.fa-times
+  - else
+    td.text-center
+      i.fas.fa-times
+  td #{ret_item.description}
+  - if ret_item.feedback.present?
+    td 
+      - if ret_item.feedback == "retur_item"
+        | TUKAR BARANG
+      - elsif ret_item.feedback == "cash"
+        | PIUTANG
+      - elsif ret_item.feedback == "loss"
+        | LOSS
+    td.text-right #{number_with_delimiter(ret_item.nominal, delimiter: ".")}
+  - else
+    td.text-right
+      i.fas.fa-times
+    td.text-right
+      i.fas.fa-times
+

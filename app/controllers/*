@@ -1,0 +1,2 @@
+item.create_activity :create, owner: current_user
+item.create_activity :edit, owner: current_user

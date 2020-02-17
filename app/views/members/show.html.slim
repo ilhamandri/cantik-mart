@@ -1,0 +1,44 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Detil Member - #{@member.name}
+      .card-body
+       = form_for :member, url: "" do |form|
+        .form-group
+          label for="name" Nama
+          = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
+        .form_group
+          label for="address" Alamat
+          = form.text_field :address, required: true, class: "form-control md-form", id: "address", disabled: "disabled"
+        .form-group
+          label for="phone" Phone
+          input class="form-control md-form" value="#{number_to_phone(@member.phone, country_code: 62)}"  disabled="disabled"
+        .form-group
+          label for="sex" Jenis Kelamin
+          input type="text" class="form-control md-form" value='#{@member.sex}'  disabled="disabled"
+        .form-group
+          label for="card-card" Nomor Kartu
+          input class="form-control md-form" value="#{number_with_delimiter(@member.card_number, delimiter: " ")}"  disabled="disabled"
+        .form-group
+          label for="card-card" Poin
+          input class="form-control md-form" value="#{number_with_delimiter(@member.point, delimiter: ".")}"  disabled="disabled"
+        .form-group
+          label for="card-card" Dibuat Di Toko
+          input type="text" class="form-control md-form" value='#{@member.store.name}'  disabled="disabled"
+        .form-group
+          label for="card-card" Dibuat Oleh
+          input type="text" class="form-control md-form" value='#{@member.user.name}' disabled="disabled"
+        .form-group.text-center
+          a href='#{edit_member_path(id: @member.id)}'
+            button.btn.btn-warning type="button" 
+                | Edit
+
+          a href='#{transactions_path(member_card: @member.card_number)}'
+            button.btn.btn-primary type="button" 
+                | Riwayat Transaksi
+
+          a href='#{points_path(id: @member.id)}'
+            button.btn.btn-info type="button" 
+                | Riwayat Poin

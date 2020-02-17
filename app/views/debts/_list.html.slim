@@ -1,0 +1,25 @@
+tr
+  td 	
+  	| #{finance.user.name} (#{finance.store.name}) 
+  	br 
+  	| #{finance.date_created}
+  td #{finance.finance_type}
+  td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
+  td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}
+  td #{finance.due_date.to_date}
+  td 
+    a href='#{edit_debt_path(id: finance.id)}' class="btn btn-danger"
+          | EDIT
+  td
+    - if ["BANK", "OTHERLOAN"].include? finance.finance_type 
+      - if finance.deficiency.abs > 0 
+        a href='#{debt_path(id: finance.id)}' class="btn btn-info"
+          | #{finance.description}
+      - else
+        | #{finance.description}
+    - elsif finance.finance_type == "ORDER"
+        a href='#{order_path(id: finance.ref_id)}' class="btn btn-info"
+          | #{finance.description}
+    - else
+      | #{finance.description}
+   

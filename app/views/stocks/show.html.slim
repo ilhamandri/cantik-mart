@@ -1,0 +1,90 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Detil Stok #{@stock.store.name} - #{@item.name} (#{@item.code})
+      .card-body
+        = form_for :item, url: "" do |form|
+          .form-group
+            label for="code" Kode
+            = form.text_field :code, required: true, class: "form-control md-form", id: "code", disabled: true
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: true
+          .form-group
+            label for="item" Kategori
+            input type='text' value="#{@item.item_cat.name}" disabled= true class="form-control md-form"
+          .form_group
+            label for="category" Stok 
+            input type='number' value="#{@stock.stock}" disabled= true class="form-control md-form"
+          .form-group
+            label for="stock" Limit
+            = form.number_field :min_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.min_stock}", disabled: "disabled"
+          .form-group
+            label for="stock" Harga Beli
+            input type='number' value="#{@stock.buy}" disabled= true class="form-control md-form"
+          .form-group
+            label for="sell" Harga Jual
+            table class="table table-hover"
+              thead
+                th Min
+                th Max
+                th Harga Normal
+                th Harga Member
+                th Diskon
+                th Profit
+                th
+              tbody
+                tr
+                  td 0
+                  td 1
+                  td #{number_to_currency(@item.sell, delimiter: ".", separator: ",", unit: "Rp. ")}
+                  td
+                    - if @item.sell_member == 0 || @item.sell_member == @item.sell 
+                      | -
+                    - else
+                      | #{number_to_currency(@item.sell_member, delimiter: ".", separator: ",", unit: "Rp. ")}
+                  - disc = @item.discount
+                  - if disc < 100
+                    - if disc != 0
+                      td #{disc} %
+                    - else
+                      td -
+                  - else
+                    td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
+                  - disc = (@item.discount / 100 * @item.sell) if disc >= 100
+                  td #{number_to_currency((@item.sell - @item.buy - disc).round, delimiter: ".", separator: ",", unit: "Rp. ")}
+                  td.text-right
+                    a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
+                      |   + Cetak
+                - item_grocers = @item.grocer_items
+                - if item_grocers.present?
+                  -item_grocers.each do |item|
+                    tr 
+                      td #{item.min}
+                      td #{item.max}
+                      td #{number_to_currency(item.price, delimiter: ".", separator: ",", unit: "Rp. ")}
+                      - member_price = item.member_price
+                      - if member_price == item.price
+                       td -
+                      - else
+                        td #{number_to_currency(item.member_price, delimiter: ".", separator: ",", unit: "Rp. ")}
+                      - if item.discount < 100
+                        - if item.discount > 0
+                          td #{item.discount} %
+                        - else
+                          td -
+                      - else
+                        td #{number_to_currency(item.discount, delimiter: ".", separator: ",", unit: "Rp. ")}
+                      - disc = item.discount
+                      - disc = (disc * item.price / 100) if disc >= 100
+                      td #{number_to_currency((item.price - @item.buy - disc).round, delimiter: ".", separator: ",", unit: "Rp. ")}
+                      td.text-right
+                        a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
+                          |   + Cetak
+
+        - if Controller.find_by(name: 'stocks').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+          .col-12.text-center
+            a href='#{edit_stock_path(id: @stock.id)}' class="btn btn-warning" type="button" 
+                  | Edit

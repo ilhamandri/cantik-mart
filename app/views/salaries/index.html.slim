@@ -1,0 +1,70 @@
+.row
+  .col
+    h5
+      | Gaji Karyawan
+  .col.text-right
+    a href="#{new_salary_path}"
+      button.btn.btn-success. type="button" 
+        i.fas.fa-plus 
+        |   Bayar Gaji
+        
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+      h5.font-weight-500.my-1
+        | Pencarian
+    .card.mb-4
+      .card-body
+        = form_for :finances, url: salaries_path, method: 'GET' do |form|
+          .row
+            - if ["owner", "super_admin", "super_finance"].include? current_user.level
+              .col-md-12
+                select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="user_id"
+                  option value="0"
+                    | Semua Karyawan
+                  - User.all.each do |user|
+                    option value="#{user.id}"
+                      | #{user.name} - #{user.store.name}
+            .col
+              select class="mdb-select md-form" id="months" name="months"
+                option[value=3]
+                  | 3 bulan
+                option[value=6]
+                  | 6 bulan
+                option[value=9]
+                  | 9 bulan
+                option[value=12]
+                  | 1 tahun
+            .col
+              select class="mdb-select md-form" id="order_by" name="order_by"
+                option[value="asc"]
+                  | secara A - Z
+                option[value="desc"]
+                  | secara Z - A
+            .col-12.text-center
+              button class="btn btn-primary"
+                | Cari
+
+        .col-md-12.text-center.grey-text
+          a href="#{salaries_path(option: @params.to_s, format: :pdf)}"
+            b
+              | #{@search}
+          
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data
+    .card.mb-4
+      .card-body.table-responsive.text-nowrap
+        = paginate @salaries
+        table class="table"
+          thead
+            th Karyawan
+            th Toko
+            th Bulan / Tahun
+            / th Jumlah Masuk
+            th Nominal
+          tbody
+            = render partial: 'list', collection: @salaries, as: :salary
+

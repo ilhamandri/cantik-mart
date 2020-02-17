@@ -1,0 +1,53 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Tambah Pengguna
+      .card-body
+        = form_for :user, url: users_path, method: "POST" do |form|
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+          .form-group
+            label for="email" Email
+            = form.text_field :email, required: true, class: "form-control md-form", id: "email"
+          .form-group
+            label for="password" Kata Sandi
+            = form.password_field :password, required: true, class: "form-control md-form", id: "password"
+          .form_group
+            label for="address" Alamat
+            = form.text_field :address, required: true, class: "form-control md-form", id: "address"
+          .form-group
+            label for="phone" No. Telepon
+            = form.text_field :phone, required: true, class: "form-control md-form", id: "phone", minlength:"6", maxlength: "13", pattern:"[0-9]+", title:"6-13 digit nomor telepon"
+          .form-group
+            label for="sex" Jenis Kelamin
+            select name="user[sex]" required=true class="mdb-select md-form colorful-select dropdown-primary" 
+              option value='laki_laki'
+                | Laki - laki
+              option value='perempuan'
+                | Perempuan
+          .form-group
+            label for="level" Peran 
+            select name="user[level]" required=true class="mdb-select md-form colorful-select dropdown-primary" id="level" 
+              - User::levels.each do |user_level|
+                option value='#{user_level[0]}'
+                  | #{user_level[0].upcase.gsub('_', ' ')}
+          .form-group
+            label for="id-card" KTP
+            = form.text_field :id_card, required: true, class: "form-control md-form", id: "id-card", minlength:"16", maxlength:"18", pattern:"[0-9]+", title:"16 digit nomor KTP"
+          .form-group
+            label for="store" Toko
+            select name="user[store_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store" searchable="Cari..."
+              - @stores.each do |store|
+                option value="#{store.id}"
+                  | #{store.name}
+          .form-group style="display: none;"
+            label for="id-card" ID Fingerprint
+            = form.text_field :fingerprint, required: true, class: "form-control md-form", id: "id-card", value: "0"
+          .form-group
+            label for="id-card" Gaji
+            = form.number_field :salary, required: true, class: "form-control md-form", id: "id-card", min:"0", value:'0'
+          .form-group.text-center
+            = form.submit "Tambah Pengguna", class: "btn btn-primary"

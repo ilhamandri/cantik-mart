@@ -1,0 +1,34 @@
+tr
+
+	td #{print.item.code}
+	- if print.grocer_item_id.present?
+		- grocer_item = print.grocer_item
+		- min = grocer_item.min
+		- max = nil
+		- max = grocer_item.max if min != grocer_item.max
+		- text = "Promo Beli "+min.to_s+" - "+max.to_s+" "+grocer_item.item.name
+		td #{text}
+		td Grosir
+		- price = print.grocer_item.price
+		- disc = print.grocer_item.discount
+		- disc = price*print.grocer_item.discount/100 if print.grocer_item.discount < 100
+		td #{number_with_delimiter(price - disc, delimiter: ".")}
+
+	-elsif print.promotion_id.present?
+		- promotion = print.promotion
+		- buy_qty = promotion.buy_quantity.to_s
+		- buy_item = promotion.buy_item.name
+		- free_qty = promotion.free_quantity.to_s
+		- free_item = promotion.free_item.name
+		- text = "PROMO BELI "+buy_qty+" "+buy_item+"\n GRATIS "+free_qty+" "+free_item+" ( "+promotion.promo_code+" )"
+		td #{text}
+		td Bundling
+		td -
+
+	- else
+		td #{print.item.name}
+		td  Satuan
+		- price = print.item.sell
+		- disc = print.item.discount
+		- disc = price*print.item.discount/100 if print.item.discount < 100
+		td #{number_with_delimiter(print.item.sell, delimiter: ".")}

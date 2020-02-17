@@ -1,0 +1,115 @@
+.row
+  .col.text-left
+    h5
+      - if @search_id.nil?
+        | Rekap Keuangan - #{@user.name} 
+br
+.container-fluid
+  .row
+    .col-4.pb-2
+      .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Pencarian
+      .card.mb-4 
+        .card-body
+          = form_for :absent, url: user_receivable_recap_path, method: 'GET' do |form|
+            .row
+              .col-5
+                label Bulan
+                input type="number" min="1" max="12" name="month" class="form-control md-form" value="#{Date.today.month}"
+              .col-2
+                label 
+                  | /
+              .col-5
+                label Tahun
+                input type="number" min="2019" max="2022" name="year" class="form-control md-form" value="#{Date.today.year}"
+              .col-md-12.text-center
+                button class="btn btn-info "
+                  |   Cari Rekap Piutang #{@user.name}
+
+    .col-8.pb-2
+      .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Informasi #{@filter}
+      .card.mb-4 
+        .card-body
+          table class="table"
+            tr
+              th 
+              th Sisa Limit
+              th Total Belum Lunas
+              th Rata-rata pinjam
+              th Biasanya Lunas Dalam
+            tr 
+              td 
+                b Kasbon
+              td #{@limit_kasbon}
+              td #{@total_kasbon}
+              td #{@avg_kasbon}
+              td #{@avg_pay_complete_kasbon}
+            tr
+              td 
+                b Pinjaman
+              td #{number_with_delimiter(@limit_pinjaman.to_i, delimiter: ".", separator: ",")}
+              td #{number_with_delimiter(@total_pinjaman.to_i, delimiter: ".", separator: ",")}
+              td #{number_with_delimiter(@avg_pinjaman.to_i, delimiter: ".", separator: ",")}
+              td #{number_with_delimiter(@avg_pay_complete_pinjaman.to_i, delimiter: ".", separator: ",")} x
+
+
+
+    .col-6.pb-2
+      .card-header.white-text.info-color 
+        h5.font-weight-500.my-1
+          | Grafik Kasbon
+      .card.mb-4 
+        .card-body.table-responsive.text-nowrap
+          canvas id="kasbon"
+
+    .col-6.pb-2
+      .card-header.white-text.info-color 
+        h5.font-weight-500.my-1
+          | Grafik Pinjaman
+      .card.mb-4 
+        .card-body.table-responsive.text-nowrap
+          canvas id="pinjaman"
+
+    .col-6.pb-2
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Data Kasbon
+        .card-body.table-responsive.text-nowrap
+          table class="table"
+            thead
+              th Tanggal
+              th Pinjam
+              th Cicilan 
+              th Sisa
+              th Jatuh Tempo
+            tbody
+
+    .col-6.pb-2
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Data Pinjaman
+        .card-body.table-responsive.text-nowrap
+          table class="table table-hover"
+            thead
+              th Tanggal
+              th Pinjam
+              th Cicilan 
+              th Sisa
+              th Jatuh Tempo
+            tbody
+              - @receivables.order("deficiency DESC, created_at DESC").each do |receivable| 
+                tr 
+                  td #{receivable.created_at.to_date}
+                  td #{receivable.nominal}
+                  td 1
+                  td #{receivable.deficiency}
+                  td #{receivable.due_date.to_date}
+                  td 
+                    a href="#{receivable_path(id: receivable.id)}" class="btn btn-info"
+                      | #{receivable.description}
+          = paginate @receivables

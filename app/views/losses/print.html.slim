@@ -1,0 +1,37 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Invoice #
+      td
+        textarea #{@loss.invoice}
+    tr
+      td.meta-head Tanggal
+      td
+        textarea #{@loss.created_at.to_date} - #{@loss.user.name}
+    tr
+      td.meta-head Toko
+      td
+        .due #{@loss.store.name}
+    tr
+      td.meta-head Jumlah Item
+      td
+        textarea #{@loss.total_item}
+
+table#items
+  tr
+    th Kode
+    th Barang
+    th Jumlah
+    th Deskripsi
+
+  - @loss_items.each do |loss_item|
+    tr.item-row
+      td.item-name
+        textarea #{loss_item.item.code}
+      td.item-name
+        textarea #{loss_item.item.name}
+      td.item-name
+        textarea #{loss_item.quantity}
+      td.description
+        textarea #{loss_item.description}
+     

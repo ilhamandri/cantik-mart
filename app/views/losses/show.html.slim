@@ -1,0 +1,58 @@
+- loss = @loss
+.row
+  .col
+    h5
+      | Data #{loss.invoice}
+  .col.text-right
+    a href="#{loss_path(id: loss.id, format: :pdf)}"
+      button.btn.btn-success type="button" 
+        | CETAK
+br
+.container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Laporan Barang Loss
+        .card-body
+          .row
+            .col-md-8
+              label for="form" INVOICE
+              input type="text" class="form-control md-form" disabled=true value="#{loss.invoice}"
+
+            .col-md-4
+              .form-group
+                label for="from" Toko
+                input type="text" class="form-control md-form" disabled=true value="#{loss.store.name}"
+
+            .col-md-8
+              .form-group
+                label for="from" Dibuat 
+                input type="text" class="form-control md-form" disabled=true value="#{loss.created_at} ( #{loss.user.name} )"
+
+            .col-md-4
+              label for="form" Jumlah Item
+              input type="number" class="form-control md-form" disabled=true value="#{loss.total_item}"
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Daftar Barang
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Kode
+            th Nama
+            th Jumlah
+            th Keterangan
+          tbody
+            - @loss_items.each do |loss_item|
+              tr
+                td #{loss_item.item.code}
+                td #{loss_item.item.name}
+                td #{loss_item.quantity}
+                td #{loss_item.description}
+          
+            

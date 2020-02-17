@@ -1,0 +1,50 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Toko 
+      td
+        textarea #{@store_name}
+    tr
+      td.meta-head Jenis
+      td 
+        textarea Order Supplier
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | #{@search}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Invoice
+    th Supplier
+    th Total Item
+    th Total
+    th Order
+    th Terima
+    th Lunas
+
+  - @orders.each do |order|
+    tr.item-row
+      td #{order.invoice}
+      td #{order.supplier.name}
+      td #{order.total_items}
+      td #{number_with_delimiter(order.grand_total, delimiter: ".")}
+      td #{order.user.name} (#{order.date_created.to_date})
+      td
+        - if order.date_receive.nil?
+          | - 
+        - else
+          | #{order.received_by.name} (#{order.date_receive.to_date})
+      td
+        - if order.date_paid_off.nil?
+          | - 
+        - else
+          | #{order.date_paid_off.to_date}
+
+
+

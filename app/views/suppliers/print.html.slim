@@ -1,0 +1,56 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Supplier 
+      td
+        textarea 
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | #{@search}
+
+- total_debt = 0
+- total_receivable = 0
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Nama
+    th Alamat
+    th Telepon
+    th Hutang
+    th Piutang
+
+  - @suppliers.each do |supplier|
+
+    - debts = Debt.where(finance_type: Debt::ORDER, supplier: supplier).where("deficiency > 0").sum(:deficiency)
+    - total_debt += debts
+    - receivables = Receivable.where(finance_type: Receivable::RETUR, to_user: supplier.id).where("deficiency > 0").sum(:deficiency)
+    - total_receivable += receivables
+
+    - if @type.nil?
+      tr.item-row
+        td #{supplier.name}
+        td #{supplier.address}
+        td #{number_to_phone(supplier.phone, country_code: 62)}      
+        td #{number_with_delimiter(debts.to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}
+    - else
+      - if debts > 0 || receivables > 0
+        tr.item-row
+          td #{supplier.name}
+          td #{supplier.address}
+          td #{number_to_phone(supplier.phone, country_code: 62)}      
+          td #{number_with_delimiter(debts.to_i, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}
+
+  tr
+    th colspan=3
+      | TOTAL
+    th style="text-align: left !important"
+      | #{number_with_delimiter(total_debt.to_i, delimiter: ".", separator: ",")}
+    th style="text-align: left !important"
+      | #{number_with_delimiter(total_receivable.to_i, delimiter: ".", separator: ",")}
+   

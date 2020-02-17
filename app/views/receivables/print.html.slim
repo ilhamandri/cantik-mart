@@ -1,0 +1,40 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Toko 
+      td
+        textarea #{@store_name}
+    tr
+      td.meta-head Jenis
+      td 
+        textarea Piutang
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | #{@search}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Dibuat Oleh
+    th Tanggal
+    th Tipe
+    th Nominal
+    th Kekurangan
+    th Jatuh Tempo
+    th Keterangan
+
+  - @finances.each do |finance|
+    tr.item-row
+      td #{finance.user.name} (#{finance.store.name}) 
+      td #{finance.date_created}
+      td #{finance.finance_type}
+      td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
+      td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}
+      td #{finance.due_date.to_date}
+      td #{finance.description}
+   

@@ -1,0 +1,364 @@
+= include_gon
+html
+  head
+    title CANTIK MART
+    = csrf_meta_tags
+
+    meta charset="UTF-8" /
+    meta http-equiv="X-UA-Compatible" content="chrome=1" /
+    meta name="author" content="Jaya Abadi" /
+    meta name="description" content="Jaya Abadi" /
+    meta name="keywords" content="pusat jual beli alat teknik bandung" /
+    meta name="copyright" content="Cantik Mart" /
+    meta name="distribution" content="Global" /
+    meta name="rating" content="General" /
+
+    meta name="apple-mobile-web-app-capable" content="yes" /
+    meta content="yes" name="apple-touch-fullscreen" /
+    meta name="apple-mobile-web-app-status-bar-style" content="black" /
+
+    link rel="shortcut icon" href="images/logo.png" sizes=("16x16 24x24 32x32 48x48 64x64") /
+    
+    link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" /
+
+    = stylesheet_link_tag '/dist/css/bootstrap.min.css'
+    = stylesheet_link_tag '/dist/css/mdb.min.css'
+    = stylesheet_link_tag "/dist/css/application", media: "all"
+    
+  body.fixed-sn.white-skin onload="startTime()"
+    - if params[:controller] != "sessions" && params[:controller] != "registers"
+      header
+        #slide-out.side-nav.sn-bg-4.fixed
+          ul.custom-scrollbar
+            li.logo-sn.waves-effect.py-3
+              .text-center
+                a.pl-0 href="#" 
+                  =image_tag("/images/logo.png", height: '100')
+                  / img src="images/logo.png" width="120px"/
+            li
+              ul.collapsible.collapsible-accordion
+                li
+                  a.collapsible-header.waves-effect.arrow-r href="#{root_path}"
+                    i.w-fa.fas.fa-tachometer-alt
+                    | Dashboards
+                
+                = render "layouts/menu/navbar"
+          .sidenav-bg.mask-strong
+
+        = render "layouts/menu/top_nav"
+
+      main
+        = yield
+    - else
+      = yield
+    
+    / footer.page-footer.pt-0.mt-5.rgba-stylish-light
+      .footer-copyright.py-3.text-center
+        .container-fluid
+          | © 2019 Copyright:
+          a href="https://www.pardev.co.id" target="_blank"  www.pardev.co.id
+
+    = javascript_include_tag '/dist/js/jquery-3.4.0.min.js'
+    = javascript_include_tag '/dist/js/popper.min.js'
+    = javascript_include_tag '/dist/js/bootstrap.min.js'
+    = javascript_include_tag '/dist/js/mdb.min.js'
+    = javascript_include_tag '/dist/js/application'
+    = javascript_include_tag "https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"
+
+    - if flash.present?
+      - flash.each do |key, value|
+        javascript:
+          toastr.#{key}('#{value}');
+
+    - if ["homes"].include? controller_name
+      javascript:
+        var ctxP = document.getElementById("higher_sales").getContext('2d');
+        var myPieChart = new Chart(ctxP, {
+          type: 'doughnut',
+          data: {
+            labels: gon.higher_item_cats_label,
+            datasets: [{
+              data: gon.higher_item_cats_data,
+              backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360", "rgba(219, 0, 0, 0.1)", "rgba(0, 165, 2, 0.1)", "rgba(255, 195, 15, 0.2)", "rgba(55, 59, 66, 0.1)", "rgba(0, 0, 0, 0.3)"],
+              hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774", "rgba(219, 0, 0, 0.2)", "rgba(0, 165, 2, 0.2)", "rgba(255, 195, 15, 0.3)", "rgba(55, 59, 66, 0.1)", "rgba(0, 0, 0, 0.4)"]
+            }]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+
+        var ctxP = document.getElementById("lower_sales").getContext('2d');
+        var myPieChart = new Chart(ctxP, {
+          type: 'doughnut',
+          data: {
+            labels: gon.lower_item_cats_label,
+            datasets: [{
+              data: gon.lower_item_cats_data,
+              backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)", "rgba(219, 0, 0, 0.1)", "rgba(0, 165, 2, 0.1)", "rgba(255, 195, 15, 0.2)", "rgba(55, 59, 66, 0.1)", "rgba(0, 0, 0, 0.3)"
+              ],
+              hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774", "rgba(219, 0, 0, 0.2)", "rgba(0, 165, 2, 0.2)", "rgba(255, 195, 15, 0.3)", "rgba(55, 59, 66, 0.1)", "rgba(0, 0, 0, 0.4)"]
+            }]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+    - if ["transactions", "homes"].include? controller_name
+      javascript:
+        var ctxL = document.getElementById("transactions").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+          type: 'line',
+          data: {
+            labels: gon.month,
+            datasets: [
+              {
+                label: "Profit",
+                data: gon.profits,
+                backgroundColor: [
+                'rgba(75, 192, 192, 0.2)',
+                ],
+                borderColor: [
+                "rgb(75, 192, 192)",
+                ],
+                borderWidth: 2
+              },
+              {
+                label: "Omzet",
+                data: gon.grand_totals,
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 2
+              },
+              {
+                label: "HPP",
+                data: gon.hpp_totals,
+                backgroundColor: [
+                'rgba(54, 162, 235, 0.1)',
+                ],
+                borderColor: [
+                'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 2
+              }
+
+            ]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+        var ctxL = document.getElementById("transactions_days").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+          type: 'line',
+          data: {
+            labels: gon.month_days,
+            datasets: [
+              {
+                label: "Profit",
+                data: gon.profits_days,
+                backgroundColor: [
+                'rgba(75, 192, 192, 0.2)',
+                ],
+                borderColor: [
+                "rgb(75, 192, 192)",
+                ],
+                borderWidth: 2
+              },
+              {
+                label: "Omzet",
+                data: gon.grand_totals_days,
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 2
+              },
+              {
+                label: "HPP",
+                data: gon.hpp_totals_days,
+                backgroundColor: [
+                'rgba(54, 162, 235, 0.1)',
+                ],
+                borderColor: [
+                'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 2
+              }
+
+            ]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+    - if ["items"].include? controller_name
+      javascript:
+        var ctxL = document.getElementById("buy_sell").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+          type: 'line',
+          data: {
+            labels: gon.month,
+            datasets: [
+              {
+                label: "Pembelian",
+                data: gon.buy,
+                backgroundColor: [
+                'rgba(255, 206, 86, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 206, 86, 1)',
+                ],
+                borderWidth: 2
+              },
+              {
+                label: "Penjualan",
+                data: gon.sell,
+                backgroundColor: [
+                'rgba(54, 162, 235, 0.1)',
+                ],
+                borderColor: [
+                'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 2
+              }
+
+            ]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+        var ctxL = document.getElementById("price").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+          type: 'line',
+          data: {
+            labels: gon.month,
+            datasets: [
+              {
+                label: "Harga Beli",
+                data: gon.buy_price,
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 2
+              },
+              {
+                label: "Harga Jual",
+                data: gon.sell_price,
+                backgroundColor: [
+                'rgba(54, 162, 235, 0.1)',
+                ],
+                borderColor: [
+                'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 2
+              }
+
+            ]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+    - if ["absents"].include? controller_name
+      javascript:
+        var ctxL = document.getElementById("workhour").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+          type: 'line',
+          data: {
+            labels: gon.label_work_hour,
+            datasets: [
+              {
+                label: "Jam Kerja",
+                data: gon.work_hour,
+                backgroundColor: [
+                'rgba(255, 206, 86, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 206, 86, 1)',
+                ],
+                borderWidth: 2
+              },
+              {
+                label: "Lembur",
+                data: gon.overtime_hour,
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 2
+              }
+
+            ]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+    javascript:
+      const autoNumericOption = {
+        decimalCharacter: AutoNumeric.options.decimalCharacter.comma,
+        digitGroupSeparator: AutoNumeric.options.digitGroupSeparator.dot,
+        allowDecimalPadding: false,
+        minimumValue: "0"
+      }
+      $(".button-collapse").sideNav();
+      var container = document.querySelector('.custom-scrollbar');
+      var ps = new PerfectScrollbar(container, {
+        wheelSpeed: 2,
+        wheelPropagation: true,
+        minScrollbarLength: 20
+      });
+
+      $(document).ready(function () {
+        $('.mdb-select').materialSelect();
+        var autoNumericInstance = new AutoNumeric.multiple('.input-sept', null, autoNumericOption);
+    
+        $('#input').on('keyup', function() {
+          $('#output').val(autoNumericInstance.getNumericString());
+        });
+      });
+
+      function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('txt').innerHTML =
+        h + ":" + m + ":" + s;
+        var t = setTimeout(startTime, 500);
+      }
+      function checkTime(i) {
+        if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+        return i;
+      }
+
+      $('.datepicker').pickadate({
+        labelMonthNext: 'Go to the next month',
+        labelMonthPrev: 'Go to the previous month',
+        labelMonthSelect: 'Pick a month from the dropdown',
+        labelYearSelect: 'Pick a year from the dropdown',
+        selectMonths: true,
+        selectYears: true
+      })

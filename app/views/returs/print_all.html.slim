@@ -1,0 +1,55 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Toko 
+      td
+        textarea #{@store_name}
+    tr
+      td.meta-head Jenis
+      td 
+        textarea Retur Supplier
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | #{@search}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Invoice
+    th Dari
+    th Kepada
+    th Total Item
+    th Buat
+    th Konfirmasi
+    th Ambil
+    th Selesai
+
+  - @returs.each do |retur|
+    tr.item-row
+      td #{retur.invoice}
+      td #{retur.store.name}
+      td #{retur.supplier.name}
+      td #{retur.total_items}
+      td #{retur.user.name} (#{retur.date_created.to_date})
+      td
+        - if retur.date_approve.nil?
+          | - 
+        - else
+          | #{retur.approved_by.name} (#{retur.date_approve.to_date})
+      td
+        - if retur.date_picked.nil?
+          | - 
+        - else
+          | #{retur.picked_by.name} (#{retur.date_picked.to_date})
+      td
+        - if retur.status.nil?
+          | -
+        - else
+          | #{retur.status.to_date}
+
+

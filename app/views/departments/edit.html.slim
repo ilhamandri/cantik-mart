@@ -1,0 +1,13 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Ubah Department (#{@department.name})
+      .card-body 
+        = form_for :department, url: department_path, method: "PUT" do |form|
+		  .form-group
+		    label for="name" Nama
+		    = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+          .form-group.text-center
+            = form.submit "Ubah Department", class: "btn btn-warning"

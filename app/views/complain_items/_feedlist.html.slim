@@ -1,0 +1,22 @@
+tr
+  td
+    - if r_item.item.image.present?
+      img src="#{r_item.item.image}" width="50px"
+    - else
+      =image_tag("/images/default_item.jpg", height: '70', width: '70')
+  td #{r_item.item.name}
+  td #{r_item.item.item_cat.name}
+  td #{r_item.quantity}
+  td #{r_item.description}
+  td
+    select name="retur[retur_items][#{r_item_counter}][feedback]" required=true
+      option value="retur_item"
+        | Tukar Barang
+      option value="cash"
+        | Tukar Uang
+      option value="loss"
+        | Musnah
+  td 
+    input type="number" class="form-control md-form" name="retur[retur_items][#{r_item_counter}][item_id]" value="#{r_item.id}" style="display: none;"
+    input type="number" class="form-control md-form" name="retur[retur_items][#{r_item_counter}][nominal]" value=0
+    

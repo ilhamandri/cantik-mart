@@ -1,0 +1,35 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Dibuat  
+      td
+        textarea #{DateTime.now.in_time_zone.to_s}
+    tr
+      td.meta-head Oleh
+      td 
+        textarea #{current_user.name.to_s} ( #{current_user.store.name} )
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | Barang yang belum sempat diinfut
+
+
+table style="width: 100%"
+  tr colspan="5"
+  tr
+    th
+    th Kode
+    th Nama
+    th Terjual
+    th Stok
+
+  - idx = 1
+  - @items.each do |inv|
+    tr.item-row
+      td #{idx}
+      td #{inv.item.code}
+      td #{inv.item.name}
+      td #{inv.stock}
+      td 
+      - idx+=1

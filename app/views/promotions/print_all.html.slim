@@ -1,0 +1,37 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Jenis
+      td 
+        textarea DAFTAR PROMO
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | #{@search}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Kode Promo
+    th Deskripsi
+    th Mulai
+    th Berakhir
+    th Digunakan
+
+  - @promotions.each do |promotion|
+    tr.item-row
+      - promo = promotion
+      - promo_name = "BELI "+promo.buy_quantity.to_s+" '"+promo.buy_item.name+"' GRATIS "+promo.free_quantity.to_s+" '"+promo.free_item.name+"'"
+
+      td #{promotion.promo_code}
+      td #{promo_name}
+      td #{promotion.start_promo.to_date}
+      td #{promotion.end_promo.to_date}
+      td #{promotion.hit}
+
+
+

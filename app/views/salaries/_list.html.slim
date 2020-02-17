@@ -1,0 +1,5 @@
+tr 
+	td #{salary.user.name}
+	td #{salary.user.store.name}
+	td #{salary.created_at.month} / #{salary.created_at.year}
+	td #{number_with_delimiter(salary.nominal, delimiter: ".")}

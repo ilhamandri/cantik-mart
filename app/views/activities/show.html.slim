@@ -1,0 +1,46 @@
+- user_name = User.find_by(id: @activity.owner_id.to_i).name
+- date_created = @activity.created_at
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Detil Aktivitas - #{user_name} (#{date_created})
+      .card-body
+        = form_for :item, url: '' do |form|
+          .form-group
+            label for="item" Pengguna
+            input class="md-form form-control" value="#{user_name}"
+          .form-group
+            label for="item" Tanggal
+            input class="md-form form-control" value="#{date_created}"
+          form-group
+            label for="item" Aktivitas
+            input class="md-form form-control" value="#{@activity.key.split('.')[1].upcase}"
+          .form-group
+            label for="item" Target
+            input class="md-form form-control" value="#{@activity.trackable_type.upcase}"
+          .form-group
+            label for="sell" 
+            table class="table"
+              thead
+                th Perubahan
+                th Dari
+                th Menjadi
+              tbody
+                - changes = @activity.parameters
+                - changes.each do |key, value|
+                  tr
+                    td #{key.upcase}
+                    td #{value[0]}
+                    td #{value[1]}
+          .form-group.text-center
+            - if @activity.trackable.present?
+              - class_name = @activity.trackable.class.name 
+              - if ["GrocerItem", "StoreItem"].include? class_name
+                = link_to @activity.trackable.item.name, item_path(id: @activity.trackable.item_id), :class => "btn btn-warning"
+              - elsif ["ORDER", "TRANSFER", "RETUR", "COMPLAINS"].include? class_name.upcase
+                = link_to @activity.trackable.invoice, @activity.trackable, :class => "btn btn-warning"
+              - else
+                = link_to @activity.trackable.name, @activity.trackable, :class => "btn btn-warning"
+                

@@ -1,0 +1,48 @@
+.row
+  .col.text-left
+    h5
+      - if @search_id.nil?
+        | Daftar Menu Sistem 
+        - if !@bool_status
+          .text-danger
+            | #{@status}
+      - else
+        - user = User.find @search_id
+        | Absensi #{user.name}
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+      h5.font-weight-500.my-1
+        - if @search_text.present?
+          | #{@search_text}
+        - else
+          | Pencarian
+    .card.mb-4
+      .card-body
+        = form_for :controller, url: controllers_path, method: 'GET' do |form|
+          .col-md-12.text-center
+            input type="text" class="form-control md-form" id="search" name="search" placeholder="Cari nama..."         
+          .col-md-12.text-center
+            button class="btn btn-primary"
+              | Cari
+          .col-md-12.text-center
+            a href="#{controller_path(id: 1, format: :pdf)}"
+              | Download EXCEL
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data
+    .card.mb-4
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Nama
+            th Aksi
+          tbody
+            = render partial: 'list', collection: @controllers, as: :controller
+        = paginate @controllers
+
+  
+

@@ -1,0 +1,29 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Tambah Promo Diskon
+      .card-body
+
+        = form_for :discount, url: discounts_path, method: "POST" do |form|
+          .row
+            .form-group.col-12
+              label for="name" Kode Item
+              = form.text_field :item_code, required: true, class: "form-control md-form", id: "name"
+            .form-group.col-12
+              label for="name" Diskon
+              br
+              label.text-danger * 0 - 99 = Dianggap %
+              br
+              label.text-danger * lebih dari 99 = Dianggap harga Rupiah
+              = form.number_field :discount, required: true, class: "form-control md-form", id: "name", value:"1", min: "1"
+            .form-group.col-6
+              label for="name" Tanggal Mulai Promo
+              input class="date-picker-example md-form form-control datepicker" type="date" name="discount[start]" id="date_from"  required="true"
+            .form-group.col-6
+              label for="name" Tanggal Selesai Promo
+              input class="date-picker-example md-form form-control datepicker" type="date" name="discount[end]" id="date_from" value="#{Date.today+1}" required="true"
+            .form-group.col-12.text-center
+              = form.submit "Tambah Promo", class: "btn btn-primary"
+

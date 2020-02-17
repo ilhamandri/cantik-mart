@@ -1,0 +1,53 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Toko 
+      td
+        textarea #{@store_name}
+    tr
+      td.meta-head Jenis
+      td 
+        textarea Arus Kas
+    tr
+      td.meta-head Kriteria
+      td
+        b  
+          | #{@search}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Dibuat Oleh
+    th Tanggal
+    th Tipe
+    th Debit
+    th Kredit
+    th Keterangan
+
+  - @finances.each do |finance|
+    tr.item-row
+      - nominal = finance.nominal.abs
+
+      td 
+        textarea #{finance.user.name} (#{finance.store.name})
+      td 
+        textarea #{finance.date_created}
+      td 
+        textarea #{finance.finance_type.gsub("_", " ")}
+
+      - if finance.nominal > 0
+        td 
+          textarea #{number_with_delimiter(nominal.to_i, delimiter: ".", separator: ",")}
+        td 
+          textarea 0
+      - else
+        td 
+          textarea 0
+        td 
+          textarea #{number_with_delimiter(nominal.to_i, delimiter: ".", separator: ",")}
+
+      td
+        textarea #{finance.description}

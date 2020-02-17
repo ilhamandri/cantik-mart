@@ -1,0 +1,63 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Ubah Barang - #{@item.name} (#{@item.code})
+      .card-body
+        = form_for :item, url: item_path(id: @item.id), method: "PUT" do |form|
+          .form-group
+            label for="code" Kode
+            = form.text_field :code, required: true, class: "form-control md-form", id: "code"
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+          .form-group style= "display: none"
+            label for="brand" Merek
+            = form.text_field :brand, required: true, class: "form-control md-form", id: "brand"
+          .form-group
+            label for="tipe" Jenis Barang
+            select name="item[local_item]" class="mdb-select md-form md-outline colorful-select dropdown-primary"
+              - if @item.local_item
+                option value="true" selected="selected"
+                  | Barang Lokal
+                option value="false"
+                  | Barang Pusat
+              - else
+                option value="false" selected="selected"
+                  | Barang Pusat
+                option value="true"
+                  | Barang Lokal
+
+          .form-group
+            label for="item" Kategori
+            select name="item[item_cat_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" searchable="Cari..."
+              - @item_cats.each do |item_cat|
+                - if @item.item_cat == item_cat
+                  option value="#{item_cat.id}" selected="selected"
+                    | #{item_cat.name}     
+                - else
+                  option value="#{item_cat.id}"
+                    | #{item_cat.name}    
+          .form-group
+            label for="sell" Margin
+            = form.number_field :margin, required: true, class: "form-control md-form", id: "sell", min: "0"
+          .form-group
+            label for="sell" Diskon Satuan
+            br
+            label.text-danger * 0 - 100 = Dianggap %
+            br
+            label.text-danger * lebih dari 100 = Dianggap harga Rupiah
+            = form.number_field :discount, required: true, class: "form-control md-form", id: "sell", min: "0"
+          .form-group
+            label for="sell" Harga Jual Satuan
+            = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", min: "0", value: "#{@item.sell.to_i}"
+          .form-group
+            label for="sell" Harga Jual Satuan MEMBER
+            = form.number_field :sell_member, required: true, class: "form-control md-form", id: "sell", min: "0", value: "#{@item.sell_member.to_i}"
+            input value="#{@item.local_item}" required=true style="display: none"
+          .form-group
+            label for="sell" Link Foto
+            = form.text_field :image, class: "form-control md-form", id: "sell"
+          .form-group.text-center
+            = form.submit "Ubah Barang", class: "btn btn-primary"

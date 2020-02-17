@@ -1,0 +1,71 @@
+.row
+  .col.text-left
+    h5
+      | Daftar Transfer
+  - if Controller.find_by(name: 'transfers').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+    .col.text-right
+      a href="#{new_transfer_path}"
+        button.btn.btn-primary type="button" 
+          i.fas.fa-plus 
+          |   Buat Permintaan Transfer
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pencarian
+    .card.mb-4 
+      
+      .card-body
+        = form_for :transfer, url: transfers_path, method: 'GET' do |form|
+          .row
+            - if ["owner", "super_admin", "finance"].include? current_user.level
+              .col-12
+                select class="mdb-select md-form" id="months" name="store_id"
+                  option value="0"
+                    | Semua Toko
+                  - Store.all.each do |store|
+                    option value="#{store.id}"
+                      | #{store.name}
+            .col-md-6
+              select class="mdb-select md-form" id="months" name="months"
+                option value="1"
+                  | 1 Bulan
+                option value="3"
+                  | 3 Bulan
+                option value="6"
+                  | 6 Bulan
+                option value="12"
+                  | 12 Bulan
+            .col-6.text-center
+              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice ..."
+            .col-12.text-center
+              button class="btn btn-primary"
+                | Cari
+        br
+        .col-md-12.text-center.grey-text
+          a href="#{transfers_path(option: @params.to_s, format: :pdf)}"
+            b
+              | #{@search}
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data
+    .card.mb-4 style="overflow-x:auto;"
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Invoice
+            th Dari
+            th Kepada
+            th Total Item
+            th Dibuat
+            th Status
+            th Kirim
+            th Terima
+            th Aksi
+          tbody
+            = render partial: 'list', collection: @transfers, as: :transfer
+        = paginate @transfers

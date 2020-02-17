@@ -1,0 +1,27 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Bayar Gaji Pengguna
+      .card-body
+        = form_for :salary, url: salaries_path, method: "POST" do |form|
+          .form-group
+            label for="name" Karyawan
+            select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="user_id" onchange="getUserSalary(this)"
+              - @users.all.each do |user|
+                option value="#{user.id}"
+                  | #{user.name} - #{user.store.name}
+          .row
+            .col-6
+              h3.text-success id="salary"
+                | GAJI : -
+            .col-6
+              h3.text-danger id="debt"
+                | HUTANG : -
+          .form-group
+            br
+            label for="id-card" Gaji yang akan dibayarkan
+            = form.number_field :salary, required: true, class: "form-control md-form", id: "id-card", min:"0", value:'0'
+          .form-group.text-center
+            = form.submit "Bayar Gaji", class: "btn btn-primary"

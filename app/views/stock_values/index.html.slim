@@ -1,0 +1,74 @@
+.row
+  .col
+    h5
+      | Nilai Stok
+  .col.text-right
+    a href="#{new_cash_flow_path}"
+      button.btn.btn-primary type="button" 
+        i.fas.fa-plus 
+        |   Tambah 
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+      h5.font-weight-500.my-1
+        - if @search_text.present?
+          | #{@search_text}
+        - else
+          | Pencarian
+    .card.mb-4
+      .card-body
+        = form_for :finances, url: stock_values_path, method: 'GET' do |form|
+          .row
+            - if ["owner", "super_admin", "finance"].include? current_user.level
+              .col-md-12
+                select class="mdb-select md-form" id="months" name="store_id"
+                  option value="0"
+                    | Semua Toko
+                  - Store.all.each do |store|
+                    option value="#{store.id}"
+                      | #{store.name}
+            .col
+              select class="mdb-select md-form" id="months" name="months"
+                option[value=3]
+                  | 3 bulan
+                option[value=6]
+                  | 6 bulan
+                option[value=9]
+                  | 9 bulan
+                option[value=12]
+                  | 1 tahun
+            .col
+              select class="mdb-select md-form" id="order_by" name="order_by"
+                option[value="asc"]
+                  | secara A - Z
+                option[value="desc"]
+                  | secara Z - A
+          .row
+            .col.text-center
+              button class="btn btn-primary"
+                | Cari
+
+        .col-md-12.text-center.grey-text
+          a href="#{stock_values_path(option: @params.to_s, format: :pdf)}"
+            b
+              | #{@search}
+
+              
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data
+    .card.mb-4
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Toko
+            th Bulan
+            th Nominal
+            / th Keterangan
+          tbody
+            = render partial: 'list', collection: @finances, as: :finance
+        = paginate @finances
+

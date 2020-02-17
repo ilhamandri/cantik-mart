@@ -1,0 +1,23 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Ubah - Piutang (#{@receivable.description})
+    .card.mb-4
+      .card-body
+        = form_for :receivable, url: receivable_path, method: "PUT" do |form|
+          .form-group
+            label.text-primary for="type" Deskripsi
+            input type="text" value="#{@receivable.description}" name="pay[from_to]" class="form-control md-form" disabled="disabled"
+          .form-group
+            label.text-primary for="type" Nominal saat Ini
+            input type="text" value="#{@receivable.nominal}" name="pay[nominal]" class="form-control md-form"disabled="disabled"
+          .form-group
+            label.text-primary for="type" Kekurangan saat ini
+            input type="text" value="#{@receivable.deficiency}" name="pay[deficiency]" class="form-control md-form" disabled="disabled"
+          hr
+          .form-group
+            label.text-primary for="nominal" Nominal baru
+            = form.number_field :nominal, required: true, class: "form-control md-form", id: "nominal", min:"0" , value:"#{@receivable.nominal}"
+          .form-group.text-center
+            = form.submit "UBAH", class: "btn btn-warning"

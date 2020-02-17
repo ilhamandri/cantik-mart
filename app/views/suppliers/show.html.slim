@@ -1,0 +1,48 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Detil Supplier - #{@supplier.name}
+      .card-body
+        = form_for :supplier, url: "" do |form|
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
+          .form_group
+            label for="address" Alamat
+            = form.text_field :address, required: true, class: "form-control md-form", id: "address", disabled: "disabled"
+          .form-group
+            label for="phone" Nomor Telepon
+            input class="form-control md-form" value="#{number_to_phone(@supplier.phone, country_code: 62)}" disabled="disabled"
+          - debts = Debt.where(finance_type: Debt::ORDER, supplier: @supplier).where("deficiency > 0").sum(:deficiency)
+          .form-group
+            label for="phone" Total Hutang
+            input class="form-control md-form" value="#{number_with_delimiter(debts.to_i, delimiter: ".", separator: ",")}" disabled="disabled"
+
+
+          - receivables = Receivable.where(finance_type: Receivable::RETUR, to_user: @supplier.id).where("deficiency > 0").sum(:deficiency)
+          .form-group
+            label for="phone" Total Piutang
+            input class="form-control md-form" value=" #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}" disabled="disabled"
+          
+      .col-12.text-center
+        - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+          a href='#{edit_supplier_path(id: @supplier.id)}'
+            button.btn.btn-warning type="button" 
+              | Edit
+
+        - if Controller.find_by(name: 'supplier_items').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? current_user.level
+          a href='#{supplier_items_path(id: @supplier.id)}'
+            button.btn.btn-primary type="button" 
+              | Riwayat Pembelian Barang
+        - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+          a href='#{new_order_path(supplier_id: @supplier.id)}'
+            button.btn.btn-success type="button" 
+                | Order
+
+        - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
+          - if !@supplier.supplier_items.present?
+            = button_to "Hapus Supplier", @supplier, :method=>:delete, :class=>"btn btn-danger"
+      p
+        | 

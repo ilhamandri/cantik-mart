@@ -1,0 +1,9 @@
+tr
+	td #{loss.invoice}
+	td #{loss.store.name}
+	td #{loss.total_item}
+	td #{loss.created_at} ( #{loss.user.name} )
+	td
+	    a href='#{loss_path(id: loss.id)}'
+	      button class="btn btn-primary"
+	        | Item

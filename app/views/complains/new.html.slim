@@ -1,0 +1,90 @@
+- member = "NO MEMBER"
+- member = Member.find_by(card_number: @transaction.member_card).name if @transaction.member_card.present?
+.row
+  .col.text-left
+    h5
+      | Buat Retur Member - #{member}
+  .col.text-right.text-danger
+    h5#total_text
+      | 0
+br
+= form_for :complain, url: complains_path(id: @transaction.id), method: "POST" do |form|
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Data Pembelian (#{@transaction.invoice}) 
+        .card-body
+          table.table id="myTable2"
+            tr
+              th
+                | Barang
+              th
+                | Harga
+              th
+                | Beli
+              th
+                | Komplain
+              th
+                | Diganti
+              th
+                | Keterangan
+              th
+              
+              input type="number" required=true class="form-control" id="total" name="complain[new_total]" value="0" readonly=true style="display: none;"
+
+              input type="number" required=true class="form-control" id="item_total" name="complain[item_total]" value="#{@transaction_items.count}" readonly=true style="display: none;"
+
+            - @transaction_items.each_with_index do |trx_item, index|
+              tr
+                td hidden=true
+                  input type="text" required=true class="form-control" id="description" name="complain[complain_items][#{index}][item_id]" value="#{trx_item.id}" 
+                td
+                  input type="text" required=true class="form-control" value="#{trx_item.item.name}" disabled="disabled"
+                td 
+                  input type="number" required=true class="form-control" id="price#{index}" name="complain[complain_items][#{index}][price]" value="#{trx_item.price}" readonly=true
+                td 
+                  input type="number" required=true class="form-control " id="quantity#{index}" name="complain[complain_items][#{index}][quantity]" value="#{trx_item.quantity}" readonly=true 
+                td 
+                  input type="number" required=true class="form-control" id="complain#{index}" name="complain[complain_items][#{index}][retur_qty]" value=0 min=0 onchange="complain_check(#{index})"
+                td 
+                  input type="number" required=true class="form-control" id="replace#{index}" name="complain[complain_items][#{index}][replace]" value=0 min=0 onchange="complain_check(#{index})"
+                td 
+                  input type="text" required=true class="form-control" id="description" name="complain[complain_items][#{index}][reason]" value="-" require="true"
+                td 
+                  input type="text" required=true class="form-control" id="description_new" name="complain[complain_items][#{index}][decription]" value="#{@transaction.invoice}" readonly=true style="display: none;"
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Tambah Pembelian
+        .card-body
+          .row
+            .col-8
+                label for="from" Kode Barang
+                input class="md-form form-control" placeholder="Barcode Barang..." id="itemId" onkeyup="getData('complain')"
+            .col-4
+                label for="from" Jumlah
+                input class="md-form form-control" value="1" id="searchqty" type="number"
+            .col-12
+              table.table id="myTable"
+                tr
+                  th
+                    | Kode
+                  th
+                    | Nama
+                  th
+                    | Kategori
+                  th
+                    | Jumlah
+                  th
+                    | Harga
+                  th
+                    | Diskon
+
+
+  .col-md-12.text-center
+    .form-group.text-center
+      = form.submit "Buat Retur", class: "btn btn-primary", id: "submitButton", style:"display: none;"

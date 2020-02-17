@@ -1,0 +1,96 @@
+= form_for :order, url: orders_path, method: "POST" do |form|
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Buat Pesanan Baru
+      .card.mb-4
+        .card-body
+          .row
+            .col-8
+              label for="from" Kode Barang
+              input class="md-form form-control" placeholder="Barcode Barang..." id="itemId" onkeyup="getData('order')"
+            .col-4.text-right
+              .form-group
+                label for="from" Supplier
+                select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="order[supplier_id]" id="supplierId"
+                  - if @supplier.present?
+                    option data-subtext="#{@supplier.address}" value="#{@supplier.id}"
+                      | #{@supplier.name}
+                  - else
+                    - @suppliers.each do |supplier|
+                      - if supplier.id == @supplier_id
+                        option data-subtext="#{supplier.address}" value="#{supplier.id}" selected="selected"
+                          | #{supplier.name}
+                      -else
+                        option data-subtext="#{supplier.address}" value="#{supplier.id}"
+                          | #{supplier.name}
+
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Daftar Barang
+      .card.mb-4
+        .card-body
+          .row
+            .col-md-12  
+              table.table id="myTable"
+                tr
+                  th style="display: none;"
+                  th
+                    | Kode
+                  th
+                    | Nama
+                  th
+                    | Kategori
+                  th
+                    | Jumlah
+                  th
+                    | Deskripsi
+                  th
+                - if @add_item.present?
+                  tr
+                    td style="display: none;"
+                      input type="number" required=true class="form-control md-form" id="quantity" name="order[order_items][1][item_id]" value="#{@add_item.id}" readonly="readonly"
+                    td
+                      input type="text" required=true class="form-control md-form" id="quantity" name="order[order_items][1][code]" value="#{@add_item.code}" readonly="readonly"
+                    td
+                      input type="text" required=true class="form-control md-form" id="quantity" name="order[order_items][1][name]" value="#{@add_item.name}"  readonly="readonly"
+                    td
+                      input type="text" required=true class="form-control md-form" id="quantity" name="order[order_items][1][item_cat]" value="#{@add_item.item_cat.name}" readonly="readonly"
+                    td 
+                      input type="number" required=true class="form-control md-form" id="quantity" name="order[order_items][1][quantity]" value=1 min=1
+                    td 
+                      input type="textarea" class="form-control md-form" id="description" name="order[order_items][1][description]" value=""
+                    td
+                      i.fa.fa-trash.text-danger onclick="removeThisRow(this)"
+                - idx = 2
+                - @inventories.each_with_index do |store_item, index|
+                  - stock = store_item.item
+                  - total_order = 0
+                  - @ongoing_order_items.each do |order_item|
+                    - if order_item.item.id == stock.id
+                      - total_order+= order_item.quantity
+                  - new_order = store_item.min_stock - store_item.stock - total_order
+                  / - if new_order > 0
+                    tr
+                      td style="display: none;"
+                        input type="number" required=true class="form-control md-form" id="quantity" name="order[order_items][#{index+idx}][item_id]" value="#{stock.id}" readonly="readonly"
+                      td
+                        input type="text" required=true class="form-control md-form" id="quantity" name="order[order_items][#{index+idx}][quantity]" value="#{stock.code}"
+                      td
+                        input type="text" required=true class="form-control md-form" id="quantity" name="order[order_items][#{index+idx}][quantity]" value="#{stock.name}"
+                      td
+                        input type="text" required=true class="form-control md-form" id="quantity" name="order[order_items][#{index+idx}][quantity]" value="#{stock.item_cat.name}"
+                      td 
+                        input type="number" required=true class="form-control md-form" id="quantity" name="order[order_items][#{index+idx}][quantity]" value="#{new_order}"
+                      td 
+                        input type="textarea" class="form-control md-form" id="description" name="order[order_items][#{index+idx}][description]" value="Barang yang terkena stok limit."
+                      td
+                        i.fa.fa-trash.text-danger onclick="removeThisRow(this)"
+                    - idx+=1
+
+            .col-md-12.text-center
+              .form-group.text-center
+                = form.submit "Buat Pesanan", class: "btn btn-primary"

@@ -1,0 +1,23 @@
+require_tree .
+.card.mb-4{
+	/*overflow-x: auto;*/
+}
+
+.mod-mb-4{
+	overflow-x: auto;	
+}
+
+.navsup{
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+.navsup li{
+	display: inline-block;
+}
+
+#myTable td{
+	vertical-align: middle;
+	text-align: center;
+}

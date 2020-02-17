@@ -1,0 +1,15 @@
+tr
+  td #{department.name}
+  td
+  	- if Controller.find_by(name: 'departments').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+	    a href='#{edit_department_path(id: department.id)}'
+	    	button.btn.btn-warning.black-text type="button" 
+		       	| Edit
+
+	a href='#{department_path(id: department.id)}'
+    	button.btn.btn-info type="button" 
+	       	| Detil
+
+	- subdept = ItemCat.where(department: department).count
+	- if subdept == 0
+		= button_to "Hapus", department, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Are you sure you want to reset the indexes?" }

@@ -1,0 +1,19 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Detil Harga Barang - #{@grocer_item.item.name}
+      .card-body
+        = form_for :grocer_item, url: "", method: "" do |form|
+          .form-group
+            label for="name" Min
+            = form.number_field :min, required: true, class: "form-control md-form", id: "name"
+          .form-group
+            label for="name" Max
+            = form.number_field :max, required: true, class: "form-control md-form", id: "name"
+          .form-group
+            label for="name" Harga
+            = form.number_field :price, required: true, class: "form-control md-form", id: "price"
+        .text-center
+          = button_to "Hapus", @grocer_item, :method=>:delete, :class=>"btn btn-danger"

@@ -1,0 +1,163 @@
+- order = @order_items.first.order
+- order_id = order.id
+- @idx = 1
+.row
+  .col
+    h5
+      | Data #{@order_items.first.order.invoice}
+  .col.text-right
+    a href="#{order_path(id: order_id, format: :pdf)}"
+      button.btn.btn-primary type="button" 
+        i.fas.fa-print 
+        | &nbsp&nbsp&nbsp CETAK
+
+  - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'confirmation').user_methods.pluck(:user_level).include? current_user.level
+    - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
+      .col.text-right
+        a href="#{order_confirmation_path(id: order_id)}"
+          button.btn.btn-success type="button" 
+            | Terima
+            
+  - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'edit_confirmation').user_methods.pluck(:user_level).include? current_user.level
+    - if order.editable && @pay !=0 && order.date_receive!=nil
+        / .col.text-right
+          a href="#{edit_order_confirmation_path(id: order_id)}"
+            button.btn.btn-warning type="button" 
+              | Ubah
+br
+.container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Informasi Pesanan
+        .card-body
+          .row
+            .col-md-12
+              label for="form" INVOICE
+              input type="text" class="form-control md-form" disabled=true value="#{order.invoice}"
+            - if order.from_retur
+              .col-md-6
+                label for="form" KETERANGAN
+                input type="text" class="form-control md-form" disabled=true value="#{"TIDAK ADA TAGIHAN - ORDER DARI RETUR"}"
+              .col-md-6.text-center
+                / center v-align
+                - retur = ReturItem.find_by(ref_id: order.id).retur
+                a href="#{retur_path(id: retur.id)}" class="btn btn-primary"
+                  | #{retur.invoice}
+
+            - bonus = CashFlow.find_by(description: order.invoice)
+            - if bonus.present?
+              .col-md-12
+                label for="form" Diskon Supplier / Faktur
+                input type="text" class="form-control md-form" disabled=true value="#{number_with_delimiter(bonus.nominal, separator: ",", delimiter: ".")}"
+              
+            .col-md-4
+              label for="form" Jumlah Item
+              - item_order_count = order.order_items.sum(:quantity)
+              - if order.order_items.sum(:receive) != 0
+                - item_order_count = order.order_items.sum(:receive)
+              input type="number" class="form-control md-form" disabled=true value="#{item_order_count}"
+            .col-md-4
+              .form-group
+                label for="from" Dari
+                input type="text" class="form-control md-form" disabled=true value="#{order.store.name}"
+            .col-md-4
+              .form-group
+                label for="from" Kepada
+                input type="text" class="form-control md-form" disabled=true value="#{order.supplier.name}"
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Daftar Barang
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th No
+            th Kode
+            / th Foto
+            th Nama
+            th Jumlah
+            th Terima
+            th Harga / Item
+            th Diskon
+            th.text-right Total
+          tbody
+            = render partial: 'list_show', collection: @order_items, as: :order_item
+          tfoot.text-right.text-danger
+            tr
+              td
+              td
+              td
+              td
+              td
+              td.font-weight-bold SUB TOTAL
+              td
+              td.font-weight-bold #{number_with_delimiter(order.total, separator: ",", delimiter: ".")}
+            tr
+              td
+              td
+              td
+              td
+              td
+              td.font-weight-bold DISKON (#{order.discount_percentage}% )
+              td
+              td.font-weight-bold #{number_with_delimiter(order.discount, separator: ",", delimiter: ".")}
+            tr
+              td
+              td
+              td
+              td
+              td
+              td.font-weight-bold PPN (#{@order_items.first.ppn}% )
+              td
+              td.font-weight-bold #{number_with_delimiter(@order_items.first.ppn * (order.total - order.discount) / 100, separator: ",", delimiter: ".")}
+            tr
+              td
+              td
+              td
+              td
+              td
+              td.font-weight-bold TOTAL
+              td
+              td.font-weight-bold #{number_with_delimiter(order.grand_total, separator: ",", delimiter: ".")}
+            
+
+- if order.date_receive.present?
+  br
+  .row
+    .col
+      h5
+        - if @pay > 0
+          .text-danger
+            | KEKURANGAN : #{number_to_currency(@pay, unit: "Rp. ")}
+        - else
+          .text-success
+            | LUNAS
+    - if @order_items.first.order.date_receive.present? && @order_items.first.order.date_paid_off.nil? && @pay != 0
+      .col.text-right
+        a href="#{order_pay_path(id: order_id)}"
+          button.btn.btn-success type="button" 
+            | Bayar
+  br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data Pembayaran
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Invoice
+            th Dibayar
+            th Tanggal
+            th Nominal
+            th Catatan
+          tbody
+            = render partial: 'list_payment', collection: @order_invs, as: :order_inv
+
+

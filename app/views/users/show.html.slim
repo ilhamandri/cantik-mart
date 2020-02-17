@@ -1,0 +1,58 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data Pengguna
+      .card-body
+        .row
+          .col-12.text-center
+            - if @user.image.present?
+              =image_tag("/uploads/profile_picture/#{@user.image}", height: '200', width: '200', class:"rounded-circle z-depth-2")
+            - else
+              =image_tag("/uploads/profile_picture/default.png", height: '200', width: '200', class:"rounded-circle z-depth-2")
+          .col-12
+            = form_for :user, url: users_path, method: "POST" do |form|
+              .form-group
+                label for="name" Nama
+                = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
+              .form-group
+                label for="id-card" Toko
+                input class="form-control md-form" value="#{@user.store.name}" disabled="disabled"
+              .form-group
+                label for="email" Email
+                = form.text_field :email, required: true, class: "form-control md-form", id: "email", disabled: "disabled"
+              .form_group
+                label for="address" Alamat
+                = form.text_field :address, required: true, class: "form-control md-form", id: "address", readonly: "disabled"
+              .form-group
+                label for="phone" No. Telepon
+                input class="form-control md-form" value="#{number_to_phone(@user.phone, country_code: 62)}" disabled="disabled"
+              .form-group
+                label for="sex" Jenis Kelamin
+                - sex = @user.sex
+                - if sex == "laki_laki"
+                  - sex = "Laki - laki"
+                - else
+                  - sex = "Perempuan"
+                input class="form-control md-form" value="#{sex}" disabled="disabled"
+              .form-group
+                label for="level" Peran 
+                input class="form-control md-form" value="#{@user.level.upcase.gsub("_", "")}" disabled="disabled"
+              .form-group
+                label for="id-card" KTP
+                input class="form-control md-form" value="#{number_with_delimiter(@user.id_card, delimiter: " ")}" disabled="disabled"
+              .form-group
+                label for="id-card" ID Fingerprint
+                = form.text_field :fingerprint, required: true, class: "form-control md-form", id: "id-card", disabled: "disabled"
+              .form-group
+                label for="id-card" Gaji
+                input class="form-control md-form" value="#{number_with_delimiter(@user.salary, delimiter: " ")}" disabled="disabled"
+              .form-group
+                label for="id-card" Terakhir Update
+                input type="text" value="#{@user.updated_at}" class="form-control md-form" disabled="disabled"
+          .col-12.text-center
+            a href='#{edit_user_path(id: @user.id)}' 
+              button.btn.btn-warning.black-text type="button" 
+                | Edit
+

@@ -1,0 +1,15 @@
+tr
+  td #{retur.invoice}
+  td #{retur.store.name}
+  td #{retur.supplier.name}
+  td #{retur.total_items}
+  td #{retur.date_created.to_date}
+  - if retur.date_picked.nil?
+    td
+      = form_for :retur, url: retur_path(id: retur.id), method: "DELETE" do |form|
+        = form.submit "Hapus", class: "btn btn-danger"
+  td
+    a href='#{retur_path(id: retur.id)}'
+      button class="btn btn-primary"
+        | Item
+

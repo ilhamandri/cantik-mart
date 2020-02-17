@@ -1,0 +1,35 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Ubah Item - #{@item.name} (#{@item.code})
+      .card-body
+        = form_for :item, url: stock_path(id: @stock.id), method: "PUT" do |form|
+          .form-group
+            label for="code" Kode
+            = form.text_field :code, required: true, class: "form-control md-form", id: "code", disabled: true
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: true
+          - if @item.name.upcase == "TELOR RETAK" || ["002024", "002030", "002040"].include? @item.code
+            -  if ["super_admin", "owner", "super_visi"].include? current_user.level
+              .form_group
+                label for="category" Stokud
+                = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}"
+              .form-group
+                label for="sell" Harga Beli Saat Ini
+                label.text-danger for="type" (*Isi dengan harga satuan sesuai dengan harga beli saat ini)
+                = form.number_field :buy, required: true, class: "form-control md-form", id: "buy"
+          - if ["super_admin", "owner"].include? current_user.level
+            .form_group
+              label for="category" Stok
+              = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}"
+          .form-group
+            label for="stock" Limit
+            = form.number_field :min_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.min_stock}"
+          .form-group
+            label for="sell" Harga Jual
+            = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", disabled: true
+          .form-group.text-center
+            = form.submit "Ubah Stok Item - #{@item.name}", class: "btn btn-primary"

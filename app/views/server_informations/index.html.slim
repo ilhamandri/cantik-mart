@@ -1,0 +1,52 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Informasi Server
+      .card-body.table-responsive.text-nowrap
+      	table.table.table-bordered
+      		thead
+      			tr
+	      			th Komponen
+	      			th Terpakai
+	      	tbody
+	      		tr
+	      			td Disk Used
+	      			td #{@usw.uw_diskused}
+      			tr
+	      			td Disk Used Percentage
+	      			td #{@usw.uw_diskused_perc}
+	      		tr
+	      			td CPU Used 
+	      			td #{@usw.uw_cpuused}
+	      		tr
+	      			td TCP Used
+	      			td #{@usw.uw_tcpused}
+	      		tr
+	      			td UDP Used
+	      			td #{@usw.uw_udpused}
+	      		tr
+	      			td Memory Used
+	      			td #{@usw.uw_memused}
+	      		tr
+	      			td System Load
+	      			td #{@usw.uw_load}
+	      		tr
+	      			td Bandwidth Received
+	      			td #{@usw.uw_bandrx}
+	      		tr
+	      			td Bandwidth Transmitted
+	      			td #{@usw.uw_bandtx}
+	      		tr
+	      			td Current Disk Read Completed
+	      			td #{@usw.uw_diskioreads}
+	      		tr
+	      			td Current Disk Write Completed
+	      			td #{@usw.uw_diskiowrites}
+	      		tr
+	      			td Top Ten Processes By CPU Completed
+	      			td #{@usw.uw_cputop}
+	      		tr
+	      			td Top Ten Processes By Memory Consumption
+	      			td #{@usw.uw_memtop}			

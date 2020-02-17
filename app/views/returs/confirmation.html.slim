@@ -1,0 +1,47 @@
+- @idx = 1
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data Pengembalian
+      .card-body
+        .row
+          .col-md-12
+            label for="form" INVOICE
+            input type="text" class="form-control md-form" disabled=true value="#{@retur.invoice}"
+          .col-md-4
+            label for="form" Total
+            input type="number" class="form-control md-form" disabled=true value="#{@retur.total_items}"
+          .col-md-4
+            .form-group
+              label for="from" Dari
+              input type="text" class="form-control md-form" disabled=true value="#{@retur.store.name}"
+          .col-md-4
+            .form-group
+              label for="from" Kepada
+              input type="text" class="form-control md-form" disabled=true value="#{@retur.supplier.name}"
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data Barang
+      .card-body
+        = form_for :retur, url: retur_accept_path, method: "POST" do |form|
+          .col-md-12
+              table class="table"
+                thead
+                  th No
+                  th Kode
+                  th Nama
+                  th Kategori
+                  th Jumlah
+                  th Deskripsi
+                  th Cek Jumlah
+                tbody
+                  = render partial: 'conflist', collection: @retur_items, as: :r_item
+          .col-md-12
+            .form-group.text-center
+              = form.submit "Konfirmasi Retur", class: "btn btn-primary"
+

@@ -1,0 +1,5 @@
+tr
+  td #{finance.user.name} (#{finance.store.name})
+  td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
+  td #{finance.date_created}
+  td #{finance.description}

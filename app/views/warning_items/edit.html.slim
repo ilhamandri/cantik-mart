@@ -1,0 +1,24 @@
+h5
+  | UBAH ITEM - #{@item.name} (#{@item.code})
+= form_for :item, url: stock_path(id: @stock.id), method: "PUT" do |form|
+  .form-group
+    label for="code" Kode
+    = form.text_field :code, required: true, class: "form-control md-form", id: "code", disabled: true
+  .form-group
+    label for="name" Nama
+    = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: true
+  .form_group
+    label for="category" Kategori
+    = form.select :item_cat_id, options_from_collection_for_select(@item_cats, "id", "name"), required: true, class: "form-control md-form", id: "category", disabled: true
+  .form_group
+    label for="category" Stok Lama
+    input type='number' value="#{@stock.stock}" disabled= true class="form-control md-form"
+  = form.fields_for :stock do |form|
+    .form-group
+      label for="stock" Stok Baru
+      = form.number_field :stock, required: true, class: "form-control md-form", id: "stock"
+  .form-group
+    label for="sell" Kode Barang
+    = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", disabled: true
+  .form-group
+    = form.submit "Ubah Stok Item - #{@item.name}", class: "btn btn-primary"

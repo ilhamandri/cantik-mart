@@ -1,0 +1,63 @@
+.row
+  .col.text-right
+    a href="#{send_back_path(id: @send_back.id, format: :pdf)}"
+      button.btn.btn-primary type="button" 
+        i.fas.fa-print 
+        | &nbsp&nbsp&nbsp CETAK
+  - if @send_back.received_by.nil? && current_user.store == Store.first
+    .col.text-right
+    .col-md-6.text-right
+      a href="#{send_back_receive_path(id: @send_back.id)}"
+        button class="btn btn-warning"
+          | TERIMA
+  
+      
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+      h5.font-weight-500.my-1
+       | Informasi Retur BS ke GUDANG
+    .card.mb-4
+      .card-body
+        .row
+          .col-3
+            label Invoice
+            input disabled="disabled" class="form-control md-form" value="#{@send_back.invoice}"
+          .col-3
+            label Dari
+            input disabled="disabled" class="form-control md-form" value="#{@send_back.store.name}"
+          .col-6
+            label Dibuat Oleh
+            input disabled="disabled" class="form-control md-form" value="#{@send_back.user.name} - ( #{@send_back.created_at} )"
+          .col-4
+            label Total Barang
+            input disabled="disabled" class="form-control md-form" value="#{@send_back.total_items}"
+          .col-8
+            - received = "-"
+            - if @send_back.received_by.present?
+              - received = @send_back.received_by.name 
+              - received += " ( " 
+              - received += @send_back.created_at.to_s 
+              - received += " )" 
+
+            label Diterima
+            input disabled="disabled" class="form-control md-form" value="#{received}"
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Daftar Barang 
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th No
+            - @idx = 1
+            th Kode
+            th Nama
+            th Jumlah Kirim
+            th Jumlah Terima
+            th Keterangan
+          tbody
+            = render partial: 'list_show', collection: @send_back_items, as: :send_back_item

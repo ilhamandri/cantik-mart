@@ -1,0 +1,33 @@
+tr
+  td #{inventory.item.code}
+  td
+    - if inventory.item.image.present?
+      img src="#{inventory.item.image}" width="50px"
+    - else
+      =image_tag("/images/default_item.jpg", height: '70', width: '70')
+  td #{inventory.item.name}
+  td #{inventory.item.item_cat.name}
+  td #{inventory.stock}
+  td #{inventory.min_stock}
+  td 
+    - supplier_items = SupplierItem.where(item_id: inventory.item.id)
+    - supplier_items.each do |supplier_item|
+      	- if supplier_items.last == supplier_item
+        	| #{supplier_item.supplier.name}
+      	- else
+        	| #{supplier_item.supplier.name},&nbsp
+  td
+    - if @ongoing_orders.present?
+      - @ongoing_orders.each do |order|
+        - total = 0
+        - order.order_items.each do |order_item|
+          -if order_item.item.id == inventory.item.id
+            - total += order_item.quantity
+        | #{total}
+    - else
+      | -
+  td
+    - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+      a.btn.btn-primary href='#{new_order_path(item_id: inventory.item.id)}'
+        | Order
+

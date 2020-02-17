@@ -1,0 +1,179 @@
+- user_level = current_user.level
+
+li
+  a.collapsible-header.waves-effect.arrow-r
+    i.w-fa.fas.fa-user
+    | Karyawan
+    i.fas.fa-angle-down.rotate-icon
+  .collapsible-body
+    ul
+      - if Controller.find_by(name: 'users').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        li
+          a.waves-effect href="#{users_path}"  Daftar Karyawan
+      li
+        a.collapsible-header.waves-effect.arrow-r href="#{absents_path}" Absensi
+
+
+- if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+  li
+    a.collapsible-header.waves-effect.arrow-r
+      i.w-fa.fas.fa-edit
+      | Suplier
+      i.fas.fa-angle-down.rotate-icon
+    .collapsible-body
+      ul
+        li
+          a.waves-effect href="#{suppliers_path}"  Daftar Suplier
+
+
+        - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.collapsible-header.waves-effect.arrow-r  href="#{orders_path}" Order Barang
+
+        - if Controller.find_by(name: 'returs').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{returs_path}" Retur Suplier
+
+
+- if Controller.find_by(name: 'members').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+  li
+    a.collapsible-header.waves-effect.arrow-r
+      i.w-fa.fas.fa-users
+      | Member
+      i.fas.fa-angle-down.rotate-icon
+    .collapsible-body
+      ul
+        li
+          a.waves-effect href="#{members_path}" Daftar Member
+
+        - if Controller.find_by(name: 'exchange_points').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{exchange_points_path}"  Kriterian Penukaran Poin
+
+        - if Controller.find_by(name: 'exchange_points').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{vouchers_path}"  Daftar Voucher
+
+        - if Controller.find_by(name: 'complains').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{complains_path}" Retur Konsumen
+          
+
+
+
+- if Controller.find_by(name: 'stores').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+  li
+    a.collapsible-header.waves-effect.arrow-r
+      i.w-fa.fas.fa-home
+      | Toko
+      i.fas.fa-angle-down.rotate-icon
+    .collapsible-body
+      ul
+        li
+          a.collapsible-header.waves-effect.arrow-r href="#{stores_path}" Daftar Toko
+
+        - if Controller.find_by(name: 'transfers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.collapsible-header.waves-effect.arrow-r  href="#{transfers_path}" Minta Barang ke GUDANG
+
+        - if current_user.store.store_type != "retail"
+          li
+            a.collapsible-header.waves-effect.arrow-r  href="#{new_direct_transfer_path}" Kirim Barang ke TOKO
+
+        - if Controller.find_by(name: 'send_backs').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.collapsible-header.waves-effect.arrow-r  href="#{send_backs_path}" Kirim BS
+        
+        - if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.collapsible-header.waves-effect.arrow-r  href="#{transactions_path}" Penjualan
+
+- if Controller.find_by(name: 'items').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+  li
+    a.collapsible-header.waves-effect.arrow-r
+      i.w-fa.fas.fa-archive
+      | Barang
+      i.fas.fa-angle-down.rotate-icon
+    .collapsible-body
+      ul
+        - if Controller.find_by(name: 'promotions').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{promotions_path}"  Promo Bundle
+
+        - if Controller.find_by(name: 'discounts').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{discounts_path}"  Promo Diskon
+
+        - if Controller.find_by(name: 'departments').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{departments_path}"  Departemen
+
+        - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{items_path}"  Daftar Barang
+
+        - if Controller.find_by(name: 'stocks').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{stocks_path}"  Stok Toko
+
+        - if Controller.find_by(name: 'warning_items').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{warning_items_path}" Barang Habis
+
+        - if Controller.find_by(name: 'prints').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{prints_path}"  Cetak Harga
+
+        - if Controller.find_by(name: 'losses').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+          li
+            a.waves-effect href="#{losses_path}"  Barang Hangus      
+
+
+- if Controller.find_by(name: 'cash_flows').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+  li
+    a.collapsible-header.waves-effect.arrow-r
+      i.w-fa.fas.fa-book
+      | Keuangan
+      i.fas.fa-angle-down.rotate-icon
+    .collapsible-body
+      ul
+        li
+          a.waves-effect href="#{balances_path}"  Laporan
+        li
+          a.waves-effect href="#{loss_profits_path}"  Loss & Profit
+        li
+          a.waves-effect href="#{cash_flows_path}"  Arus Kas
+        li
+          a.waves-effect href="#{debts_path}"  Hutang
+        li
+          a.waves-effect href="#{receivables_path}"  Piutang
+        li
+          a.waves-effect href="#{taxs_path}"  Pajak
+        li
+          a.waves-effect href="#{operationals_path}"  Operasional
+        li
+          a.waves-effect href="#{fix_costs_path}"  Biaya Pasti
+        li
+          a.waves-effect href="#{stock_values_path}"  Nilai Stok
+        li
+          a.waves-effect href="#{salaries_path}"  Gaji
+        li
+          a.waves-effect href="#{losses_path}"  Barang Hangus
+
+- if user_level == "super_admin"
+  li
+    a.collapsible-header.waves-effect.arrow-r  href="#{controllers_path}"
+      i.w-fa.fas.fa-cog
+      | Hak Akses
+
+- if user_level == "owner" || user_level == "super_admin"
+  li
+    a.collapsible-header.waves-effect.arrow-r  href="#{activities_path}"
+      i.w-fa.fas.fa-rss
+      | Aktivitas Pengguna
+
+- if user_level == "super_admin"
+  li
+    a.collapsible-header.waves-effect.arrow-r  href="#{server_informations_path}"
+      i.w-fa.fas.fa-info-circle
+      | Informasi Sistem

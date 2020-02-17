@@ -1,0 +1,85 @@
+- balance = @balance
+.col-lg-12.col-md-12
+  .card.mb-4
+    .card-header.white-text.info-color
+      h5.font-weight-500.my-1
+        | Detil Keuangan - #{balance.store.name} (#{balance.created_at.to_date})
+    .row
+      - stock_under_zero = StoreItem.where(store: balance.store).where('stock < 0').count
+      - if stock_under_zero > 0
+        .card-body.col-12.text-left
+          .text-danger
+            | * Terdapat #{stock_under_zero} item dengan stok dibawah 0.
+
+      - activa = balance.cash + balance.receivable + balance.asset_value + balance.stock_value
+      - passiva = balance.equity + balance.debt + balance.outcome + balance.transaction_value
+      
+      
+      .card-body.col-6.text-left
+        .card-header.white-text.primary-color
+          | AKTIVA
+        .card-body
+          label for="phone" Tunai
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.cash.to_i, delimiter: ".", separator: ",")}' 
+
+          label for="phone" Saldo Bank
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.bank.to_i, delimiter: ".", separator: ",")}' 
+
+          label for="phone" Piutang
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.receivable.to_i, delimiter: ".", separator: ",")}'
+
+          label for="phone" Nilai Stok
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.stock_value.to_i, delimiter: ".", separator: ",")}'
+
+          label for="phone" Nilai Aset
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.asset_value.to_i, delimiter: ".", separator: ",")}'
+
+      .card-body.col-6.text-right
+        .card-header.white-text.primary-color
+          | PASSIVA
+        .card-body
+          label for="phone" Modal
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.equity.to_i, delimiter: ".", separator: ",")}'
+
+          label for="phone" Hutang
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.debt.to_i, delimiter: ".", separator: ",")}'
+
+          label for="phone" Penjualan(Profit) & Loss
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.transaction_value.to_i, delimiter: ".", separator: ",")}'
+
+          label for="phone" Pemasukkan & Pengeluaran
+          input type="text" class="form-control md-form" value='#{number_with_delimiter(balance.outcome.to_i, delimiter: ".", separator: ",")}'
+
+      .col-12
+        hr.primary-color-dark
+
+
+
+      .col-5.text-center
+        | #{number_to_currency(activa, unit: "Rp. ")}
+
+      .col-2.text-center
+        | :
+
+      .col-5.text-center
+        
+        | #{number_to_currency(passiva, unit: "Rp. ")}
+
+      h5.col-12.text-center
+        hr.primary-color-dark
+
+        - if activa.to_i == passiva.to_i
+          .text-success
+            | BALANCE
+        - else
+          .text-danger
+            | NOT BALANCE (#{number_to_currency((activa-passiva).abs, unit: "Rp. ")})
+
+        br
+        - if balance.filename.present?
+          - file = balance.filename.split("/").last
+          - file_exist = File.exist?("./report/"+file)
+          - if file_exist
+            a href="#{download_file_path(name: file)}"
+              button.btn.btn-success type="button" 
+                | Unduh

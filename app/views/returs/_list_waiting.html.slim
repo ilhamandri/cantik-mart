@@ -1,0 +1,15 @@
+tr
+  td #{retur.invoice}
+  td #{retur.store.name}
+  td #{retur.supplier.name}
+  td #{retur.total_items}
+  td
+    - if retur.date_approve.nil?
+      | - 
+    - else
+      | #{retur.date_approve.to_date}
+  td
+    a href='#{retur_path(id: retur.id)}'
+      button class="btn btn-primary"
+        | Item
+

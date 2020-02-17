@@ -1,0 +1,14 @@
+tr
+  td #{@idx}
+  - @idx += 1
+  td #{r_item.item.code}
+  td #{r_item.item.name}
+  td #{r_item.description}
+  td #{r_item.request_quantity}
+  td 
+    input type="number" class="form-control md-form" name="transfer[transfer_items][#{r_item_counter}][item_id]" value="#{r_item.item.id}" style="display: none;"
+    input type="number" class="form-control" name="transfer[transfer_items][#{r_item_counter}][total]"
+    input type="number" class="form-control md-form" name="transfer[transfer_items][#{r_item_counter}][tr_item_id]" value="#{r_item.id}" style="display: none;"
+
+    
+    

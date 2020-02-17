@@ -1,0 +1,25 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Ubah Harga Barang - #{@grocer_item.item.name} (#{@grocer_item.item.item_cat.name})
+      .card-body
+        = form_for :grocer_item, url: grocer_item_path(id: @grocer_item.id), method: "PUT" do |form|
+          .form-group
+            label for="name" Min
+            = form.number_field :min, required: true, class: "form-control md-form", id: "name", min: "@grocer_item.min"
+          .form-group
+            label for="name" Max
+            = form.number_field :max, required: true, class: "form-control md-form", id: "name", min:"@grocer_item.max"
+          .form-group
+            label for="name" Harga Jual Satuan
+            = form.number_field :price, required: true, class: "form-control md-form", id: "price", min: "100"
+          .form-group
+            label for="name" Harga Jual Satuan MEMBER
+            = form.number_field :member_price, required: true, class: "form-control md-form", id: "price", min: "100"
+          .form-group
+            label for="name" Diskon
+            = form.number_field :discount, required: true, class: "form-control md-form", id: "price", min: "0"
+          .form-group.text-center
+            = form.submit "Ubah Harga Barang", class: "btn btn-warning"

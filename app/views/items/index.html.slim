@@ -1,0 +1,76 @@
+.row
+  .col
+    h5
+      | Daftar Barang
+      / = link_to "PRINT", '#', onclick: "printpage()" 
+  .col.text-right
+    - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+      a href="#{new_item_path}"
+        button.btn.btn-success type="button" 
+          i.fas.fa-plus 
+          |   Tambah Barang
+br
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pencarian
+    .card.mb-4
+      .card-body
+        = form_for :items, url: items_path, method: 'GET' do |form|
+          .row
+            .col-12
+              input type="text" class="form-control md-form" id="search" name="search" value="#{@search}" placeholder="Cari..."
+            .col
+              select[class="mdb-select md-form md-outline colorful-select dropdown-primary" id="order_by" name="order_by"]
+                option[value="code" select]
+                  | urutkan KODE
+                option[value="name"]
+                  | urutkan NAMA
+                / option[value="brand"]
+                  | urutkan MEREK
+                option[value="sell"]
+                  | urutkan HARGA BELI
+            .col
+              select[class="mdb-select md-form md-outline colorful-select dropdown-primary" id="order_type" name="order_type"]
+                option[value="asc"]
+                  | secara A - Z
+                option[value="desc"]
+                  | secara Z - A
+            .col-12.text-center
+              button class="btn btn-primary"
+                | Cari
+            br
+        - if @search.present?
+          .col-md-12.text-center.grey-text
+            | Pencarian "
+            b
+              | #{@search}
+            | " berdasarkan 
+            b
+              | #{@order_by} 
+            | secara 
+            b
+              | #{@order_type} 
+        
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Data
+    .card.mb-4 
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Kode
+            th Foto
+            th Name
+            / th Merek
+            th Kategori
+            th Beli
+            th Jual
+            th Aksi
+          tbody
+            = render partial: 'list', collection: @items, as: :item
+        = paginate @items

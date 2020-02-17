@@ -1,0 +1,35 @@
+- retur = @complain_items.first.complain
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pengembalian
+      .card-body
+        .row
+          .col-4
+            label Invoice
+            input class="form-control md-form" value="#{retur.invoice}" disabled="disabled"
+          .col-4
+            label Dari
+            input class="form-control md-form" value="#{retur.member.name}" disabled="disabled"
+          .col-4
+            label Kepada
+            input class="form-control md-form" value="#{retur.store.name}" disabled="disabled"
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Daftar Barang
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Kode
+            th Name
+            th Kuantiti
+            th Alasan Retur
+          tbody
+            = render partial: 'list', collection: @complain_items, as: :ret_item
+        = paginate @complain_items

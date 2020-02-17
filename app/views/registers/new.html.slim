@@ -1,0 +1,32 @@
+header.header
+  .container
+    .row
+      .col-12
+        .d-flex.justify-content-center
+          = image_tag "logo-main.png", class: 'header__img', alt: "PPSDM Kemenkes RI"
+.container
+  .row
+    .col-3
+    .col-6
+      .card.shadow-outset-sm.p-30
+        p.card__title.text-center
+           | Registrasi User Baru
+        = form_for :user, url: registers_path, method: :post do |form|
+            .container
+              .row
+                .field
+                  label for="name" Nama Lengkap
+                  = form.text_field :name, type: 'text'
+                .field
+                  label for="email" Email
+                  = form.text_field :email, type: 'text'
+                .field
+                  label for="level" Level
+                  = form.select :level, [["ADMIN",0],["CREATOR",1],['VALIDATOR',2]], class: ''
+                .field
+                  label for="password" Password
+                  = form.password_field :password
+                .col-12
+                  .d-flex.justify-content-center
+                    = form.submit 'Register', class: 'btn btn-standard--primary'
+    .col-3

@@ -1,0 +1,43 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+      h5.font-weight-500.my-1
+       | Konfirmasi Transfer
+    .card.mb-4
+      .card-body.table-responsive.text-nowrap
+        .row
+          .col-12
+            label Invoice
+            input disabled="disabled" class="form-control md-form" value="#{@transfer.invoice}"
+          .col
+            label Dari
+            input disabled="disabled" class="form-control md-form" value="#{@transfer.from_store.name}"
+          .col
+            label Kepada
+            input disabled="disabled" class="form-control md-form" value="#{@transfer.to_store.name}"
+          .col
+            label Total Barang
+            input disabled="disabled" class="form-control md-form" value="#{@transfer.total_items}"
+
+          hr style="border-top: 1px solid black;"
+            table class="table"
+              thead
+                th Kode
+                th Nama
+                th Kategori
+                th Jumlah
+                th Deskripsi
+              tbody
+                = render partial: 'conflist', collection: @transfer_items, as: :r_item
+
+          .col.text-center
+            .form-group
+              = form_for :transfer, url: transfer_accept_path, method: "POST" do |form|
+                input type="hidden" value=0 name="transfer[status]"
+                = form.submit "Batalkan Permintaan", class: "btn btn-danger"
+          .col.text-center
+            .form-group
+              = form_for :transfer, url: transfer_accept_path, method: "POST" do |form|
+                input type="hidden" value=1 name="transfer[status]"
+                = form.submit "Terima Permintaan", class: "btn btn-primary"
+    

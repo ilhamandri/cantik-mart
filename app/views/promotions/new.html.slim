@@ -1,0 +1,31 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Tambah Promo
+      .card-body
+
+        = form_for :promotion, url: promotions_path, method: "POST" do |form|
+          .row
+            .form-group.col-6
+              label for="name" Beli Barang
+              = form.text_field :buy_item, required: true, class: "form-control md-form", id: "name"
+            .form-group.col-6
+              label for="name" Jumlah Beli Barang
+              = form.number_field :buy_quantity, required: true, class: "form-control md-form", id: "name"
+            .form-group.col-6
+              label for="name" Gratis Barang
+              = form.text_field :free_item, required: true, class: "form-control md-form", id: "name"
+            .form-group.col-6
+              label for="name" Jumlah Gratis Barang
+              = form.number_field :free_quantity, required: true, class: "form-control md-form", id: "name"
+            .form-group.col-6
+              label for="name" Tanggal Mulai Promo
+              input class="form-control md-form" type="date" name="promotion[start_promo]" id="date_from"
+            .form-group.col-6
+              label for="name" Tanggal Selesai Promo
+              input class="form-control md-form" type="date" name="promotion[end_promo]" id="date_from"
+            .form-group.col-12.text-center
+              = form.submit "Tambah Promo", class: "btn btn-primary"
+

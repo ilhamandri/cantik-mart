@@ -1,0 +1,34 @@
+tr 
+	td #{epoint.point}
+	- item = Item.find_by(code: epoint.name)
+	- if item.nil?
+		td #{epoint.name}
+	- else
+		td Barang - #{item.name} ( #{item.code} )
+	td #{number_with_delimiter(epoint.quantity, delimiter: " ")}
+	- hit = epoint.points.count
+	- if hit <= 0
+		td 0
+		td 
+			a href='#{set_exchange_point_path(id: epoint.id)}'
+	    		button.btn.btn-primary type="button"
+	    			- if epoint.status 
+		       			| Hentikan
+		       		- else
+		       			| Aktifkan 
+
+			a href='#{edit_exchange_point_path(id: epoint.id)}'
+	    		button.btn.btn-warning.black-text type="button" 
+		       		| Edit
+
+		td
+			= button_to "Hapus", epoint, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Are you sure you want to delete ?" }
+	- else
+		td #{hit} x
+		td
+			a href='#{set_exchange_point_path(id: epoint.id)}'
+	    		button.btn.btn-primary type="button" 
+	    			- if epoint.status 
+		       			| Hentikan
+		       		- else
+		       			| Aktifkan 

@@ -1,0 +1,57 @@
+.row
+  .col.text-left
+    h5
+      | Daftar Supplier
+  .col.text-right
+    - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+      a href="#{new_supplier_path}"
+        button.btn.btn-success type="button" 
+          i.fas.fa-plus 
+          |   Tambah Supplier
+
+    - if ["owner", "finance", "super_admin"].include? current_user.level
+      a href="#{supplier_path(format: :pdf, id: 0)}"
+        button.btn.btn-warning.text-dark type="button" 
+          |   Daftar Hutang Piutang
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pencarian
+    .card.mb-4 
+      
+      .card-body
+        = form_for :supplier, url: suppliers_path, method: 'GET' do |form|
+          .row.align-middle
+            .col-md-12
+              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nama supplier ..."
+            .col-md-12.text-center
+              button class="btn btn-primary"
+                | Cari
+                
+            .col-md-12.text-center.grey-text
+              a href="#{suppliers_path(option: @params.to_s, format: :pdf)}"
+                br
+                b
+                  | #{@search}
+
+.container-fluid 
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data Supplier
+    .card.mb-4 
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Nama
+            th Alamat
+            th Telepon
+            th Hutang
+            th Piutang
+            th Aksi
+          tbody
+            = render partial: 'list', collection: @suppliers, as: :supplier
+        = paginate @suppliers
+

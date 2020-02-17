@@ -1,0 +1,17 @@
+- users_level = UserMethod.where(controller_method: method).pluck(:user_level)
+- users_level_name = ""
+- users_level.each do |user_level|
+	- if users_level.last == user_level
+		- users_level_name += user_level.underscore.humanize.upcase
+	- else
+		- users_level_name += user_level.underscore.humanize.upcase + ", "
+- if !["show", "update", "create"].include? method.name
+tr
+	td #{method.name.camelize}
+	td #{users_level_name}
+	td 
+		a href='#{edit_method_path(id: method.id)}'
+	    	button.btn.btn-warning type="button" 
+		       	| Edit
+
+		

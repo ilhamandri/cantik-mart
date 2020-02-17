@@ -1,0 +1,76 @@
+- member = "NO MEMBER"
+- member = Member.find_by(card_number: @transaction.member_card) if @transaction.member_card.present?
+.row
+  .col.text-left
+    h5
+      | Retur #{@complain.invoice}
+  .col.text-right
+    a href="#{complain_path(id: @complain.id, format: :pdf)}"
+      button.btn.btn-success type="button" 
+        | CETAK
+br
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data Retur Pelanggan
+      .card-body
+        .row
+          .col-4
+            label No. Invoice
+            input disabled="disabled" class="form-control md-form" value="#{@complain.invoice}"
+          .col-4
+            label Dari Transaksi
+            input disabled="disabled" class="form-control md-form" value="#{@transaction.invoice}"
+          
+          .col-4
+            label Member
+            input disabled="disabled" class="form-control md-form" value="#{member}"
+          .col-4
+            label Tanggal Komplain
+            input disabled="disabled" class="form-control md-form" value="#{@complain.date_created}"
+          .col-4
+            label Tanggal Transaksi
+            input disabled="disabled" class="form-control md-form" value="#{@transaction.date_created}"
+          .col-4
+            label Toko
+            input disabled="disabled" class="form-control md-form" value="#{@transaction.user.store.name}"
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data Item yang Ditukar
+      .card-body
+        table.table id="myTable2"
+          tr
+            th
+              | Barang
+            th
+              | Harga
+            th
+              | Beli
+            th
+              | Komplain
+            th
+              | Diganti
+            th
+              | Keterangan
+            th
+            
+            input type="number" required=true class="form-control" id="total" name="complain[new_total]" value="0" readonly=true style="display: none;"
+
+            input type="number" required=true class="form-control" id="item_total" name="complain[item_total]" value="#{@transaction_items.count}" readonly=true style="display: none;"
+
+          - @transaction_items.each_with_index do |trx_item, index|
+            - if trx_item.retur.present?
+              tr
+                td #{trx_item.item.name}
+                td #{number_with_delimiter(trx_item.price, delimiter: ".")}
+                td #{trx_item.quantity}
+                td #{trx_item.retur}
+                td #{trx_item.replace}
+                td #{trx_item.reason}

@@ -1,0 +1,43 @@
+- received = @order.received_by.present?
+#customer
+  table#meta
+    tr
+      td.meta-head Invoice #
+      td
+        textarea #{@order.invoice}
+    tr
+      td.meta-head Tanggal
+      td
+        textarea #{@order.created_at.to_date} - #{@order.user.name}
+    tr
+      td.meta-head Toko
+      td
+        .due #{@order.store.name}
+    tr
+      td.meta-head Suplier
+      td
+        .due #{@order.supplier.name}
+    - if received
+      tr
+        td.meta-head Terima
+        td
+          .due #{@order.date_receive} - #{@order.received_by.name}
+      tr
+        - due_date = Debt.find_by(finance_type: "ORDER", ref_id: @order.id).due_date
+        td.meta-head Jatuh Tempo
+        td
+          .due #{due_date.to_date}
+
+table#items
+  tr
+    th No
+    th Kode
+    th Barang
+    th Pesan
+    
+  - @order_items.each_with_index do |order_item, idx|
+    tr.item-row
+      td #{idx+1}
+      td #{order_item.item.code}
+      td  #{order_item.item.name}
+      td  #{order_item.quantity}

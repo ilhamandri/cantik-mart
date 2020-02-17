@@ -1,0 +1,142 @@
+- transaction = @transaction_items.first.trx
+- member = "-"
+- member = Member.find_by(card_number: transaction.member_card).name  if transaction.member_card.present?
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Informasi Transaksi 
+      .card-body
+        .row
+          - if transaction.from_complain?
+            - complain = Complain.find_by(id: transaction.complain_id)
+            .col-6
+              label RETUR
+              input disabled="disabled" class="form-control md-form" value="#{complain.invoice}"
+            .col-6
+              label NOMINAL
+              input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(complain.nominal, delimiter: ".")}"
+            br
+          .col-3
+            label Invoice
+            input disabled="disabled" class="form-control md-form" value="#{transaction.invoice}"
+          .col-3
+            label Member
+            input disabled="disabled" class="form-control md-form" value="#{member}"
+          .col-3
+            label Kasir
+            input disabled="disabled" class="form-control md-form" value="#{transaction.user.name}"
+          .col-3
+            label Tgl. Transaksi
+            input disabled="disabled" class="form-control md-form" value="#{transaction.created_at}"
+          .col
+            label Total Belanja
+            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total, delimiter: ".")}"
+          .col 
+            label Profit
+            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total - transaction.hpp_total, delimiter: ".")}"
+          - if  transaction.voucher_id.present?
+            .col
+              label Voucher
+              input disabled="disabled" class="form-control md-form" value="#{Voucher.find_by(id: transaction.voucher_id).exchange_point.name}"
+          .col
+            label Pembayaran
+            input disabled="disabled" class="form-control md-form" value="#{transaction.payment_type}"
+          - if transaction.payment_type == "DEBIT" || transaction.payment_type == "CREDIT"
+            .col
+              label Bank
+              input disabled="disabled" class="form-control md-form" value="#{transaction.bank}"
+            .col
+              label No. EDC
+              input disabled="disabled" class="form-control md-form" value="#{transaction.edc_inv.to_i}"
+            .col
+              label No. Kartu
+              input disabled="disabled" class="form-control md-form" value="#{transaction.card_number.to_s}"
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          - if transaction.from_complain?
+            | Daftar Tambahan Item
+          - else
+            | Daftar Belanja 
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Kode
+            th Nama
+            th Jumlah
+            th Harga
+            th Diskon
+            th Total
+          tbody
+            = render partial: 'list_show', collection: @transaction_items, as: :transaction_item
+
+- contains_promo = @transaction_items.where("lower(reason) like ?", "%promo%")
+- contains_promo.present?
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Barang Promo
+        .card-body.table-responsive.text-nowrap
+          table class="table"
+            thead
+              th Kode Promo
+              th Promo
+              th Jumlah Gratis 
+            tbody
+              = render partial: 'promo', collection: @transaction_items, as: :transaction_item
+          = paginate @transaction_items
+
+- check_complain = Complain.find_by(transaction_id: transaction.id)
+- if check_complain.present? || transaction.from_complain?
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.danger-color
+          h5.font-weight-500.my-1
+            | Barang yang di Retur 
+        .card-body.table-responsive.text-nowrap
+          table class="table"
+            thead
+              th
+                | Barang
+              th
+                | Harga
+              th
+                | Beli
+              th
+                | Komplain
+              th
+                | Diganti
+              th
+                | Keterangan
+              th
+            tbody
+              - if transaction.from_complain?
+                - complain = Complain.find_by(id: transaction.complain_id)
+                - trx = Transaction.find_by(id: complain.transaction_id)
+                - @transaction_items = trx.transaction_items
+              - @transaction_items.each do |trx_item|
+                - if trx_item.retur.present?
+                  tr
+                    td #{trx_item.item.name}
+                    td #{number_with_delimiter(trx_item.price - trx_item.discount, delimiter: ".")}
+                    td #{trx_item.quantity}
+                    td #{trx_item.retur}
+                    td #{trx_item.replace}
+                    td #{trx_item.reason}
+
+    - if check_complain.present? 
+      .col-12.text-center
+        - trx_from_retur = Transaction.find_by(from_complain: true, complain_id: check_complain.id)
+        - if trx_from_retur.present?
+          a href="#{transaction_path(id: trx_from_retur.id)}" class="btn btn-primary"
+            | Transaksi Baru -> #{trx_from_retur.invoice}
+
+

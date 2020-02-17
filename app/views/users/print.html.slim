@@ -1,0 +1,25 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Daftar Pengguna 
+      td
+        textarea SEMUA
+    tr
+      td.meta-head Kriteria
+      td
+        | -
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Nama
+    th Email
+
+  - @users.each do |user|
+    tr.item-row
+      td #{user.name}
+      td #{user.email}
+   

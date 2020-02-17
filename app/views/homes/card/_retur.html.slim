@@ -1,0 +1,25 @@
+.card
+  - if @total_returs > 0
+    .card-header.white-text.grey.darken-1
+      h5.font-weight-500.my-1
+        | RETUR
+    h6.ml-4.mb-0.pt-4.font-weight-bold
+      i.fas.fa-arrow-down.red-text.mr-3[aria-hidden="true"]
+      b
+        | #{@total_returs} 
+      | pengembalian
+    .card-body.text-center
+      a.btn.btn-danger[href="#{returs_path}"]
+        | Cek &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
+  - else
+    .card-header.white-text.grey.darken-1
+      h5.font-weight-500.my-1
+        | RETUR
+    h6.ml-4.mb-0.pt-4.font-weight-bold
+      i.fas.fa-arrow-up.blue-text.mr-3[aria-hidden="true"]
+      | Tidak ada retur
+    .card-body.text-center
+      a.btn.btn-primary[href="#{returs_path}"]
+        | Cek  &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
+
+      

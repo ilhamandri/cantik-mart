@@ -1,0 +1,310 @@
+- if !["driver", "super_admin", "owner"].include? current_user.level
+  .container-fluid
+    section.pb-3
+      .row
+        .col-md-3.mb-0
+        	= render "homes/card/stock"
+        .col-md-3.mb-0
+          = render "homes/card/order"
+        .col-md-3.mb-md-0.mb-4
+          = render "homes/card/payment"
+        .col-md-3.mb-0
+          = render "homes/card/retur"
+
+- if ["super_admin", "owner"].include? current_user.level
+  .section.mb-5
+  .card.card-cascade.narrower
+    .section
+      .row
+        .col-xl-12.col-lg-12.mr-0.pb-2
+          .view.view-cascade.gradient-card-header.light-blue.lighten-1
+            h2.h2-responsive.mb-0.font-weight-500 LAPORAN HARI INI ( #{Date.today} )
+          .card-body.card-body-cascade.pb-0
+            .row.py-3.pl-4
+              .col-6
+                = form_for :absent, url: daily_absent_recap_path, method: 'GET' do |form|
+                  .row
+                    .col-md-12 style="display: none;"
+                      label Pilih Tanggal Absensi
+                      input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
+                    .col-md-12.text-center
+                      button class="btn btn-primary "
+                        |   Rekap Absensi 
+              .col-6
+                = form_for :transaction, url: daily_trx_recap_path, method: 'GET' do |form|
+                  .row
+                    .col-md-12 style="display: none;"
+                      label Pilih Tanggal Absensi
+                      input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
+                    .col-md-12.text-center
+                      button class="btn btn-primary "
+                        |   Rekap Transaksi 
+
+- if ["driver", "super_admin", "owner", "finance"].include? current_user.level
+  .section.mb-5
+  .card.card-cascade.narrower
+    .section
+      .row
+        .col-xl-6.col-lg-12.mr-0.pb-2
+          .view.view-cascade.gradient-card-header.light-blue.lighten-1
+            h2.h2-responsive.mb-0.font-weight-500 PENJUALAN HARI INI 
+          .card-body.card-body-cascade.pb-0
+            .row.py-3.pl-4
+              .col-md-12
+                - Store.where(store_type: "retail").each do |store|
+                  - trx = @transactions.where(store: store).order("created_at DESC").limit(1).first
+                  - trx_last_timestamp = "Tidak ada transaksi"
+                  - trx_last_timestamp = trx.created_at if trx.present?
+                  h6
+                    b
+                      | #{store.name.upcase} ( #{trx_last_timestamp} )
+                  table.table
+                    tr
+                      th Kasir
+                      th Tunai
+                      th Debit / Kredit
+                      th Total
+                      th Profit
+                    - @cashiers.uniq.each do |cashier_id|
+                      - cashier = User.find_by(id: cashier_id)
+                      - next if cashier.store != store
+                      tr
+                        td #{cashier.name}
+                        - cash = @transactions.where(payment_type: "CASH", user: cashier).sum(:grand_total)
+                        td #{number_with_delimiter( cash.to_i, delimiter: ".", separator: ",")}
+                        - debit = @transactions.where(payment_type: ["DEBIT", "CREDIT"], user: cashier).sum(:grand_total)
+                        td #{number_with_delimiter( debit.to_i, delimiter: ".", separator: ",")}
+                        td #{number_with_delimiter( (debit+cash).to_i, delimiter: ".", separator: ",")}
+                        - hpp_total = @transactions.where(user: cashier).sum(:hpp_total)
+                        td #{number_with_delimiter( (debit+cash-hpp_total).to_i, delimiter: ".", separator: ",")}
+
+                    tr
+                      td 
+                      - cash_total = @transactions.where(store: store).where(payment_type: "CASH").sum(:grand_total)
+                      - debit_total = @transactions.where(store: store).where(payment_type: ["DEBIT", "CREDIT"]).sum(:grand_total)
+                      - grand_total = @transactions.where(store: store).sum(:grand_total)
+                      td #{number_with_delimiter( (cash_total).to_i, delimiter: ".", separator: ",")}
+                      td #{number_with_delimiter( (debit_total).to_i, delimiter: ".", separator: ",")}
+                      td #{number_with_delimiter( (grand_total).to_i, delimiter: ".", separator: ",")}
+                      - hpp_total = @transactions.where(store: store).sum(:hpp_total)
+                      td #{number_with_delimiter( (grand_total-hpp_total).to_i, delimiter: ".", separator: ",")}
+        .col-xl-6.col-lg-12.mr-0.pb-2
+          .view.view-cascade.gradient-card-header.light-blue.lighten-1
+            h2.h2-responsive.mb-0.font-weight-500 REVIEW KEUANGAN 
+          .card-body.card-body-cascade.pb-0
+            .row.py-3.pl-4
+              .col-md-6
+                p.lead.pt-3.pb-4
+                  span.badge.info-color.p-2 Penjualan Dalam Bulan
+                
+                p
+                  | Penjualan Bulan Lalu:
+
+                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
+
+                  strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
+                  button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.month).strftime("%B")}") type="button" 
+                    i.fas.fa-question
+
+                p
+                  | Profit Bulan Lalu:
+
+                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
+                  - sum_hpp_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:hpp_total)
+
+                  strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
+                  button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.month).strftime("%B")}") type="button" 
+                    i.fas.fa-question
+
+                br
+
+                p
+                  | Penjualan Bulan Ini:
+
+                  - sum_grand_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
+
+                  strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
+                  button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now).strftime("%B")}") type="button" 
+                    i.fas.fa-question
+
+                p
+                  | Profit Bulan Ini:
+
+                  - sum_grand_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
+
+                  - sum_hpp_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:hpp_total)
+
+                  strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
+                  button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now).strftime("%B")}") type="button" 
+                    i.fas.fa-question
+
+              .col-md-6
+                p.lead.pt-3.pb-4
+                  span.badge.info-color.p-2 Penjualan Dalam Hari
+                p
+                  | Penjualan Kemarin:
+
+                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:grand_total)
+
+                  strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
+                  button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.day).to_date}") type="button" 
+                    i.fas.fa-question
+
+
+                p 
+                  | Profit Kemarin
+                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:grand_total)
+                  - sum_hpp_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:hpp_total)
+
+                  strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
+                  button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.day).to_date}") type="button" 
+                    i.fas.fa-question
+
+                br
+                
+                p
+                  | Penjualan Hari Ini:
+
+                  - sum_grand_total = Transaction.where("created_at >= ? ", DateTime.now.beginning_of_day).sum(:grand_total)
+
+                  strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
+                  button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
+                    i.fas.fa-question
+
+                p 
+                  | Profit Hari Ini
+                  - sum_grand_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_day).sum(:grand_total)
+                  - sum_hpp_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_day).sum(:hpp_total)
+
+                  strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
+                  button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
+                    i.fas.fa-question
+
+
+              .col-md-6
+                p.lead.pt-3.pb-4
+                  | HUTANG
+                  br
+                  a href="#{debts_path(due_date: 1)}"
+                    span.badge.danger-color.p-2.strong  #{number_to_currency(@debt.sum(:deficiency), unit: "Rp. ")}
+
+                    - due_date = @debt.where("due_date <= ?", Date.today.end_of_week).count
+                    - due_date_text = ""
+                    - due_date_text += " -"+ due_date.to_s + " jatuh tempo." if due_date > 0
+                    button.btn.btn-danger.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{@debt.count} belum lunas #{due_date_text}") type="button" 
+                      i.fas.fa-minus &nbsp
+                      i.fas.fa-donate
+
+              .col-md-6
+                p.lead.pt-3.pb-4
+                  | PIUTANG
+                  br
+                  a href="#{debts_path(due_date: 1)}"
+                    span.badge.warning-color.p-2.strong  #{number_to_currency(@receivable.sum(:deficiency), unit: "Rp. ")}
+
+                    - due_date = @receivable.where("due_date <= ?", Date.today.end_of_week).count
+                    - due_date_text = ""
+                    - due_date_text += " -"+ due_date.to_s + " jatuh tempo." if due_date > 0
+                    button.btn.btn-warning.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{@receivable.count} belum lunas #{due_date_text}") type="button" 
+                      i.fas.fa-plus &nbsp
+                      i.fas.fa-donate
+
+- if ["super_admin", "owner", "stock_admin", "super_visi"].include? current_user.level
+  .section.mb-5
+  .card.card-cascade.narrower
+    .section
+      .row
+        .col-xl-12.col-lg-12.mb-4.pb-2
+          .view.view-cascade.gradient-card-header.light-blue.lighten-1
+            .row
+              .col-12
+                h2.h2-responsive.mb-0.font-weight-500 ITEM ( #{PopularItem.last.created_at.to_date} )
+              .col-12
+                a href="#{refresh_popular_items_path}" class="btn btn-warning"
+                  | Refresh Recap Item
+          .card-body.card-body-cascade.pb-0
+            .row.py-3.pl-4
+              .col-md-6.text-center-pl-xl-2.my-md-0.my-3
+                .view.view-cascade.gradient-card-header.cloudy-knoxville-gradient
+                  p.lead.pt-3.pb-4
+                    span.badge.info-color.p-2 Kategori Paling Laku
+                  
+                  .row
+                    .col-12
+                      canvas id="higher_sales"
+                    .col-xl-6.col-lg-12.mr-0.pb-2
+                      table class="table"
+                        thead
+                          th Nama
+                          th Terjual
+                        tbody
+                          = render partial: 'list', collection: @higher_item.first(10), as: :item
+
+                    .col-xl-6.col-lg-12.mr-0.pb-2
+                      table class="table"
+                        thead
+                          th Nama
+                          th Terjual
+                        tbody
+                          = render partial: 'list', collection: @higher_item.to_a.pop(10), as: :item
+
+              .col-md-6.text-center-pl-xl-2.my-md-0.my-3
+                .view.view-cascade.gradient-card-header.cloudy-knoxville-gradient
+                  p.lead.pt-3.pb-4
+                    span.badge.info-color.p-2 Kategori Kurang Laku
+                  .row
+                    .col-12
+                      canvas id="lower_sales"
+                    .col-xl-6.col-lg-12.mr-0.pb-2
+                      table class="table"
+                        thead
+                          th Nama
+                          th Terjual
+                        tbody
+                          = render partial: 'list', collection: @lower_item.first(10), as: :item
+
+                    .col-xl-6.col-lg-12.mr-0.pb-2
+                      table class="table"
+                        thead
+                          th Nama
+                          th Terjual
+                        tbody
+                          = render partial: 'list', collection: @lower_item.to_a.pop(10), as: :item
+
+- if ["driver", "super_admin", "owner", "finance"].include? current_user.level
+  .section.mb-5
+  ul#myTabJust.nav.nav-tabs.nav-justified.md-tabs.indigo[role="tablist"]
+    li.nav-item
+      a#home-tab-just.nav-link.active[data-toggle="tab" href="#home-just" role="tab" aria-controls="home-just" aria-selected="true"]
+        | Bulan
+    li.nav-item
+      a#profile-tab-just.nav-link[data-toggle="tab" href="#profile-just" role="tab" aria-controls="profile-just" aria-selected="false"]
+        | Per Tanggal
+  #myTabContentJust.tab-content.card.pt-5
+    #home-just.tab-pane.fade.show.active[role="tabpanel" aria-labelledby="home-tab-just"]
+      .section.mb-5
+      .card.card-cascade.narrower
+        .section
+          .row                          
+            .col-xl-12.col-lg-12.mb-4.pb-2
+              .view.view-cascade.gradient-card-header.light-blue.lighten-1
+                h2.h2-responsive.mb-0.font-weight-500 PENJUALAN per BULAN (#{Date.today.year - 1} - #{Date.today.year})
+              .card-body.card-body-cascade.pb-0
+                .row.py-3.pl-4
+                  .col-md-12.text-center-pl-xl-2.my-md-0.my-3
+                    .view.view-cascade.gradient-card-header.cloudy-knoxville-gradient
+                      canvas id="transactions"         
+
+    #profile-just.tab-pane.fade[role="tabpanel" aria-labelledby="profile-tab-just"]
+      .section.mb-5
+      .card.card-cascade.narrower
+        .section
+          .row                          
+            .col-xl-12.col-lg-12.mb-4.pb-2
+              .view.view-cascade.gradient-card-header.light-blue.lighten-1
+                h2.h2-responsive.mb-0.font-weight-500 PENJUALAN per Tanggal (#{Transaction.first.created_at.to_date} - #{Transaction.last.created_at.to_date})
+              .card-body.card-body-cascade.pb-0
+                .row.py-3.pl-4
+                  .col-md-12.text-center-pl-xl-2.my-md-0.my-3
+                    .view.view-cascade.gradient-card-header.cloudy-knoxville-gradient
+                      canvas id="transactions_days"   

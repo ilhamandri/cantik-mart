@@ -1,0 +1,38 @@
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+      h5.font-weight-500.my-1
+       | Terima Barang Transfer
+    .card.mb-4
+      .card-body.table-responsive.text-nowrap
+        = form_for :transfer, url: transfer_received_path, method: "POST" do |form|
+          .row
+            .col-12
+              label Invoice
+              input disabled="disabled" class="form-control md-form" value="#{@transfer.invoice}"
+            .col
+              label Dari
+              input disabled="disabled" class="form-control md-form" value="#{@transfer.from_store.name}"
+            .col
+              label Kepada
+              input disabled="disabled" class="form-control md-form" value="#{@transfer.to_store.name}"
+            .col
+              label Total Barang
+              input disabled="disabled" class="form-control md-form" value="#{@transfer.total_items}"
+
+            table class="table"
+              thead
+                th No
+                - @idx = 1
+                th Barang
+                th Kategori
+                th Deskripsi
+                th Jumlah
+                th Kirim
+                th Terima
+              tbody
+                = render partial: 'receive', collection: @transfer_items, as: :r_item
+          
+            .col.text-center
+              = form.submit "TERIMA", class: "btn btn-primary"

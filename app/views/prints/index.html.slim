@@ -1,0 +1,35 @@
+.row
+  .col
+    h5
+      | Cetak
+  .col.text-right
+    a href="#{clean_prints_path}"
+      button.btn.btn-danger type="button" 
+        |   Bersihkan Daftar
+  .col.text-right
+    a href="#{items_path}"
+      button.btn.btn-primary type="button" 
+        i.fas.fa-plus 
+        |   Tambah Item
+
+  .col.text-right
+    a href="#{prints_path(format: :pdf)}"
+      button.btn.btn-success type="button" 
+        |   Cetak
+
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data
+    .card.mb-4
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Kode
+            th Nama
+            th Jenis
+            th Harga Satuan
+          tbody
+            = render partial: 'list', collection: @prints, as: :print
+            

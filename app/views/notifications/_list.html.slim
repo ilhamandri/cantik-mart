@@ -1,0 +1,25 @@
+tr
+	td #{notification.from_user.name}
+	td 
+		- t = Time.now - notification.date_created
+		- mm, ss = t.divmod(60)            
+		- hh, mm = mm.divmod(60)           
+		- dd, hh = hh.divmod(24)  
+		- time = ""
+		- if dd != 0
+			- if dd > 30
+				- new_dd = dd / 30
+				- time+= pluralize(new_dd, 'month') + " ago"
+			- else
+				- time+= pluralize(dd, 'day') + " ago"
+		- elsif hh != 0
+			- time+= pluralize(hh,'hour') + " ago"
+		- elsif mm != 0
+			- time+= pluralize(mm,'minute') + " ago"
+		- else
+			- time+= pluralize(ss.to_i,'sec') + " ago"
+
+		| #{time}
+	td 
+		a href="#{notification.link}"
+			| #{notification.message}

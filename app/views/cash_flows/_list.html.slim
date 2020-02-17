@@ -1,0 +1,39 @@
+tr
+  - nominal = finance.nominal.abs
+  td #{finance.user.name} (#{finance.store.name})
+  td #{finance.finance_type.gsub("_", " ")}
+  - if !["Employee_Loan", "Outcome", "Operational", "Fix_Cost", "Tax", "Withdraw", "Send", "SendBank"].include? finance.finance_type
+    td #{number_with_delimiter(nominal.to_i, delimiter: ".", separator: ",")}
+    td 0
+  - else
+    td 0
+    td #{number_with_delimiter(nominal.to_i, delimiter: ".", separator: ",")}
+  td #{finance.date_created}
+  td
+
+    - if finance.ref_id.present?
+      - if finance.finance_type == "Outcome"
+        - if finance.payment == "order"
+          a href="#{debt_path(id: finance.ref_id)}"
+          | #{finance.description}
+        - elsif finance.payment == "debt"
+          a href="#{debt_path(id: finance.ref_id)}"
+            | #{finance.description}
+      - elsif finance.finance_type == "Income"
+        - ord = Order.find_by(invoice: finance.description)
+        - if ord.present?
+          a href="#{order_path(id: ord.id)}"
+            | #{finance.description}
+        - elsif finance.payment == "receivable"
+          a href="#{receivable_path(id: finance.ref_id)}"
+            | #{finance.description}
+      - elsif ["Debt", "Bank_Loan", "Other_Loan"].include? finance.finance_type 
+        a href="#{debt_path(id: finance.ref_id)}"
+          | #{finance.description}
+      - elsif ["Receivable", "Employee_Loan"].include? finance.finance_type
+        a href="#{receivable_path(id: finance.ref_id)}"
+          | #{finance.description}
+      - else
+        | #{finance.description}
+    -else
+      | #{finance.description}

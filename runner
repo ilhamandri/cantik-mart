@@ -1,0 +1,62 @@
+sudo apt install php libapache2-mod-php
+sudo systemctl restart apache2
+
+ssh root@193.168.195.145 -p 22
+ssh root@45.13.132.52 -p 22
+tmux attach -t 0
+
+tmux new -s 0
+rails s -p 80 -e production
+
+rm -rf cantik-mart
+git clone https://github.com/ilhamandri/cantik-mart.git
+yarn install
+rm -rf config/credentials.ymc.enc
+rm -rf config/master.key
+
+EDITOR="mate --wait" bin/rails credentials:edit
+EDITOR="atom --wait" rails credentials:edit
+=============================================================
+
+
+sudo /etc/init.d/apache2 stop
+
+sudo -u postgres psql
+postgres
+
+DROP DATABASE cantik_mart;
+CREATE DATABASE cantik_mart;
+
+DROP DATABASE cantik_mart_local;
+CREATE DATABASE cantik_mart_local;
+
+\q
+
+rails db:migrate
+rails c
+Store.create id: 1, name:"Gudang Cirata", cash: 10000000, equity: 10000000
+Store.create id: 2, name:"Toko Cirata", cash: 10000000, equity: 10000000
+Store.create id: 3, name:"Toko Plered", cash: 10000000, equity: 10000000
+
+User.create id: 99, name:"PARDEV", email: "admin@pardev.id", password: "admin123", level: 1, store: Store.first 
+
+exit
+
+
+localhost:3000/controllers
+
+________________________________________________________________________
+
+--> check semua params is required ==> mengurangi error params not found
+--> jangan catat activity jika data tidak ada perubahan
+--> catat activity jika data dihapus
+--> jumlah promo yang terpakai untuk setiap toko
+=====================================================================
+
+--> CRON di cloud blm aktif
+--> sendMail auto to drg.kindiialfarabi@gmail.com --> kurang boootstrap blm jalan
+
+
+---------------------------  NEXT ---------------------------------
+- Upload gambar									|   |
+- manajemen SDM 								|   |

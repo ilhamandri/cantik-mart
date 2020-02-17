@@ -1,0 +1,19 @@
+tr
+  td #{@idx}
+  - @idx += 1
+  td #{r_item.item.code}
+  td #{r_item.item.name}
+  td #{r_item.item.item_cat.name}
+  td #{r_item.quantity.to_i}
+  td
+    select name="retur[retur_items][#{r_item_counter}][feedback]" required=true
+      option value="retur_item"
+        | Tukar Barang
+      option value="cash"
+        | Tukar Uang
+      option value="loss"
+        | Musnah
+  td 
+    input type="number" class="form-control md-form" name="retur[retur_items][#{r_item_counter}][item_id]" value="#{r_item.id}" style="display: none;"
+    input type="number" class="form-control md-form" name="retur[retur_items][#{r_item_counter}][nominal]" value=0
+    
