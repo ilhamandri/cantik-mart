@@ -28,7 +28,7 @@ table#items
     -  total += finance.nominal
     tr.item-row
       td #{finance.created_at}
-      td #{finance.nominal}
+      td #{number_with_delimiter( finance.nominal.to_i, delimiter: ".", separator: ",")}
       td #{finance.description}
 
   tr 
@@ -37,4 +37,4 @@ table#items
     td colspan="2"
       | TOTAL
     td 
-      | #{total}
+      | td #{number_with_delimiter( total.to_i, delimiter: ".", separator: ",")}
