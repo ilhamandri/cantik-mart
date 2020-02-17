@@ -14,7 +14,7 @@
         b  
           | #{@search}
 
-
+- total = 0
 table#items
   tr colspan="5"
 
@@ -25,7 +25,16 @@ table#items
     th Keterangan
 
   - @finances.each do |finance|
+    -  total += finance.nominal
     tr.item-row
       td #{finance.created_at}
       td #{finance.nominal}
       td #{finance.description}
+
+  tr 
+    td colspan="3"
+  tr
+    td colspan="2"
+      | TOTAL
+    td 
+      | #{total}
