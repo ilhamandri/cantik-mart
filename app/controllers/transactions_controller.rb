@@ -31,10 +31,11 @@ class TransactionsController < ApplicationController
       end
     end
 
-    transactions = transactions_profit_graph "month"
+    transactions = transactions_profit_graph "day"
     gon.grand_totals = transactions[0]
     gon.hpp_totals = transactions[1]
     gon.profits = transactions[2]
+    gon.days = transactions[3]
 
   end
 
@@ -66,10 +67,8 @@ class TransactionsController < ApplicationController
     cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
     @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
-    @losses = losses(start_day, end_day)
-    @other_outcome = cash_flow.where(finance_type: CashFlow::OUTCOME).sum(:nominal)
     
-    @total_outcome = @operational + @fix_cost + @losses + @other_outcome
+    @total_outcome = @operational + @fix_cost
 
 
     start_day = (params[:date].to_s + " 00:00:00 +0700").to_time
@@ -82,22 +81,6 @@ class TransactionsController < ApplicationController
     render pdf: DateTime.now.to_i.to_s,
       layout: 'pdf_layout.html.erb',
       template: "transactions/print_recap.html.slim"
-  end
-
-  def losses start_day, end_day
-    loss_val = 0
-    Store.all.each do |store|
-      losses = Loss.where("created_at >= ? AND created_at <= ?", start_day, end_day)
-      losses.each do |loss|
-        losses_items = loss.loss_items
-        losses_items.each do |loss|
-          store_stock = StoreItem.find_by(store: store, item: loss.item)
-          loss_val += (loss.quantity * store_stock.item.buy) if !store_stock.item.local_item
-          loss_val += (loss.quantity * store_stock.buy) if store_stock.item.local_item
-        end
-      end
-  end
-    return loss_val
   end
 
   def daily_recap_item
@@ -250,30 +233,40 @@ class TransactionsController < ApplicationController
 
   private
     def transactions_profit_graph group
-      transaction_datas = nil
-      if group == "month" 
-        transaction_datas = Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_year, DateTime.now.end_of_year).group_by{ |m| m.created_at.beginning_of_month}
+      transaction_datas = []
+      if group == "day" 
+        transaction_datas = Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_month, DateTime.now.end_of_month).group_by{ |m| m.created_at.beginning_of_day}
       end
 
-      grand_totals = [0,0,0,0,0,0,0,0,0,0,0,0]
-      hpp_totals = [0,0,0,0,0,0,0,0,0,0,0,0]
-      profits = [0,0,0,0,0,0,0,0,0,0,0,0]
+      grand_totals = []
+      hpp_totals = []
+      profits = []
+      days = []
+
+
+      Time.days_in_month(Date.today.month.to_i).times do |idx|
+        grand_totals << 0
+        hpp_totals << 0
+        profits << 0
+        days << idx
+      end
 
       transaction_datas.each do |trxs|
         grand_total = 0
         hpp_total = 0
-        month_idx = trxs[0].month.to_i - 1
+        day_idx = trxs[0].day.to_i - 1
         trxs[1].each do |trx|
           grand_total += trx.grand_total
           hpp_total += trx.hpp_total
         end
         profit = grand_total - hpp_total
-        grand_totals[month_idx] = grand_total
-        hpp_totals[month_idx] = hpp_total
-        profits[month_idx] = profit
+        grand_totals[day_idx] = grand_total
+        hpp_totals[day_idx] = hpp_total
+        profits[day_idx] = profit
       end
 
-      return [grand_totals, hpp_totals, profits]
+
+      return [grand_totals, hpp_totals, profits, days]
     end
 
     def filter_search params, r_type
@@ -305,7 +298,6 @@ class TransactionsController < ApplicationController
         date_end += " " + params["hour_end"]
         @search += " pada " + params["date_start"] + " hingga " + params["date_end"]
         @transactions = @transactions.where("created_at >= ? AND created_at <= ?", date_start.to_time ,date_end.to_time)
-        binding.pry
       end
 
       if params["user_id"].present?

@@ -2,22 +2,6 @@ class HomesController < ApplicationController
   before_action :require_login
   require 'usagewatch'
 
-  def losses start_day, end_day
-    loss_val = 0
-    Store.all.each do |store|
-      losses = Loss.where("created_at >= ? AND created_at <= ?", start_day, end_day)
-      losses.each do |loss|
-        losses_items = loss.loss_items
-        losses_items.each do |loss|
-          store_stock = StoreItem.find_by(store: store, item: loss.item)
-          loss_val += (loss.quantity * store_stock.item.buy) if !store_stock.item.local_item
-          loss_val += (loss.quantity * store_stock.buy) if store_stock.item.local_item
-        end
-      end
-    end
-    return loss_val
-  end
-
   def index
     ItemUpdate.updateItem
     UserMethod.where(user_level: ["driver", "preamuniaga", "cashier"]).destroy_all
@@ -47,10 +31,8 @@ class HomesController < ApplicationController
     cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
     @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
-    @losses = losses(start_day, end_day)
-    @other_outcome = cash_flow.where(finance_type: CashFlow::OUTCOME).sum(:nominal)
     
-    @total_outcome = @operational + @fix_cost + @losses + @other_outcome
+    @total_outcome = @operational + @fix_cost
 
     # graphs_buy_sell = transactions_profit_graph
 

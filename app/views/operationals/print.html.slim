@@ -20,14 +20,12 @@ table#items
 
 
   tr
-    th Dibuat Oleh
     th Tanggal
     th Nominal
     th Keterangan
 
   - @finances.each do |finance|
     tr.item-row
-      td #{finance.user.name}
       td #{finance.created_at}
       td #{finance.nominal}
       td #{finance.description}
