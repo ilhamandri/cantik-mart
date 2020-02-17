@@ -5,18 +5,18 @@ class SalariesController < ApplicationController
   def index
   	# AccountBalance.salary
 
-    xlsx = Roo::Spreadsheet.open("./data/prodlist/bs/bs.xlsx", extension: :xlsx)
-    store_id = 3
-    xlsx.each_with_index do |row, idx|
-      code = row[0]
-      qty = row[3]
-      next if qty.nil?
-      item = Item.find_by(code: code)
-      store_item = StoreItem.find_by(item: item, store_id: store_id)
-      next if store_item.nil?
-      store_item.stock = store_item.stock + qty.to_f
-      store_item.save!  
-    end
+    # xlsx = Roo::Spreadsheet.open("./data/prodlist/bs/bs.xlsx", extension: :xlsx)
+    # store_id = 3
+    # xlsx.each_with_index do |row, idx|
+    #   code = row[0]
+    #   qty = row[3]
+    #   next if qty.nil?
+    #   item = Item.find_by(code: code)
+    #   store_item = StoreItem.find_by(item: item, store_id: store_id)
+    #   next if store_item.nil?
+    #   store_item.stock = store_item.stock + qty.to_f
+    #   store_item.save!  
+    # end
 
 
     filter = filter_search params

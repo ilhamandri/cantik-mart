@@ -11,7 +11,7 @@ rails s -p 80 -e production
 rm -rf cantik-mart
 git clone https://github.com/ilhamandri/cantik-mart.git
 yarn install
-rm -rf config/credentials.ymc.enc
+rm -rf config/credentials.yml.enc
 rm -rf config/master.key
 
 EDITOR="mate --wait" bin/rails credentials:edit
