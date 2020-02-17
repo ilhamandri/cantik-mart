@@ -2,6 +2,22 @@ class HomesController < ApplicationController
   before_action :require_login
   require 'usagewatch'
 
+  def losses start_day, end_day
+    loss_val = 0
+    Store.all.each do |store|
+      losses = Loss.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+      losses.each do |loss|
+        losses_items = loss.loss_items
+        losses_items.each do |loss|
+          store_stock = StoreItem.find_by(store: store, item: loss.item)
+          loss_val += (loss.quantity * store_stock.item.buy) if !store_stock.item.local_item
+          loss_val += (loss.quantity * store_stock.buy) if store_stock.item.local_item
+        end
+      end
+    end
+    return loss_val
+  end
+
   def index
     ItemUpdate.updateItem
     UserMethod.where(user_level: ["driver", "preamuniaga", "cashier"]).destroy_all
@@ -25,34 +41,45 @@ class HomesController < ApplicationController
       @lower_item = lower_item
     end
 
-    graphs_buy_sell = transactions_profit_graph
+    # PENGELUARAN
+    end_day = DateTime.now.end_of_day
+    start_day = end_day.beginning_of_day
+    cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+    @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
+    @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
+    @losses = losses(start_day, end_day)
+    @other_outcome = cash_flow.where(finance_type: CashFlow::OUTCOME).sum(:nominal)
+    
+    @total_outcome = @operational + @fix_cost + @losses + @other_outcome
 
-    graphs_buy_sell_val = graphs_buy_sell.values
-    grand_totals = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse
-    gon.grand_totals = grand_totals
+    # graphs_buy_sell = transactions_profit_graph
 
-    hpp_totals = graphs_buy_sell_val.collect{|ind| ind[1]}.reverse
-    gon.hpp_totals = hpp_totals
+    # graphs_buy_sell_val = graphs_buy_sell.values
+    # grand_totals = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse
+    # gon.grand_totals = grand_totals
 
-    profits = graphs_buy_sell_val.collect{|ind| ind[2]}.reverse
-    gon.profits = profits
+    # hpp_totals = graphs_buy_sell_val.collect{|ind| ind[1]}.reverse
+    # gon.hpp_totals = hpp_totals
 
-    gon.month = graphs_buy_sell.keys.reverse
+    # profits = graphs_buy_sell_val.collect{|ind| ind[2]}.reverse
+    # gon.profits = profits
+
+    # gon.month = graphs_buy_sell.keys.reverse
 
     # days
-    graphs_buy_sell = transactions_profit_graph_days
+    # graphs_buy_sell = transactions_profit_graph_days
 
-    graphs_buy_sell_val = graphs_buy_sell.values
-    grand_totals = graphs_buy_sell_val.collect{|ind| ind[0]}
-    gon.grand_totals_days = grand_totals
+    # graphs_buy_sell_val = graphs_buy_sell.values
+    # grand_totals = graphs_buy_sell_val.collect{|ind| ind[0]}
+    # gon.grand_totals_days = grand_totals
 
-    hpp_totals = graphs_buy_sell_val.collect{|ind| ind[1]}
-    gon.hpp_totals_days = hpp_totals
+    # hpp_totals = graphs_buy_sell_val.collect{|ind| ind[1]}
+    # gon.hpp_totals_days = hpp_totals
 
-    profits = graphs_buy_sell_val.collect{|ind| ind[2]}
-    gon.profits_days = profits
+    # profits = graphs_buy_sell_val.collect{|ind| ind[2]}
+    # gon.profits_days = profits
 
-    gon.month_days = graphs_buy_sell.keys    
+    # gon.month_days = graphs_buy_sell.keys    
 
     # popular_item
 
