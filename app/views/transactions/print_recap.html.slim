@@ -106,10 +106,16 @@ br
 
     br
     hr
+    br
 
   h3
     | LAPORAN IN-OUT #{@end.to_date}
   table#items
+    tr
+      td colspan="2" style="font-weight: bold; text-align: center"
+        | Pemasukkan
+      td colspan="2" style="font-weight: bold; text-align: center"
+        | Pengeluaran
     tr
       td Profit Toko Plered
       td 
@@ -124,15 +130,22 @@ br
       td Biaya Pasti
       td 
         b #{number_with_delimiter(@fix_cost.to_i, delimiter: ".")}
+
+  table#items
     tr
-      td colspan="4"
-    tr
-      td TOTAL
+      td Total Pemasukkan
       td 
         b #{number_with_delimiter(@total_income.to_i, delimiter: ".")}
-      td
+    tr
+      td Total Pengeluaran
       td
         b #{number_with_delimiter(@total_outcome.to_i, delimiter: ".")}
+    tr
+      td Profit Bersih
+      td 
+        b #{number_with_delimiter(@total_income.to_i - @total_outcome.to_i, delimiter: ".")}
+
+
 
 
 
