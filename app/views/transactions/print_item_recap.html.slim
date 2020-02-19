@@ -55,9 +55,9 @@ br
           td #{item.margin}
           td #{number_with_delimiter( item.buy.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter( item.sell.to_i, delimiter: ".", separator: ",")}
-          - profit = (item.sell - buy)*sell_qty
+          - profit = (item.sell - item.buy)*sell_qty
           - profits += profit
-          td #{number_with_delimiter( (item.sell - buy).to_i, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter( (item.sell - item.buy).to_i, delimiter: ".", separator: ",")}
           td #{sell_qty}
           td #{number_with_delimiter( profit.to_i, delimiter: ".", separator: ",")}
 
