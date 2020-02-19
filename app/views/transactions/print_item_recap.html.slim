@@ -17,10 +17,10 @@
 br
 br
 br
-- profits = 0
 - items = 0
 
 - @supplier_items.each do |supplier_item|
+  - profits = 0
   - supplier_name = "TIDAK ADA SUPPLIER"
   - if supplier_item[0] != 0
     - supplier = Supplier.find_by(id: supplier_item[0])
