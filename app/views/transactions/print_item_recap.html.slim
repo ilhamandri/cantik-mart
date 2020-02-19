@@ -53,12 +53,7 @@ br
           - else
             td PUSAT
           td #{item.margin}
-          - buy = item.buy
-          - if item.local_item
-            - store_item = StoreItem.find_by(item: item, store: current_user.store)
-            - if store_item.present?
-              - buy = store_item.buy
-          td #{number_with_delimiter( buy.to_i, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter( item.buy.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter( item.sell.to_i, delimiter: ".", separator: ",")}
           - profit = (item.sell - buy)*sell_qty
           - profits += profit

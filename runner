@@ -38,6 +38,8 @@ Store.create id: 1, name:"Gudang Cirata", cash: 10000000, equity: 10000000
 Store.create id: 2, name:"Toko Cirata", cash: 10000000, equity: 10000000
 Store.create id: 3, name:"Toko Plered", cash: 10000000, equity: 10000000
 
+
+Store.create id: 3, name:"STORE 1", cash: 10000000, equity: 10000000
 User.create id: 99, name:"PARDEV", email: "admin@pardev.id", password: "admin123", level: 1, store: Store.first 
 
 exit
