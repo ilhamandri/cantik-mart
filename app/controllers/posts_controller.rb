@@ -33,11 +33,8 @@ class PostsController < ApplicationController
 						new_trx_item = TransactionItem.create trx_item 
 
 						store_stock = StoreItem.find_by(store: trx.user.store, item: new_trx_item.item)
-						if new_trx_item.item.local_item
-							hpp_totals += store_stock.buy * new_trx_item.quantity
-						else
-							hpp_totals += new_trx_item.item.buy * new_trx_item.quantity
-						end
+						
+						hpp_totals += new_trx_item.item.buy * new_trx_item.quantity
 
 						if new_trx_item.reason.present?
 							if new_trx_item.reason.include? "PROMO-"

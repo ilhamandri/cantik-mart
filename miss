@@ -1,27 +1,4 @@
---> BALANCE
-
---> Ubah disemua date picker ke mdbootstrap classes
-
---> set promo pakai range date
-	--> Update Diskon per tarik data
-
---> Transaksi tanggal bermasalah
-
---> Poin di member masi error
-
---> Masih gejlok
-
---> input barang yang ikut ke PO
-
---> neural network
---> forward / backpropagation
---> KMeans
---> Naive Bayes
-
-
-a.each do |as|
-	trx = Transaction.find_by(invoice: as.invoice)
-	trx_items = trx.transaction_items
-	trx_items.destroy_all
-	trx.destroy
-end
+HAPUS ITEM_ID
+	29473
+	15915
+	18896

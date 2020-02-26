@@ -240,9 +240,9 @@ class ItemsController < ApplicationController
 
 
     if changes["sell"].present?
-      if item.sell <= item.buy
-        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Harga Jual Lebih Besar dari Harga Beli"
-      end
+      # if item.sell <= item.buy
+      #   return redirect_back_data_error item_path(id: item.id), "Silahkan Set Harga Jual Lebih Besar dari Harga Beli"
+      # end
       margin = ( (item.sell - item.buy ) / item.buy) * 100;
       item.margin = margin
     end
