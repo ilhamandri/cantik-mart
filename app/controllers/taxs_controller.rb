@@ -4,16 +4,16 @@ class TaxsController < ApplicationController
 
   def index
 
-    trxs = Transaction.where("created_at >= ?", DateTime.now-4.days)
-    trxs.each do |trx|
-      trx_items = trx.transaction_items
-      hpp = 0
-      trx_items.each do |trx_item|
-        hpp += trx_item.quantity * trx_item.item.buy
-      end
-      trx.hpp_total = hpp
-      trx.save!
-    end
+    # trxs = Transaction.where("created_at >= ?", DateTime.now-4.days)
+    # trxs.each do |trx|
+    #   trx_items = trx.transaction_items
+    #   hpp = 0
+    #   trx_items.each do |trx_item|
+    #     hpp += trx_item.quantity * trx_item.item.buy
+    #   end
+    #   trx.hpp_total = hpp
+    #   trx.save!
+    # end
 
   	filter = filter_search params
     @search = filter[0]
