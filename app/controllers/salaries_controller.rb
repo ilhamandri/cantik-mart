@@ -48,7 +48,7 @@ class SalariesController < ApplicationController
     paid = params[:salary][:salary].to_i
     return redirect_back_data_error new_salary_path, "Nominal harus lebih besar dari 10.000 dan maksimal sesuai gaji karyawan" if paid < 10000 || paid > user.salary
     receivables = Receivable.where(user: user).where("deficiency > 0")
-    return redirect_back_data_error new_salary_path, user.name + " tidak memiliki hutang. Silahkan cek kembali" if receivables.sum(:deficiency) == 0
+    return redirect_back_data_error new_salary_path, user.name + " tidak memiliki hutang. Silahkan cek kembali" if receivables.sum(:deficiency) == 0 && paid != user.salary
     
     paid_for_deficiency = user.salary - paid
     receivables.each do |receivable|
