@@ -84,6 +84,8 @@ class SalariesController < ApplicationController
     invoice = "SLRY-"+inv_number+"-"+user.id.to_s
     cash_flow = CashFlow.create user: user, store: store, nominal: paid, date_created: date_created, description: desc, 
                 finance_type: CashFlow::OUTCOME, invoice: invoice
+    user_salary = UserSalary.create user: user, nominal: paid
+    user_salary.create_activity :create, owner: current_user 
     store.cash = store.cash - paid
     store.save!
     cash_flow.create_activity :create, owner: current_user 

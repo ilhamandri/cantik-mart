@@ -6,6 +6,7 @@ class TransactionsController < ApplicationController
   @@point = 10000
 
   def index
+    check_duplicate
     filter = filter_search params, "html"
     @search = "Rekap transaksi " + filter[0]
     @transactions = filter[1]
@@ -31,13 +32,42 @@ class TransactionsController < ApplicationController
       end
     end
 
-    transactions = transactions_profit_graph "day"
+    start_day = (DateTime.now - 7.days).beginning_of_day
+    end_day = DateTime.now.end_of_day
+
+    if params["date_start"].present?
+      start_day = params["date_start"].to_datetime.beginning_of_day
+      if params["date_end"].present?
+        end_day = params["date_end"].to_datetime.end_of_day
+      else
+        end_day = (start_day + 7.days).end_of_day
+      end 
+    end
+
+    transactions = transactions_profit_graph start_day, end_day
     gon.grand_totals = transactions[0]
     gon.hpp_totals = transactions[1]
     gon.profits = transactions[2]
     gon.days = transactions[3]
 
   end
+
+
+  def check_duplicate
+    duplicate_trxs = Transaction.select(:invoice).group(:invoice).having("count(*) > 1").size
+    duplicate_trxs.each do |trx_data|
+      trx = Transaction.find_by(invoice: trx_data[0])
+      store = trx.store
+      trx.trx_items.each do |trx_item|
+        store_item = StoreItem.find_by(item: trx_item.item, store: store)
+        store_item.stock = store_item.stock + trx_item.quantity
+        store_item.save!
+      end
+      trx.trx_items.destroy_all
+      trx.destroy
+    end
+  end
+
 
   def daily_recap
     curr_date = DateTime.now
@@ -232,24 +262,11 @@ class TransactionsController < ApplicationController
   end
 
   private
-    def transactions_profit_graph group
-      transaction_datas = []
-      if group == "day" 
-        transaction_datas = Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_month, DateTime.now.end_of_month).group_by{ |m| m.created_at.beginning_of_day}
-      end
+    def transactions_profit_graph start_day, end_day
 
-      grand_totals = []
-      hpp_totals = []
-      profits = []
-      days = []
-
-
-      Time.days_in_month(Date.today.month.to_i).times do |idx|
-        grand_totals << 0
-        hpp_totals << 0
-        profits << 0
-        days << idx
-      end
+      transaction_datas = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
+      
+      graphs = {}
 
       transaction_datas.each do |trxs|
         grand_total = 0
@@ -260,13 +277,15 @@ class TransactionsController < ApplicationController
           hpp_total += trx.hpp_total
         end
         profit = grand_total - hpp_total
-        grand_totals[day_idx] = grand_total
-        hpp_totals[day_idx] = hpp_total
-        profits[day_idx] = profit
+        graphs[trxs[0].to_date] = [grand_total, hpp_total, profit]
       end
+      vals = graphs.values
+      grand_totals = vals.collect {|ind| ind[0]}
+      hpp_totals = vals.collect {|ind| ind[1]}
+      profits = vals.collect {|ind| ind[2]}
+      days = graphs.keys
 
-
-      return [grand_totals, hpp_totals, profits, days]
+      return grand_totals, hpp_totals, profits, days
     end
 
     def filter_search params, r_type
