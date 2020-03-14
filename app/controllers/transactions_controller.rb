@@ -68,6 +68,16 @@ class TransactionsController < ApplicationController
     end
   end
 
+  def monthly_recap
+    start_day = (params[:month] + params[:year]).to_datetime
+    end_day = start_day.end_of_month-1
+    @desc = "Rekap bulanan - "+ start_day.month.to_s + "/" + start_day.year.to_s
+    @transaction_datas = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
+    render pdf: DateTime.now.to_i.to_s,
+      layout: 'pdf_layout.html.erb',
+      template: "transactions/print_recap_monthly.html.slim"
+  end
+
 
   def daily_recap
     curr_date = DateTime.now
