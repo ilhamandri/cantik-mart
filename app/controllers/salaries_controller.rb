@@ -42,15 +42,30 @@ class SalariesController < ApplicationController
     @users = User.where.not(level: [1,2]).order("name ASC")
   end
 
+  def print_salary
+    @salaries = UserSalary.where("created_at > ?", DateTime.now.beginning_of_month)
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: DateTime.now.to_i.to_s,
+          show_as_html: false,
+          template: "salaries/print_salary.html.slim"
+      end
+    end
+  end
+
   def create
     user = User.find_by(id: params[:user_id])
     return redirect_back_data_error new_salary_path, "Karyawan tidak ditemukan" if user.nil?
-    paid = params[:salary][:salary].to_i
-    return redirect_back_data_error new_salary_path, "Nominal harus lebih besar dari 10.000 dan maksimal sesuai gaji karyawan" if paid < 10000 || paid > user.salary
+    pay_kasbon = params[:salary][:pay_kasbon].to_i
+    pay_receivable = params[:salary][:pay_receivable].to_i
+    paid = pay_kasbon + pay_receivable
+    bonus = params[:salary][:bonus].to_i
+    return redirect_back_data_error new_salary_path, "Nominal harus lebih besar dari 0" if paid < 0
     receivables = Receivable.where(user: user).where("deficiency > 0")
-    return redirect_back_data_error new_salary_path, user.name + " tidak memiliki hutang. Silahkan cek kembali" if receivables.sum(:deficiency) == 0 && paid != user.salary
+    return redirect_back_data_error new_salary_path, user.name + " tidak memiliki hutang. Silahkan cek kembali" if receivables.sum(:deficiency) == 0 && paid > 0
     
-    paid_for_deficiency = user.salary - paid
+    paid_for_deficiency = paid
     receivables.each do |receivable|
       curr_receivable_deficiency = receivable.deficiency
       break if paid_for_deficiency == 0
@@ -82,11 +97,11 @@ class SalariesController < ApplicationController
     inv_number = Time.now.to_i.to_s
     desc = "Gaji " + user.name + "(" + Date.today.month.to_s + "/" + Date.today.year.to_s + ")"
     invoice = "SLRY-"+inv_number+"-"+user.id.to_s
-    cash_flow = CashFlow.create user: user, store: store, nominal: paid, date_created: date_created, description: desc, 
+    cash_flow = CashFlow.create user: user, store: store, nominal: user.salary + bonus - pay_receivable - pay_kasbon, date_created: date_created, description: desc, 
                 finance_type: CashFlow::OUTCOME, invoice: invoice
-    user_salary = UserSalary.create user: user, nominal: paid
+    user_salary = UserSalary.create user: user, nominal: user.salary, pay_kasbon: pay_kasbon, pay_receivable: pay_receivable, bonus: bonus
     user_salary.create_activity :create, owner: current_user 
-    store.cash = store.cash - paid
+    store.cash = store.cash - user.salary + bonus - pay_receivable - pay_kasbon
     store.save!
     cash_flow.create_activity :create, owner: current_user 
     return redirect_success new_salary_path, desc + " berhasil disimpan"

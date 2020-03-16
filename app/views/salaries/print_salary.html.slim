@@ -1,0 +1,81 @@
+doctype html
+html
+  head
+    meta[name="viewport" content="width=device-width, initial-scale=1"]
+    style
+      |  table { width: 100%; border-spacing: 0px; border-collapse: separate; } th, td {padding: 0px 15px 3px 25px; width: 33%; font-size: 18px;} 
+  body
+    - row = 0
+    table
+		- @salaries.each_slice(2) do |salaries|
+			- row+=1
+			tr
+				- salaries.each do |salary|
+					td style="border: 1px solid black; padding: 1px;"
+						table 
+							tr
+								td colspan="3" style="font-size: 22px;font-weight: bold; text-align: center" 
+									= wicked_pdf_image_tag 'logo.png', :width=>"150" 
+							tr 
+								td.price colspan="3" style="font-size: 22px;font-weight: bold; text-align: center" 
+									| #{salary.user.name} 
+							tr
+								td 
+									| Gaji
+								td 
+									| :
+								td.price style=" text-align: right"
+									| #{number_with_delimiter(salary.nominal, unit: "Rp. ", :precision => 0)}
+							tr
+								td 
+									| Bonus
+								td 
+									| :
+								td.price style=" text-align: right"
+									| #{number_with_delimiter(salary.bonus, unit: "Rp. ", :precision => 0)}
+							tr
+								td colspan="3" 
+									hr
+							tr style=" color: red"
+								td 
+									| Kasbon
+								td 
+									| :
+								td.price style="text-align: right"
+									| #{number_with_delimiter(salary.pay_kasbon, unit: "Rp. ", :precision => 0)}
+							tr style=" color: red"
+								td
+									| Pinjaman
+								td
+									| :
+								td.price style=" text-align: right"
+									| #{number_with_delimiter(salary.pay_receivable, unit: "Rp. ", :precision => 0)}
+							tr
+								td colspan="3" 
+									hr
+							tr style="color: blue"
+								td 
+									| TOTAL
+								td 
+									| :
+								td.price style="text-align: right"
+									| #{number_with_delimiter(salary.nominal - salary.pay_kasbon - salary.pay_receivable + salary.bonus, unit: "Rp. ", :precision => 0)}
+							tr
+								td colspan="3" style="text-align: center"
+									| #{Date.today.to_s}
+							tr
+								td 
+									br
+									br 
+							tr
+								td style="text-align: center"
+									| Syifa
+								td 	
+									| 
+								td style="text-align: center"
+									| #{salary.user.name}
+		
+		    -if row >= 3
+		        - row = 0
+		        tr 
+		            td style="height: 6px; border: 0px !important;"

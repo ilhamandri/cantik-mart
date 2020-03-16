@@ -7,6 +7,10 @@
       button.btn.btn-success. type="button" 
         i.fas.fa-plus 
         |   Bayar Gaji
+  .col.text-right
+    a href="#{print_salary_path(format: :pdf)}"
+      button.btn.btn-success type="button" 
+        |   Cetak
         
 .container-fluid
   .col-lg-12.col-md-12
@@ -63,8 +67,10 @@
             th Karyawan
             th Toko
             th Bulan / Tahun
-            / th Jumlah Masuk
             th Nominal
+            th Bonus
+            th Kasbon
+            th Hutang
           tbody
             = render partial: 'list', collection: @salaries, as: :salary
 
