@@ -30,10 +30,11 @@ class OrdersController < ApplicationController
       order = Order.find_by(invoice: order_data[0])
       store = order.store
       order.order_items.each do |order_item|
-        binding.pry
         store_item = StoreItem.find_by(item: order_item.item, store: store)
-        store_item.stock = store_item.stock - order_item.receive
-        store_item.save!
+        if order_item.receive.present?
+          store_item.stock = store_item.stock - order_item.receive
+          store_item.save!
+        end
       end
       order.order_items.destroy_all
       order.destroy
