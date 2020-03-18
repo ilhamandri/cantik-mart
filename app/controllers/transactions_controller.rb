@@ -32,7 +32,7 @@ class TransactionsController < ApplicationController
       end
     end
 
-    start_day = (DateTime.now - 7.days).beginning_of_day
+    start_day = DateTime.now.beginning_of_month
     end_day = DateTime.now.end_of_day
 
     if params["date_start"].present?
@@ -70,9 +70,9 @@ class TransactionsController < ApplicationController
 
   def monthly_recap
     start_day = (params[:month] + params[:year]).to_datetime
-    end_day = start_day.end_of_month-1
+    end_day = start_day.end_of_month
     @desc = "Rekap bulanan - "+ start_day.month.to_s + "/" + start_day.year.to_s
-    @transaction_datas = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
+    @transaction_datas = Transaction.where("date_created >= ? AND date_created <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
     render pdf: DateTime.now.to_i.to_s,
       layout: 'pdf_layout.html.erb',
       template: "transactions/print_recap_monthly.html.slim"
@@ -273,7 +273,6 @@ class TransactionsController < ApplicationController
 
   private
     def transactions_profit_graph start_day, end_day
-
       transaction_datas = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
       
       graphs = {}
@@ -294,6 +293,9 @@ class TransactionsController < ApplicationController
       hpp_totals = vals.collect {|ind| ind[1]}
       profits = vals.collect {|ind| ind[2]}
       days = graphs.keys
+      days.each_with_index do |day, idx|
+        days[idx] = day.to_date.to_s
+      end
 
       return grand_totals, hpp_totals, profits, days
     end

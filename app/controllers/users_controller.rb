@@ -48,6 +48,8 @@ class UsersController < ApplicationController
     user = User.new user_params
     return redirect_back_data_error new_user_path, "Data Pengguna Tidak Ditemukan" if user.invalid?
     user.save!
+    user.fingerprint_id = user.id
+    user.save!
     user.create_activity :create, owner: current_user
     return redirect_success users_path, "Pengguna - " + user.name + " - Berhasil Ditambahkan"
   end
