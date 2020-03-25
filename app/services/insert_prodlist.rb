@@ -51,7 +51,7 @@ class InsertProdlist
 				transfer_items = item.transfer_items
 				order_items = item.order_items
 
-				if trx_items.nil? && transfer_items.nil? && order_items.nil? 
+				if trx_items.empty? && transfer_items.empty? && order_items.empty? 
 					item.store_items.destroy_all
 					item.item_prices.destroy_all 
 					item.destroy
