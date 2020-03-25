@@ -50,8 +50,8 @@ class InsertProdlist
 				trx_items = item.transaction_items
 				transfer_items = item.transfer_items
 				order_items = item.order_items
-
-				if trx_items.empty? && transfer_items.empty? && order_items.empty? 
+				send_back_items = item.send_back_items
+				if send_back_items && trx_items.empty? && transfer_items.empty? && order_items.empty? 
 					item.store_items.destroy_all
 					item.item_prices.destroy_all 
 					item.destroy

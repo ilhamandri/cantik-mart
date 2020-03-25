@@ -9,5 +9,6 @@ class Item < ApplicationRecord
   has_many :supplier_items
   has_many :item_prices
   has_many :transfer_items
+  has_many :send_back_items
 end
 
