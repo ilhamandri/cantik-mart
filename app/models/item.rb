@@ -7,5 +7,7 @@ class Item < ApplicationRecord
   has_many :transaction_items
   has_many :grocer_items
   has_many :supplier_items
+  has_many :item_prices
+  has_many :transfer_items
 end
 

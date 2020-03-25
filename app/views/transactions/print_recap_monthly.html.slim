@@ -19,6 +19,9 @@ br
 br
 
 table#items
+  - totals = 0
+  - hpp_totals = 0
+  - profit_totals = 0
   tr
     th Tanggal
     th Total
@@ -38,4 +41,24 @@ table#items
         td #{number_with_delimiter(total.to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter(hpp.to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter((total-hpp).to_i, delimiter: ".", separator: ",")}
+        - totals += total
+        - hpp_totals += hpp
+        - profit_totals += total - hpp
+
+  tr
+    td colspan="4"
+      |
+  tr
+    td 
+      b
+        | Total
+    td 
+      b
+        | #{number_with_delimiter((totals).to_i, delimiter: ".", separator: ",")}
+    td 
+      b
+        | #{number_with_delimiter((hpp_totals).to_i, delimiter: ".", separator: ",")}
+    td 
+      b
+        | #{number_with_delimiter((profit_totals).to_i, delimiter: ".", separator: ",")}
           
