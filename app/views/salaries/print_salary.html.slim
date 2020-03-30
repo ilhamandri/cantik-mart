@@ -71,11 +71,11 @@ html
 								td colspan="3" style="text-align: center"
 									| Syifa Sofia Jaelani Ramli
 									br
-									| Owner
+									| Owner #{row}
 
-		
+			
 		    -if row >= 3
-		        - row = 0
 		        tr 
 		            td style="height: 50px; border: 0px !important;"
-		            	| asd
+		            	| #{row}
+		        - row = 0
