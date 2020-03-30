@@ -1,8 +1,11 @@
 - status = true
-- if finance.description.include? "Gaji" || if finance.description.include? "Pembayaran piutang"
+- if finance.description.include? "Gaji" 
   - if !["owner", "super_admin"].include? current_user.level
     - status = false
-    
+- if finance.description.include? "Pembayaran piutang"
+  - if !["owner", "super_admin"].include? current_user.level
+    - status = false
+
 - if status
   tr
     - nominal = finance.nominal.abs
