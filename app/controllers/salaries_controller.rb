@@ -43,7 +43,13 @@ class SalariesController < ApplicationController
   end
 
   def print_salary
-    @salaries = UserSalary.where("created_at > ?", DateTime.now.beginning_of_month)
+    start_day = DateTime.now.beginning_of_month
+    end_day = start_day.end_of_month
+    if params[:month].present? && params[:year].present?
+      start_day = (params[:month] + params[:year]).to_datetime
+      end_day = start_day.end_of_month
+    end
+    @salaries = UserSalary.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     respond_to do |format|
       format.html
       format.pdf do
