@@ -1,5 +1,5 @@
 - show = true
-- if finance.finance_type == Receivable::EMPLOYEE
+- if finance.finance_type == "EMPLOYEE"
   - if !["owner", "super_admin"].include? current_user.level
     - show = false
 

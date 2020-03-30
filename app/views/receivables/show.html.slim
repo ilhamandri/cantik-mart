@@ -3,17 +3,29 @@
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Data Hutang
+          | Data Piutang
       .card-body 
         .row
-          .col-8
+          .col-12
             .form-group
               label for="name" Deskripsi
               input type="text" class="form-control md-form" value="#{@receivable.description}"
-          .col-4
+        .row
+          - if @receivable.finance_type == "EMPLOYEE"
+            - target = @receivable.to_user
+            - user = User.find_by(id: target.to_i)
+            - target = user.name + " (" + user.store.name + ")"
+
+            .col
+              .form-group
+                label for="name" Karyawan
+                input type="text" class="form-control md-form" value="#{target}"
+
+          .col
             .form-group
               label for="name" Dibuat Oleh
-              input type="text" class="form-control md-form" value="#{@receivable.user.name} - #{@receivable.user.store.name}"
+              input type="text" class="form-control md-form" value="#{@receivable.user.name} (#{@receivable.user.store.name})"
+        .row
           .col-3
             .form-group
               label for="name" Nominal
