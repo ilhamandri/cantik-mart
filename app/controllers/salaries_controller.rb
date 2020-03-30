@@ -62,7 +62,7 @@ class SalariesController < ApplicationController
     paid = pay_kasbon + pay_receivable
     bonus = params[:salary][:bonus].to_i
     receivables = Receivable.where(user: user).where("deficiency > 0")
-    return redirect_back_data_error new_salary_path, user.name + " tidak memiliki hutang. Silahkan cek kembali" if receivables.sum(:deficiency) == 0 && paid >= 0
+    return redirect_back_data_error new_salary_path, user.name + " tidak memiliki hutang. Silahkan cek kembali" if receivables.sum(:deficiency) == 0 && paid > 0
     
     paid_for_deficiency = paid
     receivables.each do |receivable|
