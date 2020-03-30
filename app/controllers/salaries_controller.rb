@@ -61,7 +61,7 @@ class SalariesController < ApplicationController
     pay_receivable = params[:salary][:pay_receivable].to_i
     paid = pay_kasbon + pay_receivable
     bonus = params[:salary][:bonus].to_i
-    receivables = Receivable.where(user: user).where("deficiency > 0")
+    receivables = Receivable.where(to_user: user.id).where("deficiency > 0")
     return redirect_back_data_error new_salary_path, user.name + " tidak memiliki hutang. Silahkan cek kembali" if receivables.sum(:deficiency) == 0 && paid > 0
     
     paid_for_deficiency = paid
@@ -100,7 +100,7 @@ class SalariesController < ApplicationController
                 finance_type: CashFlow::OUTCOME, invoice: invoice
     user_salary = UserSalary.create user: user, nominal: user.salary, pay_kasbon: pay_kasbon, pay_receivable: pay_receivable, bonus: bonus
     user_salary.create_activity :create, owner: current_user 
-    store.cash = store.cash - user.salary + bonus - pay_receivable - pay_kasbon
+    store.cash = store.cash - user.salary - bonus + pay_receivable + pay_kasbon
     store.save!
     cash_flow.create_activity :create, owner: current_user 
     return redirect_success new_salary_path, desc + " berhasil disimpan"
