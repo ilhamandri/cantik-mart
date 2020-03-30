@@ -3,7 +3,7 @@ html
   head
     meta[name="viewport" content="width=device-width, initial-scale=1"]
     style
-      |  table { width: 100%; border-spacing: 0px; border-collapse: separate; } th, td {padding: 0px 15px 3px 25px; width: 33%; font-size: 18px;} 
+      |  table { width: 100%; border-spacing: 0px; border-collapse: separate; } th, td {padding: 0px 15px 3px 25px; width: 33%; font-size: 17px;} 
   body
     - row = 0
     table
@@ -31,7 +31,7 @@ html
 									| Bonus
 								td 
 									| :
-								td.price style=" text-align: left"
+								td.price style=" text-align: right"
 									| #{number_with_delimiter(salary.bonus, unit: "Rp. ", :precision => 0)}
 							tr
 								td colspan="3" 
