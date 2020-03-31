@@ -80,6 +80,8 @@ Rails.application.routes.draw do
 
   get '/recap/item/:id', to: 'items#recap_item', as: 'recap_item'
 
+  get '/salary/:id/delete', to: 'salaries#delete_salary', as: 'delete_salary'
+
   resources :discounts
   resources :pays, only: %i[new create]
 

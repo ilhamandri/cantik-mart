@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_16_022010) do
+ActiveRecord::Schema.define(version: 2020_03_31_222759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 2020_03_16_022010) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "payment"
+    t.string "tag", default: "", null: false
     t.index ["store_id"], name: "index_cash_flows_on_store_id"
     t.index ["user_id"], name: "index_cash_flows_on_user_id"
   end
@@ -777,6 +778,7 @@ ActiveRecord::Schema.define(version: 2020_03_16_022010) do
     t.bigint "bonus", default: 0, null: false
     t.bigint "pay_receivable", default: 0, null: false
     t.bigint "pay_kasbon", default: 0, null: false
+    t.string "tag", default: "", null: false
     t.index ["user_id"], name: "index_user_salaries_on_user_id"
   end
 
