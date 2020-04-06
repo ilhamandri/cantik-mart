@@ -109,7 +109,7 @@ class HomesController < ApplicationController
   private
     def transactions_profit_graph
       transactions = Transaction.where("created_at >= ?", DateTime.now.beginning_of_year-13.months).order("created_at ASC")
-      if !["driver","owner", "super_admin"].include? current_user.level
+      if !["owner", "super_admin"].include? current_user.level
         transactions = transactions.where(store: current_user.store)
       end
 
