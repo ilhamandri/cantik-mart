@@ -3,7 +3,7 @@ class OrdersController < ApplicationController
   before_action :require_login
   before_action :require_fingerprint
   def index
-    check_duplicate
+    # check_duplicate
     filter = filter_search params, "html"
     @search = filter[0]
     @orders = filter[1]
