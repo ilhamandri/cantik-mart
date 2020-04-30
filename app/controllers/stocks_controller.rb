@@ -86,7 +86,7 @@ class StocksController < ApplicationController
     item = store_item.item
     curr_stock = store_item.stock
     store_item.assign_attributes edit_stock_params
-    store_item.stock = curr_stock if !["super_admin", 'owner', 'super_visi'].include? current_user.level
+    store_item.stock = curr_stock if !["super_admin", 'owner', 'stock_admin'].include? current_user.level
     # if ['super_visi'].include? current_user.level
     #   newbuy = params[:item][:buy].to_i
     #   newstock = (params[:item][:stock].to_i - curr_stock).abs
@@ -105,7 +105,7 @@ class StocksController < ApplicationController
       end
     end
     store_item.create_activity :edit, owner: current_user, parameters: changes
-    return redirect_success stocks_path, "Data Stok Barang Berhasil Diubah"
+    return redirect_success stock_path(id: store_item.id), "Data Stok Barang Berhasil Diubah"
   end
 
   def show
