@@ -86,17 +86,17 @@ class StocksController < ApplicationController
     item = store_item.item
     curr_stock = store_item.stock
     store_item.assign_attributes edit_stock_params
-    store_item.stock = curr_stock if !["super_admin", 'owner'].include? current_user.level
-    if ['super_visi'].include? current_user.level
-      newbuy = params[:item][:buy].to_i
-      newstock = (params[:item][:stock].to_i - curr_stock).abs
-      buy_price = newbuy * newstock
-      stocks = StoreItem.where(item: item).sum(:stock)
-      old_buy_price = item.buy * curr_stock
-      new_buy_price = (old_buy_price + buy_price) / (curr_stock + newstock)
-      item.buy = new_buy_price
-      item.save!
-    end
+    store_item.stock = curr_stock if !["super_admin", 'owner', 'super_visi'].include? current_user.level
+    # if ['super_visi'].include? current_user.level
+    #   newbuy = params[:item][:buy].to_i
+    #   newstock = (params[:item][:stock].to_i - curr_stock).abs
+    #   buy_price = newbuy * newstock
+    #   stocks = StoreItem.where(item: item).sum(:stock)
+    #   old_buy_price = item.buy * curr_stock
+    #   new_buy_price = (old_buy_price + buy_price) / (curr_stock + newstock)
+    #   item.buy = new_buy_price
+    #   item.save!
+    # end
     changes = store_item.changes
     store_item.save! if store_item.changed?
     if changes.include? "min_stock"
