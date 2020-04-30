@@ -38,6 +38,7 @@ br
       td Harga Jual
       td Profit/Item
       td Terjual
+      td Omzet
       td Total Profit
     - supplier_item[1].each do |trx_item|
       - item_id = trx_item[0]
@@ -59,6 +60,7 @@ br
           - profits += profit
           td #{number_with_delimiter( (item.sell - item.buy).to_i, delimiter: ".", separator: ",")}
           td #{sell_qty}
+          td #{number_with_delimiter( (item.sell * sell_qty).to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter( profit.to_i, delimiter: ".", separator: ",")}
 
     tr style="font-weight: bold; text-align: right;"
