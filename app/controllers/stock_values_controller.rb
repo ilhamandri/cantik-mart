@@ -3,7 +3,7 @@ class StockValuesController < ApplicationController
   before_action :require_fingerprint
 
   def index
-    AccountBalance.balance_account
+    # AccountBalance.balance_account
     filter = filter_search params
     @search = filter[0]
     @finances = filter[1]
