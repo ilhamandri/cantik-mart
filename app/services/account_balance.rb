@@ -133,8 +133,7 @@ class AccountBalance
     values = 0
     stocks.each do |store_stock|
       next if store_stock.stock <= 0
-      values += (store_stock.stock * store_stock.item.buy) if !store_stock.item.local_item
-      values += (store_stock.buy * store_stock.stock) if store_stock.item.local_item
+      values += (store_stock.stock * store_stock.item.buy)
     end
     time_start = DateTime.now.beginning_of_day
     time_end = DateTime.now.end_of_day
