@@ -58,12 +58,14 @@ class TransactionsController < ApplicationController
     duplicate_trxs.each do |trx_data|
       trx = Transaction.find_by(invoice: trx_data[0])
       store = trx.store
-      trx.trx_items.each do |trx_item|
-        store_item = StoreItem.find_by(item: trx_item.item, store: store)
-        store_item.stock = store_item.stock + trx_item.quantity
-        store_item.save!
+      if trx.trx_items.present?
+        trx.trx_items.each do |trx_item|
+          store_item = StoreItem.find_by(item: trx_item.item, store: store)
+          store_item.stock = store_item.stock + trx_item.quantity
+          store_item.save!
+        end
+        trx.trx_items.destroy_all
       end
-      trx.trx_items.destroy_all
       trx.destroy
     end
   end
