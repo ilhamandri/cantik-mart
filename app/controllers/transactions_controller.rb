@@ -58,6 +58,7 @@ class TransactionsController < ApplicationController
     duplicate_trxs.each do |trx_data|
       trx = Transaction.find_by(invoice: trx_data[0])
       store = trx.store
+      puts trx.invoice + " | " + trx.id.to_s
       if trx.trx_items.present?
         trx.trx_items.each do |trx_item|
           store_item = StoreItem.find_by(item: trx_item.item, store: store)
