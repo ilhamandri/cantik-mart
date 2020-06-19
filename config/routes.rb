@@ -75,7 +75,6 @@ Rails.application.routes.draw do
   get '/print/salary', to: 'salaries#print_salary', as:"print_salary"
   get 'popular/items/refresh', to: 'homes#popular_items', as: 'refresh_popular_items'
   get 'popular/items/departments', to: 'departments#popular_items', as: 'departments_popular_items'
-
   get '/refresh/predict/item/:id', to: 'items#refresh_predict', as: 'refresh_predict_item'
   get '/predict/item/:id', to: 'items#predict', as: 'predict_item'
 
@@ -85,6 +84,8 @@ Rails.application.routes.draw do
 
   resources :discounts
   resources :pays, only: %i[new create]
+
+  resources :result_items
 
   resources :balances
   resources :promotions

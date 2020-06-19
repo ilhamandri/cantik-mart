@@ -1,176 +1,29 @@
-.row
-  .col.text-left
-    h5
-      | Daftar Transaksi #{@member_name} #{@from}
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="all_data" aria-selected="true" data-toggle="tab" href="#all_data" role="tab" 
+        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Semua Data 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="recap" aria-selected="true" data-toggle="tab" href="#recap" role="tab" 
+        i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Rekap
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="graph" aria-selected="true" data-toggle="tab" href="#graph" role="tab" 
+        i.fa.fa-fast-forward.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Grafik
 
-  - if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
-    .col.text-right
-      a href="#{new_transaction_path}"
-        button.btn.btn-primary type="button" 
-          i.fas.fa-plus 
-          |   Buat Transaksi
+  #myClassicTabContentOrange.tab-content.card
+    #all_data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'all_data'
 
-- if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
-  br
-  .container-fluid
-    .col-xl-12.col-lg-12.col-md-12.pb-2
-      .card-header.white-text.info-color
-          h5.font-weight-500.my-1
-            | Rekap Perhari
-      .card.mb-4 
-        .card-body
-          = form_for :transaction, url: daily_trx_recap_path, method: 'GET' do |form|
-            .row
-              .col-md-12
-                label Pilih Tanggal Transaksi
-                input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date" required=true
-              .col-md-12.text-center
-                button class="btn btn-info "
-                  i.fas.fa-book
-                  |   Download Rekap Transaksi
+    #recap.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'recap'
 
-  br
-  .container-fluid
-    .col-xl-12.col-lg-12.col-md-12.pb-2
-      .card-header.white-text.info-color
-          h5.font-weight-500.my-1
-            | Rekap Perbulan
-      .card.mb-4 
-        .card-body
-          = form_for :transaction, url: monthly_trx_recap_path, method: 'GET' do |form|
-            .row
-              .col-md-6
-                select name="month" required=true class="mdb-select md-form colorful-select dropdown-primary" 
-                  option value='01/01'
-                    | Januari
-                  option value='01/02'
-                    | Februari
-                  option value='01/03'
-                    | Maret
-                  option value='01/04'
-                    | April
-                  option value='01/05'
-                    | Mei
-                  option value='01/06'
-                    | Juni
-                  option value='01/07'
-                    | Juli
-                  option value='01/08'
-                    | Agustus
-                  option value='01/09'
-                    | September
-                  option value='01/10'
-                    | Oktober
-                  option value='01/11'
-                    | November
-                  option value='01/12'
-                    | Desember
+    #graph.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'graph'
 
-              .col-md-6
-                select name="year" required=true class="mdb-select md-form colorful-select dropdown-primary" 
-                  - curr_year = Date.today.year
-                  - first_year = 2019
-                  - loop = curr_year - first_year + 1
-                  - loop.times do |idx|
-                    option value='/#{first_year+idx} 00:00:00'
-                      | #{first_year+idx}
-
-              .col-md-12.text-center
-                button class="btn btn-info "
-                  i.fas.fa-book
-                  |   Download Rekap Transaksi
-
-  .container-fluid
-    .col-xl-12.col-lg-12.col-md-12.pb-2
-      .card-header.white-text.info-color
-          h5.font-weight-500.my-1
-            | Rekap Penjualan Item
-      .card.mb-4 
-        .card-body
-          = form_for :transaction, url: daily_trx_item_recap_path, method: 'GET' do |form|
-            .row
-              .col-md-12
-                label Pilih Tanggal Transaksi
-                input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date" required=true
-              .col-md-12.text-center
-                button class="btn btn-info "
-                  i.fas.fa-book
-                  |  Download Item Terjual
-
-    .col-xl-12.col-lg-12.col-md-12.pb-2
-      .card-header.white-text.info-color 
-        h5.font-weight-500.my-1
-          | Grafik Transaksi 
-      .card.mb-4 
-        .card-body.table-responsive.text-nowrap
-          canvas id="transactions"
-
-    .col-xl-12.col-lg-12.col-md-12.pb-2
-      .card-header.white-text.info-color
-          h5.font-weight-500.my-1
-            | Pencarian
-      .card.mb-4 
-        .card-body
-          = form_for :transaction, url: transactions_path, method: 'GET' do |form|
-            .row
-              - if ["owner", "super_admin", "super_finance"].include? current_user.level
-                .col-6
-                  select class="mdb-select md-form" id="months" name="store_id"
-                    option value="0"
-                      | Semua Toko
-                    - Store.all.each do |store|
-                      option value="#{store.id}"
-                        | #{store.name}
-                .col-6
-                  select class="mdb-select md-form" id="months" name="user_id"
-                    option value="0"
-                      | Semua Kasir
-                    - User.all.each do |user|
-                      option value="#{user.id}"
-                        | #{user.name}
-              - if @member.present?
-                input type="hidden" name="member_card" value="#{@member.card_number}"
-              .col-md-3
-                | Dari Tanggal
-                input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date_start" 
-              .col-md-3
-                | Jam
-                input type="number" class="form-control md-form" value="6" min="5" max="23" name="hour_start" 
-              .col-md-3
-                | Sampai Tanggal
-                input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date_end" 
-              .col-md-3
-                | Jam
-                input type="number" class="form-control md-form" value="7" min="6" max="23" name="hour_end" 
-
-              .col-md-12
-                | Nomor Invoice
-                input type="text" class="form-control md-form" id="search" name="search" placeholder="123456789-11-22"
-              .col-md-12.text-center
-                button class="btn btn-primary"
-                  | Cari
-          br
-          .col-md-12.text-center.grey-text
-            a href="#{transactions_path(option: @params.to_s, format: :pdf)}"
-              b
-                | #{@search}
-
-.container-fluid
-  .col-lg-12.col-md-12
-    .card-header.white-text.info-color 
-      h5.font-weight-500.my-1
-        | Data 
-    .card.mb-4 
-      .card-body.table-responsive.text-nowrap
-        table class="table"
-          thead
-            th Invoice
-            th Tanggal
-            th Toko
-            th Member
-            th Poin
-            th Profit
-            th Aksi
-          tbody
-            = render partial: 'list', collection: @transactions, as: :transaction
-        = paginate @transactions
+      

@@ -1,126 +1,47 @@
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Detil Barang - #{@item.name} (#{@item.code})
-      .card-body
-        .row
-          .col-12.text-center
-            - if @item.image.present?
-              =image_tag("#{@item.image}", height: '200', width: '200', class:"z-depth-2")
-            - else
-              =image_tag("/images/default_item.jpg", height: '200', width: '200', class:"z-depth-2")
-        = form_for :item, url: '' do |form|
-          .form-group
-            label for="code" Kode
-            = form.text_field :code, required: true, class: "form-control md-form", id: "code", disabled:"disabled"
-          .form-group
-            label for="name" Nama
-            = form.text_field :name, required: true, class: "form-control md-form", id: "name",  disabled:"disabled"
-          / .form-group
-            label for="brand" Merek
-            = form.text_field :brand, required: true, class: "form-control md-form", id: "brand", disabled:"disabled"
-          .form-group
-            label for="item" Kategori
-            input class="md-form form-control" value="#{@item.item_cat.name}" disabled="disabled"
-          .form-group
-            - price_updated = @item.created_at
-            - price_updated = @item.price_updated if @item.price_updated.present?
-            label for="item" Harga Beli
-            input class="md-form form-control" value="#{number_with_delimiter(@item.buy.round, delimiter: ".")} ( #{price_updated} )" disabled="disabled"
-          .form-group
-            label for="item" Margin
-            input class="md-form form-control" value="#{@item.margin}" disabled="disabled"
-          .form-group
-            label for="item" Jenis Barang
-            - if !@item.local_item
-              input class="md-form form-control" value="Barang dari Pusat" disabled="disabled"
-            - else
-              input class="md-form form-control" value="Barang Lokal" disabled="disabled"
-          .form-group.table-responsive.text-nowrap
-            label for="sell" Harga Jual
-            table class="table table-hover"
-              thead
-                th Min
-                th Max
-                th Harga Normal
-                th Harga Member
-                th Diskon
-                th Profit
-                th
-              tbody
-                tr
-                  td 0
-                  td 1
-                  td #{number_to_currency(@item.sell, delimiter: ".", separator: ",", unit: "Rp. ")}
-                  td
-                    - if @item.sell_member == 0 || @item.sell_member == @item.sell 
-                      | -
-                    - else
-                      | #{number_to_currency(@item.sell_member, delimiter: ".", separator: ",", unit: "Rp. ")}
-                  - disc = @item.discount
-                  - if disc < 100
-                    - if disc != 0
-                      td #{disc} %
-                    - else
-                      td -
-                  - else
-                    td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
-                  - disc = (@item.discount / 100 * @item.sell) if disc <= 100
-                  td #{number_to_currency((@item.sell - @item.buy - disc).round, delimiter: ".", separator: ",", unit: "Rp. ")}
-                  td.text-right
-                    a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
-                      |   + Cetak
-                - item_grocers = @item.grocer_items
-                - if item_grocers.present?
-                  -item_grocers.each do |item|
-                    tr 
-                      td #{item.min}
-                      td #{item.max}
-                      td #{number_to_currency(item.price, delimiter: ".", separator: ",", unit: "Rp. ")}
-                      - member_price = item.member_price
-                      - if member_price == item.price
-                       td -
-                      - else
-                        td #{number_to_currency(item.member_price, delimiter: ".", separator: ",", unit: "Rp. ")}
-                      - if item.discount < 100
-                        - if item.discount > 0
-                          td #{item.discount} %
-                        - else
-                          td -
-                      - else
-                        td #{number_to_currency(item.discount, delimiter: ".", separator: ",", unit: "Rp. ")}
-                      - disc = item.discount
-                      - disc = (disc * item.price / 100) if disc >= 100
-                      td #{number_to_currency((item.price - @item.buy - disc).round, delimiter: ".", separator: ",", unit: "Rp. ")}
-                      td.text-right
-                        a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
-                          |   + Cetak
-                        | &nbsp&nbsp&nbsp
-                        a class="btn btn-warning" href="#{edit_grocer_item_path(id: item.id)}"
-                          |   Ubah
-                        | &nbsp&nbsp&nbsp
-                        a class="btn btn-danger" href="#{grocer_item_path(id: item.id)}"
-                          |   Hapus
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="info" aria-selected="true" data-toggle="tab" href="#info" role="tab" 
+        i.fa.fa-info.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Info 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="supplier" aria-selected="true" data-toggle="tab" href="#supplier" role="tab" 
+        i.fa.fa-user.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Supplier
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="buy_sell" aria-selected="true" data-toggle="tab" href="#buy_sell" role="tab" 
+        i.fa.fa-cart-arrow-down.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Penjualan - Pembelian 
+    li.nav-item
+      a#follow-tab-classic-blue.nav-link.waves-light aria-controls="loss" aria-selected="false" data-toggle="tab" href="#loss" role="tab" 
+        i.fas.fa-trash.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Loss
+    li.nav-item
+      a#contact-tab-classic-blue.nav-link.waves-light aria-controls="bundling" aria-selected="false" data-toggle="tab" href="#bundling" role="tab" 
+        i.fa.fa-thumbs-up.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Bundling
 
-          .form-group.text-center
-            - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
-              a href="#{edit_item_path(id: @item.id)}"
-                button.btn.btn-warning type="button" 
-                  |   Edit
+  #myClassicTabContentOrange.tab-content.card
+    #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'info'
 
-            - if Controller.find_by(name: 'grocer_items').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
-              a href="#{new_grocer_item_path(id: @item.id)}"
-                button.btn.btn-info type="button" 
-                  i.fas.fa-plus 
-                  |   Tambah Harga
+    #supplier.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'supplier'
 
-            - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
-              a href='#{item_suppliers_path(id: @item.id)}'
-                    button.btn.btn-primary type="button" 
-                      | Supplier
+    #buy_sell.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        p
+            | BUY 
 
-            - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
-              - if !@item.store_items.present? && !@item.supplier_items.present?
-                = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-danger"
+    #loss.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        p
+            | loss 
+
+    #bundling.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        p
+            | bundling 
+      

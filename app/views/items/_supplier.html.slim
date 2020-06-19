@@ -1,0 +1,35 @@
+.card-body
+  .row
+    .col-12.text-center
+    	table class="table"
+          thead
+            th Nama
+            th Alamat
+            th Telepon
+            th Terakhir Order
+            th Harga
+            th Aksi
+          tbody
+          	- @suppliers.each do |supplier|
+          		tr
+					td #{supplier.supplier.name}
+					td #{supplier.supplier.address}
+					td #{number_to_phone(supplier.supplier.phone, country_code: 62)}
+					- orders = Order.where(supplier: supplier.supplier)
+					- last = DateTime.now - 10.years
+					- price = 0
+					- orders.each do |order|
+						- this_order_items = order.order_items
+						- contain_items = this_order_items.where(item: @item)
+						- if contain_items.present? && last < order.created_at
+							- last = order.created_at.to_date 
+							- price = contain_items.first.price
+					td #{last}
+					td #{number_to_currency(price, unit: "Rp. ", separator: ",", delimiter: ".")}
+					td
+						a href='#{supplier_path(id: supplier.supplier.id)}'
+							button.btn.btn-info type="button"
+						        | Detil
+						a href='#{new_order_path(supplier_id: supplier.supplier.id)}'
+							button.btn.btn-success type="button"
+						        | Order

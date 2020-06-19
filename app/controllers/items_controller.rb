@@ -38,7 +38,8 @@ class ItemsController < ApplicationController
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless params[:id].present?
     @item = Item.find_by_id params[:id]
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless @item.present?
-    
+    @suppliers = SupplierItem.where(item: @item)
+
     respond_to do |format|
       format.html
       format.pdf do
