@@ -1,0 +1,29 @@
+.col-md-12.text-right.grey-text
+  a.btn.btn-danger href="#{supplier_path(id: @supplier.id,format: :pdf)}"
+    b
+    	i.fas.fa-print
+      	|     CETAK    
+.table-responsive.text-nowrap
+    table class="table"
+      thead
+        th Kode
+        th Nama
+        th Merek
+        th Kategori
+        th Total Pesan
+      tbody
+      	- @datas.each do |order_item|	
+      		- item = Item.find_by_id(order_item[0])
+			- order_qty = order_item[1]
+			tr
+			  td #{item.code}
+			  td #{item.name}
+			  td #{item.brand}
+			  td #{item.item_cat.name}
+			  td.text-center #{number_with_delimiter(order_qty.to_i, delimiter: ".")}
+			  td
+			  	- if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+					a href='#{new_order_path(supplier_id: @supplier.id, item_id: item.id)}'
+						button.btn.btn-success type="button"
+					        | Order
+= paginate @order_items, param_name: :item_page

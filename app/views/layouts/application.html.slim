@@ -204,7 +204,7 @@ html
 
     - if ["items"].include? controller_name
       javascript:
-        var ctxL = document.getElementById("buy_sell").getContext('2d');
+        var ctxL = document.getElementById("bs").getContext('2d');
         var myLineChart = new Chart(ctxL, {
           type: 'line',
           data: {
@@ -229,6 +229,31 @@ html
                 ],
                 borderColor: [
                 'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 2
+              }
+
+            ]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+        var ctxL = document.getElementById("loss_canvas").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+          type: 'line',
+          data: {
+            labels: gon.month,
+            datasets: [
+              {
+                label: "Loss",
+                data: gon.loss_vals,
+                backgroundColor: [
+                'rgba(255, 206, 86, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 206, 86, 1)',
                 ],
                 borderWidth: 2
               }

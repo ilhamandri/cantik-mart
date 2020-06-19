@@ -6,6 +6,11 @@
         br
         | Info 
     li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="prices" aria-selected="true" data-toggle="tab" href="#prices" role="tab" 
+        i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Harga
+    li.nav-item
       a#profile-tab-classic-blue.nav-link.waves-light aria-controls="supplier" aria-selected="true" data-toggle="tab" href="#supplier" role="tab" 
         i.fa.fa-user.fa-2x.pb-2 aria-hidden="true" 
         br
@@ -33,13 +38,14 @@
     #supplier.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         = render partial: 'supplier'
 
+    #prices.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel"
+        = render partial: 'prices'
+
     #buy_sell.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-        p
-            | BUY 
+        = render partial: 'buy_sell'
 
     #loss.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-        p
-            | loss 
+        = render partial: 'loss'
 
     #bundling.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         p

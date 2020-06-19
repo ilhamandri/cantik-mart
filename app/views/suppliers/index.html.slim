@@ -10,7 +10,7 @@
           |   Tambah Supplier
 
     - if ["owner", "finance", "super_admin"].include? current_user.level
-      a href="#{supplier_path(format: :pdf, id: 0)}"
+      a href="#{print_debt_receive_path(format: :pdf, id: 0)}"
         button.btn.btn-warning.text-dark type="button" 
           |   Daftar Hutang Piutang
 br

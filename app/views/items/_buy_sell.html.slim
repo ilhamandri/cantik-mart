@@ -1,0 +1,14 @@
+.col-xl-12.col-lg-12.col-md-12.pb-2
+	.card-body.table-responsive.text-nowrap
+      canvas id="bs" 
+
+  	table.table
+    	tr
+      		th Bulan
+      		th Pembelian
+      		th Penjualan
+	    - @buy_sell.each do|buy_sell|
+	      	tr
+	        	td #{buy_sell[0]}
+	        	td #{buy_sell[1][0]}
+	        	td #{buy_sell[1][1]}

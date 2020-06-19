@@ -40,29 +40,25 @@ class ItemsController < ApplicationController
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless @item.present?
     @suppliers = SupplierItem.where(item: @item)
 
-    respond_to do |format|
-      format.html
-      format.pdf do
-        Print.create item: @item, store: current_user.store
-        return redirect_success items_path, "Data Barang Telah Ditambahkan di Daftar Cetak"
-      end
-    end
-  end
+    losses = Loss.where(id: LossItem.where(item: @item).pluck(:loss_id)).where("created_at >= ?", DateTime.now-13.months).group_by { |m| m.created_at.beginning_of_month }
 
-  def recap_item
-    return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless params[:id].present?
     @item = Item.find_by_id params[:id]
-    return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless @item.present?
-    
     graphs_buy_sell = {}
-
+    graphs_losses = {}
     13.times do |i|
       date = Date.today - i.month
       month = date.strftime("%B %Y")
       graphs_buy_sell[month] = [0,0,0,0,0]
+      graphs_losses[month] = 0
     end
-
-    raw_trx_items = TransactionItem.where(item: @item).group_by { |m| m.created_at.beginning_of_month }
+    @losses = graphs_losses
+    losses.each do |r_loss|
+      month = r_loss.first.to_date.strftime("%B %Y")
+      loss_items = LossItem.where(loss_id: r_loss.second.pluck(:id), item: @item).sum(:quantity)
+      graphs_losses[month] = loss_items
+    end
+    gon.loss_vals = graphs_losses.values.reverse
+    raw_trx_items = TransactionItem.where(item: @item).where("created_at >= ?", DateTime.now-13.months).group_by { |m| m.created_at.beginning_of_month }
     raw_trx_items.each do |trx_items|
       month = trx_items.first.to_date.strftime("%B %Y")
       sell = 0
@@ -73,7 +69,7 @@ class ItemsController < ApplicationController
       graphs_buy_sell[month] = [0, sell, 0,0,0]
     end
 
-    raw_order_items = OrderItem.where(item: @item).group_by { |m| m.created_at.beginning_of_month }
+    raw_order_items = OrderItem.where(item: @item).where("created_at >= ?", DateTime.now-13.months).group_by { |m| m.created_at.beginning_of_month }
     raw_order_items.each do |order_items|
       month = order_items.first.to_date.strftime("%B %Y")
       buy = 0
@@ -86,7 +82,7 @@ class ItemsController < ApplicationController
       graphs_buy_sell[month] = data
     end
 
-    raw_prices = ItemPrice.where(item: @item).group(:month, :year).average(:buy)
+    raw_prices = ItemPrice.where(item: @item).where("created_at >= ?", DateTime.now-13.months).group(:month, :year).average(:buy)
     raw_prices.each do |item_price|
       month = Date::MONTHNAMES[item_price[0][0]] + " " + item_price[0][1].to_s
       b = item_price[1]
@@ -97,7 +93,7 @@ class ItemsController < ApplicationController
       graphs_buy_sell[month] = data
     end
 
-    raw_prices = ItemPrice.where(item: @item).group(:month, :year).average(:sell)
+    raw_prices = ItemPrice.where(item: @item).where("created_at >= ?", DateTime.now-13.months).group(:month, :year).average(:sell)
     raw_prices.each do |item_price|
       month = Date::MONTHNAMES[item_price[0][0]] + " " + item_price[0][1].to_s
       s = item_price[1]
@@ -140,12 +136,13 @@ class ItemsController < ApplicationController
 
     @buy_sell = graphs_buy_sell
 
-
-
-    # model = LightGBM::Regressor.new
-    # a = model.predict(buy)
-    # model.predict(buy)
-    # binding.pry
+    respond_to do |format|
+      format.html
+      format.pdf do
+        Print.create item: @item, store: current_user.store
+        return redirect_success items_path, "Data Barang Telah Ditambahkan di Daftar Cetak"
+      end
+    end
   end
 
   def new
@@ -272,7 +269,7 @@ class ItemsController < ApplicationController
   def refresh_predict
     data_item = []
     data = []
-    trxs = Transaction.where("created_at >= ?", DateTime.now.beginning_of_day-120.days)
+    trxs = Transaction.where("created_at >= ?", DateTime.now.beginning_of_day-360.days)
     trxs.each do |trx|
       trx_items_id = trx.transaction_items.pluck(:item_id)
       item_cats_id = Item.where(id: trx_items_id).pluck(:item_cat_id)
@@ -337,5 +334,9 @@ class ItemsController < ApplicationController
 
     def param_page
       params[:page]
+    end
+
+    def param_loss_page
+      params[:loss_page]
     end
 end

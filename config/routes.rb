@@ -67,14 +67,14 @@ Rails.application.routes.draw do
   post '/bs/receive', to: 'send_backs#received', as: 'send_back_received'
 
 
-  post 'opname_day', to: 'warning_items#opname_day', as: 'opname_day'
-  get 'opname', to: 'warning_items#opname', as: 'opname_form'
-  post 'opname', to: 'warning_items#update_stock', as: 'opname'
+  post '/opname_day', to: 'warning_items#opname_day', as: 'opname_day'
+  get '/opname', to: 'warning_items#opname', as: 'opname_form'
+  post '/opname', to: 'warning_items#update_stock', as: 'opname'
   
   get '/clean/prints', to: 'prints#clean', as: "clean_prints"
   get '/print/salary', to: 'salaries#print_salary', as:"print_salary"
-  get 'popular/items/refresh', to: 'homes#popular_items', as: 'refresh_popular_items'
-  get 'popular/items/departments', to: 'departments#popular_items', as: 'departments_popular_items'
+  get '/popular/items/refresh', to: 'homes#popular_items', as: 'refresh_popular_items'
+  get '/popular/items/departments', to: 'departments#popular_items', as: 'departments_popular_items'
   get '/refresh/predict/item/:id', to: 'items#refresh_predict', as: 'refresh_predict_item'
   get '/predict/item/:id', to: 'items#predict', as: 'predict_item'
 
@@ -82,6 +82,7 @@ Rails.application.routes.draw do
 
   get '/salary/:id/delete', to: 'salaries#delete_salary', as: 'delete_salary'
 
+  get '/print/suppliers', to: 'suppliers#print_debt_receive', as: 'print_debt_receive'
   resources :discounts
   resources :pays, only: %i[new create]
 
@@ -109,8 +110,6 @@ Rails.application.routes.draw do
   resources :stores
 
   resources :suppliers
-  resources :supplier_items
-  resources :item_suppliers, only: %i[index show]
 
   resources :members
 

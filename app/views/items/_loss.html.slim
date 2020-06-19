@@ -1,0 +1,12 @@
+.col-xl-12.col-lg-12.col-md-12.pb-2
+    .card-body.table-responsive.text-nowrap
+      canvas id="loss_canvas" 
+
+    table.table
+        tr
+            th Bulan
+            th Jumlah
+        - @losses.each do|loss|
+            tr
+                td #{loss[0]}
+                td #{loss[1]}

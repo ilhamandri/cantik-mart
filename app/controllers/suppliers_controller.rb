@@ -41,6 +41,16 @@ class SuppliersController < ApplicationController
     id = Supplier.first.id if params[:id] == "0"
     @supplier = Supplier.find_by_id id
     return redirect_back_data_error suppliers_path, "Data Supplier Tidak Ditemukan" unless @supplier.present?
+    @orders = Order.where(supplier: @supplier).order("created_at DESC")
+    @order_items = OrderItem.where(order: @orders.pluck(:id)).page param_item_page
+    @datas = @order_items.select(:item_id, :quantity).group(:item_id).sum(:quantity).sort_by(&:last).reverse
+    @orders = @orders.page param_order_page
+
+    
+    
+  end
+
+  def print_debt_receive
     respond_to do |format|
       format.html
       format.pdf do
@@ -53,7 +63,6 @@ class SuppliersController < ApplicationController
           template: "suppliers/print.html.slim"
       end
     end
-    
   end
 
   def new
@@ -109,6 +118,14 @@ class SuppliersController < ApplicationController
 
     def param_page
       params[:page]
+    end
+
+    def param_item_page
+      params[:item_page]
+    end
+
+    def param_order_page
+      params[:order_page]
     end
 
 end
