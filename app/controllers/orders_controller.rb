@@ -41,6 +41,57 @@ class OrdersController < ApplicationController
     end
   end
 
+  def recap
+    @date_start = params[:date_start] 
+    @date_end = params[:date_end]
+    @orders = Order.where("date_created >= ? AND date_created <= ?", @date_start, @date_end)
+    @store_name = "Semua Toko"
+    store_id = params[:store_id].to_i
+    if Store.all.pluck(:id).include? store_id
+      @orders = @orders.where(store_id: store_id)
+      @store_name = Store.find(store_id).name
+    end
+    @grouped_by = params[:grouped_by]
+    if @grouped_by == "supplier"
+      ids = @orders.pluck(:supplier_id).uniq
+      @suppliers = {}
+      ids.each do |id|
+        supplier = Supplier.find id
+        ords = @orders.where(supplier: supplier)
+        @suppliers[supplier.name] = [ords.count, ords.sum(:grand_total)]
+      end
+      @suppliers = @suppliers.sort
+    elsif @grouped_by == "item"
+      ids = @orders.pluck(:id)
+      order_items = OrderItem.where(order_id: ids)
+      item_ids = order_items.pluck(:item_id).uniq
+      @items = {}
+      item_ids.each do |item_id|
+        item = Item.find item_id
+        ordering_item = order_items.where(item: item)
+        buy = ordering_item.sum(:receive)
+        supplier = ordering_item.first.order.supplier
+        @items[item.code] = [item.name, item.item_cat.name, buy]
+      end
+    else
+      # tunai / cicilan
+      @order_invs = InvoiceTransaction.where(invoice: @orders.pluck(:invoice)).group(:invoice).count
+      @lunas = []
+      @cicilan = []
+      @order_invs.each do |ord_inv|
+        ord = Order.find_by(invoice: ord_inv[0])
+        if ord_inv[1] >= 2
+          @cicilan << [ord.invoice, ord.created_at.to_date, ord.store.name, ord.grand_total]
+        else
+          @lunas << [ord.invoice, ord.created_at.to_date, ord.store.name, ord.grand_total]
+        end
+      end
+    end
+    render pdf: DateTime.now.to_i.to_s,
+      layout: 'pdf_layout.html.erb',
+      template: "orders/recap.html.slim"
+  end
+
   def new
     return redirect_back_data_error suppliers_path, "Data Supplier Belum Tersedia, Silahkan Menambahkan Data Supplier" if Supplier.count <= 0
     @suppliers = Supplier.select(:id, :name, :address).order("supplier_type DESC").all

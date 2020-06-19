@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   put 'order/:id/edit/receive', to: 'orders#edit_receive', as: 'edit_order_receive'
   get 'order/:id/pay', to: 'orders#pay', as: 'order_pay'
   post 'order/:id/pay', to: 'orders#paid', as: 'order_paid'
+  post 'order/recap', to: 'orders#recap', as: 'order_recap'
 
   get '/retur/:id/picked', to: 'returs#picked', as: 'retur_picked'
   get '/retur/:id/feedback', to: 'retur_items#feedback', as: 'retur_feedback'
