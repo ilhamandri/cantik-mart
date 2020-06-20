@@ -11,7 +11,7 @@
         br
         | Absensi
     li.nav-item
-      a#contact-tab-classic-blue.nav-link.waves-light aria-controls="resume" aria-selected="false" data-toggle="tab" href="#resume" role="tab" 
+      a#contact-tab-classic-blue.nav-link.waves-light aria-controls="receivables" aria-selected="false" data-toggle="tab" href="#receivables" role="tab" 
         i.fa.fa-handshake-o.fa-2x.pb-2 aria-hidden="true" 
         br
         | Pinjaman
@@ -29,8 +29,8 @@
     #absent.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel"
         = render partial: 'absent'
 
-    #resume.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-        = render partial: 'resume'
+    #receivables.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'receivables'
 
     #salaries.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         = render partial: 'salaries'

@@ -64,6 +64,8 @@ class MembersController < ApplicationController
     return redirect_back_data_error members_path, "Data Member Tidak Ditemukan" unless params[:id].present?
     @member = Member.find_by_id params[:id]
     return redirect_back_data_error members_path, "Data Member Tidak Ditemukan" unless @member.present?
+    @transactions = Transaction.where(member_card: @member.card_number).order("date_created DESC").limit(10)
+    @points = Point.where(member: @member).order("created_at DESC").limit(10)
   end
 
   private

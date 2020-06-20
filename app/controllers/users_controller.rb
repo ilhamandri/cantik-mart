@@ -63,12 +63,55 @@ class UsersController < ApplicationController
     
     absent @user
 
+    @receivables = Receivable.where(user: @user, finance_type: "EMPLOYEE")
+    
+    # if params[:month].present?
+    #   start_date = ("01-" + params[:month].to_s + "-" + params[:year].to_s).to_time.beginning_of_month
+    #   end_date = start_date.end_of_month
+    #   @receivables = @receivables.where(user: @user).order("check_in ASC").where("check_in >= ? AND check_in <= ?", start_date, end_date)
+    # else
+    #   start_date = DateTime.current.beginning_of_month
+    #   end_date = start_date.end_of_month
+    #   @receivables = @receivables.where(user: @user).order("check_in ASC").where("check_in >= ? AND check_in <= ?", start_date, end_date)
+    # end
+
+    @receivable_not_paid = @receivables.where("created_at <= ?", DateTime.now - 6.months)
+    @receivable_now = @receivables.where("created_at >= ?", DateTime.now - 6.months)
+
+    pinjaman_belum_lunas = @receivables.sum(:deficiency)
+    @limit_pinjaman = 5000000 - pinjaman_belum_lunas
+    @total_pinjaman = pinjaman_belum_lunas
+    @avg_pinjaman = @receivables.average(:nominal).to_i
+
+    n_pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivables.pluck(:id)).count
+    total_n_term = @receivables.sum(:n_term)
+    @avg_pay_complete_pinjaman = total_n_term.to_f / n_pays.to_f
+    @avg_pay_complete_pinjaman = 1 if @avg_pay_complete_pinjaman.nan?
+    @receivables = Receivable.where(user: @user, finance_type: "EMPLOYEE").page param_page
+
     # gon.work_hour = @work_hours
     # gon.label_work_hour = @date
     # gon.overtime_hours = @overtime_hours 
   end
 
   private 
+
+    def receivable user
+      @receivables = Receivable.where(user: @user, finance_type: "EMPLOYEE")
+      @receivable_not_paid = @receivables.where("created_at <= ?", DateTime.now - 6.months)
+      @receivable_now = @receivables.where("created_at >= ?", DateTime.now - 6.months)
+
+      pinjaman_belum_lunas = @receivables.sum(:deficiency)
+      @limit_pinjaman = 5000000 - pinjaman_belum_lunas
+      @total_pinjaman = pinjaman_belum_lunas
+      @avg_pinjaman = @receivables.average(:nominal).to_i
+
+      n_pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivables.pluck(:id)).count
+      total_n_term = @receivables.sum(:n_term)
+      @avg_pay_complete_pinjaman = total_n_term.to_f / n_pays.to_f
+      @avg_pay_complete_pinjaman = 1 if @avg_pay_complete_pinjaman.nan?
+    end
+
     def absent user
       @user = user
 

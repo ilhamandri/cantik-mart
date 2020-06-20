@@ -1,0 +1,22 @@
+.card-body
+  table class="table"
+    tr
+      th 
+      th Sisa Limit
+      th Total Belum Lunas
+      th Rata-rata pinjam
+      th Biasanya Lunas Dalam
+    tr 
+      td 
+        b Kasbon
+      td #{@limit_kasbon}
+      td #{@total_kasbon}
+      td #{@avg_kasbon}
+      td #{@avg_pay_complete_kasbon}
+    tr
+      td 
+        b Pinjaman
+      td #{number_with_delimiter(@limit_pinjaman.to_i, delimiter: ".", separator: ",")}
+      td #{number_with_delimiter(@total_pinjaman.to_i, delimiter: ".", separator: ",")}
+      td #{number_with_delimiter(@avg_pinjaman.to_i, delimiter: ".", separator: ",")}
+      td #{number_with_delimiter(@avg_pay_complete_pinjaman.to_i, delimiter: ".", separator: ",")} x

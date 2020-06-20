@@ -1,0 +1,41 @@
+.col-md-12.text-right.grey-text
+  a href='#{transactions_path(member_card: @member.card_number)}'
+      button.btn.btn-success type="button" 
+          | Selengkapnya
+.table-responsive.text-nowrap
+  table class="table"
+    thead
+    	th Invoice
+        th Tanggal
+        th Toko
+        th Member
+        th Poin
+        th Profit
+        th Aksi
+    tbody
+    	- @transactions.each do |transaction|
+    		tr
+			  td #{transaction.invoice}
+			  td #{transaction.date_created}
+			  td #{transaction.user.store.name}
+			  td 
+			    - member = Member.find_by(card_number: transaction.member_card)
+			    - if member.nil?
+			      | -
+			    - else 
+			      | #{member.name}
+			  td #{transaction.point}
+			  td 
+			    - profit = transaction.grand_total - transaction.hpp_total
+			    - if profit >= 0
+			      .text-success
+			        | #{number_with_delimiter(profit, delimiter: ".", separator:",", precision: 2)}
+			    - else
+			      .text-danger
+			        | #{number_with_delimiter(profit, delimiter: ".", separator:",", precision: 2)}
+			  td
+			    - if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'show').user_methods.pluck(:user_level).include? current_user.level
+			      a href='#{transaction_path(id: transaction.id)}'
+			        button class="btn  btn-primary"
+			          | Detil
+
