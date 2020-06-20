@@ -40,6 +40,7 @@ class ItemsController < ApplicationController
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless @item.present?
     @suppliers = SupplierItem.where(item: @item)
 
+    @bundlings = PredictCategory.where(buy: @item.item_cat).order("percentage DESC").limit(10)
     losses = Loss.where(id: LossItem.where(item: @item).pluck(:loss_id)).where("created_at >= ?", DateTime.now-13.months).group_by { |m| m.created_at.beginning_of_month }
 
     @item = Item.find_by_id params[:id]
@@ -277,24 +278,24 @@ class ItemsController < ApplicationController
       data << item_cats_id
     end
     # data = [[1,2,3,4], [1,2,4,5], [2,3,4,5]]
-    item_set = Apriori::ItemSet.new(data_item)
+    # item_set = Apriori::ItemSet.new(data_item)
     item_cat_set = Apriori::ItemSet.new(data)
     support = 1
     confidence = 1
-    minings_item = item_set.mine(support, confidence)
-    minings_item.each do |mining|
-      percentage = mining[1]
-      items = mining[0].split("=>")
-      buy = Item.find_by(id: items[0])
-      usually = Item.find_by(id: items[1])
-      predict = PredictItem.find_by(buy: buy, usually: usually)
-      if predict.present?
-        predict.percentage = percentage
-        predict.save!
-      else
-        predict = PredictItem.create percentage: percentage, buy: buy, usually: usually
-      end
-    end
+    # minings_item = item_set.mine(support, confidence)
+    # minings_item.each do |mining|
+    #   percentage = mining[1]
+    #   items = mining[0].split("=>")
+    #   buy = Item.find_by(id: items[0])
+    #   usually = Item.find_by(id: items[1])
+    #   predict = PredictItem.find_by(buy: buy, usually: usually)
+    #   if predict.present?
+    #     predict.percentage = percentage
+    #     predict.save!
+    #   else
+    #     predict = PredictItem.create percentage: percentage, buy: buy, usually: usually
+    #   end
+    # end
 
     minings_item_cats = item_cat_set.mine(support, confidence)
     minings_item_cats.each do |mining|

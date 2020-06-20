@@ -1,0 +1,19 @@
+.card-body
+  .row
+    .col-12.text-center
+    	table class="table"
+          thead
+            th Kategori
+            th Persentase
+            th Aksi
+          tbody
+          	- @bundlings.each do |bundling|
+          		tr
+					td #{bundling.usually.name}
+					
+					td #{number_to_currency(bundling.percentage, unit: "", separator: ",", delimiter: ".")}
+					
+					td
+						a href='#{item_cat_path(id: bundling.usually.id)}'
+							button.btn.btn-info type="button"
+						        | Daftar Barang

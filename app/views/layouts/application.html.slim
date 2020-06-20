@@ -63,6 +63,7 @@ html
     = javascript_include_tag '/dist/js/bootstrap.min.js'
     = javascript_include_tag '/dist/js/mdb.min.js'
     = javascript_include_tag '/dist/js/application'
+    = javascript_include_tag "https://use.fontawesome.com/aa85c1019a.js"
     = javascript_include_tag "https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"
 
     - if flash.present?
@@ -301,7 +302,7 @@ html
           }
         });
 
-    - if ["absents"].include? controller_name
+    - if ["users", "absents"].include? controller_name
       javascript:
         var ctxL = document.getElementById("workhour").getContext('2d');
         var myLineChart = new Chart(ctxL, {
