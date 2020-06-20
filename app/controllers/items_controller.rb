@@ -270,7 +270,7 @@ class ItemsController < ApplicationController
   def refresh_predict
     data_item = []
     data = []
-    trxs = Transaction.where("created_at >= ?", DateTime.now.beginning_of_day-360.days)
+    trxs = Transaction.where("created_at >= ?", DateTime.now.beginning_of_day-30.days)
     trxs.each do |trx|
       trx_items_id = trx.transaction_items.pluck(:item_id)
       item_cats_id = Item.where(id: trx_items_id).pluck(:item_cat_id)
