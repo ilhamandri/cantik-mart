@@ -96,6 +96,7 @@ class ItemsController < ApplicationController
 
     raw_prices = ItemPrice.where(item: @item).where("created_at >= ?", DateTime.now-13.months).group(:month, :year).average(:sell)
     raw_prices.each do |item_price|
+      binding.pry
       month = Date::MONTHNAMES[item_price[0][0]] + " " + item_price[0][1].to_s
       s = item_price[1]
 
