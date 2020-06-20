@@ -302,6 +302,7 @@ class ItemsController < ApplicationController
       percentage = mining[1]
       items = mining[0].split("=>")
       buy = ItemCat.find_by(id: items[0])
+      next if items[1] == 134 || items[0] == 134
       usually = ItemCat.find_by(id: items[1])
       predict_cat = PredictCategory.find_by(buy: buy, usually: usually)
       if predict_cat.present?
