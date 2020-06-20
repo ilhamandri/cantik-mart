@@ -270,12 +270,10 @@ class ItemsController < ApplicationController
   def refresh_predict
     data_item = []
     data = []
-    trxs = Transaction.where("created_at >= ?", DateTime.now.beginning_of_day-30.days)
-    trxs.each do |trx|
-      trx_items_id = trx.transaction_items.pluck(:item_id)
-      item_cats_id = Item.where(id: trx_items_id).pluck(:item_cat_id)
-      data_item << trx_items_id
-      data << item_cats_id
+    trx_items = TransactionItem.where("created_at >= ?", DateTime.now.beginning_of_day-1.days)
+    trx_items.each do |trx_item|
+      # data_item << trx_item.id
+      data << trx_item.item.item_cat.id
     end
     # data = [[1,2,3,4], [1,2,4,5], [2,3,4,5]]
     # item_set = Apriori::ItemSet.new(data_item)
