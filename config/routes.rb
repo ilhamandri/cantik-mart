@@ -87,7 +87,7 @@ Rails.application.routes.draw do
   resources :pays, only: %i[new create]
 
   resources :result_items
-
+  resources :opnames
   resources :balances
   resources :promotions
   resources :prints

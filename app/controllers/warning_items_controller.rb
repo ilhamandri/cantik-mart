@@ -70,6 +70,7 @@ class WarningItemsController < ApplicationController
 
   def update_stock
     file = params[:file]
+    return redirect_back_data_error opname_form_path, "File tidak valid" if file.nil?
     if File.extname(file.path) == ".xlsx"
       excel = Roo::Excelx.new(file.path)
       excel.each_with_pagename do |name, sheet|
@@ -94,7 +95,13 @@ class WarningItemsController < ApplicationController
     else
       return redirect_back_data_error opname_form_path, "File tidak valid" 
     end 
-    return redirect_success warning_items_path, "Item telah selesai diopname."
+    upload_io = params[:file]
+    filename = Digest::SHA1.hexdigest([Time.now, rand].join).to_s+File.extname(file.path).to_s
+    File.open(Rails.root.join('public', 'uploads', 'stock_opnames', filename), 'wb') do |file|
+      file.write(upload_io.read)
+    end
+    Opname.create user: current_user, store: current_user.store, file_name: filename
+    return redirect_success opnames_path, "Item telah selesai diopname."
   end
 
   def check_excel sheet

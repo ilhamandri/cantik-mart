@@ -16,6 +16,18 @@ class DownloadsController < ApplicationController
 	  		end
 	  		datas.order("store_id ASC")
 	  		serving_file datas, data_type
+	  	elsif data_type == "opname"
+	  		filename = params[:file]
+	  		return redirect_back_data_error opnames_path, "File Tidak Ditemukan" if filename.nil?
+	  		opname = Opname.find_by(file_name: filename)
+	  		return redirect_back_data_error opnames_path, "File Tidak Ditemukan" if opname.store.id != current_user.store.id
+	  		path = "./public/uploads/stock_opnames/"+filename
+	    	file_exist = File.exist?(path)
+	  		if file_exist
+		    	send_file(path)
+		    else
+		      return redirect_back_data_error opnames_path, "File Tidak Ditemukan" 
+		    end
 	  	else
 	  		redirect_home
 	  	end

@@ -1,0 +1,15 @@
+.col-xl-12.col-lg-12.col-md-12.pb-2
+    table.table
+        tr
+            th Toko
+            th Oleh
+            th Tanggal
+            th File
+        - @opnames.each do|opname|
+            tr
+                td #{opname.store.name}
+                td #{opname.user.name}
+                td #{opname.created_at.strftime("%d-%m-%Y")}
+                td 
+                    a href="#{download_path(type: 'opname', file: opname.file_name)}" class="text-primary"
+                        | Unduh File
