@@ -49,6 +49,11 @@ class SuppliersController < ApplicationController
         @datas = @order_items.select(:item_id, :quantity).group(:item_id).sum(:quantity).sort_by(&:last).reverse
         @orders = @orders.page param_order_page
         @supplier_items = SupplierItem.where(supplier: @supplier).page param_item_page
+        @debts = Debt.where(finance_type: Debt::ORDER, supplier: @supplier).where("deficiency > 0")
+        @total_debt = @debts.sum(:deficiency)
+        @receivables = Receivable.where(finance_type: Receivable::RETUR, to_user: @supplier.id).where("deficiency > 0")
+        @total_receivable = @receivables.sum(:deficiency)
+
       format.pdf do
         @order_items = OrderItem.where(order: Order.where(supplier: @supplier).pluck(:id)).select(:item_id, :quantity)
         @inventories = @order_items.group(:item_id).sum(:quantity)

@@ -14,7 +14,7 @@
   .card.mb-12
     .card-body
       .card-header.white-text.teal
-        | REKAP PERFORMA
+        | REKAP ABSENSI 6 BULAN TERAKHIR
       br
       .row
         .col-4
@@ -24,16 +24,16 @@
           h3
             | #{@performance} / 100
         .col-4
-          - if @performance >= 95
+          - if @performance >= 80
             h3.text-success
               | ( Sangat Baik )
-          - elsif @performance < 95 && @performance >= 90
+          - elsif @performance < 80 && @performance >= 70
             h3.text-info
               | ( Baik )
-          - elsif @performance < 90 && @performance >= 80
+          - elsif @performance < 70 && @performance >= 50
             h3.text-warning
               | ( Kurang )
-          - elsif @performance < 80
+          - elsif @performance < 50
             h3.text-danger
               | ( Sangat Kurang )
         .col-12
@@ -58,8 +58,6 @@
               td.text-danger  style="font-weight: bold !important;"
                 | Sangat Kurang
     .card-body
-      .card-header.white-text.teal
-        | REKAP KESELURUHAN
       table class="table"
         tr
           th 

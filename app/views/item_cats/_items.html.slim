@@ -1,0 +1,16 @@
+.table-responsive.text-nowrap
+  table class="table"
+    thead
+      th Kode
+      th Nama
+      th Aksi 
+    tbody
+      - @items.each do |item| 
+        tr
+          td #{item.code}
+          td #{item.name}
+          td 
+            a href="#{item_path(id: item.id)}" class="text-primary"
+              | Detil
+
+  = paginate @items

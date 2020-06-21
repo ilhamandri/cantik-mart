@@ -1,58 +1,23 @@
-.row
-  .col
-    h5
-      | Daftar Sub-Department (#{@dept.name})
-  .col.text-right
-    - if Controller.find_by(name: 'departments').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? current_user.level
-      a href="#{new_item_cat_path(dept_id: @dept.id)}"
-        button.btn.btn-success type="button" 
-          i.fas.fa-plus 
-          |   Tambah Sub-Department
-br
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Pencarian
-      .card-body
-        = form_for :item_cats, url: item_cats_path, method: 'GET' do |form|
-          .row
-            .col
-              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nama Sub Departemen ..."
-            .col-12.text-center
-              button class="btn btn-primary"
-                | Cari
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Utilitas
-      .card-body
-        .row
-          .col-6.text-center.grey-text
-            a href="#{item_cats_path(dept_id: @dept.id,format: :pdf)}" class="btn btn-primary"
-              b
-                | CETAK SEMUA BARANG
-          .col-6.text-center.grey-text
-            a href="#{departments_popular_items_path(id: @dept.id,format: :pdf)}" class="btn btn-success"
-              b
-                | TOP 25
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Data Sub-Department
-      .card-body.table-responsive.text-nowrap
-        table class="table"
-          thead
-            th Nama
-            th Jumlah Barang
-            th Termasuk Perhitungan Poin
-            th Aksi
-          tbody
-            = render partial: 'list', collection: @item_cats, as: :item_cat
-        = paginate @item_cats
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="info" aria-selected="true" data-toggle="tab" href="#info" role="tab" 
+        i.fa.fa-info.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Info
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="all_data" aria-selected="true" data-toggle="tab" href="#all_data" role="tab" 
+        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Sub Kategori
 
+  #myClassicTabContentOrange.tab-content.card
+    #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'info'
+
+    #all_data.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'all_data'
+
+      
+
+      

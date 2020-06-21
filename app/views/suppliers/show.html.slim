@@ -6,6 +6,11 @@
         br
         | Info 
     li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="debts" aria-selected="true" data-toggle="tab" href="#debts" role="tab" 
+        i.fa.fa-usd.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Hutang - Piutang
+    li.nav-item
       a#profile-tab-classic-blue.nav-link.waves-light aria-controls="item" aria-selected="true" data-toggle="tab" href="#item" role="tab" 
         i.fa.fa-archive.fa-2x.pb-2 aria-hidden="true" 
         br
@@ -34,4 +39,7 @@
     #resume.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         p
             | KINERJA
+
+    #debts.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'debts'
       

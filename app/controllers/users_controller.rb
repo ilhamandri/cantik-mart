@@ -156,7 +156,7 @@ class UsersController < ApplicationController
           @work_hours << hour
           @work_totals += hour
 
-          @no_check_out += 1 if hour == 0 && minutes == 0 
+          @no_check_out += 0.0025 if hour == 0 && minutes == 0 
 
           if check_in < half_day
             if check_in > morning_shift
@@ -165,7 +165,7 @@ class UsersController < ApplicationController
             end
             @work_hours_morning << hour
             @work_morning += hour
-            @no_check_out_morning += 1 if hour == 0 && minutes == 0 
+            @no_check_out_morning += 0.0025 if hour == 0 && minutes == 0 
           else
             if check_in > afternoon_shift
               @late_afternoon << check_in - afternoon_shift  
@@ -173,7 +173,7 @@ class UsersController < ApplicationController
             end
             @work_hours_afternoon << hour
             @work_afternoon += hour
-            @no_check_out_afternoon += 1 if hour == 0 && minutes == 0 
+            @no_check_out_afternoon += 0.0025 if hour == 0 && minutes == 0 
           end 
 
         
@@ -186,7 +186,7 @@ class UsersController < ApplicationController
           @overtime_hours << hour
           @overtime_totals += hour
           if rawdata[3].present?
-            @no_check_out_overtime += 1 if hour == 0 && minutes == 0
+            @no_check_out_overtime += 0.001 if hour == 0 && minutes == 0
           else
             @overtime_hours << hour
           end
@@ -250,7 +250,7 @@ class UsersController < ApplicationController
         
         work_days = (start_date..end_date).to_a.select {|k| days.include?(k.wday)}
 
-        @performance = (@date.count.to_f) - (@late_general.count * 0.5) 
+        @performance = (@date.count.to_f) - (@late_general.count * 0.005) 
         @performance = @performance / work_days.count.to_f
         @performance = (@performance * 10000.0 ).round / 100.0
       end

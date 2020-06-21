@@ -1,0 +1,23 @@
+.card-body 
+  = form_for :item_cat, url: "" do |form|
+    .form-group
+      label for="name" Departemen
+      input type="text" class="form-control md-form" value="#{@item_cat.department.name}" disabled="disabled"
+	  .form-group
+	    label for="name" Sub Departemen
+	    = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
+    .form-group
+      label for="name" Jumlah Barang
+      - items_count = Item.where(item_cat: @item_cat).count
+      input type="text" class="form-control md-form" value="#{items_count}" disabled= "disabled"
+    .form-group
+      label for="name" Termasuk Dalam Perhitungan Poin
+      - if @item_cat.use_in_point
+        input type="text" class="form-control md-form" value="Ya" disabled= "disabled"
+      - else
+        input type="text" class="form-control md-form" value="Tidak" disabled= "disabled"
+- if Controller.find_by(name: 'item_cats').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+  .col-12.text-center
+    a href='#{edit_item_cat_path(id: @item_cat.id)}'
+      button.btn.btn-warning type="button" 
+        | Ubah Sub Departemen
