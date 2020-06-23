@@ -11,7 +11,7 @@ class HomesController < ApplicationController
     @total_payments = Order.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null').count
     @total_returs = Retur.where(store_id: current_user.store.id).where('date_picked is null').count
     
-    if ["driver", "owner","super_admin", "stock_admin", "super_visi"].include? current_user.level
+    if ["owner","super_admin", "stock_admin", "super_visi"].include? current_user.level
       item_cats_data = higher_item_cats_graph
       gon.higher_item_cats_data = item_cats_data.values
       gon.higher_item_cats_label = item_cats_data.keys
@@ -103,7 +103,7 @@ class HomesController < ApplicationController
       pop_item = NotPopularItem.create item: item, item_cat: item_cat,
        department: department, n_sell: sell, date: Date.today
     end
-    redirect_success root_path, "Refresh rekap item selesai."
+    redirect_success populars_path, "Refresh rekap item selesai."
   end
 
   private

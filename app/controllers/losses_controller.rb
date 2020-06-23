@@ -37,6 +37,8 @@ class LossesController < ApplicationController
     	end
     	store_item.stock = store_item.stock - qty
     	store_item.save!
+      item.counter -= qty
+      item.save!
       loss.create_activity :create, owner: current_user
 
       if store_item.stock <= store_item.min_stock

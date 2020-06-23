@@ -71,11 +71,11 @@ html
         javascript:
           toastr.#{key}('#{value}');
 
-    - if ["homes"].include? controller_name
+    - if ["populars"].include? controller_name
       javascript:
         var ctxP = document.getElementById("higher_sales").getContext('2d');
         var myPieChart = new Chart(ctxP, {
-          type: 'doughnut',
+          type: 'horizontalBar',
           data: {
             labels: gon.higher_item_cats_label,
             datasets: [{
@@ -92,7 +92,7 @@ html
 
         var ctxP = document.getElementById("lower_sales").getContext('2d');
         var myPieChart = new Chart(ctxP, {
-          type: 'doughnut',
+          type: 'horizontalBar',
           data: {
             labels: gon.lower_item_cats_label,
             datasets: [{

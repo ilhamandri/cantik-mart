@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_21_161641) do
+ActiveRecord::Schema.define(version: 2020_06_22_155927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -280,6 +280,7 @@ ActiveRecord::Schema.define(version: 2020_06_21_161641) do
     t.integer "margin", default: 0
     t.datetime "price_updated"
     t.bigint "sell_member", default: 0, null: false
+    t.bigint "counter", default: 0
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 

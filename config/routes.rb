@@ -85,7 +85,7 @@ Rails.application.routes.draw do
   get '/print/suppliers', to: 'suppliers#print_debt_receive', as: 'print_debt_receive'
   resources :discounts
   resources :pays, only: %i[new create]
-
+  resources :populars
   resources :result_items
   resources :opnames
   resources :balances

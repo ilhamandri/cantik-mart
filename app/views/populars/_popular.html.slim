@@ -1,0 +1,17 @@
+.card-body
+  .row
+    .col-12.text-right
+      a href="#{refresh_popular_items_path}" class="btn btn-warning"
+        | Perbarui
+    .col-12
+      canvas id="higher_sales"
+    .col-12.pb-2
+      table class="table"
+        thead
+          th Nama
+          th Terjual
+        tbody
+          - @higher_item.each do |item|
+            tr
+              td #{Item.find_by(id: item[0]).name}
+              td #{item[1]}

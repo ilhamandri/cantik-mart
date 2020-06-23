@@ -8,9 +8,14 @@ class OrdersController < ApplicationController
     @search = filter[0]
     @orders = filter[1]
     @params = params.to_s
-
     respond_to do |format|
       format.html
+        @holds = Order.where('date_receive is null')
+        @holds = @holds.where(store: current_user.store) if !["owner", "super_admin", "finance"].include? current_user.level
+
+        @debts = Order.where('date_receive is not null and date_paid_off is null')
+        @debts = @debts.where(store: current_user.store) if !["owner", "super_admin", "finance"].include? current_user.level
+      
       format.pdf do
         new_params = eval(params[:option])
         filter = filter_search new_params, "pdf"
@@ -204,75 +209,6 @@ class OrdersController < ApplicationController
     @order_items = OrderItem.where(order_id: @order.id)
   end
 
-  # def edit_receive
-  #   return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
-  #   order = Order.find params[:id]
-  #   return redirect_success redirect_back_data_error orders_path unless order.present? || order.editable == false
-  #   return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if order.date_paid_off.present? || order.date_receive.nil?
-  #   items = edit_order_items
-  #   return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if items.empty?
-  #   new_grand_total = 0
-  #   new_total = 0
-  #   disc_percentage = order.discount_percentage.to_f
-  #   items.each do |item|
-  #     order_item = OrderItem.find item[0]
-  #     break if order_item.nil?
-  #     new_receive = item[1].to_i.abs
-  #     next if new_receive <= 0
-
-  #     price = order_item.price
-  #     disc_1 = order_item.discount_1.to_f
-  #     disc_2 = order_item.discount_2.to_f
-  #     ppn = order_item.ppn.to_f
-
-  #     price_1 = price - (price*disc_1/100) 
-  #     price_2 = price_1 - (price_1*disc_2/100)
-  #     price_3 = (price_2 + (price_2*ppn/100)).to_i
-  #     based_item_price = (price_3 - (price_3 * disc_percentage / 100)).to_i
-  #     new_grand_total_item = based_item_price * new_receive
-  #     total_item_without_disc_global = (price_3 * new_receive).to_i
-
-  #     order_item.new_receive = new_receive
-  #     order_item.discount_1 = disc_1
-  #     order_item.discount_2 = disc_2
-  #     order_item.ppn = ppn
-  #     order_item.price = price
-  #     order_item.total = total_item_without_disc_global
-  #     order_item.grand_total = new_grand_total_item.to_i
-  #     order_item.save!
-
-  #     this_item = Item.find order_item.item.id
-  #     store_stock = StoreItem.find_by(item_id: order_item.item.id, store_id: current_user.store)
-  #     store_stock = StoreItem.create store: current_user.store, item: this_item, stock: 0, min_stock: 5 if store_stock.nil?
-  #     store_stock.stock = store_stock.stock - order_item.receive + new_receive
-  #     store_stock.save!
-  #     new_grand_total +=  new_grand_total_item.to_i
-  #     new_total += total_item_without_disc_global
-  #   end
-  #   order.old_total = new_total
-  #   order.total = new_total
-  #   order.grand_total = new_grand_total
-  #   order.discount = ( new_total * disc_percentage / 100).to_i
-  #   order.date_change = DateTime.now
-  #   order.editable = false
-
-  #   changes = order.changes
-  #   order.save!
-  #   payment = edit_payment new_grand_total, order
-
-  #   order.create_activity :edit, owner: current_user, parameters: changes
-
-  #   if payment
-  #     order.date_paid_off = DateTime.now 
-  #     order.save!
-  #     debt = Debt.find_by(finance_type: Debt::ORDER, ref_id: order.id)
-  #     debt.deficiency = 0
-  #     debt.save!
-  #   end
-  #   urls = order_path(id: params[:id])
-  #   return redirect_success urls, "Order " + order.invoice + " Telah Diterima"
-  # end
-
   def receive
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
     order = Order.find params[:id]
@@ -326,6 +262,8 @@ class OrdersController < ApplicationController
       store_stock = StoreItem.find_by(item: this_item, store_id: current_user.store)
       store_stock = StoreItem.create store: current_user.store, item: this_item, stock: 0, min_stock: 5 if store_stock.nil?
 
+      this_item.counter -= receive_qty
+      this_item.save!
 
       price_0 = price*receive_qty
       disc_1 = (price_0)*disc_1/100 if  disc_1 < 99
