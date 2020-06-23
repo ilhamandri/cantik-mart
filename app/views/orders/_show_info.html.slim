@@ -17,20 +17,6 @@
 .card-body
   .row
     - if order.date_receive.present?
-    br
-      .col-12
-        h5
-          - if @pay > 0
-            .text-danger
-              | KEKURANGAN : #{number_to_currency(@pay, unit: "Rp. ")}
-          - else
-            .text-success
-              | LUNAS
-      - if @order_items.first.order.date_receive.present? && @order_items.first.order.date_paid_off.nil? && @pay != 0
-        .col.text-right
-          a href="#{order_pay_path(id: order_id)}"
-            button.btn.btn-success type="button" 
-              | Bayar
     .col-4
       label for="form" INVOICE
       input type="text" class="form-control md-form" disabled=true value="#{order.invoice}"
