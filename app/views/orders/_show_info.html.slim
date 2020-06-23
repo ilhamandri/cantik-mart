@@ -48,6 +48,8 @@
         label for="form" KETERANGAN
         input type="text" class="form-control md-form" disabled=true value="#{"TIDAK ADA TAGIHAN - ORDER DARI RETUR"}"
       .col-12.text-center
-        - retur = ReturItem.find_by(ref_id: order.id).retur
-        a href="#{retur_path(id: retur.id)}" class="btn btn-primary"
-          | #{retur.invoice}
+        - retur_item = ReturItem.find_by(ref_id: order.id)
+        - if retur_item.present?
+          - retur = retur_item.retur
+          a href="#{retur_path(id: retur.id)}" class="btn btn-primary"
+            | #{retur.invoice}
