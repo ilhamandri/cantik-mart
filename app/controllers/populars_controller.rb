@@ -21,6 +21,7 @@ class PopularsController < ApplicationController
     end
 
     def higher_item
+      PopularItem.where(item_cat_id: 134).destroy_all
       item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell DESC").limit(20).pluck(:item_id, :n_sell)
       return Hash[item_sells]
     end

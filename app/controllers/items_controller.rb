@@ -13,7 +13,6 @@ class ItemsController < ApplicationController
     #   item.margin = margin.ceil.to_i
     #   item.save!
     # end
-
     @items = Item.page param_page
     if params[:search].present?
       @search = params[:search].downcase
