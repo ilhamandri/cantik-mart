@@ -28,7 +28,7 @@ tr
 
   - if !order.editable && !order.from_retur
   	td
-      |#{order_item.receive} &nbsp
+      | #{order_item.receive} &nbsp
       span 
         i.fas.fa-arrow-right
       | &nbsp #{order_item.new_receive.to_i}
@@ -50,7 +50,7 @@ tr
       td.text-danger.text-right
         | #{number_with_delimiter(order_item.total, delimiter: ".", separator: ",")}
     - else
-      - 4.times do
+      - 3.times do
         td 
           span 
             i.fas.fa-times
