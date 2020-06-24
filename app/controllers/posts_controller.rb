@@ -47,7 +47,7 @@ class PostsController < ApplicationController
 					    next if store_stock.nil?
 					    store_stock.stock = store_stock.stock.to_f - new_trx_item.quantity.to_f
 					    item = store_stock.item
-					    item.counter += new_trx_item.quantity.to_i
+					    item.counter = item.counter + new_trx_item.quantity.to_i
 					    item.save!
 					    store_stock.save!
 					end
