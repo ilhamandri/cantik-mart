@@ -50,6 +50,7 @@
 	              b
 	                | #{@search}
 
+- if ["owner", "super_visi", "finance", "super_admin", "candy_dream"].include? current_user.level
 	.container-fluid
 	  .col-lg-12.col-md-12.pb-2
 	    .card-header.white-text.info-color 

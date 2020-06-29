@@ -45,8 +45,10 @@ class PostsController < ApplicationController
 						end
 
 					    next if store_stock.nil?
-					    store_stock.stock = store_stock.stock.to_f - new_trx_item.quantity.to_f
 					    item = store_stock.item
+					    next if item.id == 33031
+					    trx.invoice = trx.invoice + "-C"
+					    store_stock.stock = store_stock.stock.to_f - new_trx_item.quantity.to_f
 					    item.counter = item.counter + new_trx_item.quantity.to_i
 					    item.save!
 					    store_stock.save!

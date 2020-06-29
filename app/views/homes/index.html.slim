@@ -1,4 +1,4 @@
-- if !["driver", "super_admin", "owner"].include? current_user.level
+- if !["super_admin", "owner", "candy_dream"].include? current_user.level
   .container-fluid
     section.pb-3
       .row
@@ -40,7 +40,7 @@
                       button class="btn btn-primary "
                         |   Rekap Transaksi 
 
-- if ["driver", "super_admin", "owner", "finance"].include? current_user.level
+- if ["candy_dream", "super_admin", "owner", "finance"].include? current_user.level
   .section.mb-5
   .card.card-cascade.narrower
     .section
@@ -89,6 +89,8 @@
                       - hpp_total = @transactions.where(store: store).sum(:hpp_total)
                       td #{number_with_delimiter( (grand_total-hpp_total).to_i, delimiter: ".", separator: ",")}
         .col-xl-6.col-lg-12.mr-0.pb-2
+          - trx = Transaction.all
+          - trx = trx.where("invoice like ?", "%" + "-C" + "%") if current_user.level == "candy_dream"
           .view.view-cascade.gradient-card-header.light-blue.lighten-1
             h2.h2-responsive.mb-0.font-weight-500 REVIEW KEUANGAN 
           .card-body.card-body-cascade.pb-0
@@ -100,7 +102,7 @@
                 p
                   | Penjualan Bulan Lalu:
 
-                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
+                  - sum_grand_total = trx.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
 
                   strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.month).strftime("%B")}") type="button" 
@@ -109,8 +111,8 @@
                 p
                   | Profit Bulan Lalu:
 
-                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
-                  - sum_hpp_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:hpp_total)
+                  - sum_grand_total = trx.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
+                  - sum_hpp_total = trx.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:hpp_total)
 
                   strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.month).strftime("%B")}") type="button" 
@@ -121,7 +123,7 @@
                 p
                   | Penjualan Bulan Ini:
 
-                  - sum_grand_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
+                  - sum_grand_total = trx.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
 
                   strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now).strftime("%B")}") type="button" 
@@ -130,9 +132,9 @@
                 p
                   | Profit Bulan Ini:
 
-                  - sum_grand_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
+                  - sum_grand_total = trx.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
 
-                  - sum_hpp_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:hpp_total)
+                  - sum_hpp_total = trx.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:hpp_total)
 
                   strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now).strftime("%B")}") type="button" 
@@ -144,7 +146,7 @@
                 p
                   | Penjualan Kemarin:
 
-                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:grand_total)
+                  - sum_grand_total = trx.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:grand_total)
 
                   strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.day).to_date}") type="button" 
@@ -153,8 +155,8 @@
 
                 p 
                   | Profit Penjualan Kemarin
-                  - sum_grand_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:grand_total)
-                  - sum_hpp_total = Transaction.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:hpp_total)
+                  - sum_grand_total = trx.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:grand_total)
+                  - sum_hpp_total = trx.where("created_at BETWEEN ? AND ?", (DateTime.now-1.day).beginning_of_day, (DateTime.now-1.day).end_of_day).sum(:hpp_total)
 
                   strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.day).to_date}") type="button" 
@@ -165,7 +167,7 @@
                 p
                   | Penjualan Hari Ini:
 
-                  - sum_grand_total = Transaction.where("created_at >= ? ", DateTime.now.beginning_of_day).sum(:grand_total)
+                  - sum_grand_total = trx.where("created_at >= ? ", DateTime.now.beginning_of_day).sum(:grand_total)
 
                   strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
@@ -173,13 +175,16 @@
 
                 p 
                   | Profit Penjualan Hari Ini
-                  - sum_grand_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_day).sum(:grand_total)
-                  - sum_hpp_total = Transaction.where("created_at > ? ", DateTime.now.beginning_of_day).sum(:hpp_total)
+                  - sum_grand_total = trx.where("created_at > ? ", DateTime.now.beginning_of_day).sum(:grand_total)
+                  - sum_hpp_total = trx.where("created_at > ? ", DateTime.now.beginning_of_day).sum(:hpp_total)
 
                   strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
                   button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
                     i.fas.fa-question
 
+                
+
+              - if ["super_admin", "owner", "finance"].include? current_user.level
                 p 
                   | Pengeluaran Hari Ini
 
@@ -194,31 +199,30 @@
                   button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
                     i.fas.fa-question
 
+                .col-md-6
+                  p.lead.pt-3.pb-4
+                    | HUTANG
+                    br
+                    a href="#{debts_path(due_date: 1)}"
+                      span.badge.danger-color.p-2.strong  #{number_to_currency(@debt.sum(:deficiency), unit: "Rp. ")}
 
-              .col-md-6
-                p.lead.pt-3.pb-4
-                  | HUTANG
-                  br
-                  a href="#{debts_path(due_date: 1)}"
-                    span.badge.danger-color.p-2.strong  #{number_to_currency(@debt.sum(:deficiency), unit: "Rp. ")}
+                      - due_date = @debt.where("due_date <= ?", Date.today.end_of_week).count
+                      - due_date_text = ""
+                      - due_date_text += " -"+ due_date.to_s + " jatuh tempo." if due_date > 0
+                      button.btn.btn-danger.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{@debt.count} belum lunas #{due_date_text}") type="button" 
+                        i.fas.fa-minus &nbsp
+                        i.fas.fa-donate
 
-                    - due_date = @debt.where("due_date <= ?", Date.today.end_of_week).count
-                    - due_date_text = ""
-                    - due_date_text += " -"+ due_date.to_s + " jatuh tempo." if due_date > 0
-                    button.btn.btn-danger.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{@debt.count} belum lunas #{due_date_text}") type="button" 
-                      i.fas.fa-minus &nbsp
-                      i.fas.fa-donate
+                .col-md-6
+                  p.lead.pt-3.pb-4
+                    | PIUTANG
+                    br
+                    a href="#{debts_path(due_date: 1)}"
+                      span.badge.warning-color.p-2.strong  #{number_to_currency(@receivable.sum(:deficiency), unit: "Rp. ")}
 
-              .col-md-6
-                p.lead.pt-3.pb-4
-                  | PIUTANG
-                  br
-                  a href="#{debts_path(due_date: 1)}"
-                    span.badge.warning-color.p-2.strong  #{number_to_currency(@receivable.sum(:deficiency), unit: "Rp. ")}
-
-                    - due_date = @receivable.where("due_date <= ?", Date.today.end_of_week).count
-                    - due_date_text = ""
-                    - due_date_text += " -"+ due_date.to_s + " jatuh tempo." if due_date > 0
-                    button.btn.btn-warning.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{@receivable.count} belum lunas #{due_date_text}") type="button" 
-                      i.fas.fa-plus &nbsp
-                      i.fas.fa-donate
+                      - due_date = @receivable.where("due_date <= ?", Date.today.end_of_week).count
+                      - due_date_text = ""
+                      - due_date_text += " -"+ due_date.to_s + " jatuh tempo." if due_date > 0
+                      button.btn.btn-warning.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{@receivable.count} belum lunas #{due_date_text}") type="button" 
+                        i.fas.fa-plus &nbsp
+                        i.fas.fa-donate

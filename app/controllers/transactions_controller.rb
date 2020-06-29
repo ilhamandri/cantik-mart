@@ -74,7 +74,8 @@ class TransactionsController < ApplicationController
     start_day = (params[:month] + params[:year]).to_datetime
     end_day = start_day.end_of_month
     @desc = "Rekap bulanan - "+ start_day.month.to_s + "/" + start_day.year.to_s
-    @transaction_datas = Transaction.where("date_created >= ? AND date_created <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
+    trx = Transaction.where("invoice like ?", "%" + "-C" + "%") if current_user.level == "candy_dream"
+    @transaction_datas = trx.where("date_created >= ? AND date_created <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
     render pdf: DateTime.now.to_i.to_s,
       layout: 'pdf_layout.html.erb',
       template: "transactions/print_recap_monthly.html.slim"
@@ -116,6 +117,7 @@ class TransactionsController < ApplicationController
     start_day = (params[:date].to_s + " 00:00:00 +0700").to_time
     end_day = start_day.end_of_day
     @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+    @transactions = @transactions.where("invoice like ?", "%" + "-C" + "%") if current_user.level == "candy_dream"
     @transactions = @transactions.order("created_at DESC")
     @start_day = start_day
     @kriteria = "Rekap Harian - "+Date.today.to_s
@@ -275,7 +277,9 @@ class TransactionsController < ApplicationController
 
   private
     def transactions_profit_graph start_day, end_day
-      transaction_datas = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
+      trx = Transaction.all
+      trx = trx.where("invoice like ?", "%" + "-C" + "%") if current_user.level == "candy_dream"
+      transaction_datas = trx.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
       
       graphs = {}
 
@@ -315,7 +319,8 @@ class TransactionsController < ApplicationController
       if r_type == "html"
         @transactions = @transactions.page param_page if r_type=="html"
       end
-      @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance", "candy_dream"].include? current_user.level
+      @transactions = @transactions.where("invoice like ?", "%" + "-C" + "%") if current_user.level == "candy_dream"
       
       @search = ""
       if params["search"].present?

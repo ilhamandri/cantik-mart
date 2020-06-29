@@ -1,4 +1,4 @@
-- if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
+- if ["owner", "super_visi", "finance", "super_admin", "candy_dream"].include? current_user.level
   br
   .container-fluid
     .row
@@ -27,7 +27,7 @@
                     i.fas.fa-book
                     |   Download Rekap Transaksi
 
-      .col-6.pb-2
+      .col.pb-2
         .card-header.white-text.info-color
             h5.font-weight-500.my-1
               | Rekap Perbulan
@@ -77,8 +77,8 @@
                   button class="btn btn-info "
                     i.fas.fa-book
                     |   Download Rekap Transaksi
-
-      .col-6.pb-2
+- if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
+      .col.pb-2
         .card-header.white-text.info-color
             h5.font-weight-500.my-1
               | Rekap Penjualan Item
