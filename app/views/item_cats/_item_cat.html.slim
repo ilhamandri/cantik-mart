@@ -10,7 +10,7 @@
       label for="name" Jumlah Barang
       - items_count = Item.where(item_cat: @item_cat).count
       input type="text" class="form-control md-form" value="#{items_count}" disabled= "disabled"
-    .form-group
+    / .form-group
       label for="name" Termasuk Dalam Perhitungan Poin
       - if @item_cat.use_in_point
         input type="text" class="form-control md-form" value="Ya" disabled= "disabled"
