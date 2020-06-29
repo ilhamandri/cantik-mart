@@ -74,6 +74,9 @@ class HomesController < ApplicationController
     end_day = start_day.end_of_day
     @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     @transactions = @transactions.order("created_at DESC")
+    
+    @transactions = @transactions.where("invoice like ?", "%" + "-C" + "%") if current_user.level == "candy_dream"
+
     @cashiers = @transactions.pluck(:user_id)
     # RecapMailer.new_recap_email(@transactions, @cashiers).deliver_now
 
