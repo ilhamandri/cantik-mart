@@ -44,8 +44,7 @@ class SalariesController < ApplicationController
     return redirect_back_data_error salaries_path, "Data tidak ditemukan" if user_salary.nil?
     
     tag = user_salary.tag
-
-    return redirect_back_data_error salaries_path, "Data tidak dapat dihapus" if tag == ""
+    # return redirect_back_data_error salaries_path, "Data tidak dapat dihapus" 
     
     cfs = CashFlow.where(tag: tag)
     incomes = cfs.where(finance_type: "Income")
@@ -100,7 +99,7 @@ class SalariesController < ApplicationController
     return redirect_back_data_error new_salary_path, user.name + " tidak memiliki hutang. Silahkan cek kembali" if receivables.sum(:deficiency) == 0 && paid > 0
     
     paid_for_deficiency = paid
-    tag = "SL"+DateTime.now.to_s
+    tag = "SL-"+DateTime.now.to_i
     receivables.each do |receivable|
       curr_receivable_deficiency = receivable.deficiency
       break if paid_for_deficiency == 0
