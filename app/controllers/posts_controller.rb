@@ -22,11 +22,12 @@ class PostsController < ApplicationController
 					trx_data = JSON.parse(data[0])
 					trx_items_datas = JSON.parse(data[1])
 					trx_data.delete("id")
-					check_trx = Transaction.find_by(invoice: trx_data["invoice"])
+					check_trx = Transaction.find_by("invoice like ?", "%" + trx_data["invoice"] + "%")
 					next if check_trx.present?
 					trx = Transaction.create trx_data
 					trx_total_for_point = 0
 					hpp_totals = 0
+					has_coin = false
 					trx_items_datas.each do |trx_item|
 						trx_item.delete("id")
 						trx_item["transaction_id"] = trx.id
@@ -46,8 +47,9 @@ class PostsController < ApplicationController
 
 					    next if store_stock.nil?
 					    item = store_stock.item
-					    next if item.id == 33031
-					    trx.invoice = trx.invoice + "-C"
+					    if item.id == 33031
+					    	has_coin = true
+					    end
 					    store_stock.stock = store_stock.stock.to_f - new_trx_item.quantity.to_f
 					    item.counter = item.counter + new_trx_item.quantity.to_i
 					    item.save!
@@ -55,7 +57,7 @@ class PostsController < ApplicationController
 					end
 
 					trx.hpp_total = hpp_totals
-					
+					trx.invoice = trx.invoice + "-C" if has_coin
 					trx.save!
 
 					voucher = Voucher.find_by(voucher_code: trx.voucher)
