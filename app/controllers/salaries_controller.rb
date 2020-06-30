@@ -45,22 +45,23 @@ class SalariesController < ApplicationController
     
     tag = user_salary.tag
     # return redirect_back_data_error salaries_path, "Data tidak dapat dihapus" 
-    
-    cfs = CashFlow.where(tag: tag)
-    incomes = cfs.where(finance_type: "Income")
-    outcome = cfs.where(finance_type: "Outcome").first
-    incomes.each do |income|
-      nominal = income.nominal
-      receivable = Receivable.find_by(id: income.ref_id)
-      receivable.deficiency = receivable.deficiency + nominal
-      receivable.save!
-      income.destroy
+    if tag.present?
+      cfs = CashFlow.where(tag: tag)
+      incomes = cfs.where(finance_type: "Income")
+      outcome = cfs.where(finance_type: "Outcome").first
+      incomes.each do |income|
+        nominal = income.nominal
+        receivable = Receivable.find_by(id: income.ref_id)
+        receivable.deficiency = receivable.deficiency + nominal
+        receivable.save!
+        income.destroy
+      end
+      store = current_user.store
+      nominal_salary = outcome.nominal
+      store.cash = store.cash + nominal_salary
+      store.save!
+      outcome.destroy
     end
-    store = current_user.store
-    nominal_salary = outcome.nominal
-    store.cash = store.cash + nominal_salary
-    store.save!
-    outcome.destroy
     user_salary.destroy!
     return redirect_success salaries_path, "Data berhasil dihapus"
   
