@@ -41,3 +41,4 @@
             - else
               a href='#{receivable_path(id: finance.id)}' class="btn btn-success"
                 | #{finance.description}
+  = paginate @receivables
