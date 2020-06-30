@@ -42,52 +42,52 @@ class UsersController < ApplicationController
     return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless @user.present?
 
     @salaries = UserSalary.where(user: @user).order("created_at DESC").limit(12)
-    @date = []
-    @work_hours = []
-    @work_hours_morning = []
-    @work_hours_afternoon = []
-    @overtime_hours = []
-    @work_totals = 0
-    @work_morning = 0
-    @work_afternoon = 0
-    @overtime_totals = 0
-    @no_check_out = 0
-    @no_check_out_morning = 0
-    @no_check_out_afternoon = 0
-    @no_check_out_overtime = 0
-    @n_absents = 0
-    @late_morning = []
-    @late_afternoon = []
-    @late_general = []
-    @performance = 0
+    # @date = []
+    # @work_hours = []
+    # @work_hours_morning = []
+    # @work_hours_afternoon = []
+    # @overtime_hours = []
+    # @work_totals = 0
+    # @work_morning = 0
+    # @work_afternoon = 0
+    # @overtime_totals = 0
+    # @no_check_out = 0
+    # @no_check_out_morning = 0
+    # @no_check_out_afternoon = 0
+    # @no_check_out_overtime = 0
+    # @n_absents = 0
+    # @late_morning = []
+    # @late_afternoon = []
+    # @late_general = []
+    # @performance = 0
     
-    absent @user
+    # absent @user
 
-    @receivables = Receivable.where(user: @user, finance_type: "EMPLOYEE")
+    @receivables = Receivable.where(user: @user, finance_type: "EMPLOYEE").order("created_at DESC").page param_page
     
-    # if params[:month].present?
-    #   start_date = ("01-" + params[:month].to_s + "-" + params[:year].to_s).to_time.beginning_of_month
-    #   end_date = start_date.end_of_month
-    #   @receivables = @receivables.where(user: @user).order("check_in ASC").where("check_in >= ? AND check_in <= ?", start_date, end_date)
-    # else
-    #   start_date = DateTime.current.beginning_of_month
-    #   end_date = start_date.end_of_month
-    #   @receivables = @receivables.where(user: @user).order("check_in ASC").where("check_in >= ? AND check_in <= ?", start_date, end_date)
-    # end
+    # # if params[:month].present?
+    # #   start_date = ("01-" + params[:month].to_s + "-" + params[:year].to_s).to_time.beginning_of_month
+    # #   end_date = start_date.end_of_month
+    # #   @receivables = @receivables.where(user: @user).order("check_in ASC").where("check_in >= ? AND check_in <= ?", start_date, end_date)
+    # # else
+    # #   start_date = DateTime.current.beginning_of_month
+    # #   end_date = start_date.end_of_month
+    # #   @receivables = @receivables.where(user: @user).order("check_in ASC").where("check_in >= ? AND check_in <= ?", start_date, end_date)
+    # # end
 
-    @receivable_not_paid = @receivables.where("created_at <= ?", DateTime.now - 6.months)
-    @receivable_now = @receivables.where("created_at >= ?", DateTime.now - 6.months)
+    # @receivable_not_paid = @receivables.where("created_at <= ?", DateTime.now - 6.months)
+    # @receivable_now = @receivables.where("created_at >= ?", DateTime.now - 6.months)
 
-    pinjaman_belum_lunas = @receivables.sum(:deficiency)
-    @limit_pinjaman = 5000000 - pinjaman_belum_lunas
-    @total_pinjaman = pinjaman_belum_lunas
-    @avg_pinjaman = @receivables.average(:nominal).to_i
+    # pinjaman_belum_lunas = @receivables.sum(:deficiency)
+    # @limit_pinjaman = 5000000 - pinjaman_belum_lunas
+    # @total_pinjaman = pinjaman_belum_lunas
+    # @avg_pinjaman = @receivables.average(:nominal).to_i
 
-    n_pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivables.pluck(:id)).count
-    total_n_term = @receivables.sum(:n_term)
-    @avg_pay_complete_pinjaman = total_n_term.to_f / n_pays.to_f
-    @avg_pay_complete_pinjaman = 1 if @avg_pay_complete_pinjaman.nan?
-    @receivables = Receivable.where(user: @user, finance_type: "EMPLOYEE").page param_page
+    # n_pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivables.pluck(:id)).count
+    # total_n_term = @receivables.sum(:n_term)
+    # @avg_pay_complete_pinjaman = total_n_term.to_f / n_pays.to_f
+    # @avg_pay_complete_pinjaman = 1 if @avg_pay_complete_pinjaman.nan?
+    # @receivables = Receivable.where(user: @user, finance_type: "EMPLOYEE").page param_page
 
     # gon.work_hour = @work_hours
     # gon.label_work_hour = @date
