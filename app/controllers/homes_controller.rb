@@ -11,19 +11,6 @@ class HomesController < ApplicationController
     @total_payments = Order.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null').count
     @total_returs = Retur.where(store_id: current_user.store.id).where('date_picked is null').count
     
-    if ["owner","super_admin", "stock_admin", "super_visi"].include? current_user.level
-      item_cats_data = higher_item_cats_graph
-      gon.higher_item_cats_data = item_cats_data.values
-      gon.higher_item_cats_label = item_cats_data.keys
-
-      item_cats_data = lower_item_cats_graph
-      gon.lower_item_cats_data = item_cats_data.values
-      gon.lower_item_cats_label = item_cats_data.keys
-
-      
-      @higher_item = higher_item
-      @lower_item = lower_item
-    end
 
     # PENGELUARAN
     end_day = DateTime.now.end_of_day
@@ -34,39 +21,9 @@ class HomesController < ApplicationController
     
     @total_outcome = @operational + @fix_cost
 
-    # graphs_buy_sell = transactions_profit_graph
-
-    # graphs_buy_sell_val = graphs_buy_sell.values
-    # grand_totals = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse
-    # gon.grand_totals = grand_totals
-
-    # hpp_totals = graphs_buy_sell_val.collect{|ind| ind[1]}.reverse
-    # gon.hpp_totals = hpp_totals
-
-    # profits = graphs_buy_sell_val.collect{|ind| ind[2]}.reverse
-    # gon.profits = profits
-
-    # gon.month = graphs_buy_sell.keys.reverse
-
-    # days
-    # graphs_buy_sell = transactions_profit_graph_days
-
-    # graphs_buy_sell_val = graphs_buy_sell.values
-    # grand_totals = graphs_buy_sell_val.collect{|ind| ind[0]}
-    # gon.grand_totals_days = grand_totals
-
-    # hpp_totals = graphs_buy_sell_val.collect{|ind| ind[1]}
-    # gon.hpp_totals_days = hpp_totals
-
-    # profits = graphs_buy_sell_val.collect{|ind| ind[2]}
-    # gon.profits_days = profits
-
-    # gon.month_days = graphs_buy_sell.keys    
-
-    # popular_item
 
     @debt = Debt.where("deficiency > ?",0)
-    @receivable = Receivable.where("deficiency > ?",0)\
+    @receivable = Receivable.where("deficiency > ?",0)
 
 
 
@@ -75,7 +32,11 @@ class HomesController < ApplicationController
     @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     @transactions = @transactions.order("created_at DESC")
     
-    @transactions = @transactions.where("invoice like ?", "%" + "-C" + "%") if current_user.level == "candy_dream"
+    if current_user.level == "candy_dream"
+      @transactions = @transactions.where("invoice like ?", "%" + "-C" + "%") 
+    else
+      @transactions = @transactions.where.not("invoice like ?", "%" + "-C" + "%") 
+    end
 
     @cashiers = @transactions.pluck(:user_id)
     # RecapMailer.new_recap_email(@transactions, @cashiers).deliver_now
@@ -108,102 +69,4 @@ class HomesController < ApplicationController
     end
     redirect_success populars_path, "Refresh rekap item selesai."
   end
-
-  private
-    def transactions_profit_graph
-      transactions = Transaction.where("created_at >= ?", DateTime.now.beginning_of_year-13.months).order("created_at ASC")
-      if !["owner", "super_admin"].include? current_user.level
-        transactions = transactions.where(store: current_user.store)
-      end
-
-      transaction_datas = transactions.group_by{ |m| m.created_at.beginning_of_month}
-
-      graphs_buy_sell = {}
-
-      13.times do |i|
-        date = Date.today - i.month
-        month = date.strftime("%B %Y")
-        graphs_buy_sell[month] = [0,0,0]
-      end
-
-      transaction_datas.each do |trxs|
-        grand_total = 0
-        hpp_total = 0
-        month = trxs.first.to_date.strftime("%B %Y")
-        trxs[1].each do |trx|
-          grand_total += trx.grand_total
-          hpp_total += trx.hpp_total
-        end
-
-        profit = grand_total - hpp_total
-        graphs_buy_sell[month] = [grand_total, hpp_total, profit]
-      end
-
-      return graphs_buy_sell
-    end
-
-    def transactions_profit_graph_days
-      transactions = Transaction.where("created_at >= ?", DateTime.now.beginning_of_year-13.months).order("created_at ASC")
-      if !["visitor", "owner", "super_admin", "driver"].include? current_user.level
-        transactions = transactions.where(store: current_user.store)
-      end
-
-      transaction_datas = transactions.group_by{ |m| m.created_at.beginning_of_day}
-
-      graphs_buy_sell = {}
-
-      transaction_datas.each do |trxs|
-        grand_total = 0
-        hpp_total = 0
-        d = trxs.first.to_date.strftime("%d %B %Y")
-        trxs[1].each do |trx|
-          grand_total += trx.grand_total
-          hpp_total += trx.hpp_total
-        end
-
-        profit = grand_total - hpp_total
-        graphs_buy_sell[d] = [grand_total, hpp_total, profit]
-      end
-
-      return graphs_buy_sell
-    end
-
-    def higher_item
-      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell DESC").limit(20).pluck(:item_id, :n_sell)
-      return Hash[item_sells]
-    end
-
-    def lower_item
-      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell ASC").limit(20).pluck(:item_id, :n_sell)
-      return Hash[item_sells]
-    end
-
-    def higher_item_cats_graph
-      item_cats = {}
-      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell DESC").limit(100).pluck(:item_id, :n_sell)
-      item_sells.each do |item_sell|
-        item_id = item_sell[0]
-        sell_qty = item_sell[1]
-        item_cat_name = Item.find(item_id).item_cat.name
-        item_cats[item_cat_name] = sell_qty
-      end
-      sort_results = Hash[item_cats.sort_by{|k, v| v}.reverse]
-      results = sort_results.first(10)
-      return Hash[results]
-    end
-
-    def lower_item_cats_graph
-      item_cats = {}
-      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell ASC").limit(100).pluck(:item_id, :n_sell)
-      item_sells.each do |item_sell|
-        item_id = item_sell[0]
-        sell_qty = item_sell[1]
-        item_cat_name = Item.find(item_id).item_cat.name
-        item_cats[item_cat_name] = sell_qty
-      end
-      sort_results = Hash[item_cats.sort_by{|k, v| v}.reverse]
-      results = sort_results.first(10)
-      return Hash[results]
-    end
-
 end

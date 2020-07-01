@@ -1,0 +1,52 @@
+- trx_items = TransactionItem.where(item_id: 30331).where("created_at > ? ", DateTime.now.beginning_of_month)
+- sell = trx_items.sum(:quantity).to_i
+.col-4.pb-2
+	.row
+		.col-12.pb-2
+		  .card.bg-success.text-white
+		    .card-body.text-white
+		      h5.card-title
+		        | <i class="fa fa-cart-plus"></i>&nbsp&nbsp
+		        | KOIN TERJUAL
+		      p.card-text.text-white
+		        | #{number_with_delimiter(sell, delimiter: ".")}
+
+		.col-12.pb-2
+		  .card.bg-warning.text-black
+		    .card-body.text-black
+		      h5.card-title
+		        | <i class="fa fa-cart-arrow-down"></i>&nbsp&nbsp
+		        | SISA KOIN
+		      p.card-text.text-black
+		        | #{number_with_delimiter(4000 - sell, delimiter: ".")}
+- total = sell * trx_items.first.item.sell
+.col.pb-2
+  .card.bg-primary
+    .card-body.text-white
+      h5.card-title
+        | <i class="fa fa-handshake"></i>&nbsp&nbsp
+        | PENJUALAN
+      .row
+      	.col-6
+	      p.card-text.text-white.text-right style="font-size: 20px;"
+	      	| Total Keseluruhan
+      	.col-6
+	      p.card-text.text-white.text-right style="font-size: 20px;"
+	        | #{number_with_delimiter(total, delimiter: ".")}
+
+	    .col-12
+	    	hr
+      	.col-6
+	      p.card-text.text-white.text-right style="font-size: 20px;"
+	      	| Cantik Mart ( 30% )
+      	.col-6
+	      p.card-text.text-white.text-right style="font-size: 20px;"
+	        | #{number_with_delimiter(total * 30 / 100, delimiter: ".")}
+
+
+      	.col-6
+	      p.card-text.text-white.text-right style="font-size: 20px;"
+	      	| Candy Dream ( 70% )
+      	.col-6
+	      p.card-text.text-white.text-right style="font-size: 20px;"
+	        | #{number_with_delimiter(total * 70 / 100, delimiter: ".")}
