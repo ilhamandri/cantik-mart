@@ -46,7 +46,7 @@ class PostsController < ApplicationController
 						end
 
 					    next if store_stock.nil?
-					    item = store_stock.item
+					    item = new_trx_item.item
 					    if item.id == 33031
 					    	has_coin = true
 					    end
