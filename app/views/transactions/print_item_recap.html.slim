@@ -28,6 +28,7 @@ br
   br
   h3
     | #{supplier_name}
+  - omzets = 0
   table#items
     tr style="font-weight: bold"
       td Kode
@@ -46,13 +47,16 @@ br
       - items += sell_qty
       - item =  Item.find_by(id: item_id)
       - if item.present?
-        tr
-          td #{item.code}
-          td #{item.name}
-          - if item.local_item
-            td LOCAL
-          - else
-            td PUSAT
+        tr style="text-align: right;"
+          td style="text-align: left;"
+            | #{item.code}
+          td style="text-align: left;"
+            | #{item.name}
+          td style="text-align: center;"
+            - if item.local_item
+              | LOCAL
+            - else
+              | PUSAT
           td #{item.margin}
           td #{number_with_delimiter( item.buy.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter( item.sell.to_i, delimiter: ".", separator: ",")}
@@ -60,13 +64,16 @@ br
           - profits += profit
           td #{number_with_delimiter( (item.sell - item.buy).to_i, delimiter: ".", separator: ",")}
           td #{sell_qty}
-          td #{number_with_delimiter( (item.sell * sell_qty).to_i, delimiter: ".", separator: ",")}
+          - omzet = item.sell * sell_qty
+          - omzets += omzet
+          td #{number_with_delimiter( omzet.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter( profit.to_i, delimiter: ".", separator: ",")}
 
     tr style="font-weight: bold; text-align: right;"
       td colspan=7
         | TOTAL
       td #{items}
+      td #{number_with_delimiter( omzets.to_i, delimiter: ".", separator: ",")}
       td #{number_with_delimiter( profits.to_i, delimiter: ".", separator: ",")}
     break
 br

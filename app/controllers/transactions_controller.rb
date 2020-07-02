@@ -141,7 +141,7 @@ class TransactionsController < ApplicationController
   def daily_recap_item
     start_day = params[:date].to_time
     end_day = start_day.end_of_day
-    @transaction_items = TransactionItem.where("created_at >= ? AND created_at <= ?", start_day, end_day).group(:item_id).count
+    @transaction_items = TransactionItem.where("created_at >= ? AND created_at <= ?", start_day, end_day).group(:item_id).sum(:quantity)
     @transaction_items = @transaction_items.sort_by(&:last).reverse
     @item_cats = {}
     @transaction_items.each do |trx_item|
