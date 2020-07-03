@@ -89,7 +89,6 @@ class TransactionsController < ApplicationController
 
 
   def daily_recap
-    curr_date = DateTime.now
     end_day = (params[:date].to_s + " 00:00:00 +0700").to_time.end_of_day
     start_day = end_day.beginning_of_day
     @end = end_day
@@ -100,9 +99,9 @@ class TransactionsController < ApplicationController
     cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     trx = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     if current_user.level == "candy_dream"
-      trx = Transaction.where("invoice like ?", "%" + "-C" + "%") 
+      trx = trx.where("invoice like ?", "%" + "-C" + "%") 
     else
-      trx = Transaction.where.not("invoice like ?", "%" + "-C" + "%") 
+      trx = trx.where.not("invoice like ?", "%" + "-C" + "%") 
     end
     
     grand_total_plered = trx.where(store: plered).sum(:grand_total)
@@ -123,7 +122,6 @@ class TransactionsController < ApplicationController
     @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
     
     @total_outcome = @operational + @fix_cost
-
 
     start_day = (params[:date].to_s + " 00:00:00 +0700").to_time
     end_day = start_day.end_of_day
