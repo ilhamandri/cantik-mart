@@ -1,14 +1,7 @@
 .row
   .col.text-left
     h5
-      | Daftar Transaksi #{@member_name} #{@from}
-
-  - if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
-    .col.text-right
-      a href="#{new_transaction_path}"
-        button.btn.btn-primary type="button" 
-          i.fas.fa-plus 
-          |   Buat Transaksi
+      | Daftar Transaksi
 
 - if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
   br

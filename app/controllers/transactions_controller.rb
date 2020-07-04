@@ -16,6 +16,14 @@ class TransactionsController < ApplicationController
       @member_name = " - "+@member.name
       @transactions = @transactions.where(member_card: params[:member_card])
     end
+
+    inv = TransactionItem.invoice
+    transactions.each do |trx_item|
+    
+    if inv.include? "c"
+         
+    end
+    
     
     respond_to do |format|
       format.html
