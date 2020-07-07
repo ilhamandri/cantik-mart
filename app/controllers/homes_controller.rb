@@ -33,9 +33,9 @@ class HomesController < ApplicationController
     @transactions = @transactions.order("created_at DESC")
     
     if current_user.level == "candy_dream"
-      @transactions = @transactions.where("invoice like ?", "%" + "-C" + "%") 
+      @transactions = @transactions.where(has_coin: true) 
     else
-      @transactions = @transactions.where.not("invoice like ?", "%" + "-C" + "%") 
+      @transactions = @transactions.where(has_coin: false)
     end
 
     @cashiers = @transactions.pluck(:user_id)

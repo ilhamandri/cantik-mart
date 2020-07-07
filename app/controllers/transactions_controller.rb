@@ -76,9 +76,9 @@ class TransactionsController < ApplicationController
     @desc = "Rekap bulanan - "+ start_day.month.to_s + "/" + start_day.year.to_s
     trx = nil
     if current_user.level == "candy_dream"
-      trx = Transaction.where("invoice like ?", "%" + "-C" + "%") 
+      trx = Transaction.where(has_coin: true) 
     else
-      trx = Transaction.where.not("invoice like ?", "%" + "-C" + "%") 
+      trx = Transaction.where(has_coin: false) 
     end
     @month = start_day.month
     @transaction_datas = trx.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
@@ -99,9 +99,9 @@ class TransactionsController < ApplicationController
     cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     trx = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     if current_user.level == "candy_dream"
-      trx = trx.where("invoice like ?", "%" + "-C" + "%") 
+      trx = trx.where(has_coin: true) 
     else
-      trx = trx.where.not("invoice like ?", "%" + "-C" + "%") 
+      trx = trx.where(has_coin: false) 
     end
     
     grand_total_plered = trx.where(store: plered).sum(:grand_total)
@@ -126,7 +126,7 @@ class TransactionsController < ApplicationController
     start_day = (params[:date].to_s + " 00:00:00 +0700").to_time
     end_day = start_day.end_of_day
     @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
-    @transactions = @transactions.where("invoice like ?", "%" + "-C" + "%") if current_user.level == "candy_dream"
+    @transactions = @transactions.where(has_coin: true) if current_user.level == "candy_dream"
     @transactions = @transactions.order("created_at DESC")
     @start_day = start_day
     @kriteria = "Rekap Harian - "+Date.today.to_s
@@ -288,9 +288,9 @@ class TransactionsController < ApplicationController
     def transactions_profit_graph start_day, end_day
       trx = nil
       if current_user.level == "candy_dream"
-        trx = Transaction.where("invoice like ?", "%" + "-C" + "%") 
+        trx = Transaction.where(has_coin: true) 
       else
-        trx = Transaction.where.not("invoice like ?", "%" + "-C" + "%") 
+        trx = Transaction.where(has_coin: false) 
       end
       transaction_datas = trx.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
       
@@ -323,9 +323,9 @@ class TransactionsController < ApplicationController
       results = []
       trx = nil
       if current_user.level == "candy_dream"
-        trx = Transaction.where("invoice like ?", "%" + "-C" + "%") 
+        trx = Transaction.where(has_coin: true) 
       else
-        trx = Transaction.where.not("invoice like ?", "%" + "-C" + "%") 
+        trx = Transaction.where(has_coin: false) 
       end
       @transactions = trx.order("created_at DESC")
       if params[:from].present?
@@ -339,7 +339,7 @@ class TransactionsController < ApplicationController
         @transactions = @transactions.page param_page if r_type=="html"
       end
       @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance", "candy_dream"].include? current_user.level
-      @transactions = @transactions.where("invoice like ?", "%" + "-C" + "%") if current_user.level == "candy_dream"
+      @transactions = @transactions.where(has_coin: true) if current_user.level == "candy_dream"
       
       @search = ""
       if params["search"].present?
