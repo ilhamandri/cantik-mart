@@ -127,7 +127,7 @@ class TransactionsController < ApplicationController
     end_day = start_day.end_of_day
     @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     @transactions = @transactions.where(has_coin: true) if current_user.level == "candy_dream"
-    @transactions = @transactions.order("created_at DESC")
+
     @start_day = start_day
     @kriteria = "Rekap Harian - "+Date.today.to_s
     @cashiers = @transactions.pluck(:user_id)

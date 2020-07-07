@@ -68,7 +68,7 @@ br
     - trx_last_timestamp = trx.created_at if trx.present?
     h3
       | #{store.name.upcase} ( #{trx_last_timestamp} )
-      
+
     table#items
       tr colspan="5"
       - total_coins = 0
@@ -79,6 +79,7 @@ br
         th Total
       - @cashiers.uniq.each do |cashier_id|
         - cashier = User.find_by(id: cashier_id)
+        - next if cashier.store.id != store.id
         - trxs =  @transactions.where(user: cashier)
         tr
           td #{cashier.name.upcase}
