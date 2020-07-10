@@ -1,0 +1,22 @@
+.card-body
+  .row
+    .col-12.text-center
+    	table class="table"
+          thead
+            th Karyawan
+            th Toko
+            th Bulan / Tahun
+            th Gaji
+            th Bonus
+            th Kasbon
+            th Hutang
+          tbody
+          	- @salaries.each do |salary|
+          		tr 
+					td #{salary.user.name}
+					td #{salary.user.store.name}
+					td #{salary.created_at.month} / #{salary.created_at.year}
+					td #{number_with_delimiter(salary.nominal, delimiter: ".")}
+					td #{number_with_delimiter(salary.bonus, delimiter: ".")}
+					td #{number_with_delimiter(salary.pay_kasbon, delimiter: ".")}
+					td #{number_with_delimiter(salary.pay_receivable, delimiter: ".")}

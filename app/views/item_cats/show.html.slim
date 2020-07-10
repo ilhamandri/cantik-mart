@@ -1,30 +1,23 @@
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Sub Departemen - #{@item_cat.name}
-      .card-body 
-        = form_for :item_cat, url: "" do |form|
-          .form-group
-            label for="name" Departemen
-            input type="text" class="form-control md-form" value="#{@item_cat.department.name}" disabled="disabled"
-    		  .form-group
-    		    label for="name" Sub Departemen
-    		    = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
-          .form-group
-            label for="name" Jumlah Barang
-            - items_count = Item.where(item_cat: @item_cat).count
-            input type="text" class="form-control md-form" value="#{items_count}" disabled= "disabled"
-          .form-group
-            label for="name" Termasuk Dalam Perhitungan Poin
-            - if @item_cat.use_in_point
-              input type="text" class="form-control md-form" value="Ya" disabled= "disabled"
-            - else
-              input type="text" class="form-control md-form" value="Tidak" disabled= "disabled"
-      - if Controller.find_by(name: 'item_cats').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
-        .col-12.text-center
-          a href='#{edit_item_cat_path(id: @item_cat.id)}'
-            button.btn.btn-warning type="button" 
-              | Ubah Sub Departemen
-      br
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="item_cat" aria-selected="true" data-toggle="tab" href="#item_cat" role="tab" 
+        i.fa.fa-info.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Info
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="items" aria-selected="true" data-toggle="tab" href="#items" role="tab" 
+        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Item
+
+  #myClassicTabContentOrange.tab-content.card
+    #item_cat.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'item_cat'
+
+    #items.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'items'
+
+      
+
+      

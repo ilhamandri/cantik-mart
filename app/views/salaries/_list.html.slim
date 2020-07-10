@@ -3,3 +3,8 @@ tr
 	td #{salary.user.store.name}
 	td #{salary.created_at.month} / #{salary.created_at.year}
 	td #{number_with_delimiter(salary.nominal, delimiter: ".")}
+	td #{number_with_delimiter(salary.bonus, delimiter: ".")}
+	td #{number_with_delimiter(salary.pay_kasbon, delimiter: ".")}
+	td #{number_with_delimiter(salary.pay_receivable, delimiter: ".")}
+	td
+		= link_to "HAPUS", delete_salary_path(salary), method: :delete, data: { confirm: 'Are you certain you want to delete this?' }, class: "btn btn-danger"

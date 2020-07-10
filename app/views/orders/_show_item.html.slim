@@ -1,0 +1,54 @@
+- order = @order_items.first.order
+- order_id = order.id
+- @idx = 1
+.card-body.table-responsive.text-nowrap
+  table class="table"
+    thead
+      th No
+      th Kode
+      / th Foto
+      th Nama
+      th Jumlah
+      th Terima
+      th Harga / Item
+      th Diskon
+      th.text-right Total
+    tbody
+      = render partial: 'list_show', collection: @order_items, as: :order_item
+    tfoot.text-right.text-danger
+      tr
+        td
+        td
+        td
+        td
+        td
+        td.font-weight-bold SUB TOTAL
+        td
+        td.font-weight-bold #{number_with_delimiter(order.total, separator: ",", delimiter: ".")}
+      tr
+        td
+        td
+        td
+        td
+        td
+        td.font-weight-bold DISKON (#{order.discount_percentage}% )
+        td
+        td.font-weight-bold #{number_with_delimiter(order.discount, separator: ",", delimiter: ".")}
+      tr
+        td
+        td
+        td
+        td
+        td
+        td.font-weight-bold PPN (#{@order_items.first.ppn}% )
+        td
+        td.font-weight-bold #{number_with_delimiter(@order_items.first.ppn * (order.total - order.discount) / 100, separator: ",", delimiter: ".")}
+      tr
+        td
+        td
+        td
+        td
+        td
+        td.font-weight-bold TOTAL
+        td
+        td.font-weight-bold #{number_with_delimiter(order.grand_total, separator: ",", delimiter: ".")}

@@ -1,15 +1,24 @@
+cantikgroup
+-
+-
+
 sudo apt install php libapache2-mod-php
 sudo systemctl restart apache2
+sudo service apache2 stop
 
-ssh root@193.168.195.145 -p 22
-ssh root@45.13.132.52 -p 22
+cantikmart.com -> ssh root@193.168.195.145 -p 22
+tbjayaabadi.com -> ssh root@45.13.132.52 -p 22
 tmux attach -t 0
 
-tmux new -s 0
+cantikmart.com -> tmux new -s 0
+cantikjelita.com -> tmux new -s 1
+
 rails s -p 80 -e production
 
 rm -rf cantik-mart
 git clone https://github.com/ilhamandri/cantik-mart.git
+
+bundle install
 yarn install
 rm -rf config/credentials.yml.enc
 rm -rf config/master.key

@@ -1,0 +1,40 @@
+.card-body
+  = form_for :order, url: order_recap_path, method: 'POST' do |form|
+    .row
+      .col-12
+        .row
+          .col-6
+            .row
+              .col-12
+                label Pengelompokan Berdasarkan
+              .col-12
+                select class="mdb-select md-form" id="months" name="grouped_by"
+                  option value="supplier"
+                    | Supplier
+                  option value="item"
+                    | Item
+                  option value="payment"
+                    | Jenis Pembayaran
+          .col-6
+            .row
+              .col-12
+                label Toko
+              .col-12
+                select class="mdb-select md-form" id="store_id" name="store_id"
+                  option value="0"
+                    | Semua Toko
+                  - Store.all.each do |store|
+                    option value="#{store.id}"
+                      | #{store.name}
+      .col-12
+        label Rentang Tanggal
+      .col-12
+        .row
+          .col-6
+            input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date_start" required=true
+          .col-6
+            input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date_end" required=true
+      .col-md-12.text-center
+        button class="btn btn-info "
+          i.fas.fa-book
+          |  Download Rekap Pembelian 

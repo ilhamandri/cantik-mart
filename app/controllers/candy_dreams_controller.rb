@@ -2,8 +2,7 @@ class CandyDreamsController < ApplicationController
   before_action :require_login
 
   def index
-    @search = "c"
-    @transactions  = Transaction.where("lower(invoice) like ?",  "%#{@search}%").order('created_at DESC').page param_page
+    @transactions  = Transaction.where("lower(invoice) like ?",  "C").order('created_at DESC').page param_page
   end
 
   def show

@@ -41,6 +41,32 @@ class SuppliersController < ApplicationController
     id = Supplier.first.id if params[:id] == "0"
     @supplier = Supplier.find_by_id id
     return redirect_back_data_error suppliers_path, "Data Supplier Tidak Ditemukan" unless @supplier.present?
+    
+    respond_to do |format|
+      format.html
+        @orders = Order.where(supplier: @supplier).order("created_at DESC")
+        @order_items = OrderItem.where(order: @orders.pluck(:id)).page param_item_page
+        @datas = @order_items.select(:item_id, :quantity).group(:item_id).sum(:quantity).sort_by(&:last).reverse
+        @orders = @orders.page param_order_page
+        @supplier_items = SupplierItem.where(supplier: @supplier).page param_item_page
+        @debts = Debt.where(finance_type: Debt::ORDER, supplier: @supplier).where("deficiency > 0")
+        @total_debt = @debts.sum(:deficiency)
+        @receivables = Receivable.where(finance_type: Receivable::RETUR, to_user: @supplier.id).where("deficiency > 0")
+        @total_receivable = @receivables.sum(:deficiency)
+
+      format.pdf do
+        @order_items = OrderItem.where(order: Order.where(supplier: @supplier).pluck(:id)).select(:item_id, :quantity)
+        @inventories = @order_items.group(:item_id).sum(:quantity)
+        @inventories = @inventories.sort_by(&:last).reverse
+        render pdf: DateTime.now.to_i.to_s,
+          layout: 'pdf_layout.html.erb',
+          template: "suppliers/print_supplier_items.html.slim"
+      end
+    end
+    
+  end
+
+  def print_debt_receive
     respond_to do |format|
       format.html
       format.pdf do
@@ -53,7 +79,6 @@ class SuppliersController < ApplicationController
           template: "suppliers/print.html.slim"
       end
     end
-    
   end
 
   def new
@@ -109,6 +134,14 @@ class SuppliersController < ApplicationController
 
     def param_page
       params[:page]
+    end
+
+    def param_item_page
+      params[:item_page]
+    end
+
+    def param_order_page
+      params[:order_page]
     end
 
 end

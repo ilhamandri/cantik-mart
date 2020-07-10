@@ -87,6 +87,8 @@ class ComplainsController < ApplicationController
       end
       new_stock = store_stock.stock + retur - replace
       store_stock.stock = new_stock
+      item.counter += retur - replace
+      item.save!
       store_stock.save!
       trx_item.save!
       items_retur_total += retur

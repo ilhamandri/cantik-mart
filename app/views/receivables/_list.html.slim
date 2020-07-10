@@ -1,4 +1,10 @@
-tr
+- show = true
+- if finance.finance_type == "EMPLOYEE"
+  - if !["owner", "super_admin"].include? current_user.level
+    - show = false
+
+- if show 
+  tr
     td #{finance.finance_type}
     td #{finance.user.name} (#{finance.store.name})
    	- if finance.finance_type == "RETUR"

@@ -1,0 +1,30 @@
+1. Di App/services/SyncData.rb
+	- Taruh di bagian private 
+	- Kode
+		def check_duplicate
+		    duplicate_trxs = Transaction.select(:invoice).group(:invoice).having("count(*) > 1").size
+		    duplicate_trxs.each do |trx_data|
+		      trx = Transaction.find_by(invoice: trx_data[0])
+		      store = trx.store
+		      if trx.transaction_items.present?
+		        trx.transaction_items.destroy_all
+		      end
+		      trx.destroy
+		    end
+		 end
+	- Panggil method check_duplicate di sync_now
+
+2. Migrate Baru
+	- rails g migration AddColumnCounterItem
+	- Kode
+		...
+			def change
+			  	add_column :items, :counter, :bigint, default: 0
+			end
+		...
+	- rails db:migrate
+
+3. Mundurin waktu sync
+	- rails c 
+	- Store.update_all(last_post: DateTime.now-3.days, last_update: DateTime.now-3.days)
+	- SyncData.sync_now

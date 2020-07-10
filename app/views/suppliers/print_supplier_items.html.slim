@@ -1,0 +1,35 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Data Barang 
+      td
+        textarea PER SUPLIER
+    tr
+      td.meta-head Suplier
+      td
+        b  
+          | #{@supplier.name}
+
+
+table#items
+  tr colspan="5"
+
+
+  tr
+    th Kode
+    th Nama
+    th Departemen
+    th Sub Departemen
+    th Jumlah Barang Order
+
+  - @inventories.each do |order_item|
+      - item = Item.find_by_id(order_item[0])
+      - order_qty = order_item[1]
+      tr
+        td #{item.code}
+        td #{item.name}
+        td #{item.item_cat.department.name}
+        td #{item.item_cat.name}
+        td.text-center #{number_with_delimiter(order_qty.to_i, delimiter: ".")}
+
+   

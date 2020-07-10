@@ -34,6 +34,7 @@ class ItemCatsController < ApplicationController
     return redirect_back_data_error departments_path, "ID Departemen Tidak Ditemukan" unless params[:id].present?
     @item_cat = ItemCat.find_by_id params[:id]
     return redirect_back_data_error departments_path, "Data Kategori Item Tidak Ditemukan" unless @item_cat.present?
+    @items = Item.where(item_cat: @item_cat).page param_page
   end
 
   def new

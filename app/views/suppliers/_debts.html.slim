@@ -1,0 +1,39 @@
+.card-body
+	.col-12
+		h3
+			| Daftar Hutang
+	.col-12
+	  	table class="table"
+		    thead
+		      	th Invoice
+		      	th Jatuh Tempo
+		      	th Kekurangan
+		      	th Aksi
+		    tbody
+		    	- @debts.each do |debt|	
+		    		tr 
+		    			td #{debt.description}
+		    			td #{debt.due_date.to_date.strftime("%d-%m-%Y")}
+		    			td #{number_with_delimiter(debt.deficiency.to_i, delimiter: ".", separator: ",")}
+		    			td
+				    		a href='#{order_path(id: debt.ref_id)}' class="text-primary"
+        		  				| Detil
+
+.card-body
+	.col-12
+		h3
+			| Daftar Piutang
+	.col-12
+	  	table class="table"
+		    thead
+		      th Invoice
+		      th Kekurangan
+		      th Aksi
+		    tbody
+		    	- @receivables.each do |receivable|
+		    		tr
+		    			td #{receivable.description}
+		    			td #{number_with_delimiter(receivable.deficiency.to_i, delimiter: ".", separator: ",")}
+		    			td 
+		    				a href='#{receivable.ref_id}' class="text-primary"
+        		  				| Detil

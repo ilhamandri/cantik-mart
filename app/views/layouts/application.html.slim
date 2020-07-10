@@ -63,6 +63,7 @@ html
     = javascript_include_tag '/dist/js/bootstrap.min.js'
     = javascript_include_tag '/dist/js/mdb.min.js'
     = javascript_include_tag '/dist/js/application'
+    = javascript_include_tag "https://use.fontawesome.com/aa85c1019a.js"
     = javascript_include_tag "https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"
 
     - if flash.present?
@@ -70,11 +71,11 @@ html
         javascript:
           toastr.#{key}('#{value}');
 
-    - if ["homes"].include? controller_name
+    - if ["populars"].include? controller_name
       javascript:
         var ctxP = document.getElementById("higher_sales").getContext('2d');
         var myPieChart = new Chart(ctxP, {
-          type: 'doughnut',
+          type: 'horizontalBar',
           data: {
             labels: gon.higher_item_cats_label,
             datasets: [{
@@ -91,7 +92,7 @@ html
 
         var ctxP = document.getElementById("lower_sales").getContext('2d');
         var myPieChart = new Chart(ctxP, {
-          type: 'doughnut',
+          type: 'horizontalBar',
           data: {
             labels: gon.lower_item_cats_label,
             datasets: [{
@@ -204,7 +205,7 @@ html
 
     - if ["items"].include? controller_name
       javascript:
-        var ctxL = document.getElementById("buy_sell").getContext('2d');
+        var ctxL = document.getElementById("bs").getContext('2d');
         var myLineChart = new Chart(ctxL, {
           type: 'line',
           data: {
@@ -229,6 +230,31 @@ html
                 ],
                 borderColor: [
                 'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 2
+              }
+
+            ]
+          },
+          options: {
+            responsive: true
+          }
+        });
+
+        var ctxL = document.getElementById("loss_canvas").getContext('2d');
+        var myLineChart = new Chart(ctxL, {
+          type: 'line',
+          data: {
+            labels: gon.month,
+            datasets: [
+              {
+                label: "Loss",
+                data: gon.loss_vals,
+                backgroundColor: [
+                'rgba(255, 206, 86, 0.1)',
+                ],
+                borderColor: [
+                'rgba(255, 206, 86, 1)',
                 ],
                 borderWidth: 2
               }
@@ -276,7 +302,7 @@ html
           }
         });
 
-    - if ["absents"].include? controller_name
+    - if ["users", "absents"].include? controller_name
       javascript:
         var ctxL = document.getElementById("workhour").getContext('2d');
         var myLineChart = new Chart(ctxL, {

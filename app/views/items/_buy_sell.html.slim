@@ -1,0 +1,26 @@
+.col-xl-12.col-lg-12.col-md-12.pb-2
+	h2 style="font-weight: bold"
+		- if @item.counter >= 5
+			.text-success
+				| FAST MOVING
+		- elsif @item.counter <= -5
+			.text-danger
+				| SLOW MOVING 
+		- else
+			.text-primary
+				| NORMAL
+			
+.col-xl-12.col-lg-12.col-md-12.pb-2
+	.card-body.table-responsive.text-nowrap
+      canvas id="bs" 
+
+  	table.table
+    	tr
+      		th Bulan
+      		th Pembelian
+      		th Penjualan
+	    - @buy_sell.each do|buy_sell|
+	      	tr
+	        	td #{buy_sell[0]}
+	        	td #{buy_sell[1][0]}
+	        	td #{buy_sell[1][1]}

@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   put 'order/:id/edit/receive', to: 'orders#edit_receive', as: 'edit_order_receive'
   get 'order/:id/pay', to: 'orders#pay', as: 'order_pay'
   post 'order/:id/pay', to: 'orders#paid', as: 'order_paid'
+  post 'order/recap', to: 'orders#recap', as: 'order_recap'
 
   get '/retur/:id/picked', to: 'returs#picked', as: 'retur_picked'
   get '/retur/:id/feedback', to: 'retur_items#feedback', as: 'retur_feedback'
@@ -50,6 +51,7 @@ Rails.application.routes.draw do
   get '/refresh/balance', to: 'balances#refresh'
   get '/transaction/daily/recap', to: 'transactions#daily_recap', as: "daily_trx_recap"
   get '/transaction/daily/recap_item', to: 'transactions#daily_recap_item', as: "daily_trx_item_recap"
+  get '/transaction/monthly/recap', to: 'transactions#monthly_recap', as: "monthly_trx_recap"
   
   get '/download/:type', to: 'downloads#serve_file', as: "download"
   get '/file/download', to: 'downloads#get_file', as: "download_file"
@@ -65,23 +67,27 @@ Rails.application.routes.draw do
   post '/bs/receive', to: 'send_backs#received', as: 'send_back_received'
 
 
-  post 'opname_day', to: 'warning_items#opname_day', as: 'opname_day'
-  get 'opname', to: 'warning_items#opname', as: 'opname_form'
-  post 'opname', to: 'warning_items#update_stock', as: 'opname'
+  post '/opname_day', to: 'warning_items#opname_day', as: 'opname_day'
+  get '/opname', to: 'warning_items#opname', as: 'opname_form'
+  post '/opname', to: 'warning_items#update_stock', as: 'opname'
   
   get '/clean/prints', to: 'prints#clean', as: "clean_prints"
-
-  get 'popular/items/refresh', to: 'homes#popular_items', as: 'refresh_popular_items'
-  get 'popular/items/departments', to: 'departments#popular_items', as: 'departments_popular_items'
-
+  get '/print/salary', to: 'salaries#print_salary', as:"print_salary"
+  get '/popular/items/refresh', to: 'homes#popular_items', as: 'refresh_popular_items'
+  get '/popular/items/departments', to: 'departments#popular_items', as: 'departments_popular_items'
   get '/refresh/predict/item/:id', to: 'items#refresh_predict', as: 'refresh_predict_item'
   get '/predict/item/:id', to: 'items#predict', as: 'predict_item'
 
   get '/recap/item/:id', to: 'items#recap_item', as: 'recap_item'
 
+  get '/salary/:id/delete', to: 'salaries#delete_salary', as: 'delete_salary'
+
+  get '/print/suppliers', to: 'suppliers#print_debt_receive', as: 'print_debt_receive'
   resources :discounts
   resources :pays, only: %i[new create]
-
+  resources :populars
+  resources :result_items
+  resources :opnames
   resources :balances
   resources :promotions
   resources :prints
@@ -104,8 +110,6 @@ Rails.application.routes.draw do
   resources :stores
 
   resources :suppliers
-  resources :supplier_items
-  resources :item_suppliers, only: %i[index show]
 
   resources :members
 

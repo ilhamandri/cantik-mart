@@ -17,6 +17,7 @@ class ActivitiesController < ApplicationController
 		# 	trx.destroy
 		# end
 		@models = PublicActivity::Activity.pluck(:trackable_type)
+	  	@models = @models.uniq
 	  	@activities = PublicActivity::Activity.order("created_at desc").page param_page
 		@search_text = ""
 		@date_search = nil

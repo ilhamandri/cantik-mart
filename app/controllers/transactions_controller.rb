@@ -6,6 +6,7 @@ class TransactionsController < ApplicationController
   @@point = 10000
 
   def index
+    check_duplicate
     filter = filter_search params, "html"
     @search = "Rekap transaksi " + filter[0]
     @transactions = filter[1]
@@ -39,7 +40,19 @@ class TransactionsController < ApplicationController
       end
     end
 
-    transactions = transactions_profit_graph "day"
+    start_day = DateTime.now.beginning_of_month
+    end_day = DateTime.now.end_of_day
+
+    if params["date_start"].present?
+      start_day = params["date_start"].to_datetime.beginning_of_day
+      if params["date_end"].present?
+        end_day = params["date_end"].to_datetime.end_of_day
+      else
+        end_day = (start_day + 7.days).end_of_day
+      end 
+    end
+
+    transactions = transactions_profit_graph start_day, end_day
     gon.grand_totals = transactions[0]
     gon.hpp_totals = transactions[1]
     gon.profits = transactions[2]
@@ -47,8 +60,43 @@ class TransactionsController < ApplicationController
 
   end
 
+
+  def check_duplicate
+    duplicate_trxs = Transaction.select(:invoice).group(:invoice).having("count(*) > 1").size
+    duplicate_trxs.each do |trx_data|
+      trx = Transaction.find_by(invoice: trx_data[0])
+      store = trx.store
+      if trx.transaction_items.present?
+        trx.transaction_items.each do |trx_item|
+          store_item = StoreItem.find_by(item: trx_item.item, store: store)
+          store_item.stock = store_item.stock + trx_item.quantity
+          store_item.save!
+        end
+        trx.transaction_items.destroy_all
+      end
+      trx.destroy
+    end
+  end
+
+  def monthly_recap
+    start_day = (params[:month] + params[:year]).to_datetime
+    end_day = start_day.end_of_month
+    @desc = "Rekap bulanan - "+ start_day.month.to_s + "/" + start_day.year.to_s
+    trx = nil
+    if current_user.level == "candy_dream"
+      trx = Transaction.where("invoice like ?", "%" + "-C" + "%") 
+    else
+      trx = Transaction.where.not("invoice like ?", "%" + "-C" + "%") 
+    end
+    @month = start_day.month
+    @transaction_datas = trx.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
+    render pdf: DateTime.now.to_i.to_s,
+      layout: 'pdf_layout.html.erb',
+      template: "transactions/print_recap_monthly.html.slim"
+  end
+
+
   def daily_recap
-    curr_date = DateTime.now
     end_day = (params[:date].to_s + " 00:00:00 +0700").to_time.end_of_day
     start_day = end_day.beginning_of_day
     @end = end_day
@@ -58,6 +106,11 @@ class TransactionsController < ApplicationController
 
     cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     trx = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+    if current_user.level == "candy_dream"
+      trx = trx.where("invoice like ?", "%" + "-C" + "%") 
+    else
+      trx = trx.where.not("invoice like ?", "%" + "-C" + "%") 
+    end
     
     grand_total_plered = trx.where(store: plered).sum(:grand_total)
     hpp_total_plered = trx.where(store: plered).sum(:hpp_total)
@@ -78,10 +131,10 @@ class TransactionsController < ApplicationController
     
     @total_outcome = @operational + @fix_cost
 
-
     start_day = (params[:date].to_s + " 00:00:00 +0700").to_time
     end_day = start_day.end_of_day
     @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+    @transactions = @transactions.where("invoice like ?", "%" + "-C" + "%") if current_user.level == "candy_dream"
     @transactions = @transactions.order("created_at DESC")
     @start_day = start_day
     @kriteria = "Rekap Harian - "+Date.today.to_s
@@ -94,7 +147,7 @@ class TransactionsController < ApplicationController
   def daily_recap_item
     start_day = params[:date].to_time
     end_day = start_day.end_of_day
-    @transaction_items = TransactionItem.where("created_at >= ? AND created_at <= ?", start_day, end_day).group(:item_id).count
+    @transaction_items = TransactionItem.where("created_at >= ? AND created_at <= ?", start_day, end_day).group(:item_id).sum(:quantity)
     @transaction_items = @transaction_items.sort_by(&:last).reverse
     @item_cats = {}
     @transaction_items.each do |trx_item|
@@ -240,24 +293,16 @@ class TransactionsController < ApplicationController
   end
 
   private
-    def transactions_profit_graph group
-      transaction_datas = []
-      if group == "day" 
-        transaction_datas = Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_month, DateTime.now.end_of_month).group_by{ |m| m.created_at.beginning_of_day}
+    def transactions_profit_graph start_day, end_day
+      trx = nil
+      if current_user.level == "candy_dream"
+        trx = Transaction.where("invoice like ?", "%" + "-C" + "%") 
+      else
+        trx = Transaction.where.not("invoice like ?", "%" + "-C" + "%") 
       end
-
-      grand_totals = []
-      hpp_totals = []
-      profits = []
-      days = []
-
-
-      Time.days_in_month(Date.today.month.to_i).times do |idx|
-        grand_totals << 0
-        hpp_totals << 0
-        profits << 0
-        days << idx
-      end
+      transaction_datas = trx.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
+      
+      graphs = {}
 
       transaction_datas.each do |trxs|
         grand_total = 0
@@ -268,18 +313,29 @@ class TransactionsController < ApplicationController
           hpp_total += trx.hpp_total
         end
         profit = grand_total - hpp_total
-        grand_totals[day_idx] = grand_total
-        hpp_totals[day_idx] = hpp_total
-        profits[day_idx] = profit
+        graphs[trxs[0].to_date] = [grand_total, hpp_total, profit]
+      end
+      vals = graphs.values
+      grand_totals = vals.collect {|ind| ind[0]}
+      hpp_totals = vals.collect {|ind| ind[1]}
+      profits = vals.collect {|ind| ind[2]}
+      days = graphs.keys
+      days.each_with_index do |day, idx|
+        days[idx] = day.to_date.to_s
       end
 
-
-      return [grand_totals, hpp_totals, profits, days]
+      return grand_totals, hpp_totals, profits, days
     end
 
     def filter_search params, r_type
       results = []
-      @transactions = Transaction.all.order("created_at DESC")
+      trx = nil
+      if current_user.level == "candy_dream"
+        trx = Transaction.where("invoice like ?", "%" + "-C" + "%") 
+      else
+        trx = Transaction.where.not("invoice like ?", "%" + "-C" + "%") 
+      end
+      @transactions = trx.order("created_at DESC")
       if params[:from].present?
         if params[:from] == "complain"
           curr_date = Date.today - 3.days
@@ -290,7 +346,8 @@ class TransactionsController < ApplicationController
       if r_type == "html"
         @transactions = @transactions.page param_page if r_type=="html"
       end
-      @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance", "candy_dream"].include? current_user.level
+      @transactions = @transactions.where("invoice like ?", "%" + "-C" + "%") if current_user.level == "candy_dream"
       
       @search = ""
       if params["search"].present?

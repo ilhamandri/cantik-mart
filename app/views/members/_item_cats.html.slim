@@ -1,0 +1,11 @@
+.table-responsive.text-nowrap
+  table class="table"
+    thead
+      th Nama
+      th Total
+    tbody
+      - @trx_item_cats.each do |trx_item_cat| 
+        - item_cat = ItemCat.find(trx_item_cat[0])
+        tr
+          td #{item_cat.name}
+          td #{trx_item_cat[1]}

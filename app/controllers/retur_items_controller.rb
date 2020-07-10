@@ -107,7 +107,7 @@ class ReturItemsController < ApplicationController
         end
 
         item = retur_item.item
-        diff_stock_val_cash += (nominal_value - (item.buy * accept_item).round)
+        diff_stock_val_cash += nominal_value - (item.buy * accept_item).round
         if receivable.nil?
           desc = "FROM RETUR #"+retur.invoice
           receivable = Receivable.create user: current_user, store: current_user.store, nominal: nominal_value, date_created: DateTime.now, 
@@ -137,10 +137,12 @@ class ReturItemsController < ApplicationController
     end
     if diff_stock_val_cash != 0
       if diff_stock_val_cash > 0
+        desc = "Keuntungan dari retur "+retur.invoice
         invoice = " IN-"+Time.now.to_i.to_s
         cash_flow_in = CashFlow.create user: current_user, store: current_user.store, nominal: diff_stock_val_cash, date_created: DateTime.now, description: desc, 
                       finance_type: CashFlow::INCOME, invoice: invoice
       else
+        desc = "Kerugian dari retur "+retur.invoice
         invoice = " OUT-"+Time.now.to_i.to_s
         cash_flow_in = CashFlow.create user: current_user, store: current_user.store, nominal: diff_stock_val_cash, date_created: DateTime.now, description: desc, 
                       finance_type: CashFlow::OUTCOME, invoice: invoice

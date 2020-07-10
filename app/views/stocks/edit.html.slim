@@ -12,16 +12,16 @@
           .form-group
             label for="name" Nama
             = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: true
-          - if @item.name.upcase == "TELOR RETAK" || ["002024", "002030", "002040"].include? @item.code
-            -  if ["super_admin", "owner", "super_visi"].include? current_user.level
+          - if @item.name.upcase == "TELOR RETAK" || (["002024", "002030", "002040"].include? @item.code)
+            / -  if ["super_admin", "owner", "super_visi"].include? current_user.level
               .form_group
-                label for="category" Stokud
+                label for="category" Stok
                 = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}"
               .form-group
                 label for="sell" Harga Beli Saat Ini
                 label.text-danger for="type" (*Isi dengan harga satuan sesuai dengan harga beli saat ini)
                 = form.number_field :buy, required: true, class: "form-control md-form", id: "buy"
-          - if ["super_admin", "owner"].include? current_user.level
+          - if ["super_admin", "owner", "stock_admin"].include? current_user.level
             .form_group
               label for="category" Stok
               = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}"

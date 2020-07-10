@@ -1,0 +1,167 @@
+.col-md-12.text-right.grey-text
+  a.btn.btn-danger href="#{user_absent_recap_path(id: @user.id)}"
+    b
+      i.fas.fa-desktop
+      |  Lebih Detail    
+/ .col-xl-12.col-lg-12.col-md-12.pb-2
+  .card-header.white-text.teal
+    h5.font-weight-500.my-1
+      | Grafik Jam Kerja 
+  .card.mb-4 
+    .card-body.table-responsive.text-nowrap
+      canvas id="workhour"
+.col-12.pb-2
+  .card.mb-12
+    .card-body
+      .card-header.white-text.teal
+        | REKAP ABSENSI 6 BULAN TERAKHIR
+      br
+      .row
+        .col-4
+          h3
+            | NILAI : 
+        .col-4
+          h3
+            | #{@performance} / 100
+        .col-4
+          - if @performance >= 80
+            h3.text-success
+              | ( Sangat Baik )
+          - elsif @performance < 80 && @performance >= 70
+            h3.text-info
+              | ( Baik )
+          - elsif @performance < 70 && @performance >= 50
+            h3.text-warning
+              | ( Kurang )
+          - elsif @performance < 50
+            h3.text-danger
+              | ( Sangat Kurang )
+        .col-12
+          br
+          table class="table" 
+            tr 
+              td style="font-weight: bold !important;"
+                | 100 - 95
+              td style="font-weight: bold !important;"
+                |  94 - 90
+              td style="font-weight: bold !important;"
+                |  89 - 80
+              td style="font-weight: bold !important;"
+                |  80 - 0
+            tr
+              td.text-success  style="font-weight: bold !important;"
+                | Sangat Baik
+              td.text-info  style="font-weight: bold !important;"
+                | Baik
+              td.text-warning  style="font-weight: bold !important;"
+                | Kurang
+              td.text-danger  style="font-weight: bold !important;"
+                | Sangat Kurang
+    .card-body
+      table class="table"
+        tr
+          th 
+          th Rata-rata Kerja
+          th Waktu Kerja
+          th Terlambat
+          th Rata-rata Terlambat
+          th Tidak Masuk
+          th Tidak Keluar
+        tr 
+          td Jam Kerja
+          td #{@average_work}
+          td #{@work_totals.to_i} jam #{((@work_totals%1)*60).to_i} menit
+          td #{@late_general.count} x
+          - avg_late = (@late_general.sum.to_f / @late_general.count)
+          - if avg_late.nan?
+            td -
+          - else
+            td #{(avg_late/3600).to_i} jam #{(avg_late.modulo(60).to_i)} menit 
+          td #{@n_absents} x
+          - if @no_check_out == 0
+            td -
+          - else 
+            td #{@no_check_out} x
+        tr
+          td Jam Lembur
+          td #{@average_overtime}
+          - if @overtime_totals > 0
+            td #{@overtime_totals.to_i} jam #{((@overtime_totals%1)*60).to_i} menit
+          - else
+            td -
+          td -
+          td -
+          td -
+          - if @no_check_out_overtime > 0 
+            td #{@no_check_out_overtime} x
+          - else 
+            td -
+
+    .card-body
+      .card-header.white-text.teal
+        | REKAP PER SHIFT
+      table class="table"
+        tr
+          th Shift
+          th Rata-rata Kerja
+          th Waktu Kerja
+          th Terlambat
+          th Rata-rata Terlambat
+          th Tidak Keluar
+        tr
+          td Pagi
+          - if @average_work_morning == "-" || @average_work_morning == 0
+            td -
+          - else
+            td #{@average_work_morning}
+
+          - if @work_morning.to_i == 0 && ((@work_morning%1)*60).to_i == 0
+            td -
+          - else
+            td #{@work_morning.to_i} jam #{((@work_morning%1)*60).to_i} menit
+
+          - if @late_morning.count == 0
+            td -
+          - else
+            td #{@late_morning.count} x
+          
+          - avg_late = (@late_morning.sum.to_f / @late_morning.count)
+          - if avg_late.nan?
+            td -
+          - else
+            td #{(avg_late/3600).to_i} jam #{(avg_late.modulo(60).to_i)} menit 
+
+          - if @no_check_out_morning == 0
+            td -
+          - else
+            td #{@no_check_out_morning} x
+        
+        tr
+          td Siang
+          - if @average_work_afternoon == "-" || @average_work_afternoon == 0
+            td -
+          - else
+            td #{@average_work_afternoon}
+          
+          - if @work_afternoon.to_i == 0 && ((@work_afternoon%1)*60).to_i == 0
+            td -
+          - else 
+            td #{@work_afternoon.to_i} jam #{((@work_afternoon%1)*60).to_i} menit
+
+          - if @late_afternoon.count == 0
+            td -
+          - else
+            td #{@late_afternoon.count} x
+
+          - avg_late = (@late_afternoon.sum.to_f / @late_afternoon.count)
+          - if avg_late.nan?
+            td -
+          - else
+            td #{(avg_late/3600).to_i} jam #{(avg_late.modulo(60).to_i)} menit 
+
+          - if @no_check_out_afternoon == 0
+            td -
+          - else
+            td #{@no_check_out_afternoon} x
+
+

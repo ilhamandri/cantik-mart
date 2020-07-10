@@ -1,0 +1,54 @@
+- order = @order_items.first.order
+- order_id = order.id
+- @idx = 1
+.row
+  .col.text-right
+    a href="#{order_path(id: order_id, format: :pdf)}"
+      button.btn.btn-primary type="button" 
+        i.fas.fa-print 
+        | &nbsp&nbsp&nbsp CETAK
+
+  - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'confirmation').user_methods.pluck(:user_level).include? current_user.level
+    - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
+        a href="#{order_confirmation_path(id: order_id)}"
+          button.btn.btn-success type="button" 
+            | Terima
+
+.card-body
+  .row
+    - if order.date_receive.present?
+      .col-4
+        label for="form" INVOICE
+        input type="text" class="form-control md-form" disabled=true value="#{order.invoice}"
+      
+      .col-4
+        label for="form" Total Tagihan
+        input type="text" class="form-control md-form" disabled=true value="#{number_to_currency(order.grand_total, unit: "Rp. ")}"
+
+      .col-4
+        label for="form" Kekurangan
+        input type="text" class="form-control md-form" disabled=true value="#{number_to_currency(@pay, unit: "Rp. ")}"
+
+    - else
+      .col
+        label for="form" INVOICE
+        input type="text" class="form-control md-form" disabled=true value="#{order.invoice}"
+
+    .col
+      .form-group
+        label for="from" Dari
+        input type="text" class="form-control md-form" disabled=true value="#{order.store.name}"
+    .col
+      .form-group
+        label for="from" Kepada
+        input type="text" class="form-control md-form" disabled=true value="#{order.supplier.name}"
+    - if order.from_retur
+      .col-12
+        label for="form" KETERANGAN
+        input type="text" class="form-control md-form" disabled=true value="#{"TIDAK ADA TAGIHAN - ORDER DARI RETUR"}"
+      .col-12.text-center
+        - retur_item = ReturItem.find_by(ref_id: order.id)
+        - if retur_item.present?
+          - retur = retur_item.retur
+          a href="#{retur_path(id: retur.id)}" class="btn btn-primary"
+            | #{retur.invoice}

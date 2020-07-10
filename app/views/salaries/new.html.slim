@@ -21,7 +21,15 @@
                 | HUTANG : -
           .form-group
             br
-            label for="id-card" Gaji yang akan dibayarkan
-            = form.number_field :salary, required: true, class: "form-control md-form", id: "id-card", min:"0", value:'0'
+            label for="id-card" Bonus
+            = form.number_field :bonus, required: true, class: "form-control md-form", id: "id-card", min:"0", value:'0'
+          .form-group
+            br
+            label.text-primary for="id-card" Bayar Kasbon
+            = form.number_field :pay_kasbon, required: true, class: "form-control md-form", id: "id-card", min:"0", value:'0'
+          .form-group
+            br
+            label.text-danger for="id-card" Bayar Hutang
+            = form.number_field :pay_receivable, required: true, class: "form-control md-form", id: "id-card", min:"0", value:'0'
           .form-group.text-center
             = form.submit "Bayar Gaji", class: "btn btn-primary"

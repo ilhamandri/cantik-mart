@@ -1,0 +1,76 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Rekap 
+      td
+        textarea #{@grouped_by.camelize}
+    tr
+      td.meta-head Tanggal
+      td
+        textarea #{@date_start.to_date.to_s+" - "+@date_end.to_date.to_s}
+    tr
+      td.meta-head Toko
+      td
+        textarea #{@store_name}
+br
+- if @grouped_by == "supplier" 
+  table#items
+    tr 
+      th Supplier
+      th Jumlah Order
+      th Nominal
+    - @suppliers.each do |k,v|
+      tr
+        td #{k}
+        td #{v[0]}
+        td style="text-align: right"
+          | #{number_with_delimiter(v[1].to_i, delimiter: ".")}
+- if @grouped_by == "item"
+  table#items
+    tr
+      th Kode
+      th Nama
+      th Departemen
+      th Jumlah 
+    - @items.each do |k,v|
+      tr
+        td #{k}
+        td #{v[0]}
+        td #{v[1]}
+        td style="text-align: right"
+          | #{number_with_delimiter(v[2].to_i, delimiter: ".")}
+- else
+  br
+  br
+  h2
+    | TUNAI
+  table#items
+    tr
+      th Invoice
+      th Tanggal
+      th Toko
+      th Nominal
+    - @lunas.each do |lunas|
+        tr
+          td #{lunas[0]}
+          td #{lunas[1]}
+          td #{lunas[2]}
+          td style="text-align: right"
+            | #{number_with_delimiter(lunas[3], delimiter: ".")}
+  br
+  h2
+    | CICILAN
+  table#items
+    tr
+      th Invoice
+      th Tanggal
+      th Toko
+      th Nominal
+    - @cicilan.each do |cicilan|
+        tr
+          td #{cicilan[0]}
+          td #{cicilan[1]}
+          td #{cicilan[2]}
+          td style="text-align: right"
+            | #{number_with_delimiter(cicilan[3], delimiter: ".")}
+  

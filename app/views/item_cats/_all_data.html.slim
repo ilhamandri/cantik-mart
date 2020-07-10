@@ -1,0 +1,10 @@
+.card-body.table-responsive.text-nowrap
+  table class="table"
+    thead
+      th Nama
+      th Jumlah Barang
+      th Termasuk Perhitungan Poin
+      th Aksi
+    tbody
+      = render partial: 'list', collection: @item_cats, as: :item_cat
+  = paginate @item_cats

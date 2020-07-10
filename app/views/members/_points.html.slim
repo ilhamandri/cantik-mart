@@ -1,0 +1,30 @@
+.col-md-12.text-right.grey-text
+  a href='#{points_path(id: @member.id)}'
+      button.btn.btn-success type="button" 
+          | Selengkapnya
+.table-responsive.text-nowrap
+  table class="table"
+    thead
+        th Tanggal
+        th Poin
+        th Jenis
+        th Keterangan
+    tbody
+    	- @points.each do |point|
+    		tr
+				td #{point.created_at}
+				td #{point.point}
+				td #{point.point_type.upcase}
+				- if point.trx.present?
+					td 
+						a href="#{transaction_items_path(id: point.trx.id)}"
+							| TRANSAKSI - #{point.trx.invoice}
+				- elsif point.exchange_point.present?
+					td 
+						- item = Item.find_by(code: point.exchange_point.name)
+						- if item.present?
+							| #{point.exchange_point.quantity} buah - #{item.name}
+						- else
+							| #{point.exchange_point.name} ( #{point.voucher.voucher_code} )
+				- else
+					td -

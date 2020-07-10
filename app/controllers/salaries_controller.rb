@@ -38,19 +38,69 @@ class SalariesController < ApplicationController
     end
   end
 
+  def delete_salary
+    return redirect_back_data_error salaries_path, "Data tidak ditemukan" if params["id"].nil?
+    user_salary = UserSalary.find_by(id: params[:id])
+    return redirect_back_data_error salaries_path, "Data tidak ditemukan" if user_salary.nil?
+    
+    tag = user_salary.tag
+    # return redirect_back_data_error salaries_path, "Data tidak dapat dihapus" 
+    if tag.present?
+      cfs = CashFlow.where(tag: tag)
+      incomes = cfs.where(finance_type: "Income")
+      outcome = cfs.where(finance_type: "Outcome").first
+      incomes.each do |income|
+        nominal = income.nominal
+        receivable = Receivable.find_by(id: income.ref_id)
+        receivable.deficiency = receivable.deficiency + nominal
+        receivable.save!
+        income.destroy
+      end
+      store = current_user.store
+      nominal_salary = outcome.nominal
+      store.cash = store.cash + nominal_salary
+      store.save!
+      outcome.destroy
+    end
+    user_salary.destroy!
+    return redirect_success salaries_path, "Data berhasil dihapus"
+  
+  end
+
   def new
     @users = User.where.not(level: [1,2]).order("name ASC")
+  end
+
+  def print_salary
+    start_day = DateTime.now.beginning_of_month
+    end_day = start_day.end_of_month
+    if params[:month].present? && params[:year].present?
+      start_day = (params[:month] + params[:year]).to_datetime
+      end_day = start_day.end_of_month
+    end
+    @salaries = UserSalary.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: DateTime.now.to_i.to_s,
+          show_as_html: false,
+          template: "salaries/print_salary.html.slim"
+      end
+    end
   end
 
   def create
     user = User.find_by(id: params[:user_id])
     return redirect_back_data_error new_salary_path, "Karyawan tidak ditemukan" if user.nil?
-    paid = params[:salary][:salary].to_i
-    return redirect_back_data_error new_salary_path, "Nominal harus lebih besar dari 10.000 dan maksimal sesuai gaji karyawan" if paid < 10000 || paid > user.salary
-    receivables = Receivable.where(user: user).where("deficiency > 0")
-    return redirect_back_data_error new_salary_path, user.name + " tidak memiliki hutang. Silahkan cek kembali" if receivables.sum(:deficiency) == 0
+    pay_kasbon = params[:salary][:pay_kasbon].to_i
+    pay_receivable = params[:salary][:pay_receivable].to_i
+    paid = pay_kasbon + pay_receivable
+    bonus = params[:salary][:bonus].to_i
+    receivables = Receivable.where(to_user: user.id).where("deficiency > 0")
+    return redirect_back_data_error new_salary_path, user.name + " tidak memiliki hutang. Silahkan cek kembali" if receivables.sum(:deficiency) == 0 && paid > 0
     
-    paid_for_deficiency = user.salary - paid
+    paid_for_deficiency = paid
+    tag = "SL-"+DateTime.now.to_i
     receivables.each do |receivable|
       curr_receivable_deficiency = receivable.deficiency
       break if paid_for_deficiency == 0
@@ -62,13 +112,13 @@ class SalariesController < ApplicationController
         pay_nominal = paid_for_deficiency
         paid_for_deficiency = 0
       end
-      store = user.store
+      store = current_user.store
       date_created = DateTime.now
       inv_number = Time.now.to_i.to_s
       desc = "Pembayaran piutang "+user.name+" dengan potong gaji"
       invoice = " IN-"+inv_number+"-1"
       cash_flow = CashFlow.create user: user, store: store, nominal: pay_nominal, date_created: date_created, description: desc, 
-                        finance_type: CashFlow::INCOME, invoice: invoice, payment: "receivable", ref_id: receivable.id
+                        finance_type: CashFlow::INCOME, invoice: invoice, payment: "receivable", ref_id: receivable.id, tag: tag
       store.cash = store.cash + pay_nominal
       store.save!
       cash_flow.create_activity :create, owner: current_user 
@@ -82,9 +132,11 @@ class SalariesController < ApplicationController
     inv_number = Time.now.to_i.to_s
     desc = "Gaji " + user.name + "(" + Date.today.month.to_s + "/" + Date.today.year.to_s + ")"
     invoice = "SLRY-"+inv_number+"-"+user.id.to_s
-    cash_flow = CashFlow.create user: user, store: store, nominal: paid, date_created: date_created, description: desc, 
-                finance_type: CashFlow::OUTCOME, invoice: invoice
-    store.cash = store.cash - paid
+    cash_flow = CashFlow.create user: user, store: store, nominal: user.salary + bonus - pay_receivable - pay_kasbon, date_created: date_created, description: desc, 
+                finance_type: CashFlow::OUTCOME, invoice: invoice, tag: tag
+    user_salary = UserSalary.create user: user, nominal: user.salary, pay_kasbon: pay_kasbon, pay_receivable: pay_receivable, bonus: bonus, tag: tag
+    user_salary.create_activity :create, owner: current_user 
+    store.cash = store.cash - user.salary - bonus + pay_receivable + pay_kasbon
     store.save!
     cash_flow.create_activity :create, owner: current_user 
     return redirect_success new_salary_path, desc + " berhasil disimpan"
