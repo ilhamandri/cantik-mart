@@ -47,8 +47,8 @@ class PostsController < ApplicationController
 
 					    next if store_stock.nil?
 					    item = new_trx_item.item
-					    if item.id == 33031
-					    	has_coin = true
+					    if item.id == 30331
+					    	trx.has_coin = true
 					    end
 					    store_stock.stock = store_stock.stock.to_f - new_trx_item.quantity.to_f
 					    item.counter = item.counter + new_trx_item.quantity.to_i
@@ -57,7 +57,6 @@ class PostsController < ApplicationController
 					end
 
 					trx.hpp_total = hpp_totals
-					trx.invoice = trx.invoice + "-C" if has_coin
 					trx.save!
 
 					voucher = Voucher.find_by(voucher_code: trx.voucher)

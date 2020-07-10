@@ -62,32 +62,35 @@ br
       td #{number_with_delimiter( (total-hpp_total).to_i, delimiter: ".", separator: ",")}
 
 - elsif current_user.level == "candy_dream"
-  - trx = @transactions.order("created_at DESC").limit(1).first
-  - trx_last_timestamp = "Tidak ada transaksi"
-  - trx_last_timestamp = trx.created_at if trx.present?
-  h2
-    | #{current_user.store.name.upcase} ( #{trx_last_timestamp} )
-  table#items
-    tr colspan="5"
-    - total_coins = 0
-    - sell = Item.find_by(id: 30331).sell
-    tr
-      th Kasir
-      th Koin Terjual
-      th Total
-    - @cashiers.uniq.each do |cashier_id|
-      - cashier = User.find_by(id: cashier_id)
-      - trxs =  @transactions.where(user: cashier)
+  - Store.where(store_type: "retail").each do |store|
+    - trx = @transactions.where(store: store).order("created_at DESC").limit(1).first
+    - trx_last_timestamp = "Tidak ada transaksi"
+    - trx_last_timestamp = trx.created_at if trx.present?
+    h3
+      | #{store.name.upcase} ( #{trx_last_timestamp} )
+
+    table#items
+      tr colspan="5"
+      - total_coins = 0
+      - sell = Item.find_by(id: 30331).sell
       tr
-        td #{cashier.name.upcase}
-        - sell_coin = TransactionItem.where(transaction_id: trxs.pluck(:id), item_id: 30331).sum(:quantity)
-        - total_coins += sell_coin
-        td #{number_with_delimiter( sell_coin.to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter( sell_coin.to_i * sell.to_i, delimiter: ".", separator: ",")}
-    tr
-      td 
-      td #{number_with_delimiter( (total_coins).to_i, delimiter: ".", separator: ",")}
-      td #{number_with_delimiter( (total_coins*sell).to_i, delimiter: ".", separator: ",")}
+        th Kasir
+        th Koin Terjual
+        th Total
+      - @cashiers.uniq.each do |cashier_id|
+        - cashier = User.find_by(id: cashier_id)
+        - next if cashier.store.id != store.id
+        - trxs =  @transactions.where(user: cashier)
+        tr
+          td #{cashier.name.upcase}
+          - sell_coin = TransactionItem.where(transaction_id: trxs.pluck(:id), item_id: 30331).sum(:quantity)
+          - total_coins += sell_coin
+          td #{number_with_delimiter( sell_coin.to_i, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter( sell_coin.to_i * sell.to_i, delimiter: ".", separator: ",")}
+      tr
+        td 
+        td #{number_with_delimiter( (total_coins).to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter( (total_coins*sell).to_i, delimiter: ".", separator: ",")}
 
 
 
