@@ -47,7 +47,7 @@ class WarningItemsController < ApplicationController
     start_limit = (day * 100) - 100
 
 
-    items = StoreItem.where(store: current_user.store).where("stock < 0")
+    items = StoreItem.where(store: current_user.store).where("stock <= 0")
     # items = items.limit(100).offset(start_limit)
 
     filename = "./report/opname/" + current_user.store.id.to_s + "-" +DateTime.now.to_i.to_s+".xlsx"
