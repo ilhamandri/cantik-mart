@@ -114,6 +114,7 @@ class WarningItemsController < ApplicationController
   def check_excel sheet
     sheet.each do |row|
       next if sheet.first == row
+      code = row[1]
       # code = row[1].gsub(" ","")
       item = Item.find_by(code: code)
       if item.nil?
