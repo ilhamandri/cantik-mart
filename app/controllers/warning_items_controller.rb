@@ -124,7 +124,7 @@ class WarningItemsController < ApplicationController
         return false
       end
       if real_stock.nil?
-        return false
+        # return false
       end
     end
     return true
