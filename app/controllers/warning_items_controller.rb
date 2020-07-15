@@ -114,21 +114,18 @@ class WarningItemsController < ApplicationController
   def check_excel sheet
     sheet.each do |row|
       next if sheet.first == row
-      code = row[1].gsub(" ","")
+      # code = row[1].gsub(" ","")
       item = Item.find_by(code: code)
       if item.nil?
-        binding.pry
         return false
       end
       store_item = StoreItem.find_by(store: current_user.store, item: item)
       if store_item.nil?
-        binding.pry
         return false
       end
       last_stock = row[3]
       real_stock = row[4]
       if last_stock.nil?
-        binding.pry
         return false
       end
       if real_stock.nil?
