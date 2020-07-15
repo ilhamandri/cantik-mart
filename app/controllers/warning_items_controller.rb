@@ -70,24 +70,28 @@ class WarningItemsController < ApplicationController
 
   def update_stock
     file = params[:file]
+    not_read = []
     return redirect_back_data_error opname_form_path, "File tidak valid" if file.nil?
     if File.extname(file.path) == ".xlsx"
       excel = Roo::Excelx.new(file.path)
       excel.each_with_pagename do |name, sheet|
         is_file_ok = check_excel sheet
-        return redirect_back_data_error opname_form_path, "File tidak valid" if !is_file_ok
+        # return redirect_back_data_error opname_form_path, "File tidak valid" if !is_file_ok
         
         sheet.each do |row|
           next if sheet.first == row
           code = row[1].gsub(" ","")
           item = Item.find_by(code: code)
-          next if item.nil?
+          if item.nil?
+            not_read << code
+            next
+          end
           store_item = StoreItem.find_by(store: current_user.store, item: item)
           next if store_item.nil?
           last_stock = row[3]
           curr_stock = store_item.stock
           real_stock = row[4]
-          next if real_stock.nil? || real_stock == ""
+          next if real_stock.nil? 
           # new_stock = curr_stock + (last_stock * -1) + real_stock
           new_stock = real_stock
           store_item.stock = new_stock
@@ -97,6 +101,7 @@ class WarningItemsController < ApplicationController
     else
       return redirect_back_data_error opname_form_path, "File tidak valid" 
     end 
+    binding.pry
     upload_io = params[:file]
     filename = Digest::SHA1.hexdigest([Time.now, rand].join).to_s+File.extname(file.path).to_s
     File.open(Rails.root.join('public', 'uploads', 'stock_opnames', filename), 'wb') do |file|
@@ -112,15 +117,18 @@ class WarningItemsController < ApplicationController
       code = row[1].gsub(" ","")
       item = Item.find_by(code: code)
       if item.nil?
+        binding.pry
         return false
       end
       store_item = StoreItem.find_by(store: current_user.store, item: item)
       if store_item.nil?
+        binding.pry
         return false
       end
       last_stock = row[3]
       real_stock = row[4]
       if last_stock.nil?
+        binding.pry
         return false
       end
       if real_stock.nil?
