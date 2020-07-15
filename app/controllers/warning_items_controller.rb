@@ -102,7 +102,7 @@ class WarningItemsController < ApplicationController
     else
       return redirect_back_data_error opname_form_path, "File tidak valid" 
     end 
-    binding.pry
+    # binding.pry
     upload_io = params[:file]
     filename = Digest::SHA1.hexdigest([Time.now, rand].join).to_s+File.extname(file.path).to_s
     File.open(Rails.root.join('public', 'uploads', 'stock_opnames', filename), 'wb') do |file|
