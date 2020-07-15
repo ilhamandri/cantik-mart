@@ -87,7 +87,9 @@ class WarningItemsController < ApplicationController
           last_stock = row[3]
           curr_stock = store_item.stock
           real_stock = row[4]
-          new_stock = curr_stock + (last_stock * -1) + real_stock
+          next if real_stock.nil? || real_stock == ""
+          # new_stock = curr_stock + (last_stock * -1) + real_stock
+          new_stock = real_stock
           store_item.stock = new_stock
           store_item.save!
         end
