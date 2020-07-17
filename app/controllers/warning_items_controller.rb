@@ -58,9 +58,11 @@ class WarningItemsController < ApplicationController
       sheet.add_row ["No", "Kode", "Nama", "STOK SISTEM", "OPNAME"]
       idx = 1
       items.each do |store_item|
-        item = store_item.item
-        a = sheet.add_row [idx, item.code.to_s+" ", item.name, store_item.stock]
-        idx+=1
+        if store_item.stock < 0
+          item = store_item.item
+          a = sheet.add_row [idx, item.code.to_s+" ", item.name, store_item.stock]
+          idx+=1
+        end
       end
     end
 
