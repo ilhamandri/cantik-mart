@@ -101,7 +101,7 @@ class WarningItemsController < ApplicationController
           # new_stock = curr_stock + (last_stock * -1) + real_stock
           new_stock = real_stock
           if curr_stock < 0
-            new_stock -= curr_stock
+            # new_stock -= curr_stock
             store_item.stock = new_stock
             store_item.save!
           end
