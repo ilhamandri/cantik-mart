@@ -133,6 +133,7 @@ class AccountBalance
     values = 0
     stocks.each do |store_stock|
       next if store_stock.stock <= 0
+      next if store_stock.item.id == 30331
       values += (store_stock.stock * store_stock.item.buy)
     end
     time_start = DateTime.now.beginning_of_day
