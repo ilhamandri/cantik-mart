@@ -81,6 +81,7 @@ class WarningItemsController < ApplicationController
         sheet.each do |row|
           next if sheet.first == row
           code = row[1]
+          binding.pry if code.nil?
           code = code.gsub(" ","")
           code = code.gsub("'","")
           item = Item.find_by(code: code)
@@ -98,9 +99,11 @@ class WarningItemsController < ApplicationController
           new_stock = real_stock
           if curr_stock <= 0
             new_stock -= curr_stock
+            store_item.stock = new_stock
+            store_item.save!
           end
-          store_item.stock = new_stock
-          store_item.save!
+          # store_item.stock = new_stock
+          # store_item.save!
         end
       end
     else
