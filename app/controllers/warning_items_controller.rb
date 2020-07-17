@@ -81,7 +81,8 @@ class WarningItemsController < ApplicationController
         sheet.each do |row|
           next if sheet.first == row
           code = row[1]
-          # code = row[1].gsub(" ","")
+          code = code.gsub(" ","")
+          code = code.gsub("'","")
           item = Item.find_by(code: code)
           if item.nil?
             not_read << code
