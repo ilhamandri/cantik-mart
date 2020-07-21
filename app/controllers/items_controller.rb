@@ -143,6 +143,12 @@ class ItemsController < ApplicationController
         return redirect_success items_path, "Data Barang Telah Ditambahkan di Daftar Cetak"
       end
     end
+
+    @loss_ids = LossItem.where(item: @item).pluck(:loss_id).uniq
+    @losses = Loss.where(id: @loss_ids)
+
+    @retur_ids = ReturItem.where(item: @item).pluck(:retur_id).uniq
+    @returs = Retur.where(id: @retur_ids)
   end
 
   def new
