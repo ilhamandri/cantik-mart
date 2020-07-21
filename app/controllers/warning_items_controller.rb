@@ -47,8 +47,8 @@ class WarningItemsController < ApplicationController
     start_limit = (day * 100) - 100
 
 
-    items = StoreItem.where(store: current_user.store).where("stock < 0")
-    items = items.limit(100).offset(start_limit)
+    items = StoreItem.where(store: current_user.store).where("stock <= 0")
+    # items = items.limit(100).offset(start_limit)
 
     filename = "./report/opname/" + current_user.store.id.to_s + "-" +DateTime.now.to_i.to_s+".xlsx"
     p = Axlsx::Package.new
@@ -58,9 +58,11 @@ class WarningItemsController < ApplicationController
       sheet.add_row ["No", "Kode", "Nama", "STOK SISTEM", "OPNAME"]
       idx = 1
       items.each do |store_item|
-        item = store_item.item
-        a = sheet.add_row [idx, item.code.to_s+" ", item.name, store_item.stock]
-        idx+=1
+        if store_item.stock < 0
+          item = store_item.item
+          a = sheet.add_row [idx, item.code.to_s+" ", item.name, store_item.stock]
+          idx+=1
+        end
       end
     end
 
@@ -70,31 +72,47 @@ class WarningItemsController < ApplicationController
 
   def update_stock
     file = params[:file]
+    not_read = []
     return redirect_back_data_error opname_form_path, "File tidak valid" if file.nil?
     if File.extname(file.path) == ".xlsx"
       excel = Roo::Excelx.new(file.path)
       excel.each_with_pagename do |name, sheet|
         is_file_ok = check_excel sheet
-        return redirect_back_data_error opname_form_path, "File tidak valid" if !is_file_ok
+        # return redirect_back_data_error opname_form_path, "File tidak valid" if !is_file_ok
         
         sheet.each do |row|
           next if sheet.first == row
-          code = row[1].gsub(" ","")
+          next if row[1].nil?
+          code = row[1].to_s
+          code = code.gsub(" ","")
+          code = code.gsub("'","")
+          code = code.gsub(".0","")
           item = Item.find_by(code: code)
-          next if item.nil?
+          if item.nil?
+            not_read << code
+            next
+          end
           store_item = StoreItem.find_by(store: current_user.store, item: item)
           next if store_item.nil?
           last_stock = row[3]
           curr_stock = store_item.stock
           real_stock = row[4]
-          new_stock = curr_stock + (last_stock * -1) + real_stock
-          store_item.stock = new_stock
-          store_item.save!
+          next if real_stock.nil? 
+          # new_stock = curr_stock + (last_stock * -1) + real_stock
+          new_stock = real_stock
+          if curr_stock < 0
+            # new_stock -= curr_stock
+            store_item.stock = new_stock
+            store_item.save!
+          end
+          # store_item.stock = new_stock
+          # store_item.save!
         end
       end
     else
       return redirect_back_data_error opname_form_path, "File tidak valid" 
     end 
+    # binding.pry
     upload_io = params[:file]
     filename = Digest::SHA1.hexdigest([Time.now, rand].join).to_s+File.extname(file.path).to_s
     File.open(Rails.root.join('public', 'uploads', 'stock_opnames', filename), 'wb') do |file|
@@ -107,7 +125,8 @@ class WarningItemsController < ApplicationController
   def check_excel sheet
     sheet.each do |row|
       next if sheet.first == row
-      code = row[1].gsub(" ","")
+      code = row[1]
+      # code = row[1].gsub(" ","")
       item = Item.find_by(code: code)
       if item.nil?
         return false
@@ -122,7 +141,7 @@ class WarningItemsController < ApplicationController
         return false
       end
       if real_stock.nil?
-        return false
+        # return false
       end
     end
     return true
