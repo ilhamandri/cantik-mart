@@ -24,8 +24,7 @@ class TransactionsController < ApplicationController
     if inv.include? "c"
          
     end
-    
-    
+  
     respond_to do |format|
       format.html
       format.pdf do
@@ -405,5 +404,7 @@ class TransactionsController < ApplicationController
     def param_page
       params[:page]
     end
+ end 
 
 end
+

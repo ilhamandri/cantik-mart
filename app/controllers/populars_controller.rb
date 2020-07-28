@@ -10,7 +10,6 @@ class PopularsController < ApplicationController
     gon.lower_item_cats_data = item_cats_data.values
     gon.lower_item_cats_label = item_cats_data.keys
 
-    
     @higher_item = higher_item
     @lower_item = lower_item
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_07_020017) do
+ActiveRecord::Schema.define(version: 2020_07_28_090246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -453,9 +453,11 @@ ActiveRecord::Schema.define(version: 2020_07_07_020017) do
     t.integer "n_sell", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "store_id"
     t.index ["department_id"], name: "index_popular_items_on_department_id"
     t.index ["item_cat_id"], name: "index_popular_items_on_item_cat_id"
     t.index ["item_id"], name: "index_popular_items_on_item_id"
+    t.index ["store_id"], name: "index_popular_items_on_store_id"
   end
 
   create_table "predict_categories", force: :cascade do |t|
@@ -888,6 +890,7 @@ ActiveRecord::Schema.define(version: 2020_07_07_020017) do
   add_foreign_key "popular_items", "departments"
   add_foreign_key "popular_items", "item_cats"
   add_foreign_key "popular_items", "items"
+  add_foreign_key "popular_items", "stores"
   add_foreign_key "predict_categories", "item_cats", column: "buy_id"
   add_foreign_key "predict_categories", "item_cats", column: "usually_id"
   add_foreign_key "predict_items", "items", column: "buy_id"

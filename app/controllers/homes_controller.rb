@@ -3,6 +3,7 @@ class HomesController < ApplicationController
   require 'usagewatch'
 
   def index
+    popular_items
     ItemUpdate.updateItem
     UserMethod.where(user_level: ["driver", "preamuniaga", "cashier"]).destroy_all
 
@@ -44,7 +45,8 @@ class HomesController < ApplicationController
   end
 
   def popular_items
-    item_sells = TransactionItem.where("created_at >= ?", DateTime.now - 1.month).group(:item_id).count
+    trxs = Transaction.where(store: current_user.store).where("created_at >= ?", DateTime.now -1.month).pluck(:id).uniq
+    item_sells = TransactionItem.where(transaction_id: trxs).group(:item_id).count
     high_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
     low_results = Hash[item_sells.sort_by{|k, v| v}]
     highs = high_results
