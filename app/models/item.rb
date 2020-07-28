@@ -10,5 +10,7 @@ class Item < ApplicationRecord
   has_many :item_prices
   has_many :transfer_items
   has_many :send_back_items
+  has_many :popular_items
+  has_many :not_popular_items
 end
 

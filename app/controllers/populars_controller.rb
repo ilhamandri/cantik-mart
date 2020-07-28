@@ -21,18 +21,18 @@ class PopularsController < ApplicationController
 
     def higher_item
       PopularItem.where(item_cat_id: 134).destroy_all
-      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell DESC").limit(20).pluck(:item_id, :n_sell)
+      item_sells = PopularItem.where(store: current_user.store).where("date = ?", PopularItem.last.date).order("n_sell DESC").limit(20).pluck(:item_id, :n_sell)
       return Hash[item_sells]
     end
 
     def lower_item
-      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell ASC").limit(20).pluck(:item_id, :n_sell)
+      item_sells = PopularItem.where(store: current_user.store).where("date = ?", PopularItem.last.date).order("n_sell ASC").limit(20).pluck(:item_id, :n_sell)
       return Hash[item_sells]
     end
 
     def higher_item_cats_graph
       item_cats = {}
-      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell DESC").limit(100).pluck(:item_id, :n_sell)
+      item_sells = PopularItem.where(store: current_user.store).where("date = ?", PopularItem.last.date).order("n_sell DESC").limit(100).pluck(:item_id, :n_sell)
       item_sells.each do |item_sell|
         item_id = item_sell[0]
         sell_qty = item_sell[1]
@@ -46,7 +46,7 @@ class PopularsController < ApplicationController
 
     def lower_item_cats_graph
       item_cats = {}
-      item_sells = PopularItem.where("date = ?", PopularItem.last.date).order("n_sell ASC").limit(100).pluck(:item_id, :n_sell)
+      item_sells = PopularItem.where(store: current_user.store).where("date = ?", PopularItem.last.date).order("n_sell ASC").limit(100).pluck(:item_id, :n_sell)
       item_sells.each do |item_sell|
         item_id = item_sell[0]
         sell_qty = item_sell[1]

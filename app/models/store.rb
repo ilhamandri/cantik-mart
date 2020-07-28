@@ -8,6 +8,7 @@ class Store < ApplicationRecord
   has_many :transactions
   has_many :store_balances
   has_many :popular_items
+  has_many :not_popular_items
   
   enum store_type:{
     retail: 0,
