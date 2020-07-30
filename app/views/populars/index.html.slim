@@ -1,6 +1,11 @@
 .classic-tabs.mx-2
   ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
     li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="search_popular" aria-selected="true" data-toggle="tab" href="#search_popular" role="tab" 
+        i.fa.fa-search.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Pencarian
+    li.nav-item
       a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="popular" aria-selected="true" data-toggle="tab" href="#popular" role="tab" 
         i.fa.fa-thumbs-up.fa-2x.pb-2 aria-hidden="true" 
         br
@@ -16,6 +21,9 @@
   #myClassicTabContentOrange.tab-content.card
     #popular.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
         = render partial: 'popular'
+
+    #search_popular.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'search_popular'
 
     #not_popular.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel"
         = render partial: 'not_popular'

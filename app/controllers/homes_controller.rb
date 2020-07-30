@@ -52,15 +52,16 @@ class HomesController < ApplicationController
     # low_results = Hash[item_sells.sort_by{|k, v| v}]
     highs = high_results
     # lows = low_results
-    curr_date_pop_item = PopularItem.where("date = ?", Date.today)
+    curr_date_pop_item = PopularItem.where("date = ?", DateTime.now.beginning_of_month)
     curr_date_pop_item.destroy_all if curr_date_pop_item.present?
+    date = DateTime.now.beginning_of_month
     highs.each do |data|
       item = Item.find_by(id: data[0])
       item_cat = item.item_cat
       department = item_cat.department
       sell = data[1]
       pop_item = PopularItem.create item: item, item_cat: item_cat,
-       department: department, n_sell: sell, date: Date.today, store: current_user.store
+       department: department, n_sell: sell, date: date, store: current_user.store
     end
     # lows.each do |data|
     #   item = Item.find_by(id: data[0])
