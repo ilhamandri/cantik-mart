@@ -4,6 +4,19 @@
 
     table.table
         tr
+            th Invoice
+            th Tanngal
+            th Aksi
+        - @losses.each do|loss|
+            tr
+                td #{loss.invoice}
+                td #{loss.created_at}
+                td
+                    a href="#{loss_path(id: loss.id)}" class="btn btn-primary"
+                        | DETIL
+    
+    / table.table
+        tr
             th Bulan
             th Jumlah
         - @losses.each do|loss|

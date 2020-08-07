@@ -1,0 +1,39 @@
+.row
+  .col
+    h5
+      | Daftar Tests
+  .col.text-right
+      a href="#{new_test_path}"
+        button.btn.btn-success type="button" 
+          i.fas.fa-plus 
+          |   Tambah Test
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Pencarian
+      .card-body
+        = form_for :tests, url: tests_path, method: 'GET' do |form|
+          .row
+            .col-12
+              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nama Departemen ..."
+            .col-12.text-center
+              button class="btn btn-primary"
+                | Cari
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data test
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Name
+            th Aksi
+          tbody
+            = render partial: 'list', collection: @tests, as: :test
+        = paginate @tests
+

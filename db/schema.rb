@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_07_020017) do
+ActiveRecord::Schema.define(version: 2020_07_28_093928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -330,9 +330,11 @@ ActiveRecord::Schema.define(version: 2020_07_07_020017) do
     t.integer "n_sell", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "store_id"
     t.index ["department_id"], name: "index_not_popular_items_on_department_id"
     t.index ["item_cat_id"], name: "index_not_popular_items_on_item_cat_id"
     t.index ["item_id"], name: "index_not_popular_items_on_item_id"
+    t.index ["store_id"], name: "index_not_popular_items_on_store_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -453,9 +455,11 @@ ActiveRecord::Schema.define(version: 2020_07_07_020017) do
     t.integer "n_sell", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "store_id"
     t.index ["department_id"], name: "index_popular_items_on_department_id"
     t.index ["item_cat_id"], name: "index_popular_items_on_item_cat_id"
     t.index ["item_id"], name: "index_popular_items_on_item_id"
+    t.index ["store_id"], name: "index_popular_items_on_store_id"
   end
 
   create_table "predict_categories", force: :cascade do |t|
@@ -692,6 +696,14 @@ ActiveRecord::Schema.define(version: 2020_07_07_020017) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "tests", force: :cascade do |t|
+    t.string "name"
+    t.bigint "store_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_tests_on_store_id"
+  end
+
   create_table "transaction_items", force: :cascade do |t|
     t.bigint "item_id", null: false
     t.bigint "transaction_id", null: false
@@ -861,6 +873,7 @@ ActiveRecord::Schema.define(version: 2020_07_07_020017) do
   add_foreign_key "not_popular_items", "departments"
   add_foreign_key "not_popular_items", "item_cats"
   add_foreign_key "not_popular_items", "items"
+  add_foreign_key "not_popular_items", "stores"
   add_foreign_key "notifications", "users", column: "from_user_id"
   add_foreign_key "notifications", "users", column: "to_user_id"
   add_foreign_key "opnames", "stores"
@@ -880,6 +893,7 @@ ActiveRecord::Schema.define(version: 2020_07_07_020017) do
   add_foreign_key "popular_items", "departments"
   add_foreign_key "popular_items", "item_cats"
   add_foreign_key "popular_items", "items"
+  add_foreign_key "popular_items", "stores"
   add_foreign_key "predict_categories", "item_cats", column: "buy_id"
   add_foreign_key "predict_categories", "item_cats", column: "usually_id"
   add_foreign_key "predict_items", "items", column: "buy_id"
@@ -912,6 +926,7 @@ ActiveRecord::Schema.define(version: 2020_07_07_020017) do
   add_foreign_key "store_items", "stores"
   add_foreign_key "supplier_items", "items"
   add_foreign_key "supplier_items", "suppliers"
+  add_foreign_key "tests", "stores"
   add_foreign_key "transaction_items", "items"
   add_foreign_key "transaction_items", "transactions"
   add_foreign_key "transactions", "stores"

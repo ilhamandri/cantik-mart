@@ -26,6 +26,11 @@
             i.fas.fa-trash.fa-2x.pb-2 aria-hidden="true" 
             br
             | Loss
+        li.nav-item
+          a#follow-tab-classic-blue.nav-link.waves-light aria-controls="loss" aria-selected="false" data-toggle="tab" href="#retur" role="tab" 
+            i.fas.fa-exchange-alt.fa-2x.pb-2 aria-hidden="true" 
+            br
+            | Retur
         / li.nav-item
           a#contact-tab-classic-blue.nav-link.waves-light aria-controls="bundling" aria-selected="false" data-toggle="tab" href="#bundling" role="tab" 
             i.fa.fa-thumbs-up.fa-2x.pb-2 aria-hidden="true" 
@@ -47,6 +52,9 @@
 
     #loss.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         = render partial: 'loss'
+
+    #retur.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'retur'
 
     #bundling.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         = render partial: 'bundling'

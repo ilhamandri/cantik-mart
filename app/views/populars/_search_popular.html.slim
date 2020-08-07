@@ -1,0 +1,52 @@
+.card-body
+  .row
+    .col-12.text-right
+      a href="#{refresh_popular_items_path}" class="btn btn-warning"
+        | Perbarui
+    .col-12
+    	- if @date.present?
+    		h3
+    			| Tanggal #{@date.to_date}
+    .col-12
+      	= form_for :populars, url: populars_path, method: 'GET' do |form|
+      		.row
+      			.col-6
+                  select name="month" required=true class="mdb-select md-form colorful-select dropdown-primary" 
+                    option value='01/01'
+                      | Januari
+                    option value='01/02'
+                      | Februari
+                    option value='01/03'
+                      | Maret
+                    option value='01/04'
+                      | April
+                    option value='01/05'
+                      | Mei
+                    option value='01/06'
+                      | Juni
+                    option value='01/07'
+                      | Juli
+                    option value='01/08'
+                      | Agustus
+                    option value='01/09'
+                      | September
+                    option value='01/10'
+                      | Oktober
+                    option value='01/11'
+                      | November
+                    option value='01/12'
+                      | Desember
+
+                .col-md-6
+                  select name="year" required=true class="mdb-select md-form colorful-select dropdown-primary" 
+                    - curr_year = Date.today.year
+                    - first_year = 2019
+                    - loop = curr_year - first_year + 1
+                    - loop.times do |idx|
+                      option value='/#{first_year+idx} 00:00:00'
+                        | #{first_year+idx}
+
+                .col-md-12.text-center
+                  button class="btn btn-success"
+                    i.fas.fa-search
+                    |   Cari

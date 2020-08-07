@@ -1,0 +1,14 @@
+.col-xl-12.col-lg-12.col-md-12.pb-2
+    table.table
+        tr
+            th Invoice
+            th Tanngal
+            th Aksi
+        - @returs.each do|retur|
+            tr
+                td #{retur.invoice}
+                td #{retur.created_at}
+                td
+                    a href="#{retur_path(id: retur.id)}" class="btn btn-primary"
+                        | DETIL
+    

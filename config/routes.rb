@@ -142,12 +142,17 @@ Rails.application.routes.draw do
   resources :stock_values, only: %i[index new create]
   # resources :assets, only: %i[index new create]
 
+  #candy dream routes
+  resources :candy_dreams
+
   resources :controllers
   resources :methods
 
   resources :activities, only: %i[index show]
 
   resources :server_informations, only: %i[index]
+
+  resources :tests
 
   
   get "/403", to: "errors#no_access_right", as: 'no_access_right'

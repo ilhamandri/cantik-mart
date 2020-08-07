@@ -1,0 +1,25 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Edit TEST - #{@test.name}
+      .card-body
+        = form_for :test, url: test_path(id: @test.id), method: "PUT" do |form|
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name", value:"nama"
+
+          .form-group
+            label for="name" Store
+            select name="test[store_id]" required=true class="mdb-select md-form colorful-select dropdown-primary" searchable="Cari..."
+              - @stores.each do |store|
+                - if store.id == @test.store.id
+                  option value="#{store.id}"  selected="selected"
+                    | #{store.name}
+                - else
+                  option value="#{store.id}"
+                    | #{store.name} 
+
+          .form-group.text-center
+            = form.submit "Edit", class: "btn btn-warning"
