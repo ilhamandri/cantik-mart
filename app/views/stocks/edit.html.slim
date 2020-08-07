@@ -24,7 +24,7 @@
           - if ["super_admin", "owner", "stock_admin"].include? current_user.level
             .form_group
               label for="category" Stok
-              = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}"
+              = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}", step: "0.001"
           .form-group
             label for="stock" Limit
             = form.number_field :min_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.min_stock}"
