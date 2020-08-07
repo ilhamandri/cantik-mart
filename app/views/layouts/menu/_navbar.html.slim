@@ -51,11 +51,11 @@ li
         li
           a.waves-effect href="#{members_path}" Daftar Member
 
-        - if Controller.find_by(name: 'exchange_points').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        / - if Controller.find_by(name: 'exchange_points').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
           li
             a.waves-effect href="#{exchange_points_path}"  Kriterian Penukaran Poin
 
-        - if Controller.find_by(name: 'exchange_points').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        / - if Controller.find_by(name: 'exchange_points').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
           li
             a.waves-effect href="#{vouchers_path}"  Daftar Voucher
 
@@ -101,11 +101,11 @@ li
       i.fas.fa-angle-down.rotate-icon
     .collapsible-body
       ul
-        - if Controller.find_by(name: 'promotions').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        / - if Controller.find_by(name: 'promotions').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
           li
             a.waves-effect href="#{promotions_path}"  Promo Bundle
 
-        - if Controller.find_by(name: 'discounts').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        / - if Controller.find_by(name: 'discounts').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
           li
             a.waves-effect href="#{discounts_path}"  Promo Diskon
 
@@ -173,11 +173,6 @@ li
           a.waves-effect href="#{salaries_path}"  Gaji
         li
           a.waves-effect href="#{losses_path}"  Barang Hangus
-
-  li
-    a.collapsible-header.waves-effect.arrow-r  href="#{candy_dreams_path}"
-      i.w-fa.fas.fa-coins
-      | Candy Dream
 
 - if user_level == "super_admin"
   li
