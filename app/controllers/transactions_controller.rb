@@ -17,16 +17,27 @@ class TransactionsController < ApplicationController
       @member_name = " - "+@member.name
       @transactions = @transactions.where(member_card: params[:member_card])
     end
-
-    inv = TransactionItem.invoice
-    transactions.each do |trx_item|
-    
-    if inv.include? "c"
-         
-    end
   
     respond_to do |format|
-      format.html
+      format.html do
+        start_day = DateTime.now.beginning_of_month
+        end_day = DateTime.now.end_of_day
+
+        if params["date_start"].present?
+          start_day = params["date_start"].to_datetime.beginning_of_day
+          if params["date_end"].present?
+            end_day = params["date_end"].to_datetime.end_of_day
+          else
+            end_day = (start_day + 7.days).end_of_day
+          end 
+        end
+
+        transactions = transactions_profit_graph start_day, end_day
+        gon.grand_totals = transactions[0]
+        gon.hpp_totals = transactions[1]
+        gon.profits = transactions[2]
+        gon.days = transactions[3]
+      end
       format.pdf do
         new_params = eval(params[:option])
         filter = filter_search new_params, "pdf"
@@ -38,25 +49,6 @@ class TransactionsController < ApplicationController
           template: "transactions/print_all.html.slim"
       end
     end
-
-    start_day = DateTime.now.beginning_of_month
-    end_day = DateTime.now.end_of_day
-
-    if params["date_start"].present?
-      start_day = params["date_start"].to_datetime.beginning_of_day
-      if params["date_end"].present?
-        end_day = params["date_end"].to_datetime.end_of_day
-      else
-        end_day = (start_day + 7.days).end_of_day
-      end 
-    end
-
-    transactions = transactions_profit_graph start_day, end_day
-    gon.grand_totals = transactions[0]
-    gon.hpp_totals = transactions[1]
-    gon.profits = transactions[2]
-    gon.days = transactions[3]
-
   end
 
 
@@ -404,7 +396,6 @@ class TransactionsController < ApplicationController
     def param_page
       params[:page]
     end
- end 
+end 
 
-end
 

@@ -11,15 +11,10 @@
 		      p.card-text.text-white
 		        | #{number_with_delimiter(sell, delimiter: ".")}
 
-		/.col-12.pb-2
-		  .card.bg-warning.text-black
-		    .card-body.text-black
-		      h5.card-title
-		        | <i class="fa fa-cart-arrow-down"></i>&nbsp&nbsp
-		        | SISA KOIN
-		      p.card-text.text-black
-		        | #{number_with_delimiter(4000 - sell, delimiter: ".")}
-- total = sell * trx_items.first.item.sell
+- total = 0
+- if trx_items.present?
+	- total = sell * trx_items.first.item.sell
+
 .col.pb-2
   .card.bg-primary
     .card-body.text-white

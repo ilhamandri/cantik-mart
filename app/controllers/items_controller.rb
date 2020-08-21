@@ -4,16 +4,7 @@ class ItemsController < ApplicationController
   require 'apriori'
   
   def index
-    # items = Item.all
-    # items.each do |item|
-    #   buy = item.buy
-    #   sell = item.sell
-    #   next if sell == 0 || buy == 0
-    #   margin = ((sell.to_f-buy.to_f) / buy)*100
-    #   item.margin = margin.ceil.to_i
-    #   item.save!
-    # end
-    @items = Item.page param_page
+    @items = Item.all
     if params[:search].present?
       @search = params[:search].downcase
       search = "%"+@search+"%"
@@ -31,6 +22,7 @@ class ItemsController < ApplicationController
       order = @order_by+" "+order_type
       @items = @items.order(order)
     end
+    @items = @items.page param_page
   end
 
   def show
