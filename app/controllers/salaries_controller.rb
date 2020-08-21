@@ -92,15 +92,17 @@ class SalariesController < ApplicationController
   def create
     user = User.find_by(id: params[:user_id])
     return redirect_back_data_error new_salary_path, "Karyawan tidak ditemukan" if user.nil?
-    pay_kasbon = params[:salary][:pay_kasbon].to_i
+    # pay_kasbon = params[:salary][:pay_kasbon].to_i
+    pay_kasbon = 0
     pay_receivable = params[:salary][:pay_receivable].to_i
     paid = pay_kasbon + pay_receivable
+    paid = pay_receivable
     bonus = params[:salary][:bonus].to_i
     receivables = Receivable.where(to_user: user.id).where("deficiency > 0")
     return redirect_back_data_error new_salary_path, user.name + " tidak memiliki hutang. Silahkan cek kembali" if receivables.sum(:deficiency) == 0 && paid > 0
     
     paid_for_deficiency = paid
-    tag = "SL-"+DateTime.now.to_i
+    tag = "SL-"+DateTime.now.to_i.to_s
     receivables.each do |receivable|
       curr_receivable_deficiency = receivable.deficiency
       break if paid_for_deficiency == 0
