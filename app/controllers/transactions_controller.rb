@@ -306,6 +306,7 @@ class TransactionsController < ApplicationController
         profit = grand_total - hpp_total
         graphs[trxs[0].to_date] = [grand_total, hpp_total, profit]
       end
+      graphs = graphs.sort.to_h
       vals = graphs.values
       grand_totals = vals.collect {|ind| ind[0]}
       hpp_totals = vals.collect {|ind| ind[1]}
