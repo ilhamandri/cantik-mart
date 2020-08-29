@@ -1,0 +1,20 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Tambah Kasbon
+      .card-body
+        = form_for :kasbon, url: kasbons_path, method: "POST" do |form|
+          .form-group
+              label for="kasbon" Karyawan
+              select name="kasbon[user_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" searchable="Cari..."
+                - @users.each do |user|
+                  option value="#{user.id}"
+                    | #{user.name} 
+          .form-group
+            label for="buy" Nominal
+            = form.number_field :nominal, required: true, class: "form-control md-form", id: "buy", min: "10000"
+          
+          .form-group.text-center
+            = form.submit "Tambah", class: "btn btn-primary"

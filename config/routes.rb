@@ -154,6 +154,8 @@ Rails.application.routes.draw do
 
   resources :tests
 
+  resources :kasbons
+
   
   get "/403", to: "errors#no_access_right", as: 'no_access_right'
   get "/404", to: "errors#not_found", as: 'not_found'

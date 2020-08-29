@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_28_093928) do
+ActiveRecord::Schema.define(version: 2020_08_29_045916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -282,6 +282,14 @@ ActiveRecord::Schema.define(version: 2020_07_28_093928) do
     t.bigint "sell_member", default: 0, null: false
     t.bigint "counter", default: 0
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
+  end
+
+  create_table "kasbons", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "nominal", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_kasbons_on_user_id"
   end
 
   create_table "loss_items", force: :cascade do |t|
@@ -864,6 +872,7 @@ ActiveRecord::Schema.define(version: 2020_07_28_093928) do
   add_foreign_key "item_cats", "departments"
   add_foreign_key "item_prices", "items"
   add_foreign_key "items", "item_cats"
+  add_foreign_key "kasbons", "users"
   add_foreign_key "loss_items", "items"
   add_foreign_key "loss_items", "losses"
   add_foreign_key "losses", "stores"

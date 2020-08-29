@@ -92,8 +92,8 @@ class SalariesController < ApplicationController
   def create
     user = User.find_by(id: params[:user_id])
     return redirect_back_data_error new_salary_path, "Karyawan tidak ditemukan" if user.nil?
-    # pay_kasbon = params[:salary][:pay_kasbon].to_i
-    pay_kasbon = 0
+    pay_kasbon = params[:salary][:pay_kasbon].to_i
+    # pay_kasbon = 0
     pay_receivable = params[:salary][:pay_receivable].to_i
     paid = pay_kasbon + pay_receivable
     paid = pay_receivable
@@ -127,6 +127,17 @@ class SalariesController < ApplicationController
       receivable.deficiency = new_val_deficiency
       receivable.save!
     end 
+
+    if pay_kasbon != 0
+      kasbon = Kasbon.find_by(user: user)
+      if kasbon.present?
+        kasbon.nominal = kasbon.nominal - pay_kasbon
+        kasbon.nominal = 0 if kasbon.nominal < 0
+        kasbon.save!
+      else
+        pay_kasbon = 0
+      end
+    end
 
 
     store = user.store
