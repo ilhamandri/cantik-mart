@@ -31,10 +31,12 @@ class ApisController < ApplicationController
     user = User.find_by(id: user_id)
     if user.present? 
       user_debt = Receivable.where("deficiency > 0").where(finance_type: Receivable::EMPLOYEE).where(to_user: user_id).sum(:deficiency)
+      kasbon = Kasbon.find_by(user: user)
+      nominal = 0
+      nominal = kasbon.nominal if kasbon.present?
       json_result << view_context.number_with_delimiter(user.salary, delimiter: ".", separator: ",")
       json_result << view_context.number_with_delimiter(user_debt.to_i, delimiter: ".", separator: ",")
-      # json_result << view_context.number_to_currency(user.salary) 
-      # json_result << view_context.number_to_currency(user_debt)
+      json_result << view_context.number_with_delimiter(nominal.to_i, delimiter: ".", separator: ",")
     end
     render :json => json_result
   end

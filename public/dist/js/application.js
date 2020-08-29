@@ -8,6 +8,7 @@ function getUserSalary(user) {
     success: function (result) { 
       $("#salary").html("GAJI : "+result[0]);
       $("#debt").html("HUTANG : "+result[1]);
+      $("#kasbon").html("KASBON : "+result[2]);
       // alert(result)
     }
   });
