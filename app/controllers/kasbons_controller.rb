@@ -20,7 +20,7 @@ class KasbonsController < ApplicationController
       curr_kasbon.save!
     else
       curr_kasbon = Kasbon.new kasbon_params
-      return redirect_back_data_error new_kasbon_path, "Data Kasbon Tidak Valid" if kasbon.invalid?
+      return redirect_back_data_error new_kasbon_path, "Data Kasbon Tidak Valid" if curr_kasbon.invalid?
       curr_kasbon.save!
     end
     return redirect_success kasbons_path, "Data Kasbon - " + curr_kasbon.user.name + " - Berhasil Disimpan"
