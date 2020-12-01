@@ -63,7 +63,7 @@ class UsersController < ApplicationController
     
     # absent @user
 
-    @receivables = Receivable.where(user: @user, finance_type: "EMPLOYEE").order("created_at DESC").page param_page
+    @receivables = Receivable.where(to_user: @user, finance_type: "EMPLOYEE").order("created_at DESC").page param_page
     
     # # if params[:month].present?
     # #   start_date = ("01-" + params[:month].to_s + "-" + params[:year].to_s).to_time.beginning_of_month
