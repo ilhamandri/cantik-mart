@@ -24,21 +24,27 @@ class ReceivablesController < ApplicationController
   end
 
   def show
-    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless params[:id].present?
+    return redirect_back_data_error departments_path, "Data Piutang Tidak Ditemukan" unless params[:id].present?
     @receivable = Receivable.find_by_id params[:id]
-    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless @receivable.present?
+    return redirect_back_data_error departments_path, "Data Piutang Tidak Ditemukan" unless @receivable.present?
   end
 
   def edit
-    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless params[:id].present?
+    return redirect_back_data_error departments_path, "Data Piutang Tidak Ditemukan" unless params[:id].present?
     @receivable = Receivable.find_by_id params[:id]
-    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless @receivable.present?
+    return redirect_back_data_error departments_path, "Data Piutang Tidak Ditemukan" unless @receivable.present?
+    return redirect_back_data_error departments_path, "Data Piutang Tidak Dapat Diubah" unless can_edit
+  end
+
+  def can_edit_or_destroy receivable
+    pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivable.id)
   end
 
   def update
-    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless params[:id].present?
+    return redirect_back_data_error departments_path, "Data Piutang Tidak Ditemukan" unless params[:id].present?
     @receivable = Receivable.find_by_id params[:id]
-    return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless @receivable.present?
+    return redirect_back_data_error departments_path, "Data Piutang Tidak Ditemukan" unless @receivable.present?
+    return redirect_back_data_error departments_path, "Data Piutang Tidak Dapat Diubah" unless can_edit
     new_nominal = params[:receivable][:nominal].to_i
     old_nominal = @receivable.nominal
 

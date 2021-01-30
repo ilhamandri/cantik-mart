@@ -62,7 +62,7 @@ class PopularsController < ApplicationController
     def search_date
       month_param = params[:month]
       year_param = params[:year]
-      date = PopularItem.last.date
+      date = nil
       if (year_param.present?) && (month_param.present?)
         date = (month_param.to_s + year_param.to_s).to_datetime.beginning_of_month
       end
