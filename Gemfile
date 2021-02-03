@@ -37,6 +37,7 @@ gem 'rubyzip'
 gem 'axlsx'
 gem 'axlsx_rails'
 gem 'apriori-ruby'
+gem 'sidekiq'
 # gem 'xgboost'
 # gem 'lightgbm'
 
