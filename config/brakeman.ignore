@@ -1,0 +1,426 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "1145587628f3409f3e876a561f45208eb5f18164dd0862c43f5fb280a4840fd7",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/balances_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "BalancesController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "1da0b32128563d70f1386a602fc50ca49e5dd40829c3c63161ad73976cb4708a",
+      "check_name": "SendFile",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/downloads_controller.rb",
+      "line": 46,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file((\"./report/\" + params[:name]))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DownloadsController",
+        "method": "get_file"
+      },
+      "user_input": "params[:name]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "278694ce68d14ecd563e5c01c44381bf51428d3eac6283587e536568d2309cdc",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/suppliers_controller.rb",
+      "line": 20,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "SuppliersController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "27cdd3180d5254ad829e25adcd63927b4de01a4e03a55e0c9af70f058d2a9eec",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/transfers_controller.rb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "TransfersController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "3573447fcd088ba4e400152152ffcf9da5c9c049b0e8530032c4dbd429fed6d1",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/stocks_controller.rb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "StocksController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "3d12da997e70385687d03bf4889f15f20ba41022ea2175712331165d4f02c755",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/transactions_controller.rb",
+      "line": 42,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "TransactionsController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "46a2f70bbd785a1b457d68142c2e2ac43d37ecb871290e2e85fd4bbc52a12174",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/stock_values_controller.rb",
+      "line": 18,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "StockValuesController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "4ab809f80ac34b96a3d85d67ad9541b3e5c756faa1e07f69601c3ddfaf2ac657",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/operationals_controller.rb",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "OperationalsController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "5532a5ff5ecd1cea91e93c600901dcf184128ec2f8e1efcf4df4fe1dd8201e8a",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/promotions_controller.rb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PromotionsController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "5a45505f142086809a4d6b87c46cc72b8631a61bbbc2caf3714bb157bb6aebec",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/fix_costs_controller.rb",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "FixCostsController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "5b78a9a797fb362d1d3bb6b39559fc60acaeaa1fc4daad9ed26a5727e19fcfd4",
+      "check_name": "SendFile",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/downloads_controller.rb",
+      "line": 27,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file((\"./public/uploads/stock_opnames/\" + params[:file]))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DownloadsController",
+        "method": "serve_file"
+      },
+      "user_input": "params[:file]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "6dac2da0e7b23d16c74269769edde43568170310fbff4c2e2441f828576cdc0d",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/returs_controller.rb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "RetursController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "7a11793749d025c92831a149b59ae8f14405ab3271174068cd4a1c8c834f9795",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/cash_flows_controller.rb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "CashFlowsController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "8302291b5112b020e11eb3cd22045b5a324a9607a8b62c71b2377ea952cd1e5a",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/taxs_controller.rb",
+      "line": 25,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "TaxsController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "9d17a5eafda357b50045c592ccb9192d3bca0cee80a0e974b8828db12869f489",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/complains_controller.rb",
+      "line": 17,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ComplainsController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "b2727ce34545069f8f44c1e63485333671018f32e7fd96e6c5ed04c9740c9670",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/absents_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "AbsentsController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "ba043c2cc6a4ca67932ad16946c9d546a792c0ed4a6ad6f971c83e03df4efcab",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/receivables_controller.rb",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ReceivablesController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "d86d33f58379140f0791c6718c4031863fd4f9c142c044164497f1bc99341334",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/debts_controller.rb",
+      "line": 16,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DebtsController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "e07bfb0433c8930fa6968743fe7270ac9809fdf706d59972edafbfd773b79aea",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/salaries_controller.rb",
+      "line": 29,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "SalariesController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "e30f1fc2a3cf17aeaff9e7d67383393a4403e452fd88cfd796c88d3de5463b5b",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/items_controller.rb",
+      "line": 23,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Item.all.where(\"lower(name) like ? OR lower(code) like ?\", ((\"%\" + params[:search].downcase) + \"%\"), ((\"%\" + params[:search].downcase) + \"%\")).order(((params[:order_by].downcase + \" \") + params[:order_type].upcase))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ItemsController",
+        "method": "index"
+      },
+      "user_input": "((params[:order_by].downcase + \" \") + params[:order_type].upcase)",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "f65165e0cb8044bc567d056216d0a445d14c9b379e39ecbc071b879d2c84d940",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/controllers/orders_controller.rb",
+      "line": 20,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:option])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "OrdersController",
+        "method": "index"
+      },
+      "user_input": "params[:option]",
+      "confidence": "High",
+      "note": ""
+    }
+  ],
+  "updated": "2021-02-03 14:50:04 +0700",
+  "brakeman_version": "4.7.2"
+}

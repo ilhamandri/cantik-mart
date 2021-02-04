@@ -66,6 +66,8 @@ class PopularsController < ApplicationController
       if (year_param.present?) && (month_param.present?)
         date = (month_param.to_s + year_param.to_s).to_datetime.beginning_of_month
       end
+
+      date = PopularItem.where(store: current_user.store).last.date.to_date if date == nil
       
       return date
       
