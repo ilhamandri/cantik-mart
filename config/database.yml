@@ -1,8 +1,6 @@
 default: &default
   adapter: postgresql
   pool: 5
-  timeout: 5000
-
 development:
   <<: *default
   database: cantik_mart
@@ -16,7 +14,9 @@ test:
   password: postgres
 
 production:
-  <<: *default
+  adapter: postgresql
+  pool: <%= ENV['RAILS_MAX_THREADS'].to_i + 2 %>
   database: cantik_mart
   username: postgres
   password: postgres
+  timeout: 5000

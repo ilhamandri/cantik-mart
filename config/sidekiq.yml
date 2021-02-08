@@ -1,0 +1,7 @@
+development:
+	:concurency: 5
+production:
+	:concurency: <%= ENV['SIDEKIQ_CONCURRENCY'] %>
+:queues:
+	- critical
+	- default
