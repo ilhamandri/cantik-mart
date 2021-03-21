@@ -50,7 +50,9 @@ class PostsController < ApplicationController
 					    if item.id == 30331
 					    	trx.has_coin = true
 					    end
-					    store_stock.stock = store_stock.stock.to_f - new_trx_item.quantity.to_f
+					    decrease = new_trx_item.quantity.to_f
+					    decrease = decrease.ceil.to_i if item.id != 6049
+					    store_stock.stock = store_stock.stock.to_f - decrease
 					    item.counter = item.counter + new_trx_item.quantity.to_i
 					    item.save!
 					    store_stock.save!
