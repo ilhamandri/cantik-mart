@@ -27,7 +27,10 @@
               = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}", step: "0.001"
           .form-group
             label for="stock" Limit
-            = form.number_field :min_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.min_stock}"
+            = form.number_field :limit, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.limit}"
+          .form-group
+            label for="stock" Ideal Stok
+            = form.number_field :ideal_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.ideal_stock}"
           .form-group
             label for="sell" Harga Jual
             = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", disabled: true

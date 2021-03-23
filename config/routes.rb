@@ -70,6 +70,8 @@ Rails.application.routes.draw do
   post '/opname_day', to: 'warning_items#opname_day', as: 'opname_day'
   get '/opname', to: 'warning_items#opname', as: 'opname_form'
   post '/opname', to: 'warning_items#update_stock', as: 'opname'
+
+  post '/item_recaps', to: 'items#item_recaps', as: 'item_recaps'
   
   get '/clean/prints', to: 'prints#clean', as: "clean_prints"
   get '/print/salary', to: 'salaries#print_salary', as:"print_salary"

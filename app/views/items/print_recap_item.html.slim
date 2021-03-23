@@ -1,0 +1,46 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Tanggal Buat  
+      td
+        textarea #{DateTime.now.in_time_zone.to_s}
+    tr
+      td.meta-head Dibuat Oleh
+      td 
+        textarea #{current_user.name.to_s} ( #{current_user.store.name} )
+    tr
+      td.meta-head Keterangan
+      td
+        b  
+          | #{@description}
+
+br
+br
+br
+- buys = 0
+- sells = 0
+table#items
+  tr
+    th Tanggal
+    th Beli
+    th Jual
+  - @buy_sell.each do |buy_sell|
+    tr
+      td #{buy_sell[0].to_date}
+      td #{number_with_delimiter(buy_sell[1].to_i, delimiter: ".", separator: ",")}
+      td #{number_with_delimiter(buy_sell[2].to_i, delimiter: ".", separator: ",")}
+      - buys += buy_sell[1].to_i
+      - sells += buy_sell[2].to_i
+  tr
+    td colspan="3"
+      |
+  tr
+    td 
+      b
+        | Total
+    td 
+      b
+        | #{number_with_delimiter(buys.to_i, delimiter: ".", separator: ",")}
+    td 
+      b
+        | #{number_with_delimiter(sells.to_i, delimiter: ".", separator: ",")}

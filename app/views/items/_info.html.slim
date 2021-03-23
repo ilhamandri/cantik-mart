@@ -28,6 +28,16 @@
       - margin = @item.margin 
       - margin = margin.to_s + " %" if margin <= 100
       input class="md-form form-control" value="#{margin}" disabled="disabled"
+    -  @stock = StoreItem.find_by(item: @item, store: current_user.store)
+    .form_group
+      label for="category" Stok 
+      input type='number' value="#{@stock.stock}" disabled= true class="form-control md-form"
+    .form-group
+      label for="stock" Limit AO
+      = form.number_field :limit, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.limit}", disabled: "disabled"
+    .form-group
+      label for="stock" Stok Ideal
+      = form.number_field :ideal_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.ideal_stock}", disabled: "disabled"
     .form-group
       label for="item" Jenis Barang
       - if !@item.local_item
@@ -94,29 +104,35 @@
                   a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
                     |   + Cetak
                   | &nbsp&nbsp&nbsp
-                  a class="btn btn-warning" href="#{edit_grocer_item_path(id: item.id)}"
-                    |   Ubah
-                  | &nbsp&nbsp&nbsp
-                  a class="btn btn-danger" href="#{grocer_item_path(id: item.id)}"
-                    |   Hapus
+                  - if current_user.store.store_type == "warehouse"
+                    a class="btn btn-warning" href="#{edit_grocer_item_path(id: item.id)}"
+                      |   Ubah
+                    | &nbsp&nbsp&nbsp
+                    a class="btn btn-danger" href="#{grocer_item_path(id: item.id)}"
+                      |   Hapus
+    .form-group.text-center     
+      - if Controller.find_by(name: 'stocks').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+          .col-12.text-center
+            - stock = StoreItem.find_by(item: @item, store: current_user.store)
+            a href='#{edit_stock_path(id: stock.id)}' class="btn btn-danger" type="button" 
+                  | Edit Stok         
+      - if current_user.store.store_type == "warehouse"
+        - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+          a href="#{edit_item_path(id: @item.id)}"
+            button.btn.btn-warning type="button" 
+              |   Edit
 
-    .form-group.text-center
-      - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
-        a href="#{edit_item_path(id: @item.id)}"
-          button.btn.btn-warning type="button" 
-            |   Edit
+        - if Controller.find_by(name: 'grocer_items').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+          a href="#{new_grocer_item_path(id: @item.id)}"
+            button.btn.btn-info type="button" 
+              i.fas.fa-plus 
+              |   Tambah Harga
 
-      - if Controller.find_by(name: 'grocer_items').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
-        a href="#{new_grocer_item_path(id: @item.id)}"
-          button.btn.btn-info type="button" 
-            i.fas.fa-plus 
-            |   Tambah Harga
+        - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? current_user.level
+          / a href='#{item_suppliers_path(id: @item.id)}'
+                button.btn.btn-primary type="button" 
+                  | Supplier
 
-      - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? current_user.level
-        / a href='#{item_suppliers_path(id: @item.id)}'
-              button.btn.btn-primary type="button" 
-                | Supplier
-
-      - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
-        - if !@item.store_items.present? && !@item.supplier_items.present?
-          = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-danger"
+        - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
+          - if !@item.store_items.present? && !@item.supplier_items.present?
+            = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-danger"

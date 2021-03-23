@@ -105,7 +105,7 @@ class StocksController < ApplicationController
       end
     end
     store_item.create_activity :edit, owner: current_user, parameters: changes
-    return redirect_success stock_path(id: store_item.id), "Data Stok Barang Berhasil Diubah"
+    return redirect_success item_path(id: item.id), "Data Stok Barang Berhasil Diubah"
   end
 
   def show
@@ -119,14 +119,16 @@ class StocksController < ApplicationController
     def stock_params
       {
         stock: params[:item][:stock],
-        min_stock: params[:item][:min_stock]
+        limit: params[:item][:limit],
+        ideal_stock: params[:item][:ideal_stock]
       }
     end
 
     def edit_stock_params
       {
         stock: params[:item][:stock],
-        min_stock: params[:item][:min_stock]
+        limit: params[:item][:limit],
+        ideal_stock: params[:item][:ideal_stock]
       }
     end
 
