@@ -40,7 +40,7 @@ class ItemsController < ApplicationController
       buy_sell << [date, 0, 0]
     end
     dates.each_with_index do |date, idx| 
-      buy = OrderItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:new_receive)
+      buy = OrderItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:receive)
       sell = TransactionItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:quantity)
       buy_sell[idx][1] = buy
       buy_sell[idx][2] = sell
