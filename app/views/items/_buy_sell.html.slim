@@ -1,9 +1,9 @@
 .col-xl-12.col-lg-12.col-md-12.pb-2
 	h2 style="font-weight: bold"
-		- if @item.kpi >= 75
+		- if @item.kpi >= 40
 			.text-success
 				| FAST MOVING
-		- elsif @item.kpi <= 50
+		- elsif @item.kpi <= 15
 			.text-danger
 				| SLOW MOVING 
 		- else

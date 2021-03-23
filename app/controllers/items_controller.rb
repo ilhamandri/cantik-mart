@@ -131,10 +131,9 @@ class ItemsController < ApplicationController
     buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse
     gon.buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse 
     begin
-      kpi = (sell.inject(:+) / buy.inject(:+)) * 100
+      kpi = (sell.inject(:+).to_f / buy.inject(:+).to_f) * 100
       @item.kpi = kpi
       @item.save!
-      binding.pry
     rescue Exception
     end
 
