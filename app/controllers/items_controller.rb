@@ -136,6 +136,9 @@ class ItemsController < ApplicationController
     rescue Exception
     end
 
+    @item.kpi = kpi
+    @item.save!
+
     b_prices = graphs_buy_sell_val.collect{|ind| ind[2]}.reverse
     before = 0
     b_prices.each_with_index do |price, idx|
