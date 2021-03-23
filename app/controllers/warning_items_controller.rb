@@ -42,27 +42,36 @@ class WarningItemsController < ApplicationController
   end
 
   def opname_day
-    return redirect_back_data_error opname_path, "Data tidak valid (opname hari harus diisi)" if params[:day].nil?
-    day = params[:day].to_i
-    start_limit = (day * 100) - 100
+    so_type = params[:so_type]
+    filename = nil
+    
+    items = nil
+    department = Department.find_by(id: params[:opname][:department_id])
+    supplier = Supplier.find_by(id: params[:opname][:supplier_id])
 
+    if so_type == "department"  
+      item_cats = department.item_cat
+      items = Item.where(item_cat: item_cats)
+      filename = "./report/opname/" + so_type + "_" + department.name + "_" + current_user.store.id.to_s + "_" +DateTime.now.to_i.to_s+".xlsx"
+    else
+      item_ids = supplier.supplier_items.pluck(:item_id)
+      items = Item.where(id: item_ids)
+      filename = "./report/opname/" + so_type + "_" + supplier.name + "_" + current_user.store.id.to_s + "_" +DateTime.now.to_i.to_s+".xlsx"
+    end
 
-    items = StoreItem.where(store: current_user.store).where("stock <= 0")
-    # items = items.limit(100).offset(start_limit)
+    store_items = StoreItem.where(store: current_user.store, item: items)
 
-    filename = "./report/opname/" + current_user.store.id.to_s + "-" +DateTime.now.to_i.to_s+".xlsx"
+    
     p = Axlsx::Package.new
-    wb = p.workbook
+    wb = p.workbook 
 
     wb.add_worksheet(:name => "OPNAME") do |sheet|
       sheet.add_row ["No", "Kode", "Nama", "STOK SISTEM", "OPNAME"]
       idx = 1
-      items.each do |store_item|
-        if store_item.stock < 0
-          item = store_item.item
-          a = sheet.add_row [idx, item.code.to_s+" ", item.name, store_item.stock]
-          idx+=1
-        end
+      store_items.each do |store_item|
+        item = store_item.item
+        a = sheet.add_row [idx, item.code.to_s+" ", item.name, store_item.stock]
+        idx+=1
       end
     end
 

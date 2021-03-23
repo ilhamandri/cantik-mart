@@ -5,14 +5,32 @@ h3
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Download File Opname 
-      .card-body
-        = form_for :opname, url: opname_day_path, method: "POST" do |form|
-          .form-group
-            label for="store" Opname Hari Ke
-            input type="number" min="1" value="1" name="day" class="form-control"
-          .form-group.text-center
-            = form.submit "DOWNLOAD", class: "btn btn-primary white-text"
+          | Unduh Data SO
+      .row
+        .col-6
+          .card-body
+            = form_for :opname, url: opname_day_path(so_type: "department"), method: "POST" do |form|
+              .form-group
+                label for="department" Pilih DEPARTEMEN
+                select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="opname[department_id]" id="supplierId" 
+                  - Department.all.each do |department|
+                    option value="#{department.id}"
+                      | #{department.name}
+              .form-group.text-center
+                = form.submit "UNDUH", class: "btn btn-primary white-text"
+
+
+        .col-6
+          .card-body
+            = form_for :opname, url: opname_day_path(so_type: "supplier"), method: "POST" do |form|
+              .form-group
+                label for="department" Pilih SUPLIER
+                select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="opname[supplier_id]" id="supplierId" 
+                  - Supplier.all.each do |supplier|
+                    option value="#{supplier.id}"
+                      | #{supplier.name}
+              .form-group.text-center
+                = form.submit "UNDUH", class: "btn btn-primary white-text"
 
 .container-fluid
   .col-lg-12.col-md-12
