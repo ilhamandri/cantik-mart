@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_29_045916) do
+ActiveRecord::Schema.define(version: 2021_03_23_033021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -281,6 +281,7 @@ ActiveRecord::Schema.define(version: 2020_08_29_045916) do
     t.datetime "price_updated"
     t.bigint "sell_member", default: 0, null: false
     t.bigint "counter", default: 0
+    t.bigint "kpi", default: 0
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 
@@ -665,6 +666,8 @@ ActiveRecord::Schema.define(version: 2020_08_29_045916) do
     t.float "head_buy", default: 0.0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "limit", default: 5
+    t.bigint "ideal_stock", default: 10
     t.index ["item_id"], name: "index_store_items_on_item_id"
     t.index ["store_id"], name: "index_store_items_on_store_id"
   end

@@ -31,7 +31,7 @@ class ItemsController < ApplicationController
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless @item.present?
     @suppliers = SupplierItem.where(item: @item)
 
-    @bundlings = PredictCategory.where(buy: @item.item_cat).order("percentage DESC").limit(10)
+    # @bundlings = PredictCategory.where(buy: @item.item_cat).order("percentage DESC").limit(10)
     losses = Loss.where(id: LossItem.where(item: @item).pluck(:loss_id)).where("created_at >= ?", DateTime.now-13.months).group_by { |m| m.created_at.beginning_of_month }
 
     @item = Item.find_by_id params[:id]
@@ -103,7 +103,12 @@ class ItemsController < ApplicationController
     gon.sell = sell
     buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse
     gon.buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse 
-    
+    kpi = 0
+    begin
+      kpi = (sell.inject(:+) / buy.inject(:+)) * 100
+    rescue Exception
+    end
+
     b_prices = graphs_buy_sell_val.collect{|ind| ind[2]}.reverse
     before = 0
     b_prices.each_with_index do |price, idx|
@@ -202,6 +207,7 @@ class ItemsController < ApplicationController
         return redirect_back_data_error item_path(id: item.id), "Silahkan Set Ulang Margin Supaya Harga JUAL Lebih Besar dari Harga Beli"
       end
       item.sell = new_price
+      item.sell_member = new_price
       change = true
     end
 

@@ -46,11 +46,20 @@ class ReturItemsController < ApplicationController
 
         order_qty = value[2].to_i
         if order_qty > accept_item
-          receivable.delete
-          OrderItem.where(order: order).delete_all
-          order.delete
-          LossItem.where(loss: loss).delete_all
-          loss.delete
+          begin
+            receivable.delete
+          rescue Exception
+          end
+          begin
+            OrderItem.where(order: order).delete_all
+            order.delete
+          rescue Exception
+          end
+          begin
+            LossItem.where(loss: loss).delete_all
+            loss.delete
+          rescue Exception
+          end
           return redirect_back_data_error urls, "Jumlah tidak boleh melebihi barang yang ditukar" 
         end
 

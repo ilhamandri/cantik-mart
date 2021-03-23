@@ -19,8 +19,11 @@
             label for="category" Stok 
             input type='number' value="#{@stock.stock}" disabled= true class="form-control md-form"
           .form-group
-            label for="stock" Limit
-            = form.number_field :min_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.min_stock}", disabled: "disabled"
+            label for="stock" Limit AO
+            = form.number_field :limit, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.limit}", disabled: "disabled"
+          .form-group
+            label for="stock" Stok Ideal
+            = form.number_field :ideal_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.ideal_stock}", disabled: "disabled"
           .form-group
             label for="stock" Harga Beli
             input type='number' value="#{@stock.buy}" disabled= true class="form-control md-form"

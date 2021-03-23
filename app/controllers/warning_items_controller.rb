@@ -5,7 +5,7 @@ class WarningItemsController < ApplicationController
   def index
     @inventories = StoreItem.page param_page
     store_id = current_user.store.id
-    @inventories = @inventories.where(store_id: store_id).where('stock < min_stock')
+    @inventories = @inventories.where(store_id: store_id).where('stock < limit')
     if params[:search].present?
       @search = params[:search].downcase
       search = "%"+@search+"%"

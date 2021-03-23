@@ -25,7 +25,9 @@
       input class="md-form form-control" value="#{number_with_delimiter(@item.buy.round, delimiter: ".")} ( #{price_updated} )" disabled="disabled"
     .form-group
       label for="item" Margin
-      input class="md-form form-control" value="#{@item.margin}" disabled="disabled"
+      - margin = @item.margin 
+      - margin = margin.to_s + " %" if margin <= 100
+      input class="md-form form-control" value="#{margin}" disabled="disabled"
     .form-group
       label for="item" Jenis Barang
       - if !@item.local_item
