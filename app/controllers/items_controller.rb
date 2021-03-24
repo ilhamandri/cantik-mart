@@ -193,9 +193,8 @@ class ItemsController < ApplicationController
     end
     kpi = (kpi_3month + kpi_6month) / 2.to_f
     kpi = 0 if kpi.nan?
-    item.kpi = kpi
+    item.kpi = kpi.ceil(2)
     item.save!
-    binding.pry
   end
 
   def new
