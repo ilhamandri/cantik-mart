@@ -186,7 +186,7 @@ class ItemsController < ApplicationController
     kpi_3month = (sell_3months / order_3months) * 100 if order_3months > 0 && sell_3months > 0
     kpi_6month = (sell_6months / order_6months) * 100 if order_6months > 0 && sell_6months > 0
     
-    kpi = (kpi_3month + kpi_6month) / 2.to_f
+    kpi = (kpi_3month*0.75) + (kpi_6month*0.25) 
     item.kpi = kpi.ceil(2)
     item.save!
   end
