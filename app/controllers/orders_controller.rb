@@ -274,58 +274,60 @@ class OrdersController < ApplicationController
 
       total_item_without_disc_global = price_2
 
-      # price_3 = (price_2 - (price_2*disc_percentage/100)).round
       item_grand_total = (price_2 + (price_2*ppn/100)).round
 
       based_item_price = item_grand_total / receive_qty;
 
-      profit_margin = this_item.margin
+      sell_price = item.last.to_f
+      margin = ((sell_price-based_item_price) / based_item_price) * 100
 
-      if this_item.buy < based_item_price
-        new_price = based_item_price + (based_item_price * profit_margin / 100).round
+      this_item.buy = based_item_price 
+      this_item.sell = sell_price
+      this_item.margin = margin
+      this_item.save!
+      # if this_item.buy < based_item_price
+      #   new_price = based_item_price + (based_item_price * profit_margin / 100).round
 
-        last_price = this_item.sell
-        if profit_margin > 0
-          if new_price > last_price
-            old_price = this_item.sell
-            this_item.sell = new_price.ceil(-2)
-            this_item.save!
-
-            # ItemPrice.create item: this_item, buy: based_item_price, sell: this_item.sell, month: Date.today.month.to_i, year: Date.today.year.to_i
-
-            to_users = User.where(level: ["owner", "super_admin", "super_visi"])
-
-            if old_price != this_item.sell
-              Store.all.each do |store|
-                Print.create item: this_item, store: store
-              end
-              message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
-              to_users.each do |to_user|
-                set_notification current_user, to_user, "info", message, prints_path
-              end
-            end  
-          end
-        else
-          this_item.sell = new_price.ceil(-2)
-          this_item.save!
-
-          to_users = User.where(level: ["owner", "super_admin", "super_visi"])
+      #   last_price = this_item.sell
+      #   if profit_margin > 0
+      #     if new_price > last_price
+      #       old_price = this_item.sell
+      #       this_item.sell = new_price.ceil(-2)
+      #       this_item.save!
 
 
-          # ItemPrice.create item: this_item, buy: based_item_price, sell: this_item.sell, month: Date.today.month.to_i, year: Date.today.year.to_i
+      #       to_users = User.where(level: ["owner", "super_admin", "super_visi"])
 
-          Store.all.each do |store|
-            Print.create item: this_item, store: store
-          end
+      #       if old_price != this_item.sell
+      #         Store.all.each do |store|
+      #           Print.create item: this_item, store: store
+      #         end
+      #         message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
+      #         to_users.each do |to_user|
+      #           set_notification current_user, to_user, "info", message, prints_path
+      #         end
+      #       end  
+      #     end
+      #   else
+      #     this_item.sell = new_price.ceil(-2)
+      #     this_item.save!
+
+      #     to_users = User.where(level: ["owner", "super_admin", "super_visi"])
+
+
+
+      #     Store.all.each do |store|
+      #       Print.create item: this_item, store: store
+      #     end
           
-          message = "Silahkan untuk melakukan set MARGIN / HARGA JUAL "+this_item.name
+      #     message = "Silahkan untuk melakukan set MARGIN / HARGA JUAL "+this_item.name
           
-          to_users.each do |to_user|
-            set_notification current_user, to_user, "info", message, prints_path
-          end
+      #     to_users.each do |to_user|
+      #       set_notification current_user, to_user, "info", message, prints_path
+      #     end
 
-        end
-      end
+      #   end
+      # end
 
       order_item.receive = receive_qty
       order_item.discount_1 = disc_1
@@ -337,7 +339,7 @@ class OrdersController < ApplicationController
       order_item.last_sell = this_item.sell
       order_item.save!
 
-
+      binding.pry
       old_buy_total = 0
 
       curr_stock = 0
