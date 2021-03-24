@@ -181,20 +181,13 @@ class ItemsController < ApplicationController
     sell_3months = TransactionItem.where(item: item, created_at: (DateTime.now-3.months)..date_end).sum(:quantity).to_f
     sell_6months = TransactionItem.where(item: item, created_at: (DateTime.now-6.months)..date_end).sum(:quantity).to_f
 
-    kpi_3month = 0
-    kpi_6month = 0
-    begin
-      kpi_3month = (sell_3months / order_3months) * 100
-    rescue Exception
-    end
-    begin
-      kpi_6month = (sell_6months / order_6months) * 100
-    rescue Exception
-    end
+    kpi_3month = 0.01
+    kpi_6month = 0.01
+    kpi_3month = (sell_3months / order_3months) * 100 if order_3months > 0 && sell_3months > 0
+    kpi_6month = (sell_6months / order_6months) * 100 if order_6months > 0 && sell_6months > 0
+    
     kpi = (kpi_3month + kpi_6month) / 2.to_f
-    kpi = 0 if kpi.nan?
     item.kpi = kpi.ceil(2)
-    binding.pry
     item.save!
   end
 
