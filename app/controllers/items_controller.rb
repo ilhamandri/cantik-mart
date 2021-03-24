@@ -174,12 +174,12 @@ class ItemsController < ApplicationController
   end
 
   def calculate_kpi item
-    date_start = DateTime.now
-    order_3months = OrderItem.where(item: item, created_at: date_start..(DateTime.now-3.months)).sum(:receive).to_f
-    order_6months = OrderItem.where(item: item, created_at: date_start..(DateTime.now-6.months)).sum(:receive).to_f
+    date_end = DateTime.now
+    order_3months = OrderItem.where(item: item, created_at: (DateTime.now-3.months)..date_end).sum(:receive).to_f
+    order_6months = OrderItem.where(item: item, created_at: (DateTime.now-6.months)..date_end).sum(:receive).to_f
 
-    sell_3months = TransactionItem.where(item: item, created_at: date_start..(DateTime.now-3.months)).sum(:quantity).to_f
-    sell_6months = TransactionItem.where(item: item, created_at: date_start..(DateTime.now-6.months)).sum(:quantity).to_f
+    sell_3months = TransactionItem.where(item: item, created_at: (DateTime.now-3.months)..date_end).sum(:quantity).to_f
+    sell_6months = TransactionItem.where(item: item, created_at: (DateTime.now-6.months)..date_end).sum(:quantity).to_f
 
     kpi_3month = 0
     kpi_6month = 0
