@@ -29,6 +29,23 @@ class SupplierItemsController < ApplicationController
     end
   end
 
+  def item_recaps
+    return redirect_back_data_error suppliers_path, "Data Barang Suplier Tidak Ditemukan" unless params[:id].present?
+    supplier = Supplier.find_by_id params[:id]
+    return redirect_back_data_error suppliers_path, "Data Barang Suplier Tidak Ditemukan" if supplier.nil?
+    supplier_items = SupplierItem.where(supplier: supplier).pluck(:item_id)
+    start_params = params[:date_start]
+    end_params = params[:date_end]
+    return redirect_back_data_error item_path(id: item.id), "Silahkan cek tanggal kembali" if start_params.empty? || end_params.empty? 
+    date_from = start_params.to_date
+    date_to = end_params.to_date
+    @trx_items = TransactionItem.where(item: supplier_items, created_at: date_from..date_to).group(:item_id).sum(:quantity)
+    @description = "Rekap penjualan " + supplier.name.upcase + " ( " + date_from.to_s + " ... " + date_to.to_s + " )"
+    render pdf: DateTime.now.to_i.to_s,
+      layout: 'pdf_layout.html.erb',
+      template: "supplier_items/trxs.html.slim"
+  end
+
   private
     def supplier_item_params
       params.require(:supplier_item).permit(

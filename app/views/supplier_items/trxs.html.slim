@@ -1,0 +1,58 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Tanggal Buat  
+      td
+        textarea #{DateTime.now.in_time_zone.to_s}
+    tr
+      td.meta-head Dibuat Oleh
+      td 
+        textarea #{current_user.name.to_s} ( #{current_user.store.name} )
+    tr
+      td.meta-head Keterangan
+      td
+        b  
+          | #{@description}
+
+br
+br
+br
+- n = 0
+- totals = 0
+table#items
+  tr
+    th No
+    th Barang
+    th Terjual
+    - if ['super_admin', 'owner'].include? current_user.level
+      th Omzet
+  - @trx_items.each_with_index do |trx_item, idx|
+    tr
+      - n += trx_item[1]
+      td style="text-align: center" #{idx+1}
+      - item = Item.find trx_item[0]
+      td #{item.name}
+      td style="text-align: right" #{number_with_delimiter(trx_item[1].to_i, delimiter: ".")}
+      - if ['super_admin', 'owner'].include? current_user.level
+        - omzet = trx_item[1]*item.sell
+        - totals += omzet
+        td style="text-align: right" #{number_with_delimiter(omzet.to_i, delimiter: ".")}
+  tr
+    - if ['super_admin', 'owner'].include? current_user.level
+      td colspan="4"
+        |
+    - else
+      td colspan="3"
+        |
+  tr
+    td colspan="2"
+      b
+        | Total
+    td style="text-align: right"
+      b
+        | #{number_with_delimiter(n.to_i, delimiter: ".", separator: ",")}
+    - if ['super_admin', 'owner'].include? current_user.level
+      td style="text-align: right"
+        b
+          | #{number_with_delimiter(totals.to_i, delimiter: ".", separator: ",")}
+
