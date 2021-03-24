@@ -130,12 +130,7 @@ class ItemsController < ApplicationController
     gon.sell = sell
     buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse
     gon.buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse 
-    begin
-      kpi = (sell.inject(:+).to_f / buy.inject(:+).to_f) * 100
-      @item.kpi = kpi
-      @item.save!
-    rescue Exception
-    end
+    
 
 
     b_prices = graphs_buy_sell_val.collect{|ind| ind[2]}.reverse
@@ -162,6 +157,7 @@ class ItemsController < ApplicationController
 
     @buy_sell = graphs_buy_sell
 
+    calculate_kpi @item
     respond_to do |format|
       format.html
       format.pdf do
@@ -175,6 +171,30 @@ class ItemsController < ApplicationController
 
     @retur_ids = ReturItem.where(item: @item).pluck(:retur_id).uniq
     @returs = Retur.where(id: @retur_ids)
+  end
+
+  def calculate_kpi item
+    date_start = DateTime.now
+    order_3months = OrderItem.where(item: item, created_at: date_start..(DateTime.now-3.months)).sum(:receive).to_f
+    order_6months = OrderItem.where(item: item, created_at: date_start..(DateTime.now-6.months)).sum(:receive).to_f
+
+    sell_3months = TransactionItem.where(item: item, created_at: date_start..(DateTime.now-3.months)).sum(:quantity).to_f
+    sell_6months = TransactionItem.where(item: item, created_at: date_start..(DateTime.now-6.months)).sum(:quantity).to_f
+
+    kpi_3month = 0
+    kpi_6month = 0
+    begin
+      kpi_3month = (sell_3months / order_3months) * 100
+    rescue Exception
+    end
+    begin
+      kpi_6month = (sell_6months / order_6months) * 100
+    rescue Exception
+    end
+    kpi = (kpi_3month + kpi_6month) / 2.to_f
+    kpi = 0 if kpi.nan?
+    item.kpi = kpi
+    item.save!
   end
 
   def new
