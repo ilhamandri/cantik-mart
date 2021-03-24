@@ -2,13 +2,13 @@
 	h2 style="font-weight: bold"
 		- if @item.kpi >= 40
 			.text-success
-				| FAST MOVING
+				| FAST MOVING #{@item.kpi}
 		- elsif @item.kpi <= 20
 			.text-danger
-				| SLOW MOVING 
+				| SLOW MOVING  #{@item.kpi}
 		- else
 			.text-primary
-				| NORMAL
+				| NORMAL #{@item.kpi}
 			
 .col-xl-12.col-lg-12.col-md-12.pb-2
 	.card-body.table-responsive.text-nowrap

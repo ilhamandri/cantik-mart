@@ -195,6 +195,7 @@ class ItemsController < ApplicationController
     kpi = 0 if kpi.nan?
     item.kpi = kpi
     item.save!
+    binding.pry
   end
 
   def new
