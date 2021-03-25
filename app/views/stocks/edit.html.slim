@@ -7,6 +7,9 @@
       .card-body
         = form_for :item, url: stock_path(id: @stock.id), method: "PUT" do |form|
           .form-group
+            label for="code" Toko
+            = form.text_field :store_id, required: true, class: "form-control md-form", id: "code", disabled: true, value: "#{@stock.store.name}"
+          .form-group
             label for="code" Kode
             = form.text_field :code, required: true, class: "form-control md-form", id: "code", disabled: true
           .form-group

@@ -280,11 +280,21 @@ class OrdersController < ApplicationController
 
       sell_price = item.last.to_f
       margin = ((sell_price-based_item_price) / based_item_price) * 100
-
+      old_sell = this_item.sell
       this_item.buy = based_item_price 
       this_item.sell = sell_price
       this_item.margin = margin
-      this_item.save!
+      if this_item.changed?
+        this_item.save!
+        Store.all.each do |store|
+          Print.create item: this_item, store: store
+        end
+        message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
+        to_users = User.where(level: ["owner", "super_admin", "super_visi"])
+        to_users.each do |to_user|
+          set_notification current_user, to_user, "info", message, prints_path
+        end
+      end
       # if this_item.buy < based_item_price
       #   new_price = based_item_price + (based_item_price * profit_margin / 100).round
 
