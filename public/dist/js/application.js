@@ -49,9 +49,9 @@ function changePrice(id){
   // var input = document.getElementById(id+"Sell");
   // input.setAttribute("min", base_price);
 
-  sell_price = (price*1.0/receive*1.0) + ((price*1.0/receive*1.0) * margin / 100);
+  // sell_price = (price*1.0/receive*1.0) + ((price*1.0/receive*1.0) * margin / 100);
 
-  $("#"+id+"Sell").val(sell_price);
+  // $("#"+id+"Sell").val(sell_price);
 
   g_total = 0
   for (i = 0; i < ids.length; i++) {
