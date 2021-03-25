@@ -23,7 +23,7 @@ br
             input disabled="disabled" class="form-control md-form" value="#{@complain.invoice}"
           .col-4
             label Dari Transaksi
-            input disabled="disabled" class="form-control md-form" value="#{@transaction.invoice}"
+            input disabled="disabled" class="form-control md-form" value="#{@transaction.invoice.gsub("/TP", "")}"
           
           .col-4
             label Member

@@ -36,9 +36,9 @@ table#items
       td 
         textarea #{complain.invoice}
       td 
-        textarea #{trx.invoice}
+        textarea #{trx.invoice.gsub("/TP", "")}
       td 
-        textarea #{trx.invoice}
+        textarea #{trx.invoice.gsub("/TP", "")}
       td 
         textarea #{member}
       td 

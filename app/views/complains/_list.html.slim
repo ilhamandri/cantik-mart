@@ -1,7 +1,7 @@
 tr
   td #{retur.invoice}
   - trx = Transaction.find_by(id: retur.transaction_id)
-  td #{trx.invoice}
+  td #{trx.invoice.gsub("/TP", "")}
   td 
     - member = Member.find_by(card_number: retur.member_card)
   	- if member.present?

@@ -1,5 +1,5 @@
 tr
-  td #{transaction.invoice}
+  td #{transaction.invoice.gsub("/TP", "")}
   td #{transaction.date_created}
   td #{transaction.user.store.name}
   td 

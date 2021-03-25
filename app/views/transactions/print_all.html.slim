@@ -29,7 +29,7 @@ table#items
 
   - @transactions.each do |transaction|
     tr.item-row
-      td #{transaction.invoice}
+      td #{transaction.invoice.gsub("/TP", "")}
       td #{transaction.date_created.to_date}
       td #{transaction.user.store.name}
       td 
