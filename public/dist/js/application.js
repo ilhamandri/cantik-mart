@@ -45,7 +45,7 @@ function changePrice(id){
   base_price = price / receive;
 
   $("#"+id+"Total").html(price);
-  
+
   g_total = 0
   for (i = 0; i < ids.length; i++) {
     g_total += parseInt($("#"+ids[i]+"Total").html());
