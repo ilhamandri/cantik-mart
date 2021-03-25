@@ -339,7 +339,6 @@ class OrdersController < ApplicationController
       order_item.last_sell = this_item.sell
       order_item.save!
 
-      binding.pry
       old_buy_total = 0
 
       curr_stock = 0
