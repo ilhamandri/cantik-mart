@@ -52,3 +52,7 @@
 	          			td #{trx.store.name}
 	          			td #{trx.user.name}
 	          			td #{number_with_delimiter(trx.grand_total, delimiter: ".", separator:",", precision: 2)}
+
+
+
+	        = paginate @trxs

@@ -4,7 +4,6 @@ class CheatsController < ApplicationController
 
   def index
   	@trxs = Transaction.where("invoice like '%/TP'")
-  	binding.pry
   	if params[:date].present?
   		search_date = params[:date].to_datetime
   		@trxs = @trxs.where(created_at: search_date.beginning_of_day..search_date.end_of_day)
