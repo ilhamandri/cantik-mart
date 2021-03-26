@@ -284,7 +284,7 @@ class OrdersController < ApplicationController
       this_item.buy = based_item_price 
       this_item.sell = sell_price
       this_item.margin = margin
-      if this_item.changed?
+      if old_sell != sell_price
         this_item.save!
         Store.all.each do |store|
           Print.create item: this_item, store: store
