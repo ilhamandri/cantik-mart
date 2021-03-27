@@ -1,0 +1,78 @@
+- if current_user.email == 'pardev@pardev.co.id'
+
+  - transaction = @transaction_items.first.trx
+  - member = "-"
+  - member = Member.find_by(card_number: transaction.member_card).name  if transaction.member_card.present?
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            | Informasi Transaksi 
+        .card-body
+          .row
+            - if transaction.from_complain?
+              - complain = Complain.find_by(id: transaction.complain_id)
+              .col-6
+                label RETUR
+                input disabled="disabled" class="form-control md-form" value="#{complain.invoice}"
+              .col-6
+                label NOMINAL
+                input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(complain.nominal, delimiter: ".")}"
+              br
+            .col-3
+              label Invoice
+              input disabled="disabled" class="form-control md-form" value="#{transaction.invoice}"
+            .col-3
+              label Member
+              input disabled="disabled" class="form-control md-form" value="#{member}"
+            .col-3
+              label Kasir
+              input disabled="disabled" class="form-control md-form" value="#{transaction.user.name}"
+            .col-3
+              label Tgl. Transaksi
+              input disabled="disabled" class="form-control md-form" value="#{transaction.created_at}"
+            .col
+              label Total Belanja
+              input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total, delimiter: ".")}"
+            .col 
+              label Profit
+              input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total - transaction.hpp_total, delimiter: ".")}"
+            - if  transaction.voucher_id.present?
+              .col
+                label Voucher
+                input disabled="disabled" class="form-control md-form" value="#{Voucher.find_by(id: transaction.voucher_id).exchange_point.name}"
+            .col
+              label Pembayaran
+              input disabled="disabled" class="form-control md-form" value="#{transaction.payment_type}"
+            - if transaction.payment_type == "DEBIT" || transaction.payment_type == "CREDIT"
+              .col
+                label Bank
+                input disabled="disabled" class="form-control md-form" value="#{transaction.bank}"
+              .col
+                label No. EDC
+                input disabled="disabled" class="form-control md-form" value="#{transaction.edc_inv.to_i}"
+              .col
+                label No. Kartu
+                input disabled="disabled" class="form-control md-form" value="#{transaction.card_number.to_s}"
+
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.info-color
+          h5.font-weight-500.my-1
+            - if transaction.from_complain?
+              | Daftar Tambahan Item
+            - else
+              | Daftar Belanja 
+        .card-body.table-responsive.text-nowrap
+          table class="table"
+            thead
+              th Kode
+              th Nama
+              th Jumlah
+              th Harga
+              th Diskon
+              th Total
+            tbody
+              = render partial: 'list_show', collection: @transaction_items, as: :transaction_item

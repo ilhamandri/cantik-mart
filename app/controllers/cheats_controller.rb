@@ -19,6 +19,12 @@ class CheatsController < ApplicationController
   	@trxs = @trxs.page params_page
   end
 
+  def show
+    return redirect_back_data_error transactions_path, "Data Transaksi Tidak Ditemukan" if params[:id].nil?
+    @transaction_items = TransactionItem.where(transaction_id: params[:id])
+    return redirect_back_data_error transactions_path, "Data Transaksi Tidak Ditemukan" if @transaction_items.empty?
+  end
+
 
   private
   	def params_page
