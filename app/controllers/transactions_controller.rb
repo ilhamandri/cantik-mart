@@ -328,6 +328,7 @@ class TransactionsController < ApplicationController
         trx = Transaction.where(has_coin: false) 
       end
       @transactions = trx.order("created_at DESC")
+      @transactions = @transactions.where.not("invoice like '%/TP'")
       if params[:from].present?
         if params[:from] == "complain"
           curr_date = Date.today - 3.days
