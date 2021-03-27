@@ -53,7 +53,7 @@
 		          			td #{trx.user.name}
 		          			td #{number_with_delimiter(trx.grand_total, delimiter: ".", separator:",", precision: 2)}
 		          			td 
-		          				a href='#{cheat_path(id: transaction.id)}'
+		          				a href='#{cheat_path(id: trx.id)}'
 							        button class="btn  btn-primary"
 							          | Detil
 
