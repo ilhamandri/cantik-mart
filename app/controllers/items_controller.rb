@@ -26,30 +26,30 @@ class ItemsController < ApplicationController
   end
 
   def item_recaps
-    item = Item.find_by(id: params[:id])
-    return redirect_back_data_error items_path, "Item tidak ditemukan" if item.nil?
-    start_params = params[:date_start]
-    end_params = params[:date_end]
-    return redirect_back_data_error item_path(id: item.id), "Silahkan cek tanggal kembali" if start_params.empty? || end_params.empty? 
-    date_from = start_params.to_date
-    date_to = end_params.to_date
-    dates = []
-    buy_sell = []
-    (date_from..date_to).each { |date| dates << date}
-    dates.each do |date| 
-      buy_sell << [date, 0, 0]
-    end
-    dates.each_with_index do |date, idx| 
-      buy = OrderItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:receive)
-      sell = TransactionItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:quantity)
-      buy_sell[idx][1] = buy
-      buy_sell[idx][2] = sell
-    end
-    @buy_sell = buy_sell
-    @description = "Rekap jual-beli " + item.name.upcase + " ( " + date_from.to_s + " ... " + date_to.to_s + " )"
-    render pdf: DateTime.now.to_i.to_s,
-      layout: 'pdf_layout.html.erb',
-      template: "items/print_recap_item.html.slim"
+    # item = Item.find_by(id: params[:id])
+    # return redirect_back_data_error items_path, "Item tidak ditemukan" if item.nil?
+    # start_params = params[:date_start]
+    # end_params = params[:date_end]
+    # return redirect_back_data_error item_path(id: item.id), "Silahkan cek tanggal kembali" if start_params.empty? || end_params.empty? 
+    # date_from = start_params.to_date
+    # date_to = end_params.to_date
+    # dates = []
+    # buy_sell = []
+    # (date_from..date_to).each { |date| dates << date}
+    # dates.each do |date| 
+    #   buy_sell << [date, 0, 0]
+    # end
+    # dates.each_with_index do |date, idx| 
+    #   buy = OrderItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:receive)
+    #   sell = TransactionItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:quantity)
+    #   buy_sell[idx][1] = buy
+    #   buy_sell[idx][2] = sell
+    # end
+    # @buy_sell = buy_sell
+    # @description = "Rekap jual-beli " + item.name.upcase + " ( " + date_from.to_s + " ... " + date_to.to_s + " )"
+    # render pdf: DateTime.now.to_i.to_s,
+    #   layout: 'pdf_layout.html.erb',
+    #   template: "items/print_recap_item.html.slim"
   end
 
   def show

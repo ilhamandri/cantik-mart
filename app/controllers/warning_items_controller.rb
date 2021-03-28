@@ -42,26 +42,29 @@ class WarningItemsController < ApplicationController
   end
 
   def opname_day
-    so_type = params[:so_type]
-    filename = nil
+    # so_type = params[:so_type]
+    # filename = nil
     
-    items = nil
-    department = Department.find_by(id: params[:opname][:department_id])
-    supplier = Supplier.find_by(id: params[:opname][:supplier_id])
+    # items = nil
+    # department = Department.find_by(id: params[:opname][:department_id])
+    # supplier = Supplier.find_by(id: params[:opname][:supplier_id])
 
-    if so_type == "department"  
-      item_cats = department.item_cat
-      items = Item.where(item_cat: item_cats)
-      filename = "./report/opname/" + so_type + "_" + department.name + "_" + current_user.store.id.to_s + "_" +DateTime.now.to_i.to_s+".xlsx"
-    else
-      item_ids = supplier.supplier_items.pluck(:item_id)
-      items = Item.where(id: item_ids)
-      filename = "./report/opname/" + so_type + "_" + supplier.name + "_" + current_user.store.id.to_s + "_" +DateTime.now.to_i.to_s+".xlsx"
-    end
+    # if so_type == "department"  
+    #   item_cats = department.item_cat
+    #   items = Item.where(item_cat: item_cats)
+    #   filename = "./report/opname/" + so_type + "_" + department.name + "_" + current_user.store.id.to_s + "_" +DateTime.now.to_i.to_s+".xlsx"
+    # else
+    #   item_ids = supplier.supplier_items.pluck(:item_id)
+    #   items = Item.where(id: item_ids)
+    #   filename = "./report/opname/" + so_type + "_" + supplier.name + "_" + current_user.store.id.to_s + "_" +DateTime.now.to_i.to_s+".xlsx"
+    # end
 
-    store_items = StoreItem.where(store: current_user.store, item: items)
-
+    # store_items = StoreItem.where(store: current_user.store, item: items)
     
+    store_items = StoreItem.where(store: current_user.store, stock: 0..10)
+    filename = "./report/opname/" + "SO-" + DateTime.to_i.to_s + ".xlsx"
+    
+
     p = Axlsx::Package.new
     wb = p.workbook 
 
