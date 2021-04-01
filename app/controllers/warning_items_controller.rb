@@ -1,4 +1,5 @@
 class WarningItemsController < ApplicationController
+  include ActionView::Helpers::NumberHelper
   before_action :require_login
   before_action :require_fingerprint
 
@@ -42,38 +43,40 @@ class WarningItemsController < ApplicationController
   end
 
   def opname_day
-    # so_type = params[:so_type]
-    # filename = nil
+    so_type = params[:so_type]
+    filename = nil
     
-    # items = nil
-    # department = Department.find_by(id: params[:opname][:department_id])
-    # supplier = Supplier.find_by(id: params[:opname][:supplier_id])
+    items = nil
+    department = Department.find_by(id: params[:opname][:department_id])
+    supplier = Supplier.find_by(id: params[:opname][:supplier_id])
 
-    # if so_type == "department"  
-    #   item_cats = department.item_cat
-    #   items = Item.where(item_cat: item_cats)
-    #   filename = "./report/opname/" + so_type + "_" + department.name + "_" + current_user.store.id.to_s + "_" +DateTime.now.to_i.to_s+".xlsx"
-    # else
-    #   item_ids = supplier.supplier_items.pluck(:item_id)
-    #   items = Item.where(id: item_ids)
-    #   filename = "./report/opname/" + so_type + "_" + supplier.name + "_" + current_user.store.id.to_s + "_" +DateTime.now.to_i.to_s+".xlsx"
-    # end
+    if so_type == "department"  
+      item_cats = department.item_cat
+      items = Item.where(item_cat: item_cats)
+      filename = "./report/opname/" + so_type + "_" + department.name + "_" + current_user.store.id.to_s + "_" +DateTime.now.to_i.to_s+".xlsx"
+    else
+      item_ids = supplier.supplier_items.pluck(:item_id)
+      items = Item.where(id: item_ids)
+      filename = "./report/opname/" + so_type + "_" + supplier.name + "_" + current_user.store.id.to_s + "_" +DateTime.now.to_i.to_s+".xlsx"
+    end
 
-    # store_items = StoreItem.where(store: current_user.store, item: items)
+    store_items = StoreItem.where(store: current_user.store, item: items)
     
     store_items = StoreItem.where(store: current_user.store, stock: 0..10)
-    filename = "./report/opname/" + "SO-" + DateTime.to_i.to_s + ".xlsx"
+    filename = "./report/opname/" + "SO-" + DateTime.now.to_i.to_s + ".xlsx"
     
 
     p = Axlsx::Package.new
     wb = p.workbook 
 
     wb.add_worksheet(:name => "OPNAME") do |sheet|
-      sheet.add_row ["No", "Kode", "Nama", "STOK SISTEM", "OPNAME"]
+      sheet.add_row ["No", "Kode", "Nama", "Beli", "Jual", "STOK SISTEM", "OPNAME"]
       idx = 1
       store_items.each do |store_item|
         item = store_item.item
-        a = sheet.add_row [idx, item.code.to_s+" ", item.name, store_item.stock]
+        b = number_with_delimiter(item.buy.to_i, delimiter: ".").to_s
+        s = item.sell
+        a = sheet.add_row [idx, item.code.to_s+" ", item.name, b, s, store_item.stock]
         idx+=1
       end
     end

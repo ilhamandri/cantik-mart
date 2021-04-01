@@ -6,14 +6,14 @@ tr
 
   / td #{number_with_delimiter(hpp, delimiter: ".")}
   td #{r_item.accept_item.to_i}
-  td #{number_with_delimiter(hpp*r_item.accept_item.to_i, delimiter: ".")}
+  / td #{number_with_delimiter(hpp*r_item.accept_item.to_i, delimiter: ".")}
   td #{r_item.description}
   td
     select class="mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="retur[retur_items][#{r_item_counter}][feedback]" required=true
-      option value="retur_item"
-        | Tukar Barang
       option value="cash"
         | Potong Nota
+      option value="retur_item"
+        | Tukar Barang
       option value="loss"
         | Musnah
   td 

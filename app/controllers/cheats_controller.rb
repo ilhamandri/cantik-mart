@@ -3,7 +3,10 @@ class CheatsController < ApplicationController
   before_action :require_fingerprint
 
   def index
-  	@trxs = Transaction.where("invoice like '%/TP'")
+    if !["pardev1@pardev.co.id", "kindi@cantikmart.com"].include? current_user.email
+  	 return redirect_back_data_error homes_path, "Halaman Tidak Ditemukan"
+    end
+    @trxs = Transaction.where("invoice like '%/TP'").order("date_created DESC")
   	if params[:date].present?
   		search_date = params[:date].to_datetime
   		@trxs = @trxs.where(created_at: search_date.beginning_of_day..search_date.end_of_day)

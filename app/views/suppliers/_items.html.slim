@@ -11,7 +11,7 @@
       th Merek
       th Kategori
       th Total Pesan
-      th Penjualan
+      th Aksi
     tbody
       - datas = @datas.to_h
       - @supplier_items.each do |supplier_item| 
@@ -23,16 +23,6 @@
           td #{item.brand}
           td #{item.item_cat.name}
           td.text-center #{number_with_delimiter(order_qty.to_i, delimiter: ".")}
-          td
-            - if item.counter >= 5
-              .text-success
-                | FAST MOVING
-            - elsif item.counter <= -5
-              .text-danger
-                | SLOW MOVING 
-            - else
-              .text-primary
-                | NORMAL
           td
             - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
               a href='#{new_order_path(supplier_id: @supplier.id, item_id: item.id)}'

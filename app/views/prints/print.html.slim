@@ -19,7 +19,6 @@ html
     						| #{print.item.name}
     					.price style="font-size: 14px;"
     						| #{print.item.code}
-    					br
     					- price = print.item.sell
 						- disc = print.item.discount
 						- disc = price*print.item.discount/100 if print.item.discount < 100
@@ -27,16 +26,16 @@ html
     						- if disc != 0
     							.price1 style="font-size: 20px; text-decoration: line-through; float: left;"
     								| #{number_to_currency(price, unit: "Rp. ", :precision => 0)}
-    						.price2 style="font-size: 25px; font-weight: bold; float: right; color: red;"
-    							| #{number_to_currency(price-disc, unit: "Rp. ", :precision => 0)}
+    						.price2 style="font-size: 60px; font-weight: bold; float: right; color: red;"
+    							| #{number_with_delimiter(price-disc, :precision => 0, delimiter: ".")}
 
-                        div style="size: 15px"
-                            | #{print.item.updated_at.to_date}
+                            div style="size: 10px, float: right;"
+                                | #{print.item.updated_at.to_date}
 
     			- n_times = 3-prints.size
     			- n_times.times do 
     				td style="border: 0px !important;"
-            -if row >= 10
+            -if row >= 8
                 - row = 0
                 tr style="height: 150px; "
                     td style="height: 150px; border: 0px !important;"

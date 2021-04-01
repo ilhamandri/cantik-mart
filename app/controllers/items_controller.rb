@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  include ActionView::Helpers::NumberHelper
   before_action :require_login
   before_action :require_fingerprint
   require 'apriori'
@@ -26,30 +27,61 @@ class ItemsController < ApplicationController
   end
 
   def item_recaps
-    # item = Item.find_by(id: params[:id])
-    # return redirect_back_data_error items_path, "Item tidak ditemukan" if item.nil?
-    # start_params = params[:date_start]
-    # end_params = params[:date_end]
-    # return redirect_back_data_error item_path(id: item.id), "Silahkan cek tanggal kembali" if start_params.empty? || end_params.empty? 
-    # date_from = start_params.to_date
-    # date_to = end_params.to_date
-    # dates = []
-    # buy_sell = []
-    # (date_from..date_to).each { |date| dates << date}
-    # dates.each do |date| 
-    #   buy_sell << [date, 0, 0]
-    # end
-    # dates.each_with_index do |date, idx| 
-    #   buy = OrderItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:receive)
-    #   sell = TransactionItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:quantity)
-    #   buy_sell[idx][1] = buy
-    #   buy_sell[idx][2] = sell
-    # end
-    # @buy_sell = buy_sell
-    # @description = "Rekap jual-beli " + item.name.upcase + " ( " + date_from.to_s + " ... " + date_to.to_s + " )"
-    # render pdf: DateTime.now.to_i.to_s,
-    #   layout: 'pdf_layout.html.erb',
-    #   template: "items/print_recap_item.html.slim"
+    item = Item.find_by(id: params[:id])
+    return redirect_back_data_error items_path, "Item tidak ditemukan" if item.nil?
+    start_params = params[:date_start]
+    end_params = params[:date_end]
+    return redirect_back_data_error item_path(id: item.id), "Silahkan cek tanggal kembali" if start_params.empty? || end_params.empty? 
+    date_from = start_params.to_date
+    date_to = end_params.to_date
+    dates = []
+    buy_sell = []
+    (date_from..date_to).each { |date| dates << date}
+    dates.each do |date| 
+      buy_sell << [date, 0, 0]
+    end
+    dates.each_with_index do |date, idx| 
+      buy = OrderItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:receive)
+      sell = TransactionItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:quantity)
+      buy_sell[idx][1] = buy
+      buy_sell[idx][2] = sell
+    end
+    @buy_sell = buy_sell
+    @description = "Rekap jual-beli " + item.name.upcase + " ( " + date_from.to_s + " ... " + date_to.to_s + " )"
+
+    filename = "./report/item/" + "ITEM-" + DateTime.now.to_i.to_s + ".xlsx"
+    
+    order_item = OrderItem.where(item: item).last
+    supplier = "-"
+    harga_beli = "-"
+    if order_item.present?
+      order = order_item.order
+      supplier = order.supplier.name
+      harga_beli = number_with_delimiter(order_item.price, delimiter: ".")
+    end
+    
+    p = Axlsx::Package.new
+    wb = p.workbook 
+    
+    wb.add_worksheet(:name => "INFO")do |sheet|
+      sheet.add_row ["Dekripsi", @description]
+      sheet.add_row ["Suplier", supplier]
+      sheet.add_row ["Harga Beli Terakhir", harga_beli]
+
+    end
+    
+    wb.add_worksheet(:name => "OPNAME") do |sheet|
+      sheet.add_row ["Tanggal", "Order", "Terjual"]
+      @buy_sell.each do |buy_sell|
+        d = buy_sell[0].to_date.strftime("%d / %m / %y")
+        b = buy_sell[1]
+        s = buy_sell[2]
+        sheet.add_row [d,b,s]
+      end
+    end
+
+    p.serialize(filename)
+    send_file(filename)
   end
 
   def show
@@ -157,7 +189,7 @@ class ItemsController < ApplicationController
 
     @buy_sell = graphs_buy_sell
 
-    calculate_kpi @item
+    # calculate_kpi @item
     respond_to do |format|
       format.html
       format.pdf do

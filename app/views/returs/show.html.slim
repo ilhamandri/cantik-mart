@@ -1,77 +1,20 @@
-- @idx = 1
-- retur_id = @retur_items.first.retur.id
-- retur = @retur_items.first.retur
-.row
-  .col
-    h5
-      | Data (#{@retur_items.first.retur.invoice})
-  .col.text-right
-    a href="#{retur_path(id: retur_id, format: :pdf)}"
-      button.btn.btn-success type="button" 
-        | CETAK
-  .col.text-right
-  - if Controller.find_by(name: 'retur_items').controller_methods.find_by(name: 'feedback').user_methods.pluck(:user_level).include? current_user.level
-    - if retur.date_approve.present? && retur.date_picked.present? && retur.status.nil?
-      a href="#{retur_feedback_path(id: retur_id)}"
-        button class="btn btn-primary"
-          | FEEDBACK
-      |  &nbsp &nbsp 
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="info" aria-selected="true" data-toggle="tab" href="#info" role="tab" 
+        i.fa.fa-info.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Info 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="items" aria-selected="true" data-toggle="tab" href="#items" role="tab" 
+        i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Barang
+    
 
-  - if Controller.find_by(name: 'returs').controller_methods.find_by(name: 'confirmation').user_methods.pluck(:user_level).include? current_user.level  
-    - if retur.date_approve.nil?
-      a href="#{retur_confirmation_path(id: retur_id)}"
-        button class="btn btn-warning"
-          | KONFIRMASI
-      |  &nbsp &nbsp 
+  #myClassicTabContentOrange.tab-content.card
+    #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'info'
 
-  - if Controller.find_by(name: 'returs').controller_methods.find_by(name: 'picked').user_methods.pluck(:user_level).include? current_user.level
-    - if retur.date_picked.nil? && retur.date_approve.present?
-      a href="#{retur_picked_path(id: retur_id)}"
-        button class="btn btn-warning"
-          | AMBIL
-br
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Informasi Retur
-      .card-body.table-responsive.text-nowrap
-        .row
-          .col-md-12
-            label for="form" INVOICE
-            input type="text" class="form-control md-form" disabled=true value="#{retur.invoice}"
-          .col-md-4
-            label for="form" Total
-            input type="number" class="form-control md-form" disabled=true value="#{retur.total_items}"
-          .col-md-4
-            .form-group
-              label for="from" Dari
-              input type="text" class="form-control md-form" disabled=true value="#{retur.store.name}"
-          .col-md-4
-            .form-group
-              label for="from" Kepada
-              input type="text" class="form-control md-form" disabled=true value="#{retur.supplier.name}"
-br
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Data Barang
-      .card-body.table-responsive.text-nowrap
-        table class="table"
-          thead
-            th No
-            th Kode
-            th Foto
-            th Name
-            th Kuantiti
-            th Konfirmasi Jumlah
-            th Alasan Retur
-            th Hasil
-            th Nominal
-          tbody
-            = render partial: 'show_list', collection: @retur_items, as: :ret_item
-        = paginate @retur_items
-
+    #items.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'items'
