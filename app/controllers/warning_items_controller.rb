@@ -109,9 +109,9 @@ class WarningItemsController < ApplicationController
           end
           store_item = StoreItem.find_by(store: current_user.store, item: item)
           next if store_item.nil?
-          last_stock = row[3]
+          last_stock = row[5]
           curr_stock = store_item.stock
-          real_stock = row[4]
+          real_stock = row[6]
           next if real_stock.nil? 
           # new_stock = curr_stock + (last_stock * -1) + real_stock
           new_stock = real_stock

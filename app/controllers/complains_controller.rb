@@ -93,7 +93,7 @@ class ComplainsController < ApplicationController
       trx_item.save!
       items_retur_total += retur
     end
-
+    
     complain.total_items = items_retur_total;
     complain.nominal = nominal;
     complain.save!
