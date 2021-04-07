@@ -68,7 +68,7 @@ class PopularsController < ApplicationController
       end
 
       date = PopularItem.where(store: current_user.store).last.date.to_date if date == nil
-      
+      date = DateTime.now-1.year if date == nil
       return date
       
     end 
