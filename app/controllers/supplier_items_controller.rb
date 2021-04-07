@@ -33,6 +33,7 @@ class SupplierItemsController < ApplicationController
   def item_recaps
     return redirect_back_data_error suppliers_path, "Data Barang Suplier Tidak Ditemukan" unless params[:id].present?
     supplier = Supplier.find_by_id params[:id]
+    binding.pry
     return redirect_back_data_error suppliers_path, "Data Barang Suplier Tidak Ditemukan" if supplier.nil?
     supplier_items = SupplierItem.where(supplier: supplier).pluck(:item_id)
     start_params = params[:date_start]
