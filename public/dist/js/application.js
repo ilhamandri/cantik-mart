@@ -14,6 +14,18 @@ function getUserSalary(user) {
   });
 }
 
+
+function returTotal(input){
+  var table = document.getElementById("myTable");
+  var table_length = table.rows.length;
+  var total = 0;
+  for (var i = 1; i < table_length; i++) {
+    total += parseInt(table.rows[i].cells[4].childNodes[1].value);
+  }
+  var total_text = formatangka_titik(total);
+  document.getElementById("total").innerHTML = total_text;
+}
+
 function changePrice(id){
   var ids = gon.ids
   var receive = $("#"+id+"Receive").val();

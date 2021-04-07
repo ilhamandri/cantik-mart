@@ -29,7 +29,7 @@
       .card-body
         = form_for :retur, url: retur_feedback_confirmation_path, method: "POST" do |form|
           .col-md-12
-              table class="table"
+              table class="table" id="myTable"
                 thead
                   th Barang
                   / th HPP
@@ -41,5 +41,9 @@
                 tbody
                   = render partial: 'feedlist', collection: @retur_items, as: :r_item
           .col-md-12
+            hr
+            .form-group.text-right
+              h3 id="total"
+                | 0
             .form-group.text-center
               = form.submit "Buat Hasil Retur", class: "btn btn-primary"

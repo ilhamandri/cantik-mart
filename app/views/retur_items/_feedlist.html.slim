@@ -18,5 +18,5 @@ tr
         | Musnah
   td 
     input type="number" class="form-control md-form" name="retur[retur_items][#{r_item_counter}][item_id]" value="#{r_item.id}" style="display: none;"
-    input type="number" class="form-control" name="retur[retur_items][#{r_item_counter}][nominal]" value=0
+    input type="number" class="form-control" name="retur[retur_items][#{r_item_counter}][nominal]" value=0 onchange="returTotal(this)"
     
