@@ -72,7 +72,7 @@ Rails.application.routes.draw do
   post '/opname', to: 'warning_items#update_stock', as: 'opname'
 
   post '/item_recaps', to: 'items#item_recaps', as: 'item_recaps'
-  post '/supplier_item_recaps', to: 'supplier_items#item_recaps', as: 'supplier_item_recaps'
+  get '/supplier_item_recaps', to: 'supplier_items#item_recaps', as: 'supplier_item_recaps'
   
   get '/clean/prints', to: 'prints#clean', as: "clean_prints"
   get '/print/salary', to: 'salaries#print_salary', as:"print_salary"
