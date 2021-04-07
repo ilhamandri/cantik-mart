@@ -102,7 +102,7 @@ class TransactionsController < ApplicationController
     else
       trx = trx.where(has_coin: false) 
     end
-    
+    @trxs = trx
     grand_total_plered = trx.where(store: plered).sum(:grand_total)
     hpp_total_plered = trx.where(store: plered).sum(:hpp_total)
     grand_total_cirata = trx.where(store: cirata).sum(:grand_total)
