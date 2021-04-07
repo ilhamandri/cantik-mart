@@ -61,7 +61,7 @@ class WarningItemsController < ApplicationController
     end
 
     store_items = StoreItem.where(store: current_user.store, item: items)
-    
+    binding.pry
     store_items = StoreItem.where(store: current_user.store, stock: 0..10)
     filename = "./report/opname/" + "SO-" + DateTime.now.to_i.to_s + ".xlsx"
     

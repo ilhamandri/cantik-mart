@@ -97,6 +97,9 @@ class StocksController < ApplicationController
     #   item.buy = new_buy_price
     #   item.save!
     # end
+    item.sell = params[:item][:sell]
+    item.margin = (((item.sell-item.buy)/item.buy)*100).to_i
+    item.save!
     changes = store_item.changes
     store_item.save! if store_item.changed?
     if changes.include? "min_stock"
@@ -120,7 +123,8 @@ class StocksController < ApplicationController
       {
         stock: params[:item][:stock],
         limit: params[:item][:limit],
-        ideal_stock: params[:item][:ideal_stock]
+        ideal_stock: params[:item][:ideal_stock],
+        sell: params[:item][:sell]
       }
     end
 
@@ -128,7 +132,8 @@ class StocksController < ApplicationController
       {
         stock: params[:item][:stock],
         limit: params[:item][:limit],
-        ideal_stock: params[:item][:ideal_stock]
+        ideal_stock: params[:item][:ideal_stock],
+        sell: params[:item][:sell]
       }
     end
 
