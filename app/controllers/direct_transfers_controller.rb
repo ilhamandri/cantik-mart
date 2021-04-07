@@ -1,6 +1,6 @@
 class DirectTransfersController < ApplicationController
   before_action :require_login
-  before_action :require_fingerprint
+  
 
   def new
     @stores = Store.where(store_type: "retail")

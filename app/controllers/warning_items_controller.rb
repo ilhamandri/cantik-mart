@@ -1,7 +1,7 @@
 class WarningItemsController < ApplicationController
   include ActionView::Helpers::NumberHelper
   before_action :require_login
-  before_action :require_fingerprint
+  
 
   def index
     @inventories = StoreItem.page param_page

@@ -1,6 +1,6 @@
 class StoresController < ApplicationController
   before_action :require_login
-  before_action :require_fingerprint
+  
   def index
     @stores = Store.page param_page
     if params[:search].present?

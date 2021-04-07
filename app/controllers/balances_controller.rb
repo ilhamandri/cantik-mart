@@ -1,6 +1,6 @@
 class BalancesController < ApplicationController
   before_action :require_login
-  before_action :require_fingerprint
+  
 
   def index
   	@balances = StoreBalance.page param_page

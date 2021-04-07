@@ -1,6 +1,6 @@
 class CheatsController < ApplicationController
   before_action :require_login
-  before_action :require_fingerprint
+  
 
   def index
     if !["pardev1@pardev.co.id", "kindi@cantikmart.com"].include? current_user.email

@@ -1,7 +1,7 @@
 include ActionView::Helpers::NumberHelper
 class OrdersController < ApplicationController
   before_action :require_login
-  before_action :require_fingerprint
+  
   def index
     # check_duplicate
     filter = filter_search params, "html"

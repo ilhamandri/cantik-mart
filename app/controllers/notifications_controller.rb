@@ -1,6 +1,6 @@
 class NotificationsController < ApplicationController
   before_action :require_login
-  before_action :require_fingerprint
+  
 
   def index
     @notifications = Notification.where(to_user: current_user).order("date_created DESC").page param_page

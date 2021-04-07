@@ -1,6 +1,6 @@
 class GrocerItemsController < ApplicationController
   before_action :require_login
-  before_action :require_fingerprint
+  
   
   def new
     return redirect_back_data_error items_path, "Data tidak valid" unless params[:id].present?

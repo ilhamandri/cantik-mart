@@ -1,6 +1,6 @@
 class ReturItemsController < ApplicationController
   before_action :require_login
-  before_action :require_fingerprint
+  
   def index
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless params[:id].present?
     @retur_items = ReturItem.page param_page
