@@ -70,7 +70,7 @@ class ItemsController < ApplicationController
 
     end
     
-    wb.add_worksheet(:name => "OPNAME") do |sheet|
+    wb.add_worksheet(:name => "TRX") do |sheet|
       sheet.add_row ["Tanggal", "Order", "Terjual"]
       @buy_sell.each do |buy_sell|
         d = buy_sell[0].to_date.strftime("%d / %m / %y")

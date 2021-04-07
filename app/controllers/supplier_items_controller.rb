@@ -72,20 +72,20 @@ class SupplierItemsController < ApplicationController
         omzet = (trx_item[1]*item.sell).to_i
         total_omzet+=omzet
         omzet_str = number_with_delimiter(omzet, delimiter: ",")
-        if ['super_admin', 'owner'].include? current_user.level
+        # if ['super_admin', 'owner'].include? current_user.level
           sheet.add_row [idx,item_name, terjual, omzet_str]
-        else
-          sheet.add_row [idx,item_name, terjual]
-        end
+        # else
+          # sheet.add_row [idx,item_name, terjual]
+        # end
       end
-      if ['super_admin', 'owner'].include? current_user.level
+      # if ['super_admin', 'owner'].include? current_user.level
 
         sheet.add_row ["", "", "", total_omzet]
         sheet.merge_cells sheet.rows.last.cells[(0..3)]
         sheet.add_row ["TOTAL", "", "", number_with_delimiter(total_omzet, delimiter: ",")]
         sheet.merge_cells sheet.rows.last.cells[(0..2)]
 
-      end
+      # end
     end
 
     p.serialize(filename)
