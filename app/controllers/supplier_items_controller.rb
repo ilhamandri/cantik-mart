@@ -1,7 +1,6 @@
 class SupplierItemsController < ApplicationController
   include ActionView::Helpers::NumberHelper
   before_action :require_login
-  before_action :require_fingerprint
   def index
     return redirect_back_data_error suppliers_path, "Data Barang Suplier Tidak Ditemukan" unless params[:id].present?
     @supplier = Supplier.find_by_id params[:id]
@@ -33,7 +32,7 @@ class SupplierItemsController < ApplicationController
   def item_recaps
     return redirect_back_data_error suppliers_path, "Data Barang Suplier Tidak Ditemukan" unless params[:id].present?
     supplier = Supplier.find_by_id params[:id]
-    binding.pry
+
     return redirect_back_data_error suppliers_path, "Data Barang Suplier Tidak Ditemukan" if supplier.nil?
     supplier_items = SupplierItem.where(supplier: supplier).pluck(:item_id)
     start_params = params[:date_start]
@@ -57,7 +56,7 @@ class SupplierItemsController < ApplicationController
       sheet.add_row ["Total Barang Terjual", total]
     end
     
-    wb.add_worksheet(:name => "OPNAME") do |sheet|
+    wb.add_worksheet(:name => "PENJUALAN") do |sheet|
       if ['super_admin', 'owner'].include? current_user.level
         sheet.add_row ["Tanggal", "Order", "Terjual", "Omzet"]
       else
