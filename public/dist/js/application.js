@@ -30,7 +30,7 @@ function changePrice(id){
   var ids = gon.ids
   var receive = $("#"+id+"Receive").val();
   var price = $("#"+id+"Price").val();
-  var new_sell = $("#"+id+"Price").val();
+  var new_sell = parseFloat($("#"+id+"Price").val());
   var disc_1 = $("#"+id+"Disc1").val();
   var disc_2 = $("#"+id+"Disc2").val();
   var margin = parseFloat($("#"+id+"Margins").html());

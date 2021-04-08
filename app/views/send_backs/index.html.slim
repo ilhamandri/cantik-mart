@@ -59,6 +59,7 @@ br
 
     .card.mb-4
       .card-body.table-responsive.text-nowrap
+        = paginate @send_backs
         table class="table table-hover"
           thead
             th Invoice
@@ -69,4 +70,3 @@ br
             th Aksi
           tbody
             = render partial: 'list', collection: @send_backs, as: :send_back
-        = paginate @send_backs
