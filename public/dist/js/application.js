@@ -58,6 +58,9 @@ function changePrice(id){
 
   $("#"+id+"Total").html(price);
 
+  sell = Math.ceil((base_price+((base_price*margin)/100))/100)*100;
+  $("#"+id+"Sell").val(sell);
+
   g_total = 0
   for (i = 0; i < ids.length; i++) {
     g_total += parseInt($("#"+ids[i]+"Total").html());
