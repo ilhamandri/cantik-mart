@@ -30,6 +30,7 @@ function changePrice(id){
   var ids = gon.ids
   var receive = $("#"+id+"Receive").val();
   var price = $("#"+id+"Price").val();
+  var new_sell = $("#"+id+"Price").val();
   var disc_1 = $("#"+id+"Disc1").val();
   var disc_2 = $("#"+id+"Disc2").val();
   var margin = parseFloat($("#"+id+"Margins").html());
@@ -58,7 +59,7 @@ function changePrice(id){
 
   $("#"+id+"Total").html(price);
 
-  sell = Math.ceil((base_price+((base_price*margin)/100))/100)*100;
+  sell = Math.ceil((new_sell+((new_sell*margin)/100))/100)*100;
   $("#"+id+"Sell").val(sell);
 
   g_total = 0
