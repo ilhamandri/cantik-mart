@@ -26,6 +26,16 @@ function returTotal(input){
   document.getElementById("total").innerHTML = total_text;
 }
 
+function changeSellOrder(id){
+  var totals = parseInt($("#"+id+"Total").html());
+  var receive = $("#"+id+"Receive").val();
+  var base_price = parseInt(totals / receive);
+  var new_sell = $("#"+id+"Sell").val();
+  if(new_sell<base_price){
+    alert("Harga JUAL : HARUS LEBIH BESAR dari harga BELI")
+  }
+}
+
 function changePrice(id){
   var ids = gon.ids
   var receive = $("#"+id+"Receive").val();
@@ -43,7 +53,6 @@ function changePrice(id){
     price -= disc_1;
   }else{
     price -= disc_1;
-    new_sell -= disc_1;
   }
 
   if(disc_2 <= 99){
