@@ -41,7 +41,6 @@ function changePrice(id){
   if(disc_1 <= 99){
     disc_1 = parseFloat(price * disc_1 / 100);
     price -= disc_1;
-    new_sell -= parseFloat(new_sell * disc_1 / 100);
   }else{
     price -= disc_1;
     new_sell -= disc_1;
@@ -58,10 +57,12 @@ function changePrice(id){
   $("#"+id+"Total").html(price);
 
   base_price = price / receive;
-  new_sell = Math.ceil((base_price+((base_price*margin)/100))/100)*100;
-  old_sell = $("#"+id+"Sell").val();
+  var new_sell = Math.ceil((base_price+((base_price*margin)/100))/100)*100;
+  var old_sell = document.getElementById(id+"Sell").min; 
   if(new_sell>old_sell){
-    $("#"+id+"Sell").val(sell);
+    $("#"+id+"Sell").val(new_sell);
+  }else{
+    $("#"+id+"Sell").val(old_sell);
   }
 
   g_total = 0

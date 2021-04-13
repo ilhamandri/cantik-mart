@@ -34,7 +34,7 @@ tr
       | #{buy.to_i*r_item.quantity}
 
     td 
-      input type="number" class="form-control" value="#{prev_sell}" name="order[order_items][#{r_item_counter}][[sell]]" required="required" min="0" id="#{r_item.id.to_s+"Sell"}"
+      input type="number" class="form-control" value="#{prev_sell}" name="order[order_items][#{r_item_counter}][[sell]]" required="required" min="#{prev_sell}" id="#{r_item.id.to_s+"Sell"}"
 
     td style="display: none;" id="#{r_item.id.to_s+"Margins"}"
       | #{r_item.item.margin}
