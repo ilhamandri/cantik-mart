@@ -278,13 +278,11 @@ class OrdersController < ApplicationController
 
       based_item_price = item_grand_total / receive_qty;
 
-      sell_price = item.last.to_f
-      margin = ((sell_price-based_item_price) / based_item_price) * 100
+      sell_price = based_item_price + (based_item_price * this_item.margin / 100)
       old_sell = this_item.sell
       this_item.buy = based_item_price 
       this_item.sell = sell_price
-      this_item.margin = margin
-      if old_sell != sell_price
+      if old_sell < sell_price
         this_item.save!
         Store.all.each do |store|
           Print.create item: this_item, store: store

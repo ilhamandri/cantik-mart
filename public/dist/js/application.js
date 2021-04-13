@@ -30,7 +30,6 @@ function changePrice(id){
   var ids = gon.ids
   var receive = $("#"+id+"Receive").val();
   var price = $("#"+id+"Price").val();
-  var new_sell = parseFloat($("#"+id+"Price").val());
   var disc_1 = $("#"+id+"Disc1").val();
   var disc_2 = $("#"+id+"Disc2").val();
   var margin = parseFloat($("#"+id+"Margins").html());
@@ -58,7 +57,12 @@ function changePrice(id){
   price += parseFloat(price*ppn/100);
   $("#"+id+"Total").html(price);
 
-  
+  base_price = price / receive;
+  new_sell = Math.ceil((base_price+((base_price*margin)/100))/100)*100;
+  old_sell = $("#"+id+"Sell").val();
+  if(new_sell>old_sell){
+    $("#"+id+"Sell").val(sell);
+  }
 
   g_total = 0
   for (i = 0; i < ids.length; i++) {
@@ -72,9 +76,6 @@ function changePrice(id){
     g_total -= globalDisc;
   }
 
-  new_sell += parseFloat(new_sell * ppn / 100);
-  sell = Math.ceil((new_sell+((new_sell*margin)/100))/100)*100;
-  $("#"+id+"Sell").val(sell);
 
   $("#grand_total_all").html(parseInt(g_total));
 }
