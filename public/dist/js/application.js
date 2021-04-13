@@ -32,6 +32,7 @@ function changeSellOrder(id){
   var base_price = parseInt(totals / receive);
   var new_sell = $("#"+id+"Sell").val();
   if(new_sell<base_price){
+    changePrice(id);
     alert("Harga JUAL : HARUS LEBIH BESAR dari harga BELI")
   }
 }
@@ -63,7 +64,7 @@ function changePrice(id){
   }
 
   price += parseFloat(price*ppn/100);
-  $("#"+id+"Total").html(price);
+  $("#"+id+"Total").html(parseInt(price));
 
   base_price = price / receive;
   var new_sell = Math.ceil((base_price+((base_price*margin)/100))/100)*100;
