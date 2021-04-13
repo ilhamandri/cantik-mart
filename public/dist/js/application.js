@@ -56,7 +56,7 @@ function changePrice(id){
   price += parseFloat(price*ppn/100);
 
   base_price = price / receive;
-
+  base_price += parseFloat(base_price * ppn / 100);
   $("#"+id+"Total").html(price);
 
   sell = Math.ceil((new_sell+((new_sell*margin)/100))/100)*100;
