@@ -35,16 +35,18 @@ function changePrice(id){
   var disc_2 = $("#"+id+"Disc2").val();
   var margin = parseFloat($("#"+id+"Margins").html());
   var ppn = $("#ppn").val();
+  var globalDisc = $("#globalDisc").val();
 
   price = price * receive
 
   if(disc_1 <= 99){
     disc_1 = parseFloat(price * disc_1 / 100);
     price -= disc_1;
+    new_sell -= parseFloat(new_sell * disc_1 / 100);
   }else{
     price -= disc_1;
+    new_sell -= disc_1;
   }
-
 
   if(disc_2 <= 99){
     disc_2 = parseFloat(price * disc_2 / 100);
@@ -54,19 +56,25 @@ function changePrice(id){
   }
 
   price += parseFloat(price*ppn/100);
-
-  new_sell += parseFloat(new_sell * ppn / 100);
   $("#"+id+"Total").html(price);
 
-  sell = Math.ceil((new_sell+((new_sell*margin)/100))/100)*100;
-  $("#"+id+"Sell").val(sell);
+  
 
   g_total = 0
   for (i = 0; i < ids.length; i++) {
     g_total += parseInt($("#"+ids[i]+"Total").html());
   } 
 
-  
+  if(globalDisc<=99){
+    g_total -= parseInt(g_total * globalDisc / 100 );
+    new_sell -= parseInt(new_sell * globalDisc / 100 );
+  }else{
+    g_total -= globalDisc;
+  }
+
+  new_sell += parseFloat(new_sell * ppn / 100);
+  sell = Math.ceil((new_sell+((new_sell*margin)/100))/100)*100;
+  $("#"+id+"Sell").val(sell);
 
   $("#grand_total_all").html(parseInt(g_total));
 }
