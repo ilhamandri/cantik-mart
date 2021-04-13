@@ -278,7 +278,7 @@ class OrdersController < ApplicationController
 
       based_item_price = item_grand_total / receive_qty;
 
-      sell_price = based_item_price + (based_item_price * this_item.margin / 100)
+      sell_price = item.last.to_f
       old_sell = this_item.sell
       this_item.buy = based_item_price 
       this_item.sell = sell_price
