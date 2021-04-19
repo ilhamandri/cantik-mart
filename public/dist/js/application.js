@@ -64,11 +64,14 @@ function changePrice(id){
   }
 
   price += parseFloat(price*ppn/100);
+
   $("#"+id+"Total").html(parseInt(price));
 
   base_price = price / receive;
+  alert(base_price);
   var new_sell = Math.ceil((base_price+((base_price*margin)/100))/100)*100;
   var old_sell = document.getElementById(id+"Sell").min; 
+  alert(new_sell + " - " +old_sell)
   if(new_sell>old_sell){
     $("#"+id+"Sell").val(new_sell);
   }else{

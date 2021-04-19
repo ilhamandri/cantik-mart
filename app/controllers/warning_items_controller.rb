@@ -111,21 +111,20 @@ class WarningItemsController < ApplicationController
           curr_stock = store_item.stock
           real_stock = row[6]
           next if real_stock.nil? 
-          # new_stock = curr_stock + (last_stock * -1) + real_stock
-          new_stock = real_stock
+          new_stock = curr_stock + (last_stock * -1) + real_stock
+          # new_stock = real_stock
           if curr_stock < 0
-            # new_stock -= curr_stock
-            store_item.stock = new_stock
-            store_item.save!
+            new_stock = real_stock
+          elsif new_stock < 0
+            new_stock = 0
           end
-          # store_item.stock = new_stock
-          # store_item.save!
+          store_item.stock = new_stock
+          store_item.save!
         end
       end
     else
       return redirect_back_data_error opname_form_path, "File tidak valid" 
     end 
-    # binding.pry
     upload_io = params[:file]
     filename = Digest::SHA1.hexdigest([Time.now, rand].join).to_s+File.extname(file.path).to_s
     File.open(Rails.root.join('public', 'uploads', 'stock_opnames', filename), 'wb') do |file|
