@@ -7,7 +7,7 @@ class ReCheck
 		trxs.each do |trx2|
 			trx2_hpp = 0
 			trx2.transaction_items.each do |trx2_item|
-				trx2_hpp += trx_item.item.buy * trx2_item.quantity
+				trx2_hpp += trx2_item.item.buy * trx2_item.quantity
 			end
 			trx2.hpp_total = trx2_hpp
 			trx2_grand_total = trx2.grand_total
