@@ -9,15 +9,16 @@ class ReCheck
 			trx2.transaction_items.each do |trx2_item|
 				trx2_hpp += trx2_item.item.buy.to_i * trx2_item.quantity.to_i
 			end
-			binding.pry
 			trx2.hpp_total = trx2_hpp
 			trx2_grand_total = trx2.grand_total
 			trx1 = Transaction.find_by(id: trx2.complain.transaction_id)
 			trx1_complain_hpp = 0
+			trx1_hpp = 0
 			trx1.transaction_items.each do |trx1_item|
 				trx1_complain_hpp += (trx1_item.item.buy*trx1_item.retur) if trx1_item.retur.present?
+				trx1_hpp += trx1_item.item.buy*trx1_item.quantity
 			end
-			trx1.hpp_total = trx1.hpp_total - trx2.hpp_total
+			trx1.hpp_total = trx1.hpp - trx2.hpp_total
 			binding.pry
 			trx2.save!
 			trx1.save!
