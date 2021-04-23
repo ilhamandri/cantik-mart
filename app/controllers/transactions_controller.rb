@@ -96,7 +96,7 @@ class TransactionsController < ApplicationController
     plered = Store.find_by(id: 3)
 
     cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
-    trx = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+    trx = Transaction.where(date_created: start_day..end_day)
     if current_user.level == "candy_dream"
       trx = trx.where(has_coin: true) 
     else

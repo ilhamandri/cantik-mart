@@ -178,18 +178,3 @@ br
       td 
         b #{number_with_delimiter(@total_income.to_i - @total_outcome.to_i, delimiter: ".")}
 
-br
-hr
-br
-
-
-table#items
-    tr
-      th INVOICE
-      th KASIR
-      th NOMINAL
-    - @trxs.each do |trx|
-      tr
-        td #{trx.invoice}
-        td #{trx.user.name}
-        td #{trx.grand_total}
