@@ -18,7 +18,7 @@ class ReCheck
 				trx1_complain_hpp += (trx1_item.item.buy*trx1_item.retur) if trx1_item.retur.present?
 				trx1_hpp += trx1_item.item.buy*trx1_item.quantity
 			end
-			trx1.hpp_total = trx1.hpp 
+			trx1.hpp_total = trx1_hpp 
 			trx2.hpp_total = trx2.hpp - trx1_complain_hpp
 			binding.pry
 			trx2.save!
