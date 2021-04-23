@@ -1,5 +1,5 @@
 class ReCheck
-
+# complain
 	def self.complain
 		end_date = DateTime.now
 		start_date = end_date - 4.day
