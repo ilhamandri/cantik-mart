@@ -19,7 +19,7 @@ class ReCheck
 				trx1_hpp += trx1_item.item.buy*trx1_item.quantity
 			end
 			trx1.hpp_total = trx1_hpp 
-			trx2.hpp_total = trx2.hpp - trx1_complain_hpp
+			trx2.hpp_total = trx2_hpp - trx1_complain_hpp
 			binding.pry
 			trx2.save!
 			trx1.save!
