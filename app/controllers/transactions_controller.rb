@@ -111,8 +111,7 @@ class TransactionsController < ApplicationController
     @margin_plered = grand_total_plered - hpp_total_plered
     @margin_cirata = grand_total_cirata - hpp_total_cirata
     @supplier_income = 0
-    
-    binding.pry
+
 
     @bonus = cash_flow.where(finance_type: CashFlow::BONUS).sum(:nominal)
     @other_income = cash_flow.where(finance_type: CashFlow::INCOME).sum(:nominal)
