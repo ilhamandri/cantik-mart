@@ -10,7 +10,6 @@ class ReCheck
 				trx2_hpp += trx2_item.item.buy.to_i * trx2_item.quantity.to_i
 			end
 			trx2.hpp_total = trx2_hpp
-			trx2_grand_total = trx2.grand_total
 			trx1 = Transaction.find_by(id: trx2.complain.transaction_id)
 			trx1_complain_hpp = 0
 			trx1_hpp = 0
@@ -20,7 +19,6 @@ class ReCheck
 			end
 			trx1.hpp_total = trx1_hpp 
 			trx2.hpp_total = trx2_hpp - trx1_complain_hpp
-			binding.pry
 			trx2.save!
 			trx1.save!
 		end
