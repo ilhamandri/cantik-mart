@@ -75,7 +75,7 @@
                       | Choose file
             .form-group
               label for="id-card" ID Fingerprint
-              = form.text_field :fingerprint, required: true, class: "form-control md-form", id: "id-card", disabled: true
+              = form.number_field :fingerprint, required: true, class: "form-control md-form", id: "id-card"
             
           .form-group.text-center
             = form.submit "Ubah - #{@user.name}", class: "btn btn-warning black-text"
