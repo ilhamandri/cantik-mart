@@ -140,7 +140,7 @@ class ComplainsController < ApplicationController
         qty = new_item[1].to_i
         price = new_item[2].to_f
         disc = new_item[3].to_f
-
+        store_item.stock = store_item.stock - qty
         hpp += (buy * qty).round
 
         discount += disc * qty
@@ -152,6 +152,7 @@ class ComplainsController < ApplicationController
         price: price,
         discount: disc,
         date_created: DateTime.now
+        store_item.save!
       end
 
       new_trx.discount = discount

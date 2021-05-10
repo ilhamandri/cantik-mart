@@ -1,5 +1,4 @@
 class ApisController < ApplicationController
-  before_action :require_login
 
   def index
     api_type = params[:api_type]
@@ -21,7 +20,19 @@ class ApisController < ApplicationController
       get_notification params
     elsif api_type == "update_notification"
       update_notification params
+    elsif api_type == "home"
+      get_home params 
     end   
+  end
+
+  def get_home params
+    url = URI.parse('http://localhost:3030/api/home')
+    req = Net::HTTP::Get.new(url.to_s)
+    res = Net::HTTP.start(url.host, url.port) {|http|
+      http.request(req)
+    }
+    datas = JSON.parse(res.body)
+    render :json => datas
   end
 
   def get_user_salary params
