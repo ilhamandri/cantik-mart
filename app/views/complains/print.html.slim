@@ -66,11 +66,10 @@ br
 
     - trx_retur.transaction_items.each_with_index do |transaction_item, index|
         tr
-          td #{index}
+          td #{index+1}
           td #{transaction_item.item.code}
           td #{transaction_item.item.name}
           td #{transaction_item.quantity}
           td #{number_with_delimiter(transaction_item.price, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter(transaction_item.discount, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter((transaction_item.price - transaction_item.discount) * transaction_item.quantity, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter(transaction_item.price * transaction_item.quantity, delimiter: ".", separator: ",")}
 
