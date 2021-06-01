@@ -72,12 +72,12 @@ class DebtsController < ApplicationController
       filters = Debt.all
       filter = filters.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
       due_date = params["due_date"]
-
+      binding.pry
       if params["invoice"].present?
         filters = filters.where(description: "ORD-"+params["invoice"])
         search_text += "invoice 'ORD-" + params["invoice"] + "' "
       end
-
+      binding.pry
       if params["supplier_id"] != "0"
         supplier = Supplier.find_by(id: params["supplier_id"].to_i)
         if supplier.present?
@@ -145,6 +145,7 @@ class DebtsController < ApplicationController
       results << filters
       results << store_name
       results << count_debt
+      binding.pry
       return results
     end
 
