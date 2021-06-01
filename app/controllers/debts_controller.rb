@@ -3,6 +3,7 @@ class DebtsController < ApplicationController
   
 
   def index
+    ReCheck.debt
   	filter = filter_search params
     @search = filter[0]
     @finances = filter[1]

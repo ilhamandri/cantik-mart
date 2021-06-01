@@ -24,4 +24,16 @@ class ReCheck
 		end
 	end
 
+	def self.debt
+		duplicates = Debt.where("description like 'ORD-%'").select(:description).group(:description).having("count(*) > 1").count
+		duplicates.each do |duplicate|
+			debts = Debt.where(description: duplicate[0])
+			debts.each do |debt|
+				next if debt.deficiency == 0
+				debt.destroy
+				break
+			end
+		end
+	end
+
 end
