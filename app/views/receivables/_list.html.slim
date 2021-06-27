@@ -21,13 +21,15 @@
     - else
       td #{number_with_delimiter(finance.nominal_term, delimiter: ".", separator: ",")}
     td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}
-    td 
-      a href='#{edit_receivable_path(id: finance.id)}' class="btn btn-danger"
-            | EDIT
-    td
-      - if finance.deficiency.abs > 0 
+    - if finance.deficiency.abs > 0 
+      td 
+        a href='#{edit_receivable_path(id: finance.id)}' class="btn btn-danger"
+              | EDIT
+    - if finance.deficiency.abs > 0 
+      td 
         a href='#{receivable_path(id: finance.id)}' class="btn btn-warning"
           | #{finance.description}
-      - else
+    - else
+      td 
         a href='#{receivable_path(id: finance.id)}' class="btn btn-success"
           | #{finance.description}

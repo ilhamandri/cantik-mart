@@ -33,7 +33,7 @@ class ReceivablesController < ApplicationController
     return redirect_back_data_error departments_path, "Data Piutang Tidak Ditemukan" unless params[:id].present?
     @receivable = Receivable.find_by_id params[:id]
     return redirect_back_data_error departments_path, "Data Piutang Tidak Ditemukan" unless @receivable.present?
-    return redirect_back_data_error departments_path, "Data Piutang Tidak Dapat Diubah" unless can_edit
+    return redirect_back_data_error departments_path, "Data Piutang Tidak Dapat Diubah" unless can_edit_or_destroy @receivable
   end
 
   def can_edit_or_destroy receivable
@@ -44,7 +44,7 @@ class ReceivablesController < ApplicationController
     return redirect_back_data_error departments_path, "Data Piutang Tidak Ditemukan" unless params[:id].present?
     @receivable = Receivable.find_by_id params[:id]
     return redirect_back_data_error departments_path, "Data Piutang Tidak Ditemukan" unless @receivable.present?
-    return redirect_back_data_error departments_path, "Data Piutang Tidak Dapat Diubah" unless can_edit
+    return redirect_back_data_error departments_path, "Data Piutang Tidak Dapat Diubah" unless can_edit_or_destroy @receivable
     new_nominal = params[:receivable][:nominal].to_i
     old_nominal = @receivable.nominal
 
