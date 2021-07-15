@@ -100,7 +100,7 @@ class PostsController < ApplicationController
 			render status: 200
 		rescue Exception => e
 			logger.error e.message
-  			e.backtrace.each { |line| logger.error line }
+  			# e.backtrace.each { |line| logger.error line }
   			puts e.message
 		end
 	end
