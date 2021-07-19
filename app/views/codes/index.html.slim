@@ -1,0 +1,19 @@
+= form_for :finance, url: cash_flows_path, method: "POST" do |form|
+	.row	
+		.col
+			.form-group
+			    label for="code" CODE
+			    = form.text_field :code, required: true, class: "form-control md-form", id: "code", onchange: "codePrice()"
+		.col
+			.form-group
+			    label for="code" TOTAL
+			    = form.text_field :qty, required: true, class: "form-control md-form", id: "qty", onchange: "codePrice()", value: "1", min: "1"
+			    br
+			    br
+			    br
+			    hr
+			    br
+			    br
+	.form-group
+		h4 id="price"
+			| 0

@@ -1,5 +1,27 @@
 setInterval(get_notification, 10000);
 
+function codePrice(){
+  var alphabet = gon.alphabet;
+  code = $("#code").val().toUpperCase();
+  price = "";
+  for(var i=0; i < code.length; i++){
+    code_val = alphabet[code.charAt(i)];
+    if(code_val==undefined){
+      $("#price").html("- - E R R O R - -");
+      return 
+    }
+    price += code_val;
+  }
+  int_price = parseInt(price);
+  qty = $("#qty").val();
+  if(qty>1){
+    sell = Math.ceil((int_price / qty) / 100 )*100;
+    $("#price").html(formatangka_titik(int_price) + " / " + formatangka_titik(sell))
+  }else{
+    $("#price").html(formatangka_titik(int_price));
+  }
+}
+
 function getUserSalary(user) {
   var user_id = user.value
   $.ajax({ 

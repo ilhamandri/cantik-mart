@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resource :session, controller: 'sessions', only:  %i[create]
   get '/sign_in', to: 'sessions#new', as: 'sign_in'
 
+  resources :codes
   get '/retur/:id/confirmation', to: 'returs#confirmation', as: 'retur_confirmation'
   post '/retur/:id/confirmation', to: 'returs#accept', as: 'retur_accept'
 
