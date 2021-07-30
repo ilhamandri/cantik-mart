@@ -65,8 +65,6 @@ class ComplainsController < ApplicationController
       trx_item = TransactionItem.find_by(id: complain_item[0])
       item = trx_item.item
       store_stock = StoreItem.find_by(item: item)
-      
-      binding.pry
 
       reason = complain_item[5]
       retur = complain_item[3].to_i
@@ -166,6 +164,7 @@ class ComplainsController < ApplicationController
       new_trx.create_activity :create, owner: current_user
     end
 
+    binding.pry
     complain.create_activity :create, owner: current_user
 
     return redirect_success complains_path, "Komplain "+@transaction.invoice+" selesai"
