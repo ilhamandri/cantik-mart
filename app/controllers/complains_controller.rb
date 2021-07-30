@@ -130,16 +130,15 @@ class ComplainsController < ApplicationController
       new_items.each do |new_item|
         item = Item.find_by(id: new_item[0])
         buy = item.buy
+        store_item = StoreItem.find_by(item: item, store: current_user.store)
         if item.local_item?
-          store_item = StoreItem.find_by(item: item, store: current_user.store)
-          if store_item.present?
-            buy = store_item.buy
-          end
+          buy = store_item.buy
         end
 
         qty = new_item[1].to_i
         price = new_item[2].to_f
         disc = new_item[3].to_f
+        binding.pry
         store_item.stock = store_item.stock - qty
         hpp += (buy * qty).round
 
@@ -152,7 +151,6 @@ class ComplainsController < ApplicationController
         price: price,
         discount: disc,
         date_created: DateTime.now
-        binding.pry
         store_item.save!
 
       end
