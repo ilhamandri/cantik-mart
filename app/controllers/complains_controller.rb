@@ -152,9 +152,11 @@ class ComplainsController < ApplicationController
         price: price,
         discount: disc,
         date_created: DateTime.now
+        binding.pry
         store_item.save!
-      end
 
+      end
+      binding.pry
       new_trx.discount = discount
       new_trx.total = total
       new_trx.hpp_total = hpp - nominal_hpp
