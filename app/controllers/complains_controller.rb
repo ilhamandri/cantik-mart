@@ -138,7 +138,7 @@ class ComplainsController < ApplicationController
         qty = new_item[1].to_i
         price = new_item[2].to_f
         disc = new_item[3].to_f
-        binding.pry
+        
         store_item.stock = store_item.stock - qty
         hpp += (buy * qty).round
 
@@ -154,7 +154,7 @@ class ComplainsController < ApplicationController
         store_item.save!
 
       end
-      binding.pry
+      
       new_trx.discount = discount
       new_trx.total = total
       new_trx.hpp_total = hpp - nominal_hpp
