@@ -164,7 +164,6 @@ class ComplainsController < ApplicationController
       new_trx.create_activity :create, owner: current_user
     end
 
-    binding.pry
     complain.create_activity :create, owner: current_user
 
     return redirect_success complains_path, "Komplain "+@transaction.invoice+" selesai"
