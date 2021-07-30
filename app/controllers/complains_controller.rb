@@ -66,6 +66,7 @@ class ComplainsController < ApplicationController
       item = trx_item.item
       store_stock = StoreItem.find_by(item: item)
       
+      binding.pry
 
       reason = complain_item[5]
       retur = complain_item[3].to_i
