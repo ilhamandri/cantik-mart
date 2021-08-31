@@ -141,7 +141,8 @@ class OrdersController < ApplicationController
         break
       end
       supplier_item = SupplierItem.find_by(item_id: item_arr[0])
-      SupplierItem.create supplier_id: address_to, item: item if supplier_item.nil?
+      supplier_item.destroy
+      SupplierItem.create supplier_id: address_to, item: item 
       order_item = OrderItem.create item_id: item_arr[0], order_id: order.id, quantity: item_arr[4], price: 0, description: item_arr[5]
       total+= (item_arr[5].to_i*item_arr[4].to_i)
     end
@@ -260,7 +261,9 @@ class OrdersController < ApplicationController
 
       this_item = order_item.item
       store_stock = StoreItem.find_by(item: this_item, store_id: current_user.store)
-      store_stock = StoreItem.create store: current_user.store, item: this_item, stock: 0, min_stock: 5 if store_stock.nil?
+      if store_stock.nil?
+        store_stock = StoreItem.create store: current_user.store, item: this_item, stock: 0, min_stock: 5 
+      end
 
       this_item.counter -= receive_qty
       this_item.save!
@@ -293,49 +296,6 @@ class OrdersController < ApplicationController
           set_notification current_user, to_user, "info", message, prints_path
         end
       end
-      # if this_item.buy < based_item_price
-      #   new_price = based_item_price + (based_item_price * profit_margin / 100).round
-
-      #   last_price = this_item.sell
-      #   if profit_margin > 0
-      #     if new_price > last_price
-      #       old_price = this_item.sell
-      #       this_item.sell = new_price.ceil(-2)
-      #       this_item.save!
-
-
-      #       to_users = User.where(level: ["owner", "super_admin", "super_visi"])
-
-      #       if old_price != this_item.sell
-      #         Store.all.each do |store|
-      #           Print.create item: this_item, store: store
-      #         end
-      #         message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
-      #         to_users.each do |to_user|
-      #           set_notification current_user, to_user, "info", message, prints_path
-      #         end
-      #       end  
-      #     end
-      #   else
-      #     this_item.sell = new_price.ceil(-2)
-      #     this_item.save!
-
-      #     to_users = User.where(level: ["owner", "super_admin", "super_visi"])
-
-
-
-      #     Store.all.each do |store|
-      #       Print.create item: this_item, store: store
-      #     end
-          
-      #     message = "Silahkan untuk melakukan set MARGIN / HARGA JUAL "+this_item.name
-          
-      #     to_users.each do |to_user|
-      #       set_notification current_user, to_user, "info", message, prints_path
-      #     end
-
-      #   end
-      # end
 
       order_item.receive = receive_qty
       order_item.discount_1 = disc_1
@@ -373,6 +333,7 @@ class OrdersController < ApplicationController
       end
       
       store_stock.stock = store_stock.stock + receive_qty
+      store_stock.buy = order_item.price
       store_stock.save!
       
       new_total +=  total_item_without_disc_global
@@ -382,7 +343,6 @@ class OrdersController < ApplicationController
 
     order.total = new_total
     order.discount_percentage = 0
-    # order.discount = (new_total*disc_percentage/100)
     order.discount = 0
     order.date_receive = DateTime.now
     order.received_by = current_user

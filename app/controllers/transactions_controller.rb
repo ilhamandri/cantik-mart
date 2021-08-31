@@ -140,7 +140,14 @@ class TransactionsController < ApplicationController
   def daily_recap_item
     start_day = params[:date].to_time
     end_day = start_day.end_of_day
-    @transaction_items = TransactionItem.where("created_at >= ? AND created_at <= ?", start_day, end_day).group(:item_id).sum(:quantity)
+    store_id = params["store_id"]
+    return redirect_back_data_error transactions_path, "Silahkan untuk memilih toko di rekap penjualan item" if store_id.nil?
+    store = Store.find_by(id: store_id)
+    return redirect_back_data_error transactions_path, "Data tidak Ditemukan" if store.nil?
+    @transactions = Transaction.where(store: store,created_at: start_day..end_day)
+    return redirect_back_data_error transactions_path, "Data tidak Ditemukan" if @transactions.nil?
+    @trx_items =  TransactionItem.where(transaction_id:  @transactions.pluck(:id))
+    @transaction_items = TransactionItem.where(transaction_id:  @transactions.pluck(:id)).group(:item_id).sum(:quantity)
     @transaction_items = @transaction_items.sort_by(&:last).reverse
     @item_cats = {}
     @transaction_items.each do |trx_item|
@@ -176,9 +183,74 @@ class TransactionsController < ApplicationController
     @departments = Hash[@departments.sort_by{|k, v| v}.reverse]
     @start_day = start_day
     @kriteria = "Rekap Item Terjual - "+Date.today.to_s
-    render pdf: DateTime.now.to_i.to_s,
-      layout: 'pdf_layout.html.erb',
-      template: "transactions/print_item_recap.html.slim"
+
+    respond_to do |format|
+      format.html
+      format.xlsx do
+        filename = "./report/trxs/"+store.name+"_trx_items_"+DateTime.now.to_i.to_s+".xlsx"
+        p = Axlsx::Package.new
+        wb = p.workbook
+        wb.add_worksheet(:name => "SUPPLIER ITEMS") do |sheet|
+          @supplier_items.each do |supplier_item|
+            profits = 0
+            items = 0
+            omzets = 0
+            supplier_name = "TIDAK ADA SUPPLIER"
+            if supplier_item[0] != 0
+              supplier = Supplier.find_by(id: supplier_item[0])
+              supplier_name = supplier.name + " ( " + supplier.phone.to_s + " )"
+            end
+            sheet.add_row [supplier_name.upcase]
+            sheet.add_row ["No", "Kode", "Nama", "Status", "Margin", "Beli", "Jual", "Profit", "Terjual", "Omzet", "Total Profit"]
+            idx = 1
+            supplier_item[1].each do |trx_item|
+              item_id = trx_item[0]
+              sell_qty = 0
+              sell = 0
+              items += sell_qty
+              item =  Item.find_by(id: item_id)
+              if item.present?
+                trx_items = @trx_items.where(item: item).group(:price).sum(:quantity)
+                trx_items.each_with_index do |trx_item, idx|
+                  sell = trx_item.first
+                  sell_qty = trx_item.second
+                  profit = profit = (sell - item.buy)*sell_qty
+                  profits += profit
+                  omzet = sell * sell_qty
+                  omzets += omzet
+                  if idx == 0
+                    sheet.add_row [idx.to_s, item.code, item.name, item.local_item, item.margin, item.buy.to_i, sell.to_i, (sell-item.buy).to_i, sell_qty.to_i, omzet.to_i, profit.to_i]
+                  else
+                    sheet.add_row ["", "", "", "", "", "", sell.to_i, (sell-item.buy).to_i, sell_qty.to_i, omzet.to_i, profit.to_i]
+                  end
+                end
+              end
+            end
+            sheet.add_row ["","","","","","","","", items.to_i, omzets.to_i, profits.to_i]
+            idx+=1
+          end
+          
+          sheet.add_row [""]
+        end
+        wb.add_worksheet(:name => "DEPARTEMEN") do |sheet|
+          sheet.add_row ["Departemen", "Jumlah"]
+          @departments.each do |dept|
+            sheet.add_row [dept.first, dept.second]
+          end
+        end
+
+        wb.add_worksheet(:name => "KATEGORI") do |sheet|
+          sheet.add_row ["Kategori", "Jumlah"]
+          @item_cats.each do |item_cat|
+            sheet.add_row [item_cat.first, item_cat.second]
+          end
+        end
+
+        p.serialize(filename)
+        send_file(filename)
+      end
+    end
+
   end
 
   def show

@@ -30,6 +30,7 @@ class DebtsController < ApplicationController
   end
 
   def show
+    ReCheck.debt
     return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless params[:id].present?
     @debt = Debt.find_by_id params[:id]
     return redirect_back_data_error departments_path, "Data Hutang Tidak Ditemukan" unless @debt.present?

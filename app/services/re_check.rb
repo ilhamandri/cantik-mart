@@ -29,7 +29,6 @@ class ReCheck
 		duplicates.each do |duplicate|
 			debts = Debt.where(description: duplicate[0])
 			debts.each do |debt|
-				next if debt.deficiency == 0
 				debt.destroy
 				break
 			end

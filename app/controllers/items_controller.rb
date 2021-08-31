@@ -124,7 +124,7 @@ class ItemsController < ApplicationController
       month = order_items.first.to_date.strftime("%B %Y")
       buy = 0
       order_items[1].each do |order_item|
-        buy += order_item.quantity.to_i
+        buy += order_item.receive.to_i
       end
       data = graphs_buy_sell[month]
       next if graphs_buy_sell[month].nil?

@@ -84,11 +84,17 @@
               | Rekap Penjualan Item
         .card.mb-4 
           .card-body
-            = form_for :transaction, url: daily_trx_item_recap_path, method: 'GET' do |form|
+            = form_for :transaction, url: daily_trx_item_recap_path(format: :xlsx), method: 'GET' do |form|
               .row
-                .col-md-12
+                .col-md-6
                   label Pilih Tanggal Transaksi
                   input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date" required=true
+                .col-md-6
+                  label Pilih Toko
+                  select name="store_id" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store_id" searchable="Cari..."
+                    - Store.all.each do |store|
+                      option value="#{store.id}"
+                        | #{store.name}
                 .col-md-12.text-center
                   button class="btn btn-info "
                     i.fas.fa-book
