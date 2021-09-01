@@ -141,7 +141,7 @@ class OrdersController < ApplicationController
         break
       end
       supplier_item = SupplierItem.find_by(item_id: item_arr[0])
-      supplier_item.destroy
+      supplier_item.destroy if supplier_item.present?
       SupplierItem.create supplier_id: address_to, item: item 
       order_item = OrderItem.create item_id: item_arr[0], order_id: order.id, quantity: item_arr[4], price: 0, description: item_arr[5]
       total+= (item_arr[5].to_i*item_arr[4].to_i)
