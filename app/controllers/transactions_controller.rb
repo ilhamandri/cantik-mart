@@ -223,11 +223,11 @@ class TransactionsController < ApplicationController
                   else
                     sheet.add_row ["", "", "", "", "", "", sell.to_i, (sell-item.buy).to_i, sell_qty.to_i, omzet.to_i, profit.to_i]
                   end
+                  idx+=1
                 end
               end
             end
             sheet.add_row ["","","","","","","","", items.to_i, omzets.to_i, profits.to_i]
-            idx+=1
           end
           
           sheet.add_row [""]
