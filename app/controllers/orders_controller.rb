@@ -120,11 +120,11 @@ class OrdersController < ApplicationController
   end
 
   def create
-    invoice = "ORD-" + Time.now.to_i.to_s
     ordered_items = order_items
     return redirect_back_data_error orders_path, "Data Item Tidak Valid (Tidak Boleh Kosong)" if ordered_items.empty?
     total_item = ordered_items.size
     address_to = params[:order][:supplier_id]
+    invoice = "ORD-" + Time.now.to_i.to_s + address_to.to_s + current_user.id.to_s
     order = Order.create invoice: invoice,
       total_items: total_item,
       store_id: current_user.store.id,
