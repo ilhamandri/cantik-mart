@@ -88,9 +88,9 @@ class SuppliersController < ApplicationController
       sheet.add_row ["Supplier", supplier.name]
       sheet.add_row ["Tanggal", date_from.to_s + " - " + date_to.to_s]
       sheet.add_row ["Total", number_with_delimiter(order_total, separator: ".")]
-    end
-
-    wb.add_worksheet(:name => "ORDER") do |sheet|
+      sheet.add_row [""]
+      sheet.add_row [""]
+      sheet.add_row [""]
       sheet.add_row ["No. ","Invoice", "Supplier", "Jumlah Item", "Nominal", "Dibuat", "Diterima", "Dibayarkan", "Detil Order"]
       orders.each_with_index do |order, idx|
         invoice = order.invoice
@@ -106,6 +106,7 @@ class SuppliersController < ApplicationController
           jumlah, nominal, created, received, paid, link]
         sheet.add_hyperlink :location => link, :ref => sheet.rows.last.cells.last
       end
+      sheet.add_row [""]
       sheet.add_row ["","","","",number_with_delimiter(order_total, separator: "."),"","","",""]
     end
 
