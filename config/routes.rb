@@ -74,6 +74,7 @@ Rails.application.routes.draw do
 
   post '/item_recaps', to: 'items#item_recaps', as: 'item_recaps'
   post '/supplier_item_recaps', to: 'supplier_items#item_recaps', as: 'supplier_item_recaps'
+  post '/supplier_order_recaps', to: 'suppliers#recap_order', as: 'supplier_order_recaps'
   
   get '/clean/prints', to: 'prints#clean', as: "clean_prints"
   get '/print/salary', to: 'salaries#print_salary', as:"print_salary"
