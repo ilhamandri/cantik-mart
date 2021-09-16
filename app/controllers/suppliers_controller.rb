@@ -77,7 +77,7 @@ class SuppliersController < ApplicationController
     end_params = params[:date_end]
     date_from = start_params.to_date
     date_to = end_params.to_date
-    orders = Order.where(created_at: date_from..date_to).order("created_at ASC")
+    orders = Order.where(supplier: supplier, created_at: date_from..date_to).order("created_at ASC")
     order_total = orders.sum(:grand_total).to_i
     filename = "./report/supplier/ORDER-" + supplier.name + "-" + DateTime.now.to_i.to_s + ".xlsx"
 
