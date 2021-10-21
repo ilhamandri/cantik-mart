@@ -153,16 +153,22 @@ class TransactionsController < ApplicationController
     @transaction_items.each do |trx_item|
       item = Item.find_by(id: trx_item.first)
       item_cat = item.item_cat
-      @item_cats[item_cat.name] = trx_item[1] if @item_cats[item_cat.name].nil?
-      @item_cats[item_cat.name] = @item_cats[item_cat.name] + trx_item[1] if  @item_cats[item_cat.name].present?
+      if  @item_cats[item_cat.name].present?
+        @item_cats[item_cat.name] = @item_cats[item_cat.name] + trx_item[1] 
+      else
+        @item_cats[item_cat.name] = trx_item[1] if @item_cats[item_cat.name].nil?
+      end
     end
     @item_cats = Hash[@item_cats.sort_by{|k, v| v}.reverse]
     @departments = {}
     @item_cats.each do |item_cat|
       cat = ItemCat.find_by(name: item_cat.first)
       department = cat.department
-      @departments[department.name] = item_cat.second if @departments[department.name].nil?
-      @departments[department.name] = @departments[department.name] + item_cat[1] if  @departments[department.name].present?
+      if @departments[department.name].nil?
+        @departments[department.name] = item_cat.second 
+      else
+        @departments[department.name] = @departments[department.name] + item_cat[1] 
+      end
     end
     @supplier_items = {}
     @transaction_items.each do |trx_item|
@@ -207,18 +213,18 @@ class TransactionsController < ApplicationController
               item_id = trx_item[0]
               sell_qty = 0
               sell = 0
-              items += sell_qty
               item =  Item.find_by(id: item_id)
               if item.present?
                 trx_items = @trx_items.where(item: item).group(:price).sum(:quantity)
-                trx_items.each_with_index do |trx_item, idx|
+                trx_items.each_with_index do |trx_item|
                   sell = trx_item.first
                   sell_qty = trx_item.second
+                  items += sell_qty
                   profit = profit = (sell - item.buy)*sell_qty
                   profits += profit
                   omzet = sell * sell_qty
                   omzets += omzet
-                  if idx == 0
+                  if trx_items.first == trx_item
                     sheet.add_row [idx.to_s, item.code, item.name, item.local_item, item.margin, item.buy.to_i, sell.to_i, (sell-item.buy).to_i, sell_qty.to_i, omzet.to_i, profit.to_i]
                   else
                     sheet.add_row ["", "", "", "", "", "", sell.to_i, (sell-item.buy).to_i, sell_qty.to_i, omzet.to_i, profit.to_i]
