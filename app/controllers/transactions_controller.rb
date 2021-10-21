@@ -240,16 +240,22 @@ class TransactionsController < ApplicationController
         end
         wb.add_worksheet(:name => "DEPARTEMEN") do |sheet|
           sheet.add_row ["Departemen", "Jumlah"]
+          totals = 0
           @departments.each do |dept|
             sheet.add_row [dept.first, dept.second]
+            totals += dept.second
           end
+          sheet.add_row ["",totals.to_i]
         end
 
         wb.add_worksheet(:name => "KATEGORI") do |sheet|
           sheet.add_row ["Kategori", "Jumlah"]
+          totals = 0
           @item_cats.each do |item_cat|
             sheet.add_row [item_cat.first, item_cat.second]
+            totals += item_cat.second
           end
+          sheet.add_row ["",totals.to_i]
         end
 
         p.serialize(filename)
