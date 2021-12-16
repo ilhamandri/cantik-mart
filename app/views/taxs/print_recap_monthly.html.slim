@@ -1,0 +1,146 @@
+#customer
+  table#meta
+    tr
+      td.meta-head Tanggal Buat  
+      td
+        textarea #{DateTime.now.in_time_zone.to_s}
+    tr
+      td.meta-head Dibuat Oleh
+      td 
+        textarea #{current_user.name.to_s} ( #{current_user.store.name} )
+    tr
+      td.meta-head Keterangan
+      td
+        b  
+          | #{@desc}
+
+br
+br
+hr
+h2
+  | KENA PPn 
+hr
+br
+br
+
+
+- order_1 = 0
+- order_1_taxs = 0
+- trx_1 = 0
+- trx_1_taxs = 0
+- @suppliers.where("tax > 0 ").each do |supplier|
+  h3
+    | #{supplier.name.upcase} 
+  - supplier_items_id = supplier.supplier_items.pluck(:item_id)
+  - items_id = @uniq_items && supplier_items_id
+  - trx_totals = 0
+  - trx_tax_totals = 0
+  - order_totals = 0
+  - order_tax_totals = 0
+  - @trx_items.where(item_id: items_id).each do |trx_item|
+    - trx_totals += trx_item.quantity * (trx_item.price - trx_item.discount )
+  - trx_tax_totals = trx_totals - ( (100.0 / (100.0 + supplier.tax) * trx_totals ) )
+  - order_totals = @orders.where(supplier: supplier).sum(:grand_total)
+  - order_tax_totals = @orders.where(supplier: supplier).sum(:tax)
+
+  - order_1 += order_totals
+  - order_1_taxs += order_tax_totals
+  - trx_1 += trx_totals
+  - trx_1_taxs += trx_tax_totals
+
+  table#items
+    tr
+      th Jenis
+      th Total
+      th PPn
+    tr style="text-align: right;"
+      td style="text-align: left;" Order
+      td #{number_with_delimiter(order_totals.to_i, delimiter: ".", separator:",")}
+      td #{number_with_delimiter(order_tax_totals.to_i, delimiter: ".", separator:",")}
+    tr style="text-align: right;"
+      td style="text-align: left;" Penjualan
+      td #{number_with_delimiter(trx_totals.to_i, delimiter: ".", separator:",")}
+      td #{number_with_delimiter(trx_tax_totals.to_i, delimiter: ".", separator:",")}
+  br
+  br
+br
+
+br
+br
+br
+hr
+h2
+  | TIDAK KENA PPn
+hr
+br
+br
+- order_2 = 0
+- order_2_taxs = 0
+- trx_2 = 0
+- trx_2_taxs = 0
+- @suppliers.where("tax = 0 ").each do |supplier|
+  h3
+    | #{supplier.name.upcase} 
+  - supplier_items_id = supplier.supplier_items.pluck(:item_id)
+  - items_id = @uniq_items && supplier_items_id
+  - trx_totals = 0
+  - order_totals = 0
+  - @trx_items.where(item_id: items_id).each do |trx_item|
+    - trx_totals += trx_item.quantity * (trx_item.price - trx_item.discount )
+  
+  - order_totals = @orders.where(supplier: supplier).sum(:grand_total)
+
+  - order_2 += order_totals
+  - trx_2 += trx_totals
+
+  table#items
+    tr
+      th Jenis
+      th Total
+    tr style="text-align: right;"
+      td style="text-align: left;" Order
+      td #{number_with_delimiter(order_totals.to_i, delimiter: ".", separator:",")}
+    tr style="text-align: right;"
+      td style="text-align: left;" Penjualan
+      td #{number_with_delimiter(trx_totals.to_i, delimiter: ".", separator:",")}
+
+  br
+  br
+
+br
+br
+hr
+h2
+  | Rangkuman Keseluruhan
+br
+hr
+h3
+  | Kena PPn
+  table#items  
+    tr
+      th Jenis
+      th Total
+      th PPn
+    tr style="text-align: right;"
+      td style="text-align: left;" Order
+      td #{number_with_delimiter(order_1.to_i, delimiter: ".", separator:",")}
+      td #{number_with_delimiter(order_1_taxs.to_i, delimiter: ".", separator:",")}
+    tr style="text-align: right;"
+      td style="text-align: left;" Penjualan
+      td #{number_with_delimiter(trx_1.to_i, delimiter: ".", separator:",")}
+      td #{number_with_delimiter(trx_1_taxs.to_i, delimiter: ".", separator:",")}
+br
+br
+hr
+h3
+  | Tidak Kena PPn
+  table#items
+    tr
+      th Jenis
+      th Total
+    tr style="text-align: right;"
+      td style="text-align: left;" Order
+      td #{number_with_delimiter(order_2.to_i, delimiter: ".", separator:",")}
+    tr style="text-align: right;"
+      td style="text-align: left;" Penjualan
+      td #{number_with_delimiter(trx_2.to_i, delimiter: ".", separator:",")}

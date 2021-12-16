@@ -8,7 +8,8 @@ class Transaction < ApplicationRecord
   enum payment_type:{
   	CASH: 1,
   	DEBIT: 2,
-  	CREDIT: 3
+  	CREDIT: 3,
+    QRIS: 4
   }
 
   enum bank:{

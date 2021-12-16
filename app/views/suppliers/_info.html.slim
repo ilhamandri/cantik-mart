@@ -19,3 +19,7 @@
     .form-group
       label for="phone" Total Piutang
       input class="form-control md-form" value=" #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}" disabled="disabled"
+
+    .form-group
+      label for="phone" Pajak Faktur
+      input class="form-control md-form" value=" #{number_with_delimiter(@supplier.tax.to_i, delimiter: ".", separator: ",")} %" disabled="disabled"

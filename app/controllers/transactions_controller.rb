@@ -80,7 +80,7 @@ class TransactionsController < ApplicationController
       trx = Transaction.where(has_coin: false) 
     end
     @month = start_day.month
-    @transaction_datas = trx.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
+    @transaction_datas = trx.where(created_at: start_day..end_day).group_by{ |m| m.created_at.beginning_of_day}
     render pdf: DateTime.now.to_i.to_s,
       layout: 'pdf_layout.html.erb',
       template: "transactions/print_recap_monthly.html.slim"
@@ -138,8 +138,8 @@ class TransactionsController < ApplicationController
   end
 
   def daily_recap_item
-    start_day = params[:date].to_time
-    end_day = start_day.end_of_day
+    start_day = params[:start_date].to_time
+    end_day = params[:end_date].to_time.end_of_day
     store_id = params["store_id"]
     return redirect_back_data_error transactions_path, "Silahkan untuk memilih toko di rekap penjualan item" if store_id.nil?
     store = Store.find_by(id: store_id)
@@ -199,6 +199,7 @@ class TransactionsController < ApplicationController
         wb.add_worksheet(:name => "SUPPLIER ITEMS") do |sheet|
           @supplier_items.each do |supplier_item|
             profits = 0
+            taxs = 0
             items = 0
             omzets = 0
             supplier_name = "TIDAK ADA SUPPLIER"
@@ -207,7 +208,7 @@ class TransactionsController < ApplicationController
               supplier_name = supplier.name + " ( " + supplier.phone.to_s + " )"
             end
             sheet.add_row [supplier_name.upcase]
-            sheet.add_row ["No", "Kode", "Nama", "Status", "Margin", "Beli", "Jual", "Profit", "Terjual", "Omzet", "Total Profit"]
+            sheet.add_row ["No", "Kode", "Nama", "Status", "Margin", "Beli", "Jual", "Profit", "Terjual", "Omzet", "Total Profit", "Total Pajak"]
             idx = 1
             supplier_item[1].each do |trx_item|
               item_id = trx_item[0]
@@ -224,16 +225,18 @@ class TransactionsController < ApplicationController
                   profits += profit
                   omzet = sell * sell_qty
                   omzets += omzet
+                  tax =  omzet -  ( ( 100.0 / (100.0 + item.tax) ) * omzet )  
+                  taxs += tax
                   if trx_items.first == trx_item
-                    sheet.add_row [idx.to_s, item.code, item.name, item.local_item, item.margin, item.buy.to_i, sell.to_i, (sell-item.buy).to_i, sell_qty.to_i, omzet.to_i, profit.to_i]
+                    sheet.add_row [idx.to_s, item.code, item.name, item.local_item, item.margin, item.buy.to_i, sell.to_i, (sell-item.buy).to_i, sell_qty.to_i, omzet.to_i, profit.to_i, tax.to_i]
                   else
-                    sheet.add_row ["", "", "", "", "", "", sell.to_i, (sell-item.buy).to_i, sell_qty.to_i, omzet.to_i, profit.to_i]
+                    sheet.add_row ["", "", "", "", "", "", sell.to_i, (sell-item.buy).to_i, sell_qty.to_i, omzet.to_i, profit.to_i, tax.to_i]
                   end
                   idx+=1
                 end
               end
             end
-            sheet.add_row ["","","","","","","","", items.to_i, omzets.to_i, profits.to_i]
+            sheet.add_row ["","","","","","","","", items.to_i, omzets.to_i, profits.to_i, taxs.to_i]
           end
           
           sheet.add_row [""]

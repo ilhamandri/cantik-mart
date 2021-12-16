@@ -12,6 +12,11 @@
         br
         | Rekap
     li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="recap" aria-selected="true" data-toggle="tab" href="#taxs" role="tab" 
+        i.fa.fa-tags.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | PPn
+    li.nav-item
       a#profile-tab-classic-blue.nav-link.waves-light aria-controls="holds" aria-selected="true" data-toggle="tab" href="#holds" role="tab" 
         i.fa.fa-shopping-cart.fa-2x.pb-2 aria-hidden="true" 
         br
@@ -35,5 +40,8 @@
 
     #debts.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         = render partial: 'debts'
+
+    #taxs.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'taxs'
 
     

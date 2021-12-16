@@ -1,0 +1,15 @@
+
+[1mFrom:[0m /home/zerd/Work/cantik-mart/app/views/taxs/print_recap_monthly.html.slim @ line 25 ActionView::CompiledTemplates#_app_views_taxs_print_recap_monthly_html_slim___832506743939257562_69927859821580:
+
+    [1;34m20[0m: - @suppliers.each [32mdo[0m |supplier|
+    [1;34m21[0m:   h5
+    [1;34m22[0m:     | [1;30m#{supplier.name.upcase}[0m
+    [1;34m23[0m:   - supplier_items_id = supplier.supplier_items.pluck([33m:item_id[0m)
+    [1;34m24[0m:   - items_id = @uniq_items && supplier_items_id
+ => [1;34m25[0m:   - binding.pry
+    [1;34m26[0m:   table[1;30m#items[0m
+    [1;34m27[0m:     - totals = [1;34m0[0m
+    [1;34m28[0m:     - hpp_totals = [1;34m0[0m
+    [1;34m29[0m:     - profit_totals = [1;34m0[0m
+    [1;34m30[0m:     - tax_totals = [1;34m0[0m
+

@@ -3,6 +3,7 @@ class HomesController < ApplicationController
   require 'usagewatch'
 
   def index
+    Tax.calculate
     ItemUpdate.updateItem
     ReCheck.complain
     @total_limit_items = StoreItem.where(store_id: current_user.store.id).where('stock < min_stock').count

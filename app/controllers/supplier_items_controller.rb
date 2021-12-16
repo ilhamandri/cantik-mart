@@ -57,13 +57,11 @@ class SupplierItemsController < ApplicationController
     end
     
     wb.add_worksheet(:name => "PENJUALAN") do |sheet|
-      if ['super_admin', 'owner'].include? current_user.level
-        sheet.add_row ["Tanggal", "Order", "Terjual", "Omzet"]
-      else
-        sheet.add_row ["Tanggal", "Order", "Terjual"]
-      end
+      sheet.add_row ["Tanggal", "Order", "Terjual", "Omzet", "Pajak"]
+
       idx = 0
       total_omzet = 0
+      total_tax = 0
       @trx_items.each do |trx_item|
         idx+=1
         item = Item.find trx_item[0]
@@ -71,18 +69,15 @@ class SupplierItemsController < ApplicationController
         terjual = trx_item[1]
         omzet = (trx_item[1]*item.sell).to_i
         total_omzet+=omzet
+        tax = omzet - (omzet.to_f * ( 100.0/ (100.0 + item.tax) )).ceil
+        total_tax += tax
         omzet_str = number_with_delimiter(omzet, delimiter: ",")
-        # if ['super_admin', 'owner'].include? current_user.level
-          sheet.add_row [idx,item_name, terjual, omzet_str]
-        # else
-          # sheet.add_row [idx,item_name, terjual]
-        # end
+        tax_str = number_with_delimiter(tax, delimiter: ",")
+        sheet.add_row [idx,item_name, terjual, omzet_str, tax_str]
       end
-      # if ['super_admin', 'owner'].include? current_user.level
-
-        sheet.add_row ["", "", "", total_omzet]
-        sheet.merge_cells sheet.rows.last.cells[(0..3)]
-        sheet.add_row ["TOTAL", "", "", number_with_delimiter(total_omzet, delimiter: ",")]
+        sheet.add_row ["", "", "", total_omzet, total_tax]
+        sheet.merge_cells sheet.rows.last.cells[(0..4)]
+        sheet.add_row ["TOTAL", "", "", number_with_delimiter(total_omzet, delimiter: ","), number_with_delimiter(total_tax, delimiter: ",")]
         sheet.merge_cells sheet.rows.last.cells[(0..2)]
 
       # end

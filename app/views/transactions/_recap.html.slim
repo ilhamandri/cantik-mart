@@ -86,15 +86,20 @@
           .card-body
             = form_for :transaction, url: daily_trx_item_recap_path(format: :xlsx), method: 'GET' do |form|
               .row
-                .col-md-6
-                  label Pilih Tanggal Transaksi
-                  input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date" required=true
-                .col-md-6
+                .col-12
                   label Pilih Toko
                   select name="store_id" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store_id" searchable="Cari..."
                     - Store.all.each do |store|
                       option value="#{store.id}"
                         | #{store.name}
+
+                .col-12
+                  label Pilih Tanggal Transaksi
+                .col-6
+                  input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="start_date" required=true
+                .col-6
+                  input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="end_date" required=true
+                
                 .col-md-12.text-center
                   button class="btn btn-info "
                     i.fas.fa-book

@@ -49,7 +49,7 @@ class OrdersController < ApplicationController
   def recap
     @date_start = params[:date_start] 
     @date_end = params[:date_end]
-    @orders = Order.where("date_created >= ? AND date_created <= ?", @date_start, @date_end)
+    @orders = Order.where(date_created: @date_start..@date_end)
     @store_name = "Semua Toko"
     store_id = params[:store_id].to_i
     if Store.all.pluck(:id).include? store_id
@@ -57,13 +57,19 @@ class OrdersController < ApplicationController
       @store_name = Store.find(store_id).name
     end
     @grouped_by = params[:grouped_by]
+    @lunas = []
+    @cicilan = []
+    @supplier_order_total = 0
+    @supplier_tax_total = 0
     if @grouped_by == "supplier"
       ids = @orders.pluck(:supplier_id).uniq
       @suppliers = {}
       ids.each do |id|
         supplier = Supplier.find id
         ords = @orders.where(supplier: supplier)
-        @suppliers[supplier.name] = [ords.count, ords.sum(:grand_total)]
+        @suppliers[supplier.name] = [ords.count, ords.sum(:grand_total), ords.sum(:tax)]
+        @supplier_tax_total += ords.sum(:tax)
+        @supplier_order_total += ords.sum(:grand_total)
       end
       @suppliers = @suppliers.sort
     elsif @grouped_by == "item"
@@ -81,14 +87,12 @@ class OrdersController < ApplicationController
     else
       # tunai / cicilan
       @order_invs = InvoiceTransaction.where(invoice: @orders.pluck(:invoice)).group(:invoice).count
-      @lunas = []
-      @cicilan = []
       @order_invs.each do |ord_inv|
         ord = Order.find_by(invoice: ord_inv[0])
         if ord_inv[1] >= 2
-          @cicilan << [ord.invoice, ord.created_at.to_date, ord.store.name, ord.grand_total]
+          @cicilan << [ord.invoice, ord.created_at.to_date, ord.store.name, ord.grand_total, ord.tax]
         else
-          @lunas << [ord.invoice, ord.created_at.to_date, ord.store.name, ord.grand_total]
+          @lunas << [ord.invoice, ord.created_at.to_date, ord.store.name, ord.grand_total, ord.tax]
         end
       end
     end
@@ -347,6 +351,15 @@ class OrdersController < ApplicationController
     order.date_receive = DateTime.now
     order.received_by = current_user
     order.grand_total = new_grand_total
+
+    if ppn > 0
+      order.tax = order.order_items.first.ppn * (order.total - order.discount) / 100
+      order.tax = order.tax.ceil
+      order.save!
+
+      order.supplier.update(tax: ppn)
+    end
+    
     order.save!
     
     if disc_supp > 0

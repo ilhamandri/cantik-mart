@@ -79,6 +79,7 @@ class SuppliersController < ApplicationController
     date_to = end_params.to_date
     orders = Order.where(supplier: supplier, created_at: date_from..date_to).order("created_at ASC")
     order_total = orders.sum(:grand_total).to_i
+    tax_total = orders.sum(:tax).to_i
     filename = "./report/supplier/ORDER-" + supplier.name + "-" + DateTime.now.to_i.to_s + ".xlsx"
 
     p = Axlsx::Package.new
@@ -91,11 +92,12 @@ class SuppliersController < ApplicationController
       sheet.add_row [""]
       sheet.add_row [""]
       sheet.add_row [""]
-      sheet.add_row ["No. ","Invoice", "Supplier", "Jumlah Item", "Nominal", "Dibuat", "Diterima", "Dibayarkan", "Detil Order"]
+      sheet.add_row ["No. ","Invoice", "Supplier", "Jumlah Item", "Nominal", "Dibuat", "Diterima", "Dibayarkan", "Pajak", "Detil Order"]
       orders.each_with_index do |order, idx|
         invoice = order.invoice
         jumlah = order.total_items
         nominal = number_with_delimiter(order.grand_total, separator: ".")
+        tax = number_with_delimiter(order.tax, separator: ".")
         created = order.created_at.strftime("%d/%m/%Y").to_s + "   (" + order.user.name + ")   "
         received = ""
         received = order.date_receive.strftime("%d/%m/%Y").to_s + "   (" + order.received_by.name + ")   " if order.date_receive.present?
@@ -103,11 +105,11 @@ class SuppliersController < ApplicationController
         paid = "LUNAS   (" + order.date_paid_off.strftime("%d/%m/%Y").to_s + ")   " if order.date_paid_off.present?
         link = "http://cantikmart.com/order/"+order.id.to_s
         sheet.add_row [idx+1, invoice, supplier.name,
-          jumlah, nominal, created, received, paid, link]
+          jumlah, nominal, created, received, paid, tax, link]
         sheet.add_hyperlink :location => link, :ref => sheet.rows.last.cells.last
       end
       sheet.add_row [""]
-      sheet.add_row ["","","","",number_with_delimiter(order_total, separator: "."),"","","",""]
+      sheet.add_row ["","","","",number_with_delimiter(order_total, separator: "."),"","","",number_with_delimiter(tax_total, separator: "."), ""]
     end
 
     p.serialize(filename)

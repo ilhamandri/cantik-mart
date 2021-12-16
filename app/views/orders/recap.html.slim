@@ -19,12 +19,22 @@ br
       th Supplier
       th Jumlah Order
       th Nominal
+      th Pajak
     - @suppliers.each do |k,v|
       tr
         td #{k}
         td #{v[0]}
         td style="text-align: right"
           | #{number_with_delimiter(v[1].to_i, delimiter: ".")}
+        td style="text-align: right"
+          | #{number_with_delimiter(v[2].to_i, delimiter: ".")}
+    tr
+      td colspan="2"
+      td style="text-align: right"
+        |  #{number_with_delimiter(@supplier_order_total.to_i, delimiter: ".")}
+      td style="text-align: right"
+        |  #{number_with_delimiter(@supplier_tax_total.to_i, delimiter: ".")}
+        
 - if @grouped_by == "item"
   table#items
     tr
@@ -50,6 +60,7 @@ br
       th Tanggal
       th Toko
       th Nominal
+      th PPn
     - @lunas.each do |lunas|
         tr
           td #{lunas[0]}
@@ -57,6 +68,8 @@ br
           td #{lunas[2]}
           td style="text-align: right"
             | #{number_with_delimiter(lunas[3], delimiter: ".")}
+          td style="text-align: right"
+            | #{number_with_delimiter(lunas[4], delimiter: ".")}
   br
   h2
     | CICILAN
