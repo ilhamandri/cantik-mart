@@ -20,7 +20,7 @@ class Tax
 		suppliers_id = orders.pluck(:supplier_id).uniq
 		Supplier.where(id: suppliers_id).update_all(tax: 10)
 
-		TransactionItem.where("created_at>?", DateTime.now.beginning_of_month).where(item_id: items_id, trx: trxs).each do |trx_item|
+		TransactionItem.where("created_at>?", DateTime.now.beginning_of_month).where(item_id: items_id).each do |trx_item|
 			trx = trx_item.trx
 			trx.tax = trx.tax + trx_item.quantity*(trx_item.price-((10.0/11.0)*trx_item.price)).to_i
 			trx.save!
