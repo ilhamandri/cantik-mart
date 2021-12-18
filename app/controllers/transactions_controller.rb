@@ -80,7 +80,7 @@ class TransactionsController < ApplicationController
       trx = Transaction.where(has_coin: false) 
     end
     @month = start_day.month
-    @transaction_datas = trx.where(created_at: start_day..end_day).group_by{ |m| m.created_at.beginning_of_day}
+    @transaction_datas = trx.where(created_at: start_day..end_day).order("created_at ASC").group_by{ |m| m.created_at.beginning_of_day}
     render pdf: DateTime.now.to_i.to_s,
       layout: 'pdf_layout.html.erb',
       template: "transactions/print_recap_monthly.html.slim"
