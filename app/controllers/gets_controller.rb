@@ -23,7 +23,7 @@ class GetsController < ApplicationController
 			 json_result["item_cats"] = ItemCat.where("updated_at >= ? AND updated_at <= ?", from, to)
 			 json_result["items"] = Item.where("updated_at >= ? AND updated_at <= ?", from, to)
 			 json_result["stocks"] = StoreItem.where(store: store).where("updated_at >= ? AND updated_at <= ?", from, to)
-			 json_result["grocers"] = GrocerItem.where("updated_at >= ? AND updated_at <= ?", from, to)
+			 json_result["grocers"] = GrocerItem.all
 			 json_result["promotions"] = Promotion.where("updated_at >= ? AND updated_at <= ?", from, to)
 		 	 json_result["exchange_points"] = ExchangePoint.where("updated_at >= ? AND updated_at <= ?", from, to)
 		 	 json_result["vouchers"] = Voucher.where("updated_at >= ? AND updated_at <= ?", from, to)

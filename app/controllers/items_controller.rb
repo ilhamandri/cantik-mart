@@ -91,7 +91,14 @@ class ItemsController < ApplicationController
 
     # @bundlings = PredictCategory.where(buy: @item.item_cat).order("percentage DESC").limit(10)
     losses = Loss.where(id: LossItem.where(item: @item).pluck(:loss_id)).where("created_at >= ?", DateTime.now-13.months).group_by { |m| m.created_at.beginning_of_month }
-
+    store_items = @item.store_items
+    # if store_items.count != Store.all.count
+    #   Store.all.each do |store|
+    #     if store_items.find_by(store: store).nil?
+    #       StoreItem.create item: @item, store: store
+    #     end
+    #   end
+    # end
     @item = Item.find_by_id params[:id]
     graphs_buy_sell = {}
     graphs_losses = {}
