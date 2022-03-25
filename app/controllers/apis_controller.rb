@@ -193,9 +193,9 @@ class ApisController < ApplicationController
     item << item_store.item.name
     item << item_store.item.item_cat.name
     curr_item = item_store.item
-
+    qty = qty.to_i
     grocer_price = nil 
-    grocer_price = curr_item.grocer_items if qty.to_f > 1
+    grocer_price = curr_item.grocer_items.where("min <= ?", qty) if qty.to_i > 1
     if grocer_price.present?
       find_price = grocer_price.where('max >= ? AND min <= ?', qty, qty).order("max ASC")
       if find_price.present?
@@ -234,7 +234,7 @@ class ApisController < ApplicationController
     item << item_id.id
 
 
-    promo = Promotion.where(buy_item: item_id).where("start_promo <= ? AND end_promo >= ? AND buy_quantity <= ?", DateTime.now, DateTime.now, qty.to_i).first
+    promo = Promotion.where(buy_item: item_id).where("start_promo <= ? AND end_promo >= ? AND buy_quantity <= ?", DateTime.now, DateTime.now, qty).first
     if promo.present?
       hit_promo = qty.to_i / promo.buy_quantity
       item << promo.promo_code
@@ -244,7 +244,6 @@ class ApisController < ApplicationController
     end
     
     json_result << item
-
     render :json => json_result
   end
 

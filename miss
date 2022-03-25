@@ -1,0 +1,27 @@
+0. Create Migration for add OnlineStore
+	rails g migration AddColOnlineStore
+
+1. Migrate new migration
+	rails db:migrate
+
+2. Create Store
+	store = Store.create name:"Toko Bendul"
+
+3. Create StoreItem for new STORE
+	Item.all.each do |item|
+		StoreItem.create store: store, item: item
+	end
+
+4. Copy TRX UI from cantik_mart_local to cantik_mart
+
+5. Check Barcode is working
+
+6. Check all API are working (Item, Promotions, Grocers)
+
+7. Check print bill is working and layout was fixed
+
+8. Check PRINT Shift is working
+
+9. Check all recaps in transactions, orders, debts, receivables 
+
+10. check print store address

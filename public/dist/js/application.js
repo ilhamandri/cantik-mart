@@ -1,5 +1,81 @@
 setInterval(get_notification, 10000);
 
+var separator = '<p class="medium">===========================================================</p>';
+
+var header_cirata = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <style type="text/css"> table {table-layout:auto; width:100%;} td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> ' + '<table widht: "100%;" ><tr><td style="text-align: left; vertical-align: middle;"><img src="/images/logo.png" style="width: 150px"/></td><td style="text-align: right;font-size: 12px !important;">' + 'PT. Cantik Berkah Sejahtera <br>' + 'NPWP: 53.925.657.9-409.000 <br>' +  'Jl. Cirata - Cilangkap, Ds. Cadassari<br> Kec. Tegalwaru, Kabupaten Purwakarta,<br>Jawa Barat'+'</td></tr></table>'+separator;
+
+var header_plered = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <style type="text/css"> table {table-layout:auto; width:100%;} td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> ' + '<table widht: "100%;" ><tr><td style="text-align: left; vertical-align: middle;"><img src="/images/logo.png" style="width: 150px"/></td><td style="text-align: right;font-size: 12px !important;">' + 'PT. Cantik Berkah Sejahtera <br>' + 'NPWP: 53.925.657.9-409.000 <br>' + 'Jl. Raya Plered, Purwakarta <br> Kec. Plered, Kabupaten Purwakarta, <br>Jawa Barat'+'</td></tr></table>'+separator;
+
+var header_bendul = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <style type="text/css"> table {table-layout:auto; width:100%;} td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> ' + '<table widht: "100%;" ><tr><td style="text-align: left; vertical-align: middle;"><img src="/images/logo.png" style="width: 150px"/></td><td style="text-align: right;font-size: 12px !important;">' + 'PT. Cantik Berkah Sejahtera <br>' + 'NPWP: 53.925.657.9-409.000 <br>' + 'Pasar Anyar Sukatani, Purwakarta <br> Kec. Sukatani, Kabupaten Purwakarta, <br>Jawa Barat'+'</td></tr></table>'+separator;
+
+var head = ' <div class="col-sm-12 text-left"><table class="table">';
+
+function printShift(total, cashier, time, cash, debit, n_trx, store_id,store_name){
+  var data = "";  
+  if (store_id == 2){
+    data += header_cirata;
+  else if (store_id == 7){
+    data += header_bendul;
+  }else{
+    data += header_plered;
+  }
+  data += '<table><tr><td style="text-align: center; font-size: 15px;">LAPORAN SHIFT</td></tr></table>'+separator;
+  data += '<table><tr><td>Kasir</td> <td>:</td> <td>'+cashier+'</td></tr>';
+  data += '<tr><td>Toko</td> <td>:</td> <td>'+store_name+'</td></tr>';
+  data += '<tr><td>Waktu</td> <td>:</td> <td>'+time+'</td></tr>';
+  data += '<tr><td>Jumlah Struk</td> <td>:</td> <td>'+n_trx+' x</td></tr>';
+  data += '<tr><td colspan=3>'+separator+'</td></tr>';
+  data += '<tr><td>TUNAI</td> <td>:</td> <td>'+splitRibuan(cash)+'</td></tr>';
+  data += '<tr><td>DEBIT</td> <td>:</td> <td>'+splitRibuan(debit)+'</td></tr>';
+  data += '<tr><td>TOTAL</td> <td>:</td> <td>'+splitRibuan(total)+'</td></tr>';
+  data += '<tr><td>SELISIH</td> <td>:</td> <td><br><br><br></td></tr>';
+  data += '</table>';
+  data += separator;
+  data += '<table><tr><td style="text-align: center;">TTD<br><br><br><br><br>Kepala Toko</td>';
+  data += '<td style="text-align: center;">TTD<br><br><br><br><br>'+cashier+'</td></tr></table>';
+
+  printHTML(data);
+                 
+}
+
+function printHTML(html) {
+  var wnd = window.open("about:blank", "", "_blank");
+  wnd.document.write(html);
+  wnd.print();
+}
+
+
+function splitRibuan(total){
+  var bilangan = total;
+ 
+ var reverse = bilangan.toString().split('').reverse().join(''),
+ ribuan = reverse.match(/\d{1,3}/g);
+ ribuan = ribuan.join('.').split('').reverse().join('');
+ return ribuan;
+}
+
+function formatangka_titik(total) {
+  var a = (total+"").replace(/[^\d]/g, "");
+
+  var a = +a; // converts 'a' from a string to an int
+
+  return formatNum(a);
+}
+
+function formatNum(rawNum) {
+  rawNum = "" + rawNum; // converts the given number back to a string
+  var retNum = "";
+  var j = 0;
+  for (var i = rawNum.length; i > 0; i--) {
+    j++;
+    if (((j % 3) == 1) && (j != 1))
+      retNum = rawNum.substr(i - 1, 1) + "." + retNum;
+    else
+      retNum = rawNum.substr(i - 1, 1) + retNum;
+  }
+  return retNum;
+}
+
 function codePrice(){
   var alphabet = gon.alphabet;
   code = $("#code").val().toUpperCase();

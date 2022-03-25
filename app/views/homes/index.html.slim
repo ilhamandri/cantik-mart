@@ -1,6 +1,30 @@
+- trx =  Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_day, DateTime.now.end_of_day).where(user: current_user)
+- trx_total = trx.sum(:grand_total)
+- cash = trx.where(payment_type: "CASH").sum(:grand_total)
+- debit = trx.where(payment_type: "DEBIT").sum(:grand_total)
+- jumlah_trx = trx.count
+
 - if !["super_admin", "owner", "candy_dream"].include? current_user.level
   .container-fluid
     section.pb-3
+    - if current_user.level != "cashier"
+      - if current_user.store.online_store
+        h3
+        | Selamat Datang, #{current_user.name}
+        br
+        br
+        .row
+          .col.text-center
+            button.btn.btn-success onclick="printShift('#{trx_total.to_i}', '#{current_user.name.upcase}', '#{DateTime.now.strftime("%d/%m/%Y %H:%M:%S")}', #{cash.to_i}, #{debit.to_i}, '#{jumlah_trx.to_i}', '#{current_user.store.id}' , '#{current_user.store.name}' )"
+              | CETAK PENJUALAN
+          .col.text-center
+            a href="#{new_transaction_path}"
+              button.btn.btn-primary type="button" 
+                i.fas.fa-plus 
+                |   MENU KASIR 
+        br
+        hr
+        br
       .row
         .col-md-3.mb-0
         	= render "homes/card/stock"

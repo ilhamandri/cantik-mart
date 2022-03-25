@@ -241,6 +241,7 @@
                      <option value="1" selected>Tunai</option>
                      <option value="2">Debit</option>
                      <option value="3">Kredit</option>
+                     <option value="4">QRIS</option>
                   </select>
                   <label>Tipe Pembayaran</label>
                </div>
@@ -283,8 +284,8 @@
                </div>
             </div>
            <div class="modal-footer">
-              <a onclick="PrintBill()" style="color: blue;">TEST CETAK</a>
-              <a class="modal-close btn btn-success" onclick="CheckOut()">SELESAI</a>
+              <!-- <a onclick="PrintBill()" style="color: blue;">TEST CETAK</a> -->
+              <a class="modal-close btn btn-success" onclick="CheckOut('')">SELESAI</a>
            </div>
          </div>
       </div>
@@ -302,81 +303,6 @@
       <script type="text/javascript">
 
          var idx = 1;
-         function CheckOut() {
-             var table = $('#itemList').DataTable();
-             var data = table.rows().data();
-
-             table.order( [ 7, 'asc' ] ).draw();
-             var items = [];
-             for (var i = 0; i < data.length; i++) {
-                 var obj = { 
-                     id: data[i][0],
-                     qty: data[i][3],
-                     price: data[i][4],
-                     disc: data[i][5],
-                     total: data[i][6],
-                     promo: data[i][2]
-                 };
-                 items.push(obj);
-             }
-         
-             var nominal = $('#label-total').html();
-             var voucher_code = $("#voucher_code").val();
-             var payment = $("#payment-method-select").val();
-             var member = $("#memberId").val();
-             var change = "0";
-             var bank = $("#bank-select").val();
-             var edc = $("#edc-nnumber").val();
-             var card = $("#card-number").val();
-         
-             if (payment==1){
-                 change = $('#change-h5').html();
-                 var nominal = parseFloat($('#nominal').val());
-                 if (total > nominal) {
-                   var bilangan = nominal - total;
-                   alert("Jumlah Uang Kurang.")
-                   return false;
-                 }
-             }else{
-                 bank = $("#bank-select").val();
-                 edc = $("#edc-number").val();
-             }
-             var map = {};
-             map["items"] = items;
-             map["payment"] = payment;
-             map["bank"] = bank;
-             map["edc"] = edc;
-             map["card"] = card;
-             map["member"] = member;
-             map["voucher"] = voucher_code;
-             map["invoice"] = gon.invoice;
-
-             PrintBill();
-             jQuery.ajax({
-                       url: "/api/trx/post",
-                       type: "POST",
-                       data: map,
-                       dataType: "json",
-                       beforeSend: function(x) {
-                         if (x && x.overrideMimeType) {
-                           x.overrideMimeType("application/j-son;charset=UTF-8");
-                         }
-                       },
-                       success: function(result) {
-                          $("#payment-method-select").val(0);
-                          $("#nominal").val();
-                          var table = $('#itemList').DataTable();
-                          table.clear().draw();
-                          $("#total-h5").html("0");
-                          document.getElementById("label-total").innerHTML = "0";
-                          document.location.reload();
-                          window.location.reload()
-                        }, 
-                       error: function(result){
-                          alert("ERROR")
-                       }
-             });
-         }
          
          $('.top.menu .item').tab();
 
@@ -652,7 +578,7 @@
            });
            }, 300);
          };
-         
+         // recall
          itemId.onkeyup = function(e) {
            clearTimeout(timeout);
            timeout = setTimeout(function() {
@@ -721,7 +647,7 @@
              };
 
               if (existing){
-                qty += parseInt(curr_qty);
+                qty += parseFloat(curr_qty);
                 var urls = "/api/trx?search=" + curr_code + "&qty=" + qty;
                 $.ajax({
                    method: "GET",
@@ -818,24 +744,32 @@
            document.getElementById("label-total").innerHTML = ribuan;
          }
          
-         var invoice = gon.invoice
-         var cashier = gon.cashier
-         var time = gon.current_time
-         
-         var header = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> <style type="text/css"> td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> <div class="row"> <div class="col-sm-12 text-center"> <img src="/images/logo.png" style="width: 150px"/> </div><div class="col-sm-12 text-center"> <p class="medium"> Jl. Cirata - Cilangkap, Ds. Cadassari <br> Kec. Tegalwaru, Kabupaten Purwakarta, Jawa Barat <br> =========================================================== <br> ' + invoice + ' <br> '+ cashier + ' - ' + time +' <br> =========================================================== </p>  </div>';
+         var store_id = gon.store_id;
+         var cashier_name = gon.cashier_name;
 
-         // var header = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> <style type="text/css"> td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> <div class="row"> <div class="col-sm-12 text-center"> <img src="/images/logo.png" /> </div><div class="col-sm-12 text-center"> <p class="medium"> Jl. Raya Plered,Purwakarta No.17 <br> Kec. Plered, Kabupaten Purwakarta, Jawa Barat <br> =========================================================== <br> ' + invoice + ' <br> '+ cashier + ' - ' + time +' <br> =========================================================== </p>  </div>';
+         var header_cirata = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <style type="text/css"> table {table-layout:auto; width:100%;} td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> ' + '<table widht: "100%;" ><tr><td style="text-align: left; vertical-align: middle;"><img src="/images/logo.png" style="width: 150px"/></td><td style="text-align: right;font-size: 12px !important;">' + 'PT. Cantik Berkah Sejahtera <br>' + 'NPWP: 53.925.657.9-409.000 <br>' + 'Jl. Cirata - Cilangkap, Ds. Cadassari<br> Kec. Tegalwaru, Kabupaten Purwakarta,<br>Jawa Barat'+'</td></tr></table>';
+  
+         var header_plered = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <style type="text/css"> table {table-layout:auto; width:100%;} td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> ' + '<table widht: "100%;" ><tr><td style="text-align: left; vertical-align: middle;"><img src="/images/logo.png" style="width: 150px"/></td><td style="text-align: right;font-size: 12px !important;">' + 'PT. Cantik Berkah Sejahtera <br>' + 'NPWP: 53.925.657.9-409.000 <br>' + 'Jl. Raya Plered,Purwakarta <br> Kec. Plered, Kabupaten Purwakarta, <br>Jawa Barat'+'</td></tr></table>';
+  
 
-         var footer = '<p class="medium"> =========================================================== </p> <div class="text-center"> <h4> Terima kasih atas kunjungan Anda </h4> </div> </div> </div> </body> </html>';
+         var header_bendul = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <style type="text/css"> table {table-layout:auto; width:100%;} td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> ' + '<table widht: "100%;" ><tr><td style="text-align: left; vertical-align: middle;"><img src="/images/logo.png" style="width: 150px"/></td><td style="text-align: right;font-size: 12px !important;">' + 'PT. Cantik Berkah Sejahtera <br>' + 'NPWP: 53.925.657.9-409.000 <br>' + 'Pasar Anyar Sukatani, Purwakarta <br> Kec. Sukatani, Kabupaten Purwakarta, <br>Jawa Barat'+'</td></tr></table>'+separator;
+
+
+         var footer = '<p>=========================================================== </p> <div style="text-align: center;font-size: 12px;"><p> - TERIMA KASIH ATAS KUNJUNGAN ANDA - <br> UNTUK BARANG KENA PAJAK <br> HARGA SUDAH TERMASUK PPN <br> ATAU PPN YANG DI BEBASKAN</p> </div> </div> </div> </body> </html>';
 
          var separator = '<p class="medium">===========================================================</p>';
 
-         var items = ' <div class="col-sm-12"><table class="table">';
+         var items = ' <div><table class="table">';
          var HTML_totals = '<table class="table">';
          
-         function PrintBill() {
-             body_html = '';
-         
+
+
+
+
+
+         function PrintBill(invoice, time, cashier_id) {
+            body_html = '';
+            var ext = '===========================================================<table class="table"><tr><td style="text-align: left;">'+invoice+'</td><td style="text-align: center;">'+cashier_name+'</td><td style="text-align: right;">'+time+'</td></tr></table>=========================================================== </div>';
              var total_diskon = 0;
              var subtotal = 0;
              var table = $('#itemList').DataTable();
@@ -857,9 +791,9 @@
                  subtotal += p_total;
 
                  items += '<tr><td colspan="4">'+item_name+'</td> </tr>'
-                 items += '<tr><td class="text-center">'+qty+'</td><td class="text-center">x</td><td class="text-center">'+price+'</td><td class="text-right">'+splitRibuan(p_total)+'</td></tr>';
+                 items += '<tr><td>&nbsp</td><td style="text-align: left;" >'+qty+'</td><td style="text-align: center;">x</td><td style="text-align: left;">'+price+'</td><td style="text-align: right;">'+splitRibuan(p_total)+'</td></tr>';
                  if(diskon > 0){
-                  items += '<tr><td class="text-center" colspan="3">DISKON :</td><td class="text-right">-'+splitRibuan(diskon)+'</td></tr>';
+                  items += '<tr><td class="text-center" colspan="3">DISKON :</td><td style="text-align: right;">-'+splitRibuan(diskon)+'</td></tr>';
                  }
              }
 
@@ -884,16 +818,21 @@
              subtotal = parseInt(subtotal);
              total_diskon = parseInt(total_diskon);
              pay = parseInt(pay);
-             HTML_totals += '<tr><td> Subtotal </td><td class="text-right">'+splitRibuan(subtotal)+' </td></tr><tr><td> Total Diskon</td><td class="text-right">'+splitRibuan(total_diskon)+'</td></tr><tr><td>Total</td><td class="text-right">'+splitRibuan(subtotal-total_diskon)+'</td></tr><tr><td> Bayar - '+payment_method+' </td><td class="text-right">'+splitRibuan(pay)+'</td></tr><tr><td> Kembali</td><td class="text-right">'+$("#change-h5").html()+'</td></tr>';
+             HTML_totals += '<tr><td> Subtotal </td><td style="text-align: right;">'+splitRibuan(subtotal)+' </td></tr><tr><td> Total Diskon</td><td style="text-align: right;">'+splitRibuan(total_diskon)+'</td></tr><tr><td>Total</td><td style="text-align: right;">'+splitRibuan(subtotal-total_diskon)+'</td></tr><tr><td> Bayar - '+payment_method+' </td><td style="text-align: right;">'+splitRibuan(pay)+'</td></tr><tr><td> Kembali</td><td style="text-align: right;">'+$("#change-h5").html()+'</td></tr>';
 
              HTML_totals +="</table>"
 
-         
-             printHTML(header+items+separator+HTML_totals+footer);
+            if (store_id == 3){
+               printHTML(header_plered+ext+items+separator+HTML_totals+footer);
+            }else if (store_id == 7){
+               printHTML(header_bendul+ext+items+separator+HTML_totals+footer);
+            }else{
+               printHTML(header_cirata+ext+items+separator+HTML_totals+footer);
+            }
          }  
          
          function printHTML(html) {
-            var wnd = window.open("about:blank", "", "_blank");
+            wnd = window.open("about:blank", "", "_blank");
             wnd.document.write(html);
             wnd.print();
             items = ' <div class="col-sm-12"><table class="table">';
@@ -909,6 +848,86 @@
            return ribuan;
          }
          
+
+
+         function CheckOut(from) {
+             var table = $('#itemList').DataTable();
+             var data = table.rows().data();
+
+             table.order( [ 7, 'asc' ] ).draw();
+             var items = [];
+             for (var i = 0; i < data.length; i++) {
+                 var obj = { 
+                     id: data[i][0],
+                     qty: data[i][3],
+                     price: data[i][4],
+                     disc: data[i][5],
+                     total: data[i][6],
+                     promo: data[i][2]
+                 };
+                 items.push(obj);
+             }
+         
+             var nominal = $('#label-total').html();
+             var voucher_code = $("#voucher_code").val();
+             var payment = $("#payment-method-select").val();
+             var member = $("#memberId").val();
+             var change = "0";
+             var bank = $("#bank-select").val();
+             var edc = $("#edc-nnumber").val();
+             var card = $("#card-number").val();
+         
+             if (payment==1){
+                 change = $('#change-h5').html();
+                 var nominal = parseFloat($('#nominal').val());
+                 if (total > nominal) {
+                   var bilangan = nominal - total;
+                   alert("Jumlah Uang Kurang.")
+                   return false;
+                 }
+             }else{
+                 bank = $("#bank-select").val();
+                 edc = $("#edc-number").val();
+             }
+             var map = {};
+             map["items"] = items;
+             map["payment"] = payment;
+             map["bank"] = bank;
+             map["edc"] = edc;
+             map["card"] = card;
+             map["member"] = member;
+             map["voucher"] = voucher_code;
+             map["invoice"] = gon.invoice+from;
+             jQuery.ajax({
+                 url: "/api/trx/post",
+                 type: "POST",
+                 data: map,
+                 dataType: "json",
+                 beforeSend: function(x) {
+                   if (x && x.overrideMimeType) {
+                     x.overrideMimeType("application/j-son;charset=UTF-8");
+                   }
+                 },
+                 success: function(result_arr) {
+                     PrintBill(result_arr['invoice'], result_arr['time']);
+                    $("#payment-method-select").val(0);
+                    $("#nominal").val();
+                    var table = $('#itemList').DataTable();
+                    table.clear().draw();
+                    $("#total-h5").html("0");
+                    document.getElementById("label-total").innerHTML = "0";
+                    document.location.reload();
+                    window.location.reload()
+                     }, 
+                    error: function(result){
+                       alert(result[0][0]);
+                       alert("ERROR")
+                    }
+             });
+             if (isOK == true){
+                  alert("HERE");
+             }
+         }
          
       </script>
    </body>

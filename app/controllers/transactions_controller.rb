@@ -275,10 +275,12 @@ class TransactionsController < ApplicationController
   end
 
   def new
-    gon.invoice = Time.now.to_i.to_s + "-" + current_user.store.id.to_s + "-" + current_user.id.to_s
-    gon.cashier = current_user.name.upcase
-    gon.current_time = DateTime.now.to_s
-
+    gon.store_id = current_user.store.id
+    gon.cashier_name = current_user.name.upcase.split(" ")[0]
+    trx_last_store_id = Transaction.last.store.id
+    if !current_user.store.online_store
+      return redirect_back_data_error root_path, "ID kasir tidak terdaftar." if trx_last_store_id != current_user.store.id
+    end
     respond_to do |format|
       format.html { render "transactions/new", :layout => false  } 
     end
@@ -304,7 +306,7 @@ class TransactionsController < ApplicationController
     end
 
     trx = Transaction.new
-    trx.invoice = "TRX-" + params[:invoice]
+    trx.invoice = "TRX-"+DateTime.now.to_i.to_s+"-"+current_user.store.id.to_s+"-"+current_user.id.to_s
     trx.user = current_user
     member_card = nil
     if params[:member] != ""
@@ -323,6 +325,7 @@ class TransactionsController < ApplicationController
     trx.discount = discount.to_i
     trx.total = total.to_i
     trx.grand_total = grand_total.to_i
+    trx.tax = 0
 
     if params[:payment] != 1
       trx.bank = params[:bank].to_i
@@ -332,6 +335,7 @@ class TransactionsController < ApplicationController
     trx.save!
     
     trx_total_for_point = 0
+    tax = 0
     items.each do |item_par|
       item = Item.find_by(code: item_par[0])
       next if item.nil?
@@ -345,9 +349,14 @@ class TransactionsController < ApplicationController
       trx_item = TransactionItem.create item: item,  
       transaction_id: trx.id,
       quantity: item_par[1], 
-      price: item_par[2].to_f,
+      price: item_par[2],
       discount: item_par[3],
       date_created: DateTime.now
+
+
+      if item.tax != 0
+        tax += trx_item.quantity*(trx_item.price-((100.0/ (100.0 + item.tax)*trx_item.price))).to_i
+      end
 
       if trx_item.price == 0
         promo = item_par[5]
@@ -355,21 +364,21 @@ class TransactionsController < ApplicationController
         trx_item.save!
       end
       store_stock = StoreItem.find_by(store: current_user.store, item: item)
+      hpp_total += (item_par[1].to_i * item.buy).round
       next if store_stock.nil?
-      hpp_total += (item_par[1].to_i * item.buy).round if !item.local_item
-      hpp_total += (item_par[1].to_i * store_stock.buy).round if item.local_item
-      store_stock.stock = store_stock.stock.to_f - item_par[1].to_f
+      store_stock.stock = store_stock.stock.to_i - item_par[1].to_i
       store_stock.save!
     end
+    trx.tax = tax
     trx.hpp_total = hpp_total
     new_point = trx_total_for_point / @@point
     trx.point = new_point
     trx.save!
-
     render status: 200, json: {
-      message: "Transaksi Berhasil"
+      invoice: trx.invoice.to_s,
+      time: trx.created_at.strftime("%d/%m/%Y %H:%M:%S"),
+      
     }.to_json
-
   end
 
   private
