@@ -30,7 +30,7 @@ class StockRecapsController < ApplicationController
       start_date = date.to_datetime
       end_date = Date.today.to_datetime
       stocks = []
-      Item.all.order("name ASC").each do |item|
+      Item.all.order("name ASC").limit(100).each do |item|
         if(item.store_items.count != Store.all.count)
           Store.all.each do |store|
             if item.store_items.find_by(store: store).nil?
@@ -55,7 +55,7 @@ class StockRecapsController < ApplicationController
         if loss_items.present?
           loss_item_total = loss_items.sum(:quantity)
         end
-        if order_item.present?
+        if order_items.present?
           order_item_total = order_items.sum(:quantity)
         end
 
