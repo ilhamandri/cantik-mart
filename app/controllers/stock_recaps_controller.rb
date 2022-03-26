@@ -43,9 +43,11 @@ class StockRecapsController < ApplicationController
         
         trx_items = TransactionItem.where(created_at: start_date..end_date, item: item)
         loss_items = LossItem.where(created_at: start_date..end_date, item: item)
-        
+        order_items = OrderItem.where(created_at: start_date..end_date, item: item)
+
         trx_item_total = 0
         loss_item_total = 0
+        order_item_total = 0
 
         if trx_items.present?
           trx_item_total = trx_items.sum(:quantity)
@@ -53,8 +55,11 @@ class StockRecapsController < ApplicationController
         if loss_items.present?
           loss_item_total = loss_items.sum(:quantity)
         end
+        if order_item.present?
+          order_item_total = order_items.sum(:quantity)
+        end
 
-        stock_before = current_stock - trx_item_total - loss_item_total
+        stock_before = current_stock + trx_item_total + loss_item_total - order_item_total
 
         stocks << [item.code, item.name, stock_before]
       end
