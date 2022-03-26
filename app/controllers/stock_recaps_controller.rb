@@ -30,7 +30,7 @@ class StockRecapsController < ApplicationController
       start_date = date.to_datetime
       end_date = Date.today.to_datetime
       stocks = []
-      Item.all.order("name ASC").limit(100).each do |item|
+      Item.all.order("name ASC").each do |item|
         if(item.store_items.count != Store.all.count)
           Store.all.each do |store|
             if item.store_items.find_by(store: store).nil?
