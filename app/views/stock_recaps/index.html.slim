@@ -1,0 +1,17 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card-header.white-text.info-color
+      h5.font-weight-500.my-1
+        | Rekap Stok
+    .card.mb-4
+      .card-body
+        h6.red-text
+          | *) Jika rekap belum disimpan didalam sistem, dibutuhkan beberapa waktu untuk melakukan pencatatan stok
+        = form_for :stock_recaps, url: stock_recaps_path(format: :xlsx), method: 'GET' do |form|
+          .row
+            .col-12
+                  label Pilih Tanggal 
+                  input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date" required=true
+            .col-12.text-center
+              button class="btn btn-primary"
+                | Cari

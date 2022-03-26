@@ -12,5 +12,6 @@ class Item < ApplicationRecord
   has_many :send_back_items
   has_many :popular_items
   has_many :not_popular_items
+  has_many :loss_items
 end
 
