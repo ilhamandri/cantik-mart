@@ -60,8 +60,9 @@ class StockRecapsController < ApplicationController
         end
 
         stock_before = current_stock + trx_item_total + loss_item_total - order_item_total
-
-        stocks << [item.code, item.name, stock_before]
+        value = (item.buy * stock_before).to_i
+        value = 0 if value < 0
+        stocks << [item.code, item.name, value]
       end
       create_xlsx filename, stocks, date
     end
@@ -70,7 +71,7 @@ class StockRecapsController < ApplicationController
       p = Axlsx::Package.new
       wb = p.workbook
       wb.add_worksheet(:name => "STOCK ") do |sheet|
-        sheet.add_row ["Kode", "Nama", "Stok"]
+        sheet.add_row ["Kode", "Nama", "Nilai"]
         sheet.add_row ["","",""]
         stocks.each do |stock|
           sheet.add_row [stock[0], stock[1], stock[2]]
