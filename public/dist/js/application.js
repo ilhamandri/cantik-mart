@@ -14,7 +14,7 @@ function printShift(total, cashier, time, cash, debit, n_trx, store_id,store_nam
   var data = "";  
   if (store_id == 2){
     data += header_cirata;
-  else if (store_id == 7){
+  } else if (store_id == 7){
     data += header_bendul;
   }else{
     data += header_plered;
