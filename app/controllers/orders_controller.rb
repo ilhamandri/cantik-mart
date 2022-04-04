@@ -234,6 +234,9 @@ class OrdersController < ApplicationController
     items.each do |item|
       order_item = OrderItem.find item[0]
       break if order_item.nil?
+      this_item = order_item.item
+      break if this_item.nil?
+
       qty_order = order_item.quantity
       receive_qty = item[1].to_i
       
@@ -263,7 +266,6 @@ class OrdersController < ApplicationController
       end
 
 
-      this_item = order_item.item
       store_stock = StoreItem.find_by(item: this_item, store_id: current_user.store)
       if store_stock.nil?
         store_stock = StoreItem.create store: current_user.store, item: this_item, stock: 0, min_stock: 5 
@@ -283,13 +285,23 @@ class OrdersController < ApplicationController
 
       item_grand_total = (price_2 + (price_2*ppn/100)).round
 
-      based_item_price = item_grand_total / receive_qty;
+      based_item_price = total_item_without_disc_global / receive_qty;
+
+
+      if ppn > 0
+        this_item.tax = ppn
+        this_item.ppn = based_item_price * ppn / 100
+        this_item.save!
+      end
 
       sell_price = item.last.to_f
       old_sell = this_item.sell
       this_item.buy = based_item_price 
-      this_item.sell = sell_price
+      this_item.save!
       if old_sell < sell_price
+        this_item.sell = sell_price
+        sell_after_tax = this_item.buy + this_item.ppn
+        this_item.selisih_pembulatan = this_item.sell - sell_after_tax
         this_item.save!
         Store.all.each do |store|
           Print.create item: this_item, store: store
@@ -354,7 +366,7 @@ class OrdersController < ApplicationController
 
     if ppn > 0
       order.tax = order.order_items.first.ppn * (order.total - order.discount) / 100
-      order.tax = order.tax.ceil
+      order.tax = order.tax
       order.save!
 
       order.supplier.update(tax: ppn)
