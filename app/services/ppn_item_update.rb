@@ -9,9 +9,12 @@ class PpnItemUpdate
 			next if last_order.nil?
 			base_price = last_order.price
 
-			disc_1 = last_order.discount_1/last_order.receive
-			disc_2 = last_order.discount_2/last_order.receive
-			disc_1 = 0 if disc_1 < 0
+			disc_1 = last_order.discount_1
+			disc_1 = disc_1/last_order.receive if disc_1.present?
+			disc_2 = last_order.discount_2
+			disc_2 = disc_2/last_order.receive if disc_2.present?
+			
+			disc_1 = 0 if disc_1 < 0 
 			disc_2 = 0 if disc_2 < 0
 
 			if disc_1 < 100
