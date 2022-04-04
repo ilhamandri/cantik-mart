@@ -7,7 +7,7 @@ class CreateNotification
 	        message = "Terdapat perubahan harga jual. Segera cetak label harga "+item.name
 	        to_users = User.where(level: ["owner", "super_admin", "super_visi"])
 	        to_users.each do |to_user|
-	          set_notification current_user, to_user, "info", message, prints_path
+	        	Notification.create from_user: User.last, to_user: to_user, m_type: "info", message: message, link: "/prints", date_created: DateTime.now
 	        end
 	    end
 	end
