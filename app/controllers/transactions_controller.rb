@@ -92,8 +92,6 @@ class TransactionsController < ApplicationController
     start_day = end_day.beginning_of_day
     @end = end_day
     @start = start_day
-    cirata = Store.find_by(id: 2)
-    plered = Store.find_by(id: 3)
 
     cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     trx = Transaction.where(date_created: start_day..end_day)
@@ -103,20 +101,28 @@ class TransactionsController < ApplicationController
       trx = trx.where(has_coin: false) 
     end
     @trxs = trx
-    grand_total_plered = trx.where(store: plered).sum(:grand_total)
-    hpp_total_plered = trx.where(store: plered).sum(:hpp_total)
-    grand_total_cirata = trx.where(store: cirata).sum(:grand_total)
-    hpp_total_cirata = trx.where(store: cirata).sum(:hpp_total)
 
-    @margin_plered = grand_total_plered - hpp_total_plered
-    @margin_cirata = grand_total_cirata - hpp_total_cirata
+    @profits = []
+
+    @total_income = 0
+
+    Store.all.each do |store|
+      grand_total = trx.where(store: store).sum(:grand_total)
+      hpp_total = trx.where(store: store).sum(:hpp_total)
+      profit = grand_total - hpp_total
+      ppn = trx.where(store: store).sum(:tax)
+      pembulatan = trx.where(store: store).sum(:pembulatan)
+      @total_income += profit
+      @profits << [store.name, grand_total, profit, ppn, pembulatan]
+    end
+
     @supplier_income = 0
 
 
     @bonus = cash_flow.where(finance_type: CashFlow::BONUS).sum(:nominal)
     @other_income = cash_flow.where(finance_type: CashFlow::INCOME).sum(:nominal)
 
-    @total_income = @margin_plered + @margin_cirata + @supplier_income + @bonus + @other_income
+    @total_income += @supplier_income + @bonus + @other_income
   
     cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
@@ -336,6 +342,7 @@ class TransactionsController < ApplicationController
     
     trx_total_for_point = 0
     tax = 0
+    pembulatan = 0
     items.each do |item_par|
       item = Item.find_by(code: item_par[0])
       next if item.nil?
@@ -354,9 +361,8 @@ class TransactionsController < ApplicationController
       date_created: DateTime.now
 
 
-      if item.tax != 0
-        tax += trx_item.quantity*(trx_item.price-((100.0/ (100.0 + item.tax)*trx_item.price))).to_i
-      end
+      tax += item.ppn * item_par[1].to_f
+      pembulatan += item.selisih_pembulatan * item_par[1].to_f
 
       if trx_item.price == 0
         promo = item_par[5]
@@ -370,6 +376,7 @@ class TransactionsController < ApplicationController
       store_stock.save!
     end
     trx.tax = tax
+    trx.pembulatan = pembulatan
     trx.hpp_total = hpp_total
     new_point = trx_total_for_point / @@point
     trx.point = new_point

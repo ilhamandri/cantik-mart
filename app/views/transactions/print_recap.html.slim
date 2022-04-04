@@ -155,36 +155,51 @@ br
     | LAPORAN IN-OUT #{@end.to_date}
   table#items
     tr
-      td colspan="2" style="font-weight: bold; text-align: center"
-        | Pemasukkan
-      td colspan="2" style="font-weight: bold; text-align: center"
-        | Pengeluaran
+      td colspan="5" style="font-weight: bold; text-align: center"
+        | PEMASUKKAN
+    tr style="text-align: center"
+      td
+        b Toko
+      td
+        b Total
+      td 
+        b Profit
+      td
+        b Pajak Keluaran
+      td
+        b Selisih Pembulatan
+    - @profits.each do |profit|
+      tr style="text-align: right"
+        td style="text-align: left" #{profit[0]}
+        td #{number_with_delimiter(profit[1].to_i, delimiter: ".")}
+        td #{number_with_delimiter(profit[2].to_i, delimiter: ".")}
+        td #{number_with_delimiter(profit[3].to_i, delimiter: ".")}
+        td #{number_with_delimiter(profit[4].to_i, delimiter: ".")}
+
+  table#items
     tr
-      td Profit Toko Plered
-      td 
-        b #{number_with_delimiter(@margin_plered.to_i, delimiter: ".")}
+      td colspan="2" style="font-weight: bold; text-align: center"
+        | PENGELUARAN
+    tr
       td Operasional
-      td 
+      td style="text-align: right"
         b #{number_with_delimiter(@operational.to_i, delimiter: ".")}
     tr
-      td Profit Toko Cirata
-      td 
-        b #{number_with_delimiter(@margin_cirata.to_i, delimiter: ".")}
       td Biaya Pasti
-      td 
+      td style="text-align: right"
         b #{number_with_delimiter(@fix_cost.to_i, delimiter: ".")}
 
   table#items
     tr
       td Total Pemasukkan
-      td 
+      td style="text-align: right"
         b #{number_with_delimiter(@total_income.to_i, delimiter: ".")}
     tr
       td Total Pengeluaran
-      td
+      td style="text-align: right"
         b #{number_with_delimiter(@total_outcome.to_i, delimiter: ".")}
     tr
       td Profit Bersih
-      td 
+      td style="text-align: right"
         b #{number_with_delimiter(@total_income.to_i - @total_outcome.to_i, delimiter: ".")}
 

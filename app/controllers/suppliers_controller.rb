@@ -92,7 +92,7 @@ class SuppliersController < ApplicationController
       sheet.add_row [""]
       sheet.add_row [""]
       sheet.add_row [""]
-      sheet.add_row ["No. ","Invoice", "Supplier", "Jumlah Item", "Nominal", "Dibuat", "Diterima", "Dibayarkan", "Pajak", "Detil Order"]
+      sheet.add_row ["No. ","Invoice", "Dibuat", "Diterima", "Pembayaran", "Jumlah Item", "Total", "Pajak Masukan", "Detil Order"]
       orders.each_with_index do |order, idx|
         invoice = order.invoice
         jumlah = order.total_items
@@ -104,12 +104,11 @@ class SuppliersController < ApplicationController
         paid = ""
         paid = "LUNAS   (" + order.date_paid_off.strftime("%d/%m/%Y").to_s + ")   " if order.date_paid_off.present?
         link = "http://cantikmart.com/order/"+order.id.to_s
-        sheet.add_row [idx+1, invoice, supplier.name,
-          jumlah, nominal, created, received, paid, tax, link]
+        sheet.add_row [idx+1, invoice, created, received, paid, jumlah, nominal, tax, link]
         sheet.add_hyperlink :location => link, :ref => sheet.rows.last.cells.last
       end
       sheet.add_row [""]
-      sheet.add_row ["","","","",number_with_delimiter(order_total, separator: "."),"","","",number_with_delimiter(tax_total, separator: "."), ""]
+      sheet.add_row ["","","","","","",number_with_delimiter(order_total, separator: "."),number_with_delimiter(tax_total, separator: "."), ""]
     end
 
     p.serialize(filename)

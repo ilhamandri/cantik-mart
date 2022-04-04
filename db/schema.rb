@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_26_034641) do
+ActiveRecord::Schema.define(version: 2022_04_02_084845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -283,6 +283,8 @@ ActiveRecord::Schema.define(version: 2022_03_26_034641) do
     t.bigint "counter", default: 0
     t.bigint "kpi", default: 0
     t.bigint "tax", default: 0
+    t.float "ppn", default: 0.0, null: false
+    t.float "selisih_pembulatan", default: 0.0, null: false
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 
@@ -769,6 +771,7 @@ ActiveRecord::Schema.define(version: 2022_03_26_034641) do
     t.bigint "voucher"
     t.boolean "has_coin", default: false, null: false
     t.bigint "tax", default: 0
+    t.float "pembulatan", default: 0.0, null: false
     t.index ["store_id"], name: "index_transactions_on_store_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
     t.index ["voucher_id"], name: "index_transactions_on_voucher_id"

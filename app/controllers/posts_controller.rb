@@ -29,6 +29,8 @@ class PostsController < ApplicationController
 						trx_total_for_point = 0
 						hpp_totals = 0
 						has_coin = false
+						ppn = 0
+						pembulatan = 0
 						trx_items_datas.each do |trx_item|
 							trx_item.delete("id")
 							trx_item["transaction_id"] = trx.id
@@ -57,7 +59,11 @@ class PostsController < ApplicationController
 						    item.counter = item.counter + new_trx_item.quantity.to_i
 						    item.save!
 						    store_stock.save!
+							tax += item.ppn * decrease
+							pembulatan += item.selisih_pembulatan * decrease
 						end
+						trx.tax = ppn
+						trx.pembulatan = pembulatan
 
 						trx.hpp_total = hpp_totals
 						trx.save!
