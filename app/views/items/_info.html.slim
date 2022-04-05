@@ -74,7 +74,7 @@
             - else
               td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
             - disc = (@item.discount / 100 * @item.sell) if disc <= 100
-            td #{number_to_currency((@item.sell - @item.buy - disc).round, delimiter: ".", separator: ",", unit: "Rp. ")}
+            td #{number_to_currency((@item.sell - @item.buy - disc - @item.ppn).round, delimiter: ".", separator: ",", unit: "Rp. ")}
             td.text-right
               a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
                 |   + Cetak

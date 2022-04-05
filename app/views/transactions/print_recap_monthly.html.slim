@@ -51,7 +51,7 @@ br
           td #{number_with_delimiter(tax.to_i, delimiter: ".", separator: ",")}
           - totals += total
           - hpp_totals += hpp
-          - profit_totals += total - hpp
+          - profit_totals += total - hpp - tax
           - tax_totals += tax
 
     tr

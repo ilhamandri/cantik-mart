@@ -31,6 +31,7 @@ class PostsController < ApplicationController
 						has_coin = false
 						ppn = 0
 						pembulatan = 0
+						profit = 0
 						trx_items_datas.each do |trx_item|
 							trx_item.delete("id")
 							trx_item["transaction_id"] = trx.id

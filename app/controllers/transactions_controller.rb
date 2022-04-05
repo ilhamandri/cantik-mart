@@ -109,8 +109,8 @@ class TransactionsController < ApplicationController
     Store.all.each do |store|
       grand_total = trx.where(store: store).sum(:grand_total)
       hpp_total = trx.where(store: store).sum(:hpp_total)
-      profit = grand_total - hpp_total
       ppn = trx.where(store: store).sum(:tax)
+      profit = grand_total - hpp_total - ppn
       pembulatan = trx.where(store: store).sum(:pembulatan)
       @total_income += profit
       @profits << [store.name, grand_total, profit, ppn, pembulatan]
@@ -227,7 +227,7 @@ class TransactionsController < ApplicationController
                   sell = trx_item.first
                   sell_qty = trx_item.second
                   items += sell_qty
-                  profit = profit = (sell - item.buy)*sell_qty
+                  profit = (sell - item.buy - item.ppn)*sell_qty
                   profits += profit
                   omzet = sell * sell_qty
                   omzets += omzet

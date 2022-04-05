@@ -135,7 +135,7 @@ function changeSellOrder(id){
   }
 }
 
-function changePrice(id){
+function changePrice(id) {
   var ids = gon.ids
   var receive = $("#"+id+"Receive").val();
   var price = $("#"+id+"Price").val();
@@ -160,9 +160,8 @@ function changePrice(id){
     price -= disc_2;
   }
 
-  var price_supp = (receive * (price+ parseFloat(price*new_ppn/100)));
-  var total_price_supp = price_supp + (price_supp*ppn/100);
-  $("#"+id+"Total").html(parseInt(total_price_supp));
+  var price_supp = (receive * (price + parseFloat(price*ppn/100)));
+  $("#"+id+"Total").html(formatangka_titik(parseInt(price_supp)));
 
   base_price = price;
   var price_before_tax = base_price+(base_price*margin/100);
@@ -170,7 +169,6 @@ function changePrice(id){
   
   var new_sell = Math.ceil(price_after_tax/10)*10;
   var old_sell = document.getElementById(id+"Sell").min; 
-
   if(new_sell>old_sell){
     $("#"+id+"Sell").val(new_sell);
   }else{
@@ -179,7 +177,7 @@ function changePrice(id){
 
   g_total = 0
   for (i = 0; i < ids.length; i++) {
-    g_total += parseInt($("#"+ids[i]+"Total").html());
+    g_total += parseInt($("#"+ids[i]+"Total").html().replace(".",""));
   } 
 
   if(globalDisc<=99){
@@ -190,7 +188,7 @@ function changePrice(id){
   }
 
 
-  $("#grand_total_all").html(parseInt(g_total));
+  $("#grand_total_all").html(formatangka_titik(parseInt(g_total)));
 }
 
 function complain_check(index){
