@@ -349,8 +349,6 @@ class OrdersController < ApplicationController
           this_item.save!
         end
       end
-
-      binding.pry
       
       store_stock.stock = store_stock.stock + receive_qty
       store_stock.buy = order_item.price
