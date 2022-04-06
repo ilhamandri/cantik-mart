@@ -63,7 +63,7 @@ class PostsController < ApplicationController
 						    item.counter = item.counter + new_trx_item.quantity.to_i
 						    item.save!
 						    store_stock.save!
-							tax += item.ppn * decrease
+							ppn += item.ppn * decrease
 							pembulatan += item.selisih_pembulatan * decrease
 						end
 						trx.tax = ppn
