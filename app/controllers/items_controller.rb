@@ -283,15 +283,18 @@ class ItemsController < ApplicationController
     if changes["margin"].present?
       margin = (item.buy * item.margin / 100)
       new_price_before_tax = item.buy + margin 
-      ppn = new_price_before_tax*item.ppn/100
-      new_price = (new_price_before_tax + ppn).ceil(-2)
+      ppn = new_price_before_tax*item.tax/100      
+      new_price_after_tax = new_price_before_tax + ppn
+      new_price = new_price_after_tax.ceil(-2)
       if new_price <= item.buy
         return redirect_back_data_error item_path(id: item.id), "Silahkan Set Ulang Margin Supaya Harga JUAL Lebih Besar dari Harga Beli"
       end
+      item.sell = new_price
       item.ppn = ppn
-      item.selisih_pembulatan = item.sell - new_price_before_tax  - item.ppn
+      item.selisih_pembulatan = item.sell - new_price_after_tax
       item.sell = new_price
       item.sell_member = new_price
+      item.save!
       change = true
     end
 
@@ -300,23 +303,28 @@ class ItemsController < ApplicationController
         return redirect_back_data_error item_path(id: item.id), "Silahkan Ulang Set Harga Jual MEMBER Lebih Besar dari Harga Beli"
       end
       change = true if item.sell_member != 0 && item.sell_member != item.sell
+      item.save!
     end
 
 
     if changes["discount"].present?
-      disc = item.buy - (item.buy*item.discount/100.0) if item.discount < 100
-      disc = item.buy - item.discount if item.discount >= 100
-      buy = item.buy - disc
+      buy = item.buy 
       margin = buy * item.margin / 100.0
       new_price_before_tax = item.buy + margin 
-      ppn = new_price_before_tax*item.ppn/100
+      new_price_before_tax -= (new_price_before_tax*item.discount/100.0) if item.discount < 100
+      new_price_before_tax -= item.discount if item.discount >= 100
+      ppn = new_price_before_tax*item.tax/100
+      new_price_after_tax = new_price_before_tax + ppn
+      new_price = new_price_after_tax.ceil(-2)
       if new_price <= item.buy
         return redirect_back_data_error item_path(id: item.id), "Silahkan Ulang Set DISKON Supaya Harga Jual Lebih Besar dari Harga Beli"
       end
+      item.sell = new_price
       item.ppn = ppn
-      item.selisih_pembulatan = item.sell - new_price_before_tax  - item.ppn
+      item.selisih_pembulatan = item.sell - new_price_after_tax
       item.sell = new_price
       item.sell_member = new_price
+      item.save!
       change = true
     end
 
