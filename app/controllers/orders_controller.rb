@@ -232,6 +232,7 @@ class OrdersController < ApplicationController
     ppn = params[:order][:ppn].to_f
     new_grand_total = 0
     items.each do |item|
+      margin = item.last(2).first.to_i
       order_item = OrderItem.find item[0]
       break if order_item.nil?
       this_item = order_item.item
@@ -287,20 +288,21 @@ class OrdersController < ApplicationController
 
       based_item_price = total_item_without_disc_global / receive_qty;
 
-
-      if ppn > 0
-        this_item.tax = ppn
-        this_item.ppn = based_item_price * ppn / 100
-        this_item.save!
-      end
-
       sell_price = item.last.to_f
       old_sell = this_item.sell
       this_item.buy = based_item_price 
+      this_item.margin = margin
+      sell_before_tax = based_item_price + ( based_item_price * this_item.margin / 100 )
+      if ppn > 0
+        this_item.tax = ppn
+        this_item.ppn = sell_before_tax * ppn / 100.0
+        this_item.save!
+      end
+
       this_item.save!
       if old_sell < sell_price
         this_item.sell = sell_price
-        sell_after_tax = this_item.buy + this_item.ppn
+        sell_after_tax = sell_before_tax + this_item.ppn
         this_item.selisih_pembulatan = this_item.sell - sell_after_tax
         this_item.save!
         Store.all.each do |store|
@@ -337,7 +339,7 @@ class OrdersController < ApplicationController
           old_buy_total = (curr_stock.to_i * this_item.buy).to_f 
           order_item.last_buy = this_item.buy
         end
-        new_buy = (item_grand_total + old_buy_total.to_f) / (receive_qty + curr_stock)  
+        new_buy = based_item_price
         if this_item.local_item
           store_stock.buy = new_buy
           store_stock.save!
@@ -347,6 +349,8 @@ class OrdersController < ApplicationController
           this_item.save!
         end
       end
+
+      binding.pry
       
       store_stock.stock = store_stock.stock + receive_qty
       store_stock.buy = order_item.price

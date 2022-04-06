@@ -279,14 +279,17 @@ class ItemsController < ApplicationController
     if params[:item][:sell_member].to_i <= 0
       item.sell_member = item.sell
     end
-
+    
     if changes["margin"].present?
-      margin = (item.buy.round * item.margin / 100)
-      new_price = item.buy.round + margin 
-      new_price = new_price.ceil(-2)
+      margin = (item.buy * item.margin / 100)
+      new_price_before_tax = item.buy + margin 
+      ppn = new_price_before_tax*item.ppn/100
+      new_price = (new_price_before_tax + ppn).ceil(-2)
       if new_price <= item.buy
         return redirect_back_data_error item_path(id: item.id), "Silahkan Set Ulang Margin Supaya Harga JUAL Lebih Besar dari Harga Beli"
       end
+      item.ppn = ppn
+      item.selisih_pembulatan = item.sell - new_price_before_tax  - item.ppn
       item.sell = new_price
       item.sell_member = new_price
       change = true
@@ -301,11 +304,20 @@ class ItemsController < ApplicationController
 
 
     if changes["discount"].present?
-      new_price = item.sell - (item.sell * item.discount / 100) if item.discount < 100
-      new_price = item.sell - item.discount if item.discount > 100
+      disc = item.buy - (item.buy*item.discount/100.0) if item.discount < 100
+      disc = item.buy - item.discount if item.discount >= 100
+      buy = item.buy - disc
+      margin = buy * item.margin / 100.0
+      new_price_before_tax = item.buy + margin 
+      ppn = new_price_before_tax*item.ppn/100
       if new_price <= item.buy
         return redirect_back_data_error item_path(id: item.id), "Silahkan Ulang Set DISKON Supaya Harga Jual Lebih Besar dari Harga Beli"
       end
+      item.ppn = ppn
+      item.selisih_pembulatan = item.sell - new_price_before_tax  - item.ppn
+      item.sell = new_price
+      item.sell_member = new_price
+      change = true
     end
 
 
@@ -323,11 +335,8 @@ class ItemsController < ApplicationController
 
 
     if changes["sell"].present?
-      # if item.sell <= item.buy
-      #   return redirect_back_data_error item_path(id: item.id), "Silahkan Set Harga Jual Lebih Besar dari Harga Beli"
-      # end
-      margin = ( (item.sell - item.buy ) / item.buy) * 100;
-      item.margin = margin
+      selisih_pembulatan = item.sell - item.buy - item.ppn - (item.buy*item.margin/100.0);
+      item.selisih_pembulatan = selisih_pembulatan
     end
     
     if item.changed?

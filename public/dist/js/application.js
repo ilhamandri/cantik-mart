@@ -141,7 +141,7 @@ function changePrice(id) {
   var price = $("#"+id+"Price").val();
   var disc_1 = $("#"+id+"Disc1").val();
   var disc_2 = $("#"+id+"Disc2").val();
-  var margin = parseFloat($("#"+id+"Margins").html());
+  var margin = $("#"+id+"Margins").val();
   var ppn = $("#ppn").val();
   var new_ppn = 11;
   var globalDisc = $("#globalDisc").val();
@@ -161,7 +161,7 @@ function changePrice(id) {
   }
 
   var price_supp = (receive * (price + parseFloat(price*ppn/100)));
-  $("#"+id+"Total").html(formatangka_titik(parseInt(price_supp)));
+  $("#"+id+"Total").val(formatangka_titik(parseInt(price_supp)));
 
   base_price = price;
   var price_before_tax = base_price+(base_price*margin/100);
@@ -177,9 +177,8 @@ function changePrice(id) {
 
   g_total = 0
   for (i = 0; i < ids.length; i++) {
-    g_total += parseInt($("#"+ids[i]+"Total").html().replace(".",""));
+    g_total += parseInt($("#"+ids[i]+"Total").val().replaceAll(".",""));
   } 
-
   if(globalDisc<=99){
     g_total -= parseInt(g_total * globalDisc / 100 );
     new_sell -= parseInt(new_sell * globalDisc / 100 );

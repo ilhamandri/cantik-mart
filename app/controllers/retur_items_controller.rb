@@ -133,7 +133,7 @@ class ReturItemsController < ApplicationController
         if loss.nil?
           invoice = "LOSS-" + Time.now.to_i.to_s
           loss = Loss.create user: current_user, store: current_user.store, from_retur: true, ref_id: retur.id, total_item: accept_item, invoice: invoice
-          LossItem.create loss: loss, item: retur_item.item, quantity: accept_item, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
+          LossItem.create item: retur_item.item, quantity: accept_item, loss: loss, description: "LOSS FROM RETUR #"+retur.invoice
         else
           loss.total_item = loss.total_item + retur_item.quantity
           loss.save!

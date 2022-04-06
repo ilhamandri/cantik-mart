@@ -29,6 +29,14 @@
       - margin = margin.to_s + " %" if margin <= 100
       input class="md-form form-control" value="#{margin}" disabled="disabled"
     -  @stock = StoreItem.find_by(item: @item, store: current_user.store)
+    .form-group
+      label for="item" PPn
+      - ppn = @item.tax.to_i.to_s + " % (" + number_with_delimiter(@item.ppn, delimiter: ".", separator: ",") + ")"
+      input class="md-form form-control" value="#{ppn}" disabled="disabled"
+    .form-group
+      label for="item" Selisih Pembulatan
+      - selisih = number_with_delimiter(@item.selisih_pembulatan.to_f.round(2), delimiter: ".", separator: ",") 
+      input class="md-form form-control" value="#{selisih}" disabled="disabled"
     .form_group
       label for="category" Stok 
       input type='number' value="#{@stock.stock}" disabled= true class="form-control md-form"

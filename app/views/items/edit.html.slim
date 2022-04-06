@@ -40,6 +40,9 @@
                   option value="#{item_cat.id}"
                     | #{item_cat.name}    
           .form-group
+            label for="sell" PPn
+            = form.text_field :margin, required: true, class: "form-control md-form", id: "sell", readonly: "true", value:"#{@item.tax} %"
+          .form-group
             label for="sell" Margin
             = form.number_field :margin, required: true, class: "form-control md-form", id: "sell", min: "0"
           .form-group

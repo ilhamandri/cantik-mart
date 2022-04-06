@@ -34,8 +34,13 @@
           .form-group
             label for="stock" Ideal Stok
             = form.number_field :ideal_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.ideal_stock}"
-          .form-group
-            label for="sell" Harga Jual
-            = form.number_field :sell, required: true, class: "form-control md-form", id: "sell"
+          - if @item.local_item
+            .form-group
+              label for="sell" Harga Jual
+              = form.number_field :sell, required: true, class: "form-control md-form", id: "sell"
+          - else
+            .form-group
+              label for="sell" Harga Jual
+              = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", readonly: "true"
           .form-group.text-center
             = form.submit "Ubah Stok Item - #{@item.name}", class: "btn btn-primary"
