@@ -37,7 +37,9 @@ class PostsController < ApplicationController
 							trx_item["transaction_id"] = trx.id
 							new_trx_item = TransactionItem.create trx_item 
 
-							store_stock = StoreItem.find_by(store: trx.user.store, item: new_trx_item.item)
+						    item = new_trx_item.item
+
+							store_stock = StoreItem.find_by(store: trx.user.store, item: item)
 							
 							hpp_totals += new_trx_item.item.buy * new_trx_item.quantity
 
@@ -49,8 +51,9 @@ class PostsController < ApplicationController
 								end
 							end
 
-						    next if store_stock.nil?
-						    item = new_trx_item.item
+						    if store_stock.nil?
+						    	StoreItem.create store: trx.user.store, item: item
+						    end
 						    if item.id == 30331
 						    	trx.has_coin = true
 						    end
