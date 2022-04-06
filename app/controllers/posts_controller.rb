@@ -24,7 +24,6 @@ class PostsController < ApplicationController
 						trx_items_datas = JSON.parse(data[1])
 						trx_data.delete("id")
 						check_trx = Transaction.find_by(invoice: trx_data["invoice"])
-						binding.pry
 						next if check_trx.present?
 						trx = Transaction.create trx_data
 						trx_total_for_point = 0
