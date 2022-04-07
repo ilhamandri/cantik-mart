@@ -300,11 +300,9 @@ class OrdersController < ApplicationController
       end
 
       this_item.save!
-      if old_sell < sell_price
+
+      if old_sell != sell_price
         this_item.sell = sell_price
-        sell_after_tax = sell_before_tax + this_item.ppn
-        this_item.selisih_pembulatan = this_item.sell - sell_after_tax
-        this_item.save!
         Store.all.each do |store|
           Print.create item: this_item, store: store
         end
@@ -314,6 +312,10 @@ class OrdersController < ApplicationController
           set_notification current_user, to_user, "info", message, prints_path
         end
       end
+
+      sell_after_tax = sell_before_tax + this_item.ppn
+      this_item.selisih_pembulatan = this_item.sell - sell_after_tax
+      this_item.save!
 
       order_item.receive = receive_qty
       order_item.discount_1 = disc_1
