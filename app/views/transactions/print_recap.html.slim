@@ -52,11 +52,11 @@ br
         td #{number_with_delimiter(grand_total.to_i, delimiter: ".", separator: ",")}
     tr
       td 
-      - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total)
-      - debit_total = trxs.where(payment_type: "DEBIT",).sum(:grand_total)
-      - credit_total = trxs.where(payment_type: "CREDIT",).sum(:grand_total)
-      - qris_total = trxs.where(payment_type: "QRIS",).sum(:grand_total)
-      - grand_total = trxs.sum(:grand_total)
+      - cash_total = all_trxs.where(payment_type: "CASH").sum(:grand_total)
+      - debit_total = all_trxs.where(payment_type: "DEBIT",).sum(:grand_total)
+      - credit_total = all_trxs.where(payment_type: "CREDIT",).sum(:grand_total)
+      - qris_total = all_trxs.where(payment_type: "QRIS",).sum(:grand_total)
+      - grand_total = all_trxs.sum(:grand_total)
       td #{number_with_delimiter(cash_total.to_i, delimiter: ".", separator: ",")}
       td #{number_with_delimiter(debit_total.to_i, delimiter: ".", separator: ",")}
       td #{number_with_delimiter(credit_total.to_i, delimiter: ".", separator: ",")}
@@ -135,13 +135,13 @@ br
           td #{number_with_delimiter((grand_total-tax_total-hpp_total).to_i, delimiter: ".", separator: ",")}
       tr
         td 
-        - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total)
-        - debit_total = trxs.where(payment_type: "DEBIT",).sum(:grand_total)
-        - credit_total = trxs.where(payment_type: "CREDIT",).sum(:grand_total)
-        - qris_total = trxs.where(payment_type: "QRIS",).sum(:grand_total)
-        - grand_total = trxs.sum(:grand_total)
-        - hpp_total = trxs.sum(:hpp_total)
-        - tax_total = trxs.sum(:tax)
+        - cash_total = all_trxs.where(payment_type: "CASH").sum(:grand_total)
+        - debit_total = all_trxs.where(payment_type: "DEBIT",).sum(:grand_total)
+        - credit_total = all_trxs.where(payment_type: "CREDIT",).sum(:grand_total)
+        - qris_total = all_trxs.where(payment_type: "QRIS",).sum(:grand_total)
+        - grand_total = all_trxs.sum(:grand_total)
+        - hpp_total = all_trxs.sum(:hpp_total)
+        - tax_total = all_trxs.sum(:tax)
         td #{number_with_delimiter(cash_total.to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter(debit_total.to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter(credit_total.to_i, delimiter: ".", separator: ",")}
