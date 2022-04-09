@@ -136,7 +136,7 @@ br
         - debit_total = trxs.where(payment_type: "DEBIT",).sum(:grand_total)
         - credit_total = trxs.where(payment_type: "CREDIT",).sum(:grand_total)
         - qris_total = trxs.where(payment_type: "QRIS",).sum(:grand_total)
-        - grand_total = trxs.sum(:grant_total)
+        - grand_total = trxs.sum(:grand_total)
         - hpp_total = trxs.sum(:hpp_total)
         - tax_total = trxs.sum(:tax)
         td #{number_with_delimiter( (cash_total).to_i, delimiter: ".", separator: ",")}
