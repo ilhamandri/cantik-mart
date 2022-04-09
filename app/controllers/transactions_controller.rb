@@ -88,13 +88,16 @@ class TransactionsController < ApplicationController
 
 
   def daily_recap
-    end_day = params[:date].to_s.to_time.end_of_day
+    end_day = params[:date].to_s.to_datetime.end_of_day
     start_day = end_day.beginning_of_day
     @end = end_day
     @start = start_day
+    trx = Transaction.where(date_created: start_day..end_day)
+    @transactions = trx
+    @transactions = trx.where(has_coin: true) if current_user.level == "candy_dream"
 
     cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
-    trx = Transaction.where(date_created: start_day..end_day)
+    
     if current_user.level == "candy_dream"
       trx = trx.where(has_coin: true) 
     else
@@ -129,12 +132,7 @@ class TransactionsController < ApplicationController
     @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
     
     @total_outcome = @operational + @fix_cost
-
-    start_day = (params[:date].to_s + " 00:00:00 +0700").to_time
-    end_day = start_day.end_of_day
-    @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
-    @transactions = @transactions.where(has_coin: true) if current_user.level == "candy_dream"
-
+    
     @start_day = start_day
     @kriteria = "Rekap Harian - "+Date.today.to_s
     @cashiers = @transactions.pluck(:user_id)
