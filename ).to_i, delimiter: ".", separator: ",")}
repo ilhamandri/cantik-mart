@@ -1,0 +1,15 @@
+
+[1mFrom:[0m /home/zerd/Work/cantik-mart/app/views/transactions/print_recap.html.slim @ line 130 ActionView::CompiledTemplates#_app_views_transactions_print_recap_html_slim___1808976634688400227_70023100796280:
+
+    [1;34m125[0m:           td [1;30m#{number_with_delimiter( (qris).to_i, delimiter: ".", separator: ",")}[0m
+    [1;34m126[0m:           td [1;30m#{number_with_delimiter( (debit+cash+credit+qris).to_i, delimiter: ".", separator: ",")}[0m
+    [1;34m127[0m:           - hpp_total = @transactions.where([35muser[0m: cashier).sum([33m:hpp_total[0m)
+    [1;34m128[0m:           - tax_total = @transactions.where([35muser[0m: cashier).sum([33m:tax[0m)
+    [1;34m129[0m:           td [1;30m#{number_with_delimiter( (credit+debit+cash+qris-tax_total-hpp_total).to_i, delimiter: ".", separator: ",")}[0m
+ => [1;34m130[0m:           - binding.pry [32mif[0m cashier_id == [1;34m43[0m
+    [1;34m131[0m:       tr
+    [1;34m132[0m:         td 
+    [1;34m133[0m:         - cash_total = @transactions.where([35mstore[0m: store).where([35mpayment_type[0m: [31m[1;31m"[0m[31mCASH[1;31m"[0m[31m[0m).sum([33m:grand_total[0m)
+    [1;34m134[0m:         - debit_total = @transactions.where([35mstore[0m: store).where([35mpayment_type[0m: [31m[1;31m"[0m[31mDEBIT[1;31m"[0m[31m[0m,).sum([33m:grand_total[0m)
+    [1;34m135[0m:         - credit_total = @transactions.where([35mstore[0m: store).where([35mpayment_type[0m: [31m[1;31m"[0m[31mCREDIT[1;31m"[0m[31m[0m,).sum([33m:grand_total[0m)
+

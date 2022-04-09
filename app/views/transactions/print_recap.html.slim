@@ -34,7 +34,6 @@ br
       th Kredit
       th QRIS
       th Total
-      th Profit
     - @cashiers.uniq.each do |cashier_id|
       - cashier = User.find_by(id: cashier_id)
       tr
@@ -48,10 +47,6 @@ br
         td #{number_with_delimiter( credit.to_i, delimiter: ".", separator: ",")}  
         td #{number_with_delimiter( qris.to_i, delimiter: ".", separator: ",")}     
         td #{number_with_delimiter( (debit+cash+credit+qris).to_i, delimiter: ".", separator: ",")}
-        - total = debit+cash+credit
-        - hpp_total = @transactions.sum(:hpp_total)
-        - tax_total = @transactions.sum(:tax)
-        td #{number_with_delimiter( (total-hpp_total-tax_total).to_i, delimiter: ".", separator: ",")}
     tr
       td 
       - cash_total = @transactions.where(payment_type: "CASH").sum(:grand_total)
@@ -64,9 +59,7 @@ br
       td #{number_with_delimiter( (credit_total).to_i, delimiter: ".", separator: ",")}
       td #{number_with_delimiter( (qris_total).to_i, delimiter: ".", separator: ",")}
       td #{number_with_delimiter( (total).to_i, delimiter: ".", separator: ",")}
-      - hpp_total = @transactions.sum(:hpp_total)
-      - tax_total = @transactions.sum(:tax)
-      td #{number_with_delimiter( (total-hpp_total-tax_total).to_i, delimiter: ".", separator: ",")}
+      
 
 - elsif current_user.level == "candy_dream"
   - Store.where(store_type: "retail").each do |store|
@@ -130,11 +123,11 @@ br
           td #{number_with_delimiter( (debit).to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter( (credit).to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter( (qris).to_i, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter( (debit+cash+credit+qris).to_i, delimiter: ".", separator: ",")}
+          - grand_total = debit+cash+credit+qris
+          td #{number_with_delimiter( grand_total.to_i, delimiter: ".", separator: ",")}
           - hpp_total = @transactions.where(user: cashier).sum(:hpp_total)
           - tax_total = @transactions.where(user: cashier).sum(:tax)
-          td #{number_with_delimiter( (credit+debit+cash+qris-tax_total).to_i, delimiter: ".", separator: ",")}
-
+          td #{number_with_delimiter( (grand_total-tax_total-hpp_total).to_i, delimiter: ".", separator: ",")}
       tr
         td 
         - cash_total = @transactions.where(store: store).where(payment_type: "CASH").sum(:grand_total)
