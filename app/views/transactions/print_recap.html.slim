@@ -132,13 +132,13 @@ br
           td #{number_with_delimiter( (grand_total-tax_total-hpp_total).to_i, delimiter: ".", separator: ",")}
       tr
         td 
-        - cash_total = trx.where(payment_type: "CASH").sum(:grand_total)
-        - debit_total = trx.where(payment_type: "DEBIT",).sum(:grand_total)
-        - credit_total = trx.where(payment_type: "CREDIT",).sum(:grand_total)
-        - qris_total = trx.where(payment_type: "QRIS",).sum(:grand_total)
-        - grand_total = trx.sum(:grant_total)
-        - hpp_total = trx.sum(:hpp_total)
-        - tax_total = trx.sum(:tax)
+        - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total)
+        - debit_total = trxs.where(payment_type: "DEBIT",).sum(:grand_total)
+        - credit_total = trxs.where(payment_type: "CREDIT",).sum(:grand_total)
+        - qris_total = trxs.where(payment_type: "QRIS",).sum(:grand_total)
+        - grand_total = trxs.sum(:grant_total)
+        - hpp_total = trxs.sum(:hpp_total)
+        - tax_total = trxs.sum(:tax)
         td #{number_with_delimiter( (cash_total).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (debit_total).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (credit_total).to_i, delimiter: ".", separator: ",")}
