@@ -90,6 +90,11 @@ table#items
         #subtotal #{number_with_delimiter(@order.total, delimiter: ".", separator: ",")}
     tr style="text-align: right;"
       td.blank colspan="7" 
+      td.total-line colspan="2"  Pajak Masukan
+      td.total-value
+        #subtotal #{number_with_delimiter(@order.tax, delimiter: ".", separator: ",")}
+    tr style="text-align: right;"
+      td.blank colspan="7" 
       td.total-line colspan="2"  
         | Diskon Total 
         br

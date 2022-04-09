@@ -165,8 +165,8 @@ function changePrice(id) {
   base_price = price;
   var price_before_tax = base_price+(base_price*margin/100);
   var price_after_tax = price_before_tax + (price_before_tax*ppn/100);
-  
   var new_sell = price_after_tax
+  $("#"+id+"Sell").attr({"min" : new_sell});
   var old_sell = document.getElementById(id+"Sell").min; 
   if(new_sell>old_sell){
     $("#"+id+"Sell").val(new_sell);

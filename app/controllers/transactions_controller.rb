@@ -93,17 +93,15 @@ class TransactionsController < ApplicationController
     @end = end_day
     @start = start_day
     trx = Transaction.where(date_created: start_day..end_day)
-    @transactions = trx
-    @transactions = trx.where(has_coin: true) if current_user.level == "candy_dream"
 
-    cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+    cash_flow = CashFlow.where(created_at: start_day..end_day)
     
     if current_user.level == "candy_dream"
       trx = trx.where(has_coin: true) 
     else
       trx = trx.where(has_coin: false) 
     end
-    @trxs = trx
+    @transactions = trx
 
     @profits = []
 
@@ -120,22 +118,15 @@ class TransactionsController < ApplicationController
     end
 
     @supplier_income = 0
-
-
     @bonus = cash_flow.where(finance_type: CashFlow::BONUS).sum(:nominal)
     @other_income = cash_flow.where(finance_type: CashFlow::INCOME).sum(:nominal)
-
     @total_income += @supplier_income + @bonus + @other_income
   
-    cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
     @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
     @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
-    
     @total_outcome = @operational + @fix_cost
     
-    @start_day = start_day
-    @kriteria = "Rekap Harian - "+Date.today.to_s
-    @cashiers = @transactions.pluck(:user_id)
+    @search = "Rekap Harian - "+Date.today.to_s
     render pdf: DateTime.now.to_i.to_s,
       layout: 'pdf_layout.html.erb',
       template: "transactions/print_recap.html.slim"
