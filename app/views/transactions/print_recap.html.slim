@@ -99,6 +99,7 @@ br
     - trx = @transactions.where(store: store).order("created_at DESC").limit(1).first
     - trx_last_timestamp = "Tidak ada transaksi"
     - trx_last_timestamp = trx.created_at if trx.present?
+    - trxs = @transactions.where(store: store)
     h3
       | #{store.name.upcase} ( #{trx_last_timestamp} )
     table#items
@@ -113,36 +114,37 @@ br
       - @cashiers.uniq.each do |cashier_id|
         - cashier = User.find_by(id: cashier_id)
         - next if cashier.store != store
+        
         tr
           td #{cashier.name}
-          - cash = @transactions.where(payment_type: "CASH", user: cashier).sum(:grand_total)
+          - cash = trxs.where(payment_type: "CASH", user: cashier).sum(:grand_total)
+          - debit = trxs.where(payment_type: "DEBIT", user: cashier).sum(:grand_total)
+          - credit = trxs.where(payment_type: "CREDIT", user: cashier).sum(:grand_total)
+          - qris = trxs.where(payment_type: "QRIS", user: cashier).sum(:grand_total)
+          - grand_total = trxs.where(user: cashier).sum(:grand_total)
+          - hpp_total = trxs.where(user: cashier).sum(:hpp_total)
+          - tax_total = trxs.where(user: cashier).sum(:tax)
           td #{number_with_delimiter( cash.to_i, delimiter: ".", separator: ",")}
-          - debit = @transactions.where(payment_type: "DEBIT", user: cashier).sum(:grand_total)
-          - credit = @transactions.where(payment_type: "CREDIT", user: cashier).sum(:grand_total)
-          - qris = @transactions.where(payment_type: "QRIS", user: cashier).sum(:grand_total)
           td #{number_with_delimiter( (debit).to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter( (credit).to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter( (qris).to_i, delimiter: ".", separator: ",")}
-          - grand_total = debit+cash+credit+qris
           td #{number_with_delimiter( grand_total.to_i, delimiter: ".", separator: ",")}
-          - hpp_total = @transactions.where(user: cashier).sum(:hpp_total)
-          - tax_total = @transactions.where(user: cashier).sum(:tax)
           td #{number_with_delimiter( (grand_total-tax_total-hpp_total).to_i, delimiter: ".", separator: ",")}
       tr
         td 
-        - cash_total = @transactions.where(store: store).where(payment_type: "CASH").sum(:grand_total)
-        - debit_total = @transactions.where(store: store).where(payment_type: "DEBIT",).sum(:grand_total)
-        - credit_total = @transactions.where(store: store).where(payment_type: "CREDIT",).sum(:grand_total)
-        - qris_total = @transactions.where(store: store).where(payment_type: "QRIS",).sum(:grand_total)
-        - total = cash_total+debit_total+credit_total+qris_total
+        - cash_total = trx.where(payment_type: "CASH").sum(:grand_total)
+        - debit_total = trx.where(payment_type: "DEBIT",).sum(:grand_total)
+        - credit_total = trx.where(payment_type: "CREDIT",).sum(:grand_total)
+        - qris_total = trx.where(payment_type: "QRIS",).sum(:grand_total)
+        - grand_total = trx.sum(:grant_total)
+        - hpp_total = trx.sum(:hpp_total)
+        - tax_total = trx.sum(:tax)
         td #{number_with_delimiter( (cash_total).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (debit_total).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (credit_total).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (qris_total).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (total).to_i, delimiter: ".", separator: ",")}
-        - hpp_total = @transactions.where(store: store).sum(:hpp_total)
-        - tax_total = @transactions.where(store: store).sum(:tax)
-        td #{number_with_delimiter( (total-hpp_total-tax_total).to_i.to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter( (grand_total-hpp_total-tax_total).to_i, delimiter: ".", separator: ",")}
 
     br
     hr
