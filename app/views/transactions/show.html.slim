@@ -53,6 +53,13 @@
             .col
               label No. Kartu
               input disabled="disabled" class="form-control md-form" value="#{transaction.card_number.to_s}"
+        .row
+          .col-6
+            label Pajak Keluaran
+            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.tax.to_i, delimiter: ".")}"
+          .col-6
+            label Selisih Pembulatan
+            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.pembulatan.to_i, delimiter: ".")}"
 
 .container-fluid
   .col-lg-12.col-md-12

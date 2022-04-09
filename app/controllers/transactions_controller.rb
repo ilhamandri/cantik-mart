@@ -360,7 +360,10 @@ class TransactionsController < ApplicationController
       discount: item_par[3],
       date_created: DateTime.now
 
-
+      if item.id == 30331
+        trx.has_coin = true
+      end
+      
       tax += item.ppn * item_par[1].to_f
       pembulatan += item.selisih_pembulatan * item_par[1].to_f
 
