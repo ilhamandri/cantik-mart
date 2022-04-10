@@ -238,15 +238,14 @@ class ItemsController < ApplicationController
     exist = Item.find_by(code: code)
 
     return redirect_back_data_error new_item_path, "Kode  "+code.to_s+" telah terdaftar." if exist.present?
-    return redirect_back_data_error new_item_path, "Silahkan cek kembali harga beli dan harga jual" if params[:item][:buy].to_i == 0 || params[:item][:sell].to_i == 0
     item = Item.new item_params
     item.code = code.gsub(" ", "")
     item.brand = "-" if params[:item][:brand].nil?
-    item.buy = params[:item][:buy]
-    item.sell = params[:item][:sell]
+    item.buy = 0
+    item.sell = 0
     item.local_item = params[:item][:local_item]
     item.price_updated = DateTime.now
-    item.margin = 100*((item.sell - item.buy) / item.buy)
+    item.margin = params[:item][:margin]
 
     ItemPrice.create item: item, buy: item.buy, sell: item.sell, month: Date.today.month.to_i, year: Date.today.year.to_i, created_at: DateTime.now - 1.month
     return redirect_back_data_error new_item_path, "Data Barang Tidak Valid" if item.invalid?
@@ -274,62 +273,18 @@ class ItemsController < ApplicationController
     code = params[:item][:code].gsub(" ","")
     item.assign_attributes item_params
     changes = item.changes
-    change = false
 
-    if params[:item][:sell_member].to_i <= 0
-      item.sell_member = item.sell
-    end
+    item.sell_member = item.sell
+
+    base_price = item.buy + (item.buy*item.margin/100.0)
+    price_before_tax = base_price - item.discount if item.discount >= 100
+    price_before_tax = base_price - (base_price * item.discount / 100.0) if item.discount < 100
     
-    if changes["margin"].present?
-      margin = (item.buy * item.margin / 100)
-      new_price_before_tax = item.buy + margin 
-      ppn = new_price_before_tax*item.tax/100      
-      new_price_after_tax = new_price_before_tax + ppn
-      new_price = new_price_after_tax.ceil(-2)
-      if new_price <= item.buy
-        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Ulang Margin Supaya Harga JUAL Lebih Besar dari Harga Beli"
-      end
-      item.sell = new_price
-      item.ppn = ppn
-      item.selisih_pembulatan = item.sell - new_price_after_tax
-      item.sell = new_price
-      item.sell_member = new_price
-      item.save!
-      change = true
-    end
+    item.ppn = price_before_tax * item.tax / 100.0
+    item.selisih_pembulatan = item.sell - price_before_tax - item.ppn
+    item.save!
 
-    if changes["sell_member"].present?
-      if item.sell_member <= item.buy
-        return redirect_back_data_error item_path(id: item.id), "Silahkan Ulang Set Harga Jual MEMBER Lebih Besar dari Harga Beli"
-      end
-      change = true if item.sell_member != 0 && item.sell_member != item.sell
-      item.save!
-    end
-
-
-    if changes["discount"].present?
-      buy = item.buy 
-      margin = buy * item.margin / 100.0
-      new_price_before_tax = item.buy + margin 
-      new_price_before_tax -= (new_price_before_tax*item.discount/100.0) if item.discount < 100
-      new_price_before_tax -= item.discount if item.discount >= 100
-      ppn = new_price_before_tax*item.tax/100
-      new_price_after_tax = new_price_before_tax + ppn
-      new_price = new_price_after_tax.ceil(-2)
-      if new_price <= item.buy
-        return redirect_back_data_error item_path(id: item.id), "Silahkan Ulang Set DISKON Supaya Harga Jual Lebih Besar dari Harga Beli"
-      end
-      item.sell = new_price
-      item.ppn = ppn
-      item.selisih_pembulatan = item.sell - new_price_after_tax
-      item.sell = new_price
-      item.sell_member = new_price
-      item.save!
-      change = true
-    end
-
-
-    if change == true ||changes["sell"].present? || changes["discount"].present?
+    if changes["sell"].present?
       item.price_updated = DateTime.now
       to_users = User.where(level: ["owner", "super_admin", "super_visi"])
       Store.all.each do |store|
@@ -339,17 +294,8 @@ class ItemsController < ApplicationController
       to_users.each do |to_user|
         set_notification current_user, to_user, "info", message, prints_path
       end
-    end
 
-
-    if changes["sell"].present?
-      selisih_pembulatan = item.sell - item.buy - item.ppn - (item.buy*item.margin/100.0);
-      item.selisih_pembulatan = selisih_pembulatan
-    end
-    
-    if item.changed?
       ItemPrice.create item: item, buy: item.buy, sell: item.sell, month: Date.today.month.to_i, year: Date.today.year.to_i
-      item.save! 
       item.create_activity :edit, owner: current_user, params: changes
     end
     urls = item_path id: item.id
@@ -425,13 +371,13 @@ class ItemsController < ApplicationController
   private
     def item_params
       params.require(:item).permit(
-        :name, :code, :item_cat_id, :margin, :brand, :sell, :discount, :local_item, :sell_member, :buy
+        :name, :code, :item_cat_id, :margin, :brand, :sell, :discount, :local_item, :buy
       )
     end
 
     def item_params_edit
       params.require(:item).permit(
-        :name, :code, :item_cat_id, :margin, :brand, :sell, :discount, :local_item, :sell_member
+        :name, :code, :item_cat_id, :margin, :brand, :sell, :discount, :local_item
       )
     end
 

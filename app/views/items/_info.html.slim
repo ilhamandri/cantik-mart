@@ -105,9 +105,11 @@
                     td -
                 - else
                   td #{number_to_currency(item.discount, delimiter: ".", separator: ",", unit: "Rp. ")}
-                - disc = item.discount
-                - disc = (disc * item.price / 100) if disc >= 100
-                td #{number_to_currency((item.price - @item.buy - disc).round, delimiter: ".", separator: ",", unit: "Rp. ")}
+                - before_tax = @item.buy + (@item.buy*@item.margin/100.0)
+                - before_tax -= before_tax * item.discount / 100.0 if item.discount < 100
+                - before_tax -= item.discount / 100.0 if item.discount >= 100
+                - tax = before_tax * @item.tax / 100.0
+                td #{number_to_currency((item.price - @item.buy - tax).round, delimiter: ".", separator: ",", unit: "Rp. ")}
                 td.text-right
                   a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
                     |   + Cetak

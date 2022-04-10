@@ -16,10 +16,11 @@ class GrocerItemsController < ApplicationController
     return redirect_back_data_error new_grocer_item_path, "Data tidak valid" unless item.present?
     grocer_item = GrocerItem.new grocer_item_params
     grocer_item.item = item
+    grocer_item.member_price = grocer_item.price
     min = grocer_item.min
     max = grocer_item.max
     grocer = GrocerItem.where(item: item)
-    
+
     if grocer_item.price == 0
       grocer_item.price = item.sell
       if grocer_item.price <= item.buy
@@ -103,9 +104,9 @@ class GrocerItemsController < ApplicationController
     if grocer_item.price == 0
       grocer_item.price = item.sell
     end
-    if grocer_item.member_price == 0
-      grocer_item.member_price = grocer_item.price
-    end
+
+    grocer_item.member_price = grocer_item.price
+    
     if grocer_item.discount == 0
       if grocer_item.price == item.sell
         return redirect_back_data_error new_grocer_item_path, "Tidak ada data yang disimpan"
@@ -177,7 +178,7 @@ class GrocerItemsController < ApplicationController
   private
     def grocer_item_params
       params.require(:grocer_item).permit(
-        :min, :max, :price, :discount, :member_price
+        :min, :max, :price, :discount
       )
     end
 

@@ -76,6 +76,27 @@ function formatNum(rawNum) {
   return retNum;
 }
 
+function changePriceEditItem(){
+  buy = parseInt($("#buy").val().replaceAll(".",""));
+  margin = parseInt($("#margin").val());
+  tax = parseInt($("#tax").val());
+  discount = parseInt($("#discount").val());
+
+  price_before_tax = buy + (buy*margin/100.0);
+  if (discount>=100){
+    price_before_tax -= discount;
+  }
+  else{
+    price_before_tax -= price_before_tax * discount / 100.0;
+  }
+
+  ppn = price_before_tax * tax / 100.0;
+  price_after_tax = price_before_tax + ppn;
+  $("#sell").val(parseInt(price_after_tax));
+  $("#sell").attr({"min" : parseInt(price_after_tax)});
+}
+
+
 function codePrice(){
   var alphabet = gon.alphabet;
   code = $("#code").val().toUpperCase();

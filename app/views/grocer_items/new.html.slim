@@ -10,29 +10,30 @@
           - mins = GrocerItem.where(item_id: params[:id]).order("max DESC").first
           - min = mins.max + 1 if mins.present?
           - min = 2 if mins.nil?
+          label.text-danger 
+            |   *) Default adalah harga jual dan diskon satuan 
+            br
+            |  **) 0 - 100 = Dianggap %
+            br
+            | ***) lebih dari 100 = Dianggap harga Rupiah
+          hr
+          .row
+            .col
+              .form-group
+                label for="name" Minimum Pembelian
+                = form.text_field :min, required: true, class: "form-control md-form" , id: "name", value: "#{min}",minlength:"1", maxlength: "13", pattern:"[0-9]+", title:"Minimum pembelian", placeholder: "Minimum pembelian"
+                = form.number_field :tax, required: true, class: "form-control md-form" , id: "tax", value: "#{item.tax}" , style: "display: none;"
+                = form.number_field :margin, required: true, class: "form-control md-form" , id: "margin", value: "#{item.margin}" , style: "display: none;"
+                = form.number_field :buy, required: true, class: "form-control md-form" , id: "buy", value: "#{item.buy.to_i}" , style: "display: none;"
+            .col
+              .form-group
+                label for="name" Maksimum Pembelian
+                = form.text_field :max, required: true, class: "form-control md-form", id: "name", min: "2", value: "#{min}",minlength:"1", maxlength: "13", pattern:"[0-9]+", title:"maximum pembelian", placeholder:"Maksimum pembelian"
           .form-group
-            label for="name" Minimum Pembelian
-            = form.text_field :min, required: true, class: "form-control md-form" , id: "name", value: "#{min}",minlength:"1", maxlength: "13", pattern:"[0-9]+", title:"Minimum pembelian", placeholder: "Minimum pembelian"
-          .form-group
-            label for="name" Maksimum Pembelian
-            = form.text_field :max, required: true, class: "form-control md-form", id: "name", min: "2", value: "#{min}",minlength:"1", maxlength: "13", pattern:"[0-9]+", title:"maximum pembelian", placeholder:"Maksimum pembelian"
+            label for="name" Diskon        
+            = form.number_field :discount, required: true, class: "form-control md-form", value: "#{item.discount.to_i}", min:"0", step: "1", onchange:"changePriceEditItem()", id: "discount"
           .form-group
             label for="name" Harga Jual Satuan
-            br
-            label.text-danger * Default adalah harga jual saat ini
-            = form.text_field :price, required: true, class: "form-control md-form", value: "#{item.sell.to_i}", min:"100", title:"Harga Jual Satuan", placeholder:"Harga Jual Satuan",minlength:"3", maxlength: "13", pattern:"[0-9]+", title:"harga jual satuan", placeholder:"Harga satuan"
-          .form-group
-            label for="name" Harga Jual Satuan MEMBER
-            br
-            label.text-danger * Default adalah harga jual saat ini
-            = form.text_field :member_price, required: true, class: "form-control md-form", value: "#{item.sell.to_i}", min:"100", title:"Harga Jual Satuan", placeholder:"Harga Jual Satuan",minlength:"3", maxlength: "13", pattern:"[0-9]+", title:"harga jual satuan", placeholder:"Harga satuan"
-          .form-group
-            label for="name" Diskon
-            br
-            label.text-danger * 0 - 100 = Dianggap %
-            br
-            label.text-danger * lebih dari 100 = Dianggap harga Rupiah
-            
-            = form.text_field :discount, required: true, class: "form-control md-form", value: "0", min:"100", title:"Harga Diskon Satuan", placeholder:"Diskon",minlength:"1", maxlength: "13", pattern:"[0-9]+", title:"diskon"
+            = form.number_field :price, required: true, class: "form-control md-form", value: "#{item.sell.to_i}", min:"#{item.sell.to_i}", id: "sell"
           .form-group.text-center
             = form.submit "Tambah Harga Barang", class: "btn btn-primary"
