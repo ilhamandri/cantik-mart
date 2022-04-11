@@ -187,13 +187,8 @@ function changePrice(id) {
   var price_before_tax = base_price+(base_price*margin/100);
   var price_after_tax = price_before_tax + (price_before_tax*ppn/100);
   var new_sell = price_after_tax
-  $("#"+id+"Sell").attr({"min" : new_sell});
-  var old_sell = document.getElementById(id+"Sell").min; 
-  if(new_sell>old_sell){
-    $("#"+id+"Sell").val(new_sell);
-  }else{
-    $("#"+id+"Sell").val(old_sell);
-  }
+  $("#"+id+"Sell").attr({"min" : parseInt(new_sell)});
+  $("#"+id+"Sell").val( parseInt(new_sell));  
 
   g_total = 0
   for (i = 0; i < ids.length; i++) {
