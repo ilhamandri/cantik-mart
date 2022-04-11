@@ -230,6 +230,7 @@ class OrdersController < ApplicationController
     disc_supp = 0
     disc_supp = params[:order][:discount].to_f if params[:order][:discount].present?
     ppn = params[:order][:ppn].to_f
+    ppn_type = params[:order][:ppn_type].to_i
     new_grand_total = 0
     items.each do |item|
       margin = item.last(2).first.to_i
@@ -284,7 +285,11 @@ class OrdersController < ApplicationController
 
       total_item_without_disc_global = price_2
 
-      item_grand_total = (price_2 + (price_2*ppn/100)).round
+      if ppn_type == 2
+        item_grand_total = (price_2 + (price_2*ppn/100)).round
+      else
+        item_grand_total = price_2
+      end
 
       based_item_price = total_item_without_disc_global / receive_qty;
 
@@ -320,42 +325,13 @@ class OrdersController < ApplicationController
       order_item.receive = receive_qty
       order_item.discount_1 = disc_1
       order_item.discount_2 = disc_2
-      order_item.ppn = ppn
+      order_item.ppn = ppn if ppn_type == 2
       order_item.price = price
       order_item.total = total_item_without_disc_global
       order_item.grand_total = item_grand_total
       order_item.last_sell = this_item.sell
       order_item.save!
 
-      old_buy_total = 0
-
-      curr_stock = 0
-      curr_stock = store_stock.stock.to_i if store_stock.stock.to_i > 0
-
-      if !order_from_retur
-        if this_item.local_item
-          stocks = StoreItem.where(item: this_item).sum(:stock)
-          old_buy_total = (stocks * store_stock.buy).to_f 
-          order_item.last_buy = store_stock.buy
-        else
-          old_buy_total = (curr_stock.to_i * this_item.buy).to_f 
-          order_item.last_buy = this_item.buy
-        end
-        new_buy = based_item_price
-        if this_item.local_item
-          store_stock.buy = new_buy
-          store_stock.save!
-        else
-          this_item.buy = new_buy
-          StoreItem.where(item: this_item).update_all(buy: new_buy)
-          this_item.save!
-        end
-      end
-      
-      store_stock.stock = store_stock.stock + receive_qty
-      store_stock.buy = order_item.price
-      store_stock.save!
-      
       new_total +=  total_item_without_disc_global
       new_grand_total += item_grand_total
       order_item.save!
@@ -368,9 +344,8 @@ class OrdersController < ApplicationController
     order.received_by = current_user
     order.grand_total = new_grand_total
 
-    if ppn > 0
-      order.tax = order.order_items.first.ppn * (order.total - order.discount) / 100
-      order.tax = order.tax
+    if (ppn > 0) && (ppn_type == 2) 
+      order.tax = ppn * order.total / 100
       order.save!
 
       order.supplier.update(tax: ppn)

@@ -157,6 +157,8 @@ function changeSellOrder(id){
 }
 
 function changePrice(id) {
+  ppn_type = parseInt($("#ppn_type").val());
+
   var ids = gon.ids
   var receive = $("#"+id+"Receive").val();
   var price = $("#"+id+"Price").val();
@@ -180,7 +182,12 @@ function changePrice(id) {
     price -= disc_2;
   }
 
-  var price_supp = (receive * (price + parseFloat(price*ppn/100)));
+  var price_supp = 0;
+  if(ppn_type==2){
+    price_supp = (receive * (price + parseFloat(price*ppn/100)));
+  }else{
+    price_supp = receive * price;
+  }
   $("#"+id+"Total").val(formatangka_titik(parseInt(price_supp)));
 
   base_price = price;

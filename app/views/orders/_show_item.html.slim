@@ -42,7 +42,7 @@
         td
         td.font-weight-bold PPN (#{@order_items.first.ppn}% )
         td
-        td.font-weight-bold #{number_with_delimiter(@order_items.first.ppn * (order.total - order.discount) / 100, separator: ",", delimiter: ".")}
+        td.font-weight-bold #{number_with_delimiter(@order.tax, separator: ",", delimiter: ".")}
       tr
         td
         td

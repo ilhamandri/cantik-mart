@@ -8,34 +8,40 @@
             | Penerimaan Pesanan
         .card-body
           .row
-            .col-md-12
+            .col-md-4
               label for="form" INVOICE
               input type="text" class="form-control md-form" disabled=true value="#{@order.invoice}"
-            .col-md-4
+            / .col-md-4
               label for="form" Total
               input type="number" class="form-control md-form" disabled=true value="#{@order.total_items}"
-            .col-md-4
+            / .col-6
               .form-group
                 label for="from" Dari
                 input type="text" class="form-control md-form" disabled=true value="#{@order.store.name}"
-            .col-md-4
+            .col-4
               .form-group
                 label for="from" Kepada
                 input type="text" class="form-control md-form" disabled=true value="#{@order.supplier.name}"
             
             - if !@order.from_retur
-              .col-12  
-                .text-danger
-                  | (*Wajib Diisi)
-              .col-12
+              .col-4
                 .form-group
-                  label for="from" Tanggal Jatuh Tempo Pembayaran
+                  label for="from" Tanggal Jatuh Tempo 
                   input type="date" class="form-control md-form" value="#{(Date.today+2.weeks).strftime("%m/%d/%Y")}" name="order[due_date]" required=true
-              .col-6
+              .col-4
                 .form-group
-                  label for="from" Diskon Faktur / Supplier (NOMINAL)
-                  input type="number" class="form-control md-form" value="0" name="order[discount]" required=true id="globalDisc" step="0.01"
-              .col-6
+                  label for="from" Diskon Faktur (NOMINAL)
+                  input type="number" class="form-control md-form" value="0" name="order[discount]" required=true id="globalDisc" step="1"
+              .col-4
+                .form-group
+                  label for="from" Yang terkena PPn
+                  select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="order[ppn_type]" id="ppn_type" required=true 
+                    option value="2" 
+                      | Supplier & Barang
+                    option value="1" 
+                      | Hanya Barang (JUAL)
+                    
+              .col-4
                 .form-group
                   label for="from" PPn (%)
                   input type="number" class="form-control md-form" value="0" name="order[ppn]" required=true id="ppn" step="0.01"

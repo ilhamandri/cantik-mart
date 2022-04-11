@@ -64,7 +64,7 @@
             = form.number_field :sell_member, required: true, class: "form-control md-form", id: "sell", min: "0", value: "#{@item.sell_member.to_i}"
             input value="#{@item.local_item}" required=true style="display: none"
           .form-group
-            label for="sell" Link Foto
-            = form.text_field :image, class: "form-control md-form", id: "sell"
+            label style="display: none;" for="sell" Link Foto 
+            = form.text_field :image, class: "form-control md-form", id: "sell", style:"display: none;"
           .form-group.text-center
             = form.submit "Ubah Barang", class: "btn btn-primary"
