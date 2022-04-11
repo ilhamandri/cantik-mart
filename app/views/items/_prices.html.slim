@@ -16,6 +16,6 @@
                 - sell = buy_sell[1][3]
                 - before_tax = buy + (buy*@item.margin/100.0)
                 - before_tax -= before_tax * @item.discount / 100.0 if @item.discount < 100
-                - before_tax -= item.discount / 100.0 if @item.discount >= 100
+                - before_tax -= @item.discount / 100.0 if @item.discount >= 100
                 - tax = before_tax * @item.tax / 100.0
                 td #{number_with_delimiter((sell-buy-tax).to_i, delimiter: ".")}
