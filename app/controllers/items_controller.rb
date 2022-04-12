@@ -272,8 +272,8 @@ class ItemsController < ApplicationController
     item.image = params[:item][:image]
     code = params[:item][:code].gsub(" ","")
     item.assign_attributes item_params
+    item.sell = params[:item][:sell].gsub(".","").to_f
     changes = item.changes
-
     item.sell_member = item.sell
 
     base_price = item.buy + (item.buy*item.margin/100.0)

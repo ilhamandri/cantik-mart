@@ -92,8 +92,9 @@ function changePriceEditItem(){
 
   ppn = price_before_tax * tax / 100.0;
   price_after_tax = price_before_tax + ppn;
-  $("#sell").val(parseInt(price_after_tax));
-  $("#sell").attr({"min" : parseInt(price_after_tax)});
+  var new_sell = formatangka_titik(Math.ceil(price_after_tax/100)*100);
+
+  $("#sell").val(new_sell); 
 }
 
 
@@ -172,14 +173,14 @@ function changePrice(id) {
     disc_1 = parseFloat(price * disc_1 / 100);
     price -= disc_1;
   }else{
-    price -= disc_1;
+    price -= disc_1/receive;
   }
 
   if(disc_2 <= 99){
     disc_2 = parseFloat(price * disc_2 / 100);
     price -= disc_2;
   }else{
-    price -= disc_2;
+    price -= disc_2/receive;
   }
 
   var price_supp = 0;
@@ -193,9 +194,9 @@ function changePrice(id) {
   base_price = price;
   var price_before_tax = base_price+(base_price*margin/100);
   var price_after_tax = price_before_tax + (price_before_tax*ppn/100);
-  var new_sell = price_after_tax
-  $("#"+id+"Sell").attr({"min" : parseInt(new_sell)});
-  $("#"+id+"Sell").val( parseInt(new_sell));  
+  var new_sell = formatangka_titik(Math.ceil(price_after_tax/100)*100);
+
+  $("#"+id+"Sell").val(new_sell);  
 
   g_total = 0
   for (i = 0; i < ids.length; i++) {

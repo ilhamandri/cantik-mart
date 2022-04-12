@@ -293,7 +293,8 @@ class OrdersController < ApplicationController
 
       based_item_price = total_item_without_disc_global / receive_qty;
 
-      sell_price = item.last.to_f
+      sell_price = item.last.gsub(".","").to_i
+  
       old_sell = this_item.sell
       this_item.buy = based_item_price 
       this_item.margin = margin
