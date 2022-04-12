@@ -272,6 +272,8 @@ class OrdersController < ApplicationController
       if store_stock.nil?
         store_stock = StoreItem.create store: current_user.store, item: this_item, stock: 0, min_stock: 5 
       end
+      store_stock.stock = store_stock.stock + receive_qty
+      store_stock.save!
 
       this_item.counter -= receive_qty
       this_item.save!
