@@ -7,10 +7,10 @@ tr
   - margin = r_item.item.margin
   - prev_sell = r_item.item.sell
   - item = r_item.item
-  - last_buy = OrderItem.where(item: item).last
-  - buy = last_buy.price if last_buy.present?
-  - buy = item.buy if buy == 0
-  
+  - buy = 0
+  - last_buy = OrderItem.where(item: item)
+  - if last_buy.present?
+    - buy = last_buy.last(2).first.price if last_buy.count > 1
   - if r_item.item.local_item
     - store_item = StoreItem.find_by(item: r_item.item, store: r_item.order.store)
     - if store_item.buy > 0
