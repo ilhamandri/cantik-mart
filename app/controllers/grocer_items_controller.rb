@@ -20,13 +20,8 @@ class GrocerItemsController < ApplicationController
     min = grocer_item.min
     max = grocer_item.max
     grocer = GrocerItem.where(item: item)
-
-    if grocer_item.price == 0
-      grocer_item.price = item.sell
-      if grocer_item.price <= item.buy
-        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Harga Jual Lebih Besar dari Harga Beli"
-      end
-    end
+    grocer_item.price = item.sell+item.discount
+    
     
     if grocer_item.discount == 0
       if grocer_item.price == item.sell
@@ -91,56 +86,18 @@ class GrocerItemsController < ApplicationController
   end
 
   def update
-    return redirect_back_data_error items_path, "Data tidak valid" unless params[:id].present?
+    return redirect_back_data_error items_path, "Data tidak valid" if params[:id].nil?
     grocer_item = GrocerItem.find_by_id params[:id]
-    return redirect_back_data_error new_grocer_item_path, "Data tidak valid" unless grocer_item.present?
+    return redirect_back_data_error new_grocer_item_path, "Data tidak valid" if grocer_item.nil?
     grocer_item.assign_attributes grocer_item_params
-    
-    min = grocer_item.min
-    max = grocer_item.max
-    grocer = GrocerItem.where(item: grocer_item.item)
-    item = grocer_item.item
 
-    if grocer_item.price == 0
-      grocer_item.price = item.sell
-    end
-
-    grocer_item.member_price = grocer_item.price
-    
-    if grocer_item.discount == 0
-      if grocer_item.price == item.sell
-        return redirect_back_data_error new_grocer_item_path, "Tidak ada data yang disimpan"
-      end
-    end
-
-    if min < 2
-      return redirect_back_data_error new_grocer_item_path
-    else
-      if min > max 
+    if grocer_item.min > grocer_item.max 
         return redirect_back_data_error new_grocer_item_path, "Data tidak valid"
-      else
-        check_same_value = grocer.where("min < ? AND max > ? ", max, max)
-        if check_same_value.present?
-          return redirect_back_data_error new_grocer_item_path, "Data tidak valid"
-        else
-          check_same_value = grocer.where("min < ? AND max > ? ", min, min)
-          if check_same_value.present?
-            return redirect_back_data_error new_grocer_item_path, "Data tidak valid"
-          else
-            check_same_value = grocer.where("max = ? OR max = ? OR min = ? OR min = ?", min, max, min, max)
-            if check_same_value.present?
-              return redirect_back_data_error new_grocer_item_path, "Data tidak valid" if grocer_item.invalid?
-              grocer_item.save!
-              grocer_item.create_activity :create, owner: current_user
-              return redirect_success item_path(id: grocer_item.item.id), "Perubahan harga "+grocer_item.item.name+" berhasil disimpan"
-            end
-          end
-        end
-      end
     end
 
+    grocer_item.save!
     to_users = User.where(level: ["owner", "super_admin", "super_visi"])
-      
+    item = grocer_item.item
     Store.all.each do |store|
       Print.create item: item, store: store, grocer_item: grocer_item
     end
@@ -148,7 +105,7 @@ class GrocerItemsController < ApplicationController
     to_users.each do |to_user|
       set_notification current_user, to_user, "info", message, prints_path
     end
-
+    return redirect_success item_path(item), "Harga Grosir Telah Disimpan"
   end
 
   def show

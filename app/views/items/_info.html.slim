@@ -94,18 +94,22 @@
                 td #{item.min}
                 td #{item.max}
                 td #{number_to_currency(item.price, delimiter: ".", separator: ",", unit: "Rp. ")}
-                - member_price = item.member_price
-                - if member_price == item.price
-                 td -
-                - else
-                  td #{number_to_currency(item.member_price, delimiter: ".", separator: ",", unit: "Rp. ")}
-                - if item.discount < 100
-                  - if item.discount > 0
-                    td #{item.discount} %
+                - disc = item.discount
+                - disc = item.discount * item.price / 100 if disc < 100
+                / - member_price = item.member_price
+                / - if member_price == item.price
+                /  td -
+                / - else
+                /   td #{number_to_currency(item.member_price, delimiter: ".", separator: ",", unit: "Rp. ")}
+
+                - if disc < 100
+                  - if disc != 0
+                    td #{disc} %
                   - else
                     td -
                 - else
                   td #{number_to_currency(item.discount, delimiter: ".", separator: ",", unit: "Rp. ")}
+                td #{number_to_currency(item.price-disc, delimiter: ".", separator: ",", unit: "Rp. ")}
                 - before_tax = @item.buy + (@item.buy*@item.margin/100.0)
                 - before_tax -= before_tax * item.discount / 100.0 if item.discount < 100
                 - before_tax -= item.discount / 100.0 if item.discount >= 100

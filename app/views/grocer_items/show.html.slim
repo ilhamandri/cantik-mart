@@ -6,14 +6,18 @@
           | Detil Harga Barang - #{@grocer_item.item.name}
       .card-body
         = form_for :grocer_item, url: "", method: "" do |form|
-          .form-group
-            label for="name" Min
-            = form.number_field :min, required: true, class: "form-control md-form", id: "name"
-          .form-group
-            label for="name" Max
-            = form.number_field :max, required: true, class: "form-control md-form", id: "name"
-          .form-group
-            label for="name" Harga
-            = form.number_field :price, required: true, class: "form-control md-form", id: "price"
+          .row
+            .col-6
+              .form-group
+                label for="name" Min
+                = form.number_field :min, required: true, class: "form-control md-form", id: "name", readonly: "true"
+            .col-6
+              .form-group
+                label for="name" Max
+                = form.number_field :max, required: true, class: "form-control md-form", id: "name", readonly: "true"
+              .form-group
+            .col-12
+              label for="name" Harga Jual Satuan Akhir
+              = form.text_field :price, required: true, class: "form-control md-form", id: "price", readonly: "true"
         .text-center
           = button_to "Hapus", @grocer_item, :method=>:delete, :class=>"btn btn-danger"

@@ -10,6 +10,7 @@
           - mins = GrocerItem.where(item_id: params[:id]).order("max DESC").first
           - min = mins.max + 1 if mins.present?
           - min = 2 if mins.nil?
+          - disc = mins.discount
           label.text-danger 
             |   *) Default adalah harga jual dan diskon satuan 
             br
@@ -21,19 +22,19 @@
             .col
               .form-group
                 label for="name" Minimum Pembelian
-                = form.text_field :min, required: true, class: "form-control md-form" , id: "name", value: "#{min}",minlength:"1", maxlength: "13", pattern:"[0-9]+", title:"Minimum pembelian", placeholder: "Minimum pembelian"
+                = form.number_field :min, required: true, class: "form-control md-form" , id: "min", value: "#{min}", min: "#{min}"
                 = form.number_field :tax, required: true, class: "form-control md-form" , id: "tax", value: "#{item.tax}" , style: "display: none;"
                 = form.number_field :margin, required: true, class: "form-control md-form" , id: "margin", value: "#{item.margin}" , style: "display: none;"
                 = form.number_field :buy, required: true, class: "form-control md-form" , id: "buy", value: "#{item.buy.to_i}" , style: "display: none;"
             .col
               .form-group
                 label for="name" Maksimum Pembelian
-                = form.text_field :max, required: true, class: "form-control md-form", id: "name", min: "2", value: "#{min}",minlength:"1", maxlength: "13", pattern:"[0-9]+", title:"maximum pembelian", placeholder:"Maksimum pembelian"
+                = form.text_field :max, required: true, class: "form-control md-form", id: "max", min: "#{min+1}", value: "#{min+1}"
           .form-group
             label for="name" Diskon        
-            = form.number_field :discount, required: true, class: "form-control md-form", value: "#{item.discount.to_i}", min:"0", step: "1", onchange:"changePriceEditItem()", id: "discount"
+            = form.number_field :discount, required: true, class: "form-control md-form", value: "#{disc}", min:"#{disc}", step: "1", onchange:"changePriceEditItem()", id: "discount"
           .form-group
             label for="name" Harga Jual Satuan
-            = form.number_field :price, required: true, class: "form-control md-form", value: "#{item.sell.to_i}", min:"#{item.sell.to_i}", id: "sell"
+            = form.number_field :price, required: true, class: "form-control md-form", value: "#{item.sell.to_i}", id: "sell", readonly:"true"
           .form-group.text-center
             = form.submit "Tambah Harga Barang", class: "btn btn-primary"
