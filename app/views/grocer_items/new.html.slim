@@ -8,9 +8,12 @@
       .card-body
         = form_for :grocer_item, url: grocer_items_path(id: @id), method: "POST" do |form|
           - mins = GrocerItem.where(item_id: params[:id]).order("max DESC").first
-          - min = mins.max + 1 if mins.present?
-          - min = 2 if mins.nil?
-          - disc = mins.discount
+          - min = 2
+          - disc = 0
+          - if mins.present?
+            - min = mins.max + 1 
+            - min = 2 if mins.nil?
+            - disc = mins.discount
           label.text-danger 
             |  *) 0 - 100 = Dianggap %
             br
