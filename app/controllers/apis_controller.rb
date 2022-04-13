@@ -205,7 +205,7 @@ class ApisController < ApplicationController
         if member.present?
           disc = find_price.first.discount
           disc = (disc * price.member_price) / 100 if disc <= 100
-          item << price.member_price
+          item << price.member_price + disc
         else
           item << price.price
         end
@@ -215,7 +215,7 @@ class ApisController < ApplicationController
         price = find_price.first.price
         disc = find_price.first.discount
         disc = (disc * price) / 100 if disc <= 100
-        item << price
+        item << price + disc
         item << disc
       end
     else
@@ -224,9 +224,9 @@ class ApisController < ApplicationController
       if member.present?
         disc = item_id.discount
         disc = (disc * item_id.sell_member) / 100 if disc <= 100
-        item << item_id.sell_member
+        item << item_id.sell_member + disc
       else
-        item << item_id.sell
+        item << item_id.sell + disc
       end
       item << disc
     end
