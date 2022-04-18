@@ -70,11 +70,6 @@
             - disc = @item.discount
             - disc = @item.discount * @item.sell / 100 if disc < 100
             td #{number_to_currency(@item.sell+disc, delimiter: ".", separator: ",", unit: "Rp. ")}
-            / td
-              - if @item.sell_member == 0 || @item.sell_member == @item.sell 
-                | -
-              - else
-                | #{number_to_currency(@item.sell_member, delimiter: ".", separator: ",", unit: "Rp. ")}
             - if disc < 100
               - if disc != 0
                 td #{disc} %
@@ -83,7 +78,7 @@
             - else
               td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
             td #{number_to_currency(@item.sell, delimiter: ".",unit: "Rp. ")}
-            td #{number_to_currency((@item.sell - @item.buy - disc - @item.ppn).round, delimiter: ".", separator: ",", unit: "Rp. ")}
+            td #{number_to_currency((@item.sell - @item.buy).round, delimiter: ".", separator: ",", unit: "Rp. ")}
             td.text-right
               a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
                 |   + Cetak
