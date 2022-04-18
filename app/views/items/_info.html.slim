@@ -12,9 +12,6 @@
     .form-group
       label for="name" Nama
       = form.text_field :name, required: true, class: "form-control md-form", id: "name",  disabled:"disabled"
-    / .form-group
-      label for="brand" Merek
-      = form.text_field :brand, required: true, class: "form-control md-form", id: "brand", disabled:"disabled"
     .form-group
       label for="item" Kategori
       input class="md-form form-control" value="#{@item.item_cat.name}" disabled="disabled"
@@ -60,6 +57,7 @@
           th Max
           th Harga Normal
           th Diskon
+          th Pajak
           th Harga Akhir
           th Profit
           th
@@ -69,14 +67,19 @@
             td 1
             - disc = @item.discount
             - disc = @item.discount * @item.sell / 100 if disc < 100
-            td #{number_to_currency(@item.sell+disc+@item.ppn, delimiter: ".", separator: ",", unit: "Rp. ")}
-            - if disc < 100
-              - if disc != 0
+
+           
+            - if disc > 0
+              td #{number_to_currency(@item.sell-disc-@item.ppn, delimiter: ".", separator: ",", unit: "Rp. ")}
+              - if disc < 100
                 td #{disc} %
               - else
-                td -
+                td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
             - else
-              td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
+              td #{number_to_currency(@item.sell, delimiter: ".", separator: ",", unit: "Rp. ")}
+              td -
+
+            td #{number_to_currency(@item.ppn, delimiter: ".",unit: "Rp. ")}   
             td #{number_to_currency(@item.sell, delimiter: ".",unit: "Rp. ")}
             td #{number_to_currency((@item.sell - @item.buy).round, delimiter: ".", separator: ",", unit: "Rp. ")}
             td.text-right

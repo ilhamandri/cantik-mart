@@ -1,12 +1,13 @@
 class PpnItemUpdate
-	def self.updateItem
+	def self.updateItemPPn
 		tax = 11
 		Supplier.where("tax>0").update_all(tax: tax)
 		Item.where("tax>0").update_all(tax: tax)
 		Item.where("tax>0").each do |item|
 			margin = item.margin
-			last_order = OrderItem.where(item: item).last
-			next if last_order.nil?
+			orders = OrderItem.where(item: item).where("price > 0")
+			next if last_order.empty?
+			last_order = orders.last
 			base_price = last_order.price
 
 			disc_1 = last_order.discount_1
@@ -33,6 +34,23 @@ class PpnItemUpdate
 			sell_after_tax = sell_before_tax + (sell_before_tax*tax/100)
 			item.sell = sell_after_tax.ceil(-2)
 			item.ppn = sell_before_tax*tax/100
+			item.selisih_pembulatan = item.sell - sell_after_tax
+
+			item.save!
+		end
+	end
+
+	def self.updateItemSellAll
+		Item.all.each do |item|
+			margin = item.margin
+			base_price = item.buy
+			tax = item.tax
+			next if item.buy == 0
+
+			sell_before_tax = base_price + (base_price*margin/100)
+			sell_after_tax = sell_before_tax + (sell_before_tax*tax/100)
+			item.sell = sell_after_tax.ceil(-2)
+			item.ppn = sell_before_tax*tax/100 
 			item.selisih_pembulatan = item.sell - sell_after_tax
 
 			item.save!
