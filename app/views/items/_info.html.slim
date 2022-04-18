@@ -67,16 +67,16 @@
             td 1
             - disc = @item.discount
             - disc = @item.discount * @item.sell / 100 if disc < 100
-
+            - base = @item.sell-disc-@item.ppn
            
             - if disc > 0
-              td #{number_to_currency(@item.sell-disc-@item.ppn, delimiter: ".", separator: ",", unit: "Rp. ")}
+              td #{number_to_currency(base, delimiter: ".", separator: ",", unit: "Rp. ")}
               - if disc < 100
                 td #{disc} %
               - else
                 td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
             - else
-              td #{number_to_currency(@item.sell, delimiter: ".", separator: ",", unit: "Rp. ")}
+              td #{number_to_currency(base, delimiter: ".", separator: ",", unit: "Rp. ")}
               td -
 
             td #{number_to_currency(@item.ppn, delimiter: ".",unit: "Rp. ")}   
