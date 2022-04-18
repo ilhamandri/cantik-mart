@@ -81,15 +81,15 @@ function changePriceEditItem(){
   margin = parseInt($("#margin").val());
   tax = parseInt($("#tax").val());
   discount = parseInt($("#discount").val());
-
-  price_before_tax = buy + (buy*margin/100.0);
+  base_price = buy
   if (discount>=100){
-    price_before_tax -= discount;
+    base_price -= discount;
   }
   else{
-    price_before_tax -= price_before_tax * discount / 100.0;
+    base_price -= base_price * discount / 100.0;
   }
 
+  price_before_tax = base_price + (base_price*margin/100.0);
   ppn = price_before_tax * tax / 100.0;
   price_after_tax = price_before_tax + ppn;
   var new_sell = formatangka_titik(Math.ceil(price_after_tax/100)*100);

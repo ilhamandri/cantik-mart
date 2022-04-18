@@ -807,7 +807,7 @@
              var bank_opt = document.getElementById("bank-select");
              var bank = bank_opt.options[bank_opt.selectedIndex].text;
              if(payment == 1){
-              payment_method = "CASH"
+              payment_method = "TUNAI"
              }else if (payment == 2){
               payment_method = "DEBIT ("+bank+")"
               pay = subtotal-total_diskon;
@@ -818,7 +818,7 @@
              subtotal = parseInt(subtotal);
              total_diskon = parseInt(total_diskon);
              pay = parseInt(pay);
-             HTML_totals += '<tr><td> Subtotal </td><td style="text-align: right;">'+splitRibuan(subtotal)+' </td></tr><tr><td> Total Diskon</td><td style="text-align: right;">'+splitRibuan(total_diskon)+'</td></tr><tr><td>Total</td><td style="text-align: right;">'+splitRibuan(subtotal-total_diskon)+'</td></tr><tr><td> Bayar - '+payment_method+' </td><td style="text-align: right;">'+splitRibuan(pay)+'</td></tr><tr><td> Kembali</td><td style="text-align: right;">'+$("#change-h5").html()+'</td></tr>';
+             HTML_totals += '<tr><td> Subtotal </td><td style="text-align: right;">'+splitRibuan(subtotal)+' </td></tr><tr><td> Total Diskon</td><td style="text-align: right;">'+splitRibuan(total_diskon)+'</td></tr><tr><td>Total</td><td style="text-align: right;">'+splitRibuan(subtotal-total_diskon)+'</td></tr><tr><td> Pembayaran - '+payment_method+' </td><td style="text-align: right;">'+splitRibuan(pay)+'</td></tr><tr><td> Kembali</td><td style="text-align: right;">'+$("#change-h5").html()+'</td></tr>';
 
              HTML_totals +="</table>"
 

@@ -353,8 +353,18 @@ class TransactionsController < ApplicationController
         trx.has_coin = true
       end
       
-      tax += item.ppn * item_par[1].to_f
-      pembulatan += item.selisih_pembulatan * item_par[1].to_f
+      if trx_item.quantity > 1
+        grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
+        
+        if grocer_item.present?
+          tax += grocer_item.ppn * item_par[1].to_f
+          pembulatan += grocer_item.selisih_pembulatan * item_par[1].to_f
+        else
+        end
+      else
+        tax += item.ppn * item_par[1].to_f
+        pembulatan += item.selisih_pembulatan * item_par[1].to_f
+      end
 
       if trx_item.price == 0
         promo = item_par[5]

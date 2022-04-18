@@ -207,16 +207,32 @@ class ApisController < ApplicationController
           disc = (disc * price.member_price) / 100 if disc <= 100
           item << price.member_price + disc
         else
-          item << price.price
+          item << price.price + disc 
         end
         item << disc
       else
-        find_price = grocer_price.order("max ASC")
-        price = find_price.first.price
-        disc = find_price.first.discount
-        disc = (disc * price) / 100 if disc <= 100
-        item << price + disc
-        item << disc
+        # LEBIH DARI JUMLAH HARGA GROSIR YANG DITENTUKAN
+        find_price = grocer_price.where('max <= ? ', qty).order("max DESC")
+        if find_price.present?
+          price = find_price.first
+          disc = find_price.first.discount
+          disc = (disc * price.price) / 100 if disc <= 100
+          if member.present?
+            disc = find_price.first.discount
+            disc = (disc * price.member_price) / 100 if disc <= 100
+            item << price.member_price + disc
+          else
+            item << price.price + disc 
+          end
+          item << disc
+        else
+          find_price = grocer_price.order("max ASC")
+          price = find_price.first.price
+          disc = find_price.first.discount
+          disc = (disc * price) / 100 if disc <= 100
+          item << price + disc
+          item << disc
+        end
       end
     else
       disc = item_id.discount

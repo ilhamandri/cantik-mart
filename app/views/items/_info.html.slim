@@ -15,25 +15,8 @@
     .form-group
       label for="item" Kategori
       input class="md-form form-control" value="#{@item.item_cat.name}" disabled="disabled"
-    .form-group
-      - price_updated = @item.created_at
-      - price_updated = @item.price_updated if @item.price_updated.present?
-      label for="item" Harga Beli
-      input class="md-form form-control" value="#{number_with_delimiter(@item.buy.round, delimiter: ".")} ( #{price_updated} )" disabled="disabled"
-    .form-group
-      label for="item" Margin
-      - margin = @item.margin 
-      - margin = margin.to_s + " %" if margin <= 100
-      input class="md-form form-control" value="#{margin}" disabled="disabled"
+
     -  @stock = StoreItem.find_by(item: @item, store: current_user.store)
-    .form-group
-      label for="item" PPn
-      - ppn = @item.tax.to_i.to_s + " % (" + number_with_delimiter(@item.ppn, delimiter: ".", separator: ",") + ")"
-      input class="md-form form-control" value="#{ppn}" disabled="disabled"
-    .form-group
-      label for="item" Selisih Pembulatan
-      - selisih = number_with_delimiter(@item.selisih_pembulatan.to_f.round(2), delimiter: ".", separator: ",") 
-      input class="md-form form-control" value="#{selisih}" disabled="disabled"
     .form_group
       label for="category" Stok 
       input type='number' value="#{@stock.stock}" disabled= true class="form-control md-form"
@@ -49,16 +32,32 @@
         input class="md-form form-control" value="Barang dari Pusat" disabled="disabled"
       - else
         input class="md-form form-control" value="Barang Lokal" disabled="disabled"
+
+    .form-group
+      - price_updated = @item.created_at
+      - price_updated = @item.price_updated if @item.price_updated.present?
+      label for="item" Harga Beli
+      input class="md-form form-control" value="#{number_with_delimiter(@item.buy.round, delimiter: ".")} ( #{price_updated} )" disabled="disabled"
+    .form-group
+      label for="item" Margin
+      - margin = @item.margin 
+      - margin = margin.to_s + " %" if margin <= 100
+      input class="md-form form-control" value="#{margin}" disabled="disabled"
+    .form-group
+      label for="item" PPn
+      - ppn = @item.tax.to_i.to_s + " %"
+      input class="md-form form-control" value="#{ppn}" disabled="disabled"
+  
     .form-group.table-responsive.text-nowrap
       label for="sell" Harga Jual
       table class="table table-hover"
         thead
           th Min
           th Max
-          th Harga Normal
-          th Diskon (-)
-          th Pajak (+)
-          th Harga Akhir (=)
+          th Diskon
+          th Pajak 
+          th Pembulatan 
+          th Harga Jual
           th Profit
           th
         tbody
@@ -66,49 +65,54 @@
             td 0
             td 1
             - disc = @item.discount
-            - disc = @item.discount * @item.sell / 100 if disc < 100
-            - base = @item.sell-@item.ppn
+            - disc = @item.discount * @item.buy / 100 if disc < 100
+            - base = @item.sell-@item.ppn-@item.selisih_pembulatan+disc
            
             - if disc > 0
-              td #{number_to_currency(base+disc, delimiter: ".", separator: ",", unit: "Rp. ")}
-              - if disc < 100
-                td #{disc} %
+              - if @item.discount < 100
+                td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")} (#{@item.discount} %)
               - else
                 td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
             - else
-              td #{number_to_currency(base, delimiter: ".", separator: ",", unit: "Rp. ")}
               td -
 
-            td #{number_to_currency(@item.ppn, delimiter: ".",unit: "Rp. ")}   
+            - if @item.ppn == 0
+              td -
+            - else
+              td #{number_to_currency(@item.ppn, delimiter: ".",unit: "Rp. ")}   
+            td #{number_to_currency(@item.selisih_pembulatan, delimiter: ".",unit: "Rp. ")}
             td #{number_to_currency(@item.sell, delimiter: ".",unit: "Rp. ")}
             td #{number_to_currency((@item.sell - @item.buy - @item.ppn).round, delimiter: ".", separator: ",", unit: "Rp. ")}
             td.text-right
               a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
                 |   + Cetak
+
+
+
+          / HARGA GROSIR ---------------------------------------------------------------------------------------------------------------------------------
           - item_grocers = @item.grocer_items
           - if item_grocers.present?
             -item_grocers.each do |item|
               tr 
                 td #{item.min}
                 td #{item.max}
-                td #{number_to_currency(item.price, delimiter: ".", separator: ",", unit: "Rp. ")}
                 - disc = item.discount
-                - disc = item.discount * item.price / 100 if disc < 100
-
-
-                - if disc < 100
-                  - if disc != 0
-                    td #{disc} %
-                  - else
-                    td -
+                - disc = item.discount * @item.buy / 100 if disc < 100
+                - if disc > 0
+                    - if item.discount < 100
+                      td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")} (#{item.discount} %)
+                    - else
+                      td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
                 - else
-                  td #{number_to_currency(item.discount, delimiter: ".", separator: ",", unit: "Rp. ")}
-                td #{number_to_currency(item.price-disc, delimiter: ".", separator: ",", unit: "Rp. ")}
-                - before_tax = @item.buy + (@item.buy*@item.margin/100.0)
-                - before_tax -= before_tax * item.discount / 100.0 if item.discount < 100
-                - before_tax -= item.discount / 100.0 if item.discount >= 100
-                - tax = before_tax * @item.tax / 100.0
-                td #{number_to_currency((item.price - @item.buy - tax).round, delimiter: ".", separator: ",", unit: "Rp. ")}
+                  td -
+
+                - if item.ppn == 0
+                  td -
+                - else
+                  td #{number_to_currency(item.ppn, delimiter: ".",unit: "Rp. ")}   
+                td #{number_to_currency(item.selisih_pembulatan, delimiter: ".", separator: ",", unit: "Rp. ")}
+                td #{number_to_currency(item.price, delimiter: ".", separator: ",", unit: "Rp. ")}
+                td #{number_to_currency((item.price - @item.buy - @item.ppn).round, delimiter: ".", separator: ",", unit: "Rp. ")}
                 td.text-right
                   a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
                     |   + Cetak

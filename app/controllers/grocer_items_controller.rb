@@ -15,44 +15,43 @@ class GrocerItemsController < ApplicationController
     item = Item.find_by_id params[:id]
     return redirect_back_data_error new_grocer_item_path, "Data tidak valid" unless item.present?
     grocer_item = GrocerItem.new grocer_item_params
+    grocer_item.price = params[:grocer_item][:price].gsub(".","").to_i
     grocer_item.item = item
     grocer_item.member_price = grocer_item.price
     min = grocer_item.min
     max = grocer_item.max
-    grocer = GrocerItem.where(item: item)
-    grocer_item.price = item.sell+item.discount
+    grocer_items = GrocerItem.where(item: item)
     
-    
-    if grocer_item.discount == 0
-      if grocer_item.price == item.sell
-        return redirect_back_data_error new_grocer_item_path, "Tidak ada data yang disimpan"
-      end
-      new_price = grocer_item.price - (grocer_item.price * grocer_item.discount / 100) if grocer_item.discount < 100
-      new_price = grocer_item.price - (grocer_item.price - grocer_item.discount) if grocer_item.discount > 100
-      if new_price <= item.buy
-        return redirect_back_data_error item_path(id: item.id), "Silahkan Set Diskon Supaya Harga Jual Lebih Besar dari Harga Beli"
-      end
+    if grocer_item.discount <= 0
+      return redirect_back_data_error item_path(id: item.id), "Silahkan Set Diskon Supaya Harga Jual Lebih Besar dari Harga Beli"
     end
 
+    if grocer_item.discount < 100
+      grocer_item.discount = grocer_item.price * grocer_item.discount / 100.0
+    end
+    base_price = item.buy - grocer_item.discount  
+    price_before_tax = base_price + (base_price*item.margin/100.0)
+    grocer_item.ppn = price_before_tax * item.tax / 100.0
+    grocer_item.selisih_pembulatan = grocer_item.price - price_before_tax - grocer_item.ppn
 
 
     if min < 2
-      return redirect_back_data_error new_grocer_item_path, "Data tidak valid"
+      return redirect_back_data_error new_grocer_item_path, "Data tidak valid (1)"
     else
       if min > max 
         return redirect_back_data_error new_grocer_item_path, "Data tidak valid. Minimum dan Maximum terbalik."
       else
-        check_same_value = grocer.where("max = ? OR max = ? OR min = ? OR min = ?", min, max, min, max)
+        check_same_value = grocer_items.where("max = ? OR max = ? OR min = ? OR min = ?", min, max, min, max)
         if check_same_value.present?
-          return redirect_back_data_error new_grocer_item_path, "Data tidak valid"
+          return redirect_back_data_error new_grocer_item_path, "Data tidak valid (2)"
         else
-          check_same_value = grocer.where("min < ? AND max > ? ", min, min)
+          check_same_value = grocer_items.where("min < ? AND max > ? ", min, min)
           if check_same_value.present?
-            return redirect_back_data_error new_grocer_item_path, "Data tidak valid"
+            return redirect_back_data_error new_grocer_item_path, "Data tidak valid (3)"
           else
-            check_same_value = grocer.where("min < ? AND max > ? ", max, max)
+            check_same_value = grocer_items.where("min < ? AND max > ? ", max, max)
             if check_same_value.present?
-              return redirect_back_data_error new_grocer_item_path, "Data tidak valid"
+              return redirect_back_data_error new_grocer_item_path, "Data tidak valid (4)"
             end
           end
         end
@@ -93,6 +92,14 @@ class GrocerItemsController < ApplicationController
 
     if grocer_item.min > grocer_item.max 
         return redirect_back_data_error new_grocer_item_path, "Data tidak valid"
+    end
+
+    if grocer_item.discount <= 0
+      return redirect_back_data_error item_path(id: item.id), "Silahkan Set Diskon Supaya Harga Jual Lebih Besar dari Harga Beli"
+    end
+
+    if grocer_item.discount < 100
+      grocer_item.discount = grocer_item.price * grocer_item.discount / 100.0
     end
 
     grocer_item.save!

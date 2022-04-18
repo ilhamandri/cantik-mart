@@ -10,7 +10,7 @@ tr
       | #{member.name}
   td #{transaction.point}
   td 
-    - profit = transaction.grand_total - transaction.hpp_total
+    - profit = transaction.grand_total - transaction.hpp_total - transaction.tax
     - if profit >= 0
       .text-success
         | #{number_with_delimiter(profit, delimiter: ".", separator:",", precision: 2)}

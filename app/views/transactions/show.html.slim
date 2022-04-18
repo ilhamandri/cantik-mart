@@ -35,7 +35,7 @@
             input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total, delimiter: ".")}"
           .col 
             label Profit
-            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total - transaction.hpp_total, delimiter: ".")}"
+            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total - transaction.hpp_total-transaction.tax, delimiter: ".")}"
           - if  transaction.voucher_id.present?
             .col
               label Voucher

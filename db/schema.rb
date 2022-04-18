@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_02_084845) do
+ActiveRecord::Schema.define(version: 2022_04_18_151747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -213,6 +213,8 @@ ActiveRecord::Schema.define(version: 2022_04_02_084845) do
     t.datetime "updated_at", null: false
     t.boolean "member", default: false, null: false
     t.bigint "member_price", default: 0
+    t.float "selisih_pembulatan", default: 0.0, null: false
+    t.float "ppn", default: 0.0, null: false
     t.index ["item_id"], name: "index_grocer_items_on_item_id"
   end
 

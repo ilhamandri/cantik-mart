@@ -1,0 +1,51 @@
+- semua discount tidak disimpan dalam bentuk persen, langsung ubah ke angka 
+- kanit dikasi tau kalau skrng discount hanya nominal tidak bisa persen
+- Pencatatan selisih trx berubah jika ada harga promo 
+============================================================
+https://meet.google.com/yuh-pryc-uji
+============================================================
+(--) optimasi sync post where search TRX (dilimit pencarian minggu ini biar ga lama search)
+(--) harga item di trx ke diskon lagi (API) 
+(OK) detil item error
+(OK) local masih nyangkut yang lama untuk grosir (sync)
+(OK) bendul data tidak naik
+(OK) diset harga jual tidak bisa diset langsung
+	- margin on change (satuan)
+	- set min on sell price (satuan)
+	- show profit grosir
+	- margin on change new & edit (grosir)
+	- set min on sell price (grosir)
+(OK) detil transaksi tampilkan detil ppn dan selisih pembulatan 
+(OK) trx dipisah coin dan normal 
+(OK) Di cetak order
+	- tampilkan ppn dibawah sub total
+(OK) set min suggest harga jual 
+(OK) selisih rekap trx
+(OK) id item selisih : [31690, 31689, 19295, 31572]
+(OK) code item yang ada promo sekarang belum dioptimize : 
+	["89999027247","8998866202053","8993534107753","8997025914356","8997028380813","8883241166108","8997025914257","8888166336988"]
+	items.each do |item|
+		sell1 = item.buy + (item.buy*item.margin/100.0)
+		sell1 -= item.discount
+		ppn = sell1*item.tax/100.0
+		item.ppn = ppn
+		new_price = sell1 + ppn 
+		item.sell = new_price.ceil(-2)
+		item.selisih_pembulatan = item.sell - new_price
+		item.save!
+	end
+
+(OK) supplier tidak kena ppn -> tapi barang mau dikasi ppn
+	- cara tambah 1 dropdown pilihan mau dikena ppn apa engga
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+- HOLD : supplier tidak kena ppn -> tapi barang mau dikasi ppn
+	- cara tambah 1 dropdown pilihan mau dikena ppn apa engga
+
+-------------------------------------------------------------
+start_date = DateTime.now.beginning_of_day
+end_date = start_date.end_of_day
+
+Transaction.where(created_at: start_date..end_date, user_id: 14).count
+
+Item.where(id: [33283, 33286,33284, 22662])

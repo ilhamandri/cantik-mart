@@ -65,9 +65,9 @@ html
 						.price style="position: relative;"
 							- if disc != 0
 								.price1 style="float: left; text-decoration: line-through; font-size: 20px;"
-	    							| #{number_to_currency(price, unit: "Rp. ", :precision => 0)}
+	    							| #{number_to_currency(grocer_item.item.sell, unit: "Rp. ", :precision => 0)}
     						.price2 style="float: right; font-size: 29px; font-weight: bold; color: red;"
-    							| #{number_to_currency(price-disc, unit: "Rp. ", :precision => 0)}
+    							| #{number_to_currency(price, unit: "Rp. ", :precision => 0)}
 
     			- n_times = 2-prints.size
     			- n_times.times do 

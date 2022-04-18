@@ -276,10 +276,12 @@ class ItemsController < ApplicationController
     changes = item.changes
     item.sell_member = item.sell
 
-    base_price = item.buy + (item.buy*item.margin/100.0)
-    price_before_tax = base_price - item.discount if item.discount >= 100
-    price_before_tax = base_price - (base_price * item.discount / 100.0) if item.discount < 100
-    
+    if item.discount < 100
+      item.discount = item.buy * item.discount / 100.0
+    end
+
+    base_price = item.buy - item.discount  
+    price_before_tax = base_price + (base_price*item.margin/100.0)
     item.ppn = price_before_tax * item.tax / 100.0
     item.selisih_pembulatan = item.sell - price_before_tax - item.ppn
     item.save!
