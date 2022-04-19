@@ -22,12 +22,13 @@ html
     					- price = print.item.sell
 						- disc = print.item.discount
 						- disc = price*print.item.discount/100 if print.item.discount < 100
+						- disc_tax = (disc * print.item.tax / 100.0).ceil(-2)
 						.price style="position: relative;"
     						- if disc != 0
     							.price1 style="font-size: 20px; text-decoration: line-through; float: left;"
-    								| #{number_to_currency(price, unit: "Rp. ", :precision => 0)}
+    								| #{number_to_currency(price+disc+disc_tax, unit: "Rp. ", :precision => 0)}
     						.price2 style="font-size: 60px; font-weight: bold; float: right; color: red;"
-    							| #{number_with_delimiter(price-disc, :precision => 0, delimiter: ".")}
+    							| #{number_with_delimiter(price, :precision => 0, delimiter: ".")}
 
                             div style="size: 10px, float: right;"
                                 | #{print.item.updated_at.to_date}
