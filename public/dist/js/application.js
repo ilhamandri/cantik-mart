@@ -81,7 +81,7 @@ function changePriceEditItem(){
   margin = parseInt($("#margin").val());
   tax = parseInt($("#tax").val());
   discount = parseInt($("#discount").val());
-  base_price = buy
+  base_price = buy + (buy*margin/100.0);
   if (discount>=100){
     base_price -= discount;
   }
@@ -89,7 +89,7 @@ function changePriceEditItem(){
     base_price -= base_price * discount / 100.0;
   }
 
-  price_before_tax = base_price + (base_price*margin/100.0);
+  price_before_tax = base_price;
   ppn = price_before_tax * tax / 100.0;
   price_after_tax = price_before_tax + ppn;
   var new_sell = formatangka_titik(Math.ceil(price_after_tax/100)*100);
@@ -97,6 +97,61 @@ function changePriceEditItem(){
   $("#sell").val(new_sell); 
 }
 
+function changePrice(id) {
+  ppn_type = parseInt($("#ppn_type").val());
+
+  var ids = gon.ids
+  var receive = $("#"+id+"Receive").val();
+  var price = $("#"+id+"Price").val();
+  var disc_1 = $("#"+id+"Disc1").val();
+  var disc_2 = $("#"+id+"Disc2").val();
+  var margin = $("#"+id+"Margins").val();
+  var ppn = $("#ppn").val();
+  var globalDisc = $("#globalDisc").val();
+
+  if(disc_1 <= 99){
+    disc_1 = parseFloat(price * disc_1 / 100);
+    price -= disc_1;
+  }else{
+    price -= disc_1/receive;
+  }
+
+  if(disc_2 <= 99){
+    disc_2 = parseFloat(price * disc_2 / 100);
+    price -= disc_2;
+  }else{
+    price -= disc_2/receive;
+  }
+
+  var price_supp = 0;
+  if(ppn_type==2){
+    price_supp = (receive * (price + parseFloat(price*ppn/100)));
+  }else{
+    price_supp = receive * price;
+  }
+  $("#"+id+"Total").val(formatangka_titik(parseInt(price_supp)));
+
+  base_price = price;
+  var price_before_tax = base_price+(base_price*margin/100);
+  var price_after_tax = price_before_tax + (price_before_tax*ppn/100);
+  var new_sell = formatangka_titik(Math.ceil(price_after_tax/100)*100);
+
+  $("#"+id+"Sell").val(new_sell);  
+
+  g_total = 0
+  for (i = 0; i < ids.length; i++) {
+    g_total += parseInt($("#"+ids[i]+"Total").val().replaceAll(".",""));
+  } 
+  if(globalDisc<=99){
+    g_total -= parseInt(g_total * globalDisc / 100 );
+    new_sell -= parseInt(new_sell * globalDisc / 100 );
+  }else{
+    g_total -= globalDisc;
+  }
+
+
+  $("#grand_total_all").html(formatangka_titik(parseInt(g_total)));
+}
 
 function codePrice(){
   var alphabet = gon.alphabet;
@@ -157,61 +212,7 @@ function changeSellOrder(id){
   }
 }
 
-function changePrice(id) {
-  ppn_type = parseInt($("#ppn_type").val());
 
-  var ids = gon.ids
-  var receive = $("#"+id+"Receive").val();
-  var price = $("#"+id+"Price").val();
-  var disc_1 = $("#"+id+"Disc1").val();
-  var disc_2 = $("#"+id+"Disc2").val();
-  var margin = $("#"+id+"Margins").val();
-  var ppn = $("#ppn").val();
-  var globalDisc = $("#globalDisc").val();
-
-  if(disc_1 <= 99){
-    disc_1 = parseFloat(price * disc_1 / 100);
-    price -= disc_1;
-  }else{
-    price -= disc_1/receive;
-  }
-
-  if(disc_2 <= 99){
-    disc_2 = parseFloat(price * disc_2 / 100);
-    price -= disc_2;
-  }else{
-    price -= disc_2/receive;
-  }
-
-  var price_supp = 0;
-  if(ppn_type==2){
-    price_supp = (receive * (price + parseFloat(price*ppn/100)));
-  }else{
-    price_supp = receive * price;
-  }
-  $("#"+id+"Total").val(formatangka_titik(parseInt(price_supp)));
-
-  base_price = price;
-  var price_before_tax = base_price+(base_price*margin/100);
-  var price_after_tax = price_before_tax + (price_before_tax*ppn/100);
-  var new_sell = formatangka_titik(Math.ceil(price_after_tax/100)*100);
-
-  $("#"+id+"Sell").val(new_sell);  
-
-  g_total = 0
-  for (i = 0; i < ids.length; i++) {
-    g_total += parseInt($("#"+ids[i]+"Total").val().replaceAll(".",""));
-  } 
-  if(globalDisc<=99){
-    g_total -= parseInt(g_total * globalDisc / 100 );
-    new_sell -= parseInt(new_sell * globalDisc / 100 );
-  }else{
-    g_total -= globalDisc;
-  }
-
-
-  $("#grand_total_all").html(formatangka_titik(parseInt(g_total)));
-}
 
 function complain_check(index){
   var qty = $("#quantity"+index).val();
