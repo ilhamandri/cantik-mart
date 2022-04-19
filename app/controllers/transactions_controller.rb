@@ -360,6 +360,8 @@ class TransactionsController < ApplicationController
           tax += grocer_item.ppn * item_par[1].to_f
           pembulatan += grocer_item.selisih_pembulatan * item_par[1].to_f
         else
+          tax += item.ppn * item_par[1].to_f
+          pembulatan += item.selisih_pembulatan * item_par[1].to_f
         end
       else
         tax += item.ppn * item_par[1].to_f

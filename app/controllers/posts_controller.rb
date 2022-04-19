@@ -18,18 +18,20 @@ class PostsController < ApplicationController
 					json_trx_data1 = JSON.parse(string_data1)
 					json_trx_data2 = JSON.parse(string_data2)
 					json_trx_data3 = JSON.parse(string_data3)
-					
+					end_date = DateTime.now.end_of_day
+					start_date = (end_date - 5.days).beginning_of_day
+					trxs = Transaction.where(created_at: start_date..end_date)
 					json_trx_data1.each do |data|
 						trx_data = JSON.parse(data[0])
 						trx_items_datas = JSON.parse(data[1])
 						trx_data.delete("id")
-						check_trx = Transaction.where(invoice: trx_data["invoice"])
+						check_trx = trxs.where(invoice: trx_data["invoice"])
 						next if check_trx.present?
 						trx = Transaction.create trx_data
 						trx_total_for_point = 0
 						hpp_totals = 0
 						has_coin = false
-						ppn = 0
+						tax = 0
 						pembulatan = 0
 						profit = 0
 						trx_items_datas.each do |trx_item|
@@ -63,10 +65,22 @@ class PostsController < ApplicationController
 						    item.counter = item.counter + new_trx_item.quantity.to_i
 						    item.save!
 						    store_stock.save!
-							ppn += item.ppn * decrease
-							pembulatan += item.selisih_pembulatan * decrease
+						    if trx_item.quantity > 1
+						        grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
+						        
+						        if grocer_item.present?
+						          	tax += grocer_item.ppn * item_par[1].to_f
+						          	pembulatan += grocer_item.selisih_pembulatan * item_par[1].to_f
+						        else
+						        	tax += item.ppn * item_par[1].to_f
+						        	pembulatan += item.selisih_pembulatan * item_par[1].to_f
+						        end
+						    else
+						        tax += item.ppn * item_par[1].to_f
+						        pembulatan += item.selisih_pembulatan * item_par[1].to_f
+						    end
 						end
-						trx.tax = ppn
+						trx.tax = tax
 						trx.pembulatan = pembulatan
 
 						trx.hpp_total = hpp_totals
