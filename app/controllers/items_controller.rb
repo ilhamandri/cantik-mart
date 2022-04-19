@@ -279,11 +279,9 @@ class ItemsController < ApplicationController
     if item.discount < 100
       item.discount = item.buy * item.discount / 100.0
     end
-    buy = item.buy
-    base_price = buy + (buy*item.margin/100.0)
-    price_before_tax = base_price - item.discount  
-    item.ppn = price_before_tax * item.tax / 100.0
-    item.selisih_pembulatan = item.sell - price_before_tax - item.ppn
+
+    item.ppn = item.sell - ((item.sell) / ((item.tax/100.0)+1))
+    item.selisih_pembulatan = item.sell - (((item.sell) / ((item.tax/100.0)+1)) + item.ppn)
     item.save!
 
     if changes["sell"].present?

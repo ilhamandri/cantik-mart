@@ -76,23 +76,33 @@ function formatNum(rawNum) {
   return retNum;
 }
 
-function changePriceEditItem(){
+function changePriceNormalEditItem(){
   buy = parseInt($("#buy").val().replaceAll(".",""));
   margin = parseInt($("#margin").val());
   tax = parseInt($("#tax").val());
-  discount = parseInt($("#discount").val());
+
   base_price = buy + (buy*margin/100.0);
-  if (discount>=100){
-    base_price -= discount;
-  }
-  else{
-    base_price -= base_price * discount / 100.0;
+  ppn = base_price * tax / 100.0;
+  new_price = base_price + ppn;
+  var new_sell = formatangka_titik(Math.ceil(new_price/100)*100);
+  
+  $("#normal_sell").val(new_sell); 
+}
+
+function changeDiscountEditItem(){
+  buy = parseInt($("#buy").val().replaceAll(".",""));
+  normal_sell = parseInt($("#normal_sell").val().replaceAll(".",""));
+  margin = parseInt($("#margin").val());
+  tax = parseInt($("#tax").val());
+  discount = parseInt($("#discount").val());
+
+  base_price = buy + (buy*margin/100.0);
+  if (discount < 100){
+    discount = base_price * discount / 100.0;
   }
 
-  price_before_tax = base_price;
-  ppn = price_before_tax * tax / 100.0;
-  price_after_tax = price_before_tax + ppn;
-  var new_sell = formatangka_titik(Math.ceil(price_after_tax/100)*100);
+  new_price = normal_sell - discount;
+  var new_sell = formatangka_titik(Math.ceil(new_price/100)*100);
 
   $("#sell").val(new_sell); 
 }

@@ -47,7 +47,13 @@
       label for="item" PPn
       - ppn = @item.tax.to_i.to_s + " %"
       input class="md-form form-control" value="#{ppn}" disabled="disabled"
-  
+    .form-group
+      label for="item" Harga Jual Normal
+      - buy = @item.buy
+      - base_price = (buy + (buy*@item.margin/100.0)) 
+      - ppn = base_price * @item.tax / 100.0
+      - normal_sell = (base_price + ppn).ceil(-2)
+      input class="md-form form-control" value="#{number_with_delimiter(normal_sell, delimiter:'.')}" disabled="disabled"
     .form-group.table-responsive.text-nowrap
       label for="sell" Harga Jual
       table class="table table-hover"
@@ -55,8 +61,7 @@
           th Min
           th Max
           th Diskon
-          th Pajak 
-          th Pembulatan 
+          th Pajak
           th Harga Jual
           th Profit
           th
@@ -70,19 +75,15 @@
            
             - if disc > 0
               - if @item.discount < 100
-                td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")} (#{@item.discount} %)
+                td #{number_with_delimiter(disc, delimiter: ".", separator: ",")} (#{@item.discount} %)
               - else
-                td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
+                td #{number_with_delimiter(disc, delimiter: ".", separator: ",")}
             - else
               td -
 
-            - if @item.ppn == 0
-              td -
-            - else
-              td #{number_to_currency(@item.ppn, delimiter: ".",unit: "Rp. ")}   
-            td #{number_to_currency(@item.selisih_pembulatan, delimiter: ".",unit: "Rp. ")}
-            td #{number_to_currency(@item.sell, delimiter: ".",unit: "Rp. ")}
-            td #{number_to_currency((@item.sell - @item.buy - @item.ppn).round, delimiter: ".", separator: ",", unit: "Rp. ")}
+            td #{number_with_delimiter(@item.ppn.ceil(2), delimiter: ".")}
+            td #{number_with_delimiter(@item.sell, delimiter: ".")}
+            td #{number_with_delimiter((@item.sell - @item.buy - @item.ppn).round, delimiter: ".", separator: ",")}
             td.text-right
               a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
                 |   + Cetak
@@ -90,7 +91,7 @@
 
 
           / HARGA GROSIR ---------------------------------------------------------------------------------------------------------------------------------
-          - item_grocers = @item.grocer_items
+          - item_grocers = @item.grocer_items.order("min ASC")
           - if item_grocers.present?
             -item_grocers.each do |item|
               tr 
@@ -100,19 +101,15 @@
                 - disc = item.discount * @item.buy / 100 if disc < 100
                 - if disc > 0
                     - if item.discount < 100
-                      td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")} (#{item.discount} %)
+                      td #{number_with_delimiter(disc, delimiter: ".")} (#{item.discount} %)
                     - else
-                      td #{number_to_currency(disc, delimiter: ".", separator: ",", unit: "Rp. ")}
+                      td #{number_with_delimiter(disc, delimiter: ".")}
                 - else
                   td -
 
-                - if item.ppn == 0
-                  td -
-                - else
-                  td #{number_to_currency(item.ppn, delimiter: ".",unit: "Rp. ")}   
-                td #{number_to_currency(item.selisih_pembulatan, delimiter: ".", separator: ",", unit: "Rp. ")}
-                td #{number_to_currency(item.price, delimiter: ".", separator: ",", unit: "Rp. ")}
-                td #{number_to_currency((item.price - @item.buy - @item.ppn).round, delimiter: ".", separator: ",", unit: "Rp. ")}
+                td #{number_with_delimiter(item.ppn.ceil(2), delimiter: ".")}
+                td #{number_with_delimiter(item.price, delimiter: ".")}
+                td #{number_with_delimiter((item.price - @item.buy - @item.ppn).round, delimiter: ".")}
                 td.text-right
                   a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
                     |   + Cetak

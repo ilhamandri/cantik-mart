@@ -126,6 +126,8 @@ class ComplainsController < ApplicationController
       new_trx.hpp_total = hpp
       new_trx.grand_total = total - discount
       new_trx.save!
+      tax = 0
+      pembulatan = 0
       new_items.each do |new_item|
         item = Item.find_by(id: new_item[0])
         buy = item.buy
@@ -152,12 +154,29 @@ class ComplainsController < ApplicationController
         date_created: DateTime.now
         store_item.save!
 
+        if trx_item.quantity > 1
+          grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
+          
+          if grocer_item.present?
+            tax += grocer_item.ppn * item_par[1].to_f
+            pembulatan += grocer_item.selisih_pembulatan * item_par[1].to_f
+          else
+            tax += grocer_item.ppn * item_par[1].to_f
+            pembulatan += item.selisih_pembulatan * item_par[1].to_f
+          end
+        else
+          tax += grocer_item.ppn * item_par[1].to_f
+          pembulatan += item.selisih_pembulatan * item_par[1].to_f
+        end
+
       end
       
       new_trx.discount = discount
       new_trx.total = total
       new_trx.hpp_total = hpp - nominal_hpp
       new_trx.grand_total = total - discount - nominal
+      new_trx.tax = tax
+      new_trx.pembulatan = pembulatan
       new_trx.save!
 
 

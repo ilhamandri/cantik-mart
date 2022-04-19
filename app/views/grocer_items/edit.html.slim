@@ -24,11 +24,20 @@
               .form-group
                 label for="name" Max
                 = form.number_field :max, required: true, class: "form-control md-form", id: "name", min:"#{@grocer_item.min+1}"
+
+          - buy = item.buy
+          - base_price = buy + (buy*item.margin/100.0)
+          - ppn = base_price * item.tax / 100.0
+          - normal_sell = (base_price + ppn).ceil(-2)
+          .form-group
+            label for="name" Harga Jual Normal
+            = form.number_field :price, required: true, class: "form-control md-form", value: "#{number_with_delimiter(normal_sell.to_i, delimiter: '.')}", id: "normal_sell", readonly:"true"
+
           .form-group
             label for="name" Diskon        
-            = form.number_field :discount, required: true, class: "form-control md-form", value: "#{@grocer_item.discount.to_i}", min:"0", step: "1", onchange:"changePriceEditItem()", id: "discount"
+            = form.number_field :discount, required: true, class: "form-control md-form", value: "#{@grocer_item.discount.to_i}", min:"0", step: "1", onchange:"changeDiscountEditItem()", id: "discount"
           .form-group
             label for="name" Harga Jual Satuan Akhir
-            = form.number_field :price, required: true, class: "form-control md-form", value: "#{@grocer_item.price.to_i}", id: "sell", readonly: "true"
+            = form.number_field :price, required: true, class: "form-control md-form", value: "#{normal_sell}", id: "sell", readonly: "true"
           .form-group.text-center
             = form.submit "Ubah Harga Barang", class: "btn btn-warning"

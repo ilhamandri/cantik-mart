@@ -202,16 +202,15 @@ class ApisController < ApplicationController
         price = find_price.first
         disc = find_price.first.discount
         disc = (disc * price.price) / 100 if disc <= 100
-        disc_tax = (disc*price.item.tax/100.0).ceil(-2)
+        
         if member.present?
           disc = find_price.first.discount
           disc = (disc * price.member_price) / 100 if disc <= 100
-          disc_tax = (disc*price.item.tax/100.0).ceil(-2)
-          item << price.member_price + disc + disc_tax 
+          item << price.member_price + disc
         else
-          item << price.price + disc + disc_tax 
+          item << price.price + disc
         end
-        item << disc + disc_tax
+        item << disc
       else
         # LEBIH DARI JUMLAH HARGA GROSIR YANG DITENTUKAN
         find_price = grocer_price.where('max <= ? ', qty).order("max DESC")
@@ -219,39 +218,34 @@ class ApisController < ApplicationController
           price = find_price.first
           disc = find_price.first.discount
           disc = (disc * price.price) / 100 if disc <= 100
-          disc_tax = (disc*price.item.tax/100.0).ceil(-2)
           if member.present?
             disc = find_price.first.discount
             disc = (disc * price.member_price) / 100 if disc <= 100
-            disc_tax = (disc*price.item.tax/100.0)  .ceil(-2)
-            item << price.member_price + disc + disc_tax 
+            item << price.member_price + disc
           else
-            item << price.price + disc + disc_tax 
+            item << price.price + disc
           end
-          item << disc + disc_tax 
+          item << disc
         else
           find_price = grocer_price.order("max ASC")
           price = find_price.first.price
           disc = find_price.first.discount
           disc = (disc * price) / 100 if disc <= 100
-          disc_tax = (disc*price.item.tax/100.0).ceil(-2)
-          item << price + disc + disc_tax 
-          item << disc + disc_tax 
+          item << price + disc
+          item << disc
         end
       end
     else
       disc = item_id.discount
       disc = (disc * item_id.sell) / 100 if disc <= 100
-      disc_tax = (disc*item_id.tax/100.0).ceil(-2)
       if member.present?
         disc = item_id.discount
         disc = (disc * item_id.sell_member) / 100 if disc <= 100
-        disc_tax = (disc*item.tax/100.0).ceil(-2)
-        item << item_id.sell_member + disc +disc_tax
+        item << item_id.sell_member + disc
       else
-        item << item_id.sell + disc + disc_tax
+        item << item_id.sell + disc
       end
-      item << disc + disc_tax
+      item << disc
     end
 
     item << item_id.id

@@ -69,14 +69,14 @@ class PostsController < ApplicationController
 						        grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
 						        
 						        if grocer_item.present?
-						          	tax += grocer_item.ppn * item_par[1].to_f
+						    		tax += item.ppn * item_par[1].to_f
 						          	pembulatan += grocer_item.selisih_pembulatan * item_par[1].to_f
 						        else
-						        	tax += item.ppn * item_par[1].to_f
+						    		tax += item.ppn * item_par[1].to_f
 						        	pembulatan += item.selisih_pembulatan * item_par[1].to_f
 						        end
 						    else
-						        tax += item.ppn * item_par[1].to_f
+						    	tax += item.ppn * item_par[1].to_f
 						        pembulatan += item.selisih_pembulatan * item_par[1].to_f
 						    end
 						end
