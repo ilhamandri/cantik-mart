@@ -6,7 +6,7 @@
 
 - if !["super_admin", "owner", "candy_dream"].include? current_user.level
   .container-fluid
-    section.pb-3
+    .section.pb-3
     - if current_user.level != "cashier"
       - if current_user.store.online_store
         h3
@@ -37,7 +37,7 @@
 
 - if current_user.level  == "candy_dream"
   .container-fluid
-    section.pb-3
+    .section.pb-3
       .row
         = render "homes/card/candy"
 
@@ -55,7 +55,6 @@
                 = form_for :absent, url: daily_absent_recap_path, method: 'GET' do |form|
                   .row
                     .col-md-12 style="display: none;"
-                      label Pilih Tanggal Absensi
                       input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
                     .col-md-12.text-center
                       button class="btn btn-primary "
@@ -64,7 +63,6 @@
                 = form_for :transaction, url: daily_trx_recap_path, method: 'GET' do |form|
                   .row
                     .col-md-12 style="display: none;"
-                      label Pilih Tanggal Absensi
                       input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
                     .col-md-12.text-center
                       button class="btn btn-primary "
@@ -81,10 +79,10 @@
           .card-body.card-body-cascade.pb-0
             .row.py-3.pl-4
               .col-md-12
-                - Store.where(store_type: "retail").each do |store|
-                  - trx = @transactions.where(store: store).order("created_at DESC").limit(1).first
+                - Store.where(id: @transactions.pluck(:store_id).uniq).each do |store|
+                  - trxs = @transactions.where(store: store).order("created_at DESC")
                   - trx_last_timestamp = "Tidak ada transaksi"
-                  - trx_last_timestamp = trx.created_at if trx.present?
+                  - trx_last_timestamp = trxs.first.created_at if trxs.present?
                   h6
                     b
                       | #{store.name.upcase} ( #{trx_last_timestamp} )
@@ -92,32 +90,34 @@
                     tr
                       th Kasir
                       th Tunai
-                      th Debit / Kredit
+                      th Debit / Kredit / QRIS
                       th Total
                       th Profit
-                    - @cashiers.uniq.each do |cashier_id|
-                      - cashier = User.find_by(id: cashier_id)
-                      - next if cashier.store != store
+
+                    - User.where(id: trxs.pluck(:user_id).uniq).each do |cashier|
                       tr
+                        - cash = trxs.where(payment_type: "CASH", user: cashier).sum(:grand_total)
+                        - debit = trxs.where(payment_type: ["DEBIT", "CREDIT", "QRIS"], user: cashier).sum(:grand_total)
+                        - hpp_total = trxs.where(user: cashier).sum(:hpp_total)
+                        - ppn_total = trxs.where(user: cashier).sum(:tax)
                         td #{cashier.name}
-                        - cash = @transactions.where(payment_type: "CASH", user: cashier).sum(:grand_total)
                         td #{number_with_delimiter( cash.to_i, delimiter: ".", separator: ",")}
-                        - debit = @transactions.where(payment_type: ["DEBIT", "CREDIT"], user: cashier).sum(:grand_total)
                         td #{number_with_delimiter( debit.to_i, delimiter: ".", separator: ",")}
                         td #{number_with_delimiter( (debit+cash).to_i, delimiter: ".", separator: ",")}
-                        - hpp_total = @transactions.where(user: cashier).sum(:hpp_total)
-                        td #{number_with_delimiter( (debit+cash-hpp_total).to_i, delimiter: ".", separator: ",")}
+                        td #{number_with_delimiter( (debit+cash-hpp_total-ppn_total).to_i, delimiter: ".", separator: ",")}
 
                     tr
                       td 
-                      - cash_total = @transactions.where(store: store).where(payment_type: "CASH").sum(:grand_total)
-                      - debit_total = @transactions.where(store: store).where(payment_type: ["DEBIT", "CREDIT"]).sum(:grand_total)
-                      - grand_total = @transactions.where(store: store).sum(:grand_total)
+                      - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total)
+                      - debit_total = trxs.where(payment_type: ["DEBIT", "CREDIT"]).sum(:grand_total)
+                      - hpp_total = trxs.where(store: store).sum(:hpp_total)
+                      - grand_total = trxs.sum(:grand_total)
+                      - ppn_total = trxs.sum(:tax)
                       td #{number_with_delimiter( (cash_total).to_i, delimiter: ".", separator: ",")}
                       td #{number_with_delimiter( (debit_total).to_i, delimiter: ".", separator: ",")}
                       td #{number_with_delimiter( (grand_total).to_i, delimiter: ".", separator: ",")}
-                      - hpp_total = @transactions.where(store: store).sum(:hpp_total)
-                      td #{number_with_delimiter( (grand_total-hpp_total).to_i, delimiter: ".", separator: ",")}
+                      td #{number_with_delimiter( (grand_total-hpp_total-ppn_total).to_i, delimiter: ".", separator: ",")}
+
         .col-xl-6.col-lg-12.mr-0.pb-2
           - trx = nil
           - if current_user.level == "candy_dream"
@@ -131,49 +131,48 @@
               .col-md-6
                 p.lead.pt-3.pb-4
                   span.badge.info-color.p-2 Penjualan Dalam Bulan
-                
+
+                - start_month = (DateTime.now-1.month).beginning_of_month
+                - end_month = start_month.end_of_month
+
+                - trxs_month_before = trx.where(created_at: start_month..end_month)
+                - sum_grand_total = trxs_month_before.sum(:grand_total)
+                - sum_hpp_total = trxs_month_before.sum(:hpp_total)
+                - sum_ppn_total = trxs_month_before.sum(:tax)
+
                 p
                   | Penjualan Bulan Lalu:
-
-                  - sum_grand_total = trx.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
-
                   strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
-                  button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.month).strftime("%B")}") type="button" 
+                  button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{start_month.strftime("%B")}") type="button" 
                     i.fas.fa-question
-
 
                 - if current_user.level != "candy_dream"
                   p
                     | Profit Bulan Lalu:
-
-                    - sum_grand_total = trx.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:grand_total)
-                    - sum_hpp_total = trx.where("created_at BETWEEN ? AND ?", (DateTime.now-1.month).beginning_of_month, (DateTime.now-1.month).end_of_month).sum(:hpp_total)
-
-                    strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
-                    button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.month).strftime("%B")}") type="button" 
+                    strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_ppn_total, unit: "Rp. ")}
+                    button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{start_month.strftime("%B")}") type="button" 
                       i.fas.fa-question
 
                 br
+
+                - current_month = DateTime.now.beginning_of_month
+                - trxs_current_month = trx.where("created_at > ? ", current_month)
+                - sum_grand_total = trxs_current_month.sum(:grand_total)
+                - sum_hpp_total = trxs_current_month.sum(:hpp_total)
+                - sum_ppn_total = trxs_current_month.sum(:tax)
+
                 p
                   | Penjualan Bulan Ini:
-
-                  - sum_grand_total = trx.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
-
                   strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
-                  button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now).strftime("%B")}") type="button" 
+                  button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{current_month.strftime("%B")}") type="button" 
                     i.fas.fa-question
 
 
                 - if current_user.level != "candy_dream"
                   p
                     | Profit Bulan Ini:
-
-                    - sum_grand_total = trx.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:grand_total)
-
-                    - sum_hpp_total = trx.where("created_at > ? ", DateTime.now.beginning_of_month).sum(:hpp_total)
-
-                    strong  #{number_to_currency(sum_grand_total-sum_hpp_total, unit: "Rp. ")}
-                    button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now).strftime("%B")}") type="button" 
+                    strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_ppn_total, unit: "Rp. ")}
+                    button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{current_month.strftime("%B")}") type="button" 
                       i.fas.fa-question
 
               .col-md-6

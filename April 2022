@@ -46,6 +46,6 @@ https://meet.google.com/yuh-pryc-uji
 start_date = DateTime.now.beginning_of_day
 end_date = start_date.end_of_day
 
-Transaction.where(created_at: start_date..end_date, user_id: 14).count
+Transaction.where(created_at: start_date..end_date, store_id: 3).count
 
 Item.where(id: [33283, 33286,33284, 22662])

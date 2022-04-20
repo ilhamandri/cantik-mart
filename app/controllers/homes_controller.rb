@@ -5,39 +5,43 @@ class HomesController < ApplicationController
   def index
     ItemUpdate.updateItem
     ReCheck.complain
-    @total_limit_items = StoreItem.where(store_id: current_user.store.id).where('stock < min_stock').count
-    @total_orders = Order.where(store_id: current_user.store.id).where('date_receive is null').count
-    @total_payments = Order.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null').count
-    @total_returs = Retur.where(store_id: current_user.store.id).where('date_picked is null').count
-    
 
-    # PENGELUARAN
-    end_day = DateTime.now.end_of_day
-    start_day = end_day.beginning_of_day
-    cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
-    @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
-    @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
-    
-    @total_outcome = @operational + @fix_cost
-
-
-    @debt = Debt.where("deficiency > ?",0)
-    @receivable = Receivable.where("deficiency > ?",0)
-
-
+    if !["super_admin", "owner", "candy_dream"].include? current_user.level
+      @total_limit_items = StoreItem.where(store_id: current_user.store.id).where('stock < min_stock').count
+      @total_orders = Order.where(store_id: current_user.store.id).where('date_receive is null').count
+      @total_payments = Order.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null').count
+      @total_returs = Retur.where(store_id: current_user.store.id).where('date_picked is null').count
+    end
 
     start_day = DateTime.now.beginning_of_day
     end_day = start_day.end_of_day
-    @transactions = Transaction.where("created_at >= ? AND created_at <= ?", start_day, end_day)
-    @transactions = @transactions.order("created_at DESC")
-    
-    if current_user.level == "candy_dream"
-      @transactions = @transactions.where(has_coin: true) 
-    else
-      @transactions = @transactions.where(has_coin: false)
+
+
+    # PENGELUARAN
+    if ["super_admin", "owner"].include? current_user.level
+      
+      cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+      @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
+      @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
+      
+      @total_outcome = @operational + @fix_cost
+
+
+      @debt = Debt.where("deficiency > ?",0)
+      @receivable = Receivable.where("deficiency > ?",0)
+
     end
 
-    @cashiers = @transactions.pluck(:user_id)
+    # TRANSAKSI HARI INI
+     if ["super_admin", "owner", "candy_dream"].include? current_user.level
+      @transactions = Transaction.where(created_at: start_day..end_day)
+      
+      if current_user.level == "candy_dream"
+        @transactions = @transactions.where(has_coin: true) 
+      else
+        @transactions = @transactions.where(has_coin: false)
+      end
+    end
     
   end
 
