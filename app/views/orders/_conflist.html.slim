@@ -10,13 +10,12 @@ tr
   - buy = 0
   - last_buy = OrderItem.where(item: item)
   - if last_buy.present?
-    - buy = last_buy.last(2).first.price if last_buy.count > 1
-  - if r_item.item.local_item
-    - store_item = StoreItem.find_by(item: r_item.item, store: r_item.order.store)
-    - if store_item.buy > 0
-      - buy = store_item.buy 
+    - check_last = last_buy.where("price > 0")
+    - buy = check_last.last.price if check_last.present?
+
   - desc = "-"
   - desc = r_item.description if r_item.description.present?
+
   td 
     | #{r_item.quantity.to_i}
     input type="number" class="form-control" name="order[order_items][#{r_item_counter}][item_id]" value="#{r_item.id}" style="display: none;"

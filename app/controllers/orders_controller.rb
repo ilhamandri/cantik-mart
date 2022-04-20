@@ -295,7 +295,7 @@ class OrdersController < ApplicationController
 
       based_item_price = total_item_without_disc_global / receive_qty;
 
-      sell_price = item.last.gsub(".","").to_i
+      sell_price = item.last.gsub(".","").to_i - this_item.discount
   
       old_sell = this_item.sell
       this_item.buy = based_item_price 
@@ -307,18 +307,6 @@ class OrdersController < ApplicationController
 
       if old_sell != sell_price
         this_item.sell = sell_price
-        if item.tax != tax
-          this_item.tax = tax
-          this_item.ppn = this_item.sell - ((this_item.sell) / ((this_item.tax/100.0)+1))
-          this_item.selisih_pembulatan = this_item.sell - (((this_item.sell) / ((this_item.tax/100.0)+1)) + this_item.ppn)
-          item.save!
-
-          # this_item.grocer_items.each do |grocer_item|
-          #   grocer_item.ppn = grocer_item.price - ((grocer_item.price) / ((item.tax/100.0)+1))
-          #   grocer_item.selisih_pembulatan = grocer_item.price - (((grocer_item.price) / ((item.tax/100.0)+1)) + grocer_item.ppn)
-          #   grocer_item.save!
-          # end
-        end
         Store.all.each do |store|
           Print.create item: this_item, store: store
         end
@@ -329,14 +317,22 @@ class OrdersController < ApplicationController
         end
       end
 
-      sell_after_tax = sell_before_tax + this_item.ppn
-      this_item.selisih_pembulatan = this_item.sell - sell_after_tax
+      this_item.tax = tax
+      this_item.ppn = this_item.sell - ((this_item.sell) / ((this_item.tax/100.0)+1))
+      this_item.selisih_pembulatan = this_item.sell - (((this_item.sell) / ((this_item.tax/100.0)+1)) + this_item.ppn)
       this_item.save!
+
+      this_item.grocer_items.each do |grocer_item|
+        grocer_item.price = this_item.sell + this_item.discount - grocer_item.discount
+        grocer_item.ppn = grocer_item.price - ((grocer_item.price) / ((this_item.tax/100.0)+1))
+        grocer_item.selisih_pembulatan = grocer_item.price - (((grocer_item.price) / ((this_item.tax/100.0)+1)) + grocer_item.ppn)
+        grocer_item.save!
+      end
 
       order_item.receive = receive_qty
       order_item.discount_1 = disc_1
       order_item.discount_2 = disc_2
-      order_item.ppn = ppn if ppn_type == 2
+      order_item.ppn = tax if ppn_type == 2
       order_item.price = price
       order_item.total = total_item_without_disc_global
       order_item.grand_total = item_grand_total
@@ -355,11 +351,11 @@ class OrdersController < ApplicationController
     order.received_by = current_user
     order.grand_total = new_grand_total
 
-    if (ppn > 0) && (ppn_type == 2) 
-      order.tax = ppn * order.total / 100
+    if (tax > 0) && (ppn_type == 2) 
+      order.tax = tax * order.total / 100
       order.save!
 
-      order.supplier.update(tax: ppn)
+      order.supplier.update(tax: tax)
     end
     
     order.save!
