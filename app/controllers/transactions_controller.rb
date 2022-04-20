@@ -352,7 +352,7 @@ class TransactionsController < ApplicationController
       if item.id == 30331
         trx.has_coin = true
       end
-      binding.pry
+      
       if trx_item.quantity > 1
         grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
         
