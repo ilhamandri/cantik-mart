@@ -67,7 +67,7 @@ class PostsController < ApplicationController
 						    store_stock.save!
 
 						    if new_trx_item.quantity > 1
-						        grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
+						        grocer_item = GrocerItem.find_by(item: item, price: new_trx_item.price-new_trx_item.discount)
 						        
 						        if grocer_item.present?
 						    		tax += grocer_item.ppn * new_trx_item.quantity.to_f
