@@ -73,11 +73,11 @@ class PostsController < ApplicationController
 						    		tax += grocer_item.ppn * new_trx_item.quantity.to_f
 						          	pembulatan += grocer_item.selisih_pembulatan * new_trx_item.quantity.to_f
 						        else
-						    		tax += item.ppn * item_par[1].to_f
+						    		tax += item.ppn * new_trx_item.quantity.to_f
 						        	pembulatan += item.selisih_pembulatan * new_trx_item.quantity.to_f
 						        end
 						    else
-						    	tax += item.ppn * item_par[1].to_f
+						    	tax += item.ppn * new_trx_item.quantity.to_f
 						        pembulatan += item.selisih_pembulatan * new_trx_item.quantity.to_f
 						    end
 						end
