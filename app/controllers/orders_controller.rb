@@ -229,7 +229,7 @@ class OrdersController < ApplicationController
     receivable = nil
     disc_supp = 0
     disc_supp = params[:order][:discount].to_f if params[:order][:discount].present?
-    ppn = params[:order][:ppn].to_f
+    tax = params[:order][:ppn].to_f
     ppn_type = params[:order][:ppn_type].to_i
     new_grand_total = 0
     items.each do |item|
@@ -288,7 +288,7 @@ class OrdersController < ApplicationController
       total_item_without_disc_global = price_2
 
       if ppn_type == 2
-        item_grand_total = (price_2 + (price_2*ppn/100)).round
+        item_grand_total = (price_2 + (price_2*tax/100)).round
       else
         item_grand_total = price_2
       end
@@ -301,16 +301,24 @@ class OrdersController < ApplicationController
       this_item.buy = based_item_price 
       this_item.margin = margin
       sell_before_tax = based_item_price + ( based_item_price * this_item.margin / 100 )
-      if ppn > 0
-        this_item.tax = ppn
-        this_item.ppn = sell_before_tax * ppn / 100.0
-        this_item.save!
-      end
+
 
       this_item.save!
 
       if old_sell != sell_price
         this_item.sell = sell_price
+        if item.tax != tax
+          this_item.tax = tax
+          this_item.ppn = this_item.sell - ((this_item.sell) / ((this_item.tax/100.0)+1))
+          this_item.selisih_pembulatan = this_item.sell - (((this_item.sell) / ((this_item.tax/100.0)+1)) + this_item.ppn)
+          item.save!
+
+          # this_item.grocer_items.each do |grocer_item|
+          #   grocer_item.ppn = grocer_item.price - ((grocer_item.price) / ((item.tax/100.0)+1))
+          #   grocer_item.selisih_pembulatan = grocer_item.price - (((grocer_item.price) / ((item.tax/100.0)+1)) + grocer_item.ppn)
+          #   grocer_item.save!
+          # end
+        end
         Store.all.each do |store|
           Print.create item: this_item, store: store
         end

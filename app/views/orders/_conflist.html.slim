@@ -5,7 +5,7 @@ tr
   td #{r_item.item.name}
   - buy = 0
   - margin = r_item.item.margin
-  - prev_sell = r_item.item.sell
+  - prev_sell = r_item.item.sell + r_item.item.discount
   - item = r_item.item
   - buy = 0
   - last_buy = OrderItem.where(item: item)
