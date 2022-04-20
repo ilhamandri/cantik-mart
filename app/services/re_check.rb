@@ -2,7 +2,7 @@ class ReCheck
 # complain
 	def self.complain
 		end_date = DateTime.now
-		start_date = end_date - 4.day
+		start_date = end_date - 1.day
 		trxs = Transaction.where(from_complain: true, created_at:start_date..end_date)
 		trxs.each do |trx2|
 			trx2_hpp = 0

@@ -20,12 +20,11 @@ class PostsController < ApplicationController
 					json_trx_data3 = JSON.parse(string_data3)
 					end_date = DateTime.now.end_of_day
 					start_date = (end_date - 5.days).beginning_of_day
-					trxs = Transaction.where(created_at: start_date..end_date)
 					json_trx_data1.each do |data|
 						trx_data = JSON.parse(data[0])
 						trx_items_datas = JSON.parse(data[1])
 						trx_data.delete("id")
-						check_trx = trxs.where(invoice: trx_data["invoice"])
+						check_trx = Transaction.where(invoice: trx_data["invoice"])
 						next if check_trx.present?
 						trx = Transaction.create trx_data
 						trx_total_for_point = 0
