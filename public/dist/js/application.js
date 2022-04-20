@@ -87,6 +87,7 @@ function changePriceNormalEditItem(){
   var new_sell = formatangka_titik(Math.ceil(new_price/100)*100);
   
   $("#normal_sell").val(new_sell); 
+  changeDiscountEditItem();
 }
 
 function changeDiscountEditItem(){
