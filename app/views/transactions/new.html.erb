@@ -910,23 +910,19 @@
                  },
                  success: function(result_arr) {
                      PrintBill(result_arr['invoice'], result_arr['time']);
-                    $("#payment-method-select").val(0);
-                    $("#nominal").val();
-                    var table = $('#itemList').DataTable();
-                    table.clear().draw();
-                    $("#total-h5").html("0");
-                    document.getElementById("label-total").innerHTML = "0";
-                    document.location.reload();
-                    window.location.reload()
-                     }, 
-                    error: function(result){
-                       alert(result[0][0]);
-                       alert("ERROR")
-                    }
+                     $("#payment-method-select").val(0);
+                     $("#nominal").val();
+                     var table = $('#itemList').DataTable();
+                     table.clear().draw();
+                     $("#total-h5").html("0");
+                     document.getElementById("label-total").innerHTML = "0";
+                     document.location.reload();
+                     window.location.reload()
+                  }, 
+                  error: function(result){
+                    alert("ERROR")
+                  }
              });
-             if (isOK == true){
-                  alert("HERE");
-             }
          }
          
       </script>

@@ -352,7 +352,7 @@ class TransactionsController < ApplicationController
       if item.id == 30331
         trx.has_coin = true
       end
-      
+      binding.pry
       if trx_item.quantity > 1
         grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
         
@@ -364,7 +364,7 @@ class TransactionsController < ApplicationController
           pembulatan += item.selisih_pembulatan * item_par[1].to_f
         end
       else
-        tax += grocer_item.ppn * item_par[1].to_f
+        tax += item.ppn * item_par[1].to_f
         pembulatan += item.selisih_pembulatan * item_par[1].to_f
       end
       
@@ -385,6 +385,7 @@ class TransactionsController < ApplicationController
     new_point = trx_total_for_point / @@point
     trx.point = new_point
     trx.save!
+    binding.pry
     render status: 200, json: {
       invoice: trx.invoice.to_s,
       time: trx.created_at.strftime("%d/%m/%Y %H:%M:%S"),
