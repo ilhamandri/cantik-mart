@@ -385,7 +385,6 @@ class TransactionsController < ApplicationController
     new_point = trx_total_for_point / @@point
     trx.point = new_point
     trx.save!
-    binding.pry
     render status: 200, json: {
       invoice: trx.invoice.to_s,
       time: trx.created_at.strftime("%d/%m/%Y %H:%M:%S"),
