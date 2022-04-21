@@ -3,8 +3,7 @@ class HomesController < ApplicationController
   require 'usagewatch'
 
   def index
-    DeleteData.deleteNotifications
-    ItemUpdate.updateItem
+    UpdateData.updateItemDiscountExpired
     ReCheck.complain
 
     if !["super_admin", "owner", "candy_dream"].include? current_user.level

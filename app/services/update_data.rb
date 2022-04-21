@@ -1,4 +1,41 @@
-class PpnItemUpdate
+class UpdateData
+
+	def self.updateItemDiscountExpired
+		end_discounts = Discount.where("end_date <= ?", DateTime.now.beginning_of_day)
+		end_discounts.each do |end_disc|
+			item = end_disc.item
+			item.discount = 0
+			item.save!
+		end
+
+		start_date = DateTime.now.beginning_of_day
+		end_date = start_date.end_of_day
+		
+		discounts = Discount.where("end_date < ? AND start_date <= ?", end_date, end_date-3.days)
+		discounts.each do |disc|
+			item = disc.item
+			item.discount = disc.discount
+			item.save!
+		end
+	end
+
+	def self.updateItemSellAll
+		Item.all.each do |item|
+			margin = item.margin
+			base_price = item.buy
+			tax = item.tax
+			next if item.buy == 0
+
+			sell_before_tax = base_price + (base_price*margin/100)
+			sell_after_tax = sell_before_tax + (sell_before_tax*tax/100)
+			item.sell = sell_after_tax.ceil(-2)
+			item.ppn = sell_before_tax*tax/100 
+			item.selisih_pembulatan = item.sell - sell_after_tax
+
+			item.save!
+		end
+	end
+
 	def self.updateItemPPn
 		tax = 11
 		Supplier.where("tax>0").update_all(tax: tax)
@@ -40,20 +77,4 @@ class PpnItemUpdate
 		end
 	end
 
-	def self.updateItemSellAll
-		Item.all.each do |item|
-			margin = item.margin
-			base_price = item.buy
-			tax = item.tax
-			next if item.buy == 0
-
-			sell_before_tax = base_price + (base_price*margin/100)
-			sell_after_tax = sell_before_tax + (sell_before_tax*tax/100)
-			item.sell = sell_after_tax.ceil(-2)
-			item.ppn = sell_before_tax*tax/100 
-			item.selisih_pembulatan = item.sell - sell_after_tax
-
-			item.save!
-		end
-	end
 end

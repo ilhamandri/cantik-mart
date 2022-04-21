@@ -33,30 +33,38 @@ nav.navbar.fixed-top.navbar-expand-lg.scrolling-navbar.double-nav
           - if current_user.level == "driver"
             span.clearfix.d-none.d-sm-inline-block &nbsp&nbsp&nbsp#{current_user.name} - Visitor
           - else
-            span.clearfix.d-none.d-sm-inline-block &nbsp&nbsp&nbsp#{current_user.name} - #{current_user.level}
+            span.clearfix.d-none.d-sm-inline-block &nbsp&nbsp&nbsp#{current_user.name}
         .dropdown-menu.dropdown-menu-right aria-labelledby="userDropdown" 
           .row.text-center
             .col-6
-              =image_tag("/uploads/profile_picture/#{current_user.image}", height: '100', width: '100', class:"rounded-circle ")
+              - if current_user.image.present?
+                =image_tag("/uploads/profile_picture/#{current_user.image}", height: 'auto', width: 'auto', class:"rounded-circle ")
+              - else
+                =image_tag("/uploads/profile_picture/default.png", height: 'auto', width: 'auto', class:"rounded-circle ")
             .col-6.align-middle
               br
-              | #{current_user.name} - #{current_user.level}
-              - absent = Absent.find_by("DATE(check_in) = ? AND user_id = ?", DateTime.now.to_date, current_user.id)
-              - if absent.present?
-                - check_in = absent.check_in
-                - divide_hour = DateTime.now.to_time - check_in.to_time
-                - raw_hour = divide_hour / 1.hour
-                - hour = raw_hour.to_i.to_s
-                - divide_min = raw_hour - raw_hour.to_i
-                - raw_min = divide_min*60
-                - minute = raw_min.to_i.to_s
-                br
-                  .font-weight-bold.red-text
-                    | #{hour} Jam #{minute} Menit
-              - else
-                br
-                  .font-weight-bold.red-text
-                    | Silahkan melakukan absensi
+              | #{current_user.name}
+              hr
+              | #{current_user.level.gsub("_"," ").upcase}
+              hr
+              b #{current_user.store.name}
+              / - absent = Absent.find_by("DATE(check_in) = ? AND user_id = ?", DateTime.now.to_date, current_user.id)
+              / - if absent.present?
+              /   - check_in = absent.check_in
+              /   - divide_hour = DateTime.now.to_time - check_in.to_time
+              /   - raw_hour = divide_hour / 1.hour
+              /   - hour = raw_hour.to_i.to_s
+              /   - divide_min = raw_hour - raw_hour.to_i
+              /   - raw_min = divide_min*60
+              /   - minute = raw_min.to_i.to_s
+              /   br
+              /     .font-weight-bold.red-text
+              /       | #{hour} Jam #{minute} Menit
+              / - else
+              /   br
+              /     .font-weight-bold.red-text
+              /       | Silahkan melakukan absensi
+              hr
               #txt
             .col-12
               hr
