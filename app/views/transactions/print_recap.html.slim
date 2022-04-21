@@ -168,15 +168,12 @@ br
         b Profit
       td
         b Pajak Keluaran
-      td
-        b Selisih Pembulatan
     - @profits.each do |profit|
       tr style="text-align: right"
         td style="text-align: left" #{profit[0]}
         td #{number_with_delimiter(profit[1].to_i, delimiter: ".")}
         td #{number_with_delimiter(profit[2].to_i, delimiter: ".")}
         td #{number_with_delimiter(profit[3].to_i, delimiter: ".")}
-        td #{number_with_delimiter(profit[4].to_i, delimiter: ".")}
 
   table#items
     tr

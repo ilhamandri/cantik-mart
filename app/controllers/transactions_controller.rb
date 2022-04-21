@@ -112,9 +112,8 @@ class TransactionsController < ApplicationController
       hpp_total = trx.where(store: store).sum(:hpp_total)
       ppn = trx.where(store: store).sum(:tax)
       profit = grand_total - hpp_total - ppn
-      pembulatan = trx.where(store: store).sum(:pembulatan)
       @total_income += profit
-      @profits << [store.name, grand_total, profit, ppn, pembulatan]
+      @profits << [store.name, grand_total, profit, ppn]
     end
 
     @supplier_income = 0
