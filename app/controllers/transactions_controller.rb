@@ -92,7 +92,7 @@ class TransactionsController < ApplicationController
     start_day = end_day.beginning_of_day
     @end = end_day
     @start = start_day
-    trx = Transaction.where(date_created: start_day..end_day)
+    trx = Transaction.where(created_at: start_day..end_day)
 
     cash_flow = CashFlow.where(created_at: start_day..end_day)
     
