@@ -99,9 +99,9 @@ br
 
 - else
   - Store.where.not(store_type: "warehouse").each do |store|
-    - all_trxs = @transactions.where(store: store)
+    - trxs = @transactions.where(store: store)
     - trx_last_timestamp = "Tidak ada transaksi"
-    - trx_last_timestamp = all_trxs.order("created_at DESC").first.created_at if all_trxs.present?
+    - trx_last_timestamp = trxs.order("created_at DESC").first.created_at if trxs.present?
     
     h3
       | #{store.name.upcase} ( #{trx_last_timestamp} )
@@ -114,10 +114,8 @@ br
         th QRIS
         th Total
         th Profit
-      - store.users.each do |user|
-        - trxs = all_trxs.where(user: user)
-        - next if trxs.empty?
-        
+
+      - User.where(id: trxs.pluck(:user_id).uniq).each do |user|        
         tr
           td #{user.name.camelize}
           - cash = trxs.where(payment_type: "CASH").sum(:grand_total)
@@ -135,13 +133,13 @@ br
           td #{number_with_delimiter((grand_total-tax_total-hpp_total).to_i, delimiter: ".", separator: ",")}
       tr
         td 
-        - cash_total = all_trxs.where(payment_type: "CASH").sum(:grand_total)
-        - debit_total = all_trxs.where(payment_type: "DEBIT",).sum(:grand_total)
-        - credit_total = all_trxs.where(payment_type: "CREDIT",).sum(:grand_total)
-        - qris_total = all_trxs.where(payment_type: "QRIS",).sum(:grand_total)
-        - grand_total = all_trxs.sum(:grand_total)
-        - hpp_total = all_trxs.sum(:hpp_total)
-        - tax_total = all_trxs.sum(:tax)
+        - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total)
+        - debit_total = trxs.where(payment_type: "DEBIT",).sum(:grand_total)
+        - credit_total = trxs.where(payment_type: "CREDIT",).sum(:grand_total)
+        - qris_total = trxs.where(payment_type: "QRIS",).sum(:grand_total)
+        - grand_total = trxs.sum(:grand_total)
+        - hpp_total = trxs.sum(:hpp_total)
+        - tax_total = trxs.sum(:tax)
         td #{number_with_delimiter(cash_total.to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter(debit_total.to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter(credit_total.to_i, delimiter: ".", separator: ",")}
@@ -164,16 +162,16 @@ br
         b Toko
       td
         b Total
-      td 
-        b Profit
       td
         b Pajak Keluaran
+      td 
+        b Profit Bersih
     - @profits.each do |profit|
       tr style="text-align: right"
         td style="text-align: left" #{profit[0]}
         td #{number_with_delimiter(profit[1].to_i, delimiter: ".")}
-        td #{number_with_delimiter(profit[2].to_i, delimiter: ".")}
         td #{number_with_delimiter(profit[3].to_i, delimiter: ".")}
+        td #{number_with_delimiter(profit[2].to_i, delimiter: ".")}
 
   table#items
     tr
