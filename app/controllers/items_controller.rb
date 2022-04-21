@@ -285,7 +285,7 @@ class ItemsController < ApplicationController
     item.save!
 
     item.grocer_items.each do |grocer_item|
-      grocer_items.price = item.sell + item.discount - grocer_item.discount
+      grocer_item.price = item.sell + item.discount - grocer_item.discount
       grocer_item.ppn = grocer_item.price - ((grocer_item.price) / ((item.tax/100.0)+1))
       grocer_item.selisih_pembulatan = grocer_item.price - (((grocer_item.price) / ((item.tax/100.0)+1)) + grocer_item.ppn)
       grocer_item.save!

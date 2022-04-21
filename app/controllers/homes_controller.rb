@@ -3,6 +3,7 @@ class HomesController < ApplicationController
   require 'usagewatch'
 
   def index
+    DeleteData.deleteNotifications
     ItemUpdate.updateItem
     ReCheck.complain
 
