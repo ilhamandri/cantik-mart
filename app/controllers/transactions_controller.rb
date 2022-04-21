@@ -125,7 +125,7 @@ class TransactionsController < ApplicationController
     @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
     @total_outcome = @operational + @fix_cost
     
-    @search = "Rekap Harian - "+Date.today.to_s
+    @search = "Rekap Harian - " + start_day.to_date.to_s
     render pdf: DateTime.now.to_i.to_s,
       layout: 'pdf_layout.html.erb',
       template: "transactions/print_recap.html.slim"

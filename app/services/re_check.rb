@@ -1,5 +1,5 @@
 class ReCheck
-# complain
+	# complain
 	def self.complain
 		end_date = DateTime.now
 		start_date = end_date - 1.day
@@ -24,6 +24,7 @@ class ReCheck
 		end
 	end
 
+	# HUTANG
 	def self.debt
 		duplicates = Debt.where("description like 'ORD-%'").select(:description).group(:description).having("count(*) > 1").count
 		duplicates.each do |duplicate|
@@ -34,5 +35,7 @@ class ReCheck
 			end
 		end
 	end
+
+	# KOIN
 
 end
