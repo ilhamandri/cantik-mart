@@ -227,14 +227,16 @@
 
               - if current_user.level != "candy_dream"  
                   .col-6
+                    
+
+                  .col-6
                     p 
                       | Pengeluaran Hari Ini
 
-                      strong  #{number_to_currency(@total_outcome, unit: "Rp. ")}
+                      strong style="color: red;"
+                        | &nbsp #{number_to_currency(@total_outcome, unit: "Rp. ")}
                       button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
                         i.fas.fa-question
-
-                  .col-6
                     p 
                       | Profit Bersih
 

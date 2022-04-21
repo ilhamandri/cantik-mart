@@ -355,17 +355,16 @@ class TransactionsController < ApplicationController
       
       if trx_item.quantity > 1
         grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
-        
         if grocer_item.present?
-          tax += grocer_item.ppn * item_par[1].to_f
-          pembulatan += grocer_item.selisih_pembulatan * item_par[1].to_f
+          tax += grocer_item.ppn * trx_item.quantity
+          pembulatan += grocer_item.selisih_pembulatan * trx_item.quantity
         else
-          tax += grocer_item.ppn * item_par[1].to_f
-          pembulatan += item.selisih_pembulatan * item_par[1].to_f
+          tax += item.ppn * trx_item.quantity
+          pembulatan += item.selisih_pembulatan * trx_item.quantity
         end
       else
-        tax += item.ppn * item_par[1].to_f
-        pembulatan += item.selisih_pembulatan * item_par[1].to_f
+        tax += item.ppn * trx_item.quantity
+        pembulatan += item.selisih_pembulatan * trx_item.quantity
       end
       
       if trx_item.price == 0
@@ -374,9 +373,9 @@ class TransactionsController < ApplicationController
         trx_item.save!
       end
       store_stock = StoreItem.find_by(store: current_user.store, item: item)
-      hpp_total += (item_par[1].to_i * item.buy).round
+      hpp_total += (trx_item.quantity * item.buy).round
       next if store_stock.nil?
-      store_stock.stock = store_stock.stock.to_i - item_par[1].to_i
+      store_stock.stock = store_stock.stock.to_i - trx_item.quantity
       store_stock.save!
     end
     trx.tax = tax
