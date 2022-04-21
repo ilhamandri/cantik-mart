@@ -115,16 +115,17 @@ br
         th Total
         th Profit
 
-      - User.where(id: trxs.pluck(:user_id).uniq).each do |user|        
+      - User.where(id: trxs.pluck(:user_id).uniq).each do |user|       
+        - cashier_trxs = trxs.where(user: user)
         tr
           td #{user.name.camelize}
-          - cash = trxs.where(payment_type: "CASH").sum(:grand_total)
-          - debit = trxs.where(payment_type: "DEBIT").sum(:grand_total)
-          - credit = trxs.where(payment_type: "CREDIT").sum(:grand_total)
-          - qris = trxs.where(payment_type: "QRIS").sum(:grand_total)
-          - grand_total = trxs.sum(:grand_total)
-          - hpp_total = trxs.sum(:hpp_total)
-          - tax_total = trxs.sum(:tax)
+          - cash = cashier_trxs.where(payment_type: "CASH").sum(:grand_total)
+          - debit = cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total)
+          - credit = cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total)
+          - qris = cashier_trxs.where(payment_type: "QRIS").sum(:grand_total)
+          - grand_total = cashier_trxs.sum(:grand_total)
+          - hpp_total = cashier_trxs.sum(:hpp_total)
+          - tax_total = cashier_trxs.sum(:tax)
           td #{number_with_delimiter(cash.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter(debit.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter(credit.to_i, delimiter: ".", separator: ",")}
