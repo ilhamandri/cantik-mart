@@ -1,11 +1,12 @@
-- semua discount tidak disimpan dalam bentuk persen, langsung ubah ke angka 
-- kanit dikasi tau kalau skrng discount hanya nominal tidak bisa persen
-- Pencatatan selisih trx berubah jika ada harga promo 
+(--) Pajak disimpan di TRX_ITEM biar tau saat item ini terjual, pajak saat itu berapa => ngaruh buat recap trx_item
+
 ============================================================
 https://meet.google.com/yuh-pryc-uji
 ============================================================
+(OK) Pencatatan ppn trx berubah jika ada harga promo 
+(OK) semua discount tidak disimpan dalam bentuk persen, langsung ubah ke angka 
 (--) optimasi sync post where search TRX (dilimit pencarian minggu ini biar ga lama search)
-(--) harga item di trx ke diskon lagi (API) 
+(OK) harga item di trx ke diskon lagi (API) 
 (OK) detil item error
 (OK) local masih nyangkut yang lama untuk grosir (sync)
 (OK) bendul data tidak naik

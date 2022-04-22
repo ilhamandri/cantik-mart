@@ -138,51 +138,63 @@ class TransactionsController < ApplicationController
     return redirect_back_data_error transactions_path, "Silahkan untuk memilih toko di rekap penjualan item" if store_id.nil?
     store = Store.find_by(id: store_id)
     return redirect_back_data_error transactions_path, "Data tidak Ditemukan" if store.nil?
-    @transactions = Transaction.where(store: store,created_at: start_day..end_day)
-    return redirect_back_data_error transactions_path, "Data tidak Ditemukan" if @transactions.nil?
-    @trx_items =  TransactionItem.where(transaction_id:  @transactions.pluck(:id))
-    @transaction_items = TransactionItem.where(transaction_id:  @transactions.pluck(:id)).group(:item_id).sum(:quantity)
-    @transaction_items = @transaction_items.sort_by(&:last).reverse
-    @item_cats = {}
-    @transaction_items.each do |trx_item|
-      item = Item.find_by(id: trx_item.first)
-      item_cat = item.item_cat
-      if  @item_cats[item_cat.name].present?
-        @item_cats[item_cat.name] = @item_cats[item_cat.name] + trx_item[1] 
-      else
-        @item_cats[item_cat.name] = trx_item[1] if @item_cats[item_cat.name].nil?
-      end
+
+    transaction_items = TransactionItem.where(created_at: start_day..end_day)
+    return redirect_back_data_error transactions_path, "Data tidak Ditemukan" if transaction_items.nil?
+    
+    if current_user.level == "candy_dream"
+      transaction_items = transaction_items.where(item_id: 30331)
+    else
+      transaction_items = transaction_items.where.not(item_id: 30331)
     end
-    @item_cats = Hash[@item_cats.sort_by{|k, v| v}.reverse]
-    @departments = {}
-    @item_cats.each do |item_cat|
-      cat = ItemCat.find_by(name: item_cat.first)
-      department = cat.department
-      if @departments[department.name].nil?
-        @departments[department.name] = item_cat.second 
-      else
-        @departments[department.name] = @departments[department.name] + item_cat[1] 
-      end
-    end
-    @supplier_items = {}
-    @transaction_items.each do |trx_item|
-      item = Item.find_by(id: trx_item[0])
-      supplier_item = SupplierItem.find_by(item: item)
+
+
+    global_trx_items = transaction_items.group(:item_id).sum(:quantity).sort_by(&:last).reverse
+
+    # Penjualan berdasar supplier
+    supplier_items = {}
+    global_trx_items.each do |trx_item|
+      supplier_item = SupplierItem.find_by(item_id: trx_item[0])
       supplier_id = 0 if supplier_item.nil?
       supplier_id = supplier_item.supplier.id if supplier_item.present?
-      if @supplier_items[supplier_id].present?
-        temp = @supplier_items[supplier_id]
+      if supplier_items[supplier_id].present?
+        temp = supplier_items[supplier_id]
         temp << trx_item
-        @supplier_items[supplier_id] = temp
+        supplier_items[supplier_id] = temp
       else
         temp = []
         temp << trx_item
-        @supplier_items[supplier_id] = temp 
+        supplier_items[supplier_id] = temp 
       end
     end
-    @departments = Hash[@departments.sort_by{|k, v| v}.reverse]
-    @start_day = start_day
-    @kriteria = "Rekap Item Terjual - "+Date.today.to_s
+
+    # Penjualan berdasar kategori
+    item_cats = {}
+    global_trx_items.each do |trx_item|
+      item = Item.find_by(id: trx_item[0])
+      item_cat = item.item_cat
+      if  item_cats[item_cat.name].present?
+        item_cats[item_cat.name] = item_cats[item_cat.name] + trx_item[1] 
+      else
+        item_cats[item_cat.name] = trx_item[1] if item_cats[item_cat.name].nil?
+      end
+    end
+    item_cats = Hash[item_cats.sort_by{|k, v| v}.reverse]
+
+
+    # Penjualan berdasar departemen
+    departments = {}
+    item_cats.each do |item_cat|
+      cat = ItemCat.find_by(name: item_cat.first)
+      department = cat.department
+      if departments[department.name].nil?
+        departments[department.name] = item_cat.second 
+      else
+        departments[department.name] = departments[department.name] + item_cat[1] 
+      end
+    end
+    
+    departments = Hash[departments.sort_by{|k, v| v}.reverse]
 
     respond_to do |format|
       format.html
@@ -191,7 +203,7 @@ class TransactionsController < ApplicationController
         p = Axlsx::Package.new
         wb = p.workbook
         wb.add_worksheet(:name => "SUPPLIER ITEMS") do |sheet|
-          @supplier_items.each do |supplier_item|
+          supplier_items.each do |supplier_item|
             profits = 0
             taxs = 0
             items = 0
@@ -202,7 +214,7 @@ class TransactionsController < ApplicationController
               supplier_name = supplier.name + " ( " + supplier.phone.to_s + " )"
             end
             sheet.add_row [supplier_name.upcase]
-            sheet.add_row ["No", "Kode", "Nama", "Status", "Margin", "Beli", "Jual", "Profit", "Terjual", "Omzet", "Total Profit", "Total Pajak"]
+            sheet.add_row ["No", "Kode", "Nama", "Lokal Item", "Margin", "Beli", "Jual", "Profit", "Terjual", "Omzet", "Total Profit", "Total Pajak"]
             idx = 1
             supplier_item[1].each do |trx_item|
               item_id = trx_item[0]
@@ -210,7 +222,7 @@ class TransactionsController < ApplicationController
               sell = 0
               item =  Item.find_by(id: item_id)
               if item.present?
-                trx_items = @trx_items.where(item: item).group(:price).sum(:quantity)
+                trx_items = transaction_items.where(item: item).group(:price).sum(:quantity)
                 trx_items.each_with_index do |trx_item|
                   sell = trx_item.first
                   sell_qty = trx_item.second
@@ -238,7 +250,7 @@ class TransactionsController < ApplicationController
         wb.add_worksheet(:name => "DEPARTEMEN") do |sheet|
           sheet.add_row ["Departemen", "Jumlah"]
           totals = 0
-          @departments.each do |dept|
+          departments.each do |dept|
             sheet.add_row [dept.first, dept.second]
             totals += dept.second
           end
@@ -248,7 +260,7 @@ class TransactionsController < ApplicationController
         wb.add_worksheet(:name => "KATEGORI") do |sheet|
           sheet.add_row ["Kategori", "Jumlah"]
           totals = 0
-          @item_cats.each do |item_cat|
+          item_cats.each do |item_cat|
             sheet.add_row [item_cat.first, item_cat.second]
             totals += item_cat.second
           end
