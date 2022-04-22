@@ -3,4 +3,6 @@ class TransactionItem < ApplicationRecord
   belongs_to :trx, class_name: "Transaction", foreign_key: "transaction_id", optional: true
   
   belongs_to :item
+  belongs_to :supplier, optional: true
+  belongs_to :store
 end

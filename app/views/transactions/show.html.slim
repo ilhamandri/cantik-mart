@@ -18,29 +18,19 @@
               label NOMINAL
               input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(complain.nominal, delimiter: ".")}"
             br
-          .col-3
+          .col-4
             label Invoice
             input disabled="disabled" class="form-control md-form" value="#{transaction.invoice}"
-          .col-3
+          / .col-3
             label Member
             input disabled="disabled" class="form-control md-form" value="#{member}"
-          .col-3
+          .col-4
             label Kasir
             input disabled="disabled" class="form-control md-form" value="#{transaction.user.name}"
-          .col-3
+          .col-4
             label Tgl. Transaksi
             input disabled="disabled" class="form-control md-form" value="#{transaction.created_at}"
-          .col
-            label Total Belanja
-            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total, delimiter: ".")}"
-          .col 
-            label Profit
-            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total - transaction.hpp_total-transaction.tax, delimiter: ".")}"
-          - if  transaction.voucher_id.present?
-            .col
-              label Voucher
-              input disabled="disabled" class="form-control md-form" value="#{Voucher.find_by(id: transaction.voucher_id).exchange_point.name}"
-          .col
+          .col-3
             label Pembayaran
             input disabled="disabled" class="form-control md-form" value="#{transaction.payment_type}"
           - if transaction.payment_type == "DEBIT" || transaction.payment_type == "CREDIT"
@@ -53,13 +43,22 @@
             .col
               label No. Kartu
               input disabled="disabled" class="form-control md-form" value="#{transaction.card_number.to_s}"
-        .row
-          .col-6
+          .col
+            label Total Belanja
+            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total, delimiter: ".")}"
+        
+          .col
             label Pajak Keluaran
             input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.tax.to_i, delimiter: ".")}"
-          .col-6
-            label Selisih Pembulatan
-            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.pembulatan.to_i, delimiter: ".")}"
+
+          .col 
+            label Profit
+            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(transaction.grand_total - transaction.hpp_total-transaction.tax, delimiter: ".")}"
+            
+          - if  transaction.voucher_id.present?
+            .col
+              label Voucher
+              input disabled="disabled" class="form-control md-form" value="#{Voucher.find_by(id: transaction.voucher_id).exchange_point.name}"
 
 .container-fluid
   .col-lg-12.col-md-12
@@ -79,6 +78,8 @@
             th Harga
             th Diskon
             th Total
+            th PPn
+            th Profit
           tbody
             = render partial: 'list_show', collection: @transaction_items, as: :transaction_item
 

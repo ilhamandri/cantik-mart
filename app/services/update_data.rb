@@ -90,4 +90,29 @@ class UpdateData
 		end
 	end
 
+	# UpdateData.updateTransactionItemColumn
+	def self.updateTransactionItemColumn
+		start_date = DateTime.beginning_of_month
+		end_date = DateTime.now.end_of_day
+		trxs = Transaction.where(created_at: start_date..end_date)
+
+		trxs.each do |trx|
+			trx.transaction_items.update_all(store_id: trx.store.id)
+			trx.transaction_items.each do |trx_item|
+				supplier_items = SupplierItem.where(item: trx_item.item)
+				trx_item.supplier_id = supplier_items.first.supplier.id if supplier_items.present?
+
+				sell = trx_item.price-trx_item.discount
+				qty = trx_item.quantity
+
+				trx_item.total = sell * qty
+				ppn = sell/(1+trx_item.item.tax)
+				trx_item.ppn = ppn*qty
+				trx_item.profit = (sell-ppn-trx_item.item.buy)*qty
+
+				trx_item.save!
+			end
+		end
+	end
+
 end

@@ -7,4 +7,6 @@
 	  td #{transaction_item.quantity}
 	  td #{number_with_delimiter(transaction_item.price, delimiter: ".", separator: ",")}
 	  td #{number_with_delimiter(transaction_item.discount, delimiter: ".", separator: ",")}
-	  td #{number_with_delimiter((transaction_item.price - transaction_item.discount) * transaction_item.quantity, delimiter: ".", separator: ",")}
+	  td #{number_with_delimiter(transaction_item.total.to_i, delimiter: ".", separator: ",")}
+	  td #{number_with_delimiter(transaction_item.ppn.to_i, delimiter: ".", separator: ",")}
+	  td #{number_with_delimiter(transaction_item.profit.ceil, delimiter: ".", separator: ",")}

@@ -54,18 +54,3 @@ exit
 
 localhost:3000/controllers
 
-________________________________________________________________________
-
---> check semua params is required ==> mengurangi error params not found
---> jangan catat activity jika data tidak ada perubahan
---> catat activity jika data dihapus
---> jumlah promo yang terpakai untuk setiap toko
-=====================================================================
-
---> CRON di cloud blm aktif
---> sendMail auto to drg.kindiialfarabi@gmail.com --> kurang boootstrap blm jalan
-
-
----------------------------  NEXT ---------------------------------
-- Upload gambar									|   |
-- manajemen SDM 								|   |

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_18_151747) do
+ActiveRecord::Schema.define(version: 2022_04_22_114606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -744,7 +744,14 @@ ActiveRecord::Schema.define(version: 2022_04_18_151747) do
     t.string "reason"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "ppn", default: 0.0, null: false
+    t.bigint "supplier_id"
+    t.bigint "store_id"
+    t.float "profit", default: 0.0, null: false
+    t.float "total", default: 0.0, null: false
     t.index ["item_id"], name: "index_transaction_items_on_item_id"
+    t.index ["store_id"], name: "index_transaction_items_on_store_id"
+    t.index ["supplier_id"], name: "index_transaction_items_on_supplier_id"
     t.index ["transaction_id"], name: "index_transaction_items_on_transaction_id"
   end
 
@@ -959,6 +966,8 @@ ActiveRecord::Schema.define(version: 2022_04_18_151747) do
   add_foreign_key "supplier_items", "suppliers"
   add_foreign_key "tests", "stores"
   add_foreign_key "transaction_items", "items"
+  add_foreign_key "transaction_items", "stores"
+  add_foreign_key "transaction_items", "suppliers"
   add_foreign_key "transaction_items", "transactions"
   add_foreign_key "transactions", "stores"
   add_foreign_key "transactions", "users"

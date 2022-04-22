@@ -214,7 +214,7 @@ class TransactionsController < ApplicationController
               supplier_name = supplier.name + " ( " + supplier.phone.to_s + " )"
             end
             sheet.add_row [supplier_name.upcase]
-            sheet.add_row ["No", "Kode", "Nama", "Lokal Item", "Margin", "Beli", "Jual", "Profit", "Terjual", "Omzet", "Total Profit", "Total Pajak"]
+            sheet.add_row ["No", "Kode", "Nama", "Terjual", "Omzet", "Total Profit", "Total Pajak"]
             idx = 1
             supplier_item[1].each do |trx_item|
               item_id = trx_item[0]
@@ -222,31 +222,39 @@ class TransactionsController < ApplicationController
               sell = 0
               item =  Item.find_by(id: item_id)
               if item.present?
-                trx_items = transaction_items.where(item: item).group(:price).sum(:quantity)
-                trx_items.each_with_index do |trx_item|
-                  sell = trx_item.first
-                  sell_qty = trx_item.second
-                  items += sell_qty
-                  profit = (sell - item.buy - item.ppn)*sell_qty
-                  profits += profit
-                  omzet = sell * sell_qty
-                  omzets += omzet
-                  tax =  omzet -  ( ( 100.0 / (100.0 + item.tax) ) * omzet )  
-                  taxs += tax
-                  if trx_items.first == trx_item
-                    sheet.add_row [idx.to_s, item.code, item.name, item.local_item, item.margin, item.buy.to_i, sell.to_i, (sell-item.buy).to_i, sell_qty.to_i, omzet.to_i, profit.to_i, tax.to_i]
-                  else
-                    sheet.add_row ["", "", "", "", "", "", sell.to_i, (sell-item.buy).to_i, sell_qty.to_i, omzet.to_i, profit.to_i, tax.to_i]
-                  end
-                  idx+=1
+                
+                trx_item_qty = 0
+                trx_item_total = 0
+                trx_item_ppn = 0
+                trx_item_profit = 0
+
+                transaction_items.where(item: item).each_with_index do |trx_item|
+                  items += trx_item.quantity
+                  trx_item_qty += trx_item.quantity
+
+                  trx_item_total = trx_item.total
+                  omzets += trx_item.total
+
+                  trx_item_ppn =  trx_item.ppn
+                  taxs += trx_item.ppn
+
+                  trx_item_profit = trx_item.profit
+                  profits += trx_item.profit
                 end
+
+                if supplier_item[1].first == trx_item
+                  sheet.add_row [idx.to_s, item.code, item.name, trx_item_qty.to_i, trx_item_total.to_i, trx_item_profit.to_i, trx_item_ppn.to_i ]
+                else
+                  sheet.add_row ["", "", "", trx_item_qty.to_i, trx_item_total.to_i, trx_item_profit.to_i, trx_item_ppn.to_i ]
+                end
+                idx+=1
               end
             end
-            sheet.add_row ["","","","","","","","", items.to_i, omzets.to_i, profits.to_i, taxs.to_i]
+            sheet.add_row ["","","", items.to_i, omzets.to_i, profits.to_i, taxs.to_i]
           end
-          
           sheet.add_row [""]
         end
+
         wb.add_worksheet(:name => "DEPARTEMEN") do |sheet|
           sheet.add_row ["Departemen", "Jumlah"]
           totals = 0
@@ -368,16 +376,27 @@ class TransactionsController < ApplicationController
         grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
         if grocer_item.present?
           tax += grocer_item.ppn * trx_item.quantity
+          trx_item.ppn = grocer_item.ppn * trx_item.quantity
           pembulatan += grocer_item.selisih_pembulatan * trx_item.quantity
         else
           tax += item.ppn * trx_item.quantity
+          trx_item.ppn = item.ppn * trx_item.quantity
           pembulatan += item.selisih_pembulatan * trx_item.quantity
         end
       else
         tax += item.ppn * trx_item.quantity
+        trx_item.ppn = item.ppn * trx_item.quantity
         pembulatan += item.selisih_pembulatan * trx_item.quantity
       end
       
+      trx_item.store = trx.store
+      item_suppliers = SupplierItem.where(item: trx_item.item)
+      trx_item.supplier = item_suppliers.first.supplier if item_suppliers.present?
+      trx_item.total = trx_item.quantity * (trx_item.price-trx_item.discount)
+      trx_item.profit = trx_item.total - trx_item.ppn - (trx_item.item.buy * trx_item.quantity)
+
+      trx_item.save!
+
       if trx_item.price == 0
         promo = item_par[5]
         trx_item.reason = promo

@@ -1,5 +1,5 @@
-(--) Pajak disimpan di TRX_ITEM biar tau saat item ini terjual, pajak saat itu berapa => ngaruh buat recap trx_item
-
+(--) Pajak, profit per barang, supplier, store -> disimpan di TRX_ITEM biar tau saat item ini terjual, pajak saat itu berapa => ngaruh buat recap trx_item
+(--) Hapus selisih pembulatan di detil TRX
 ============================================================
 https://meet.google.com/yuh-pryc-uji
 ============================================================

@@ -4,6 +4,7 @@ class Supplier < ApplicationRecord
   has_many :returs
   has_many :orders
   has_many :debts
+  has_many :transaction_items
   
   enum supplier_type:{
     supplier: 0,

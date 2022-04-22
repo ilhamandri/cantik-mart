@@ -71,15 +71,26 @@ class PostsController < ApplicationController
 						        
 						        if grocer_item.present?
 						    		tax += grocer_item.ppn * new_trx_item.quantity.to_f
+          							new_trx_item.ppn = grocer_item.ppn * new_trx_item.quantity
 						          	pembulatan += grocer_item.selisih_pembulatan * new_trx_item.quantity.to_f
 						        else
 						    		tax += item.ppn * new_trx_item.quantity.to_f
+        							new_trx_item.ppn = item.ppn * new_trx_item.quantity
 						        	pembulatan += item.selisih_pembulatan * new_trx_item.quantity.to_f
 						        end
 						    else
 						    	tax += item.ppn * new_trx_item.quantity.to_f
+        						new_trx_item.ppn = item.ppn * new_trx_item.quantity
 						        pembulatan += item.selisih_pembulatan * new_trx_item.quantity.to_f
 						    end
+
+						    new_trx_item.store = trx.store
+						    item_suppliers = SupplierItem.where(item: new_trx_item.item)
+						    new_trx_item.supplier = item_suppliers.first.supplier if item_suppliers.present?
+						    new_trx_item.total = new_trx_item.quantity * (new_trx_item.price-new_trx_item.discount)
+						    new_trx_item.profit = new_trx_item.total - new_trx_item.ppn - (new_trx_item.item.buy * new_trx_item.quantity)
+
+						    new_trx_item.save!
 						end
 						trx.tax = tax
 						trx.pembulatan = pembulatan
