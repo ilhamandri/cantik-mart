@@ -77,4 +77,19 @@ class UpdateData
 		end
 	end
 
+	def self.updateMarginPpn
+		counter = 1
+		items = Item.where(discount: 0)
+		items.each do |item|
+			next if item.buy == 0 || item.sell == 0
+			item_margin = item.sell / ((item.tax/100.0)+1)
+		  	item.ppn = item.sell - item_margin
+		  	item.margin = (((item_margin-item.buy) / item.buy) * 100 ).to_i
+		  	item.selisih_pembulatan = item.sell - (item_margin + item.ppn)
+	  		item.save!
+	  		puts counter
+	  		counter+=1
+		end
+	end
+
 end

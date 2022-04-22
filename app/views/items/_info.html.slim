@@ -34,10 +34,8 @@
         input class="md-form form-control" value="Barang Lokal" disabled="disabled"
 
     .form-group
-      - price_updated = @item.created_at
-      - price_updated = @item.price_updated if @item.price_updated.present?
       label for="item" Harga Beli
-      input class="md-form form-control" value="#{number_with_delimiter(@item.buy.round, delimiter: ".")} ( #{price_updated} )" disabled="disabled"
+      input class="md-form form-control" value="#{number_with_delimiter(@item.buy.round, delimiter: ".")}" disabled="disabled"
     .form-group
       label for="item" Margin
       - margin = @item.margin 
@@ -53,7 +51,9 @@
       - base_price = (buy + (buy*@item.margin/100.0)) 
       - ppn = base_price * @item.tax / 100.0
       - normal_sell = (base_price + ppn).ceil(-2)
-      input class="md-form form-control" value="#{number_with_delimiter(normal_sell, delimiter:'.')}" disabled="disabled"
+      - price_updated = @item.updated_at
+      - price_updated = @item.price_updated if @item.price_updated.present?
+      input class="md-form form-control" value="#{number_with_delimiter(normal_sell, delimiter:'.')}     ( #{price_updated} )"  disabled="disabled"
     .form-group.table-responsive.text-nowrap
       label for="sell" Harga Jual
       table class="table table-hover"

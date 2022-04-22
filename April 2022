@@ -46,6 +46,19 @@ https://meet.google.com/yuh-pryc-uji
 start_date = DateTime.now.beginning_of_day
 end_date = start_date.end_of_day
 
+start_date = (DateTime.now-2.days).beginning_of_day
+end_date = start_date.end_of_day
+
+TransactionItem.where(created_at: start_date..end_date, item_id: 30331).sum(:quantity)
+
 Transaction.where(created_at: start_date..end_date, store_id: 3).count
 
-Item.where(id: [33283, 33286,33284, 22662])
+items = Item.where("selisih_pembulatan > 0")
+
+items.each do |item|
+	item_margin = item.sell / ((item.tax/100.0)+1)
+  	item.ppn = item.sell - item_margin
+  	item.margin = ((item_margin-item.buy) / item.buy).to_i
+  	item.selisih_pembulatan = item.sell - (item_margin + item.ppn)
+  	item.save!
+end
