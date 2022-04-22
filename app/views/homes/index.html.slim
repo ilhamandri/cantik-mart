@@ -4,7 +4,7 @@
 - debit = trx.where(payment_type: "DEBIT").sum(:grand_total)
 - jumlah_trx = trx.count
 
-- if ["super_visi"].include? current_user.level
+- if ["super_visi","stock_admin"].include? current_user.level
   .container-fluid
     .section.pb-3
       - if current_user.store.online_store
@@ -25,9 +25,6 @@
         hr
         br
         
-- if ["stock_admin"].include? current_user.level
-  .container-fluid
-    .section.pb-3
       .row
         .col-md-3.mb-0
         	= render "homes/card/stock"
