@@ -4,10 +4,9 @@
 - debit = trx.where(payment_type: "DEBIT").sum(:grand_total)
 - jumlah_trx = trx.count
 
-- if !["super_admin", "owner", "candy_dream"].include? current_user.level
+- if ["super_visi"].include? current_user.level
   .container-fluid
     .section.pb-3
-    - if current_user.level != "cashier"
       - if current_user.store.online_store
         h3
         | Selamat Datang, #{current_user.name}
@@ -41,7 +40,7 @@
       .row
         = render "homes/card/candy"
 
-- if ["super_admin", "owner"].include? current_user.level
+- if ["super_admin", "owner", "finance"].include? current_user.level
   .section.mb-5
   .card.card-cascade.narrower
     .section

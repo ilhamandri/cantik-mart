@@ -18,7 +18,7 @@ class HomesController < ApplicationController
 
 
     # PENGELUARAN
-    if ["super_admin", "owner"].include? current_user.level
+    if ["super_admin", "owner", "finance"].include? current_user.level
       
       cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
       @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
@@ -33,7 +33,7 @@ class HomesController < ApplicationController
     end
 
     # TRANSAKSI HARI INI
-     if ["super_admin", "owner", "candy_dream"].include? current_user.level
+     if ["super_admin", "owner", "candy_dream", "finance"].include? current_user.level
       @transactions = Transaction.where(created_at: start_day..end_day)
       
       if current_user.level == "candy_dream"
