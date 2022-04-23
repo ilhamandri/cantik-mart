@@ -92,7 +92,7 @@ class UpdateData
 
 	# UpdateData.updateTransactionItemColumn
 	def self.updateTransactionItemColumn
-		start_date = DateTime.beginning_of_month
+		start_date = DateTime.now.beginning_of_month
 		end_date = DateTime.now.end_of_day
 		trxs = Transaction.where(created_at: start_date..end_date)
 
