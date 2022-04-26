@@ -139,7 +139,8 @@ class TransactionsController < ApplicationController
     store = Store.find_by(id: store_id)
     return redirect_back_data_error transactions_path, "Data tidak Ditemukan" if store.nil?
 
-    transaction_items = TransactionItem.where(created_at: start_day..end_day)
+    transaction_items = TransactionItem.where(created_at: start_day..end_day, store: store)
+
     return redirect_back_data_error transactions_path, "Data tidak Ditemukan" if transaction_items.nil?
     
     if current_user.level == "candy_dream"
@@ -150,23 +151,6 @@ class TransactionsController < ApplicationController
 
 
     global_trx_items = transaction_items.group(:item_id).sum(:quantity).sort_by(&:last).reverse
-
-    # Penjualan berdasar supplier
-    supplier_items = {}
-    global_trx_items.each do |trx_item|
-      supplier_item = SupplierItem.find_by(item_id: trx_item[0])
-      supplier_id = 0 if supplier_item.nil?
-      supplier_id = supplier_item.supplier.id if supplier_item.present?
-      if supplier_items[supplier_id].present?
-        temp = supplier_items[supplier_id]
-        temp << trx_item
-        supplier_items[supplier_id] = temp
-      else
-        temp = []
-        temp << trx_item
-        supplier_items[supplier_id] = temp 
-      end
-    end
 
     # Penjualan berdasar kategori
     item_cats = {}
@@ -203,56 +187,21 @@ class TransactionsController < ApplicationController
         p = Axlsx::Package.new
         wb = p.workbook
         wb.add_worksheet(:name => "SUPPLIER ITEMS") do |sheet|
-          supplier_items.each do |supplier_item|
-            profits = 0
-            taxs = 0
-            items = 0
-            omzets = 0
+          suppliers_id = transaction_items.pluck(:supplier_id).uniq
+          suppliers_id.each do |supplier_id|
+            supplier = Supplier.find_by(id: supplier_id)
             supplier_name = "TIDAK ADA SUPPLIER"
-            if supplier_item[0] != 0
-              supplier = Supplier.find_by(id: supplier_item[0])
-              supplier_name = supplier.name + " ( " + supplier.phone.to_s + " )"
-            end
+            supplier_name = supplier.name + " (" + supplier.phone.to_s + ")" if supplier_id.present?
             sheet.add_row [supplier_name.upcase]
-            sheet.add_row ["No", "Kode", "Nama", "Terjual", "Omzet", "Total Profit", "Total Pajak"]
-            idx = 1
-            supplier_item[1].each do |trx_item|
-              item_id = trx_item[0]
-              sell_qty = 0
-              sell = 0
-              item =  Item.find_by(id: item_id)
-              if item.present?
-                
-                trx_item_qty = 0
-                trx_item_total = 0
-                trx_item_ppn = 0
-                trx_item_profit = 0
-
-                transaction_items.where(item: item).each_with_index do |trx_item|
-                  items += trx_item.quantity
-                  trx_item_qty += trx_item.quantity
-
-                  trx_item_total = trx_item.total
-                  omzets += trx_item.total
-
-                  trx_item_ppn =  trx_item.ppn
-                  taxs += trx_item.ppn
-
-                  trx_item_profit = trx_item.profit
-                  profits += trx_item.profit
-                end
-
-                if supplier_item[1].first == trx_item
-                  sheet.add_row [idx.to_s, item.code, item.name, trx_item_qty.to_i, trx_item_total.to_i, trx_item_profit.to_i, trx_item_ppn.to_i ]
-                else
-                  sheet.add_row ["", "", "", trx_item_qty.to_i, trx_item_total.to_i, trx_item_profit.to_i, trx_item_ppn.to_i ]
-                end
-                idx+=1
-              end
+            sheet.add_row ["No", "Kode", "Nama", "Terjual", "Omzet", "Pajak Keluaran", "Profit"]
+            trx_supplier_items = transaction_items.where(supplier_id: supplier_id)
+            trx_supplier_items.pluck(:item_id).uniq.each_with_index do |item_id, idx|
+              item = Item.find_by(id: item_id)
+              trx_items = trx_supplier_items.where(item_id: item_id)
+              sheet.add_row [(idx+1).to_s, item.code, item.name, trx_items.sum(:quantity).to_i, trx_items.sum(:total).to_i, trx_items.sum(:ppn).to_i, trx_items.sum(:profit).to_i ]
             end
-            sheet.add_row ["","","", items.to_i, omzets.to_i, profits.to_i, taxs.to_i]
+            sheet.add_row ["","","", trx_supplier_items.sum(:quantity).to_i, trx_supplier_items.sum(:total).to_i, trx_supplier_items.sum(:ppn).to_i, trx_supplier_items.sum(:profit).to_i]
           end
-          sheet.add_row [""]
         end
 
         wb.add_worksheet(:name => "DEPARTEMEN") do |sheet|

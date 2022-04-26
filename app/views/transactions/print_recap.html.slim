@@ -162,17 +162,32 @@ br
       td
         b Toko
       td
-        b Total
+        b Omzet
       td
         b Pajak Keluaran
       td 
         b Profit Bersih
+    
+    - omzet = 0
+    - pajak = 0
+    - profits = 0 
     - @profits.each do |profit|
       tr style="text-align: right"
         td style="text-align: left" #{profit[0]}
         td #{number_with_delimiter(profit[1].to_i, delimiter: ".")}
         td #{number_with_delimiter(profit[3].to_i, delimiter: ".")}
         td #{number_with_delimiter(profit[2].to_i, delimiter: ".")}
+        - omzet += profit[1]
+        - pajak += profit[3]
+        - profits += profit[2]
+    tr
+      td colspan="4"
+    tr style="text-align: right"
+      td
+      td #{number_with_delimiter(omzet.to_i, delimiter: ".")}
+      td #{number_with_delimiter(pajak.to_i, delimiter: ".")}
+      td #{number_with_delimiter(profits.to_i, delimiter: ".")}
+
 
   table#items
     tr
