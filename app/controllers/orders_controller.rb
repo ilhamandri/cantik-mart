@@ -227,13 +227,11 @@ class OrdersController < ApplicationController
     items = order_items
     new_total = 0
     receivable = nil
-    disc_supp = 0
-    disc_supp = params[:order][:discount].to_f if params[:order][:discount].present?
     tax = params[:order][:ppn].to_f
     ppn_type = params[:order][:ppn_type].to_i
     new_grand_total = 0
     items.each do |item|
-      margin = item.last(2).first.to_i
+      margin = item.last(2).first.to_f
       order_item = OrderItem.find item[0]
       break if order_item.nil?
       this_item = order_item.item
@@ -344,12 +342,15 @@ class OrdersController < ApplicationController
       order_item.save!
     end
 
+    disc_supp = 0
+    disc_supp = params[:order][:discount].to_f if params[:order][:discount].present?
+    
     order.total = new_total
     order.discount_percentage = 0
-    order.discount = 0
+    order.discount = disc_supp
     order.date_receive = DateTime.now
     order.received_by = current_user
-    order.grand_total = new_grand_total
+    order.grand_total = new_grand_total - disc_supp
 
     if (tax > 0) && (ppn_type == 2) 
       order.tax = tax * order.total / 100

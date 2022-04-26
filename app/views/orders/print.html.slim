@@ -96,9 +96,7 @@ table#items
     tr style="text-align: right;"
       td.blank colspan="7" 
       td.total-line colspan="2"  
-        | Diskon Total 
-        br
-        | ( #{@order.discount_percentage}% )
+        | Diskon Faktur
       td.total-value
         #total #{number_with_delimiter(@order.discount, delimiter: ".", separator: ",")}
     tr style="text-align: right;font-weight: bold;"

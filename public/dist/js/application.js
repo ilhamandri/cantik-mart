@@ -78,7 +78,7 @@ function formatNum(rawNum) {
 
 function changePriceNormalEditItem(){
   buy = parseInt($("#buy").val().replaceAll(".",""));
-  margin = parseInt($("#margin").val());
+  margin = parseFloat($("#margin").val());
   tax = parseInt($("#tax").val());
 
   base_price = buy + (buy*margin/100.0);
@@ -93,7 +93,7 @@ function changePriceNormalEditItem(){
 function changeDiscountEditItem(){
   buy = parseInt($("#buy").val().replaceAll(".",""));
   normal_sell = parseInt($("#normal_sell").val().replaceAll(".",""));
-  margin = parseInt($("#margin").val());
+  margin = parseFloat($("#margin").val());
   tax = parseInt($("#tax").val());
   discount = parseInt($("#discount").val());
 
