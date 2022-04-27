@@ -69,10 +69,10 @@ br
           | #{number_with_delimiter((hpp_totals).to_i, delimiter: ".", separator: ",")}
       td 
         b
-          | #{number_with_delimiter((profit_totals).to_i, delimiter: ".", separator: ",")}
+          | #{number_with_delimiter((tax_totals).to_i, delimiter: ".", separator: ",")}
       td 
         b
-          | #{number_with_delimiter(tax_totals.to_i, delimiter: ".", separator: ",")}
+          | #{number_with_delimiter(profit_totals.to_i, delimiter: ".", separator: ",")}
             
 
 - else
