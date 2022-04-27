@@ -118,7 +118,7 @@
                       td #{number_with_delimiter( (grand_total).to_i, delimiter: ".", separator: ",")}
                       td #{number_with_delimiter( (grand_total-hpp_total-ppn_total).to_i, delimiter: ".", separator: ",")}
 
-        .col-xl-6.col-lg-12.mr-0.pb-2
+        /.col-xl-6.col-lg-12.mr-0.pb-2
           - trx = nil
           - if current_user.level == "candy_dream"
             - trx = Transaction.where(has_coin: true) 

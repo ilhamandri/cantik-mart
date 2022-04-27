@@ -1,10 +1,13 @@
 
+(--) optimasi sync post where search TRX (dilimit pencarian minggu ini biar ga lama search)
+(--) optimasi home
+
 ============================================================
 https://meet.google.com/yuh-pryc-uji
 ============================================================
 (OK) Harga jual naik tidak per 100 jika margin berubah (kejadian di item rokok)
 (OK) Detil order tampilkan total pajak masukan, diskon global, total belum terpotong diskon global (cek di order_id 15799)
-(--) Migrate di server + server lokal
+(OK) Migrate di server + server lokal
 (OK) laporan transaksi bulanan
 	- ppn -> pajak keluaran 
   	- total -> omzet
@@ -17,8 +20,6 @@ https://meet.google.com/yuh-pryc-uji
 (OK) Pajak, profit per barang, supplier, store -> disimpan di TRX_ITEM biar tau saat item ini terjual, pajak saat itu berapa => ngaruh buat recap trx_item
 (OK) Hapus selisih pembulatan di detil TRX
 (OK) semua discount tidak disimpan dalam bentuk persen, langsung ubah ke angka 
-(--) optimasi sync post where search TRX (dilimit pencarian minggu ini biar ga lama search)
-(--) optimasi home
 (OK) harga item di trx ke diskon lagi (API) 
 (OK) detil item error
 (OK) local masih nyangkut yang lama untuk grosir (sync)

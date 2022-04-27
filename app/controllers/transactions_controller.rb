@@ -193,14 +193,14 @@ class TransactionsController < ApplicationController
             supplier_name = "TIDAK ADA SUPPLIER"
             supplier_name = supplier.name + " (" + supplier.phone.to_s + ")" if supplier_id.present?
             sheet.add_row [supplier_name.upcase]
-            sheet.add_row ["No", "Kode", "Nama", "Terjual", "Omzet", "Pajak Keluaran", "Profit"]
+            sheet.add_row ["Kode", "Nama", "Terjual", "Omzet", "Pajak Keluaran", "Profit"]
             trx_supplier_items = transaction_items.where(supplier_id: supplier_id)
-            trx_supplier_items.pluck(:item_id).uniq.each_with_index do |item_id, idx|
+            trx_supplier_items.pluck(:item_id).uniq.each do |item_id|
               item = Item.find_by(id: item_id)
               trx_items = trx_supplier_items.where(item_id: item_id)
-              sheet.add_row [(idx+1).to_s, item.code, item.name, trx_items.sum(:quantity).to_i, trx_items.sum(:total).to_i, trx_items.sum(:ppn).to_i, trx_items.sum(:profit).to_i ]
+              sheet.add_row [item.code, item.name, trx_items.sum(:quantity).to_i, trx_items.sum(:total).to_i, trx_items.sum(:ppn).to_i, trx_items.sum(:profit).to_i ]
             end
-            sheet.add_row ["","","", trx_supplier_items.sum(:quantity).to_i, trx_supplier_items.sum(:total).to_i, trx_supplier_items.sum(:ppn).to_i, trx_supplier_items.sum(:profit).to_i]
+            sheet.add_row ["","", trx_supplier_items.sum(:quantity).to_i, trx_supplier_items.sum(:total).to_i, trx_supplier_items.sum(:ppn).to_i, trx_supplier_items.sum(:profit).to_i]
           end
         end
 
