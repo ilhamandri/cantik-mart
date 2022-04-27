@@ -32,53 +32,46 @@ class SupplierItemsController < ApplicationController
   def item_recaps
     return redirect_back_data_error suppliers_path, "Data Barang Suplier Tidak Ditemukan" unless params[:id].present?
     supplier = Supplier.find_by_id params[:id]
-
-    return redirect_back_data_error suppliers_path, "Data Barang Suplier Tidak Ditemukan" if supplier.nil?
-    supplier_items = SupplierItem.where(supplier: supplier).pluck(:item_id)
+    return redirect_back_data_error suppliers_path, "Suplier Tidak Ditemukan" if supplier.nil?
     start_params = params[:date_start]
     end_params = params[:date_end]
     return redirect_back_data_error item_path(id: item.id), "Silahkan cek tanggal kembali" if start_params.empty? || end_params.empty? 
     date_from = start_params.to_date
     date_to = end_params.to_date
-    @trx_items = TransactionItem.where(item: supplier_items, created_at: date_from..date_to).group(:item_id).sum(:quantity)
-    @description = "Rekap penjualan " + supplier.name.upcase + " ( " + date_from.to_s + " ... " + date_to.to_s + " )"
-    # render pdf: DateTime.now.to_i.to_s,
-    #   layout: 'pdf_layout.html.erb',
-    #   template: "supplier_items/trxs.html.slim"
+    trx_items = TransactionItem.where(supplier: supplier, created_at: date_from..date_to)
+
     filename = "./report/supplier/" + supplier.name + "-" + DateTime.now.to_i.to_s + ".xlsx"
 
     p = Axlsx::Package.new
     wb = p.workbook 
     
     wb.add_worksheet(:name => "INFO")do |sheet|
-      sheet.add_row ["Dekripsi", @description]
-      total = @trx_items.values.inject(0){|sum,x| sum + x }
-      sheet.add_row ["Total Barang Terjual", total]
+      sheet.add_row ["Dekripsi", "Rekap penjualan " + supplier.name.upcase + " ( " + date_from.to_s + " ... " + date_to.to_s + " )"]
+      sheet.add_row ["Total Barang Terjual", trx_items.sum(:quantity)]
     end
     
     wb.add_worksheet(:name => "PENJUALAN") do |sheet|
-      sheet.add_row ["Tanggal", "Order", "Terjual", "Omzet", "Pajak"]
+      sheet.add_row ["No", "Kode", "Nama Barang", "Terjual", "Omzet", "Pajak", "Profit"]
 
-      idx = 0
       total_omzet = 0
       total_tax = 0
-      @trx_items.each do |trx_item|
-        idx+=1
-        item = Item.find trx_item[0]
-        item_name = item.name
-        terjual = trx_item[1]
-        omzet = (trx_item[1]*item.sell).to_i
+      total_profit = 0
+      total_terjual = 0
+      Item.where(id: trx_items.pluck(:item_id).uniq).each_with_index do |item,idx|
+        trx_item = trx_items.where(item: item)
+        terjual = trx_item.sum(:quantity)
+        total_terjual += terjual
+        omzet = trx_item.sum(:total)
         total_omzet+=omzet
-        tax = omzet - (omzet.to_f * ( 100.0/ (100.0 + item.tax) )).ceil
+        tax = trx_item.sum(:ppn).ceil(3)
         total_tax += tax
-        omzet_str = number_with_delimiter(omzet, delimiter: ",")
-        tax_str = number_with_delimiter(tax, delimiter: ",")
-        sheet.add_row [idx,item_name, terjual, omzet_str, tax_str]
+        profit = trx_item.sum(:profit).ceil(3)
+        total_profit += profit
+        sheet.add_row [idx+1, item.code, item.name, terjual, omzet, tax, profit]
       end
-        sheet.add_row ["", "", "", total_omzet, total_tax]
-        sheet.merge_cells sheet.rows.last.cells[(0..4)]
-        sheet.add_row ["TOTAL", "", "", number_with_delimiter(total_omzet, delimiter: ","), number_with_delimiter(total_tax, delimiter: ",")]
-        sheet.merge_cells sheet.rows.last.cells[(0..2)]
+      sheet.add_row []
+      sheet.add_row ["TOTAL", "", "", total_terjual, total_omzet, total_tax, total_profit]
+      sheet.merge_cells sheet.rows.last.cells[(0..2)]
 
       # end
     end
