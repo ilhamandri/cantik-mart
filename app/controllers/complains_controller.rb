@@ -141,8 +141,9 @@ class ComplainsController < ApplicationController
         disc = new_item[3].to_f
         
         store_item.stock = store_item.stock - qty
-        hpp += (buy * qty).round
+        store_item.save!
 
+        hpp += (buy * qty).round
         discount += disc * qty
         total += price * qty
 
@@ -151,8 +152,8 @@ class ComplainsController < ApplicationController
         quantity: qty, 
         price: price,
         discount: disc,
-        date_created: DateTime.now
-        store_item.save!
+        date_created: DateTime.now,
+        store: current_user.store
 
         if trx_item.quantity > 1
           grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
@@ -168,7 +169,14 @@ class ComplainsController < ApplicationController
           tax += grocer_item.ppn * item_par[1].to_f
           pembulatan += item.selisih_pembulatan * item_par[1].to_f
         end
+        trx_item.store = trx.store
 
+        item_suppliers = SupplierItem.where(item: trx_item.item)
+        trx_item.supplier = item_suppliers.first.supplier if item_suppliers.present?
+        trx_item.total = trx_item.quantity * (trx_item.price-trx_item.discount)
+        trx_item.profit = trx_item.total - trx_item.ppn - (trx_item.item.buy * trx_item.quantity)
+      
+        trx_item.save!
       end
       
       new_trx.discount = discount

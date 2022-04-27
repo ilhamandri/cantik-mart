@@ -34,7 +34,7 @@ class HomesController < ApplicationController
 
     # TRANSAKSI HARI INI
      if ["super_admin", "owner", "candy_dream", "finance"].include? current_user.level
-      @transactions = Transaction.where(created_at: start_day..end_day)
+      @transactions = Transaction.where(created_at: start_day..end_day).order("created_at ASC")
       
       if current_user.level == "candy_dream"
         @transactions = @transactions.where(has_coin: true) 

@@ -9,7 +9,7 @@
         br
         br
         .row
-          - trx =  Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_day, DateTime.now.end_of_day).where(user: current_user)
+          - trx =  Transaction.where(created_at: DateTime.now.beginning_of_day..DateTime.now.end_of_day).where(user: current_user)
           - trx_total = trx.sum(:grand_total)
           - cash = trx.where(payment_type: "CASH").sum(:grand_total)
           - debit = trx.where(payment_type: "DEBIT").sum(:grand_total)

@@ -46,7 +46,7 @@ class SupplierItemsController < ApplicationController
     wb = p.workbook 
     
     wb.add_worksheet(:name => "INFO")do |sheet|
-      sheet.add_row ["Dekripsi", "Rekap penjualan " + supplier.name.upcase + " ( " + date_from.to_s + " ... " + date_to.to_s + " )"]
+      sheet.add_row ["Dekripsi", "Rekap penjualan " + supplier.name.upcase + " ( " + date_from.to_date.to_s + " ... " + date_to.to_date.to_s + " )"]
       sheet.add_row ["Total Barang Terjual", trx_items.sum(:quantity)]
     end
     
