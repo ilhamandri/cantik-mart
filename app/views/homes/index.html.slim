@@ -1,8 +1,4 @@
-- trx =  Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_day, DateTime.now.end_of_day).where(user: current_user)
-- trx_total = trx.sum(:grand_total)
-- cash = trx.where(payment_type: "CASH").sum(:grand_total)
-- debit = trx.where(payment_type: "DEBIT").sum(:grand_total)
-- jumlah_trx = trx.count
+
 
 - if ["super_visi","stock_admin"].include? current_user.level
   .container-fluid
@@ -13,6 +9,11 @@
         br
         br
         .row
+          - trx =  Transaction.where("created_at >= ? AND created_at <= ?", DateTime.now.beginning_of_day, DateTime.now.end_of_day).where(user: current_user)
+          - trx_total = trx.sum(:grand_total)
+          - cash = trx.where(payment_type: "CASH").sum(:grand_total)
+          - debit = trx.where(payment_type: "DEBIT").sum(:grand_total)
+          - jumlah_trx = trx.count
           .col.text-center
             button.btn.btn-success onclick="printShift('#{trx_total.to_i}', '#{current_user.name.upcase}', '#{DateTime.now.strftime("%d/%m/%Y %H:%M:%S")}', #{cash.to_i}, #{debit.to_i}, '#{jumlah_trx.to_i}', '#{current_user.store.id}' , '#{current_user.store.name}' )"
               | CETAK PENJUALAN
@@ -73,16 +74,16 @@
   .card.card-cascade.narrower
     .section
       .row
-        /.col-xl-6.col-lg-12.mr-0.pb-2
+        .col-xl-6.col-lg-12.mr-0.pb-2
           .view.view-cascade.gradient-card-header.light-blue.lighten-1
             h2.h2-responsive.mb-0.font-weight-500 PENJUALAN HARI INI 
           .card-body.card-body-cascade.pb-0
             .row.py-3.pl-4
               .col-md-12
-                - Store.where(id: @transactions.pluck(:store_id).uniq).each do |store|
-                  - trxs = @transactions.where(store: store).order("created_at DESC")
+                - Store.where.not(store_type: "warehouse").each do |store|
+                  - trxs = @transactions.where(store: store)
                   - trx_last_timestamp = "Tidak ada transaksi"
-                  - trx_last_timestamp = trxs.first.created_at if trxs.present?
+                  - trx_last_timestamp = trxs.last.created_at if trxs.present?
                   h6
                     b
                       | #{store.name.upcase} ( #{trx_last_timestamp} )
@@ -97,7 +98,7 @@
                     - User.where(id: trxs.pluck(:user_id).uniq).each do |cashier|
                       tr
                         - cash = trxs.where(payment_type: "CASH", user: cashier).sum(:grand_total)
-                        - debit = trxs.where(payment_type: ["DEBIT", "CREDIT", "QRIS"], user: cashier).sum(:grand_total)
+                        - debit = trxs.where.not(payment_type: "CASH", user: cashier).sum(:grand_total)
                         - hpp_total = trxs.where(user: cashier).sum(:hpp_total)
                         - ppn_total = trxs.where(user: cashier).sum(:tax)
                         td #{cashier.name}
@@ -109,7 +110,7 @@
                     tr
                       td 
                       - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total)
-                      - debit_total = trxs.where(payment_type: ["DEBIT", "CREDIT"]).sum(:grand_total)
+                      - debit_total = trxs.where.not(payment_type: "CASH").sum(:grand_total)
                       - hpp_total = trxs.where(store: store).sum(:hpp_total)
                       - grand_total = trxs.sum(:grand_total)
                       - ppn_total = trxs.sum(:tax)
