@@ -36,8 +36,8 @@ class SupplierItemsController < ApplicationController
     start_params = params[:date_start]
     end_params = params[:date_end]
     return redirect_back_data_error item_path(id: item.id), "Silahkan cek tanggal kembali" if start_params.empty? || end_params.empty? 
-    date_from = start_params.to_date
-    date_to = end_params.to_date
+    date_from = start_params.to_datetime.beginning_of_day
+    date_to = end_params.to_datetime.end_of_day
     trx_items = TransactionItem.where(supplier: supplier, created_at: date_from..date_to)
 
     filename = "./report/supplier/" + supplier.name + "-" + DateTime.now.to_i.to_s + ".xlsx"
