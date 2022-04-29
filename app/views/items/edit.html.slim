@@ -48,7 +48,7 @@
             
           .form-group
             label for="sell" Margin
-            = form.number_field :margin, required: true, class: "form-control md-form", id: "margin", min: "0", onchange:"changePriceNormalEditItem()"
+            = form.number_field :margin, required: true, class: "form-control md-form", id: "margin", min: "0", onchange:"changePriceNormalEditItem()", step:"0.1"
           - buy = @item.buy
           - base_price = buy + (buy*@item.margin/100.0)
           - ppn = base_price * @item.tax / 100.0

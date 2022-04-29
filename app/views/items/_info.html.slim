@@ -81,8 +81,8 @@
             - else
               td -
 
-            td #{number_with_delimiter(@item.ppn.ceil(2), delimiter: ".")}
-            td #{number_with_delimiter(@item.sell, delimiter: ".")}
+            td #{number_with_delimiter(@item.ppn.ceil(2), delimiter: ".", separator: ",")}
+            td #{number_with_delimiter(@item.sell, delimiter: ".", separator: ",")}
             td #{number_with_delimiter((@item.sell - @item.buy - @item.ppn).round, delimiter: ".", separator: ",")}
             td.text-right
               a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
@@ -107,7 +107,7 @@
                 - else
                   td -
 
-                td #{number_with_delimiter(item.ppn.ceil(2), delimiter: ".")}
+                td #{number_with_delimiter(item.ppn.ceil(2), delimiter: ".", separator: ",")}
                 td #{number_with_delimiter(item.price, delimiter: ".")}
                 td #{number_with_delimiter((item.price - @item.buy - @item.ppn).round, delimiter: ".")}
                 td.text-right
