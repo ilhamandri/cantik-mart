@@ -98,20 +98,21 @@
                     - User.where(id: trxs.pluck(:user_id).uniq).each do |cashier|
                       tr
                         - cash = trxs.where(payment_type: "CASH", user: cashier).sum(:grand_total)
-                        - debit = trxs.where.not(payment_type: "CASH", user: cashier).sum(:grand_total)
+                        - debit = trxs.where.not(payment_type: "CASH").where(user: cashier).sum(:grand_total)
+                        - grand_total = trxs.where(user: cashier).sum(:grand_total)
                         - hpp_total = trxs.where(user: cashier).sum(:hpp_total)
                         - ppn_total = trxs.where(user: cashier).sum(:tax)
                         td #{cashier.name}
                         td #{number_with_delimiter( cash.to_i, delimiter: ".", separator: ",")}
                         td #{number_with_delimiter( debit.to_i, delimiter: ".", separator: ",")}
-                        td #{number_with_delimiter( (debit+cash).to_i, delimiter: ".", separator: ",")}
-                        td #{number_with_delimiter( (debit+cash-hpp_total-ppn_total).to_i, delimiter: ".", separator: ",")}
+                        td #{number_with_delimiter( grand_total.to_i, delimiter: ".", separator: ",")}
+                        td #{number_with_delimiter( (grand_total-hpp_total-ppn_total).to_i, delimiter: ".", separator: ",")}
 
                     tr
                       td 
                       - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total)
                       - debit_total = trxs.where.not(payment_type: "CASH").sum(:grand_total)
-                      - hpp_total = trxs.where(store: store).sum(:hpp_total)
+                      - hpp_total = trxs.sum(:hpp_total)
                       - grand_total = trxs.sum(:grand_total)
                       - ppn_total = trxs.sum(:tax)
                       td #{number_with_delimiter( (cash_total).to_i, delimiter: ".", separator: ",")}
