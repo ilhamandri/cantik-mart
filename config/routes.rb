@@ -89,6 +89,9 @@ Rails.application.routes.draw do
   get '/salary/:id/delete', to: 'salaries#delete_salary', as: 'delete_salary'
 
   get '/print/suppliers', to: 'suppliers#print_debt_receive', as: 'print_debt_receive'
+
+
+  get '/sync/:id/:target', to: 'apis#get_sync', as: 'get_sync'
   resources :discounts
   resources :pays, only: %i[new create]
   resources :populars

@@ -1,5 +1,4 @@
 class ApisController < ApplicationController
-
   def index
     api_type = params[:api_type]
     if api_type == "item"
@@ -27,7 +26,7 @@ class ApisController < ApplicationController
     end   
   end
 
-  def get_sync params
+  def get_sync 
     json_result = []
     store_id = params[:id]
     sync_date = params[:target]
@@ -38,7 +37,11 @@ class ApisController < ApplicationController
     return render :json => json_result if trxs.empty?
     json_result << trxs.count
     json_result << trxs.sum(:grand_total)
-    
+
+    response.headers['Access-Control-Allow-Origin'] = '*'   
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+    response.headers['Access-Control-Allow-Headers'] = 'accept, content-type'
+    response.headers['X-XSS-Protection'] = 'none'
     render :json => json_result 
   end 
 
