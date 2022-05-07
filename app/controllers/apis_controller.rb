@@ -22,8 +22,25 @@ class ApisController < ApplicationController
       update_notification params
     elsif api_type == "home"
       get_home params 
+    elsif api_type == "sync"
+      get_sync params
     end   
   end
+
+  def get_sync params
+    json_result = []
+    store_id = params[:id]
+    sync_date = params[:target]
+    return render :json => json_result if store_id.empty? || sync_date.empty?
+    sync_date = sync_date.to_datetime.localtime.beginning_of_day
+    end_date = sync_date.end_of_day
+    trxs = Transaction.where(store_id: store_id, created_at: sync_date..end_date)
+    return render :json => json_result if trxs.empty?
+    json_result << trxs.count
+    json_result << trxs.sum(:grand_total)
+    
+    render :json => json_result 
+  end 
 
   def get_home params
     url = URI.parse('http://localhost:3030/api/home')
