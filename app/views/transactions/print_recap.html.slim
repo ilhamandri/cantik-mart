@@ -49,7 +49,7 @@ br
         td #{number_with_delimiter( (total_coins).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (total_coins*sell).to_i, delimiter: ".", separator: ",")}
 
-- if ["super_visi", "owner" , "super_admin"].include? current_user.level 
+- if ["super_visi", "owner", "super_admin"].include? current_user.level 
   - Store.where.not(store_type: "warehouse").each do |store|
     - trxs = @transactions.where(store: store)
     - trx_last_timestamp = "Tidak ada transaksi"
