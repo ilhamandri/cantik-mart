@@ -9,6 +9,9 @@
           | Informasi Transaksi 
       .card-body
         .row
+          .col-12
+            label Member
+            input disabled="disabled" class="form-control md-form" value="#{member}"
           - if transaction.from_complain?
             - complain = Complain.find_by(id: transaction.complain_id)
             .col-6
@@ -21,9 +24,6 @@
           .col-4
             label Invoice
             input disabled="disabled" class="form-control md-form" value="#{transaction.invoice}"
-          .col-3
-            label Member
-            input disabled="disabled" class="form-control md-form" value="#{member}"
           .col-4
             label Kasir
             input disabled="disabled" class="form-control md-form" value="#{transaction.user.name}"
