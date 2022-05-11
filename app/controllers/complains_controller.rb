@@ -41,12 +41,12 @@ class ComplainsController < ApplicationController
   def create
     return redirect_back_data_error complains_path, "Data tidak ditemukan" unless params[:id].present?
     id = params[:id]
-    @transaction = Transaction.find id
-    return redirect_back_data_error complains_path, "Data tidak ditemukan" if @transaction.nil?
-    complain = (@transaction.created_at >= (DateTime.now - @@max_complain.days))
+    transaction = Transaction.find id
+    return redirect_back_data_error complains_path, "Data tidak ditemukan" if transaction.nil?
+    complain = (transaction.created_at >= (DateTime.now - @@max_complain.days))
     return redirect_back_data_error complains_path, "Data tidak valid" if !complain
-    return redirect_back_data_error complains_path, "Data tidak valid" if @transaction.user.store != current_user.store
-    return redirect_back_data_error complains_path, "Tidak dapat melakukan komplain" if Complain.find_by(transaction_id: @transaction).present?
+    return redirect_back_data_error complains_path, "Data tidak valid" if transaction.user.store != current_user.store
+    return redirect_back_data_error complains_path, "Tidak dapat melakukan komplain" if Complain.find_by(transaction_id: transaction).present?
     invoice = "CMP-" + Time.now.to_i.to_s
     items = complain_items
     total_item = items.size
@@ -55,12 +55,13 @@ class ComplainsController < ApplicationController
       total_items: total_item,
       store_id: current_user.store.id,
       date_created: Time.now,
-      member_card: @transaction.member_card,
+      member_card: transaction.member_card,
       user_id: current_user.id,
-      transaction_id: @transaction.id
+      transaction_id: transaction.id
+
     items_retur_total = 0
     nominal = 0
-    nominal_hpp = 0
+
     items.each do |complain_item|
       trx_item = TransactionItem.find_by(id: complain_item[0])
       item = trx_item.item
@@ -74,16 +75,11 @@ class ComplainsController < ApplicationController
 
       next if (retur - replace) < 0
 
+      nominal += (retur - replace) * (trx_item.price-trx_item.discount)
       trx_item.retur = retur
       trx_item.replace = replace
       trx_item.reason = reason
 
-      nominal += (retur-replace) * (trx_item.price - trx_item.discount)
-      if item.local_item
-        nominal_hpp += (retur-replace) * (store_stock.buy)
-      else
-        nominal_hpp += (retur-replace) * (item.buy)
-      end
       new_stock = store_stock.stock + retur - replace
       store_stock.stock = new_stock
       item.counter += retur - replace
@@ -91,10 +87,15 @@ class ComplainsController < ApplicationController
       store_stock.save!
       trx_item.save!
       items_retur_total += retur
+
+      transaction.grand_total = transaction.grand_total - ((retur-replace) * (trx_item.price-trx_item.discount))
+      transaction.tax = transaction.tax - ((retur-replace) * (trx_item.item.ppn))
+      transaction.hpp_total = transaction.hpp_total - ((retur-replace) * (trx_item.item.buy))
+      transaction.save!
     end
     
-    complain.total_items = items_retur_total;
-    complain.nominal = nominal;
+    complain.total_items = items_retur_total
+    complain.nominal = nominal
     complain.save!
 
     if new_items.count > 0
@@ -159,13 +160,16 @@ class ComplainsController < ApplicationController
           grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
           
           if grocer_item.present?
+            trx_item.ppn = grocer_item.ppn * new_item[1].to_f
             tax += grocer_item.ppn * new_item[1].to_f
             pembulatan += grocer_item.selisih_pembulatan * new_item[1].to_f
           else
+            trx_item.ppn = item.ppn * new_item[1].to_f
             tax += item.ppn * new_item[1].to_f
             pembulatan += item.selisih_pembulatan * new_item[1].to_f
           end
         else
+          trx_item.ppn = item.ppn * new_item[1].to_f
           tax += item.ppn * new_item[1].to_f
           pembulatan += item.selisih_pembulatan * new_item[1].to_f
         end
@@ -174,25 +178,27 @@ class ComplainsController < ApplicationController
         trx_item.supplier = item_suppliers.first.supplier if item_suppliers.present?
         trx_item.total = trx_item.quantity * (trx_item.price-trx_item.discount)
         trx_item.profit = trx_item.total - trx_item.ppn - (trx_item.item.buy * trx_item.quantity)
-      
+        
         trx_item.save!
       end
       
       new_trx.discount = discount
       new_trx.total = total
-      new_trx.hpp_total = hpp - nominal_hpp
-      new_trx.grand_total = total - discount - nominal
+      new_trx.hpp_total = hpp
+      new_trx.grand_total = total - discount
       new_trx.tax = tax
       new_trx.pembulatan = pembulatan
       new_trx.save!
 
+      complain.nominal = new_trx.grand_total - complain.nominal
+      complain.save!
 
       new_trx.create_activity :create, owner: current_user
     end
 
     complain.create_activity :create, owner: current_user
 
-    return redirect_success complains_path, "Komplain "+@transaction.invoice+" selesai"
+    return redirect_success complains_path, "Komplain "+transaction.invoice+" selesai"
   end
 
   def show

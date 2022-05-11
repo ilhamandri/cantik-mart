@@ -1,4 +1,4 @@
-- member = "NO MEMBER"
+- member = "-"
 - member = Member.find_by(card_number: @transaction.member_card) if @transaction.member_card.present?
 .row
   .col.text-left
@@ -10,10 +10,11 @@
         | CETAK
 br
 
+- new_trx = Transaction.find_by(complain: @complain)
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
+      .card-header.white-text.primary-color
         h5.font-weight-500.my-1
           | Data Retur Pelanggan
       .card-body
@@ -24,42 +25,45 @@ br
           .col-4
             label Dari Transaksi
             input disabled="disabled" class="form-control md-form" value="#{@transaction.invoice.gsub("/TP", "")}"
-          
+          .col-4
+            label Transaksi Baru
+            - inv = "-"
+            - inv = new_trx.invoice if new_trx.present?
+            input disabled="disabled" class="form-control md-form" value="#{inv}"
           .col-4
             label Member
             input disabled="disabled" class="form-control md-form" value="#{member}"
           .col-4
-            label Tanggal Komplain
-            input disabled="disabled" class="form-control md-form" value="#{@complain.date_created}"
-          .col-4
             label Tanggal Transaksi
             input disabled="disabled" class="form-control md-form" value="#{@transaction.date_created}"
           .col-4
+            label Tanggal Komplain
+            input disabled="disabled" class="form-control md-form" value="#{@complain.date_created}"
+          .col-4
             label Toko
             input disabled="disabled" class="form-control md-form" value="#{@transaction.user.store.name}"
+          .col-4
+            label Barang yang Dikembalikan
+            input disabled="disabled" class="form-control md-form" value="#{@complain.total_items} item"
+          .col-4
+            label Nominal Tambahan
+            input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(@complain.nominal.to_i, delimiter: ".")}"
 
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
+      .card-header.white-text.danger-color
         h5.font-weight-500.my-1
-          | Data Item yang Ditukar
+          | Barang yang Ditukar
       .card-body
         table.table id="myTable2"
           tr
-            th
-              | Barang
-            th
-              | Harga
-            th
-              | Beli
-            th
-              | Komplain
-            th
-              | Diganti
-            th
-              | Keterangan
-            th
+            th Kode
+            th Barang
+            th Harga
+            th Beli
+            th Komplain
+            th Ganti
             
             input type="number" required=true class="form-control" id="total" name="complain[new_total]" value="0" readonly=true style="display: none;"
 
@@ -68,9 +72,39 @@ br
           - @transaction_items.each_with_index do |trx_item, index|
             - if trx_item.retur.present?
               tr
+                td #{trx_item.item.code}
                 td #{trx_item.item.name}
                 td #{number_with_delimiter(trx_item.price, delimiter: ".")}
                 td #{trx_item.quantity}
                 td #{trx_item.retur}
                 td #{trx_item.replace}
-                td #{trx_item.reason}
+
+- if new_trx.present?
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.success-color
+          h5.font-weight-500.my-1
+            | Tambahan Barang
+        .card-body
+          table.table id="myTable2"
+            tr
+              th Kode
+              th Barang
+              th Jumlah
+              th Harga
+              th Diskon
+              th Total
+              
+              input type="number" required=true class="form-control" id="total" name="complain[new_total]" value="0" readonly=true style="display: none;"
+
+              input type="number" required=true class="form-control" id="item_total" name="complain[item_total]" value="#{@transaction_items.count}" readonly=true style="display: none;"
+
+            - new_trx.transaction_items.each_with_index do |trx_item, index|
+                tr
+                  td #{trx_item.item.code}
+                  td #{trx_item.item.name}
+                  td #{trx_item.quantity}
+                  td #{number_with_delimiter(trx_item.price, delimiter: ".")}
+                  td #{number_with_delimiter(trx_item.discount, delimiter: ".")}
+                  td #{number_with_delimiter(trx_item.total.to_i, delimiter: ".")}

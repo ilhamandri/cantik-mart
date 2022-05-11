@@ -4,28 +4,47 @@
 #customer
   table#meta
     tr
-      td.meta-head Invoice #
-      td
-        textarea #{@complain.invoice}
-    tr
       td.meta-head Tanggal
       td
-        textarea #{@complain.created_at} - #{@complain.user.name}
+        textarea #{@complain.created_at}
     tr
       td.meta-head Toko
       td
         .due #{@complain.store.name}
     tr
-      td.meta-head Dari TRX
+      td.meta-head Dicetak oleh
       td 
-        .due #{@transaction.invoice}
-    tr
-      td.meta-head Tgl. TRX
-      td 
-        .due #{@transaction.created_at} - #{@transaction.user.name}
+        .due #{@complain.user.name}
 
-h3
-  | Daftar Barang yang Diretur
+- new_trx = Transaction.find_by(complain_id: @complain.id)
+br
+br
+br
+h3 INFORMASI
+table#items style="text-align: left"
+  tr
+    th Retur TRX
+    td #{@transaction.invoice}   (#{@transaction.user.name})
+  tr
+    th Invoice Baru
+    td #{new_trx.invoice}   (#{new_trx.user.name})
+  tr
+    th Retur ID
+    td #{@complain.invoice} (#{@complain.user.name})
+  tr
+    th Member
+    - member = "-"
+    - member = Member.find_by(card_number: @transaction.member_card) if @transaction.member_card.present?
+    td #{member}
+  tr
+    th Jumlah barang yang ditukar
+    td #{@complain.total_items}
+  tr
+    th Nominal yang ditambahkan
+    td #{number_with_delimiter(@complain.nominal.to_i,delimiter: ".")}
+br
+br
+h3 Daftar Barang yang Diretur
 table#items
   tr
     th No
@@ -35,7 +54,7 @@ table#items
     th Beli
     th Komplain
     th Ditukar
-    th Keterangan
+    th Total
 
   - @transaction_items.each_with_index do |trx_item, index|
     - if trx_item.retur.present?
@@ -47,9 +66,10 @@ table#items
         td #{trx_item.quantity}
         td #{trx_item.retur}
         td #{trx_item.replace}
-        td #{trx_item.reason}
+        td #{number_with_delimiter((trx_item.price - trx_item.discount)*(trx_item.retur-trx_item.replace), delimiter: ".")}
 
 - trx_retur = Transaction.find_by(from_complain: true, complain: @complain)
+br
 br
 - if trx_retur.present? 
   h3
@@ -62,6 +82,7 @@ br
       th Barang
       th Qty
       th Harga
+      th Diskon
       th Total
 
     - trx_retur.transaction_items.each_with_index do |transaction_item, index|
@@ -71,5 +92,6 @@ br
           td #{transaction_item.item.name}
           td #{transaction_item.quantity}
           td #{number_with_delimiter(transaction_item.price, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter(transaction_item.price * transaction_item.quantity, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter(transaction_item.discount, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter((transaction_item.total).to_i, delimiter: ".", separator: ",")}
 
