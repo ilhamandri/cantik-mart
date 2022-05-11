@@ -40,10 +40,10 @@ br
       
       tr
         td #{user.name.camelize}
-        - cash = cashier_trxs.where(payment_type: "CASH").sum(:grand_total)- trxs.where(payment_type: "CASH").sum(:grand_total_coin)
-          - debit = cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total)- trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
-          - credit = cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total)- trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
-          - qris = cashier_trxs.where(payment_type: "QRIS").sum(:grand_total)- trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
+        - cash = cashier_trxs.where(payment_type: "CASH").sum(:grand_total)- cashier_trxs.where(payment_type: "CASH").sum(:grand_total_coin)
+          - debit = cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total)- cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
+          - credit = cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total)- cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
+          - qris = cashier_trxs.where(payment_type: "QRIS").sum(:grand_total)- cashier_trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
           - grand_total = cashier_trxs.sum(:grand_total) - cashier_trxs.sum(:grand_total_coin)
           - hpp_total = cashier_trxs.sum(:hpp_total) - cashier_trxs.sum(:hpp_total_coin)
           - tax_total = cashier_trxs.sum(:tax)
@@ -122,10 +122,10 @@ br
         - cashier_trxs = trxs.where(user: user)
         tr
           td #{user.name.camelize}
-          - cash = cashier_trxs.where(payment_type: "CASH").sum(:grand_total)- trxs.where(payment_type: "CASH").sum(:grand_total_coin)
-          - debit = cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total)- trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
-          - credit = cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total)- trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
-          - qris = cashier_trxs.where(payment_type: "QRIS").sum(:grand_total)- trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
+          - cash = cashier_trxs.where(payment_type: "CASH").sum(:grand_total)- cashier_trxs.where(payment_type: "CASH").sum(:grand_total_coin)
+          - debit = cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total)- cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
+          - credit = cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total)- cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
+          - qris = cashier_trxs.where(payment_type: "QRIS").sum(:grand_total)- cashier_trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
           - grand_total = cashier_trxs.sum(:grand_total) - cashier_trxs.sum(:grand_total_coin)
           - hpp_total = cashier_trxs.sum(:hpp_total) - cashier_trxs.sum(:hpp_total_coin)
           - tax_total = cashier_trxs.sum(:tax)
