@@ -4,6 +4,7 @@ class UpdateData
 		trx_items = TransactionItem.where(item_id: 30331)
 		trx_items.each do |trx_item|
 			trx = trx_item.trx
+			trx.has_coin = true
 			trx.grand_total_coin = trx_item.total
 			trx.hpp_total_coin = trx_item.item.buy * trx_item.quantity
 			trx.profit_coin = trx.grand_total_coin - trx.hpp_total_coin
