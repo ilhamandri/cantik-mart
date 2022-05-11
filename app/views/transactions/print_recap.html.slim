@@ -19,56 +19,7 @@ br
 br
 
 
-- if ["super_visi"].include? current_user.level 
-  - all_trxs = @transactions.where(store: current_user.store)
-  - trx_last_timestamp = "Tidak ada transaksi"
-  - trx_last_timestamp = all_trxs.order("created_at DESC").first.created_at if all_trxs.present?
-  h2
-    | #{current_user.store.name.upcase} ( #{trx_last_timestamp} )
-  table#items
-    tr colspan="5"
-    tr
-      th Kasir
-      th Tunai
-      th Debit 
-      th Kredit
-      th QRIS
-      th Total
-    - current_user.store.users.each do |user|
-      - trxs = all_trxs.where(user: user)
-      - next if trxs.empty?
-      
-      tr
-        td #{user.name.camelize}
-        - cash = cashier_trxs.where(payment_type: "CASH").sum(:grand_total)- cashier_trxs.where(payment_type: "CASH").sum(:grand_total_coin)
-          - debit = cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total)- cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
-          - credit = cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total)- cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
-          - qris = cashier_trxs.where(payment_type: "QRIS").sum(:grand_total)- cashier_trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
-          - grand_total = cashier_trxs.sum(:grand_total) - cashier_trxs.sum(:grand_total_coin)
-          - hpp_total = cashier_trxs.sum(:hpp_total) - cashier_trxs.sum(:hpp_total_coin)
-          - tax_total = cashier_trxs.sum(:tax)
-        td #{number_with_delimiter(cash.to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter(debit.to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter(credit.to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter(qris.to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter(grand_total.to_i, delimiter: ".", separator: ",")}
-    tr
-      td 
-      - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total) - trxs.where(payment_type: "CASH").sum(:grand_total_coin)
-      - debit_total = trxs.where(payment_type: "DEBIT",).sum(:grand_total) - trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
-      - credit_total = trxs.where(payment_type: "CREDIT",).sum(:grand_total) - trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
-      - qris_total = trxs.where(payment_type: "QRIS",).sum(:grand_total) - trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
-      - grand_total = trxs.sum(:grand_total) - trxs.sum(:grand_total_coin)
-      - hpp_total = trxs.sum(:hpp_total) - trxs.sum(:hpp_total_coin)
-      - tax_total = trxs.sum(:tax)
-      
-      td #{number_with_delimiter(cash_total.to_i, delimiter: ".", separator: ",")}
-      td #{number_with_delimiter(debit_total.to_i, delimiter: ".", separator: ",")}
-      td #{number_with_delimiter(credit_total.to_i, delimiter: ".", separator: ",")}
-      td #{number_with_delimiter(qris_total.to_i, delimiter: ".", separator: ",")}
-      td #{number_with_delimiter(grand_total.to_i, delimiter: ".", separator: ",")}
-
-- elsif current_user.level == "candy_dream"
+- if current_user.level == "candy_dream"
   - Store.where.not(store_type: "warehouse").each do |store|
     - all_trxs = @transactions.where(store: store)
     - trx_last_timestamp = "Tidak ada transaksi"
@@ -98,9 +49,7 @@ br
         td #{number_with_delimiter( (total_coins).to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter( (total_coins*sell).to_i, delimiter: ".", separator: ",")}
 
-
-
-- else
+- if ["super_visi", "owner" , "super_admin"].include? current_user.level 
   - Store.where.not(store_type: "warehouse").each do |store|
     - trxs = @transactions.where(store: store)
     - trx_last_timestamp = "Tidak ada transaksi"

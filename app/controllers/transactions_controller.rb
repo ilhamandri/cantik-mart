@@ -104,7 +104,7 @@ class TransactionsController < ApplicationController
 
     @total_income = 0
 
-    Store.all.each do |store|
+    Store.where.not(store_type: "warehouse").each do |store|
       grand_total = trx.where(store: store).sum(:grand_total) - trx.where(store: store).sum(:grand_total_coin)
       hpp_total = trx.where(store: store).sum(:hpp_total) - trx.where(store: store).sum(:hpp_total_coin)
       ppn = trx.where(store: store).sum(:tax)
