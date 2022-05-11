@@ -207,7 +207,7 @@ class ComplainsController < ApplicationController
     @complain = Complain.find_by(id: id)
     @transaction = Transaction.find_by(id: @complain.transaction_id)
     return redirect_back_data_error complains_path, "Data tidak ditemukan" if @transaction.nil?
-    return redirect_back_data_error complains_path, "Tidak memiliki hak akses" if @transaction.user.store != current_user.store
+    return redirect_back_data_error complains_path, "Tidak memiliki hak akses" if (@transaction.user.store != current_user.store)
     @transaction_items = @transaction.transaction_items
 
     respond_to do |format|

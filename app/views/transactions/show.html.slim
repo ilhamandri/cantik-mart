@@ -1,5 +1,5 @@
 - transaction = @transaction_items.first.trx
-- member = "-"
+- member = transaction.member_card
 - member = Member.find_by(card_number: transaction.member_card).name  if transaction.member_card.present?
 .container-fluid
   .col-lg-12.col-md-12
@@ -21,7 +21,7 @@
           .col-4
             label Invoice
             input disabled="disabled" class="form-control md-form" value="#{transaction.invoice}"
-          / .col-3
+          .col-3
             label Member
             input disabled="disabled" class="form-control md-form" value="#{member}"
           .col-4
