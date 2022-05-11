@@ -159,17 +159,16 @@ class ComplainsController < ApplicationController
           grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
           
           if grocer_item.present?
-            tax += grocer_item.ppn * item_par[1].to_f
-            pembulatan += grocer_item.selisih_pembulatan * item_par[1].to_f
+            tax += grocer_item.ppn * new_item[1].to_f
+            pembulatan += grocer_item.selisih_pembulatan * new_item[1].to_f
           else
-            tax += grocer_item.ppn * item_par[1].to_f
-            pembulatan += item.selisih_pembulatan * item_par[1].to_f
+            tax += item.ppn * new_item[1].to_f
+            pembulatan += item.selisih_pembulatan * new_item[1].to_f
           end
         else
-          tax += grocer_item.ppn * item_par[1].to_f
-          pembulatan += item.selisih_pembulatan * item_par[1].to_f
+          tax += item.ppn * new_item[1].to_f
+          pembulatan += item.selisih_pembulatan * new_item[1].to_f
         end
-        trx_item.store = trx.store
 
         item_suppliers = SupplierItem.where(item: trx_item.item)
         trx_item.supplier = item_suppliers.first.supplier if item_suppliers.present?

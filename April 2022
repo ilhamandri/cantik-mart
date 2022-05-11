@@ -3,12 +3,13 @@
 (--) dikasi 1 button jadi ada pilihan mau post / update data saja (sekarang post lanjut update)
 (--) hapus SyncData.sync_now
 (--) buat db simpan siapa yang sync ?
-(--) laporan TRX has_coin ?
+(--) thread
 
 ============================================================
 https://meet.google.com/yuh-pryc-uji
 ============================================================
 
+(OK) laporan TRX has_coin ?
 (OK) di get api data cloud tambah jumlah retur , jika ada retur konsumen dikasi notif cek manual karna jumlah dan total trx local dan cloud tidak sama
 (OK) hapus halaman cheat
 (OK) di home local bisa minta ke pusat data trx hari itu 
