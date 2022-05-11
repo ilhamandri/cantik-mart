@@ -56,8 +56,12 @@ class PostsController < ApplicationController
 						    	StoreItem.create store: trx.user.store, item: item
 						    end
 						    if item.id == 30331
-						    	trx.has_coin = true
+						        trx.has_coin = true
+						        trx.grand_total_coin = trx_item.total
+						        trx.hpp_total_coin = trx_item.item.buy * trx_item.quantity
+						        trx.profit_coin = trx_item.profit
 						    end
+						    
 						    buy_qty = new_trx_item.quantity.to_f
 						    decrease = new_trx_item.quantity.to_f
 						    decrease = decrease.ceil.to_i if item.id != 6049

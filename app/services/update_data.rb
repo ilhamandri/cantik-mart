@@ -1,5 +1,16 @@
 class UpdateData
 
+	def self.updateTrxCoin
+		trx_items = TransactionItem.where(item_id: 30331)
+		trx_items.each do |trx_item|
+			trx = trx_item.trx
+			trx.grand_total_coin = trx_item.total
+			trx.hpp_total_coin = trx_item.item.buy * trx_item.quantity
+			trx.profit_coin = trx.grand_total_coin - trx.hpp_total_coin
+			trx.save!
+		end
+	end
+
 	def self.updateItemDiscountExpired
 		end_discounts = Discount.where("end_date <= ?", DateTime.now.beginning_of_day)
 		end_discounts.each do |end_disc|

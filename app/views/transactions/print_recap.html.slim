@@ -40,11 +40,13 @@ br
       
       tr
         td #{user.name.camelize}
-        - cash = trxs.where(payment_type: "CASH").sum(:grand_total)
-        - debit = trxs.where(payment_type: "DEBIT").sum(:grand_total)
-        - credit = trxs.where(payment_type: "CREDIT").sum(:grand_total)
-        - qris = trxs.where(payment_type: "QRIS").sum(:grand_total)
-        - grand_total = trxs.sum(:grand_total)
+        - cash = cashier_trxs.where(payment_type: "CASH").sum(:grand_total)- trxs.where(payment_type: "CASH").sum(:grand_total_coin)
+          - debit = cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total)- trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
+          - credit = cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total)- trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
+          - qris = cashier_trxs.where(payment_type: "QRIS").sum(:grand_total)- trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
+          - grand_total = cashier_trxs.sum(:grand_total) - cashier_trxs.sum(:grand_total_coin)
+          - hpp_total = cashier_trxs.sum(:hpp_total) - cashier_trxs.sum(:hpp_total_coin)
+          - tax_total = cashier_trxs.sum(:tax)
         td #{number_with_delimiter(cash.to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter(debit.to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter(credit.to_i, delimiter: ".", separator: ",")}
@@ -52,18 +54,19 @@ br
         td #{number_with_delimiter(grand_total.to_i, delimiter: ".", separator: ",")}
     tr
       td 
-      - cash_total = all_trxs.where(payment_type: "CASH").sum(:grand_total)
-      - debit_total = all_trxs.where(payment_type: "DEBIT",).sum(:grand_total)
-      - credit_total = all_trxs.where(payment_type: "CREDIT",).sum(:grand_total)
-      - qris_total = all_trxs.where(payment_type: "QRIS",).sum(:grand_total)
-      - grand_total = all_trxs.sum(:grand_total)
+      - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total) - trxs.where(payment_type: "CASH").sum(:grand_total_coin)
+      - debit_total = trxs.where(payment_type: "DEBIT",).sum(:grand_total) - trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
+      - credit_total = trxs.where(payment_type: "CREDIT",).sum(:grand_total) - trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
+      - qris_total = trxs.where(payment_type: "QRIS",).sum(:grand_total) - trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
+      - grand_total = trxs.sum(:grand_total) - trxs.sum(:grand_total_coin)
+      - hpp_total = trxs.sum(:hpp_total) - trxs.sum(:hpp_total_coin)
+      - tax_total = trxs.sum(:tax)
+      
       td #{number_with_delimiter(cash_total.to_i, delimiter: ".", separator: ",")}
       td #{number_with_delimiter(debit_total.to_i, delimiter: ".", separator: ",")}
       td #{number_with_delimiter(credit_total.to_i, delimiter: ".", separator: ",")}
       td #{number_with_delimiter(qris_total.to_i, delimiter: ".", separator: ",")}
       td #{number_with_delimiter(grand_total.to_i, delimiter: ".", separator: ",")}
-      td #{number_with_delimiter( (grand_total-hpp_total-tax_total).to_i, delimiter: ".", separator: ",")}
-      
 
 - elsif current_user.level == "candy_dream"
   - Store.where.not(store_type: "warehouse").each do |store|
@@ -119,13 +122,14 @@ br
         - cashier_trxs = trxs.where(user: user)
         tr
           td #{user.name.camelize}
-          - cash = cashier_trxs.where(payment_type: "CASH").sum(:grand_total)
-          - debit = cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total)
-          - credit = cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total)
-          - qris = cashier_trxs.where(payment_type: "QRIS").sum(:grand_total)
-          - grand_total = cashier_trxs.sum(:grand_total)
-          - hpp_total = cashier_trxs.sum(:hpp_total)
+          - cash = cashier_trxs.where(payment_type: "CASH").sum(:grand_total)- trxs.where(payment_type: "CASH").sum(:grand_total_coin)
+          - debit = cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total)- trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
+          - credit = cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total)- trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
+          - qris = cashier_trxs.where(payment_type: "QRIS").sum(:grand_total)- trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
+          - grand_total = cashier_trxs.sum(:grand_total) - cashier_trxs.sum(:grand_total_coin)
+          - hpp_total = cashier_trxs.sum(:hpp_total) - cashier_trxs.sum(:hpp_total_coin)
           - tax_total = cashier_trxs.sum(:tax)
+
           td #{number_with_delimiter(cash.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter(debit.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter(credit.to_i, delimiter: ".", separator: ",")}
@@ -134,13 +138,14 @@ br
           td #{number_with_delimiter((grand_total-tax_total-hpp_total).to_i, delimiter: ".", separator: ",")}
       tr
         td 
-        - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total)
-        - debit_total = trxs.where(payment_type: "DEBIT",).sum(:grand_total)
-        - credit_total = trxs.where(payment_type: "CREDIT",).sum(:grand_total)
-        - qris_total = trxs.where(payment_type: "QRIS",).sum(:grand_total)
-        - grand_total = trxs.sum(:grand_total)
-        - hpp_total = trxs.sum(:hpp_total)
+        - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total) - trxs.where(payment_type: "CASH").sum(:grand_total_coin)
+        - debit_total = trxs.where(payment_type: "DEBIT",).sum(:grand_total) - trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
+        - credit_total = trxs.where(payment_type: "CREDIT",).sum(:grand_total) - trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
+        - qris_total = trxs.where(payment_type: "QRIS",).sum(:grand_total) - trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
+        - grand_total = trxs.sum(:grand_total) - trxs.sum(:grand_total_coin)
+        - hpp_total = trxs.sum(:hpp_total) - trxs.sum(:hpp_total_coin)
         - tax_total = trxs.sum(:tax)
+
         td #{number_with_delimiter(cash_total.to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter(debit_total.to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter(credit_total.to_i, delimiter: ".", separator: ",")}

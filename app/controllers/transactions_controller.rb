@@ -76,8 +76,6 @@ class TransactionsController < ApplicationController
     trx = nil
     if current_user.level == "candy_dream"
       trx = Transaction.where(has_coin: true) 
-    else
-      trx = Transaction.where(has_coin: false) 
     end
     @month = start_day.month
     @transaction_datas = trx.where(created_at: start_day..end_day).order("created_at ASC").group_by{ |m| m.created_at.beginning_of_day}
@@ -98,9 +96,8 @@ class TransactionsController < ApplicationController
     
     if current_user.level == "candy_dream"
       trx = trx.where(has_coin: true) 
-    else
-      trx = trx.where(has_coin: false) 
     end
+
     @transactions = trx
 
     @profits = []
@@ -108,8 +105,8 @@ class TransactionsController < ApplicationController
     @total_income = 0
 
     Store.all.each do |store|
-      grand_total = trx.where(store: store).sum(:grand_total)
-      hpp_total = trx.where(store: store).sum(:hpp_total)
+      grand_total = trx.where(store: store).sum(:grand_total) - trx.where(store: store).sum(:grand_total_coin)
+      hpp_total = trx.where(store: store).sum(:hpp_total) - trx.where(store: store).sum(:hpp_total_coin)
       ppn = trx.where(store: store).sum(:tax)
       profit = grand_total - hpp_total - ppn
       @total_income += profit
@@ -316,10 +313,6 @@ class TransactionsController < ApplicationController
       price: item_par[2],
       discount: item_par[3],
       date_created: DateTime.now
-
-      if item.id == 30331
-        trx.has_coin = true
-      end
       
       if trx_item.quantity > 1
         grocer_item = GrocerItem.find_by(item: item, price: trx_item.price-trx_item.discount)
@@ -351,6 +344,14 @@ class TransactionsController < ApplicationController
         trx_item.reason = promo
         trx_item.save!
       end
+
+      if item.id == 30331
+        trx.has_coin = true
+        trx.grand_total_coin = trx_item.total
+        trx.hpp_total_coin = trx_item.item.buy * trx_item.quantity
+        trx.profit_coin = trx_item.profit
+      end
+
       store_stock = StoreItem.find_by(store: current_user.store, item: item)
       hpp_total += (trx_item.quantity * item.buy).round
       next if store_stock.nil?

@@ -41,8 +41,8 @@ br
           - hpp = 0
           - tax = 0
           - trx_data[1].each do |trx|
-            - total += trx.grand_total
-            - hpp += trx.hpp_total
+            - total += trx.grand_total - trx.grand_total_coin
+            - hpp += trx.hpp_total - trx.hpp_total_coin
             - tax += trx.tax
 
           td #{number_with_delimiter(total.to_i, delimiter: ".", separator: ",")}
