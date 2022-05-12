@@ -42,32 +42,34 @@
       .row
         = render "homes/card/candy"
 
+
 - if ["super_admin", "owner", "finance"].include? current_user.level
-  .section.mb-5
-  .card.card-cascade.narrower
-    .section
-      .row
-        .col-xl-12.col-lg-12.mr-0.pb-2
-          .view.view-cascade.gradient-card-header.light-blue.lighten-1
-            h2.h2-responsive.mb-0.font-weight-500 LAPORAN HARI INI ( #{Date.today} )
-          .card-body.card-body-cascade.pb-0
-            .row.py-3.pl-4
-              .col-6
-                = form_for :absent, url: daily_absent_recap_path, method: 'GET' do |form|
-                  .row
-                    .col-md-12 style="display: none;"
-                      input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
-                    .col-md-12.text-center
-                      button class="btn btn-primary "
-                        |   Rekap Absensi 
-              .col-6
-                = form_for :transaction, url: daily_trx_recap_path, method: 'GET' do |form|
-                  .row
-                    .col-md-12 style="display: none;"
-                      input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
-                    .col-md-12.text-center
-                      button class="btn btn-primary "
-                        |   Rekap Transaksi 
+    .section.mb-5
+    .card.card-cascade.narrower
+      .section
+        .row
+          .col-xl-12.col-lg-12.mr-0.pb-2
+            .view.view-cascade.gradient-card-header.light-blue.lighten-1
+              h2.h2-responsive.mb-0.font-weight-500 LAPORAN HARI INI ( #{Date.today} )
+            .card-body.card-body-cascade.pb-0
+              .row.py-3.pl-4
+                .col-6
+                  = form_for :absent, url: daily_absent_recap_path, method: 'GET' do |form|
+                    .row
+                      .col-md-12 style="display: none;"
+                        input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
+                      .col-md-12.text-center
+                        button class="btn btn-primary "
+                          |   Rekap Absensi 
+                .col-6
+                  = form_for :transaction, url: daily_trx_recap_path, method: 'GET' do |form|
+                    .row
+                      .col-md-12 style="display: none;"
+                        input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
+                      .col-md-12.text-center
+                        button class="btn btn-primary "
+                          |   Rekap Transaksi 
+
 
 - if ["candy_dream", "super_admin", "owner", "finance"].include? current_user.level
   .section.mb-5

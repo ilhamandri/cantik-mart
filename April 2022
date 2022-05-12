@@ -3,12 +3,14 @@
 (--) dikasi 1 button jadi ada pilihan mau post / update data saja (sekarang post lanjut update)
 (--) hapus SyncData.sync_now
 (--) buat db simpan siapa yang sync ?
-(--) thread
+(--) ada selisih di bendul 11/05/2022 -> 13.800
 
 ============================================================
 https://meet.google.com/yuh-pryc-uji
 ============================================================
 
+(OK) thread
+(OK) menonaktifkan member (di api bypass member nil)
 (OK) laporan TRX has_coin ?
 (OK) di get api data cloud tambah jumlah retur , jika ada retur konsumen dikasi notif cek manual karna jumlah dan total trx local dan cloud tidak sama
 (OK) hapus halaman cheat
