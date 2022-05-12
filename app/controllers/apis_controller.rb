@@ -33,10 +33,11 @@ class ApisController < ApplicationController
     return render :json => json_result if store_id.empty? || sync_date.empty?
     sync_date = sync_date.to_datetime.localtime.beginning_of_day
     end_date = sync_date.end_of_day
-    trxs = Transaction.where(store_id: store_id, created_at: sync_date..end_date)
+    trxs = Transaction.where(store_id: store_id, created_at: sync_date..end_date, from_complain: false)
+    complains = Complain.where(created_at: sync_date..end_date)
     return render :json => json_result if trxs.empty?
     json_result << trxs.count
-    json_result << trxs.sum(:grand_total).to_i
+    json_result << trxs.sum(:grand_total).to_i + complains.sum(:nominal)
 
     response.headers['Access-Control-Allow-Origin'] = '*'   
     response.headers['Access-Control-Allow-Credentials'] = 'true'

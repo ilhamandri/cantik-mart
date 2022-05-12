@@ -9,7 +9,8 @@
 https://meet.google.com/yuh-pryc-uji
 ============================================================
 
-(OK) thread
+(OK) get api data cloud jika terdapat retur 
+(OK) thread sync
 (OK) menonaktifkan member (di api bypass member nil)
 (OK) laporan TRX has_coin ?
 (OK) di get api data cloud tambah jumlah retur , jika ada retur konsumen dikasi notif cek manual karna jumlah dan total trx local dan cloud tidak sama
