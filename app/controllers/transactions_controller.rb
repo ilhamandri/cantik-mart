@@ -84,7 +84,6 @@ class TransactionsController < ApplicationController
       template: "transactions/print_recap_monthly.html.slim"
   end
 
-
   def daily_recap
     end_day = params[:date].to_s.to_datetime.end_of_day
     start_day = end_day.beginning_of_day
@@ -347,9 +346,11 @@ class TransactionsController < ApplicationController
 
       if item.id == 30331
         trx.has_coin = true
-        trx.grand_total_coin = trx_item.total
-        trx.hpp_total_coin = trx_item.item.buy * trx_item.quantity
-        trx.profit_coin = trx_item.profit
+        trx.grand_total_coin = trx.grand_total_coin + trx_item.total
+        trx.hpp_total_coin = trx.hpp_total_coin + (trx_item.item.buy * trx_item.quantity)
+        trx.profit_coin = trx.profit_coin + trx_item.profit
+        trx.quantity_coin = trx.quantity_coin + trx_item.quantity
+        trx.save!
       end
 
       store_stock = StoreItem.find_by(store: current_user.store, item: item)

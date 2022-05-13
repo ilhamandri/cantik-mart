@@ -55,12 +55,6 @@ class PostsController < ApplicationController
 						    if store_stock.nil?
 						    	StoreItem.create store: trx.user.store, item: item
 						    end
-						    if item.id == 30331
-						        trx.has_coin = true
-						        trx.grand_total_coin = trx_item.total
-						        trx.hpp_total_coin = trx_item.item.buy * trx_item.quantity
-						        trx.profit_coin = trx_item.profit
-						    end
 						    
 						    buy_qty = new_trx_item.quantity.to_f
 						    decrease = new_trx_item.quantity.to_f
@@ -95,6 +89,17 @@ class PostsController < ApplicationController
 						    new_trx_item.profit = new_trx_item.total - new_trx_item.ppn - (new_trx_item.item.buy * new_trx_item.quantity)
 
 						    new_trx_item.save!
+
+
+						    if item.id == 30331
+						        trx.has_coin = true
+						        trx.grand_total_coin = trx.grand_total_coin + new_trx_item.total
+						        trx.hpp_total_coin = trx.hpp_total_coin + (new_trx_item.item.buy * new_trx_item.quantity)
+						        trx.profit_coin = trx.profit_coin + new_trx_item.profit
+						        trx.qty_coin = trx.quantity_coin + new_trx_item.quantity
+						        trx.save!
+						    end
+						    
 						end
 						trx.tax = tax
 						trx.pembulatan = pembulatan

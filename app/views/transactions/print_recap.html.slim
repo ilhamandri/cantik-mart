@@ -21,33 +21,31 @@ br
 
 - if current_user.level == "candy_dream"
   - Store.where.not(store_type: "warehouse").each do |store|
-    - all_trxs = @transactions.where(store: store)
+    - trxs = @transactions.where(store: store)
     - trx_last_timestamp = "Tidak ada transaksi"
-    - trx_last_timestamp = all_trxs.order("created_at DESC").first.created_at if all_trxs.present?
+    - trx_last_timestamp = trxs.order("created_at DESC").first.created_at if trxs.present?
     h3
       | #{store.name.upcase} ( #{trx_last_timestamp} )
 
     table#items
       tr colspan="5"
       - total_coins = 0
-      - sell = Item.find_by(id: 30331).sell
       tr
         th Kasir
         th Koin Terjual
         th Total
-      - store.users.each do |user|
-        - trxs = all_trxs.where(user: user)
-        - next if trxs.empty?
+      - User.where(id: trxs.pluck(:user_id).uniq).each do |user|
+        - cashier_trxs = trxs.where(user: user)
+        - next if cashier_trxs.empty?
         tr
           td #{user.name.camelize}
-          - sell_coin = TransactionItem.where(transaction_id: trxs.pluck(:id), item_id: 30331).sum(:quantity)
-          - total_coins += sell_coin
-          td #{number_with_delimiter( sell_coin.to_i, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter( sell_coin.to_i * sell.to_i, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter( cashier_trxs.sum(:quantity_coin).to_i, delimiter: ".", separator: ",")}
+          td #{number_with_delimiter( cashier_trxs.sum(:grand_total_coin).to_i, delimiter: ".", separator: ",")}
       tr
         td 
-        td #{number_with_delimiter( (total_coins).to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter( (total_coins*sell).to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter( (trxs.sum(:quantity_coin)).to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter( (trxs.sum(:grand_total_coin)).to_i, delimiter: ".", separator: ",")}
+        
 
 - if ["super_visi", "owner", "super_admin"].include? current_user.level 
   - Store.where.not(store_type: "warehouse").each do |store|
