@@ -1,5 +1,6 @@
 class UpdateData
 
+	# UpdateData.updateTrxCoin DateTime.now.beginning_of_day
 	def self.updateTrxCoin start_date
 		end_date = DateTime.now
 		trx_items = TransactionItem.where(item_id: 30331, created_at: start_date..end_date)

@@ -6,6 +6,8 @@ class DeleteData
 		notifications.destroy_all if notifications.present?
 	end
 
+	# DeleteData.deleteTransaction (DateTime.now.beginning_of_day-1.day), 2
+
 	def self.deleteTransaction start_date, store_id
 		end_date = start_date.end_of_day
 		trx_items = TransactionItem.where(store_id: store_id, created_at: start_date..end_date)
