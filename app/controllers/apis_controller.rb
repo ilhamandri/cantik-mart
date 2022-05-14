@@ -23,7 +23,14 @@ class ApisController < ApplicationController
       get_home params 
     elsif api_type == "sync"
       get_sync params
+    elsif api_type == "update_item_id"
+      get_update_item 
     end   
+  end
+
+  def get_update_item
+    items = Item.all.pluck(:id, :code)
+    render :json => items.map(&:reverse).to_h
   end
 
   def get_sync 

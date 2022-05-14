@@ -4,6 +4,7 @@ class ItemsController < ApplicationController
   require 'apriori'
   
   def index
+    UpdateData.updateDuplicateItem
     @items = Item.all
     if params[:search].present?
       @search = params[:search].downcase

@@ -1,5 +1,28 @@
 class UpdateData
 
+	# UpdateData.updateDuplicateItem
+	def self.updateDuplicateItem
+		duplicate_items = Item.select(:code).group(:code).having("count(*) > 1").size
+		duplicate_items.each do |duplicate_item|
+			items = Item.where(code: duplicate_item[0]).order("updated_at ASC")
+			item_ids = items.pluck(:id)
+			use_item_id = items.last.id
+			remove_ids = item_ids-[use_item_id]
+			StoreItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			OrderItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			TransferItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			TransactionItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			GrocerItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			SupplierItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			ItemPrice.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			SendBackItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			PopularItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			NotPopularItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			LossItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			Item.where(id: remove_ids).destroy_all
+		end
+	end
+
 	# UpdateData.updateTrxCoin DateTime.now.beginning_of_day
 	def self.updateTrxCoin start_date
 		end_date = DateTime.now

@@ -143,6 +143,6 @@
                 button.btn.btn-primary type="button" 
                   | Supplier
 
-        - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
+        / - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
           - if !@item.store_items.present? && !@item.supplier_items.present?
             = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-danger"
