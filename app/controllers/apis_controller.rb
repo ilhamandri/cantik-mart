@@ -44,7 +44,7 @@ class ApisController < ApplicationController
     complains = Complain.where(created_at: sync_date..end_date)
     return render :json => json_result if trxs.empty?
     json_result << trxs.count
-    json_result << trxs.sum(:grand_total).to_i + complains.sum(:nominal)
+    json_result << trxs.sum(:grand_total).to_i + complains.sum(:nominal).to_i
 
     response.headers['Access-Control-Allow-Origin'] = '*'   
     response.headers['Access-Control-Allow-Credentials'] = 'true'
