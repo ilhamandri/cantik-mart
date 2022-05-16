@@ -226,9 +226,9 @@ function changeSellOrder(id){
 
 
 function complain_check(index){
-  var qty = $("#quantity"+index).val();
-  var complain = $("#complain"+index).val();
-  var replace = $("#replace"+index).val();
+  var qty = parseInt($("#quantity"+index).val());
+  var complain = parseInt($("#complain"+index).val());
+  var replace = parseInt($("#replace"+index).val());
   if(complain > qty){
     $("#complain"+index).val($("#quantity"+index).val());
     complain = qty;

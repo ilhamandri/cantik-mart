@@ -45,11 +45,11 @@ br
                 td 
                   input type="number" required=true class="form-control" id="price#{index}" name="complain[complain_items][#{index}][price]" value="#{trx_item.price}" readonly=true
                 td 
-                  input type="number" required=true class="form-control " id="quantity#{index}" name="complain[complain_items][#{index}][quantity]" value="#{trx_item.quantity}" readonly=true 
+                  input type="number" required=true class="form-control " id="quantity#{index}" name="complain[complain_items][#{index}][quantity]" value="#{trx_item.quantity.to_i}" readonly=true 
                 td 
-                  input type="number" required=true class="form-control" id="complain#{index}" name="complain[complain_items][#{index}][retur_qty]" value=0 min=0 onchange="complain_check(#{index})"
+                  input type="number" required=true class="form-control" id="complain#{index}" name="complain[complain_items][#{index}][retur_qty]" value="0" min="0" onchange="complain_check(#{index})" step="1"
                 td 
-                  input type="number" required=true class="form-control" id="replace#{index}" name="complain[complain_items][#{index}][replace]" value=0 min=0 onchange="complain_check(#{index})"
+                  input type="number" required=true class="form-control" id="replace#{index}" name="complain[complain_items][#{index}][replace]" value="0" min="0" onchange="complain_check(#{index})" step="0"
                 td 
                   input type="text" required=true class="form-control" id="description" name="complain[complain_items][#{index}][reason]" value="-" require="true"
                 td 
