@@ -47,7 +47,7 @@ class ApisController < ApplicationController
 
     return render :json => json_result if trxs.empty?
     json_result << trxs.where(from_complain: false).count
-    json_result << TransactionItem.where(created_at: sync_date..end_date, store_id: store_id).sum(:total).to_i - complain_nominal
+    json_result << TransactionItem.where(created_at: sync_date..end_date, store_id: store_id, transaction_id: trxs.where(from_complain: false).pluck(:id)).sum(:total).to_i 
     json_result << complains.count
     json_result << complain_nominal
     response.headers['Access-Control-Allow-Origin'] = '*'   
