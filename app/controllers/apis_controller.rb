@@ -47,7 +47,7 @@ class ApisController < ApplicationController
     json_result << trxs.where(from_complain: false).count
     json_result << TransactionItem.where(created_at: sync_date..end_date, store_id: store_id).sum(:total).to_i - complains.sum(:nominal).to_i
     json_result << complains.count
-    json_result << trxs.where(from_complain: true).sum(:grand_total).to_i - complains.sum(:nominal.to_i)
+    json_result << trxs.where(from_complain: true).sum(:grand_total).to_i - complains.sum(:nominal).to_i
     response.headers['Access-Control-Allow-Origin'] = '*'   
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     response.headers['Access-Control-Allow-Headers'] = 'accept, content-type'
