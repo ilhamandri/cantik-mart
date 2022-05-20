@@ -2,7 +2,6 @@
 (--) dikasi 1 button jadi ada pilihan mau post / update data saja (sekarang post lanjut update)
 (--) hapus SyncData.sync_now
 (--) buat db simpan siapa yang sync ?
-(--) waktu sync get, kirim id item yang dihapus apa aja
 (--) benerin yang ada item dengan code sama, di api ambil yang paling terakhir (jaga2 jika ada yang tembus)
 (--) bikin 1 method update untuk update item ke id paling akhir
 
@@ -11,6 +10,7 @@ https://meet.google.com/yuh-pryc-uji
 ============================================================
 
 (OK) get api data cloud jika terdapat retur 
+(OK) hilangkan tombol "delete item"
 (OK) thread sync
 (OK) menonaktifkan member (di api bypass member nil)
 (OK) laporan TRX has_coin ?
