@@ -129,7 +129,7 @@ class PostsController < ApplicationController
 						start_date = data["created_at"].to_datetime.beginning_of_day
 						end_date = data["created_at"].to_datetime.end_of_day
 						
-						absent = Absent.where(user_id: data["user_id"]).where("created_at >= ? AND created_at <= ?", start_date, end_date).first
+						absent = Absent.find_by(user_id: data["user_id"]).where(created_at: start_date..end_date)
 
 						data.delete("id")
 						
