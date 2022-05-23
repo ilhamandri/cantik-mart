@@ -3,12 +3,13 @@
 (--) hapus SyncData.sync_now
 (--) benerin yang ada item dengan code sama, di api ambil yang paling terakhir (jaga2 jika ada yang tembus)
 (--) bikin 1 method update untuk update item ke id paling akhir
-(--) Sync Absent bermasalah
+(--) ubah js sync -> jika hari sama tidak bisa pake daily
 
 ============================================================
 https://meet.google.com/yuh-pryc-uji
 ============================================================
 
+(OK) Sync Absent bermasalah
 (OK) Retur konsumen, barang yang diretur tidak masuk ke item
 (OK) get api data cloud jika terdapat retur 
 (OK) hilangkan tombol "delete item"

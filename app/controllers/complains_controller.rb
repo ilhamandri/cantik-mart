@@ -80,8 +80,7 @@ class ComplainsController < ApplicationController
       trx_item.replace = replace
       trx_item.reason = reason
 
-      new_stock = store_stock.stock + retur - replace
-      store_stock.stock = new_stock
+      store_stock.stock = store_stock.stock + retur - replace
       item.counter += retur - replace
       item.save!
       store_stock.save!
