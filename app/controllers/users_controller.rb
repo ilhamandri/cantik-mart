@@ -142,6 +142,7 @@ class UsersController < ApplicationController
 
     user.assign_attributes user_params
     changes = user.changes
+    binding.pry
     user.save! if user.changed?
     user.create_activity :edit, owner: current_user, parameters: changes
     return redirect_success user_path(id: user.id), "Data Pengguna - " + user.name + " - Berhasil Diubah"
@@ -170,7 +171,7 @@ class UsersController < ApplicationController
   private
     def user_params
       params.require(:user).permit(
-        :name, :email, :password, :level, :phone, :sex, :store_id, :id_card, :address, :fingerprint, :salary
+        :name, :active, :email, :password, :level, :phone, :sex, :store_id, :id_card, :address, :fingerprint, :salary
       )
     end
 

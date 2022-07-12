@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
     end
 
     def require_fingerprint
+      return redirect_to not_found_path if !current_user.active
       authorization
     end
 
@@ -38,8 +39,6 @@ class ApplicationController < ActionController::Base
     def authorization
       return if current_user.level == "owner" || current_user.level == "super_admin"
 
-      return redirect_to no_access_right_path if !current_user.active
-     
       if (request.original_fullpath.include? "confirm_feedback") || ( request.original_fullpath.include? "received" ) || ( request.original_fullpath.include? "pays" )
         return
       end

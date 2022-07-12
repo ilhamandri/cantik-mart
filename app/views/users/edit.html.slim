@@ -76,6 +76,14 @@
             .form-group
               label for="id-card" ID Fingerprint
               = form.number_field :fingerprint, required: true, class: "form-control md-form", id: "id-card"
+
+            .form-group
+              label for="active" Status
+              select name="user[active]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="active"
+                option value="true" selected="selected"
+                  | Aktif
+                option value="false"
+                  | Non-aktif
             
           .form-group.text-center
             = form.submit "Ubah - #{@user.name}", class: "btn btn-warning black-text"
