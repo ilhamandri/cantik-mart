@@ -1,12 +1,10 @@
 class ApplicationController < ActionController::Base
   include Clearance::Controller
   include PublicActivity::StoreController 
-  
+  before_action :require_fingerprint
   BASE_POINT = 10000
   
-  def self.finance_recap
-    print "CRON OK"
-  end
+
 
   protected
     def authorize *authorized_level
@@ -23,14 +21,10 @@ class ApplicationController < ActionController::Base
 
     def require_fingerprint
       authorization
-      # user = current_user
-      # absent = Absent.find_by("DATE(check_in) = ? AND user_id = ?", DateTime.now.to_date, user.id)
-      # redirect_to absents_path, flash: { error: 'Silakan untuk melakukan absensi terlebih dahulu' }
     end
 
     def redirect_back_no_access_right arg:nil
       redirect_to no_access_right_path
-      # redirect_back fallback_location: root_path, flash: { error: 'Tidak memiliki hak akses' }
     end
 
     def redirect_back_data_error current_path, message
@@ -43,6 +37,9 @@ class ApplicationController < ActionController::Base
 
     def authorization
       return if current_user.level == "owner" || current_user.level == "super_admin"
+
+      return redirect_to no_access_right_path if !current_user.active
+     
       if (request.original_fullpath.include? "confirm_feedback") || ( request.original_fullpath.include? "received" ) || ( request.original_fullpath.include? "pays" )
         return
       end
@@ -54,6 +51,7 @@ class ApplicationController < ActionController::Base
     end
 
     def authentication controller_name, method_name
+
       controller = Controller.find_by(name: controller_name.to_s)
       return true if ["notifications", "absents"].include? controller.name
 
@@ -66,8 +64,5 @@ class ApplicationController < ActionController::Base
     def set_notification from_user, to_user, m_type, message, link
       Notification.create from_user: from_user, to_user: to_user, m_type: m_type,
         message: message, link: link, date_created: DateTime.now
-    end
-
-    def absents_recap
     end
 end

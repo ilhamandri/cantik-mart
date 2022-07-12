@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_13_072422) do
+ActiveRecord::Schema.define(version: 2022_07_12_093328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -864,6 +864,7 @@ ActiveRecord::Schema.define(version: 2022_05_13_072422) do
     t.string "confirmation_token", limit: 128
     t.string "remember_token", limit: 128
     t.bigint "store_id", null: false
+    t.boolean "active", default: true, null: false
     t.index ["email"], name: "index_users_on_email"
     t.index ["remember_token"], name: "index_users_on_remember_token"
     t.index ["store_id"], name: "index_users_on_store_id"

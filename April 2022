@@ -4,6 +4,7 @@
 (--) benerin yang ada item dengan code sama, di api ambil yang paling terakhir (jaga2 jika ada yang tembus)
 (--) bikin 1 method update untuk update item ke id paling akhir
 (--) ubah js sync -> jika hari sama tidak bisa pake daily
+(--) bermasalah jika get update kelewat hari pakai SYNC NOW
 
 ============================================================
 https://meet.google.com/yuh-pryc-uji
