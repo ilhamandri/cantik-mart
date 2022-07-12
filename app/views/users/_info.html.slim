@@ -9,9 +9,10 @@
       = form_for :user, url: users_path, method: "POST" do |form|
         .form-group
           label for="name" Status
-          - status = "NON - AKTIF"
-          - status = "AKTIF" if @user.active
-          input class="form-control md-form" style="color: red;" value="#{status}" disabled="disabled"
+          - if @user.active
+            input class="form-control md-form" style="color: green;" value="Aktif" disabled="disabled"
+          - else
+            input class="form-control md-form" style="color: red;" value="Non - Aktif" disabled="disabled"
         .form-group
           label for="name" Nama
           = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
