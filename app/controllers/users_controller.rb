@@ -142,7 +142,6 @@ class UsersController < ApplicationController
 
     user.assign_attributes user_params
     changes = user.changes
-    binding.pry
     user.save! if user.changed?
     user.create_activity :edit, owner: current_user, parameters: changes
     return redirect_success user_path(id: user.id), "Data Pengguna - " + user.name + " - Berhasil Diubah"
