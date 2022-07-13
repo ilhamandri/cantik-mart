@@ -129,9 +129,7 @@ class UpdateData
 	end
 
 	# UpdateData.updateTransactionItemColumn
-	def self.updateTransactionItemColumn
-		start_date = DateTime.now.beginning_of_month
-		end_date = DateTime.now.end_of_day
+	def self.updateTransactionItemColumn start_date, end_date
 		trxs = Transaction.where(created_at: start_date..end_date)
 
 		trxs.each do |trx|
@@ -152,5 +150,7 @@ class UpdateData
 			end
 		end
 	end
+
+
 
 end
