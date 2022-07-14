@@ -128,6 +128,8 @@ class UpdateData
 		end
 	end
 
+	# start_date = DateTime.now.beginning_of_month - 6.months
+	# end_date = start_date.end_of_month
 	# UpdateData.updateTransactionItemColumn
 	def self.updateTransactionItemColumn start_date, end_date
 		trxs = Transaction.where(created_at: start_date..end_date)
@@ -142,7 +144,7 @@ class UpdateData
 				qty = trx_item.quantity
 
 				trx_item.total = sell * qty
-				ppn = sell/(1+trx_item.item.tax)
+				ppn = sell-(sell/(1+(trx_item.item.tax.to_f/100.0)))
 				trx_item.ppn = ppn*qty
 				trx_item.profit = (sell-ppn-trx_item.item.buy)*qty
 
@@ -150,7 +152,6 @@ class UpdateData
 			end
 		end
 	end
-
 
 
 end
