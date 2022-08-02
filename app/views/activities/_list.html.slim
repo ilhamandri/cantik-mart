@@ -22,8 +22,6 @@ tr
           = link_to @activity.trackable.invoice, @activity.trackable
         - elsif class_name == "Transfer"
           = link_to @activity.trackable.invoice, transfer_path(id: @activity.trackable.id)
-        - elsif class_name == "Transaksi"
-          = link_to @activity.trackable.invoice, transaction_path(id: @activity.trackable.id)
         - elsif ["CashFlow"].include? class_name
           - cashflow =  @activity.trackable
           - cashflow_ftype = cashflow.finance_type
@@ -48,5 +46,8 @@ tr
         - elsif ["UserSalary"].include? class_name
           - desc = "Pembayaran Gaji " + @activity.trackable.user.name
           = link_to desc, salaries_path
+        - elsif ["Transaction"].include? class_name
+          button.btn-success
+            | Trx
         - else
           = link_to @activity.trackable.name, @activity.trackable
