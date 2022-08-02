@@ -22,7 +22,7 @@ tr
           = link_to @activity.trackable.invoice, @activity.trackable
         - elsif class_name == "Transfer"
           = link_to @activity.trackable.invoice, transfer_path(id: @activity.trackable.id)
-        - elsif class_name == "Transaction"
+        - elsif class_name == "Transaksi"
           = link_to @activity.trackable.invoice, transaction_path(id: @activity.trackable.id)
         - elsif ["CashFlow"].include? class_name
           - cashflow =  @activity.trackable
