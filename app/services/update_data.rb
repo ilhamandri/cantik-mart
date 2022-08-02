@@ -130,7 +130,7 @@ class UpdateData
 
 	# start_date = DateTime.now.beginning_of_month - 6.months
 	# end_date = start_date.end_of_month
-	# UpdateData.updateTransactionItemColumn
+	# UpdateData.updateTransactionItemColumn start_date, end_date
 	def self.updateTransactionItemColumn start_date, end_date
 		trxs = Transaction.where(created_at: start_date..end_date)
 
