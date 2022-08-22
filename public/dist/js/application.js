@@ -186,16 +186,60 @@ function codePrice(){
   }
 }
 
+function changeSalary(){
+  if(gaji==0){
+    return false;
+  }
+
+  pay_receivable = parseInt($("#pay_receivable").val());
+  pay_kasbon = parseInt($("#pay_kasbon").val());
+  bonus = parseInt($("#bonus").val());
+
+  jht = 0;
+  // 2% dari gaji
+  if($('#jht').is(':checked')){
+    jht = 0.02 * gaji;
+  }
+
+  jp = 0
+  // 1% dari gaji
+  if($('#jp').is(':checked')){
+    jp = 0.01 * gaji;
+  }
+
+  receive = gaji - pay_kasbon - pay_receivable + bonus - jht - jp;
+  $("#receive").html("TOTAL : " + formatangka_titik(receive));
+}
+
+var gaji = 0;
 function getUserSalary(user) {
   var user_id = user.value
   $.ajax({ 
     type: 'GET', 
     url: '/api/get_user_salary?id='+user_id, 
     success: function (result) { 
+      gaji = parseFloat(result[0].replaceAll(".",""));
       $("#salary").html("GAJI : "+result[0]);
       $("#debt").html("HUTANG : "+result[1]);
       $("#kasbon").html("KASBON : "+result[2]);
-      // alert(result)
+
+      if(result[1]==0){
+        $("#pay_receivable").val(0);
+        $('#pay_receivable').attr('readonly', true);
+      }else{
+        debt = parseInt(result[1].replaceAll(".",""));
+        $('#pay_receivable').attr('max', debt);
+      }
+
+      if(result[2]==0){
+        $("#pay_kasbon").val(0);
+        $('#pay_kasbon').attr('readonly', true);
+      }else{
+        kasbon = parseInt(result[2].replaceAll(".",""));
+        $('#pay_kasbon').attr('max', kasbon);
+      }
+
+      changeSalary();
     }
   });
 }

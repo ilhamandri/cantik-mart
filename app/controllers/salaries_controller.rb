@@ -3,22 +3,6 @@ class SalariesController < ApplicationController
   
 
   def index
-  	# AccountBalance.salary
-
-    # xlsx = Roo::Spreadsheet.open("./data/prodlist/bs/bs.xlsx", extension: :xlsx)
-    # store_id = 3
-    # xlsx.each_with_index do |row, idx|
-    #   code = row[0]
-    #   qty = row[3]
-    #   next if qty.nil?
-    #   item = Item.find_by(code: code)
-    #   store_item = StoreItem.find_by(item: item, store_id: store_id)
-    #   next if store_item.nil?
-    #   store_item.stock = store_item.stock + qty.to_f
-    #   store_item.save!  
-    # end
-
-
     filter = filter_search params
     @search = filter[0]
     @salaries = filter[1]
@@ -44,7 +28,6 @@ class SalariesController < ApplicationController
     return redirect_back_data_error salaries_path, "Data tidak ditemukan" if user_salary.nil?
     
     tag = user_salary.tag
-    # return redirect_back_data_error salaries_path, "Data tidak dapat dihapus" 
     if tag.present?
       cfs = CashFlow.where(tag: tag)
       incomes = cfs.where(finance_type: "Income")
@@ -90,6 +73,7 @@ class SalariesController < ApplicationController
   end
 
   def create
+
     user = User.find_by(id: params[:user_id])
     return redirect_back_data_error new_salary_path, "Karyawan tidak ditemukan" if user.nil?
     pay_kasbon = params[:salary][:pay_kasbon].to_i
@@ -139,6 +123,10 @@ class SalariesController < ApplicationController
       end
     end
 
+    jp = 0
+    jht = 0 
+    jp = 0.01 * user.salary.to_f if params[:jp].present?
+    jht = 0.02 * user.salary.to_f if params[:jht].present?
 
     store = user.store
     date_created = DateTime.now
@@ -147,7 +135,7 @@ class SalariesController < ApplicationController
     invoice = "SLRY-"+inv_number+"-"+user.id.to_s
     cash_flow = CashFlow.create user: user, store: store, nominal: user.salary + bonus - pay_receivable - pay_kasbon, date_created: date_created, description: desc, 
                 finance_type: CashFlow::OUTCOME, invoice: invoice, tag: tag
-    user_salary = UserSalary.create user: user, nominal: user.salary, pay_kasbon: pay_kasbon, pay_receivable: pay_receivable, bonus: bonus, tag: tag
+    user_salary = UserSalary.create user: user, nominal: user.salary, pay_kasbon: pay_kasbon, pay_receivable: pay_receivable, bonus: bonus, tag: tag, jp: jp, jht: jht
     user_salary.create_activity :create, owner: current_user 
     store.cash = store.cash - user.salary - bonus + pay_receivable + pay_kasbon
     store.save!

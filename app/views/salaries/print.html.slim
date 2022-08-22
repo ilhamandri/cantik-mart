@@ -21,13 +21,21 @@ table#items
 
   tr
     th Karyawan
-    th Toko
-    th Tanggal
-    th Nominal
+    th Bulan 
+    th Gaji
+    th Kasbon
+    th Hutang
+    th Bonus
+    th JP
+    th JHT
 
   - @salaries.each do |salary|
     tr.item-row
       td #{salary.user.name}
-      td #{salary.user.store.name}
       td #{salary.created_at.month} / #{salary.created_at.year}
-      td #{salary.nominal}
+      td #{number_with_delimiter(salary.nominal, delimiter: ".")}
+      td #{number_with_delimiter(salary.pay_kasbon, delimiter: ".")}
+      td #{number_with_delimiter(salary.pay_receivable, delimiter: ".")}
+      td #{number_with_delimiter(salary.bonus, delimiter: ".")}
+      td #{number_with_delimiter(salary.jp, delimiter: ".")}
+      td #{number_with_delimiter(salary.jht, delimiter: ".")}

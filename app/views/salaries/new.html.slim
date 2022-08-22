@@ -14,25 +14,53 @@
                   | #{user.name} - #{user.store.name}
           .row
             .col-12
-              h3.text-success id="salary"
+              br
+              h3 id="salary"
                 | GAJI : -
+              hr style="border-top: 3px solid red;"
             .col-6
-              h3.text-black id="kasbon"
+              h3.text-primary id="kasbon"
                 | KASBON : -
+              .form-group
+                br
+                label.text-primary for="id-card" Bayar Kasbon
+                = form.number_field :pay_kasbon, required: true, class: "form-control md-form", id: "pay_kasbon", min:"0", value:'0', onchange: "changeSalary()"
             .col-6
               h3.text-danger id="debt"
                 | HUTANG : -
-          .form-group
-            br
-            label for="id-card" Bonus
-            = form.number_field :bonus, required: true, class: "form-control md-form", id: "id-card", min:"0", value:'0'
-          .form-group
-            br
-            label.text-primary for="id-card" Bayar Kasbon
-            = form.number_field :pay_kasbon, required: true, class: "form-control md-form", id: "id-card", min:"0", value:'0'
-          .form-group
-            br
-            label.text-danger for="id-card" Bayar Hutang
-            = form.number_field :pay_receivable, required: true, class: "form-control md-form", id: "id-card", min:"0", value:'0'
+              .form-group
+                br
+                label.text-danger for="id-card" Bayar Hutang
+                = form.number_field :pay_receivable, required: true, class: "form-control md-form", id: "pay_receivable", min:"0", value:'0', onchange: "changeSalary()"
+            .col-12
+              hr style="border-top: 3px solid red;"
+
+            .col-6
+              .form-group
+                label for="id-card" Bonus
+                = form.number_field :bonus, required: true, class: "form-control md-form", id: "bonus", min:"0", value:'0', onchange: "changeSalary()"
+            
+            .col-6
+              .form-group
+                label for="id-card" Asuransi
+                .row
+                  .col-6
+                    br
+                    .form-check
+                      input.form-check-input type="checkbox" value="false" id="jht" onchange="changeSalary()" name="jht"
+                      label.form-check-label for="jht" Jaminan Hari Tua
+                      
+                  .col-6
+                    br
+                    .form-check
+                      input.form-check-input type="checkbox" value="false" id="jp" onchange="changeSalary()" name="jp"
+                      label.form-check-label for="jp" Jaminan Pensiun
+
+            .col-12
+              hr style="border-top: 3px solid red;"
+              h3.text-success id="receive"
+                | TERIMA : 
+
+
           .form-group.text-center
             = form.submit "Bayar Gaji", class: "btn btn-primary"

@@ -114,12 +114,13 @@
         table class="table"
           thead
             th Karyawan
-            th Toko
             th Bulan / Tahun
             th Gaji
-            th Bonus
             th Kasbon
             th Hutang
+            th Bonus
+            th JP
+            th JHT
           tbody
             = render partial: 'list', collection: @salaries, as: :salary
 
