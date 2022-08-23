@@ -5,19 +5,37 @@ html
     style
       |  table { width: 100%; border-spacing: 0px; border-collapse: separate; } th, td {padding: 0px 15px 3px 25px; width: 33%; font-size: 17px;} 
   body
+    - switched_from_row = 0
+    - end_row = 3
     - row = 0
     table
       - @salaries.each_slice(2) do |salaries|
         - row+=1
         tr
-          - salaries.each do |salary|
+          - salaries.each_with_index do |salary, idx|
+
+            - if salary.jp != 0 || salary.jht != 0
+              - end_row = 2 
+              - if [-1,0].include? switched_from_row
+                - switched_from_row = row
+              - if row == 3
+                - if idx == 0
+                  tr 
+                    td style="height: 455px; border: 0px !important;"
+                - else
+                  tr
+                    td style="height: 30px; border: 0px !important;"
+                  - salaries << @salaries.pop
+                - switched_from_row = 1
+                - row = 1
+
             td style="border: 1px solid black; padding: 1px;"
               table 
                 tr
-                  td colspan="3" style="font-size: 22px;font-weight: bold; text-align: center" 
+                  td style="font-size: 25px;font-weight: bold; text-align: center" 
                     = wicked_pdf_image_tag 'logo.png', :width=>"150" 
-                tr 
-                  td.price colspan="3" style="font-size: 22px;font-weight: bold; text-align: center" 
+
+                  td.price colspan="2" style="font-size: 22px;font-weight: bold; text-align: center" 
                     | #{salary.user.name} 
                 tr
                   td 
@@ -53,6 +71,26 @@ html
                 tr
                   td colspan="3" 
                     hr
+
+                - if salary.jht != 0 || salary.jp != 0
+                  tr style=" color: red"
+                    td
+                      | JHT
+                    td
+                      | :
+                    td.price style=" text-align: right"
+                      | #{number_with_delimiter(salary.jht, unit: "Rp. ", :precision => 0)}
+                  tr style=" color: red"
+                    td
+                      | JHT
+                    td
+                      | :
+                    td.price style=" text-align: right"
+                      | #{number_with_delimiter(salary.jp, unit: "Rp. ", :precision => 0)}
+                  tr
+                    td colspan="3" 
+                      hr
+
                 tr style="color: blue"
                   td 
                     | TOTAL
@@ -62,6 +100,8 @@ html
                     | #{number_with_delimiter(salary.nominal - salary.pay_kasbon - salary.pay_receivable + salary.bonus, unit: "Rp. ", :precision => 0)}
                 tr
                   td colspan="3" style="text-align: center"
+                    br 
+                    br
                     | #{Date.today.to_s}
                 tr
                   td 
@@ -69,12 +109,24 @@ html
                     br 
                 tr
                   td colspan="3" style="text-align: center"
-                    | Syifa Sofia Jaelani Ramli
+                    u
+                      b 
+                        | Syifa Sofia Jaelani Ramli #{switched_from_row}
                     br
                     | Owner 
 
       
-        -if row == 3
-          tr 
-            td style="height: 69px; border: 0px !important;"
+        -if row == end_row
+          - if end_row == 2
+            - if [-1,1].include? switched_from_row 
+              tr 
+                td style="height: 321px; border: 0px !important;"
+            - elsif switched_from_row == 2
+              tr 
+                td style="height: 388px; border: 0px !important;"
+
+            - switched_from_row = -1
+          - else
+            tr 
+              td style="height: 30px; border: 0px !important;"
           - row = 0

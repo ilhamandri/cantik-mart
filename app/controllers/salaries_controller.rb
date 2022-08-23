@@ -61,7 +61,10 @@ class SalariesController < ApplicationController
       start_day = (params[:month] + params[:year]).to_datetime
       end_day = start_day.end_of_month
     end
-    @salaries = UserSalary.where("created_at >= ? AND created_at <= ?", start_day, end_day)
+    @salaries = UserSalary.where(created_at: start_day..end_day).order("jp ASC, jht ASC")
+    
+    @salaries = @salaries.drop(1)
+
     respond_to do |format|
       format.html
       format.pdf do
