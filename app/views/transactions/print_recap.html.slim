@@ -168,3 +168,86 @@ br
       td style="text-align: right"
         b #{number_with_delimiter(@total_income.to_i - @total_outcome.to_i, delimiter: ".")}
 
+- if ["super_visi"].include? current_user.level 
+  - store = current_user.store
+  - trxs = @transactions.where(store: store)
+  - trx_last_timestamp = "Tidak ada transaksi"
+  - trx_last_timestamp = trxs.order("created_at DESC").first.created_at if trxs.present?
+  - grand_totals = 0
+  h3
+    | #{store.name.upcase} ( #{trx_last_timestamp} )
+  table#items
+    tr
+      th Kasir
+      th Tunai
+      th Debit 
+      th Kredit
+      th QRIS
+      th Total
+
+    - User.where(id: trxs.pluck(:user_id).uniq).each do |user|       
+      - cashier_trxs = trxs.where(user: user)
+      tr
+        td #{user.name.camelize}
+        - cash = cashier_trxs.where(payment_type: "CASH").sum(:grand_total)- cashier_trxs.where(payment_type: "CASH").sum(:grand_total_coin)
+        - debit = cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total)- cashier_trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
+        - credit = cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total)- cashier_trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
+        - qris = cashier_trxs.where(payment_type: "QRIS").sum(:grand_total)- cashier_trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
+        - grand_total = cashier_trxs.sum(:grand_total) - cashier_trxs.sum(:grand_total_coin)
+        - hpp_total = cashier_trxs.sum(:hpp_total) - cashier_trxs.sum(:hpp_total_coin)
+        - tax_total = cashier_trxs.sum(:tax)
+
+        td #{number_with_delimiter(cash.to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter(debit.to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter(credit.to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter(qris.to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter(grand_total.to_i, delimiter: ".", separator: ",")}
+    tr
+      td 
+      - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total) - trxs.where(payment_type: "CASH").sum(:grand_total_coin)
+      - debit_total = trxs.where(payment_type: "DEBIT",).sum(:grand_total) - trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
+      - credit_total = trxs.where(payment_type: "CREDIT",).sum(:grand_total) - trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
+      - qris_total = trxs.where(payment_type: "QRIS",).sum(:grand_total) - trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
+      - grand_total = trxs.sum(:grand_total) - trxs.sum(:grand_total_coin)
+      - grand_totals = grand_total
+      - hpp_total = trxs.sum(:hpp_total) - trxs.sum(:hpp_total_coin)
+      - tax_total = trxs.sum(:tax)
+
+      td #{number_with_delimiter(cash_total.to_i, delimiter: ".", separator: ",")}
+      td #{number_with_delimiter(debit_total.to_i, delimiter: ".", separator: ",")}
+      td #{number_with_delimiter(credit_total.to_i, delimiter: ".", separator: ",")}
+      td #{number_with_delimiter(qris_total.to_i, delimiter: ".", separator: ",")}
+      td #{number_with_delimiter(grand_total.to_i, delimiter: ".", separator: ",")}
+
+  br
+  hr
+  br
+
+
+table#items
+  tr
+    td colspan="2" style="font-weight: bold; text-align: center"
+      | PENGELUARAN
+  tr
+    td Operasional
+    td style="text-align: right"
+      b #{number_with_delimiter(@operational.to_i, delimiter: ".")}
+  tr
+    td Biaya Pasti
+    td style="text-align: right"
+      b #{number_with_delimiter(@fix_cost.to_i, delimiter: ".")}
+
+table#items
+  tr
+    td Total Penjualan
+    td style="text-align: right"
+      b #{number_with_delimiter(grand_totals.to_i, delimiter: ".")}
+  tr
+    td Total Pengeluaran
+    td style="text-align: right"
+      b #{number_with_delimiter(@total_outcome.to_i, delimiter: ".")}
+  tr
+    td Profit Bersih
+    td style="text-align: right"
+      b #{number_with_delimiter(grand_totals.to_i - @total_outcome.to_i, delimiter: ".")}
+
