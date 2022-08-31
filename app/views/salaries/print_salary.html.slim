@@ -29,7 +29,7 @@ html
                 - switched_from_row = 1
                 - row = 1
 
-            td style="border: 1px solid black; padding: 1px;"
+            td style="border: 1px solid black; padding: 1px; background-image:url(../../../public/images/bg.jpg);"
               table 
                 tr
                   td style="font-size: 25px;font-weight: bold; text-align: center" 
@@ -97,7 +97,7 @@ html
                   td 
                     | :
                   td.price style="text-align: right"
-                    | #{number_with_delimiter(salary.nominal - salary.pay_kasbon - salary.pay_receivable + salary.bonus, unit: "Rp. ", :precision => 0)}
+                    | #{number_with_delimiter(salary.nominal - salary.pay_kasbon - salary.pay_receivable + salary.bonus - salary.jp - salary.jht, unit: "Rp. ", :precision => 0)}
                 tr
                   td colspan="3" style="text-align: center"
                     br 
