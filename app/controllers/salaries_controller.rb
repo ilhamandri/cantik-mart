@@ -62,8 +62,6 @@ class SalariesController < ApplicationController
       end_day = start_day.end_of_month
     end
     @salaries = UserSalary.where(created_at: start_day..end_day).order("jp ASC, jht ASC")
-    
-    @salaries = @salaries.drop(0)
 
     respond_to do |format|
       format.html
