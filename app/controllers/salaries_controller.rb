@@ -63,7 +63,7 @@ class SalariesController < ApplicationController
     end
     @salaries = UserSalary.where(created_at: start_day..end_day).order("jp ASC, jht ASC")
     
-    @salaries = @salaries.drop(1)
+    @salaries = @salaries.drop(0)
 
     respond_to do |format|
       format.html

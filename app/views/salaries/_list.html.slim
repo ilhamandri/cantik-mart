@@ -1,5 +1,5 @@
 tr 
-	td #{salary.user.name}
+	td style="background-image:url(/images/bg.jpg);" #{salary.user.name}
 	td #{salary.created_at.month} / #{salary.created_at.year}
 	td #{number_with_delimiter(salary.nominal, delimiter: ".")}
 	td #{number_with_delimiter(salary.pay_kasbon, delimiter: ".")}
