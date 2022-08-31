@@ -70,6 +70,7 @@ class SalariesController < ApplicationController
       format.pdf do
         render pdf: DateTime.now.to_i.to_s,
           show_as_html: false,
+          page_size: "a4",
           template: "salaries/print_salary.html.slim"
       end
     end
