@@ -25,12 +25,13 @@ html
                 - else
                   tr
                     td style="height: 50px; border: 0px !important;"
+                  -binding.pry
                   - salaries << @salaries.pop
                 - switched_from_row = 1
                 - row = 1
 
-
-            - bg = (wicked_pdf_image_tag 'bg.jpg').gsub('<img src="', '').gsub('" />','')
+            - bg =""
+            / - bg = (wicked_pdf_image_tag 'bg.jpg').gsub('<img src="', '').gsub('" />','')
 
             td style="border: 1px solid black; padding: 1px;"
               table style='background-image: url(#{bg});  background-repeat: no-repeat; background-size: cover;'
