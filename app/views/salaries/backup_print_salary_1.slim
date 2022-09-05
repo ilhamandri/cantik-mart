@@ -5,37 +5,37 @@ html
     style
       |  table { width: 100%; border-spacing: 0px; border-collapse: separate; } th, td {padding: 0px 15px 3px 25px; width: 33%; font-size: 20px;} hr {border-top: 5px dashed;} br{line-height:5px !important;}
   body
-    - switched = 0
-    - end_row = 2
+    - switched_from_row = 0
+    - end_row = 3
     - row = 0
     table
       - @salaries.each_slice(2) do |salaries|
         - row+=1
         tr
           - salaries.each_with_index do |salary, idx|
+
             - if salary.jp != 0 || salary.jht != 0
-              - if idx == 0
-                - switched = 2
-              - else
-                - if switched != 2
-                  - switched = 1
+              - end_row = 2 
+              - if [-1,0].include? switched_from_row
+                - switched_from_row = row
+              - if row == 3
+                - if idx == 0
+                  tr 
+                    td style="height: 475px; border: 0px !important;"
+                - else
+                  tr
+                    td style="height: 50px; border: 0px !important;"
+                  - salaries << @salaries.pop
+                - switched_from_row = 1
+                - row = 1
 
             - bg =""
             - bg = (wicked_pdf_image_tag 'logo2.png').gsub('<img src="', '').gsub('" />','')
 
             td style="border: 1px solid black; padding: 1px;"
-              table
-                tr
-                  td
-                    hr style="border: 3px solid #91c75a;"
-                    hr style="border: 3px solid #91c75a;"
-                  td
-                    = wicked_pdf_image_tag 'logo.png', :width=>"150" 
-                  td
-                    hr style="border: 3px solid #91c75a;"
-                    hr style="border: 3px solid #91c75a;"
+              table style='background-image: url(#{bg});  background-repeat: no-repeat; background-size: cover; background-position:right;'
                 tr 
-                  td colspan="3" style="font-family: 'Times New Roman', Times, serif; font-size: 26px !important; font-weight: 900 !important; text-align: center" 
+                  td colspan="3" style="font-family: 'Times New Roman', Times, serif; font-size: 26px !important; font-weight: 900 !important; text-align: left" 
                     b
                       | #{salary.user.name}
                 tr
@@ -102,13 +102,7 @@ html
                     | :
                   td.price style="text-align: right"
                     | #{number_with_delimiter(salary.nominal - salary.pay_kasbon - salary.pay_receivable + salary.bonus - salary.jp - salary.jht, unit: "Rp. ", :precision => 0)}
-                tr
-                  td
-                    br
               table style="background-color: #91c75a;"
-                tr
-                  td
-                    br
                 tr
                   td colspan="3" style="text-align: center; font-size: 18px !important; "
                     | #{Date.today.to_s}
@@ -122,16 +116,20 @@ html
                       u 
                         | Syifa Sofia Jaelani Ramli
                       br
-                      | OWNER #{switched}
+                      | OWNER 
 
-        - if row == end_row
-          - row = 0
-          - if switched==0
-            tr 
-              td style="height: 221px; border: 0px !important;"
-          - elsif switched==1
-            tr 
-              td style="height: 138px; border: 0px !important"
+      
+        -if row == end_row
+          - if end_row == 2
+            - if [-1,1].include? switched_from_row 
+              tr 
+                td style="height: 341px; border: 0px !important;"
+            - elsif switched_from_row == 2
+              tr 
+                td style="height: 408px; border: 0px !important;"
+
+            - switched_from_row = -1
           - else
             tr 
-              td style="height: 55px; border: 0px !important"
+              td style="height: 50px; border: 0px !important;"
+          - row = 0
