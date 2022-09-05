@@ -38,8 +38,6 @@ gem 'axlsx'
 gem 'axlsx_rails'
 gem 'apriori-ruby'
 gem 'sidekiq'
-# gem 'xgboost'
-# gem 'lightgbm'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
