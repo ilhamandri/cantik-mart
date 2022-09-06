@@ -47,7 +47,7 @@ html
                     | #{number_with_delimiter(salary.bonus, unit: "Rp. ", :precision => 0, delimiter:".")}
                 tr
                   td colspan="3" 
-                    hr style="border-top: 1px dashed;"
+                    hr 
                 tr style="color: red"
                   td 
                     | Kasbon
@@ -64,8 +64,7 @@ html
                     | #{number_with_delimiter(salary.pay_receivable, unit: "Rp. ", :precision => 0, delimiter:".")}
                 tr
                   td colspan="3" 
-                    hr style="border-top: 1px dashed;"
-
+                    hr 
                 - if salary.jht != 0 || salary.jp != 0
                   tr style=" color: red"
                     td
