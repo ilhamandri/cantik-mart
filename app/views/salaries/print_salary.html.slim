@@ -3,7 +3,7 @@ html
   head
     meta[name="viewport" content="width=device-width, initial-scale=1"]
     style
-      |  table { width: 100%; border-spacing: 0px; } td {padding: 0px 25px 0px 25px;  font-size: 20px;} 
+      |  table { width: 100%; border-spacing: 0px; } td {padding: 0px 25px 0px 25px;  font-size: 18px;} 
   body
     - src = (wicked_pdf_image_tag asset_url('logo.png')).gsub('<img src="', '').gsub('" />','')
     table
@@ -29,7 +29,7 @@ html
                     hr style="border: 3px solid #91c75a;"
                     hr style="border: 3px solid #91c75a;"
                 tr 
-                  th colspan="3" style="text-align: center; padding: 10px 0 10px 0;" 
+                  th colspan="3" style="text-align: center; padding: 10px 0 10px 0; font-size: 20px;" 
                     b
                       | #{salary.user.name}
                 tr
@@ -96,7 +96,7 @@ html
 
               table style="background-color: #91c75a;"
                 tr 
-                  td colspan="3" style="padding: 10px 0 50px 0; text-align: center; font-size: 18px !important; "
+                  td colspan="3" style="padding: 10px 0 70px 0; text-align: center; font-size: 18px !important; "
                     | #{Date.today.to_s}
                 tr
                   td colspan="3" style="text-align: center; font-size: 18px !important; "
