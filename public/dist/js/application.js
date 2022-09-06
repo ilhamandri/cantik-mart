@@ -228,7 +228,11 @@ function getUserSalary(user) {
         $('#pay_receivable').attr('readonly', true);
       }else{
         debt = parseInt(result[1].replaceAll(".",""));
-        $('#pay_receivable').attr('max', debt);
+        if(debt > gaji){
+          $('#pay_receivable').attr('max', gaji);
+        }else{
+          $('#pay_receivable').attr('max', debt);
+        }
       }
 
       if(result[2]==0){
@@ -236,7 +240,11 @@ function getUserSalary(user) {
         $('#pay_kasbon').attr('readonly', true);
       }else{
         kasbon = parseInt(result[2].replaceAll(".",""));
-        $('#pay_kasbon').attr('max', kasbon);
+        if(kasbon > gaji){
+          $('#pay_receivable').attr('max', gaji);
+        }else{
+          $('#pay_receivable').attr('max', kasbon);
+        }
       }
 
       changeSalary();
