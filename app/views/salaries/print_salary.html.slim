@@ -37,14 +37,14 @@ html
                   td 
                     | :
                   td.price style=" text-align: right"
-                    | #{number_with_delimiter(salary.nominal, unit: "Rp. ", :precision => 0)}
+                    | #{number_with_delimiter(salary.nominal, unit: "Rp. ", :precision => 0, delimiter:".")}
                 tr
                   td 
                     | Bonus
                   td 
                     | :
                   td.price style=" text-align: right"
-                    | #{number_with_delimiter(salary.bonus, unit: "Rp. ", :precision => 0)}
+                    | #{number_with_delimiter(salary.bonus, unit: "Rp. ", :precision => 0, delimiter:".")}
                 tr
                   td colspan="3" 
                     hr style="border-top: 1px dashed;"
@@ -54,14 +54,14 @@ html
                   td 
                     | :
                   td.price style="text-align: right"
-                    | #{number_with_delimiter(salary.pay_kasbon, unit: "Rp. ", :precision => 0)}
+                    | #{number_with_delimiter(salary.pay_kasbon, unit: "Rp. ", :precision => 0, delimiter:".")}
                 tr style=" color: red"
                   td
                     | Pinjaman
                   td
                     | :
                   td.price style=" text-align: right"
-                    | #{number_with_delimiter(salary.pay_receivable, unit: "Rp. ", :precision => 0)}
+                    | #{number_with_delimiter(salary.pay_receivable, unit: "Rp. ", :precision => 0, delimiter:".")}
                 tr
                   td colspan="3" 
                     hr style="border-top: 1px dashed;"
@@ -73,14 +73,14 @@ html
                     td
                       | :
                     td.price style=" text-align: right"
-                      | #{number_with_delimiter(salary.jht, unit: "Rp. ", :precision => 0)}
+                      | #{number_with_delimiter(salary.jht, unit: "Rp. ", :precision => 0, delimiter:".")}
                   tr style=" color: red"
                     td
                       | JP
                     td
                       | :
                     td.price style=" text-align: right"
-                      | #{number_with_delimiter(salary.jp, unit: "Rp. ", :precision => 0)}
+                      | #{number_with_delimiter(salary.jp, unit: "Rp. ", :precision => 0, delimiter:".")}
                   tr
                     td colspan="3" 
                       hr style="border-top: 1px dashed;"
@@ -90,19 +90,21 @@ html
                     | TOTAL
                   td 
                     | :
-                  td.price style="text-align: right"
-                    | #{number_with_delimiter(salary.nominal - salary.pay_kasbon - salary.pay_receivable + salary.bonus - salary.jp - salary.jht, unit: "Rp. ", :precision => 0)}
+                  td.price style="text-align: right; padding-bottom: 10px !important;"
+                    | #{number_with_delimiter(salary.nominal - salary.pay_kasbon - salary.pay_receivable + salary.bonus - salary.jp - salary.jht, unit: "Rp. ", :precision => 0, delimiter:".")}
 
               table style="background-color: #91c75a;"
-                tr style="padding: 100px 0 200px 0;" 
-                  td colspan="3" style="text-align: center; font-size: 18px !important; "
+                tr 
+                  td colspan="3" style="padding: 10px 0 50px 0; text-align: center; font-size: 18px !important; "
                     | #{Date.today.to_s}
                 tr
                   td colspan="3" style="text-align: center; font-size: 18px !important; "
                     b
                       u 
                         | Syifa Sofia Jaelani Ramli
-                      p
-                        | OWNER 
+                tr
+                  td colspan="3" style="text-align: center; font-size: 16px !important; padding-bottom: 10px;"
+                    b
+                      | OWNER 
 
         
