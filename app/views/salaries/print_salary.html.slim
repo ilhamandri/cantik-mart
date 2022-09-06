@@ -16,17 +16,17 @@ html
                 - if switched != 2
                   - switched = 1
 
-            td style="border: 1px #ddd; padding: 0px;"
+            td style="border: 1px solid #ddd; padding: 0px;"
               table
                 tr
                   th
-                    hr style="border: 3px solid #91c75a;"
-                    hr style="border: 3px solid #91c75a;"
+                    / hr style="border: 3px solid #91c75a;"
+                    / hr style="border: 3px solid #91c75a;"
                   th
                     = wicked_pdf_image_tag asset_url('/logo.png'), :width=>"150" 
                   th
-                    hr style="border: 3px solid #91c75a;"
-                    hr style="border: 3px solid #91c75a;"
+                    / hr style="border: 3px solid #91c75a;"
+                    / hr style="border: 3px solid #91c75a;"
                 tr 
                   th colspan="3" style="font-weight: 900 !important; text-align: center; padding: 0 0 20px 0;" 
                     b
@@ -47,7 +47,7 @@ html
                     | #{number_with_delimiter(salary.bonus, unit: "Rp. ", :precision => 0, delimiter:".")}
                 tr
                   td colspan="3" 
-                    hr 
+                    / hr 
                 tr style="color: red"
                   td 
                     | Kasbon
@@ -64,7 +64,7 @@ html
                     | #{number_with_delimiter(salary.pay_receivable, unit: "Rp. ", :precision => 0, delimiter:".")}
                 tr
                   td colspan="3" 
-                    hr 
+                    / hr 
                 - if salary.jht != 0 || salary.jp != 0
                   tr style=" color: red"
                     td
@@ -82,7 +82,7 @@ html
                       | #{number_with_delimiter(salary.jp, unit: "Rp. ", :precision => 0, delimiter:".")}
                   tr
                     td colspan="3" 
-                      hr style="border-top: 1px dashed;"
+                      / hr style="border-top: 1px dashed;"
 
                 tr
                   td 
