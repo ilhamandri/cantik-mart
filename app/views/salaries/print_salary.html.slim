@@ -5,6 +5,7 @@ html
     style
       |  table { width: 100%; border-spacing: 0px; } td {padding: 0px 25px 0px 25px;  font-size: 20px;} 
   body
+    - src = (wicked_pdf_image_tag 'logo.png').gsub('<img src="', '').gsub('" />','')
     table
       - @salaries.each_slice(2) do |salaries|
         tr
@@ -23,12 +24,12 @@ html
                     hr style="border: 3px solid #91c75a;"
                     hr style="border: 3px solid #91c75a;"
                   th
-                    / = wicked_pdf_image_tag asset_url('/logo.png'), :width=>"150" 
+                    image src="#{src}" style="padding: 10px 0 0 0; width: 120px;"
                   th
                     hr style="border: 3px solid #91c75a;"
                     hr style="border: 3px solid #91c75a;"
                 tr 
-                  th colspan="3" style="font-weight: 900 !important; text-align: center; padding: 0 0 20px 0;" 
+                  th colspan="3" style="font-weight: 900 !important; text-align: center; padding: 10px 0 10px 0;" 
                     b
                       | #{salary.user.name}
                 tr
