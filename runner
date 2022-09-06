@@ -61,3 +61,8 @@ pg_dump -U postgres -f cm22.bak cantik_mart
 
 -------------------- RESTORE DB -----------------------------
 psql tecmintdb < tecmintdb.sql
+
+
+--------------------- KILL RAILS -----------------------------
+lsof -wni tcp:3000
+kill -9 PID

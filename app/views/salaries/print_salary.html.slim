@@ -92,19 +92,11 @@ html
                     | :
                   td.price style="text-align: right"
                     | #{number_with_delimiter(salary.nominal - salary.pay_kasbon - salary.pay_receivable + salary.bonus - salary.jp - salary.jht, unit: "Rp. ", :precision => 0)}
-                tr
-                  td
-                    br
+
               table style="background-color: #91c75a;"
-                tr
-                  td
-                    br
-                tr
+                tr style="padding: 100px 0 200px 0;" 
                   td colspan="3" style="text-align: center; font-size: 18px !important; "
                     | #{Date.today.to_s}
-                tr
-                  td 
-                    br 
                 tr
                   td colspan="3" style="text-align: center; font-size: 18px !important; "
                     b
