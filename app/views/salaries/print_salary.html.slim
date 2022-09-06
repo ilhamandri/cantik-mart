@@ -3,7 +3,7 @@ html
   head
     meta[name="viewport" content="width=device-width, initial-scale=1"]
     style
-      |  table { width: 100%; border-spacing: 0px; } td {padding: 0px 25px 0px 25px;  font-size: 18px;} 
+      |  table { width: 100%; border-spacing: 0px; } td {padding: 0px 25px 0px 25px;  font-size: 18px; font-family: 'OpenSansRegular'; font-size: 8px;} 
   body
     - src = (wicked_pdf_image_tag asset_url('logo.png')).gsub('<img src="', '').gsub('" />','')
     table
