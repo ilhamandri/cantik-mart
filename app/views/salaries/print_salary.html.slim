@@ -5,7 +5,7 @@ html
     style
       |  table { width: 100%; border-spacing: 0px; } td {padding: 0px 25px 0px 25px;  font-size: 16px;} 
   body
-    - src = (wicked_pdf_image_tag asset_url('logo.png')).gsub('<img src="', '').gsub('" />','')
+    - src = (wicked_pdf_image_tag 'logo.png').gsub('<img src="', '').gsub('" />','')
     table
       - @salaries.each_slice(2) do |salaries|
         tr
