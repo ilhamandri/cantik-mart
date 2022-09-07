@@ -90,7 +90,8 @@ Rails.application.routes.draw do
 
   get '/print/suppliers', to: 'suppliers#print_debt_receive', as: 'print_debt_receive'
 
-
+  get '/backup/download/:id', to: 'backups#download', as: 'backup_download'
+  
   get '/sync/:id/:target', to: 'apis#get_sync', as: 'get_sync'
   resources :discounts
   resources :pays, only: %i[new create]

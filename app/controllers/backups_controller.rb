@@ -6,6 +6,15 @@ class BackupsController < ApplicationController
     @backups = Backup.order("created DESC").page param_page
   end
 
+  def download 
+    id = params[:id]
+    return redirect_back_data_error backups_path, "File tidak ditemukan" if id.nil?
+    backup_file = Backup.find_by(id: id)
+    return redirect_back_data_error backups_path, "File tidak ditemukan" if backup_file.nil?
+    return redirect_back_data_error backups_path, "File tidak ditemukan" if !backup_file.present
+    send_file("../../Backup/"+backup_file.filename)
+  end
+
   private
     def refresh_files
       Backup.update_all(present: false)

@@ -14,8 +14,10 @@ br
           thead
             th Filename
             th Created
-            th Size
             th Exist
+            th Size
+            th Download
+
           tbody
             = render partial: 'list', collection: @backups, as: :backup
         = paginate @backups
