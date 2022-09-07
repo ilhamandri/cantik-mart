@@ -162,7 +162,7 @@ Rails.application.routes.draw do
 
   resources :server_informations, only: %i[index]
 
-  resources :tests
+  resources :backups
 
   resources :kasbons
 

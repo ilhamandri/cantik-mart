@@ -1,0 +1,9 @@
+tr
+	td #{backup.filename}
+	td #{backup.created}
+	td #{backup.size}
+	td 
+		- if backup.present
+			i.w-fa.fas.fa-check.text-success
+		- else
+			i.w-fa.fas.fa-times.text-danger

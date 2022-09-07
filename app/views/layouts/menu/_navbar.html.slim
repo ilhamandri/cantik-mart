@@ -180,6 +180,11 @@ li
       i.w-fa.fas.fa-book
       | Stock Recap
 
+  li 
+    a.collapsible-header.waves-effect.arrow-r  href="#{backups_path}"
+      i.w-fa.fas.fa-history
+      | Backup
+
 - if user_level == "owner" || user_level == "super_admin"
   li
     a.collapsible-header.waves-effect.arrow-r  href="#{activities_path}"

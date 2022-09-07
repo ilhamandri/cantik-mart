@@ -1,0 +1,23 @@
+.row
+  .col
+    h5
+      | Backup History
+br
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | Data 
+      .card-body.table-responsive.text-nowrap
+        table class="table"
+          thead
+            th Filename
+            th Created
+            th Size
+            th Exist
+          tbody
+            = render partial: 'list', collection: @backups, as: :backup
+        = paginate @backups
+
+

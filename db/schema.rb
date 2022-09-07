@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_22_050202) do
+ActiveRecord::Schema.define(version: 2022_09_07_081526) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,15 @@ ActiveRecord::Schema.define(version: 2022_08_22_050202) do
     t.datetime "updated_at", null: false
     t.index ["store_id"], name: "index_assets_on_store_id"
     t.index ["user_id"], name: "index_assets_on_user_id"
+  end
+
+  create_table "backups", force: :cascade do |t|
+    t.string "size", null: false
+    t.string "filename", null: false
+    t.datetime "created", null: false
+    t.boolean "present", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "capitals", force: :cascade do |t|
