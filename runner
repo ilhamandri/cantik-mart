@@ -66,3 +66,12 @@ psql tecmintdb < tecmintdb.sql
 --------------------- KILL RAILS -----------------------------
 lsof -wni tcp:3000
 kill -9 PID
+
+--------------------- BACKUP SH -----------------------------
+0. create "Backup" folder in home/root
+1. copy backup.sh to home / root 
+2. chmod +x backup.sh
+3. sudo nano ~/.bashrc
+3. alias backup='./backup.sh'
+4. source ~/.bashrc
+5. backup
