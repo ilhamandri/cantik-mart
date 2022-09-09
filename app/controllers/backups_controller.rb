@@ -3,6 +3,7 @@ class BackupsController < ApplicationController
   
   def index
     refresh_files
+    delete_old_files
     @backups = Backup.order("created DESC").page param_page
   end
 
@@ -16,6 +17,19 @@ class BackupsController < ApplicationController
   end
 
   private
+    def delete_old_files
+      file_names = Backup.all.order("created ASC").pluck(:filename)
+      file_names.pop(5)
+      file_names.each do |file_name|
+        backup = Backup.find_by(filename: file_name)
+        next if backup.nil?
+        backup.present = false
+        backup.save!
+        path_to_file = "../../Backup/"+file_name
+        File.delete(path_to_file) if File.exist?(path_to_file)
+      end
+    end
+
     def refresh_files
       Backup.update_all(present: false)
       files = Dir.glob("../../Backup/*")
@@ -30,7 +44,9 @@ class BackupsController < ApplicationController
           Backup.create filename: file_name, size: file_size, 
             created: file_created, present: true
         else
+          backup_file.created = file_created
           backup_file.present = true
+          backup_file.size = file_size
           backup_file.save!
         end
       end
