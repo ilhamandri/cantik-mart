@@ -2,8 +2,12 @@ nav.navbar.fixed-top.navbar-expand-lg.scrolling-navbar.double-nav
   .float-left
     a.button-collapse data-activates="slide-out" href="#" 
       i.fas.fa-bars
+
   .breadcrumb-dn.mr-auto
-    p CANTIK MART
+    .float-left
+      #txt style="padding: 0 0 0 50px;"
+      
+
   .d-flex.change-mode
     ul.nav.navbar-nav.nav-flex-icons.ml-auto
       li.nav-item.dropdown.notifications-nav
@@ -66,7 +70,8 @@ nav.navbar.fixed-top.navbar-expand-lg.scrolling-navbar.double-nav
               /     .font-weight-bold.red-text
               /       | Silahkan melakukan absensi
               hr
-              #txt
+                | #{@weather["temp"]}&#176c &nbsp | &nbsp &nbsp
+                img src="#{@weather["icon"]}" width="35px"
             .col-12
               hr
               a.dropdown-item href="#{user_path(id: current_user.id)}"  Akun

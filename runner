@@ -60,7 +60,7 @@ localhost:3000/controllers
 pg_dump -U postgres -f cm22.bak cantik_mart
 
 -------------------- RESTORE DB -----------------------------
-psql tecmintdb < tecmintdb.sql
+sudo -u postgres psql tecmintdb < tecmintdb.sql
 
 
 --------------------- KILL RAILS -----------------------------

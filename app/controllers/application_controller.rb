@@ -17,6 +17,18 @@ class ApplicationController < ActionController::Base
     end
 
     def screening
+      @weather = {}
+
+      url = "http://api.weatherapi.com/v1/current.json?key=e4a2290877b44fc79f5140927221109&q=-6.6413273,107.3890488&aqi=no"
+      response = Net::HTTP.get(URI.parse(url))
+      json_response = JSON.parse(response)
+      if json_response["error"].nil?
+        weather_data = json_response["current"]
+        @weather["temp"] = weather_data["temp_c"]
+        @weather["condition"] = weather_data["condition"]["text"]
+        @weather["icon"] = weather_data["condition"]["icon"]
+      end
+      
       return if current_user.nil?
       return not_found_path if !current_user.active
       authorization

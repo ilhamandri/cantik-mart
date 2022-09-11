@@ -3,6 +3,8 @@ class HomesController < ApplicationController
   require 'usagewatch'
 
   def index
+    
+
     UpdateData.updateItemDiscountExpired
     ReCheck.complain
 
