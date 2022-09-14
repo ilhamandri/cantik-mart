@@ -1,0 +1,9 @@
+.row
+- if ["owner", "finance", "super_admin"].include? current_user.level
+    .col.text-center
+      a href="#{print_debt_receive_path(format: :pdf, id: 0)}"
+        button.btn.btn-warning type="button" 
+          |   Daftar Hutang Piutang
+  
+
+ 

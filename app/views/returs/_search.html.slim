@@ -1,0 +1,46 @@
+= form_for :retur, url: returs_path, method: 'GET' do |form|
+  .row  
+    - if ["owner", "super_admin", "finance"].include? current_user.level
+      .col-md-12
+        select class="mdb-select md-form" id="months" name="store_id"
+          option value="0"
+            | Semua Toko
+          - Store.all.each do |store|
+            option value="#{store.id}"
+              | #{store.name}
+
+    .col-6
+      select class="mdb-select md-form" id="months" name="months"
+        option value="1"
+          | 1 Bulan
+        option value="3"
+          | 3 Bulan
+        option value="6"
+          | 6 Bulan
+        option value="12"
+          | 12 Bulan
+
+    .col-6
+      select[class="mdb-select md-form md-outline colorful-select dropdown-primary" id="order_type" name="type"]
+        option[value=""]
+          | Semua
+        option[value="confirm"]
+          | Menunggu Konfirmasi
+        option[value="pick"]
+          | Menunggu Pengambilan
+        option[value="feedback"]
+          | Menunggu Keputusan
+        option[value="complete"]
+          | Selesai
+
+    .col-12
+      input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice (12345678)" value="#{@seacrh}"
+    
+    .col-12.text-center
+      button class="btn btn-primary"
+        | Cari
+br
+.col-md-12.text-center.grey-text
+  a href="#{returs_path(option: @params.to_s, format: :pdf)}"
+    b
+      | #{@search}

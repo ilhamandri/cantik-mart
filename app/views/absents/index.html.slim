@@ -1,90 +1,35 @@
-.row
-  .col.text-left
-    h5
-      - if @search_id.nil?
-        | Daftar Absensi Pengguna Sistem  
-        - if !@bool_status
-          .text-danger
-            | #{@status}
-      - else
-        - user = User.find @search_id
-        | Absensi #{user.name}
-br
-- if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
-  br
-  .container-fluid
-    .col-xl-12.col-lg-12.col-md-12.pb-2
-      .card-header.white-text.info-color
-          h5.font-weight-500.my-1
-            | Rekap Perhari
-      .card.mb-4 
-        .card-body
-          = form_for :absent, url: daily_absent_recap_path, method: 'GET' do |form|
-            .row
-              .col-md-12
-                label Pilih Tanggal Absensi
-                input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
-              .col-md-12.text-center
-                button class="btn btn-info "
-                  i.fas.fa-book
-                  |   Download Rekap Absensi
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    - if ["owner", "finance", "super_admin"].include? current_user.level
+      li.nav-item
+        a#profile-tab-classic-blue.nav-link.waves-light aria-controls="search" aria-selected="true" data-toggle="tab" href="#search" role="tab" 
+          i.fa.fa-search.fa-2x.pb-2 aria-hidden="true" 
+          br
+          | Pencarian 
 
-.container-fluid
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="data" aria-selected="true" data-toggle="tab" href="#data" role="tab" 
+        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Data 
 
-  .col-lg-12.col-md-12
-    .card-header.white-text.info-color
-      h5.font-weight-500.my-1
-        | Pencarian
-    .card.mb-4
-      .card-body
-        = form_for :user, url: absents_path, method: 'GET' do |form|
-          - if @search_id.nil?
-            input type="number" class="form-control md-form" name="id" value="#{@search_id}" style="display: none"
-          .row.align-middle
-            - if ["owner", "super_admin", "finance"].include? current_user.level
-              .col-md-6.text-center
-                select class="mdb-select md-form" id="months" name="store_id"
-                  option value="0"
-                    | Semua Toko
-                  - Store.all.each do |store|
-                    option value="#{store.id}"
-                      | #{store.name}
-              .col-md-6.text-center
-                select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="user_id" id="supplierId"
-                  - User.all.each do |user|
-                    option value="#{user.id}"
-                      | #{user.name}
-            .col-md-6.text-center
-              input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date_from_search"]        
-            .col-md-6.text-center
-              input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date_to_search"]            
-            .col-md-12.text-center
-              button class="btn btn-primary"
-                | Cari
-            .col-md-12.text-center.grey-text
-              a href="#{absents_path(option: @params.to_s, format: :xlsx)}"
-                b
-                  | #{@search_text}
-.container-fluid
-  .col-lg-12.col-md-12
-    .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Data
-    .card.mb-4
-      .card-body.table-responsive.text-nowrap
-        table class="table"
-          thead
-            th Nama
-            th Toko
-            th Waktu Masuk
-            th Waktu Keluar
-            th Mulai Lembur
-            th Selesai Lembur
-            th Jam Kerja
-            th Jam Lembur
-          tbody
-            = render partial: 'list', collection: @absents, as: :absent
-        = paginate @absents
+    - if ["owner", "finance", "super_admin"].include? current_user.level
+      li.nav-item
+        a#contact-tab-classic-blue.nav-link.waves-light aria-controls="recap" aria-selected="false" data-toggle="tab" href="#recap" role="tab" 
+          i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
+          br
+          | Rekap 
 
-  
 
+
+  #myClassicTabContentOrange.tab-content.card
+    - if ["owner", "finance", "super_admin"].include? current_user.level
+      #search.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'search'
+
+    #data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'data'
+
+    - if ["owner", "finance", "super_admin"].include? current_user.level
+      #recap.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+          = render partial: 'recap'

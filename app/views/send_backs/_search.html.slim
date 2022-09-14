@@ -1,0 +1,28 @@
+= form_for :retur, url: send_backs_path, method: 'GET' do |form|
+  .row  
+    - if ["owner", "super_admin", "super_finance"].include? current_user.level
+      .col-md-12
+        select class="mdb-select md-form" id="months" name="store_id"
+          option value="0"
+            | Semua Toko
+          - Store.all.each do |store|
+            option value="#{store.id}"
+              | #{store.name}
+    .col-6
+      input type="text" class="form-control md-form" id="search" name="search" placeholder="Nomor Invoice (12345678)" value="#{@seacrh}"
+    .col-6
+      select[class="mdb-select md-form md-outline colorful-select dropdown-primary" id="order_type" name="type"]
+        option[value="all"]
+          | Semua
+        option[value="onprocess"]
+          | Dalam Proses
+        option[value="success"]
+          | Telah Diterima
+    
+    .col-12.text-center
+      button class="btn btn-primary"
+        | Cari
+br
+.col-md-12.text-center.grey-text
+    b
+      | #{@search}

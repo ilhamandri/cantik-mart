@@ -18,23 +18,23 @@
           | Semua Data
 
   .col-2.text-center
-    - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
-      a href="#{new_order_path}"
-        button.btn.btn-success type="button" 
+    - if Controller.find_by(name: 'returs').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+      a href="#{new_retur_path}"
+        button.btn.btn-danger type="button" 
           i.fas.fa-plus 
-          |   Order
+          |   Buat Retur
 
 table class="table table-hover"
   thead
     th Invoice
-    th Supplier
+    th Dari
+    th Kepada
     th Total Item
-    th Total
-    th Tgl. Buat
-    th Tgl. Terima
-    th Tgl. Lunas
+    th Buat
+    th Konfirmasi
+    th Ambil
+    th Selesai
     th Aksi
   tbody
-    = render partial: 'list', collection: @orders, as: :order
-= paginate @orders
-
+    = render partial: 'list', collection: @returs, as: :retur
+= paginate @returs

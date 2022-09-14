@@ -28,9 +28,11 @@ class SendBacksController < ApplicationController
   		if params[:type].present?
   			if params[:type] == "onprocess"
   				search += "dengan status SEDANG DALAM PROSES " 
+  				@color="warning"
   				@send_backs = @send_backs.where("received_by is null")
   			elsif params[:type] == "success"
   				search += "dengan status SELESAI "
+  				@color="success"
   				@send_backs = @send_backs.where("received_by is not null")
   			end	
   		end

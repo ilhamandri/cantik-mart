@@ -1,72 +1,13 @@
-- if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
-	.container-fluid
-		.col-xl-12.col-lg-12.col-md-12.pb-2
-	      .card-header.white-text.info-color
-	          h5.font-weight-500.my-1
-	            | Pencarian
-	      .card.mb-4 
-	        .card-body
-	          = form_for :transaction, url: transactions_path, method: 'GET' do |form|
-	            .row
-	              - if ["owner", "super_admin", "super_finance"].include? current_user.level
-	                .col-6
-	                  select class="mdb-select md-form" id="months" name="store_id"
-	                    option value="0"
-	                      | Semua Toko
-	                    - Store.all.each do |store|
-	                      option value="#{store.id}"
-	                        | #{store.name}
-	                .col-6
-	                  select class="mdb-select md-form" id="months" name="user_id"
-	                    option value="0"
-	                      | Semua Kasir
-	                    - User.all.each do |user|
-	                      option value="#{user.id}"
-	                        | #{user.name}
-	              - if @member.present?
-	                input type="hidden" name="member_card" value="#{@member.card_number}"
-	              .col-md-3
-	                | Dari Tanggal
-	                input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date_start" 
-	              .col-md-3
-	                | Jam
-	                input type="number" class="form-control md-form" value="6" min="5" max="23" name="hour_start" 
-	              .col-md-3
-	                | Sampai Tanggal
-	                input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date_end" 
-	              .col-md-3
-	                | Jam
-	                input type="number" class="form-control md-form" value="7" min="6" max="23" name="hour_end" 
-
-	              .col-md-12
-	                | Nomor Invoice
-	                input type="text" class="form-control md-form" id="search" name="search" placeholder="123456789-11-22"
-	              .col-md-12.text-center
-	                button class="btn btn-primary"
-	                  | Cari
-	          br
-	          .col-md-12.text-center.grey-text
-	            a href="#{transactions_path(option: @params.to_s, format: :pdf)}"
-	              b
-	                | #{@search}
-
 - if ["owner", "super_visi", "finance", "super_admin", "candy_dream"].include? current_user.level
-	.container-fluid
-	  .col-lg-12.col-md-12.pb-2
-	    .card-header.white-text.info-color 
-	      h5.font-weight-500.my-1
-	        | Data 
-	    .card.mb-4 
-	      .card-body.table-responsive.text-nowrap
-	        table class="table"
-	          thead
-	            th Invoice
-	            th Tanggal
-	            th Toko
-	            th Member
-	            th Poin
-	            th Profit
-	            th Aksi
-	          tbody
-	            = render partial: 'list', collection: @transactions, as: :transaction
-	        = paginate @transactions
+	table class="table"
+	  thead
+	    th Invoice
+	    th Tanggal
+	    th Toko
+	    th Member
+	    th Poin
+	    th Profit
+	    th Aksi
+	  tbody
+	    = render partial: 'list', collection: @transactions, as: :transaction
+	= paginate @transactions

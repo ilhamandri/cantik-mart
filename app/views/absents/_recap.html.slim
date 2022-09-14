@@ -1,0 +1,10 @@
+
+h4 Rekap Harian
+= form_for :absent, url: daily_absent_recap_path, method: 'GET' do |form|
+  .row
+    .col-md-12
+      input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
+    .col-md-12.text-center
+      button class="btn btn-primary "
+        i.fas.fa-book
+        |   Download Rekap Absensi

@@ -17,7 +17,7 @@ tr
     - else
       .text-danger
         | #{number_with_delimiter(profit, delimiter: ".", separator:",", precision: 2)}
-  td
+  td.text-right
     - if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'show').user_methods.pluck(:user_level).include? current_user.level
       a href='#{transaction_path(id: transaction.id)}'
         button class="btn  btn-primary"

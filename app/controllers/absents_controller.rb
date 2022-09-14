@@ -3,8 +3,6 @@ class AbsentsController < ApplicationController
 
   def index
     status = false
-    # status = Absent.get_data
-    # AccountBalance.salary
     if !status
       @status = "Fingerprint tidak terhubung."
     end

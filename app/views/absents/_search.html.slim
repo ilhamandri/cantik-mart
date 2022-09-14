@@ -1,0 +1,31 @@
+.card-body
+  = form_for :user, url: absents_path, method: 'GET' do |form|
+    - if @search_id.nil?
+      input type="number" class="form-control md-form" name="id" value="#{@search_id}" style="display: none"
+    .row.align-middle
+      - if ["owner", "super_admin", "finance"].include? current_user.level
+        .col-md-6.text-center
+          select class="mdb-select md-form" id="months" name="store_id"
+            option value="0"
+              | Semua Toko
+            - Store.all.each do |store|
+              option value="#{store.id}"
+                | #{store.name}
+        .col-md-6.text-center
+          select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="user_id" id="supplierId"
+            - User.all.each do |user|
+              option value="#{user.id}"
+                | #{user.name}
+      .col-md-6.text-center
+        input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date_from_search"]        
+      .col-md-6.text-center
+        input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date_to_search"]            
+      .col-md-12.text-center
+        button class="btn btn-primary"
+          | Cari
+      .col-md-12.text-center.grey-text
+        a href="#{absents_path(option: @params.to_s, format: :xlsx)}"
+          b
+            | #{@search_text}
+
+

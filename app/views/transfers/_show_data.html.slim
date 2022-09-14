@@ -1,0 +1,13 @@
+table class="table"
+  thead
+    th No
+    - @idx = 1
+    th Kode
+    th Foto
+    th Name
+    th Kuantiti
+    th Jumlah Kirim
+    th Jumlah Terima
+    th Keterangan
+  tbody
+    = render partial: 'show_list', collection: @transfer_items, as: :trf_item

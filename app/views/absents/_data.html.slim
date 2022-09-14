@@ -1,0 +1,14 @@
+table class="table"
+  thead
+    th Nama
+    th Toko
+    th Waktu Masuk
+    th Waktu Keluar
+    th Mulai Lembur
+    th Selesai Lembur
+    th Jam Kerja
+    th Jam Lembur
+  tbody
+    = render partial: 'list', collection: @absents, as: :absent
+= paginate @absents
+

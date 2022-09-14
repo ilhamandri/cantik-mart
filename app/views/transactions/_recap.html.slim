@@ -2,10 +2,10 @@
   br
   .container-fluid
     .row
-      .col-12.pb-2
+      .col-6.pb-2
         .card-header.white-text.info-color
             h5.font-weight-500.my-1
-              | Rekap Perhari
+              | Perhari
         .card.mb-4 
           .card-body
             = form_for :transaction, url: daily_trx_recap_path, method: 'GET' do |form|
@@ -27,10 +27,10 @@
                     i.fas.fa-book
                     |   Download Rekap Transaksi
 
-      .col.pb-2
+      .col-6.pb-2
         .card-header.white-text.info-color
             h5.font-weight-500.my-1
-              | Rekap Perbulan
+              | Perbulan
         .card.mb-4 
           .card-body
             = form_for :transaction, url: monthly_trx_recap_path, method: 'GET' do |form|
@@ -81,7 +81,7 @@
       .col.pb-2
         .card-header.white-text.info-color
             h5.font-weight-500.my-1
-              | Rekap Penjualan Item
+              | Penjualan Item
         .card.mb-4 
           .card-body
             = form_for :transaction, url: daily_trx_item_recap_path(format: :xlsx), method: 'GET' do |form|

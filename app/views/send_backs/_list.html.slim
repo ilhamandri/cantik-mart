@@ -1,8 +1,8 @@
 tr
 	td #{send_back.invoice}
 	td #{send_back.store.name}
-	td #{send_back.user.name} ( #{send_back.created_at} )
 	td #{send_back.total_items}
+	td #{send_back.user.name} ( #{send_back.created_at} )
 	- if send_back.received_by.nil?
 		td -
 		td

@@ -1,0 +1,11 @@
+table class="table"
+  thead
+    th No
+    - @idx = 1
+    th Kode
+    th Nama
+    th Jumlah Kirim
+    th Jumlah Terima
+    th Keterangan
+  tbody
+    = render partial: 'list_show', collection: @send_back_items, as: :send_back_item

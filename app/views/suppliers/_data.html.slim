@@ -1,0 +1,24 @@
+.row
+  .col
+    .alert.alert-primary
+      .alert-heading
+        | Semua Data
+  - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+    .col-2.text-center
+      a href="#{new_supplier_path}"
+        button.btn.btn-success type="button" 
+          i.fas.fa-plus 
+          | &nbsp Supplier
+
+
+table class="table"
+  thead
+    th Nama
+    th Alamat
+    th Telepon
+    th Hutang
+    th Piutang
+    th Aksi
+  tbody
+    = render partial: 'list', collection: @suppliers, as: :supplier
+= paginate @suppliers

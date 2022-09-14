@@ -2,10 +2,17 @@
 .classic-tabs.mx-2
   ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
     li.nav-item
+      - if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
+        a#profile-tab-classic-blue.nav-link.waves-light aria-controls="search" aria-selected="true" data-toggle="tab" href="#search" role="tab" 
+          i.fa.fa-search.fa-2x.pb-2 aria-hidden="true" 
+          br
+          | Pencarian
+
+    li.nav-item
       a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="all_data" aria-selected="true" data-toggle="tab" href="#all_data" role="tab" 
         i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
         br
-        | Semua Data 
+        | Data 
     li.nav-item
       a#profile-tab-classic-blue.nav-link.waves-light aria-controls="recap" aria-selected="true" data-toggle="tab" href="#recap" role="tab" 
         i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
@@ -23,6 +30,10 @@
 
     #recap.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         = render partial: 'recap'
+
+    - if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
+      #search.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+          = render partial: 'search'
 
     #graph.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         = render partial: 'graph'

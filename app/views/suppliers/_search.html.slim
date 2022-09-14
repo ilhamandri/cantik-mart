@@ -1,0 +1,13 @@
+= form_for :supplier, url: suppliers_path, method: 'GET' do |form|
+  .row.align-middle
+    .col-md-12
+      input type="text" class="form-control md-form" id="search" name="search" placeholder="Nama supplier ..."
+    .col-md-12.text-center
+      button class="btn btn-primary"
+        | Cari
+        
+    .col-md-12.text-center.grey-text
+      a href="#{suppliers_path(option: @params.to_s, format: :pdf)}"
+        br
+        b
+          | #{@search}

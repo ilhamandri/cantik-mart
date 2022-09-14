@@ -1,0 +1,23 @@
+.row
+  .col-10
+    .alert.alert-primary
+        .alert-heading
+          | Semua Data
+  .col-2.text-center
+    a href="#{new_user_path}"
+      button.btn.btn-success. type="button" 
+        i.fas.fa-plus 
+        |  Pengguna
+
+table class="table" 
+  thead
+    th Foto
+    th Nama
+    th Jabatan
+    th Alamat
+    th No. Telp
+    th Jenis Kelamin
+    th Aksi
+  tbody
+    = render partial: 'list', collection: @users, as: :user
+= paginate @users

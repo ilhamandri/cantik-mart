@@ -1,0 +1,24 @@
+.row
+  .col
+    .alert.alert-primary
+        .alert-heading
+          | Semua Data
+  .col-2.text-center
+    a href="#{transactions_path(from: "complain")}"
+      button.btn.btn-success type="button" 
+        i.fas.fa-plus 
+        | &nbsp Komplain
+
+
+table class="table"
+  thead
+    th Invoice
+    th Transaksi
+    th Toko
+    th Tgl. Transaksi
+    th Tgl. Retur
+    th Total Item
+    th Aksi
+  tbody
+    = render partial: 'list', collection: @complains, as: :retur
+= paginate @complains

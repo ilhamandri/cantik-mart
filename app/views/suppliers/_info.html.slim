@@ -23,3 +23,9 @@
     .form-group
       label for="phone" Pajak Faktur
       input class="form-control md-form" value=" #{number_with_delimiter(@supplier.tax.to_i, delimiter: ".", separator: ",")} %" disabled="disabled"
+    .row
+      .col-12.text-center
+        - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+          a href='#{edit_supplier_path(id: @supplier.id)}'
+            button.btn.btn-warning type="button" 
+              | Edit

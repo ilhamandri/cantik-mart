@@ -1,0 +1,35 @@
+.row
+  .col
+    - if @color == "warning"
+      .alert.alert-warning
+        .alert-heading
+          | Dalam Proses
+    - elsif @color == "success"
+      .alert.alert-success
+        .alert-heading
+          | Selesai
+    - else
+      .alert.alert-primary
+        .alert-heading
+          | Semua Data
+
+  - if Controller.find_by(name: 'send_backs').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+    .col-2.text-center
+      a href="#{new_send_back_path}"
+        button.btn.btn-success type="button" 
+          i.fas.fa-plus 
+          | &nbsp Kirim BS
+
+table class="table table-hover"
+  thead
+    th Invoice
+    th Dari
+    th Jumlah Item
+    th Dibuat
+    th Selesai
+    th Aksi
+  tbody
+    = render partial: 'list', collection: @send_backs, as: :send_back
+
+
+= paginate @send_backs

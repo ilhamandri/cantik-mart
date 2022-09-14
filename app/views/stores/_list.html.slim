@@ -5,7 +5,7 @@ tr
   td #{store_type}
   td #{store.address}
   td #{number_to_phone(store.phone, country_code: 62)}
-  td
+  td.text-right
   	a href='#{store_path(id: store.id)}'
       	button.btn.btn-info type="button" 
   	       	| Detil

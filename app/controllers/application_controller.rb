@@ -43,12 +43,24 @@ class ApplicationController < ActionController::Base
     end
 
     def authorization
-      return if current_user.level == "owner" || current_user.level == "super_admin"
-      return if ['confirm_feedback','session','received', 'pays', 'errors', 'sign_in', 'sign_out', '/'].any? { |word| request.original_fullpath.include?(word) }
 
       extracted_path = Rails.application.routes.recognize_path(request.original_url)
       controller_name = extracted_path[:controller].to_sym
       method_name = extracted_path[:action].to_sym
+
+      title_actions = {"index"=>"data", "show"=>"detail"}
+      title_action = method_name.to_s.gsub("_"," ")
+      title_action = title_actions[title_action] if title_actions[title_action].present?
+      @method = title_action.camelize
+
+      titles = {"send back"=>"Kirim BS"}
+      title = controller_name.to_s.gsub("_"," ").singularize
+      title = titles[title] if titles[title].present?
+      @title = title.camelize
+
+      return if current_user.level == "owner" || current_user.level == "super_admin"
+      return if ['confirm_feedback','session','received', 'pays', 'errors', 'sign_in', 'sign_out', '/'].any? { |word| request.original_fullpath.include?(word) }
+
       accessible = authentication controller_name, method_name
       redirect_to root_path, flash: { error: 'Tidak memiliki hak akses' } if !accessible
       return
