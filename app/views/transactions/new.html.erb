@@ -65,12 +65,22 @@
         }
       </style>
    </head>
-   <body>
+   <body onload="startTime()">
+      <div class="alert alert-primary" role="alert">
+        <div class="row" style="margin-bottom: 0px;">
+            <div class="col-md-6">
+               <div style="font-size: 20px;"><%= current_user.name %></div>
+            </div>
+            <div class="col-md-6 text-right">
+                <div id="txt" style="font-size: 20px;"></div>
+            </div>
+        </div>
+      </div>
       <div class="ui grid page">
          <div class="column">
             <div class="ui segment">
                <div class="ui menu top">
-                  <a class="active item" data-tab="transaction"><i class="icon edit sign"></i>TRANSAKSI</a>
+                  <a class="active item" data-tab="transaction">TRANSAKSI</a>
                   <!-- <a class="item" data-tab="stock">STOK</a> -->
                   <a class="item" data-tab="member">MEMBER</a>
                </div>
@@ -387,6 +397,23 @@
            $('.modal').modal();
            $('select').formSelect();
          });
+
+         function startTime() {
+           var today = new Date();
+           var h = today.getHours();
+           var m = today.getMinutes();
+           var s = today.getSeconds();
+           m = checkTime(m);
+           s = checkTime(s);
+           document.getElementById('txt').innerHTML =
+           h + ":" + m + ":" + s;
+           var t = setTimeout(startTime, 500);
+         }
+
+         function checkTime(i) {
+           if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+           return i;
+         }
 
          function SUMGrandTotal() {
            total = 0;

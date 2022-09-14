@@ -60,7 +60,7 @@ localhost:3000/controllers
 pg_dump -U postgres -f cm22.bak cantik_mart
 
 -------------------- RESTORE DB -----------------------------
-sudo -u postgres psql tecmintdb < tecmintdb.sql
+sudo -u postgres psql cantik_mart < tecmintdb.sql
 
 
 --------------------- KILL RAILS -----------------------------
@@ -72,6 +72,6 @@ kill -9 PID
 1. copy backup.sh to home / root 
 2. chmod +x backup.sh
 3. sudo nano ~/.bashrc
-3. alias backup='./backup.sh'
+3. alias backup='~/backup.sh'
 4. source ~/.bashrc
-5. backup
+5. backup_db

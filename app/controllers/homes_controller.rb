@@ -3,8 +3,6 @@ class HomesController < ApplicationController
   require 'usagewatch'
 
   def index
-    
-
     UpdateData.updateItemDiscountExpired
     ReCheck.complain
 
@@ -48,7 +46,6 @@ class HomesController < ApplicationController
   def popular_items
     trxs = Transaction.where(store: current_user.store).where("created_at >= ?", (DateTime.now - 2.month)).pluck(:id).uniq
     item_sells = TransactionItem.where(transaction_id: trxs).group(:item_id).count
-
     high_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
     highs = high_results
     curr_date_pop_item = PopularItem.where("date = ?", DateTime.now.beginning_of_month)
