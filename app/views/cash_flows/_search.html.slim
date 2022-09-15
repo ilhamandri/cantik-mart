@@ -1,0 +1,49 @@
+= form_for :finances, url: cash_flows_path, method: 'GET' do |form|
+  .row
+    - if ["owner", "super_admin", "finance"].include? current_user.level
+      .col-md-12
+        select class="mdb-select md-form" id="months" name="store_id"
+          option value="0"
+            | Semua Toko
+          - Store.all.each do |store|
+            option value="#{store.id}"
+              | #{store.name}
+    .col-md-3
+        input class="form-control md-form" type="date" name="date_from" id="date_from"
+    .col-md-3
+        input class="form-control md-form" type="date" name="date_to" id="date_to"
+    .col-3
+      select class="mdb-select md-form" searchable="Cari ..." id="finance_type" name="finance_type[]" size="8" multiple=true
+        option[value=0 selected]
+          | Semua
+        option[value=1]
+          | Aset
+        option[value=2]
+          | Pengeluaran
+        option[value=3]
+          | Pemasukkan
+        option[value=4]
+          | Operasional
+        option[value=5]
+          | Pengeluaran Pasti
+        option[value=6]
+          | Pajak
+        option[value=7]
+          | Penjualan
+        option[value=8]
+          | HPP
+        option[value=9]
+          | Profit
+    .col-3.text-center
+      select class="mdb-select md-form" id="order_by" name="order_by"
+        option[value="desc"]
+          | urutkan dari terakhir
+        option[value="asc"]
+          | secara A - Z
+    .col-12.text-center
+      button class="btn btn-primary"
+        | Cari
+  .col-md-12.text-center.grey-text
+    a href="#{cash_flows_path(option: @params.to_s, format: :pdf)}"
+      b
+        | #{@search}

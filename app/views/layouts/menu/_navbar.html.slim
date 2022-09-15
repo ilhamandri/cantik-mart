@@ -171,13 +171,11 @@ li
           a.waves-effect href="#{stock_values_path}"  Nilai Stok
         li
           a.waves-effect href="#{salaries_path}"  Gaji
-        li
-          a.waves-effect href="#{losses_path}"  Barang Hangus
 
 - if current_user.email.include? "pardev"
   li 
     a.collapsible-header.waves-effect.arrow-r  href="#{stock_recaps_path}"
-      i.w-fa.fas.fa-book
+      i.w-fa.fas.fa-file
       | Stock Recap
 
   li 

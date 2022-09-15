@@ -1,0 +1,16 @@
+.row
+  .col
+    .alert.alert-primary
+      .alert-heading
+        | Semua Data
+
+table class="table"
+  thead
+    th Toko
+    th Bulan
+    th Nominal
+    / th Keterangan
+  tbody
+    = render partial: 'list', collection: @finances, as: :finance
+= paginate @finances
+

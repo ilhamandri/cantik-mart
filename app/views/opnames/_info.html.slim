@@ -1,54 +1,57 @@
-h3
-  | #{current_user.store.name} ( #{DateTime.now.to_s} )
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Unduh Data SO
-      .row
-        .col-6
-          .card-body
-            = form_for :opname, url: opname_day_path(so_type: "department"), method: "POST" do |form|
-              .form-group
-                label for="department" Pilih DEPARTEMEN
-                select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="opname[department_id]" id="supplierId" 
-                  - Department.all.each do |department|
-                    option value="#{department.id}"
-                      | #{department.name}
-              .form-group.text-center
-                = form.submit "UNDUH", class: "btn btn-primary white-text"
+.alert.alert-warning
+  h4.alert-heading 
+    b #{current_user.store.name.upcase}
+  hr
+  p 
+    | Stok opname terakhir 
+    b 
+      u #{@opnames.last.created_at.strftime("%d/%m/%Y %H:%M:%S")}
 
-
-        .col-6
-          .card-body
-            = form_for :opname, url: opname_day_path(so_type: "supplier"), method: "POST" do |form|
-              .form-group
-                label for="department" Pilih SUPLIER
-                select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="opname[supplier_id]" id="supplierId" 
-                  - Supplier.all.each do |supplier|
-                    option value="#{supplier.id}"
-                      | #{supplier.name}
-              .form-group.text-center
-                = form.submit "UNDUH", class: "btn btn-primary white-text"
-
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Kirim File Opname 
+.card.mb-4
+  .card-header.white-text.info-color
+    h5.font-weight-500.my-1
+      | Unduh Data SO
+  .row
+    .col-6
       .card-body
-        = form_for :opname, url: opname_path, html: { multipart: true }, method: "POST" do |form|
+        = form_for :opname, url: opname_day_path(so_type: "department"), method: "POST" do |form|
           .form-group
-            label for="store" File Opname (.xlsx)
-            .input-group
-              .input-group-prepend
-                span#inputGroupFileAddon01.input-group-text
-                  | Upload
-              .custom-file
-                input#inputGroupFile01.custom-file-input[type="file" name="file" aria-describedby="inputGroupFileAddon01"]
-                label.custom-file-label[for="inputGroupFile01"]
-                  | Choose file
+            label for="department" Pilih DEPARTEMEN
+            select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="opname[department_id]" id="supplierId" 
+              - Department.all.each do |department|
+                option value="#{department.id}"
+                  | #{department.name}
           .form-group.text-center
-            = form.submit "KIRIM", class: "btn btn-warning black-text"
+            = form.submit "UNDUH", class: "btn btn-primary white-text"
+
+
+    .col-6
+      .card-body
+        = form_for :opname, url: opname_day_path(so_type: "supplier"), method: "POST" do |form|
+          .form-group
+            label for="department" Pilih SUPLIER
+            select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="opname[supplier_id]" id="supplierId" 
+              - Supplier.all.each do |supplier|
+                option value="#{supplier.id}"
+                  | #{supplier.name}
+          .form-group.text-center
+            = form.submit "UNDUH", class: "btn btn-primary white-text"
+
+.card.mb-4
+  .card-header.white-text.info-color
+    h5.font-weight-500.my-1
+      | Kirim File Opname 
+  .card-body
+    = form_for :opname, url: opname_path, html: { multipart: true }, method: "POST" do |form|
+      .form-group
+        label for="store" File Opname (.xlsx)
+        .input-group
+          .input-group-prepend
+            span#inputGroupFileAddon01.input-group-text
+              | Upload
+          .custom-file
+            input#inputGroupFile01.custom-file-input[type="file" name="file" aria-describedby="inputGroupFileAddon01"]
+            label.custom-file-label[for="inputGroupFile01"]
+              | Choose file
+      .form-group.text-center
+        = form.submit "KIRIM", class: "btn btn-warning black-text"

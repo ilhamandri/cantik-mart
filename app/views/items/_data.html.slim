@@ -1,0 +1,25 @@
+.row
+  .col
+    .alert.alert-primary
+      .alert-heading
+        | Semua Data
+  - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+    .col-2.text-center
+      a href="#{new_item_path}"
+        button.btn.btn-success type="button" 
+          i.fas.fa-plus 
+          | &nbsp Barang
+
+table class="table"
+  thead
+    th Kode
+    th Foto
+    th Name
+    / th Merek
+    th Kategori
+    th Beli
+    th Jual
+    th Aksi
+  tbody
+    = render partial: 'list', collection: @items, as: :item
+= paginate @items

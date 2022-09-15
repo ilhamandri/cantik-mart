@@ -1,0 +1,20 @@
+.row
+  .col
+    .alert.alert-primary
+      .alert-heading
+        | Semua Data
+  - if Controller.find_by(name: 'departments').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+    .col-2.text-center
+      a.btn.btn-success href="#{new_department_path}"
+        i.fas.fa-plus 
+        | &nbsp Departemen
+
+
+table class="table"
+  thead
+    th Name
+    th.text-right Aksi
+  tbody
+    = render partial: 'list', collection: @departments, as: :department
+= paginate @departments
+

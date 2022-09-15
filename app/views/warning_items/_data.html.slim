@@ -1,0 +1,21 @@
+.row
+  .col
+    .alert.alert-primary
+      .alert-heading
+        | Semua Data
+
+        
+table class="table"
+  thead
+    th Kode
+    th Foto
+    th Name
+    th Kategori
+    th Stok
+    th Limit
+    th Supplier
+    th Dalam Proses
+    th Aksi
+  tbody
+    = render partial: 'list', collection: @inventories, as: :inventory
+= paginate @inventories

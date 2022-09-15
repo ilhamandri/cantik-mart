@@ -1,0 +1,33 @@
+= form_for :finances, url: receivables_path, method: 'GET' do |form|
+  .row
+    - if ["owner", "super_admin", "finance"].include? current_user.level
+      .col-md-12
+        select class="mdb-select md-form" id="months" name="store_id"
+          option value="0"
+            | Semua Toko
+          - Store.all.each do |store|
+            option value="#{store.id}"
+              | #{store.name}
+    .col-md-12.text-center
+      input#materialGroupExample1.form-check-input.form-control[type="radio" name="switch_date_month" checked="checked" value="date"]
+        label class="form-check-label" for="materialGroupExample1" Tanggal
+      input#materialGroupExample2.form-check-input[type="radio" name="switch_date_month" value="due_date"]
+        label class="form-check-label" for="materialGroupExample2" Jatuh Tempo
+    .col-md-4
+        input class="form-control md-form" type="date" name="date_from" id="date_from"
+    .col-md-4
+        input class="form-control md-form" type="date" name="date_to" id="date_to"
+    .col-md-4
+      select class="mdb-select md-form" id="order_by" name="order_by"
+        option[value="desc"]
+          | urutkan dari terakhir
+        option[value="asc"]
+          | urutkan dari pertama
+    .col-12.text-center
+      button class="btn btn-primary"
+        | Cari
+        
+    .col-md-12.text-center.grey-text
+      a href="#{receivables_path(option: @params.to_s, format: :pdf)}"
+        b
+          | #{@search}

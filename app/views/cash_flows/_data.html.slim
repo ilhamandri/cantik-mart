@@ -1,0 +1,23 @@
+.row
+  .col
+    .alert.alert-primary
+      .alert-heading
+        | Semua Data
+  - if Controller.find_by(name: 'cash_flows').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+    .col-2.text-center
+      a.btn.btn-success href="#{new_cash_flow_path}"
+        i.fas.fa-plus 
+        | &nbsp Keuangan
+
+table class="table"
+  thead
+    th Dibuat Oleh
+    th Tipe
+    th Debit
+    th Kredit
+    th Tanggal
+    th Keterangan
+  tbody
+    = render partial: 'list', collection: @finances, as: :finance
+= paginate @finances
+

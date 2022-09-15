@@ -1,0 +1,30 @@
+.row
+  .col
+    - if @totals > 0
+      .alert.alert-warning
+        .alert-heading
+          | Piutang - #{number_to_currency(@totals, unit: "Rp. ")}
+    - else
+      .alert.alert-primary
+        .alert-heading
+          | Semua Data
+  - if Controller.find_by(name: 'cash_flows').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+    .col-2.text-center
+      a.btn.btn-success href="#{new_cash_flow_path}"
+        i.fas.fa-plus 
+        | &nbsp Keuangan
+
+table class="table"
+  thead
+    th Tipe
+    th Dibuat Oleh
+    th Untuk
+    th Tanggal
+    th Nominal
+    th Jumlah Cicilan
+    th Per Cicilan
+    th Kekurangan
+    th Keterangan
+  tbody
+    = render partial: 'list', collection: @finances, as: :finance
+= paginate @finances

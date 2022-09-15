@@ -6,7 +6,7 @@ class StockValuesController < ApplicationController
     Store.all.each do |store|
       AccountBalance.stock_values store
     end
-    # AccountBalance.balance_account
+    
     filter = filter_search params
     @search = filter[0]
     @finances = filter[1]

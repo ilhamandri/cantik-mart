@@ -1,0 +1,23 @@
+.row
+  .col
+    .alert.alert-primary
+      .alert-heading
+        | Semua Data
+  - if Controller.find_by(name: 'losses').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+    .col-2.text-center
+      a href="#{new_loss_path}"
+        button.btn.btn-success type="button" 
+          i.fas.fa-plus 
+          | &nbsp Loss
+
+
+table class="table"
+  thead
+    th Invoice
+    th Toko
+    th Jumlah Item
+    th Tgl. Buat
+    th Aksi
+  tbody
+    = render partial: 'list', collection: @losses, as: :loss
+= paginate @losses

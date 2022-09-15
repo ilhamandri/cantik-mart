@@ -1,0 +1,35 @@
+= form_for :items, url: items_path, method: 'GET' do |form|
+  .row
+    .col-12
+      input type="text" class="form-control md-form" id="search" name="search" value="#{@search}" placeholder="Cari..."
+    .col
+      select[class="mdb-select md-form md-outline colorful-select dropdown-primary" id="order_by" name="order_by"]
+        option[value="code" select]
+          | urutkan KODE
+        option[value="name"]
+          | urutkan NAMA
+        / option[value="brand"]
+          | urutkan MEREK
+        option[value="sell"]
+          | urutkan HARGA BELI
+    .col
+      select[class="mdb-select md-form md-outline colorful-select dropdown-primary" id="order_type" name="order_type"]
+        option[value="asc"]
+          | secara A - Z
+        option[value="desc"]
+          | secara Z - A
+    .col-12.text-center
+      button class="btn btn-primary"
+        | Cari
+    br
+- if @search.present?
+  .col-md-12.text-center.grey-text
+    | Pencarian "
+    b
+      | #{@search}
+    | " berdasarkan 
+    b
+      | #{@order_by} 
+    | secara 
+    b
+      | #{@order_type} 

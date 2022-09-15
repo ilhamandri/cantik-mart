@@ -1,0 +1,29 @@
+.row
+  .col
+    .alert.alert-primary
+      .alert-heading
+        | Semua Data
+  - if Controller.find_by(name: 'salaries').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+    .col-2.text-center
+      a href="#{new_salary_path}"
+        button.btn.btn-success type="button" 
+          i.fas.fa-plus 
+          | &nbsp Gaji
+
+
+
+table class="table"
+  thead
+    th Karyawan
+    th Bulan / Tahun
+    th Gaji
+    th Kasbon
+    th Hutang
+    th Bonus
+    th JP
+    th JHT
+  tbody
+    = render partial: 'list', collection: @salaries, as: :salary
+
+= paginate @salaries
+

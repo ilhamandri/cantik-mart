@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
       title_action = title_actions[title_action] if title_actions[title_action].present?
       @method = title_action.camelize
 
-      titles = {"send back"=>"Kirim BS"}
+      titles = {"send back"=>"Kirim BS", "item cat"=>"sub department", "warning item"=>"empty stock"}
       title = controller_name.to_s.gsub("_"," ").singularize
       title = titles[title] if titles[title].present?
       @title = title.camelize

@@ -3,7 +3,7 @@
   .container-fluid
     .row
       .col-6.pb-2
-        .card-header.white-text.info-color
+        .card-header.white-text.success-color
             h5.font-weight-500.my-1
               | Perhari
         .card.mb-4 
@@ -13,15 +13,6 @@
                 .col-12
                   label Pilih Tanggal Transaksi
                   input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date" required=true
-                / .col-12
-                  label Jenis Pembayaran
-                  select name="payment_type" required=true class="mdb-select md-form colorful-select dropdown-primary" 
-                    option value='all'
-                      | Semua
-                    option value="cash"
-                      | Tunai
-                    option value="debit"
-                      | Kartu
                 .col-12.text-center
                   button class="btn btn-info "
                     i.fas.fa-book
@@ -79,7 +70,7 @@
                     |   Download Rekap Transaksi
 - if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
       .col.pb-2
-        .card-header.white-text.info-color
+        .card-header.white-text.bg-dark
             h5.font-weight-500.my-1
               | Penjualan Item
         .card.mb-4 

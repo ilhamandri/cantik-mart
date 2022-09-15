@@ -1,0 +1,38 @@
+- debt_total = @debt.sum(:deficiency)
+- due_date = @debt.where("due_date <= ?", Date.today.end_of_week).count
+- due_date = 0 if due_date <= 0
+- due_date_text = due_date.to_s + " jatuh tempo." 
+
+.row
+  .col
+    - if @debt_totals > 0
+      .alert.alert-danger
+        .alert-heading
+          | Hutang - #{number_to_currency(@debt_totals, unit: "Rp. ")}
+      p
+        span.badge.danger-color.p-2.strong  #{@debt.count} belum lunas
+        | &nbsp&nbsp&nbsp
+        span.badge.danger-color.p-2.strong  #{due_date_text}
+
+    - else
+      .alert.alert-primary
+        .alert-heading
+          | Semua Data
+  - if Controller.find_by(name: 'cash_flows').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+    .col-2.text-center
+      a.btn.btn-success href="#{new_cash_flow_path}"
+        i.fas.fa-plus 
+        | &nbsp Keuangan
+
+table class="table"
+  thead
+    th Dibuat
+    th Tipe
+    th Nominal
+    th Kekurangan
+    th Jatuh Tempo
+    th Keterangan
+  tbody
+    = render partial: 'list', collection: @finances, as: :finance
+= paginate @finances
+

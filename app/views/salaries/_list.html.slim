@@ -7,5 +7,5 @@ tr
 	td #{number_with_delimiter(salary.bonus, delimiter: ".")}
 	td #{number_with_delimiter(salary.jp, delimiter: ".")}
 	td #{number_with_delimiter(salary.jht, delimiter: ".")}
-	td
+	td.text-right
 		= link_to "HAPUS", delete_salary_path(salary), method: :delete, data: { confirm: 'Are you certain you want to delete this?' }, class: "btn btn-danger"

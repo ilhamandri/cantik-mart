@@ -1,40 +1,21 @@
-.row
-  .col
-    h5
-      | Daftar Department
-  .col.text-right
-    - if Controller.find_by(name: 'departments').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
-      a href="#{new_department_path}"
-        button.btn.btn-success type="button" 
-          i.fas.fa-plus 
-          |   Tambah Deparment
-br
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Pencarian
-      .card-body
-        = form_for :departments, url: departments_path, method: 'GET' do |form|
-          .row
-            .col-12
-              input type="text" class="form-control md-form" id="search" name="search" placeholder="Nama Departemen ..."
-            .col-12.text-center
-              button class="btn btn-primary"
-                | Cari
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Data Department
-      .card-body.table-responsive.text-nowrap
-        table class="table"
-          thead
-            th Name
-            th Aksi
-          tbody
-            = render partial: 'list', collection: @departments, as: :department
-        = paginate @departments
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="search" aria-selected="true" data-toggle="tab" href="#search" role="tab" 
+        i.fa.fa-search.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Pencarian 
 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="data" aria-selected="true" data-toggle="tab" href="#data" role="tab" 
+        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Data 
+
+
+  #myClassicTabContentOrange.tab-content.card
+    #search.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+      = render partial: 'search'
+
+    #data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'data'

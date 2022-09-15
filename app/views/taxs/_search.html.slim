@@ -1,0 +1,34 @@
+= form_for :finances, url: taxs_path, method: 'GET' do |form|
+  .row
+    - if ["owner", "super_admin", "finance"].include? current_user.level
+      .col-md-12
+        select class="mdb-select md-form" id="months" name="store_id"
+          option value="0"
+            | Semua Toko
+          - Store.all.each do |store|
+            option value="#{store.id}"
+              | #{store.name}
+    .col
+      select class="mdb-select md-form" id="months" name="months"
+        option[value=3]
+          | 3 bulan
+        option[value=6]
+          | 6 bulan
+        option[value=9]
+          | 9 bulan
+        option[value=12]
+          | 1 tahun
+    .col
+      select class="mdb-select md-form" id="order_by" name="order_by"
+        option[value="asc"]
+          | secara A - Z
+        option[value="desc"]
+          | secara Z - A
+    .col-12.text-center
+      button class="btn btn-primary"
+        | Cari
+
+    .col-md-12.text-center.grey-text
+      a href="#{taxs_path(option: @params.to_s, format: :pdf)}"
+        b
+          | #{@search}
