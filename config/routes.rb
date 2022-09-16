@@ -43,7 +43,7 @@ Rails.application.routes.draw do
   get '/retur/:id/feedback', to: 'retur_items#feedback', as: 'retur_feedback'
   post '/retur/:id/confirm_feedback', to: 'retur_items#feedback_confirmation', as: 'retur_feedback_confirmation'
 
-  delete '/sign_out', to: 'sessions#destroy'
+  get '/sign_out', to: 'sessions#destroy'
 
   get '/api/:api_type', to: 'apis#index'
 
