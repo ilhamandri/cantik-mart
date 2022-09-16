@@ -926,8 +926,8 @@
              map["voucher"] = voucher_code;
              map["invoice"] = gon.invoice+from;
              jQuery.ajax({
-                 url: "/api/trx/post",
-                 type: "POST",
+                 url: "/trx/post",
+                 type: "GET",
                  data: map,
                  dataType: "json",
                  beforeSend: function(x) {

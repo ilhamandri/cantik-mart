@@ -46,7 +46,9 @@ Rails.application.routes.draw do
   delete '/sign_out', to: 'sessions#destroy'
 
   get '/api/:api_type', to: 'apis#index'
-  post '/api/trx/post', to: 'transactions#create_trx'
+
+  get '/trx/post', to: 'transactions#create_trx'
+
   get '/get/:store_id', to: 'gets#index'
   post '/api/post/:type', to: 'posts#index'
   get '/refresh/balance', to: 'balances#refresh'
