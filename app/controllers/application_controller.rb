@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   include Clearance::Controller
   include PublicActivity::StoreController 
-  before_action :screening
+  # before_action :screening
   
   protected
     def authorize *authorized_level
