@@ -29,8 +29,8 @@ class ApplicationController < ActionController::Base
         @weather["icon"] = weather_data["condition"]["icon"]
       end
       
-      return if current_user.nil?
-      return not_found_path if !current_user.active
+      # return if current_user.nil?
+      # return not_found_path if !current_user.active
        # authorization
     end
 
