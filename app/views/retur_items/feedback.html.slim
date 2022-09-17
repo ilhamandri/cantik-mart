@@ -46,4 +46,6 @@
               h3 id="total"
                 | 0
             .form-group.text-center
-              = form.submit "Buat Hasil Retur", class: "btn btn-primary"
+              /= form.submit "Buat Hasil Retur", class: "btn btn-primary"
+
+              = button_to "Feedback Retur", retur_feedback_confirmation_path(@retur), class: "btn btn-primary ", method: :post

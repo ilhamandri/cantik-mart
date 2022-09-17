@@ -8,6 +8,8 @@ class ReturItemsController < ApplicationController
   end
 
   def feedback
+    extracted_path = Rails.application.routes.recognize_path(request.original_url)
+    binding.pry
     return redirect_back_data_error returs_path, "Data Retur Tidak Valid" unless params[:id].present?
     @retur = Retur.find params[:id]
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless @retur.present?

@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
       
       return if current_user.nil?
       return not_found_path if !current_user.active
-      authorization
+       # authorization
     end
 
     def redirect_back_data_error current_path, message
@@ -43,8 +43,8 @@ class ApplicationController < ActionController::Base
     end
 
     def authorization
-
       extracted_path = Rails.application.routes.recognize_path(request.original_url)
+      
       controller_name = extracted_path[:controller].to_sym
       method_name = extracted_path[:action].to_sym
 
@@ -59,10 +59,10 @@ class ApplicationController < ActionController::Base
       @title = title.camelize
 
       return if current_user.level == "owner" || current_user.level == "super_admin"
-      return if ['confirm_feedback','session','received', 'pays', 'errors', 'sign_in', 'sign_out', '/'].any? { |word| request.original_fullpath.include?(word) }
+      return if ['session','received', 'pays', 'errors', 'sign_in', 'sign_out', '/'].any? { |word| request.original_fullpath.include?(word) }
 
-      accessible = authentication controller_name, method_name
-      redirect_to root_path, flash: { error: 'Tidak memiliki hak akses' } if !accessible
+      # accessible = authentication controller_name, method_name
+      # redirect_to root_path, flash: { error: 'Tidak memiliki hak akses' } if !accessible
       return
     end
 
