@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   include Clearance::Controller
   include PublicActivity::StoreController 
-  # before_action :screening
+  before_action :screening
   
   protected
     def authorize *authorized_level
@@ -29,9 +29,9 @@ class ApplicationController < ActionController::Base
         @weather["icon"] = weather_data["condition"]["icon"]
       end
       
-      # return if current_user.nil?
-      # return not_found_path if !current_user.active
-       # authorization
+      return if current_user.nil?
+      return not_found_path if !current_user.active
+       authorization
     end
 
     def redirect_back_data_error current_path, message
@@ -61,8 +61,8 @@ class ApplicationController < ActionController::Base
       return if current_user.level == "owner" || current_user.level == "super_admin"
       return if ['session','received', 'pays', 'errors', 'sign_in', 'sign_out', '/'].any? { |word| request.original_fullpath.include?(word) }
 
-      # accessible = authentication controller_name, method_name
-      # redirect_to root_path, flash: { error: 'Tidak memiliki hak akses' } if !accessible
+      accessible = authentication controller_name, method_name
+      redirect_to root_path, flash: { error: 'Tidak memiliki hak akses' } if !accessible
       return
     end
 
