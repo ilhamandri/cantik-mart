@@ -95,6 +95,9 @@ Rails.application.routes.draw do
   get '/backup/download/:id', to: 'backups#download', as: 'backup_download'
   
   get '/sync/:id/:target', to: 'apis#get_sync', as: 'get_sync'
+  post '/reset/user/:id', to: 'users#reset_password', as: "reset_password"
+
+
   resources :discounts
   resources :pays, only: %i[new create]
   resources :populars

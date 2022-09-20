@@ -21,7 +21,27 @@ class UsersController < ApplicationController
     end
   end
 
+  def reset_password
+    return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless params[:id].present?
+    user = User.find_by_id params[:id]
+
+    return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless user.present?
+
+    if !["owner", "super_admin", "finance"].include? current_user.level
+      if user != current_user
+        return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless user.present?
+      end
+    end
+
+    if user.temp_password.nil?
+      new_password = SecureRandom.hex(3).to_s
+      user.password = new_password
+      user.temp_password = new_password
+      user.save!
+    end
+    return redirect_success user_path(id: user.id), "Password Pengguna - " + user.name + " - Telah Direset"
   
+  end
 
   def show
     return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless params[:id].present?
@@ -131,6 +151,11 @@ class UsersController < ApplicationController
     param = user_params
     if user != current_user
       param = user_params.delete("password")
+    end
+
+    if user_params["password"].present?
+      user.temp_password = nil
+      user.save!
     end
 
     user.assign_attributes user_params

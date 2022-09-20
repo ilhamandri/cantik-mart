@@ -1,9 +1,22 @@
+- if @user.temp_password.present?
+  - if current_user == @user
+    .alert.alert-danger
+      .alert-heading
+        h5 WARNING 
+      .alert-body
+        p Segera ganti password anda.
+  - elsif current_user.level == "super_admin"
+    .alert.alert-danger
+      .alert-heading
+        h5 RESET PASSWORD 
+      .alert-body
+        p PASSWORD : #{@user.temp_password.to_s}
 .card-body
   = form_for :user, url: users_path, method: "POST" do |form|
     .row
       .col-6.text-center
         - if @user.image.present?
-          =image_tag("/uploads/profile_picture/#{@user.image}", height: '200', width: '200', class:"rounded-circle z-depth-2")
+          =image_tag("/uploads/profile_picture/#{@user.image}", height: '200', width: '300', class:"rounded z-depth-2")
         - else
           =image_tag("/uploads/profile_picture/default.png", height: '200', width: '200', class:"rounded-circle z-depth-2")
       .col-6
@@ -54,10 +67,17 @@
             label for="id-card" Terakhir Update
             input type="text" value="#{@user.updated_at}" class="form-control md-form" disabled="disabled"
       
-      .col-6.text-center
-        = button_to "Hapus", @user, :method=>:delete, :class=>"btn btn-danger"
+      - if current_user.level == "super_admin"
+        .col.text-center
+          = button_to "Hapus", @user, :method=>:delete, :class=>"btn btn-danger"
 
-      .col-6.text-center
+        .col.text-center
+          = form_for :user, id: 'reset_password_form', url: reset_password_path, method: "POST" do |form|
+            = form.text_field :id, required: true, style:"display: none;"
+            button.btn.btn-dark href="#{reset_password_path(id: @user.id)}"
+              | RESET PASSWORD
+
+      .col.text-center
         a href='#{edit_user_path(id: @user.id)}' 
-          button.btn.btn-warning.black-text type="button" 
+          button.btn.btn-warning type="button" 
             | Edit
