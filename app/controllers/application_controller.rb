@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
       
       # return if current_user.nil?
       # return not_found_path if !current_user.active
-       # authorization
+      # authorization
     end
 
     def redirect_back_data_error current_path, message

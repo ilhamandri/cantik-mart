@@ -94,6 +94,7 @@ class UsersController < ApplicationController
     user = User.new user_params
     return redirect_back_data_error new_user_path, "Data Pengguna Tidak Ditemukan" if user.invalid?
     user.fingerprint = 0
+    user.active = true
     user.save!
     user.fingerprint = user.id
     user.save!
