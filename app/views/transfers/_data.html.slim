@@ -23,4 +23,7 @@ table class="table"
     th Aksi
   tbody
     = render partial: 'list', collection: @transfers, as: :transfer
-= paginate @transfers
+.container.pagination.justify-content-center
+  = paginate @transfers
+.text-center
+  = page_entries_info @transfers

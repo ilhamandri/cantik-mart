@@ -4,7 +4,7 @@ tr
 	td #{point.point_type.upcase}
 	- if point.trx.present?
 		td 
-			a href="#{transaction_items_path(id: point.trx.id)}"
+			a href="#{transactions_path(id: point.trx.id)}"
 				| TRANSAKSI - #{point.trx.invoice}
 	- elsif point.exchange_point.present?
 		td 

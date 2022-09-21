@@ -13,7 +13,7 @@
 table class="table"
   thead
     th Kode
-    th Foto
+    / th Foto
     th Name
     / th Merek
     th Kategori
@@ -22,4 +22,8 @@ table class="table"
     th Aksi
   tbody
     = render partial: 'list', collection: @items, as: :item
-= paginate @items
+
+.container.pagination.justify-content-center
+  = paginate @items,pagination_class: "pagination-sm" 
+.text-center
+  = page_entries_info @items

@@ -19,6 +19,9 @@ table class="table"
     th Aksi
   tbody
     = render partial: 'list', collection: @stores, as: :store
-= paginate @stores
+.container.pagination.justify-content-center
+  = paginate @stores
+.text-center
+  = page_entries_info @stores
 
 

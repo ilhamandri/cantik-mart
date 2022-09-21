@@ -1,0 +1,20 @@
+= form_for :promotion, url: promotions_path, method: 'GET' do |form|
+  .row
+    .col-md-4
+        input class="form-control md-form" type="date" name="date_from" id="date_from"
+    .col-md-4
+        input class="form-control md-form" type="date" name="date_to" id="date_to"
+    .col-md-4
+      select class="mdb-select md-form" id="order_by" name="order_by"
+        option[value="desc"]
+          | urutkan dari terakhir
+        option[value="asc"]
+          | urutkan dari pertama
+    .col-12.text-center
+      button class="btn btn-primary"
+        | Cari
+
+.text-center.grey-text
+  a href="#{promotions_path(option: @params.to_s, format: :pdf)}"
+    b
+      | #{@search}

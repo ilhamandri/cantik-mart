@@ -18,4 +18,7 @@ table class="table"
     th Aksi
   tbody
     = render partial: 'list', collection: @inventories, as: :inventory
-= paginate @inventories
+.container.pagination.justify-content-center
+  = paginate @inventories
+.text-center
+  = page_entries_info @inventories

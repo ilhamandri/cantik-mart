@@ -99,7 +99,10 @@
               th Jumlah Gratis 
             tbody
               = render partial: 'promo', collection: @transaction_items, as: :transaction_item
-          = paginate @transaction_items
+          .container.pagination.justify-content-center
+            = paginate @transaction_items
+          .text-center
+            = page_entries_info 
 
 - check_complain = Complain.find_by(transaction_id: transaction.id)
 - if check_complain.present? || transaction.from_complain?

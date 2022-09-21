@@ -19,4 +19,7 @@ table class="table"
     th Aksi
   tbody
     = render partial: 'list', collection: @members, as: :member
-= paginate @members
+.container.pagination.justify-content-center
+  = paginate @members
+.text-center
+  = page_entries_info @members

@@ -36,5 +36,8 @@ table class="table table-hover"
     th Aksi
   tbody
     = render partial: 'list', collection: @orders, as: :order
-= paginate @orders
+.container.pagination.justify-content-center
+  = paginate @orders
+.text-center
+  = page_entries_info @orders
 

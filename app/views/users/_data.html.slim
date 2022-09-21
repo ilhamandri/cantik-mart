@@ -4,10 +4,9 @@
         .alert-heading
           | Semua Data
   .col-2.text-center
-    a href="#{new_user_path}"
-      button.btn.btn-success. type="button" 
-        i.fas.fa-plus 
-        |  Pengguna
+    a.btn.btn-success href="#{new_user_path}"
+      i.fas.fa-plus 
+      |  Pengguna
 
 table class="table" 
   thead
@@ -20,4 +19,7 @@ table class="table"
     th Aksi
   tbody
     = render partial: 'list', collection: @users, as: :user
-= paginate @users
+.container.pagination.justify-content-center
+  = paginate @users
+.text-center
+  = page_entries_info @users

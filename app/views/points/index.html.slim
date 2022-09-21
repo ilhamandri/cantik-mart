@@ -1,27 +1,14 @@
-.row
-  .col
-    h5
-      | Riwayat Poin - #{@member.name}
-  .col.text-right
-    a href="#{new_point_path(id: @member.id)}"
-      button.btn.btn-success type="button" 
-        i.fas.fa-plus 
-        |   Tukar Poin
-br
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Riwayat
-      .card-body.table-responsive.text-nowrap
-        table class="table"
-          thead
-            th Tanggal
-            th Poin
-            th Jenis
-            th Keterangan
-          tbody
-            = render partial: 'list', collection: @points, as: :point
-        = paginate @points
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="search" aria-selected="true" data-toggle="tab" href="#search" role="tab" 
+        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Data 
 
+
+
+  #myClassicTabContentOrange.tab-content.card
+
+    #data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'data'

@@ -53,5 +53,8 @@ br
             th Aksi
           tbody
             = render partial: 'list', collection: @discounts, as: :discount
-        = paginate @discounts
+        .container.pagination.justify-content-center
+          = paginate @discounts
+        .text-center
+          = page_entries_info @discounts
 

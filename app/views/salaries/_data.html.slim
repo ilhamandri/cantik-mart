@@ -25,5 +25,9 @@ table class="table"
   tbody
     = render partial: 'list', collection: @salaries, as: :salary
 
-= paginate @salaries
+.container.pagination.justify-content-center
+  = paginate @salaries
+
+.text-center
+  = page_entries_info @salaries
 

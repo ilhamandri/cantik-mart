@@ -7,7 +7,7 @@
         | Info 
     / li.nav-item
       a#profile-tab-classic-blue.nav-link.waves-light aria-controls="absent" aria-selected="true" data-toggle="tab" href="#absent" role="tab" 
-        i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
+        i.fa.fa-calendar.fa-2x.pb-2 aria-hidden="true" 
         br
         | Absensi
     li.nav-item
@@ -15,6 +15,12 @@
         i.fa.fa-handshake-o.fa-2x.pb-2 aria-hidden="true" 
         br
         | Pinjaman
+
+    li.nav-item
+      a#contact-tab-classic-blue.nav-link.waves-light aria-controls="kasbon" aria-selected="false" data-toggle="tab" href="#kasbon" role="tab" 
+        i.fa.fa-credit-card.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Kasbon
 
     li.nav-item
       a#contact-tab-classic-blue.nav-link.waves-light aria-controls="salaries" aria-selected="false" data-toggle="tab" href="#salaries" role="tab" 
@@ -34,4 +40,7 @@
 
     #salaries.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         = render partial: 'salaries'
+
+    #kasbon.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'kasbon'
       

@@ -42,7 +42,10 @@ br
             th Aksi
           tbody
             = render partial: 'list', collection: @controllers, as: :controller
-        = paginate @controllers
+        .container.pagination.justify-content-center
+          = paginate @controllers
+        .text-center
+          = page_entries_info @controllers
 
   
 

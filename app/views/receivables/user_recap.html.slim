@@ -112,4 +112,7 @@ br
                   td 
                     a href="#{receivable_path(id: receivable.id)}" class="btn btn-info"
                       | #{receivable.description}
-          = paginate @receivables
+.container.pagination.justify-content-center
+  = paginate @receivables
+.text-center
+  = page_entries_info @receivables

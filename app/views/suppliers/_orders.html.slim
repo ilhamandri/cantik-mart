@@ -58,7 +58,10 @@ hr
                         | Detil
 
 
-/ = paginate @orders, param_name: :order_page
+/ .container.pagination.justify-content-center
+  = paginate @orders, param_name: :order_page
+/.text-center
+  = page_entries_info @orders
 
 
 

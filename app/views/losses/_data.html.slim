@@ -20,4 +20,7 @@ table class="table"
     th Aksi
   tbody
     = render partial: 'list', collection: @losses, as: :loss
-= paginate @losses
+.container.pagination.justify-content-center
+  = paginate @losses
+.text-center
+  = page_entries_info @losses

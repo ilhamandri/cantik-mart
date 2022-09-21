@@ -1,0 +1,12 @@
+- kasbons = Kasbon.where(user: @user).where("nominal > 0")
+.card-body
+  table class="table"
+    tr
+      th Tanggal
+      th Nominal
+    - kasbons.each do |kasbon|
+      tr
+        td #{kasbon.created_at}
+        td #{number_with_delimiter(kasbon.nominal, delimiter:".")}
+      
+

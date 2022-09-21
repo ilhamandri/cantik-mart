@@ -32,4 +32,7 @@
             th Alasan Retur
           tbody
             = render partial: 'list', collection: @complain_items, as: :ret_item
-        = paginate @complain_items
+        .container.pagination.justify-content-center
+          = paginate @complain_items
+        .text-center
+          = page_entries_info @complain_items

@@ -1,0 +1,24 @@
+- exchange points
+- discounts
+- complain_items -> index
+- balances -> DELETE ALL 
+- backups
+- activities
+- hak akses
+- SEMUA DATA -> SEMUA DATA #{@title}
+
+DONE:
+- user show -> add kasbon tab
+- KASBON index
+- Voucher
+- Member Point
+- Promotion
+- item show
+- stocks -> index, show (DELETE)
+- supplier_items -> index (DELETE)
+
+UNUSED FEATURE :
+- Voucher
+- Member Point
+- Promotion
+- Balance

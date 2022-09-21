@@ -18,7 +18,10 @@ br
             th Pesan
           tbody
             = render partial: 'list', collection: @notifications, as: :notification
-        = paginate @notifications
+        .container.pagination.justify-content-center
+          = paginate @notifications
+        .text-center
+          = page_entries_info @notifications 
 
   
 

@@ -1,6 +1,6 @@
 tr
   td #{item.code}
-  td
+  / td
     - if item.image.present?
       img src="#{item.image}" width="50px"
     - else
@@ -23,6 +23,6 @@ tr
       button.btn.btn-primary type="button" 
         | Detil
     a href='#{item_path(id: item.id, format: :pdf)}'
-      button.btn.btn-success type="button" 
+      button.btn.btn-dark type="button" 
         | + Cetak
 

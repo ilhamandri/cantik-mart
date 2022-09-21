@@ -12,7 +12,11 @@ table class="table"
     th Nominal
   tbody
     = render partial: 'show_list', collection: @retur_items, as: :ret_item
-= paginate @retur_items
+    
+.container.pagination.justify-content-center
+  = paginate @retur_items
+.text-center
+  = page_entries_info @retur_items
 
 hr
 .text-right

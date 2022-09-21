@@ -25,5 +25,9 @@ br
             th
           tbody
             = render partial: 'list', collection: @EPoints, as: :epoint
-        = paginate @EPoints
+        .container.pagination.justify-content-center
+          = paginate @EPoints
+
+        .text-center
+          = page_entries_info @EPoints
 

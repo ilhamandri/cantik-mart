@@ -10,4 +10,7 @@
 	    th Aksi
 	  tbody
 	    = render partial: 'list', collection: @transactions, as: :transaction
-	= paginate @transactions
+	.container.pagination.justify-content-center
+  		= paginate @transactions
+	.text-center
+  		= page_entries_info @transactions

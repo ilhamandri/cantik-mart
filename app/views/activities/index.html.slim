@@ -72,7 +72,11 @@ br
             th Aksi
           tbody
             = render partial: 'list', collection: @activities, as: :activity
-        = paginate @activities
+        .container.pagination.justify-content-center
+          = paginate @activities
+        
+        .text-center
+          = page_entries_info 
 
   
 

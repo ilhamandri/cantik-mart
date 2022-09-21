@@ -28,4 +28,7 @@
               a href='#{new_order_path(supplier_id: @supplier.id, item_id: item.id)}'
                 button.btn.btn-success type="button"
                       | Order
-= paginate @supplier_items, param_name: :item_page
+.container.pagination.justify-content-center
+  = paginate @supplier_items, param_name: :item_page
+.text-center
+  = page_entries_info @supplier_items

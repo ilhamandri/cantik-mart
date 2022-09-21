@@ -32,4 +32,7 @@ table class="table table-hover"
     = render partial: 'list', collection: @send_backs, as: :send_back
 
 
-= paginate @send_backs
+.container.pagination.justify-content-center
+  = paginate @send_backs
+.text-center
+  = page_entries_info @send_backs

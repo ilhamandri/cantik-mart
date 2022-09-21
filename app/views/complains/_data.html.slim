@@ -21,4 +21,7 @@ table class="table"
     th Aksi
   tbody
     = render partial: 'list', collection: @complains, as: :retur
-= paginate @complains
+.container.pagination.justify-content-center
+  = paginate @complains
+.text-center
+  = page_entries_info @complains

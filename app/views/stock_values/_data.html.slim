@@ -12,5 +12,8 @@ table class="table"
     / th Keterangan
   tbody
     = render partial: 'list', collection: @finances, as: :finance
-= paginate @finances
+.container.pagination.justify-content-center
+  = paginate @finances
+.text-center
+  = page_entries_info @finances
 

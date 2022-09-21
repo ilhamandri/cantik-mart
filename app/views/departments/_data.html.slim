@@ -16,5 +16,8 @@ table class="table"
     th.text-right Aksi
   tbody
     = render partial: 'list', collection: @departments, as: :department
-= paginate @departments
+.container.pagination.justify-content-center
+  = paginate @departments
+.text-center
+  = page_entries_info @departments
 

@@ -13,4 +13,7 @@
             a href="#{item_path(id: item.id)}" class="text-primary"
               | Detil
 
+.container.pagination.justify-content-center
   = paginate @items
+.text-center
+  = page_entries_info @items

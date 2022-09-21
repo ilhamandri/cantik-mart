@@ -50,7 +50,10 @@
           | Data
     .card.mb-4
       .card-body.table-responsive.text-nowrap
-        = paginate @balances
+        .container.pagination.justify-content-center
+  = paginate @balances
+.text-center
+  = page_entries_info @balances
         table class="table"
           thead
             th Toko

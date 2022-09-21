@@ -24,7 +24,8 @@ br
             th Persentase
           tbody
             = render partial: 'list_predict_cat', collection: @predicts_cat, as: :predict
-        = paginate @predicts_cat
+        .container.pagination.justify-content-center
+  = paginate @predicts_cat
 
 .container-fluid
   .col-lg-12.col-md-12
@@ -40,4 +41,8 @@ br
             th Persentase
           tbody
             = render partial: 'list_predict', collection: @predicts, as: :predict
-        = paginate @predicts
+
+.container.pagination.justify-content-center
+  = paginate @predicts
+.text-center
+  = page_entries_info @predicts
