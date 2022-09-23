@@ -62,8 +62,11 @@ class ApplicationController < ActionController::Base
       title = titles[title] if titles[title].present?
       @title = title.camelize
       
-      return if current_user.level == "owner" || current_user.level == "super_admin"
 
+      if current_user.present?
+        return if current_user.level == "owner" || current_user.level == "super_admin"
+      end 
+      
       return if ['received', 'pays', 'errors', '/'].any? { |word| request.original_fullpath.include?(word) }
 
       accessible = authentication controller_name, method_name
