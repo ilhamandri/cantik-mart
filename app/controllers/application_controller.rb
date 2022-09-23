@@ -29,11 +29,11 @@ class ApplicationController < ActionController::Base
         @weather["icon"] = weather_data["condition"]["icon"]
       end
       
-      if current_user.present?
-        return not_found_path if !current_user.active
-      end
+      # if current_user.present?
+      #   return not_found_path if !current_user.active
+      # end
 
-      authorization
+      # authorization
     end
 
     def redirect_back_data_error current_path, message
