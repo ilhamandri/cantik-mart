@@ -1,0 +1,32 @@
+
+/ - if @search_id.nil?
+/        | Aktivitas Pengguna Sistem  
+/        - if !@bool_status
+/          .text-danger
+/            | #{@status}
+/    - else
+/        - user = User.find @search_id
+/        | Aktivitas #{user.name}
+.row
+	.col
+	    .alert.alert-primary
+	        .alert-heading
+	          | Semua Data #{@title}
+
+table class="table"
+  thead
+    th Aktivitas
+    th Target
+    th Tanggal
+    th Pengguna
+    th Perubahan
+    th Aksi
+  tbody
+    = render partial: 'list', collection: @activities, as: :activity
+.container.pagination.justify-content-center
+  = paginate @activities
+
+.text-center
+  = page_entries_info @activities
+
+

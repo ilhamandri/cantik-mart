@@ -1,82 +1,22 @@
-.row
-  .col.text-left
-    h5
-      - if @search_id.nil?
-        | Aktivitas Pengguna Sistem  
-        - if !@bool_status
-          .text-danger
-            | #{@status}
-      - else
-        - user = User.find @search_id
-        | Aktiviitas #{user.name}
-br
-.container-fluid
-  .col-lg-12.col-md-12
-    .card-header.white-text.info-color
-      h5.font-weight-500.my-1
-        - if @search_text.present?
-          | #{@search_text}
-        - else
-          | Pencarian
-    .card.mb-4
-      .card-body
-        = form_for :activity, url: activities_path, method: 'GET' do |form|
-          - if @search_id.nil?
-            input type="number" class="form-control md-form" name="id" value="#{@search_id}" style="display: none"
-          .row.align-middle
-            .col-md-4.text-center
-              select.mdb-select.colorful-select.dropdown-primary.md-form multiple="multiple" searchable=("Cari Pengguna")  name="activity[access_levels][]"
-                - users_level = UserMethod.where(controller_method: @method).pluck(:user_level)
-                - levels = User.levels
-                - levels.keys.each do |level|
-                    - lv = User.levels[level].to_s
-                    - if @access_levels.present?
-                      - if @access_levels.include? lv
-                        option selected="selected" value="#{levels[level]}"  #{level.underscore.humanize.upcase}
-                      - else
-                        option value="#{levels[level]}"  #{level.underscore.humanize.upcase}
-                    - else
-                      option value="#{levels[level]}"  #{level.underscore.humanize.upcase}
-            .col-md-4.text-center
-              select.mdb-select.colorful-select.dropdown-primary.md-form multiple="multiple" searchable=("Cari Target")  name="activity[targets][]"
-                - @models.each do |mod|
-                  - if @targets.present?
-                    - if @targets.include? mod
-                      option selected="selected" value="#{mod}"  #{mod.underscore.humanize.upcase}
-                    - else
-                      option value="#{mod}"  #{mod.underscore.humanize.upcase}
-                  - else
-                    option value="#{mod}"  #{mod.underscore.humanize.upcase}
-            .col-md-4.text-center
-              input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="activity[date_search]"]                
-            .col-md-12.text-center
-              button class="btn btn-primary"
-                | Cari
-            .col-md-12.text-center.grey-text
-              b
-                | #{@search_text}
-.container-fluid
-  .col-lg-12.col-md-12
-    .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Data
-    .card.mb-4
-      .card-body.table-responsive.text-nowrap
-        table class="table"
-          thead
-            th Aktivitas
-            th Target
-            th Tanggal
-            th Pengguna
-            th Perubahan
-            th Aksi
-          tbody
-            = render partial: 'list', collection: @activities, as: :activity
-        .container.pagination.justify-content-center
-          = paginate @activities
-        
-        .text-center
-          = page_entries_info 
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="search" aria-selected="true" data-toggle="tab" href="#search" role="tab" 
+        i.fa.fa-search.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Pencarian 
 
-  
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="data" aria-selected="true" data-toggle="tab" href="#data" role="tab" 
+        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Data 
 
+
+
+  #myClassicTabContentOrange.tab-content.card
+    #search.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'search'
+
+    #data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'data'

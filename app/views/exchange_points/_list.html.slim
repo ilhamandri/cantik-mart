@@ -10,17 +10,14 @@ tr
 	- if hit <= 0
 		td 0
 		td 
-			a href='#{set_exchange_point_path(id: epoint.id)}'
-	    		button.btn.btn-primary type="button"
-	    			- if epoint.status 
-		       			| Hentikan
-		       		- else
-		       			| Aktifkan 
-
-			a href='#{edit_exchange_point_path(id: epoint.id)}'
-	    		button.btn.btn-warning.black-text type="button" 
-		       		| Edit
-
+			a.btn.btn-primary href='#{set_exchange_point_path(id: epoint.id)}'
+    			- if epoint.status 
+	       			| Hentikan
+	       		- else
+	       			| Aktifkan 
+	        | &nbsp
+			a.btn.btn-warning href='#{edit_exchange_point_path(id: epoint.id)}'
+		       	| Edit
 		td
 			= button_to "Hapus", epoint, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Are you sure you want to delete ?" }
 	- else

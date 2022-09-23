@@ -1,0 +1,26 @@
+.row
+	.col
+	    .alert.alert-primary
+	        .alert-heading
+	          | Semua Data #{@title}
+	- if Controller.find_by(name: 'exchange_points').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+		.col-2.text-center
+		    a.btn.btn-success href="#{new_exchange_point_path}"
+		      i.fas.fa-plus 
+		      |  Kasbon
+
+
+table class="table"
+  	thead
+	    th Jumlah Poin
+	    th Tipe
+	    th Nominal
+	    th Ditukarkan
+	    th Aksi
+  	tbody
+    	= render partial: 'list', collection: @EPoints, as: :epoint
+
+.container.pagination.justify-content-center
+  	= paginate @EPoints
+.text-center
+  	= page_entries_info @EPoints

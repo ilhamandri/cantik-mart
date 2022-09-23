@@ -15,7 +15,7 @@
     - else
       .alert.alert-primary
         .alert-heading
-          | Semua Data
+          | Semua Data #{@title}
 
   .col-2.text-center
     - if Controller.find_by(name: 'returs').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level

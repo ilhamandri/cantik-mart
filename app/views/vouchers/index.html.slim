@@ -1,18 +1,17 @@
-.container-fluid
-  .col-lg-12.col-md-12
-    .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Semua Data
-    .card.mb-4
-      .card-body.table-responsive.text-nowrap
-        table class="table"
-          thead
-            th Jenis
-            th Kode Voucher
-            th Digunakan
-          tbody
-            = render partial: 'list', collection: @vouchers, as: :voucher
-        .container.pagination.justify-content-center
-          = paginate @vouchers
-        .text-center
-          = page_entries_info  @vouchers
+.row
+  .col
+      .alert.alert-primary
+          .alert-heading
+            | Semua Data #{@title}
+    
+table class="table"
+  thead
+    th Jenis
+    th Kode Voucher
+    th Digunakan
+  tbody
+    = render partial: 'list', collection: @vouchers, as: :voucher
+.container.pagination.justify-content-center
+  = paginate @vouchers
+.text-center
+  = page_entries_info  @vouchers

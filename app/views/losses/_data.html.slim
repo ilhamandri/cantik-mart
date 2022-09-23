@@ -2,7 +2,7 @@
   .col
     .alert.alert-primary
       .alert-heading
-        | Semua Data
+        | Semua Data #{@title}
   - if Controller.find_by(name: 'losses').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
     .col-2.text-center
       a href="#{new_loss_path}"

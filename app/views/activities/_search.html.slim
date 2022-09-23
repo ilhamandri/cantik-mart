@@ -1,0 +1,35 @@
+= form_for :activity, url: activities_path, method: 'GET' do |form|
+  - if @search_id.nil?
+    input type="number" class="form-control md-form" name="id" value="#{@search_id}" style="display: none"
+  .row.align-middle
+    .col-md-4.text-center
+      select.mdb-select.colorful-select.dropdown-primary.md-form multiple="multiple" searchable=("Cari Pengguna")  name="activity[access_levels][]"
+        - users_level = UserMethod.where(controller_method: @method).pluck(:user_level)
+        - levels = User.levels
+        - levels.keys.each do |level|
+            - lv = User.levels[level].to_s
+            - if @access_levels.present?
+              - if @access_levels.include? lv
+                option selected="selected" value="#{levels[level]}"  #{level.underscore.humanize.upcase}
+              - else
+                option value="#{levels[level]}"  #{level.underscore.humanize.upcase}
+            - else
+              option value="#{levels[level]}"  #{level.underscore.humanize.upcase}
+    .col-md-4.text-center
+      select.mdb-select.colorful-select.dropdown-primary.md-form multiple="multiple" searchable=("Cari Target")  name="activity[targets][]"
+        - @models.each do |mod|
+          - if @targets.present?
+            - if @targets.include? mod
+              option selected="selected" value="#{mod}"  #{mod.underscore.humanize.upcase}
+            - else
+              option value="#{mod}"  #{mod.underscore.humanize.upcase}
+          - else
+            option value="#{mod}"  #{mod.underscore.humanize.upcase}
+    .col-md-4.text-center
+      input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="activity[date_search]"]                
+    .col-md-12.text-center
+      button class="btn btn-primary"
+        | Cari
+    .col-md-12.text-center.grey-text
+      b
+        | #{@search_text}

@@ -1,0 +1,19 @@
+.row
+  .col
+      .alert.alert-primary
+          .alert-heading
+            | Semua Data #{@title}
+            
+table class="table"
+  thead
+    th Dari
+    th Waktu
+    th Pesan
+  tbody
+    = render partial: 'list', collection: @notifications, as: :notification
+.container.pagination.justify-content-center
+  = paginate @notifications
+.text-center
+  = page_entries_info @notifications 
+
+  

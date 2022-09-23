@@ -1,51 +1,22 @@
-.row
-  .col.text-left
-    h5
-      - if @search_id.nil?
-        | Daftar Menu Sistem 
-        - if !@bool_status
-          .text-danger
-            | #{@status}
-      - else
-        - user = User.find @search_id
-        | Absensi #{user.name}
-br
-.container-fluid
-  .col-lg-12.col-md-12
-    .card-header.white-text.info-color
-      h5.font-weight-500.my-1
-        - if @search_text.present?
-          | #{@search_text}
-        - else
-          | Pencarian
-    .card.mb-4
-      .card-body
-        = form_for :controller, url: controllers_path, method: 'GET' do |form|
-          .col-md-12.text-center
-            input type="text" class="form-control md-form" id="search" name="search" placeholder="Cari nama..."         
-          .col-md-12.text-center
-            button class="btn btn-primary"
-              | Cari
-          .col-md-12.text-center
-            a href="#{controller_path(id: 1, format: :pdf)}"
-              | Download EXCEL
-.container-fluid
-  .col-lg-12.col-md-12
-    .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Data
-    .card.mb-4
-      .card-body.table-responsive.text-nowrap
-        table class="table"
-          thead
-            th Nama
-            th Aksi
-          tbody
-            = render partial: 'list', collection: @controllers, as: :controller
-        .container.pagination.justify-content-center
-          = paginate @controllers
-        .text-center
-          = page_entries_info @controllers
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="search" aria-selected="true" data-toggle="tab" href="#search" role="tab" 
+        i.fa.fa-search.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Pencarian 
 
-  
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="data" aria-selected="true" data-toggle="tab" href="#data" role="tab" 
+        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Data 
 
+
+
+  #myClassicTabContentOrange.tab-content.card
+    #search.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'search'
+
+    #data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'data'

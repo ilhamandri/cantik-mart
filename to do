@@ -1,24 +1,38 @@
-- exchange points
-- discounts
-- complain_items -> index
-- balances -> DELETE ALL 
-- backups
-- activities
-- hak akses
-- SEMUA DATA -> SEMUA DATA #{@title}
+TO DO:
+
 
 DONE:
 - user show -> add kasbon tab
-- KASBON index
-- Voucher
-- Member Point
-- Promotion
-- item show
+- Kasbon-> index
+- Voucher -> index
+- Member Point -> index
+- Promotion -> index
+- item -> show (delete image, restruct info)
 - stocks -> index, show (DELETE)
 - supplier_items -> index (DELETE)
+- exchange point -> index
+- Discount -> index
+- balance -> hide route
+- backup -> index
+- activities -> index
+- controllers -> index
+- notification -> index
+- SEMUA DATA -> SEMUA DATA #{@title}
+
+
+
+
+
+
+
 
 UNUSED FEATURE :
 - Voucher
 - Member Point
 - Promotion
 - Balance
+- Exchange Point
+- Discount
+- User performance (absent, avg. pay debt)
+- Bundling recomendations
+- Item KPI 

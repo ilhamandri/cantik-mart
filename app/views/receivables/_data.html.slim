@@ -7,7 +7,7 @@
     - else
       .alert.alert-primary
         .alert-heading
-          | Semua Data
+          | Semua Data Piutang
   - if Controller.find_by(name: 'cash_flows').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
     .col-2.text-center
       a.btn.btn-success href="#{new_cash_flow_path}"

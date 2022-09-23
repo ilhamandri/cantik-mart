@@ -1,33 +1,13 @@
-.row
-  .col
-    h5
-      | Daftar Penukaran Poin
-  .col.text-right
-    a href="#{new_exchange_point_path}"
-      button.btn.btn-success type="button" 
-        i.fas.fa-plus 
-        |   Tambah Kriteria
-br
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Riwayat
-      .card-body.table-responsive.text-nowrap
-        table class="table"
-          thead
-            th Poin
-            th Jenis
-            th Jumlah
-            th Ditukar
-            th
-            th
-          tbody
-            = render partial: 'list', collection: @EPoints, as: :epoint
-        .container.pagination.justify-content-center
-          = paginate @EPoints
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="data" aria-selected="true" data-toggle="tab" href="#data" role="tab" 
+        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Data 
 
-        .text-center
-          = page_entries_info @EPoints
 
+
+  #myClassicTabContentOrange.tab-content.card
+    #data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'data'

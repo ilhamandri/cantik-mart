@@ -1,6 +1,5 @@
 tr
 	td #{controller.name.underscore.humanize.upcase}
-	td
-		a href='#{methods_path(id: controller.id)}' 
-			button.btn.btn-info type="button" 
-	       		| Hak Akses
+	td.text-right
+		a.btn.btn-dark href='#{methods_path(id: controller.id)}' 
+	       	| Hak Akses

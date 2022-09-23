@@ -1,0 +1,17 @@
+.row
+	.col
+	    .alert.alert-primary
+	        .alert-heading
+	          | Semua Data #{@title}
+
+table class="table"
+  thead.text-center
+    th Nama
+    th Aksi
+  tbody
+    = render partial: 'list', collection: @controllers, as: :controller
+.container.pagination.justify-content-center
+  = paginate @controllers
+.text-center
+  = page_entries_info @controllers
+
