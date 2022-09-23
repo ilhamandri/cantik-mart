@@ -1,7 +1,7 @@
 Clearance.configure do |config|
   config.rotate_csrf_on_sign_in = true
   config.allow_sign_up = true
-  # config.cookie_domain = "cantikmart.com"
+  config.cookie_domain = "cantikmart.com"
   config.cookie_expiration = lambda { |cookies| 1.year.from_now.utc }
   config.cookie_name = "remember_token"
   config.cookie_path = "/"
