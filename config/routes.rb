@@ -18,7 +18,6 @@ Rails.application.routes.draw do
   resource :session, controller: 'sessions', only:  %i[create]
   get '/sign_in', to: 'sessions#new', as: 'sign_in'
 
-  resources :codes
   get '/retur/:id/confirmation', to: 'returs#confirmation', as: 'retur_confirmation'
   post '/retur/:id/confirmation', to: 'returs#accept', as: 'retur_accept'
 
@@ -101,7 +100,6 @@ Rails.application.routes.draw do
   resources :discounts
   resources :pays, only: %i[new create]
   resources :populars
-  resources :result_items
   resources :opnames
   resources :balances
   resources :promotions
@@ -158,8 +156,6 @@ Rails.application.routes.draw do
   resources :stock_values, only: %i[index new create]
   # resources :assets, only: %i[index new create]
 
-  #candy dream routes
-  resources :candy_dreams
 
   resources :controllers
   resources :methods

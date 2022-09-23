@@ -46,8 +46,6 @@ class ApplicationController < ActionController::Base
     end
 
     def authorization
-      return if ["sign", "session"].any? { |word| request.original_fullpath.include?(word) }
-      
       extracted_path = Rails.application.routes.recognize_path(request.original_url)
       
       controller_name = extracted_path[:controller].to_sym
@@ -63,7 +61,7 @@ class ApplicationController < ActionController::Base
       title = titles[title] if titles[title].present?
       @title = title.camelize
       
-      # return if ['received', 'pays', 'errors', '/'].any? { |word| request.original_fullpath.include?(word) }
+      # return if ['received', 'pays', 'errors'].any? { |word| request.original_fullpath.include?(word) }
 
       if current_user.present?
         return if current_user.level == "owner" || current_user.level == "super_admin"

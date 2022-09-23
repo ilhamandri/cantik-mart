@@ -44,8 +44,6 @@ class ControllersController < ApplicationController
   def insert_new_user_method new_method
     user_method = UserMethod.find_by(user_level: current_user.level, controller_method: new_method)
     return if user_method.present?
-    UserMethod.create controller_method: new_method, user_level: 'owner'
-    UserMethod.create controller_method: new_method, user_level: 'super_admin'
   end
 
   def show

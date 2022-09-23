@@ -1,5 +1,17 @@
 TO DO:
+- error di clearance -> cookie_domain
+- candy dream gabisa login
+- remove user_method -> [super_admin, owner]
 
+- RUN
+	1. UserMethod.where(user_level: ["super_admin", "owner"]).destroy_all
+	2. 	
+		- controllers = Controller.where(name: ["cheats", "codes", "candy_dreams", "result_items", "tests"])
+		- controllers_methods = ControllerMethod.where(controller: controllers)
+		- UserMethod.where(controller_method_id: controllers_methods.pluck(:id)).destroy_all
+		- controllers_methods.destroy_all
+		- controllers.destroy_all
+-
 
 DONE:
 - user show -> add kasbon tab
