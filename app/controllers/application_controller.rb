@@ -62,16 +62,14 @@ class ApplicationController < ActionController::Base
       title = titles[title] if titles[title].present?
       @title = title.camelize
       
+      return if ['received', 'pays', 'errors', '/'].any? { |word| request.original_fullpath.include?(word) }
 
       if current_user.present?
         return if current_user.level == "owner" || current_user.level == "super_admin"
+        accessible = authentication controller_name, method_name
+        redirect_to root_path, flash: { error: 'Tidak memiliki hak akses' } if !accessible
+        return
       end 
-      
-      return if ['received', 'pays', 'errors', '/'].any? { |word| request.original_fullpath.include?(word) }
-
-      accessible = authentication controller_name, method_name
-      redirect_to root_path, flash: { error: 'Tidak memiliki hak akses' } if !accessible
-      return
     end
 
     def authentication controller_name, method_name
