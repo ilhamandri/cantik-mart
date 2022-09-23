@@ -1,4 +1,4 @@
-setInterval(get_notification, 10000);
+// setInterval(get_notification, 10000);
 
 var separator = '<p class="medium">===========================================================</p>';
 

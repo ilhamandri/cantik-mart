@@ -2,8 +2,18 @@ TO DO:
 - error di clearance -> cookie_domain
 - candy dream gabisa login
 - remove user_method -> [super_admin, owner]
+- refresh_notification -> stop
+- ubah desgin sign_in
+- bersihin error di log_console
+	0. perfect scroll bar
+	1. Di sign_in
+		* error js => start_time (clock)
+	2. quirks mode
+	3.transform origin
+	4.dist js bootstrap.min.js
+	5. autonumeric
 
-- RUN
+- run
 	1. UserMethod.where(user_level: ["super_admin", "owner"]).destroy_all
 	2. 	
 		- controllers = Controller.where(name: ["cheats", "codes", "candy_dreams", "result_items", "tests"])
@@ -13,6 +23,7 @@ TO DO:
 		- controllers.destroy_all
 -
 
+======================================================================
 DONE:
 - user show -> add kasbon tab
 - Kasbon-> index
@@ -32,12 +43,7 @@ DONE:
 - SEMUA DATA -> SEMUA DATA #{@title}
 
 
-
-
-
-
-
-
+======================================================================
 UNUSED FEATURE :
 - Voucher
 - Member Point

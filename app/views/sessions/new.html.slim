@@ -1,30 +1,41 @@
-.row
-  .col.text-center
-    br
-      img.header__img alt=("CANTIK MART") src="images/logo.png" width="400px"/
-= form_for :session, url: session_path do |form|
-  .row
-    .col-12.text-center
-      br
-      | Silahkan Masukkan E-mail dan Kata Sandi Anda
-      br
-      br
-      br
-    .col-12.text-center
-      | Email
-    .col-4
-    .col-4.text-center
-      = form.text_field :email, required: true, class: "form-control md-form", id: "email", placeholer: "Kata Sandi"
-    .col-4
-      
-    .col-12.text-center
-      | Kata Sandi
-    .col-4
-    .col-4.text-center
-      = form.password_field :password, required: true, class: "form-control md-form", id: "password"
-    .col-4
-      
-    .col-4
-    .col-4.text-center
-      br
-      = form.submit "Masuk", class: "btn btn-primary"
+section.vh-100
+  .d-flex.flex-column.flex-md-row.text-center.text-md-start.justify-content-between.py-4.px-4.px-xl-5 style="background: #8cc63f"
+    /! Copyright
+    .text-black.mb-3.mb-md-0
+      b 
+        #txt
+    /! Copyright
+    /! Right
+    div
+      .text-black
+        b PT. Cantik Berkah Sejahtera
+    /! Right
+
+  .container
+    .row.d-flex.justify-content-center.align-items-center.h-100
+      .col-md-9.col-lg-6.col-xl-5
+        / img.img-fluid alt=("Sample image") src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" /
+        img.header__img alt=("CANTIK MART") src="images/logo.png" width="400px"
+      .col-md-8.col-lg-6.col-xl-4.offset-xl-1
+        = form_for :session, url: session_path do |form|
+          .alert
+            .alert-heading
+              h3.text-center SIGN IN
+            hr.primary-color
+
+          .form-outline.mb-4
+            label Email
+            = form.text_field :email, required: true, class: "form-control md-form", id: "email", placeholer: "Enter a valid email address"
+            / input#form3Example3.form-control.form-control-lg placeholder=("Enter a valid email address") type="email" 
+          
+
+          .form-outline.mb-3
+            / input#form3Example4.form-control.form-control-lg placeholder=("Enter password") type="password"
+            label Password
+            = form.password_field :password, required: true, class: "form-control md-form", id: "password"
+          
+            
+          .text-center.text-lg-start.mt-4.pt-2
+             = form.submit "LOGIN", class: "btn btn-primary"
+            
+  

@@ -28,10 +28,13 @@ class ApplicationController < ActionController::Base
         @weather["condition"] = weather_data["condition"]["text"]
         @weather["icon"] = weather_data["condition"]["icon"]
       end
-      
+
+           
       if current_user.present?
         return not_found_path if !current_user.active
-        authorization
+        if !request.controller_class.to_s == "SessionsController"
+          authorization
+        end
       end
 
       
