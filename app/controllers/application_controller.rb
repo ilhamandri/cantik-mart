@@ -29,11 +29,11 @@ class ApplicationController < ActionController::Base
         @weather["icon"] = weather_data["condition"]["icon"]
       end
       
-      # if current_user.present?
-      #   return not_found_path if !current_user.active
-      # end
+      if current_user.present?
+        return not_found_path if !current_user.active
+      end
 
-      # authorization
+      authorization
     end
 
     def redirect_back_data_error current_path, message
@@ -67,11 +67,11 @@ class ApplicationController < ActionController::Base
         return if current_user.level == "owner" || current_user.level == "super_admin"
       end 
       
-      # return if ['received', 'pays', 'errors', '/'].any? { |word| request.original_fullpath.include?(word) }
+      return if ['received', 'pays', 'errors', '/'].any? { |word| request.original_fullpath.include?(word) }
 
-      # accessible = authentication controller_name, method_name
-      # redirect_to root_path, flash: { error: 'Tidak memiliki hak akses' } if !accessible
-      # return
+      accessible = authentication controller_name, method_name
+      redirect_to root_path, flash: { error: 'Tidak memiliki hak akses' } if !accessible
+      return
     end
 
     def authentication controller_name, method_name
