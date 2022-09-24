@@ -7,7 +7,7 @@ li
     i.fas.fa-angle-down.rotate-icon
   .collapsible-body
     ul
-      - if Controller.find_by(name: 'users').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+      - if (Controller.find_by(name: 'users').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
         li
           a.waves-effect href="#{users_path}"  Daftar Karyawan
       li
@@ -19,7 +19,7 @@ li
       i.w-fa.fas.fa-book
       | Transaksi
 
-- if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+- if (Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
   li
     a.collapsible-header.waves-effect.arrow-r
       i.w-fa.fas.fa-edit
@@ -40,7 +40,7 @@ li
             a.waves-effect href="#{returs_path}" Retur Suplier
 
 
-- if Controller.find_by(name: 'members').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+- if (Controller.find_by(name: 'members').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
   li
     a.collapsible-header.waves-effect.arrow-r
       i.w-fa.fas.fa-users
@@ -66,7 +66,7 @@ li
 
 
 
-- if Controller.find_by(name: 'stores').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+- if (Controller.find_by(name: 'stores').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
   li
     a.collapsible-header.waves-effect.arrow-r
       i.w-fa.fas.fa-home
@@ -77,23 +77,23 @@ li
         li
           a.collapsible-header.waves-effect.arrow-r href="#{stores_path}" Daftar Toko
 
-        - if Controller.find_by(name: 'transfers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        - if ((Controller.find_by(name: 'transfers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) && (current_user.store.store_type=="retail")) || (["super_admin", "owner"].include? current_user.level)
           li
             a.collapsible-header.waves-effect.arrow-r  href="#{transfers_path}" Minta Barang ke GUDANG
 
-        - if current_user.store.store_type != "retail"
+        - if ((Controller.find_by(name: 'transfers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) && (current_user.store.store_type!="retail")) || (["super_admin", "owner"].include? current_user.level)
           li
             a.collapsible-header.waves-effect.arrow-r  href="#{new_direct_transfer_path}" Kirim Barang ke TOKO
 
-        - if Controller.find_by(name: 'send_backs').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        - if (Controller.find_by(name: 'send_backs').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin"].include? current_user.level)
           li
             a.collapsible-header.waves-effect.arrow-r  href="#{send_backs_path}" Kirim BS
         
-        - if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        - if (Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
           li
             a.collapsible-header.waves-effect.arrow-r  href="#{transactions_path}" Penjualan
 
-- if Controller.find_by(name: 'items').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+- if (Controller.find_by(name: 'items').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
   li
     a.collapsible-header.waves-effect.arrow-r
       i.w-fa.fas.fa-archive
@@ -109,41 +109,37 @@ li
           li
             a.waves-effect href="#{discounts_path}"  Promo Diskon
 
-        - if Controller.find_by(name: 'departments').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        - if (Controller.find_by(name: 'departments').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
           li
             a.waves-effect href="#{departments_path}"  Departemen
 
-        - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        - if (Controller.find_by(name: 'items').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
           li
             a.waves-effect href="#{items_path}"  Daftar Barang
 
-        / - if Controller.find_by(name: 'stocks').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
-          li
-            a.waves-effect href="#{stocks_path}"  Stok Toko
-
-        - if Controller.find_by(name: 'warning_items').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        - if (Controller.find_by(name: 'warning_items').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
           li
             a.waves-effect href="#{warning_items_path}" Barang Habis
 
-        - if Controller.find_by(name: 'losses').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        - if (Controller.find_by(name: 'losses').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
           li
             a.waves-effect href="#{losses_path}"  Barang Hangus  
 
-        - if Controller.find_by(name: 'prints').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        - if (Controller.find_by(name: 'prints').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin"].include? current_user.level)
           li
             a.waves-effect href="#{prints_path}"  Cetak Harga
 
-        - if Controller.find_by(name: 'opnames').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        - if (Controller.find_by(name: 'opnames').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
           li
             a.waves-effect href="#{opnames_path}"  Stok Opname
 
-        - if Controller.find_by(name: 'populars').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+        - if (Controller.find_by(name: 'populars').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
           li
             a.waves-effect href="#{populars_path}"  Popularitas Barang
     
 
 
-- if Controller.find_by(name: 'cash_flows').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level
+- if (Controller.find_by(name: 'cash_flows').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
   li
     a.collapsible-header.waves-effect.arrow-r
       i.w-fa.fas.fa-book
