@@ -1,22 +1,22 @@
 class ApplicationController < ActionController::Base
+  protect_from_forgery
   include Clearance::Controller
   include PublicActivity::StoreController 
-  before_action :screening
+  before_action :weather
   
-  protected
-    def authorize *authorized_level
-      return not_found_path unless authorized_level.include? current_user.level
-    end
+    # def authorize *authorized_level
+    #   return not_found_path unless authorized_level.include? current_user.level
+    # end
 
-    def not_authorize *level
-      return not_found_path if level.include? current_user.level
-    end
+    # def not_authorize *level
+    #   return not_found_path if level.include? current_user.level
+    # end
 
-    def validate_access_only methods
-      return methods.include?(action_name.to_sym)
-    end
+    # def validate_access_only methods
+    #   return methods.include?(action_name.to_sym)
+    # end
 
-    def screening
+    def weather
       @weather = {}
 
       url = "http://api.weatherapi.com/v1/current.json?key=e4a2290877b44fc79f5140927221109&q=-6.6413273,107.3890488&aqi=no"
@@ -28,16 +28,16 @@ class ApplicationController < ActionController::Base
         @weather["condition"] = weather_data["condition"]["text"]
         @weather["icon"] = weather_data["condition"]["icon"]
       end
+    end
 
-           
+    def screening           
       if current_user.present?
         return not_found_path if !current_user.active
-        if !request.controller_class.to_s == "SessionsController"
-          authorization
+        if request.controller_class.to_s != "SessionsController"
+          can_access = authorization
+          redirect_back_data_error root_path, 'Tidak memiliki hak akses' if !can_access
         end
       end
-
-      
     end
 
     def redirect_back_data_error current_path, message
@@ -49,29 +49,34 @@ class ApplicationController < ActionController::Base
     end
 
     def authorization
-      extracted_path = Rails.application.routes.recognize_path(request.original_url)
-      
-      controller_name = extracted_path[:controller].to_sym
-      method_name = extracted_path[:action].to_sym
+      begin
+        extracted_path = Rails.application.routes.recognize_path request.original_fullpath
+        
+        controller_name = extracted_path[:controller].to_sym
+        method_name = extracted_path[:action].to_sym
 
-      title_actions = {"index"=>"data", "show"=>"detail"}
-      title_action = method_name.to_s.gsub("_"," ")
-      title_action = title_actions[title_action] if title_actions[title_action].present?
-      @method = title_action.camelize
 
-      titles = {"send back"=>"Kirim BS", "item cat"=>"sub department", "warning item"=>"empty stock"}
-      title = controller_name.to_s.gsub("_"," ").singularize
-      title = titles[title] if titles[title].present?
-      @title = title.camelize
-      
-      # return if ['received', 'pays', 'errors'].any? { |word| request.original_fullpath.include?(word) }
+        title_actions = {"index"=>"data", "show"=>"detail"}
+        title_action = method_name.to_s.gsub("_"," ")
+        title_action = title_actions[title_action] if title_actions[title_action].present?
+        @method = title_action.camelize
 
-      if current_user.present?
-        return if current_user.level == "owner" || current_user.level == "super_admin"
-        accessible = authentication controller_name, method_name
-        redirect_to root_path, flash: { error: 'Tidak memiliki hak akses' } if !accessible
-        return
-      end 
+        titles = {"send back"=>"Kirim BS", "item cat"=>"sub department", "warning item"=>"empty stock"}
+        title = controller_name.to_s.gsub("_"," ").singularize
+        title = titles[title] if titles[title].present?
+        @title = title.camelize
+        
+        # return if ['received', 'pays', 'errors'].any? { |word| request.original_fullpath.include?(word) }
+
+        if current_user.present?
+          return true if current_user.level == "owner" || current_user.level == "super_admin"
+          accessible = authentication controller_name, method_name
+          return accessible
+        end 
+
+      rescue
+        puts "----------------------------------------> ERROR AUTH"
+      end
     end
 
     def authentication controller_name, method_name

@@ -1,5 +1,6 @@
 class ExchangePointsController < ApplicationController
   before_action :require_login
+  before_action :screening
 
   def index
   	@EPoints = ExchangePoint.order("point ASC").page param_page

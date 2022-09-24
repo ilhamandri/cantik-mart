@@ -1,5 +1,6 @@
 class StocksController < ApplicationController
   before_action :require_login
+  before_action :screening
   
   def edit
     return redirect_back_data_error stocks_path, "Data Stok Barang Tidak Ditemukan" unless params[:id].present?

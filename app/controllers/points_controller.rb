@@ -1,5 +1,6 @@
 class PointsController < ApplicationController
   before_action :require_login
+  before_action :screening
 
   def index
   	return redirect_back_data_error members_path, "Data tidak valid" if params[:id].nil?

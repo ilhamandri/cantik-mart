@@ -14,12 +14,12 @@ TO DO:
 	3.transform origin
 	4.dist js bootstrap.min.js
 	5. autonumeric
-- error nav
-
-
+- perbaiki semua button pakai hak akses
+- perbaiki hak akses (kasir di pusat)
 
 ======================================================================
 DONE:
+- redirect error
 - user show -> add kasbon tab
 - Kasbon-> index
 - Voucher -> index
@@ -36,7 +36,7 @@ DONE:
 - controllers -> index
 - notification -> index
 - SEMUA DATA -> SEMUA DATA #{@title}
-
+- error nav
 - sub-sistem -> index
 - refresh_notification -> stop
 - error di clearance -> cookie_domain

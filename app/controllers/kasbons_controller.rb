@@ -1,5 +1,6 @@
 class KasbonsController < ApplicationController
   before_action :require_login
+  before_action :screening
   def index
     @kasbons = Kasbon.order("created_at DESC").page param_page
     if params[:kasbon].present?

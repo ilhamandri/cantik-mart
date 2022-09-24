@@ -1,5 +1,6 @@
 class StoresController < ApplicationController
   before_action :require_login
+  before_action :screening
   
   def index
     @stores = Store.page param_page

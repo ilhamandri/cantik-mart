@@ -1,4 +1,5 @@
-- if ["super_visi","stock_admin"].include? current_user.level
+- if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+      
   .container-fluid
     .section.pb-3
       - if current_user.store.online_store

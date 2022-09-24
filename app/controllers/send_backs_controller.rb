@@ -1,5 +1,6 @@
 class SendBacksController < ApplicationController
   before_action :require_login
+  before_action :screening
 
   	def index
   		@send_backs = SendBack.page param_page

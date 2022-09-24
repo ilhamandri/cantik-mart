@@ -1,5 +1,6 @@
 class DownloadsController < ApplicationController
   before_action :require_login
+  before_action :screening
 
   	def serve_file
   		data_type = params[:type]

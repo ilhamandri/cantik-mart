@@ -1,6 +1,7 @@
 include ActionView::Helpers::NumberHelper
 class OrdersController < ApplicationController
   before_action :require_login
+  before_action :screening
   
   def index
     # check_duplicate

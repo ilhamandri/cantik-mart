@@ -1,6 +1,7 @@
 include ActionView::Helpers::NumberHelper
 class SuppliersController < ApplicationController
   before_action :require_login
+  before_action :screening
   
   def index
     @suppliers = Supplier.order("name ASC").page param_page

@@ -1,5 +1,6 @@
 class MethodsController < ApplicationController
   before_action :require_login
+  before_action :screening
 
   def index
     return redirect_back_data_error controllers_path, "Data Tidak Ditemukan" if params[:id].nil?
@@ -19,9 +20,7 @@ class MethodsController < ApplicationController
     controller = @method.controller
     user_method = UserMethod.where(controller_method: @method)
     user_method.delete_all if user_method.present?
-    UserMethod.create controller_method: @method, user_level: User::SUPER_ADMIN
-    UserMethod.create controller_method: @method, user_level: User::OWNER
-
+  
     if params[:method].nil?
       if @method.name == 'index'
         all_method_id = ControllerMethod.where(controller: controller).where.not(name: 'index').pluck(:id)

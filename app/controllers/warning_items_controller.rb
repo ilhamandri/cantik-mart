@@ -1,6 +1,7 @@
 class WarningItemsController < ApplicationController
   include ActionView::Helpers::NumberHelper
   before_action :require_login
+  before_action :screening
   
 
   def index

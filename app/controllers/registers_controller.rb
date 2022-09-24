@@ -1,5 +1,6 @@
 class RegistersController < ApplicationController
   before_action :require_login
+  before_action :screening
   before_action { |controller| controller.authorize(User::ADMIN) }
 
   def new

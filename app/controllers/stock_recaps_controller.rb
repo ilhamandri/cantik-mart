@@ -1,5 +1,6 @@
 class StockRecapsController < ApplicationController
   before_action :require_login
+  before_action :screening
 
   def index
     respond_to do |format|

@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
   include ActionView::Helpers::NumberHelper
   before_action :require_login
+  before_action :screening
   require 'apriori'
   
   def index

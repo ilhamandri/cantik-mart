@@ -1,5 +1,6 @@
 class TransactionsController < ApplicationController
   before_action :require_login
+  before_action :screening
   
   skip_before_action :verify_authenticity_token, :if => Proc.new { |c| c.request.format == 'application/json' }
 

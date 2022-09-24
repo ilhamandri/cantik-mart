@@ -12,7 +12,7 @@ class User < ApplicationRecord
     cashier: 4,
     super_visi: 5,
     finance: 6,
-    driver: 7,
+    visitor: 7,
     pramuniaga: 8,
     candy_dream: 9
   }
@@ -41,7 +41,7 @@ class User < ApplicationRecord
   # KEUANGAN
   FINANCE = 'finance'
   PRAMUNIAGA = 'pramuniaga'
-  DRIVER = 'driver'
+  VISITOR = 'visitor'
 
   MALE = 'laki_laki'
   FEMALE = 'perempuan'
