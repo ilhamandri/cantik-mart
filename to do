@@ -1,11 +1,12 @@
 TO DO:
 - ubah desgin sign_in
 	1. logo cm ga center tengah
-- ubah design home
+- ubah design dashboard
 	- super_admin
 	- finance
 	- super_visi
 	- stock_admin
+		=> tidak muncul card
 - bersihin error di log_console
 	0. perfect scroll bar
 	1. Di sign_in
