@@ -1,17 +1,16 @@
 h3
 	| Daftar Sub-Department (#{@dept.name})
 .row
+	- if Controller.find_by(name: 'item_cats').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+  		.col.text-center
+	      	a.btn.btn-success href="#{new_item_cat_path(dept_id: @dept.id)}"
+	          	i.fas.fa-plus 
+	          	|   Tambah Sub-Department
   	.col.text-center
-	    - if Controller.find_by(name: 'departments').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? current_user.level
-	      a href="#{new_item_cat_path(dept_id: @dept.id)}"
-	        button.btn.btn-success type="button" 
-	          i.fas.fa-plus 
-	          |   Tambah Sub-Department
-  	.col.text-center.grey-text
-    	a href="#{item_cats_path(dept_id: @dept.id,format: :pdf)}" class="btn btn-primary"
+    	a href="#{item_cats_path(dept_id: @dept.id,format: :pdf)}" class="btn btn-dark"
 	      	b
 	        	| CETAK SEMUA BARANG
-  	.col.text-center.grey-text
+  	.col.text-center
     	a href="#{departments_popular_items_path(id: @dept.id,format: :pdf)}" class="btn btn-success"
       		b
         		| TOP 25

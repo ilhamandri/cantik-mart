@@ -6,7 +6,6 @@ TO DO:
 	- finance
 	- super_visi
 	- stock_admin
-		=> tidak muncul card
 - bersihin error di log_console
 	0. perfect scroll bar
 	1. Di sign_in
@@ -16,8 +15,25 @@ TO DO:
 	4.dist js bootstrap.min.js
 	5. autonumeric
 - perbaiki semua button pakai hak akses
-- perbaiki hak akses (kasir di pusat)
+- perbaiki hak akses 
+	0. ALL
+		- 	print (clear) --> kasi akses super_visi(clean)
+	1. super_visi :
+		x 	retur konsumen
+		x 	supplier (new)
+		x 	order (NA)
+		x 	retur (NA)
+		x 	department & sub-dept 
+			- 	(info) --> beri akses ke item_cats=super_visi
+			x 	(edit) --> 
+		x 	item (edit, tidak ada tab yang lain)
 
+- tambah user yang terakhir update
+	1. Departmen
+	2. Sub-departmen
+	3. Barang
+
+		
 ======================================================================
 DONE:
 - redirect error

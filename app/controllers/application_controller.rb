@@ -32,7 +32,10 @@ class ApplicationController < ActionController::Base
 
     def screening           
       if current_user.present?
+        can_access = false
         return not_found_path if !current_user.active
+        return if current_user.level == "owner" || current_user.level == "super_admin"
+          
         if request.controller_class.to_s != "SessionsController"
           can_access = authorization
           redirect_back_data_error root_path, 'Tidak memiliki hak akses' if !can_access
@@ -69,9 +72,7 @@ class ApplicationController < ActionController::Base
         # return if ['received', 'pays', 'errors'].any? { |word| request.original_fullpath.include?(word) }
 
         if current_user.present?
-          return true if current_user.level == "owner" || current_user.level == "super_admin"
-          accessible = authentication controller_name, method_name
-          return accessible
+          return authentication controller_name, method_name
         end 
 
       rescue
