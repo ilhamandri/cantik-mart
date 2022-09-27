@@ -14,10 +14,16 @@
               .form-group
                 label for="from" Kepada
                 select id="storeId" class="mdb-select md-form md-outline colorful-select dropdown-primary" searchable="Cari..." name="transfer[store_id]"
-                  - @stores.where(store_type: 'warehouse').each do |store|
-                    - if store != current_user.store
-                      option data-subtext="#{store.address}" value="#{store.id}"
-                        | #{store.name}
+                  - if current_user.store.store_type == "retail"
+                    - @stores.where(store_type: 'warehouse').each do |store|
+                      - if store != current_user.store
+                        option data-subtext="#{store.address}" value="#{store.id}"
+                          | #{store.name}
+                  - else
+                    - @stores.where(store_type: 'retail').each do |store|
+                      - if store != current_user.store
+                        option data-subtext="#{store.address}" value="#{store.id}"
+                          | #{store.name}
   .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4

@@ -1,283 +1,38 @@
 .container-fluid
   .section.pb-3
-    h3
-    | Selamat Datang, #{current_user.name}
-    br
-    br
+    .row
+      .col
+        .alert.alert-primary
+          .alert-heading
+            | Halo. #{current_user.name}!
+
     - if (Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level) && (current_user.store.online_store)
       .row
-        - trx =  Transaction.where(created_at: DateTime.now.beginning_of_day..DateTime.now.end_of_day).where(user: current_user)
-        - trx_total = trx.sum(:grand_total)
-        - cash = trx.where(payment_type: "CASH").sum(:grand_total)
-        - debit = trx.where(payment_type: "DEBIT").sum(:grand_total)
-        - jumlah_trx = trx.count
-        .col.text-center
-          button.btn.btn-success onclick="printShift('#{trx_total.to_i}', '#{current_user.name.upcase}', '#{DateTime.now.strftime("%d/%m/%Y %H:%M:%S")}', #{cash.to_i}, #{debit.to_i}, '#{jumlah_trx.to_i}', '#{current_user.store.id}' , '#{current_user.store.name}' )"
-            | CETAK PENJUALAN
-        .col.text-center
-          a href="#{new_transaction_path}"
-            button.btn.btn-primary type="button" 
-              i.fas.fa-plus 
-              |   MENU KASIR 
-      br
-      hr
-      br
-  - if current_user.level == "stock_admin"
-    .row
-      .col-md-3.mb-0
-      	= render "homes/card/stock"
-      .col-md-3.mb-0
-        = render "homes/card/order"
-      .col-md-3.mb-md-0.mb-4
-        = render "homes/card/payment"
-      .col-md-3.mb-0
-        = render "homes/card/retur"
+        = render "homes/card/transaction"
 
-
-
-- if current_user.level == "super_visi"
+    - if ["stock_admin", "super_visi"].include? current_user.level
+      .row
+        .col-md-3
+          = render "homes/card/order"
+        .col-md-3
+          = render "homes/card/payment"
+        .col-md-3
+          = render "homes/card/retur"
+        .col-md-3
+          = render "homes/card/transfer"
 
 
 
 
 
-
-- if current_user.level  == "candy_dream"
-  .container-fluid
-    .section.pb-3
+    - if current_user.level  == "candy_dream"
       .row
         = render "homes/card/candy"
 
 
-- if ["super_admin", "owner", "finance"].include? current_user.level
-    .section.mb-5
-    .card.card-cascade.narrower
-      .section
-        .row
-          .col-xl-12.col-lg-12.mr-0.pb-2
-            .view.view-cascade.gradient-card-header.light-blue.lighten-1
-              h2.h2-responsive.mb-0.font-weight-500 LAPORAN HARI INI ( #{Date.today} )
-            .card-body.card-body-cascade.pb-0
-              .row.py-3.pl-4
-                .col-6
-                  = form_for :absent, url: daily_absent_recap_path, method: 'GET' do |form|
-                    .row
-                      .col-md-12 style="display: none;"
-                        input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
-                      .col-md-12.text-center
-                        button class="btn btn-primary "
-                          |   Rekap Absensi 
-                .col-6
-                  = form_for :transaction, url: daily_trx_recap_path, method: 'GET' do |form|
-                    .row
-                      .col-md-12 style="display: none;"
-                        input#date-picker-example.md-form.form-control.datepicker[placeholder="Selected date" type="text" data-value="2015/04/20" name="date"]     
-                      .col-md-12.text-center
-                        button class="btn btn-primary "
-                          |   Rekap Transaksi 
+    - if ["super_admin", "owner", "finance"].include? current_user.level
+      = render "homes/card/recap"
 
 
-- if ["candy_dream", "super_admin", "owner", "finance"].include? current_user.level
-  .section.mb-5
-  .card.card-cascade.narrower
-    .section
-      .row
-        .col-xl-6.col-lg-12.mr-0.pb-2
-          .view.view-cascade.gradient-card-header.light-blue.lighten-1
-            h2.h2-responsive.mb-0.font-weight-500 PENJUALAN HARI INI 
-          .card-body.card-body-cascade.pb-0
-            .row.py-3.pl-4
-              .col-md-12
-                - Store.where.not(store_type: "warehouse").each do |store|
-                  - trxs = @transactions.where(store: store)
-                  - trx_last_timestamp = "Tidak ada transaksi"
-                  - trx_last_timestamp = trxs.last.created_at if trxs.present?
-                  h6
-                    b
-                      | #{store.name.upcase} ( #{trx_last_timestamp} )
-                  table.table
-                    tr
-                      th Kasir
-                      th Tunai
-                      th Debit / Kredit / QRIS
-                      th Total
-                      th Profit
-
-                    - User.where(id: trxs.pluck(:user_id).uniq).each do |cashier|
-                      tr
-                        - cash = trxs.where(payment_type: "CASH", user: cashier).sum(:grand_total)
-                        - debit = trxs.where.not(payment_type: "CASH").where(user: cashier).sum(:grand_total)
-                        - grand_total = trxs.where(user: cashier).sum(:grand_total)
-                        - hpp_total = trxs.where(user: cashier).sum(:hpp_total)
-                        - ppn_total = trxs.where(user: cashier).sum(:tax)
-                        td #{cashier.name}
-                        td #{number_with_delimiter( cash.to_i, delimiter: ".", separator: ",")}
-                        td #{number_with_delimiter( debit.to_i, delimiter: ".", separator: ",")}
-                        td #{number_with_delimiter( grand_total.to_i, delimiter: ".", separator: ",")}
-                        td #{number_with_delimiter( (grand_total-hpp_total-ppn_total).to_i, delimiter: ".", separator: ",")}
-
-                    tr
-                      td 
-                      - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total)
-                      - debit_total = trxs.where.not(payment_type: "CASH").sum(:grand_total)
-                      - hpp_total = trxs.sum(:hpp_total)
-                      - grand_total = trxs.sum(:grand_total)
-                      - ppn_total = trxs.sum(:tax)
-                      td #{number_with_delimiter( (cash_total).to_i, delimiter: ".", separator: ",")}
-                      td #{number_with_delimiter( (debit_total).to_i, delimiter: ".", separator: ",")}
-                      td #{number_with_delimiter( (grand_total).to_i, delimiter: ".", separator: ",")}
-                      td #{number_with_delimiter( (grand_total-hpp_total-ppn_total).to_i, delimiter: ".", separator: ",")}
-
-        .col-xl-6.col-lg-12.mr-0.pb-2
-          - trx = nil
-          - if current_user.level == "candy_dream"
-            - trx = Transaction.where(has_coin: true) 
-          - else
-            - trx = Transaction.where(has_coin: false)  
-          .view.view-cascade.gradient-card-header.light-blue.lighten-1
-            h2.h2-responsive.mb-0.font-weight-500 REVIEW KEUANGAN 
-          .card-body.card-body-cascade.pb-0
-            .row.py-3.pl-4
-              .col-md-6
-                p.lead.pt-3.pb-4
-                  span.badge.info-color.p-2 Penjualan Dalam Bulan
-
-                - start_month = (DateTime.now-1.month).beginning_of_month
-                - end_month = start_month.end_of_month
-
-                - trxs_month_before = trx.where(created_at: start_month..end_month)
-                - sum_grand_total = trxs_month_before.sum(:grand_total)
-                - sum_hpp_total = trxs_month_before.sum(:hpp_total)
-                - sum_ppn_total = trxs_month_before.sum(:tax)
-
-                p
-                  | Penjualan Bulan Lalu:
-                  strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
-                  button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{start_month.strftime("%B")}") type="button" 
-                    i.fas.fa-question
-
-                - if current_user.level != "candy_dream"
-                  p
-                    | Profit Bulan Lalu:
-                    strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_ppn_total, unit: "Rp. ")}
-                    button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{start_month.strftime("%B")}") type="button" 
-                      i.fas.fa-question
-
-                br
-
-                - current_month = DateTime.now.beginning_of_month
-                - trxs_current_month = trx.where("created_at > ? ", current_month)
-                - sum_grand_total = trxs_current_month.sum(:grand_total)
-                - sum_hpp_total = trxs_current_month.sum(:hpp_total)
-                - sum_ppn_total = trxs_current_month.sum(:tax)
-
-                p
-                  | Penjualan Bulan Ini:
-                  strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
-                  button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{current_month.strftime("%B")}") type="button" 
-                    i.fas.fa-question
-
-
-                - if current_user.level != "candy_dream"
-                  p
-                    | Profit Bulan Ini:
-                    strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_ppn_total, unit: "Rp. ")}
-                    button.btn.btn-info.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{current_month.strftime("%B")}") type="button" 
-                      i.fas.fa-question
-
-              .col-md-6
-                p.lead.pt-3.pb-4
-                  span.badge.info-color.p-2 Penjualan Dalam Hari
-                
-                - trxs_day_before = trx.where(created_at: (DateTime.now-1.day).beginning_of_day..(DateTime.now-1.day).end_of_day)
-                - sum_grand_total = trxs_day_before.sum(:grand_total)
-                - sum_hpp_total = trxs_day_before.sum(:hpp_total)
-                - sum_tax_total = trxs_day_before.sum(:tax)
-
-                p
-                  | Penjualan Kemarin:
-                  strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
-                  button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.day).to_date}") type="button" 
-                    i.fas.fa-question
-
-                - if current_user.level != "candy_dream"
-                  p 
-                    | Profit Penjualan Kemarin
-                   
-                    strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_tax_total, unit: "Rp. ")}
-                    button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{(DateTime.now-1.day).to_date}") type="button" 
-                      i.fas.fa-question
-
-                br
-                
-                - trxs_current_date = trx.where("created_at >= ? ", DateTime.now.beginning_of_day)
-                - sum_grand_total = trxs_current_date.sum(:grand_total)
-                - sum_hpp_total = trxs_current_date.sum(:hpp_total)
-                - sum_tax_total = trxs_current_date.sum(:tax)
-
-                p
-                  | Penjualan Hari Ini:
-
-                  
-
-                  strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
-                  button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
-                    i.fas.fa-question
-
-
-                - if current_user.level != "candy_dream"
-                  p 
-                    | Profit Penjualan Hari Ini
-
-                    strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_tax_total, unit: "Rp. ")}
-                    button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
-                      i.fas.fa-question
-
-              
-
-              - if current_user.level != "candy_dream"  
-                  .col-6
-                    
-
-                  .col-6
-                    p 
-                      | Pengeluaran Hari Ini
-
-                      strong style="color: red;"
-                        | &nbsp #{number_to_currency(@total_outcome, unit: "Rp. ")}
-                      button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
-                        i.fas.fa-question
-                    p 
-                      | Profit Bersih
-
-                      strong  #{number_to_currency(sum_grand_total-sum_hpp_total-@total_outcome-sum_tax_total, unit: "Rp. ")}
-                      button.btn.btn-info.btn-sm.p-2 data-placement="top" data-toggle="tooltip" title=("#{DateTime.now.to_date}") type="button" 
-                        i.fas.fa-question
-
-                  .col-md-6
-                    p.lead.pt-3.pb-4
-                      | HUTANG
-                      br
-                      a href="#{debts_path(due_date: 1)}"
-                        span.badge.danger-color.p-2.strong  #{number_to_currency(@debt.sum(:deficiency), unit: "Rp. ")}
-
-                        - due_date = @debt.where("due_date <= ?", Date.today.end_of_week).count
-                        - due_date_text = ""
-                        - due_date_text += " -"+ due_date.to_s + " jatuh tempo." if due_date > 0
-                        button.btn.btn-danger.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{@debt.count} belum lunas #{due_date_text}") type="button" 
-                          i.fas.fa-minus &nbsp
-                          i.fas.fa-donate
-
-                  .col-md-6
-                    p.lead.pt-3.pb-4
-                      | PIUTANG
-                      br
-                      a href="#{debts_path(due_date: 1)}"
-                        span.badge.warning-color.p-2.strong  #{number_to_currency(@receivable.sum(:deficiency), unit: "Rp. ")}
-
-                        - due_date = @receivable.where("due_date <= ?", Date.today.end_of_week).count
-                        - due_date_text = ""
-                        - due_date_text += " -"+ due_date.to_s + " jatuh tempo." if due_date > 0
-                        button.btn.btn-warning.btn-sm.p-2.mr-0 data-placement="top" data-toggle="tooltip" title=("#{@receivable.count} belum lunas #{due_date_text}") type="button" 
-                          i.fas.fa-plus &nbsp
-                          i.fas.fa-donate
+    - if ["candy_dream", "super_admin", "owner", "finance"].include? current_user.level
+      = render "homes/card/trx_recap"

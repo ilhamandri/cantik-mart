@@ -8,9 +8,10 @@ class HomesController < ApplicationController
 
     if !["super_admin", "owner", "candy_dream"].include? current_user.level
       @total_limit_items = StoreItem.where(store_id: current_user.store.id).where('stock < min_stock').count
-      @total_orders = Order.where(store_id: current_user.store.id).where('date_receive is null').count
+      @total_orders = Order.where(store_id: current_user.store.id).where(date_receive: nil).count
       @total_payments = Order.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null').count
-      @total_returs = Retur.where(store_id: current_user.store.id).where('date_picked is null').count
+      @total_returs = Retur.where(store_id: current_user.store.id).where(date_picked: nil).count
+      @total_transfers = Transfer.where(from_store: current_user.store).where(date_approve: nil).count
     end
 
     start_day = DateTime.now.beginning_of_day

@@ -1,25 +1,24 @@
 .card
-  - if @total_payments > 0
-    .card-header.white-text.grey.darken-1
-      h5.font-weight-500.my-1
-        | PEMBAYARAN
-    h6.ml-4.mb-0.pt-4.font-weight-bold
+  .card-header.white-text.danger-color
+    h5.font-weight-500.my-1
+      | PEMBAYARAN
+
+  h6.pt-4.font-weight-bold.text-center
+    - if @total_payments > 0
       i.fas.fa-arrow-down.red-text.mr-3[aria-hidden="true"]
       b
-       | #{@total_payments} 
-      | pesanan.
-    .card-body.text-center
-      a.btn.btn-warning[href="#{orders_path(type: 'payment')}"]
+        | #{@total_payments} 
+      | pembayaran 
+    - else
+      i.fas.fa-arrow-up.text-success.mr-3[aria-hidden="true"]
+      | Tidak ada pesanan
+
+  .card-body.text-center
+    - if @total_payments > 0
+      a.btn.btn-dark[href="#{orders_path(type: 'payment')}"]
         | Cek &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
-  - else
-    .card-header.white-text.grey.darken-1
-      h5.font-weight-500.my-1
-        | PEMBAYARAN
-    h6.ml-4.mb-0.pt-4.font-weight-bold
-      i.fas.fa-arrow-up.blue-text.mr-3[aria-hidden="true"]
-      | LUNAS
-    .card-body.text-center
-      a.btn.btn-success[href="#{debts_path(type: '1')}"]
-        | Cek &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
+    - else
+      a.btn.btn-dark[href="#{debts_path(type: '1')}"]
+        | Cek  &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
 
       
