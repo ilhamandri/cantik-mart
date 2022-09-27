@@ -19,9 +19,9 @@ TO DO:
 	0. ALL
 		- 	print (clear) --> kasi akses super_visi(clean)
 	1. super_visi :
-		x 	retur supplier (submit feedback -> tidak ada hak akses)
-		x 	receive transfer
-		? 	supplier (new)
+		- 	retur supplier (submit feedback -> tidak ada hak akses)
+		- 	receive transfer
+		- 	supplier (new)
 		- 	order (NA) 
 		- 	retur (NA)
 		x 	department & sub-dept 
@@ -30,6 +30,7 @@ TO DO:
 		x 	item 
 			- (info: tidak ada tab yang lain) --> 
 			? (edit) -->
+		- order (receive)
 
 - tambah user yang terakhir update
 	1. Departmen

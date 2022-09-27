@@ -52,34 +52,37 @@ class ApplicationController < ActionController::Base
     end
 
     def authorization
+      extracted_path = nil
       begin
         extracted_path = Rails.application.routes.recognize_path(request.url, method: request.env["REQUEST_METHOD"]) 
         # request.original_fullpath
-        
-        controller_name = extracted_path[:controller].to_sym
-        method_name = extracted_path[:action].to_sym
-
-        title_actions = {"index"=>"data", "show"=>"detail"}
-        title_action = method_name.to_s.gsub("_"," ")
-        title_action = title_actions[title_action] if title_actions[title_action].present?
-        @method = title_action.camelize
-
-        titles = {"send back"=>"Kirim BS", "item cat"=>"sub department", "warning item"=>"empty stock"}
-        title = controller_name.to_s.gsub("_"," ").singularize
-        title = titles[title] if titles[title].present?
-        @title = title.camelize
-        
-        # return if ['received', 'pays', 'errors'].any? { |word| request.original_fullpath.include?(word) }
-
-        if current_user.present?
-          return authentication controller_name, method_name
-        end 
-
       rescue
-        puts "----------------------------------------> ERROR AUTH"
-        binding.pry
+        begin
+          extracted_path = Rails.application.routes.recognize_path request.original_fullpath
+        rescue
+          puts "---------------------------------------->  PATH_RECG   2"
+          return false
+        end
+        puts "---------------------------------------->  PATH_RECG   1"
         return false
       end
+      
+      controller_name = extracted_path[:controller].to_sym
+      method_name = extracted_path[:action].to_sym
+
+      title_actions = {"index"=>"data", "show"=>"detail"}
+      title_action = method_name.to_s.gsub("_"," ")
+      title_action = title_actions[title_action] if title_actions[title_action].present?
+      @method = title_action.camelize
+
+      titles = {"send back"=>"Kirim BS", "item cat"=>"sub department", "warning item"=>"empty stock"}
+      title = controller_name.to_s.gsub("_"," ").singularize
+      title = titles[title] if titles[title].present?
+      @title = title.camelize
+      
+      # return if ['received', 'pays', 'errors'].any? { |word| request.original_fullpath.include?(word) }
+
+      return authentication controller_name, method_name
     end
 
     def authentication controller_name, method_name
