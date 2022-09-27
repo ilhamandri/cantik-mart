@@ -80,18 +80,7 @@ li
         - if (Controller.find_by(name: 'transfers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
           li
             a.collapsible-header.waves-effect.arrow-r  href="#{transfers_path}" 
-              - if current_user.store.store_type == "warehouse"
-                | Toko Minta BARANG
-              - else
-                | Minta Barang ke GUDANG
-
-        - if (Controller.find_by(name: 'transfers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin", "owner"].include? current_user.level)
-          li
-            a.collapsible-header.waves-effect.arrow-r  href="#{new_direct_transfer_path}" 
-              - if current_user.store.store_type == "warehouse"
-                | Kirim Barang ke TOKO
-              - else
-                | Gudang Kirim Barang
+              | Transfer barang
 
         - if (Controller.find_by(name: 'send_backs').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? user_level) || (["super_admin"].include? current_user.level)
           li

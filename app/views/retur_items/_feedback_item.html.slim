@@ -1,0 +1,42 @@
+ = form_for :retur, url: retur_feedback_confirmation_path(id: @retur.id), method: "POST" do |form|
+  .col-md-12
+      table class="table" id="myTable"
+        thead
+          th Barang
+          th Jumlah
+          th Deskripsi
+          th Tipe
+          th Jumlah / Nominal
+        tbody
+          - @retur_items.each_with_index do |r_item, idx|
+            tr
+              td #{r_item.item.name}
+              - hpp = OrderItem.where(item_id: r_item.item.id).last
+              - hpp = hpp.price if hpp.present?
+              - hpp = 0 if hpp.nil?
+
+              td #{r_item.accept_item.to_i}
+              td #{r_item.description}
+              td
+                select class="mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="retur[retur_items][#{idx}][feedback]" required=true
+                  option value="cash"
+                    | Potong Nota
+                  option value="retur_item"
+                    | Tukar Barang
+                  option value="loss"
+                    | Musnah
+              td 
+                input type="number" class="form-control md-form" name="retur[retur_items][#{idx}][item_id]" value="#{r_item.id}" style="display: none;"
+                input type="number" class="form-control" name="retur[retur_items][#{idx}][nominal]" value=0 onchange="returTotal(this)"
+                
+
+  .col-12
+    hr
+    .form-group.text-right
+      h3 id="total"
+        | 0
+    hr
+
+  .col-12.text-center
+    button.btn.btn-primary
+      | KONFIRMASI FEEDBACK RETUR

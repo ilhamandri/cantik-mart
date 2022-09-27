@@ -53,11 +53,11 @@ class ApplicationController < ActionController::Base
 
     def authorization
       begin
-        extracted_path = Rails.application.routes.recognize_path request.original_fullpath
+        extracted_path = Rails.application.routes.recognize_path(request.url, method: request.env["REQUEST_METHOD"]) 
+        # request.original_fullpath
         
         controller_name = extracted_path[:controller].to_sym
         method_name = extracted_path[:action].to_sym
-
 
         title_actions = {"index"=>"data", "show"=>"detail"}
         title_action = method_name.to_s.gsub("_"," ")
@@ -77,6 +77,8 @@ class ApplicationController < ActionController::Base
 
       rescue
         puts "----------------------------------------> ERROR AUTH"
+        binding.pry
+        return false
       end
     end
 

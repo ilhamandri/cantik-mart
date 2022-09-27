@@ -1,51 +1,24 @@
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Data Pengembalian
-      .card-body
-        .row
-          .col-md-12
-            label for="form" INVOICE
-            input type="text" class="form-control md-form" disabled=true value="#{@retur.invoice}"
-          .col-md-4
-            label for="form" Total
-            input type="number" class="form-control md-form" disabled=true value="#{@retur.total_items}"
-          .col-md-4
-            .form-group
-              label for="from" Dari
-              input type="text" class="form-control md-form" disabled=true value="#{@retur.store.name}"
-          .col-md-4
-            .form-group
-              label for="from" Kepada
-              input type="text" class="form-control md-form" disabled=true value="#{@retur.supplier.name}"
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Data Barang
-      .card-body
-        = form_for :retur, url: retur_feedback_confirmation_path, method: "POST" do |form|
-          .col-md-12
-              table class="table" id="myTable"
-                thead
-                  th Barang
-                  / th HPP
-                  th Jumlah
-                  / th NT
-                  th Deskripsi
-                  th Tipe
-                  th Jumlah / Nominal
-                tbody
-                  = render partial: 'feedlist', collection: @retur_items, as: :r_item
-          .col-md-12
-            hr
-            .form-group.text-right
-              h3 id="total"
-                | 0
-            .form-group.text-center
-              /= form.submit "Buat Hasil Retur", class: "btn btn-primary"
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
 
-              = button_to "Feedback Retur", retur_feedback_confirmation_path(@retur), class: "btn btn-primary ", method: :post
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="data" aria-selected="true" data-toggle="tab" href="#data" role="tab" 
+        i.fa.fa-info.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Data 
+
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="item" aria-selected="true" data-toggle="tab" href="#item" role="tab" 
+        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Barang 
+
+
+
+
+  #myClassicTabContentOrange.tab-content.card
+    #item.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+      = render partial: 'feedback_item'
+      
+    #data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+      = render partial: 'feedback_data'

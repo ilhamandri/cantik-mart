@@ -9,8 +9,6 @@ class ReturItemsController < ApplicationController
   end
 
   def feedback
-    extracted_path = Rails.application.routes.recognize_path(request.original_url)
-
     return redirect_back_data_error returs_path, "Data Retur Tidak Valid" unless params[:id].present?
     @retur = Retur.find params[:id]
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless @retur.present?
@@ -36,11 +34,11 @@ class ReturItemsController < ApplicationController
     feed_value.each do |value|
       retur_item = ReturItem.find_by(id: value[1])
       if retur_item.nil?
-          receivable.delete
-          OrderItem.where(order: order).delete_all
-          order.delete
-          LossItem.where(loss: loss).delete_all
-          loss.delete
+          receivable.delete if receivable.present?
+          OrderItem.where(order: order).delete_all if order.present?
+          order.delete if order.present?
+          LossItem.where(loss: loss).delete_all if loss.present?
+          loss.delete if loss.present?
           break
       end
       accept_item = retur_item.accept_item
@@ -110,11 +108,11 @@ class ReturItemsController < ApplicationController
         nominal_value = value[2].to_i
 
         if nominal_value < 100
-          receivable.delete
-          OrderItem.where(order: order).delete_all
-          order.delete
-          LossItem.where(loss: loss).delete_all
-          loss.delete
+          receivable.delete if receivable.present?
+          OrderItem.where(order: order).delete_all if order.present?
+          order.delete if order.present?
+          LossItem.where(loss: loss).delete_all if loss.present?
+          loss.delete if loss.present?
           return redirect_back_data_error urls, "Nominal Potong Nota > 100" 
         end
 
