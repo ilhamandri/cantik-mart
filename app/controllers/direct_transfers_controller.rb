@@ -18,9 +18,9 @@ class DirectTransfersController < ApplicationController
     
     transfer = Transfer.create invoice: invoice,
       total_items: total_item,
-      from_store_id: to_store,
+      to_store_id: to_store,
       date_created: Time.now,
-      to_store_id: current_user.store.id,
+      from_store_id: current_user.store.id,
       user: current_user,
       approved_by: current_user,
       picked_by: current_user,

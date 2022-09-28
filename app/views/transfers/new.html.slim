@@ -9,7 +9,10 @@
     .col-lg-12.col-md-12
       .card-header.white-text.info-color
           h5.font-weight-500.my-1
-            | Buat Permintaan
+            - if current_user.store.store_type == "retail"
+              | Buat Permintaan Barang 
+            - else
+              | Kirim Barang ke Toko (DIRECT)
       .card.mb-4
         .card-body
           .row
@@ -30,6 +33,7 @@
                       - if store != current_user.store
                         option data-subtext="#{store.address}" value="#{store.id}"
                           | #{store.name}
+                          
   .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4

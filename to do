@@ -52,7 +52,7 @@ x retur supplier
 	- controller tambah user isi feedback (confirmed_by, date_confirm)
 	x di list item nominal muncul jika sudah ada confirmed_by
 
-
+- hapus hak akses stock_admin new transfer atau bikin 1 page buat nge handle req_transfer dan direct_transfer
 		
 ======================================================================
 DONE:

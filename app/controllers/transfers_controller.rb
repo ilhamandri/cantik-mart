@@ -36,7 +36,13 @@ class TransfersController < ApplicationController
   end
 
   def create
-    invoice = "TRF-" + Time.now.to_i.to_s
+    invoice = ""
+    if current_user.store.store_type == "retail"
+      invoice = "TRF-" 
+    else
+      invoice = "DTRF-"
+    end
+    invoice += Time.now.to_i.to_s
     items = transfer_items
     total_item = items.size
     to_store = params[:transfer][:store_id]
@@ -50,13 +56,26 @@ class TransfersController < ApplicationController
       to_store_id: to_store,
       user: current_user
 
+
+    if current_user.store.store_type == "warehouse"
+      transfer.picked_by = current_user
+      transfer.date_picked = Time.now
+      transfer.approved_by = current_user
+      transfer.date_approve = Time.now
+      transfer.save!
+    end
+
     trf_status = false
     items.each do |item|
       check_item = Item.find item[0]
       next if check_item.nil?
       qty = item[1].to_i
       next if qty < 1
-      TransferItem.create item_id: item[0], transfer_id: transfer.id, request_quantity: qty, description: item[2]
+      transfer_item = TransferItem.create item_id: item[0], transfer_id: transfer.id, request_quantity: qty, description: item[2]
+      if current_user.store.store_type == "warehouse"
+        transfer_item.sent_quantity = transfer_item.request_quantity
+        transfer_item.save!
+      end
       if !check_item.local_item
         trf_status = true
       end
@@ -70,14 +89,23 @@ class TransfersController < ApplicationController
       transfer.date_approve = "01-01-1999".to_date
       transfer.date_picked = "01-01-1999".to_date
       transfer.status = "01-01-1999".to_date
+      transfer.date_confirm = "01-01-1999".to_date
       transfer.description = "Dibatalkan otomatis oleh sistem (terdapat local item)" 
       transfer.save!
       return redirect_back_data_error urls, "Dibatalkan otomatis oleh sistem (tidak ada barang yang dikirim / terdapat item dengan local item)"
     else
-      users = User.where(store: transfer.to_store, level: User::SUPERVISI)
-      users.each do |user|
-        set_notification(current_user, user, 
-          Notification::INFO, "Permintaan transfer"+transfer.invoice, urls)
+      if current_user.store.store_type == "retail"
+        users = User.where(store: transfer.to_store, level: User::STOCK_ADMIN)
+        users.each do |user|
+          set_notification(current_user, user, 
+            Notification::INFO, "Permintaan barang "+transfer.invoice, urls)
+        end
+      else
+        users = User.where(store: transfer.to_store, level: User::SUPERVISI)
+        users.each do |user|
+          set_notification(current_user, user, 
+            Notification::INFO, "Kiriman barang "+transfer.invoice, urls)
+        end
       end
       return redirect_success urls, "Data Transfer - " + transfer.invoice + " - Berhasil Disimpan"
     end
@@ -98,15 +126,15 @@ class TransfersController < ApplicationController
     return redirect_back_data_error transfers_path "Data Transfer Tidak Valid" if transfer.date_confirm.present? || transfer.date_picked.present?
     if params[:transfer][:status]=="0"
       transfer.approved_by = current_user
-      transfer.description = "Dibatalkan oleh " + current_user.name + "("+current_user.store.name+") pada "+DateTime.now.to_date.to_s
-      transfer.date_approve = "01-01-1999".to_date
+      transfer.description = "Dibatalkan oleh " + current_user.name + " ("+DateTime.now.to_date.to_s + ")"
+      transfer.date_approve = Time.now
       transfer.date_picked = "01-01-1999".to_date
       transfer.status = "01-01-1999".to_date
-      set_notification current_user, transfer.user, "danger", "Transfer #"+transfer.invoice+" dibatalkan oleh " + current_user.name + "("+current_user.store.name+") pada "+DateTime.now.to_date.to_s, transfer_path(id: transfer.id)
+      set_notification current_user, transfer.user, "danger", "Transfer "+transfer.invoice+" dibatalkan oleh " + current_user.name + "("+current_user.store.name+") pada "+DateTime.now.to_date.to_s, transfer_path(id: transfer.id)
     else
       transfer.date_approve = DateTime.now
       transfer.approved_by = current_user
-      set_notification current_user, transfer.user, "success", "Transfer #"+transfer.invoice+" diterima oleh " + current_user.name + "("+current_user.store.name+") pada "+DateTime.now.to_date.to_s, transfer_path(id: transfer.id)
+      set_notification current_user, transfer.user, "success", "Transfer "+transfer.invoice+" telah diterima", transfer_path(id: transfer.id)
     
     end
     
@@ -127,10 +155,9 @@ class TransfersController < ApplicationController
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     transfer = Transfer.find params[:id]
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" if transfer.nil?
-    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid (1)" if transfer.to_store_id == current_user.store.id
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid (1)" if transfer.from_store_id == current_user.store.id
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid (2)" if transfer.date_picked.present? || transfer.status.present?
     status = sent_items params[:id] 
-    binding.pry
     transfer.date_picked = DateTime.now
     transfer.picked_by = current_user
     transfer.save!
@@ -157,11 +184,19 @@ class TransfersController < ApplicationController
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     transfer = Transfer.find params[:id]
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" if transfer.nil?
-    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid (R1)" if transfer.from_store_id == current_user.store.id
+    
+    if transfer.invoice.include? "DTRF"
+      return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid (R1_1)" if transfer.from_store_id == current_user.store.id
+    else
+      return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid (R1_2)" if transfer.to_store_id == current_user.store.id
+    end
+
+
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid (R2)" if transfer.date_picked.nil? || transfer.date_approve.nil? || transfer.status.present?
     receive_items params[:id]
     transfer.status = DateTime.now
     transfer.confirmed_by = current_user
+    transfer.date_confirm = DateTime.now
     transfer.save!
     return redirect_success transfer_path(id: transfer.id), "Transfer Telah Diterima"
   end
