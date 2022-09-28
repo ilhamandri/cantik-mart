@@ -1,35 +1,45 @@
 - transfer = @transfer_items.first.transfer 
 - transfer_id = transfer.id
+
 .row
+  - if ["","-", nil].exclude? transfer.description
+    .alert.alert-danger
+      .alert-heading  
+        | #{transfer.description}
+
+  - if transfer.confirmed_by.present?
+    .col-9
+      .alert.alert-success
+        .alert-heading
+         | Telah diterima oleh #{transfer.picked_by.name + ' ('+transfer.date_picked.to_s+')'}
+
   .col.text-right
     a href="#{transfer_path(id: transfer_id, format: :pdf)}"
       button.btn.btn-dark type="button" 
         i.fas.fa-print 
         | &nbsp&nbsp&nbsp CETAK
-  - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && @transfer_items.first.transfer.from_store.id == current_user.store.id
+  - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.to_store.id == current_user.store.id
     .col.text-right
     .col-md-6.text-right
       a href="#{transfer_receive_path(id: transfer_id)}"
         button class="btn btn-success"
           | TERIMA
       |  
-  - if transfer.date_approve.nil? && transfer.to_store.id == current_user.store.id && ( current_user.level == User::SUPERVISI || current_user.level == User::OWNER || current_user.level == User::SUPER_ADMIN )
+  - if transfer.date_approve.nil? && transfer.from_store.id == current_user.store.id && ( current_user.level == User::SUPERVISI || current_user.level == User::OWNER || current_user.level == User::SUPER_ADMIN )
     .col.text-right
     .col-md-6.text-right
       a href="#{transfer_confirmation_path(id: transfer_id)}"
         button class="btn btn-warning"
           | KONFIRMASI
     |  
-  - if transfer.date_approve.present? && transfer.date_picked.nil? && @transfer_items.first.transfer.to_store.id == current_user.store.id
+  - if transfer.date_approve.present? && transfer.date_picked.nil? && transfer.from_store.id == current_user.store.id
     .col.text-right
     .col-md-6.text-right
       a href="#{transfer_picked_path(id: transfer_id)}"
         button class="btn btn-warning"
           | SIAPKAN BARANG
-    |  
-    / = form_for :transfer_items, url: "#{transfer_picked_path(id: transfer_id)}", method: "POST" do |form|
-      / = form.submit "Ambil", class: "btn btn-success"
 
+hr.primary-color
 .row
   .col
     label Invoice
@@ -43,3 +53,14 @@
   .col
     label Total Barang
     input disabled="disabled" class="form-control md-form" value="#{transfer.total_items}"
+hr.primary-color
+.row
+  .col
+    label Buat
+    input disabled="disabled" class="form-control md-form" value="#{transfer.user.name + ' ('+transfer.created_at.to_s+')'}"
+  .col
+    label Konfirmasi
+    input disabled="disabled" class="form-control md-form" value="#{(transfer.approved_by.name + ' ('+transfer.date_approve.to_s+')') if transfer.approved_by.present?}"
+  .col
+    label Kirim
+    input disabled="disabled" class="form-control md-form" value="#{(transfer.picked_by.name + ' ('+transfer.date_picked.to_s+')') if transfer.picked_by.present?}"

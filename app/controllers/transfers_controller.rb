@@ -127,9 +127,10 @@ class TransfersController < ApplicationController
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     transfer = Transfer.find params[:id]
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" if transfer.nil?
-    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" unless transfer.to_store_id == current_user.store.id
-    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" if transfer.date_picked.present? || transfer.status.present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid (1)" if transfer.to_store_id == current_user.store.id
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid (2)" if transfer.date_picked.present? || transfer.status.present?
     status = sent_items params[:id] 
+    binding.pry
     transfer.date_picked = DateTime.now
     transfer.picked_by = current_user
     transfer.save!
@@ -140,9 +141,8 @@ class TransfersController < ApplicationController
       set_notification current_user, transfer.approved_by, "danger", "Transfer #"+transfer.invoice+" dibatalkan oleh sistem (Tidak ada item yang dikirim).", transfer_path(id: transfer.id)
       return redirect_to transfer_path(id: transfer.id)
     else
-      return redirect_success transfers_path, "Transfer "+transfer.invoice+" telah dikirim"
+      return redirect_success transfer_path(id: transfer.id), "Transfer "+transfer.invoice+" telah dikirim"
     end
-    
   end
 
   def receive
@@ -157,13 +157,13 @@ class TransfersController < ApplicationController
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless params[:id].present?
     transfer = Transfer.find params[:id]
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" if transfer.nil?
-    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" unless transfer.from_store_id == current_user.store.id
-    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" if transfer.date_picked.nil? || transfer.date_approve.nil? || transfer.status.present?
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid (R1)" if transfer.from_store_id == current_user.store.id
+    return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid (R2)" if transfer.date_picked.nil? || transfer.date_approve.nil? || transfer.status.present?
     receive_items params[:id]
     transfer.status = DateTime.now
     transfer.confirmed_by = current_user
     transfer.save!
-    return redirect_success transfers_path, "Transfer Telah Diterima"
+    return redirect_success transfer_path(id: transfer.id), "Transfer Telah Diterima"
   end
 
   def destroy
@@ -173,7 +173,7 @@ class TransfersController < ApplicationController
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" if transfer.date_approve.present?
     TransferItem.where(transfer_id: params[:id]).destroy_all
     transfer.destroy
-    return redirect_success transfers_path, "Transfer Telah Dihapus"
+    return redirect_success transfer_path(id: transfer.id), "Transfer Telah Dihapus"
   end
 
   def show
@@ -259,13 +259,12 @@ class TransfersController < ApplicationController
         
         next if store_item.nil?
 
-        next if store_item.stock <= 0
-
+        # next if store_item.stock <= 0
         if store_item.present?
           if transfer_item.request_quantity < qty
             qty = transfer_item.request_quantity
           end
-          status = true if store_item.stock >= qty 
+          status = true 
         else
           qty = 0
         end
@@ -274,7 +273,9 @@ class TransfersController < ApplicationController
         transfer_item.save!
         new_stock = store_item.stock.to_i - qty
         store_item.stock = new_stock
+
         store_item.save!
+
 
         if store_item.stock <= store_item.min_stock
           set_notification current_user, current_user, "warning", store_item.item.name + " berada dibawah limit", warning_items_path
