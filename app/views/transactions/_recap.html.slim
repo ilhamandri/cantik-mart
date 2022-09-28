@@ -80,9 +80,12 @@
                 .col-12
                   label Pilih Toko
                   select name="store_id" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store_id" searchable="Cari..."
-                    - Store.all.each do |store|
-                      option value="#{store.id}"
-                        | #{store.name}
+                    - if current_user.store.store_type == "retail"
+                      option value="current_user.store.id"
+                    - else
+                      - Store.all.each do |store|
+                        option value="#{store.id}"
+                          | #{store.name}
 
                 .col-12
                   label Pilih Tanggal Transaksi

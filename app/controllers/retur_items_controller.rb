@@ -160,6 +160,8 @@ class ReturItemsController < ApplicationController
     end
 
     retur.status = Time.now
+    retur.date_confirm = Time.now
+    retur.confirmed_by = current_user
     retur.save
     return redirect_success urls, "Data Retur " + retur.invoice + " Telah Dikonfirmasi"
   end

@@ -2,11 +2,6 @@ tr
   td #{@idx}
   - @idx += 1
   td #{trf_item.item.code} 
-  td
-    - if trf_item.item.image.present?
-      img src="#{trf_item.item.image}" width="50px"
-    - else
-      =image_tag("/images/default_item.jpg", height: '70', width: '70')
   td #{trf_item.item.name}
   td #{trf_item.request_quantity}
   td #{trf_item.sent_quantity}
