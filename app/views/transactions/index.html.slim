@@ -18,11 +18,12 @@
         i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
         br
         | Rekap
-    li.nav-item
-      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="graph" aria-selected="true" data-toggle="tab" href="#graph" role="tab" 
-        i.fa.fa-line-chart.fa-2x.pb-2 aria-hidden="true" 
-        br
-        | Grafik
+    - if ["super_visi", "stock_admin"].exclude? current_user.level
+      li.nav-item
+        a#profile-tab-classic-blue.nav-link.waves-light aria-controls="graph" aria-selected="true" data-toggle="tab" href="#graph" role="tab" 
+          i.fa.fa-line-chart.fa-2x.pb-2 aria-hidden="true" 
+          br
+          | Grafik
 
   #myClassicTabContentOrange.tab-content.card
     #all_data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
@@ -35,7 +36,9 @@
       #search.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
           = render partial: 'search'
 
-    #graph.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-        = render partial: 'graph'
+
+    - if ["super_visi", "stock_admin"].exclude? current_user.level
+      #graph.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+          = render partial: 'graph'
 
       

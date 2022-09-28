@@ -136,7 +136,6 @@ Rails.application.routes.draw do
 
   resources :transfers
   
-  resources :direct_transfers
   resources :losses
   resources :loss_items
 

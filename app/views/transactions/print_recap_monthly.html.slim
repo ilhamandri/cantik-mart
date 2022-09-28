@@ -29,9 +29,10 @@ br
     tr
       th Tanggal
       th Omzet
-      th HPP
-      th Pajak Keluaran
-      th Profit
+      - if current_user.level != "super_visi"
+        th HPP
+        th Pajak Keluaran
+        th Profit 
     - curr_month = @transaction_datas.first[0].to_date.month
     - @transaction_datas.each do |trx_data|
       - if trx_data[0].to_date.month == curr_month
@@ -46,9 +47,11 @@ br
             - tax += trx.tax
 
           td #{number_with_delimiter(total.to_i, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter(hpp.to_i, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter(tax.to_i, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter((total-hpp-tax).to_i, delimiter: ".", separator: ",")}
+          - if current_user.level != "super_visi"
+            td #{number_with_delimiter(hpp.to_i, delimiter: ".", separator: ",")}
+            td #{number_with_delimiter(tax.to_i, delimiter: ".", separator: ",")}
+            
+            td #{number_with_delimiter((total-hpp-tax).to_i, delimiter: ".", separator: ",")}
           - totals += total
           - hpp_totals += hpp
           - profit_totals += total - hpp - tax
@@ -64,16 +67,18 @@ br
       td 
         b
           | #{number_with_delimiter((totals).to_i, delimiter: ".", separator: ",")}
-      td 
-        b
-          | #{number_with_delimiter((hpp_totals).to_i, delimiter: ".", separator: ",")}
-      td 
-        b
-          | #{number_with_delimiter((tax_totals).to_i, delimiter: ".", separator: ",")}
-      td 
-        b
-          | #{number_with_delimiter(profit_totals.to_i, delimiter: ".", separator: ",")}
-            
+
+      - if current_user.level != "super_visi"
+        td 
+          b
+            | #{number_with_delimiter((hpp_totals).to_i, delimiter: ".", separator: ",")}
+        td 
+          b
+            | #{number_with_delimiter((tax_totals).to_i, delimiter: ".", separator: ",")}
+          td 
+            b
+              | #{number_with_delimiter(profit_totals.to_i, delimiter: ".", separator: ",")}
+              
 
 - else
   table#items

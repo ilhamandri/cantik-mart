@@ -14,9 +14,9 @@
                   label Pilih Tanggal Transaksi
                   input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="date" required=true
                 .col-12.text-center
-                  button class="btn btn-info "
-                    i.fas.fa-book
-                    |   Download Rekap Transaksi
+                  button.btn.btn-primary
+                    i.fas.fa-download
+                    |   Unduh
 
       .col-6.pb-2
         .card-header.white-text.info-color
@@ -65,36 +65,37 @@
                         | #{first_year+idx}
 
                 .col-md-12.text-center
-                  button class="btn btn-info "
-                    i.fas.fa-book
-                    |   Download Rekap Transaksi
+                  button.btn.btn-primary
+                    i.fas.fa-download
+                    |   Unduh
 - if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
-      .col.pb-2
-        .card-header.white-text.bg-dark
-            h5.font-weight-500.my-1
-              | Penjualan Item
-        .card.mb-4 
-          .card-body
-            = form_for :transaction, url: daily_trx_item_recap_path(format: :xlsx), method: 'GET' do |form|
-              .row
-                .col-12
-                  label Pilih Toko
-                  select name="store_id" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store_id" searchable="Cari..."
-                    - if current_user.store.store_type == "retail"
-                      option value="current_user.store.id"
-                    - else
-                      - Store.all.each do |store|
-                        option value="#{store.id}"
-                          | #{store.name}
+  .col.pb-2
+    .card-header.white-text.bg-dark
+        h5.font-weight-500.my-1
+          | Penjualan Item
+    .card.mb-4 
+      .card-body
+        = form_for :transaction, url: daily_trx_item_recap_path(format: :xlsx), method: 'GET' do |form|
+          .row
+            .col-12
+              label Pilih Toko
+              select name="store_id" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store_id" searchable="Cari..."
+                - if current_user.store.store_type == "retail"
+                  option value="#{current_user.store.id}" 
+                    | #{current_user.store.name}
+                - else
+                  - Store.all.each do |store|
+                    option value="#{store.id}"
+                      | #{store.name}
 
-                .col-12
-                  label Pilih Tanggal Transaksi
-                .col-6
-                  input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="start_date" required=true
-                .col-6
-                  input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="end_date" required=true
-                
-                .col-md-12.text-center
-                  button class="btn btn-info "
-                    i.fas.fa-book
-                    |  Download Item Terjual
+            .col-12
+              label Pilih Tanggal Transaksi
+            .col-6
+              input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="start_date" required=true
+            .col-6
+              input type="date" class="form-control md-form" value="#{(Date.today).strftime("%m/%d/%Y")}" name="end_date" required=true
+            
+            .col-md-12.text-center
+              button.btn.btn-primary
+                i.fas.fa-download
+                |   Unduh

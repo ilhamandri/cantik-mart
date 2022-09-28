@@ -1,14 +1,14 @@
 .row
-  	.col-10
+  	.col
     	.alert.alert-primary
         	.alert-heading
           	| Semua Data #{@title}
    	- if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
-	    
-	  	.col-2.text-center
-		    a.btn.btn-success href="#{new_transaction_path}"
-		      	i.fas.fa-plus 
-		      	|  #{@title}
+	    - if current_user.store.online_store
+		  	.col-2.text-center
+			    a.btn.btn-success href="#{new_transaction_path}"
+			      	i.fas.fa-plus 
+			      	|  #{@title}
 
 - if ["owner", "super_visi", "finance", "super_admin", "candy_dream"].include? current_user.level
 	table class="table"

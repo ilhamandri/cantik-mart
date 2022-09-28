@@ -32,12 +32,13 @@ class TransactionsController < ApplicationController
             end_day = (start_day + 7.days).end_of_day
           end 
         end
-
-        transactions = transactions_profit_graph start_day, end_day
-        gon.grand_totals = transactions[0]
-        gon.hpp_totals = transactions[1]
-        gon.profits = transactions[2]
-        gon.days = transactions[3]
+        if ["super_visi", "stock_admin"].exclude? current_user.level
+          transactions = transactions_profit_graph start_day, end_day
+          gon.grand_totals = transactions[0]
+          gon.hpp_totals = transactions[1]
+          gon.profits = transactions[2]
+          gon.days = transactions[3]
+        end
       end
       format.pdf do
         new_params = eval(params[:option])
@@ -137,11 +138,11 @@ class TransactionsController < ApplicationController
     store_id = params["store_id"]
     return redirect_back_data_error transactions_path, "Silahkan untuk memilih toko di rekap penjualan item" if store_id.nil?
     store = Store.find_by(id: store_id)
-    return redirect_back_data_error transactions_path, "Data tidak Ditemukan" if store.nil?
+    return redirect_back_data_error transactions_path, "Data tidak Ditemukan (D1)" if store.nil?
 
     transaction_items = TransactionItem.where(created_at: start_day..end_day, store: store)
 
-    return redirect_back_data_error transactions_path, "Data tidak Ditemukan" if transaction_items.nil?
+    return redirect_back_data_error transactions_path, "Data tidak Ditemukan (D2)" if transaction_items.nil?
     
     if current_user.level == "candy_dream"
       transaction_items = transaction_items.where(item_id: 30331)
@@ -193,14 +194,27 @@ class TransactionsController < ApplicationController
             supplier_name = "TIDAK ADA SUPPLIER"
             supplier_name = supplier.name + " (" + supplier.phone.to_s + ")" if supplier_id.present?
             sheet.add_row [supplier_name.upcase]
-            sheet.add_row ["Kode", "Nama", "Terjual", "Omzet", "Pajak Keluaran", "Profit"]
+            if ["super_visi", "stock_admin"].include? current_user.level
+              sheet.add_row ["Kode", "Nama", "Terjual"]
+            else
+              sheet.add_row ["Kode", "Nama", "Terjual", "Omzet", "Pajak Keluaran", "Profit"]
+            end
             trx_supplier_items = transaction_items.where(supplier_id: supplier_id)
             trx_supplier_items.pluck(:item_id).uniq.each do |item_id|
               item = Item.find_by(id: item_id)
               trx_items = trx_supplier_items.where(item_id: item_id)
-              sheet.add_row [item.code, item.name, trx_items.sum(:quantity).to_i, trx_items.sum(:total).to_i, trx_items.sum(:ppn).to_i, trx_items.sum(:profit).to_i ]
+
+              if ["super_visi", "stock_admin"].include? current_user.level
+                sheet.add_row [item.code, item.name, trx_items.sum(:quantity).to_i ]
+              else
+                sheet.add_row [item.code, item.name, trx_items.sum(:quantity).to_i, trx_items.sum(:total).to_i, trx_items.sum(:ppn).to_i, trx_items.sum(:profit).to_i ]
+              end
             end
-            sheet.add_row ["","", trx_supplier_items.sum(:quantity).to_i, trx_supplier_items.sum(:total).to_i, trx_supplier_items.sum(:ppn).to_i, trx_supplier_items.sum(:profit).to_i]
+            if ["super_visi", "stock_admin"].include? current_user.level
+              sheet.add_row ["","", trx_supplier_items.sum(:quantity).to_i]
+            else
+              sheet.add_row ["","", trx_supplier_items.sum(:quantity).to_i, trx_supplier_items.sum(:total).to_i, trx_supplier_items.sum(:ppn).to_i, trx_supplier_items.sum(:profit).to_i]
+            end
           end
         end
 

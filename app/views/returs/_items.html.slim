@@ -15,7 +15,10 @@ table class="table"
 .container.pagination.justify-content-center
   = paginate @retur_items
 
-hr
-.text-right
-  h4
-    | #{number_with_delimiter(@retur_items.where(feedback:"cash").sum(:nominal).to_i, delimiter: ".")}
+
+- cash_feedback = @retur_items.where(feedback:"cash").sum(:nominal).to_i
+- if cash_feedback > 0
+  hr
+  .text-right
+    h4
+      | #{number_with_delimiter(cash_feedback, delimiter: ".")}
