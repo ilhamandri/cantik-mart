@@ -61,7 +61,7 @@
           input class="md-form form-control" value="#{ppn}" disabled="disabled"
       .col-md-6.col-lg-3
         .form-group
-          label for="item" Harga Jual Normal
+          label for="item" Harga Jual (*Rekomendasi Sistem)
           - buy = @item.buy
           - base_price = (buy + (buy*@item.margin/100.0)) 
           - ppn = base_price * @item.tax / 100.0

@@ -14,7 +14,7 @@ class SupplierItemsController < ApplicationController
     date_from = start_params.to_datetime.beginning_of_day
     date_to = end_params.to_datetime.end_of_day
     trx_items = TransactionItem.where(supplier: supplier, created_at: date_from..date_to)
-    trx_items = trx_items,where(store: current_user.store) if ["super_visi"].include? current_user.level
+    trx_items = trx_items.where(store: current_user.store) if ["super_visi"].include? current_user.level
 
     filename = "./report/supplier/" + supplier.name + "-" + DateTime.now.to_i.to_s + ".xlsx"
 
@@ -25,14 +25,18 @@ class SupplierItemsController < ApplicationController
       sheet.add_row ["Dekripsi", "Rekap penjualan " + supplier.name.upcase + " ( " + date_from.to_date.to_s + " ... " + date_to.to_date.to_s + " )"]
       sheet.add_row ["Total Barang Terjual", trx_items.sum(:quantity)]
     end
+
+    total_omzet = 0
+    total_tax = 0
+    total_profit = 0
+    total_terjual = 0
     
     wb.add_worksheet(:name => "PENJUALAN") do |sheet|
-      sheet.add_row ["No", "Kode", "Nama Barang", "Terjual", "Omzet", "Pajak", "Profit"]
-
-      total_omzet = 0
-      total_tax = 0
-      total_profit = 0
-      total_terjual = 0
+      if ["super_visi", "stock_admin"].include? current_user.level
+        sheet.add_row ["No", "Kode", "Nama Barang", "Terjual", "Omzet"]
+      else
+        sheet.add_row ["No", "Kode", "Nama Barang", "Terjual", "Omzet", "Pajak", "Profit"]
+      end
       Item.where(id: trx_items.pluck(:item_id).uniq).each_with_index do |item,idx|
         trx_item = trx_items.where(item: item)
         terjual = trx_item.sum(:quantity)
@@ -43,13 +47,30 @@ class SupplierItemsController < ApplicationController
         total_tax += tax
         profit = trx_item.sum(:profit).ceil(3)
         total_profit += profit
-        sheet.add_row [idx+1, item.code, item.name, terjual, omzet, tax, profit]
+        if ["super_visi", "stock_admin"].include? current_user.level
+          sheet.add_row [idx+1, item.code, item.name, terjual, omzet]
+        else
+          sheet.add_row [idx+1, item.code, item.name, terjual, omzet, tax, profit]
+        end
       end
+
       sheet.add_row []
-      sheet.add_row ["TOTAL", "", "", total_terjual, total_omzet, total_tax, total_profit]
+
+      if ["super_visi", "stock_admin"].include? current_user.level
+        sheet.add_row ["TOTAL", "", "", total_terjual, total_omzet]
+      else
+        sheet.add_row ["TOTAL", "", "", total_terjual, total_omzet, total_tax, total_profit]
+      end
       sheet.merge_cells sheet.rows.last.cells[(0..2)]
 
-      # end
+    end
+
+    sheet = p.workbook.worksheets.select {|w| w.name == "INFO"}.first
+    sheet.add_row ["Total omzet", total_omzet]
+    if ["super_admin", "finance", "owner"].include? current_user.level
+      sheet.add_row ["Total omzet", total_omzet]
+      sheet.add_row ["Total pajak", total_tax]
+      sheet.add_row ["Total profit", total_profit]
     end
 
     p.serialize(filename)
