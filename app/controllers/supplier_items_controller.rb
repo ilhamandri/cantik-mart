@@ -14,6 +14,7 @@ class SupplierItemsController < ApplicationController
     date_from = start_params.to_datetime.beginning_of_day
     date_to = end_params.to_datetime.end_of_day
     trx_items = TransactionItem.where(supplier: supplier, created_at: date_from..date_to)
+    trx_items = trx_items,where(store: current_user.store) if ["super_visi"].include? current_user.level
 
     filename = "./report/supplier/" + supplier.name + "-" + DateTime.now.to_i.to_s + ".xlsx"
 

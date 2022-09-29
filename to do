@@ -36,12 +36,14 @@ x tambah user yang terakhir update
 	x Barang
 
 x dropdown notif melenceng
-x stock_admin tidak ada notif permintaan barang 
 
+x grafik penjualan untuk supervisi hanya omzet
 
+x stock admin akses transaksi ?
 		
 ======================================================================
 DONE:
+- stock_admin tidak ada notif permintaan barang 
 - sv - item (info: tidak ada tab yang lain) 
 - sv - department & sub-dept 
 - sv - item (info) --> beri akses ke item_cats=super_visi
