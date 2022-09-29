@@ -1,6 +1,7 @@
 TO DO:
 x ubah desgin sign_in
-	1. logo cm ga center tengah
+	x logo cm ga center tengah
+
 x ubah design dashboard
 	x super_admin
 	x finance
@@ -8,14 +9,16 @@ x ubah design dashboard
 		x 	kasi lap penjualan hari ini 
 		x 	kasi jumlah item yang perlu dicetak
 	x stock_admin
+
 x bersihin error di log_console
-	0. perfect scroll bar
-	1. Di sign_in
+	x perfect scroll bar
+	- Di sign_in
 		* error js => start_time (clock)
-	2. quirks mode
-	3. transform origin
-	4. dist js bootstrap.min.js
-	5. autonumeric
+	x quirks mode
+	x transform origin
+	x dist js bootstrap.min.js
+	x autonumeric
+
 x perbaiki semua button pakai hak akses
 x perbaiki hak akses 
 	0. ALL
@@ -28,11 +31,12 @@ x perbaiki hak akses
 x Slow get item local
 
 x tambah user yang terakhir update
-	1. Departmen
-	2. Sub-departmen
-	3. Barang
+	x Departmen
+	x Sub-departmen
+	x Barang
 
-
+x dropdown notif melenceng
+x stock_admin tidak ada notif permintaan barang 
 
 
 		
