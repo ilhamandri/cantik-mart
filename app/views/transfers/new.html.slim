@@ -1,10 +1,5 @@
-- url = nil
-- if current_user.store.store_type == "warehouse"
-  - url = direct_transfers_path
-- else
-  - url = transfers_path
-  
-= form_for :transfer, url: url, method: "POST" do |form|
+
+= form_for :transfer, url: transfers_path, method: "POST" do |form|
   .container-fluid
     .col-lg-12.col-md-12
       .card-header.white-text.info-color
