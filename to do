@@ -19,18 +19,12 @@ x bersihin error di log_console
 	x dist js bootstrap.min.js
 	x autonumeric
 
-x perbaiki semua button pakai hak akses
 x perbaiki hak akses 
-	0. ALL
-		
 	1. super_visi :
 		x item (edit) --> 
-	2. stock admin 
-		x minta akses laporan penjualan toko
 		
-x Slow get item local
 
-x tambah user yang terakhir update
+x tambah user yang terakhir update ()
 	x Departmen
 	x Sub-departmen
 	x Barang
@@ -40,9 +34,17 @@ x dropdown notif melenceng
 x grafik penjualan untuk supervisi hanya omzet
 
 x stock admin akses transaksi ?
+
+x profit minus tanggal 28
+
 		
 ======================================================================
 DONE:
+- perbaiki semua button pakai hak akses
+- menu gajian
+- stock_admin penjualan supplier
+- stock admin --> minta akses laporan penjualan toko = ga dikasi akses
+- slow get item local
 - stock_admin tidak ada notif permintaan barang 
 - sv - item (info: tidak ada tab yang lain) 
 - sv - department & sub-dept 

@@ -1,11 +1,12 @@
 h3
 	| Daftar Sub-Department (#{@dept.name})
 .row
-	- if Controller.find_by(name: 'item_cats').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+	
+  	- if buttonAccess "item_cats", "new"
   		.col.text-center
 	      	a.btn.btn-success href="#{new_item_cat_path(dept_id: @dept.id)}"
 	          	i.fas.fa-plus 
-	          	|   Tambah Sub-Department
+	          	|   Sub-Department
   	.col.text-center
     	a href="#{item_cats_path(dept_id: @dept.id,format: :pdf)}" class="btn btn-dark"
 	      	b

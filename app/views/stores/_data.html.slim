@@ -3,7 +3,8 @@
     .alert.alert-primary
       .alert-heading
         | Semua Data #{@title}
-  - if Controller.find_by(name: 'stores').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+  
+  - if buttonAccess "stores", "new"
     .col-2.text-center
       a href="#{new_supplier_path}"
         button.btn.btn-success type="button" 

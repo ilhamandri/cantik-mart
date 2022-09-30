@@ -3,10 +3,12 @@
     .alert.alert-primary
         .alert-heading
           | Semua Data #{@title}
-  .col-2.text-center
-    a.btn.btn-success href="#{new_user_path}"
-      i.fas.fa-plus 
-      |  Pengguna
+
+  - if isAdmin
+    .col-2.text-center
+      a.btn.btn-success href="#{new_user_path}"
+        i.fas.fa-plus 
+        |  Pengguna
 
 table class="table" 
   thead

@@ -3,11 +3,13 @@
     .alert.alert-primary
         .alert-heading
           | Semua Data #{@title}
-  .col-2.text-center
-    a href="#{transactions_path(from: "complain")}"
-      button.btn.btn-success type="button" 
-        i.fas.fa-plus 
-        | &nbsp Komplain
+
+  - if buttonAccess "complains_path", "new"
+    .col-2.text-center
+      a href="#{transactions_path(from: "complain")}"
+        button.btn.btn-success type="button" 
+          i.fas.fa-plus 
+          | &nbsp Komplain
 
 
 table class="table"

@@ -3,7 +3,8 @@
       .alert.alert-primary
           .alert-heading
             | Semua Data #{@title}
-  - if Controller.find_by(name: 'promotions').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+  
+  - if buttonAccess "promotions", "new"
     .col-2.text-center
         a.btn.btn-success href="#{new_promotion_path}"
           i.fas.fa-plus 

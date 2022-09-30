@@ -4,7 +4,8 @@
 	        .alert-heading
 	          | Riwayat Poin - #{@member.name}
 
-	- if Controller.find_by(name: 'points').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+	
+  	- if buttonAccess "points", "new"
 		.col-2.text-right
 		    a href="#{new_point_path(id: @member.id)}"
 		      button.btn.btn-success type="button" 

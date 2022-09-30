@@ -1,5 +1,5 @@
 .row
-  .col-10
+  .col
     - if @color == "danger"
       .alert.alert-danger
         .alert-heading
@@ -17,8 +17,8 @@
         .alert-heading
           | Semua Data #{@title}
 
-  .col-2.text-center
-    - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+  - if buttonAccess "orders", "new"
+    .col-2.text-center
       a href="#{new_order_path}"
         button.btn.btn-success type="button" 
           i.fas.fa-plus 
