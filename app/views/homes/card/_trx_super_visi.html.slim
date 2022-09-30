@@ -1,4 +1,4 @@
-- start_d = DateTime.now.beginning_of_month
+- start_d = DateTime.now.beginning_of_day
 - end_d = DateTime.now.end_of_day
 - trxs = Transaction.where(store: current_user.store, created_at: start_d..end_d)
 - cashiers = trxs.pluck(:user_id).uniq
