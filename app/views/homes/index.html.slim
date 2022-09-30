@@ -12,18 +12,22 @@
 
     - if ["stock_admin", "super_visi"].include? current_user.level
       .row
-        .col-md-3
+        .col-3
           = render "homes/card/order"
-        .col-md-3
+          br
+        .col-3
           = render "homes/card/payment"
-        .col-md-3
+          br
+        .col-3
           = render "homes/card/retur"
-        .col-md-3
+        .col-3
           = render "homes/card/transfer"
-
-
-
-
+          br
+        / .col-6
+          = render "homes/card/print"
+        .col-12
+          = render "homes/card/trx_super_visi"
+          br
 
     - if current_user.level  == "candy_dream"
       .row

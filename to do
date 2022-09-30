@@ -6,9 +6,9 @@ x ubah desgin sign_in
 x ubah design dashboard
 	x super_admin
 	x finance
-	x super_visi
-		x 	kasi lap penjualan hari ini 
-		x 	kasi jumlah item yang perlu dicetak
+	- super_visi
+		- 	kasi lap penjualan hari ini 
+		- 	kasi jumlah item yang perlu dicetak
 	x stock_admin
 
 x bersihin error di log_console

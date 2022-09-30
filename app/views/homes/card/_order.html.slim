@@ -8,17 +8,17 @@
       i.fas.fa-arrow-down.red-text.mr-3[aria-hidden="true"]
       b
         | #{@total_orders} 
-      | transfer 
+      | pesanan  
     - else
       i.fas.fa-check.text-success.mr-3[aria-hidden="true"]
       | Tidak ada pesanan
 
   .card-body.text-center
     - if @total_orders > 0
-      a.btn.btn-dark[href="#{orders_path(type: 'ongoing')}"]
-        | Cek &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
+      a.btn.btn-outline-dark[href="#{orders_path(type: 'ongoing')}"]
+        | ORDER &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
     - else
-      a.btn.btn-dark[href="#{orders_path}"]
-        | Cek  &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
+      a.btn.btn-outline-dark[href="#{orders_path}"]
+        | ORDER  &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
 
       

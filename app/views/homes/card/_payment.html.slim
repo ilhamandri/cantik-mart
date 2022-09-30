@@ -11,14 +11,14 @@
       | pembayaran 
     - else
       i.fas.fa-arrow-up.text-success.mr-3[aria-hidden="true"]
-      | Tidak ada pesanan
+      | Tidak ada pembayaran
 
   .card-body.text-center
     - if @total_payments > 0
-      a.btn.btn-dark[href="#{orders_path(type: 'payment')}"]
-        | Cek &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
+      a.btn.btn-outline-dark[href="#{orders_path(type: 'payment')}"]
+        | BAYAR &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
     - else
-      a.btn.btn-dark[href="#{debts_path(type: '1')}"]
-        | Cek  &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
+      a.btn.btn-outline-dark[href="#{debts_path(type: '1')}"]
+        | BAYAR  &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
 
       

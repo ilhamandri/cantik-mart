@@ -1,0 +1,16 @@
+.card
+  .card-header.white-text.bg-info
+    h5.font-weight-500.my-1
+      | CETAK
+  h6.pt-4.font-weight-bold.text-center
+    - prints = Print.where(store: current_user.store)
+    - if prints.present?
+      b
+        | #{prints.count} 
+      | perubahan harga, silahkan cetak!
+    - else
+      b
+        | Tidak ada perubahan harga
+  .card-body.text-center
+    a.btn.btn-outline-dark[href="#{orders_path}"]
+        | Cetak  &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
