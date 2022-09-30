@@ -29,7 +29,7 @@ br
 - if ["finance", "owner", "super_admin", "super_visi"].include? current_user.level 
   h2 CANTIK MART
   - stores = Store.where.not(store_type: "warehouse")
-  - stores = [current_user.store]
+  - stores = [current_user.store] if ["finance", "owner", "super_admin"].exclude? current_user.level
   - stores.each do |store|
     - trxs = @transactions.where(store: store)
     - trx_last_timestamp = "Tidak ada transaksi"
