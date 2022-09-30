@@ -32,7 +32,7 @@ class TransactionsController < ApplicationController
             end_day = (start_day + 7.days).end_of_day
           end 
         end
-        if ["super_visi", "stock_admin"].exclude? current_user.level
+        if ["super_visi", "super_admin", "super_visi", "candy_dream"].include? current_user.level
           transactions = transactions_profit_graph start_day, end_day
           gon.grand_totals = transactions[0]
           gon.hpp_totals = transactions[1]

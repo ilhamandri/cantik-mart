@@ -18,7 +18,7 @@
         i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
         br
         | Rekap
-    - if ["super_visi", "stock_admin"].exclude? current_user.level
+    - if ["super_visi", "super_admin", "finance", "owner"].include? current_user.level
       li.nav-item
         a#profile-tab-classic-blue.nav-link.waves-light aria-controls="graph" aria-selected="true" data-toggle="tab" href="#graph" role="tab" 
           i.fa.fa-line-chart.fa-2x.pb-2 aria-hidden="true" 
@@ -37,7 +37,7 @@
           = render partial: 'search'
 
 
-    - if ["super_visi", "stock_admin"].exclude? current_user.level
+    - if ["super_visi", "super_admin", "finance", "owner"].include? current_user.level
       #graph.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
           = render partial: 'graph'
 

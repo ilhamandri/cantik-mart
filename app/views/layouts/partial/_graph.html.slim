@@ -1,0 +1,299 @@
+- if ["transactions"].include? controller_name
+  - if ["super_admin", "finance", "owner"].include? current_user.level
+    javascript:
+      var ctxL = document.getElementById("transactions").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.days,
+          datasets: [
+            {
+              label: "Profit",
+              data: gon.profits,
+              backgroundColor: [
+              'rgba(75, 192, 192, 0.2)',
+              ],
+              borderColor: [
+              "rgb(75, 192, 192)",
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "Omzet",
+              data: gon.grand_totals,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "HPP",
+              data: gon.hpp_totals,
+              backgroundColor: [
+              'rgba(54, 162, 235, 0.1)',
+              ],
+              borderColor: [
+              'rgba(54, 162, 235, 1)',
+              ],
+              borderWidth: 2
+            }
+
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+  - if ["candy_dream", "super_visi"].include? current_user.level
+    javascript:
+      var ctxL = document.getElementById("transactions").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.days,
+          datasets: [
+            {
+              label: "Omzet",
+              data: gon.grand_totals,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+// HOME DASHBOARD TRX => UNUSED
+- if ["homess"].include? controller_name
+  javascript:
+      var ctxL = document.getElementById("transactions_days").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.month_days,
+          datasets: [
+            {
+              label: "Profit",
+              data: gon.profits_days,
+              backgroundColor: [
+              'rgba(75, 192, 192, 0.2)',
+              ],
+              borderColor: [
+              "rgb(75, 192, 192)",
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "Omzet",
+              data: gon.grand_totals_days,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "HPP",
+              data: gon.hpp_totals_days,
+              backgroundColor: [
+              'rgba(54, 162, 235, 0.1)',
+              ],
+              borderColor: [
+              'rgba(54, 162, 235, 1)',
+              ],
+              borderWidth: 2
+            }
+
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+- if ["items"].include? controller_name
+  javascript:
+    var ctxL = document.getElementById("bs").getContext('2d');
+    var myLineChart = new Chart(ctxL, {
+      type: 'line',
+      data: {
+        labels: gon.month,
+        datasets: [
+          {
+            label: "Pembelian",
+            data: gon.buy,
+            backgroundColor: [
+            'rgba(255, 206, 86, 0.1)',
+            ],
+            borderColor: [
+            'rgba(255, 206, 86, 1)',
+            ],
+            borderWidth: 2
+          },
+          {
+            label: "Penjualan",
+            data: gon.sell,
+            backgroundColor: [
+            'rgba(54, 162, 235, 0.1)',
+            ],
+            borderColor: [
+            'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 2
+          }
+
+        ]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+    var ctxL = document.getElementById("loss_canvas").getContext('2d');
+    var myLineChart = new Chart(ctxL, {
+      type: 'line',
+      data: {
+        labels: gon.month,
+        datasets: [
+          {
+            label: "Loss",
+            data: gon.loss_vals,
+            backgroundColor: [
+            'rgba(255, 206, 86, 0.1)',
+            ],
+            borderColor: [
+            'rgba(255, 206, 86, 1)',
+            ],
+            borderWidth: 2
+          }
+
+        ]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+    var ctxL = document.getElementById("price").getContext('2d');
+    var myLineChart = new Chart(ctxL, {
+      type: 'line',
+      data: {
+        labels: gon.month,
+        datasets: [
+          {
+            label: "Harga Beli",
+            data: gon.buy_price,
+            backgroundColor: [
+            'rgba(255, 99, 132, 0.1)',
+            ],
+            borderColor: [
+            'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 2
+          },
+          {
+            label: "Harga Jual",
+            data: gon.sell_price,
+            backgroundColor: [
+            'rgba(54, 162, 235, 0.1)',
+            ],
+            borderColor: [
+            'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 2
+          }
+
+        ]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+// ABSENT GRAPH => UNUSED
+- if ["absentss"].include? controller_name
+  javascript:
+    var ctxL = document.getElementById("workhour").getContext('2d');
+    var myLineChart = new Chart(ctxL, {
+      type: 'line',
+      data: {
+        labels: gon.label_work_hour,
+        datasets: [
+          {
+            label: "Jam Kerja",
+            data: gon.work_hour,
+            backgroundColor: [
+            'rgba(255, 206, 86, 0.1)',
+            ],
+            borderColor: [
+            'rgba(255, 206, 86, 1)',
+            ],
+            borderWidth: 2
+          },
+          {
+            label: "Lembur",
+            data: gon.overtime_hour,
+            backgroundColor: [
+            'rgba(255, 99, 132, 0.1)',
+            ],
+            borderColor: [
+            'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 2
+          }
+
+        ]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+- if ["populars"].include? controller_name
+  javascript:
+    var ctxP = document.getElementById("higher_sales").getContext('2d');
+    var myPieChart = new Chart(ctxP, {
+      type: 'horizontalBar',
+      data: {
+        labels: gon.higher_item_cats_label,
+        datasets: [{
+          data: gon.higher_item_cats_data,
+          backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360", "rgba(219, 0, 0, 0.1)", "rgba(0, 165, 2, 0.1)", "rgba(255, 195, 15, 0.2)", "rgba(55, 59, 66, 0.1)", "rgba(0, 0, 0, 0.3)"],
+          hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774", "rgba(219, 0, 0, 0.2)", "rgba(0, 165, 2, 0.2)", "rgba(255, 195, 15, 0.3)", "rgba(55, 59, 66, 0.1)", "rgba(0, 0, 0, 0.4)"]
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+
+    var ctxP = document.getElementById("lower_sales").getContext('2d');
+    var myPieChart = new Chart(ctxP, {
+      type: 'horizontalBar',
+      data: {
+        labels: gon.lower_item_cats_label,
+        datasets: [{
+          data: gon.lower_item_cats_data,
+          backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)", "rgba(219, 0, 0, 0.1)", "rgba(0, 165, 2, 0.1)", "rgba(255, 195, 15, 0.2)", "rgba(55, 59, 66, 0.1)", "rgba(0, 0, 0, 0.3)"
+          ],
+          hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774", "rgba(219, 0, 0, 0.2)", "rgba(0, 165, 2, 0.2)", "rgba(255, 195, 15, 0.3)", "rgba(55, 59, 66, 0.1)", "rgba(0, 0, 0, 0.4)"]
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
