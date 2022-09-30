@@ -95,8 +95,7 @@ class TransactionsController < ApplicationController
     @end = end_day
     @start = start_day
     trx = Transaction.where(created_at: start_day..end_day)
-    trx = trx.where(store: current_user.store) if ["super_visi"].include? current_user.level
-
+   
     cash_flow = CashFlow.where(created_at: start_day..end_day)
     cash_flow = cash_flow.where(store: current_user.store) if ["super_visi"].include? current_user.level
     
