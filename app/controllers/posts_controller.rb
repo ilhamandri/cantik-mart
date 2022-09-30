@@ -93,10 +93,11 @@ class PostsController < ApplicationController
 
 						    if item.id == 30331
 						        trx.has_coin = true
-						        trx.grand_total_coin = new_trx_item.total
-						        trx.hpp_total_coin = new_trx_item.item.buy * new_trx_item.quantity
-						        trx.profit_coin = new_trx_item.profit
-						        trx.quantity_coin = new_trx_item.quantity
+						        trx.grand_total_coin = trx.grand_total_coin + new_trx_item.total
+						        trx.hpp_total_coin = trx.hpp_total_coin + (new_trx_item.item.buy * new_trx_item.quantity)
+						        trx.profit_coin = trx.profit_coin + new_trx_item.profit
+						        trx.quantity_coin = trx.quantity_coin + new_trx_item.quantity
+						        trx.tax_coin = trx.tax_coin + new_trx_item.ppn
 						        trx.save!
 						    end
 						    

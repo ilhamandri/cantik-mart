@@ -368,6 +368,7 @@ class TransactionsController < ApplicationController
         trx.hpp_total_coin = trx.hpp_total_coin + (trx_item.item.buy * trx_item.quantity)
         trx.profit_coin = trx.profit_coin + trx_item.profit
         trx.quantity_coin = trx.quantity_coin + trx_item.quantity
+        trx.tax_coin = trx.tax_coin + trx_item.ppn
         trx.save!
       end
 

@@ -75,7 +75,7 @@ br
           - qris = cashier_trxs.where(payment_type: "QRIS").sum(:grand_total)- cashier_trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
           - grand_total = cashier_trxs.sum(:grand_total) - cashier_trxs.sum(:grand_total_coin)
           - hpp_total = cashier_trxs.sum(:hpp_total) - cashier_trxs.sum(:hpp_total_coin)
-          - tax_total = cashier_trxs.sum(:tax)
+          - tax_total = cashier_trxs.sum(:tax) - cashier_trxs.sum(:tax_coin)
 
           td #{number_with_delimiter(cash.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter(debit.to_i, delimiter: ".", separator: ",")}
@@ -91,7 +91,7 @@ br
         - qris_total = trxs.where(payment_type: "QRIS",).sum(:grand_total) - trxs.where(payment_type: "QRIS").sum(:grand_total_coin)
         - grand_total = trxs.sum(:grand_total) - trxs.sum(:grand_total_coin)
         - hpp_total = trxs.sum(:hpp_total) - trxs.sum(:hpp_total_coin)
-        - tax_total = trxs.sum(:tax)
+        - tax_total = trxs.sum(:tax) - trxs.sum(:tax_coin)
 
         td #{number_with_delimiter(cash_total.to_i, delimiter: ".", separator: ",")}
         td #{number_with_delimiter(debit_total.to_i, delimiter: ".", separator: ",")}

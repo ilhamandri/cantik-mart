@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_27_091329) do
+ActiveRecord::Schema.define(version: 2022_09_30_033413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -796,6 +796,7 @@ ActiveRecord::Schema.define(version: 2022_09_27_091329) do
     t.float "hpp_total_coin", default: 0.0, null: false
     t.float "profit_coin", default: 0.0, null: false
     t.bigint "quantity_coin", default: 0, null: false
+    t.float "tax_coin", default: 0.0, null: false
     t.index ["store_id"], name: "index_transactions_on_store_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
     t.index ["voucher_id"], name: "index_transactions_on_voucher_id"
