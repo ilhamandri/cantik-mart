@@ -44,7 +44,7 @@ br
           - trx_data[1].each do |trx|
             - total += trx.grand_total - trx.grand_total_coin
             - hpp += trx.hpp_total - trx.hpp_total_coin
-            - tax += trx.tax
+            - tax += trx.tax - trx.tax_coin
 
           td #{number_with_delimiter(total.to_i, delimiter: ".", separator: ",")}
           - if current_user.level != "super_visi"
@@ -82,7 +82,8 @@ br
 
 - else
   table#items
-    - coins = 0
+    - n_coins = 0
+    - totals = 0
     - sell = Item.find_by(id: 30331).sell
     tr
       th Tanggal
@@ -92,11 +93,14 @@ br
       tr
         td #{trx_data[0].to_date}
         - coin = 0
+        - total = 0
         - trx_data[1].each do |trx|
           - coin += trx.transaction_items.where(item_id: 30331).sum(:quantity)
-        - coins += coin
+          - total += trx.transaction_items.where(item_id: 30331).sum(:total)
+        - n_coins += coin
+        - totals += total
         td #{number_with_delimiter(coin.to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter((coin * sell).to_i, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter(total.to_i, delimiter: ".", separator: ",")}
 
     tr
       td colspan="4"
@@ -107,7 +111,7 @@ br
           | Total
       td 
         b
-          | #{number_with_delimiter((coins).to_i, delimiter: ".", separator: ",")}
+          | #{number_with_delimiter(n_coins.to_i, delimiter: ".", separator: ",")}
       td 
         b
-          | #{number_with_delimiter((coins * sell).to_i, delimiter: ".", separator: ",")}
+          | #{number_with_delimiter(totals.to_i, delimiter: ".", separator: ",")}

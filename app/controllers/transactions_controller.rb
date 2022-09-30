@@ -95,8 +95,10 @@ class TransactionsController < ApplicationController
     @end = end_day
     @start = start_day
     trx = Transaction.where(created_at: start_day..end_day)
+    trx = trx.where(store: current_user.store) if ["super_visi"].include? current_user.level
 
     cash_flow = CashFlow.where(created_at: start_day..end_day)
+    cash_flow = cash_flow.where(store: current_user.store) if ["super_visi"].include? current_user.level
     
     if current_user.level == "candy_dream"
       trx = trx.where(has_coin: true) 
@@ -111,7 +113,7 @@ class TransactionsController < ApplicationController
     Store.where.not(store_type: "warehouse").each do |store|
       grand_total = trx.where(store: store).sum(:grand_total) - trx.where(store: store).sum(:grand_total_coin)
       hpp_total = trx.where(store: store).sum(:hpp_total) - trx.where(store: store).sum(:hpp_total_coin)
-      ppn = trx.where(store: store).sum(:tax)
+      ppn = trx.where(store: store).sum(:tax) - trx.where(store: store).sum(:tax_coin)
       profit = grand_total - hpp_total - ppn
       @total_income += profit
       @profits << [store.name, grand_total, profit, ppn]
