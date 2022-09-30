@@ -23,6 +23,7 @@
                 th.text-right Jumlah
               tbody
                 - arr_cashier.each do |cashier|
+                  - next if cashier.nil?
                   tr
                     td #{User.find_by(id: cashier).name}
                     td.text-right #{number_with_delimiter(trxs.where(user_id: cashier).sum(:grand_total).to_i, delimiter: ".", separator: ",")}

@@ -9,7 +9,7 @@ x ubah design dashboard
 	- super_visi
 		- 	kasi lap penjualan hari ini 
 		- 	kasi jumlah item yang perlu dicetak
-	x stock_admin
+	- stock_admin
 
 x bersihin error di log_console
 	x perfect scroll bar
@@ -35,7 +35,8 @@ x grafik penjualan untuk supervisi hanya omzet
 x stock admin akses transaksi ?
 x perbaiki tampilan print recap
 x print salary error production mode
-		
+x redirect if error 500
+
 ======================================================================
 DONE:
 - transaction split coin tax

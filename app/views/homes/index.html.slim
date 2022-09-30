@@ -25,9 +25,11 @@
           br
         / .col-6
           = render "homes/card/print"
-        .col-12
-          = render "homes/card/trx_super_visi"
-          br
+
+        - if current_user.level == "super_visi"
+          .col-12
+            = render "homes/card/trx_super_visi"
+            br
 
     - if current_user.level  == "candy_dream"
       .row
