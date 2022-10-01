@@ -13,6 +13,5 @@ class Item < ApplicationRecord
   has_many :popular_items
   has_many :not_popular_items
   has_many :loss_items
-  default_scope { order(name: :asc) }
 end
 
