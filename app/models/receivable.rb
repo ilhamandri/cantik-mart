@@ -15,5 +15,4 @@ class Receivable < ApplicationRecord
   OTHER=2
   EMPLOYEE=3
   OVER=4
-  default_scope { order(created_at: :desc) }
 end

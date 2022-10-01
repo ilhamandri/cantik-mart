@@ -19,6 +19,5 @@ class Transaction < ApplicationRecord
   	BRI: 4,
   	PERMATA: 5
   }
-  default_scope { order(created_at: :desc) }
 end
 
