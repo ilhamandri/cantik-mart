@@ -13,5 +13,6 @@ class Point < ApplicationRecord
 
   GET = "get"
   EXCHANGE = "exchange"
+  default_scope { order(created_at: :desc) }
 
 end

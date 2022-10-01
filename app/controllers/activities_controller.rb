@@ -1,6 +1,7 @@
 class ActivitiesController < ApplicationController
   before_action :require_login
   before_action :screening
+  
 	def index
 		# duplicate_trxs = Transaction.select(:invoice).group(:invoice).having("count(*) > 1").size
 		# duplicate_trxs.each do |duplicate_trx|

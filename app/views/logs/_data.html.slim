@@ -1,0 +1,28 @@
+.row
+  .col
+    .alert.alert-primary
+      .alert-heading
+        | Semua Data #{@title}
+
+
+table class="table"
+  thead
+    th User
+    th Action
+    th IP
+    th Device
+    th Date
+  tbody
+    - @logs.each do |log|
+      tr
+        td #{log.user.name}
+        td #{log.action}
+        td #{log.ip}
+        td #{log.device}
+        td #{log.created_at}
+
+
+.container.pagination.justify-content-center
+  = paginate @logs
+.text-center
+  = page_entries_info @logs

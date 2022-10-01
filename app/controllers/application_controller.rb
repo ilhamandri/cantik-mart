@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  require "browser"
   protect_from_forgery
   include Clearance::Controller
   include PublicActivity::StoreController 

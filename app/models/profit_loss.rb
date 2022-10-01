@@ -11,4 +11,5 @@ class ProfitLoss < ApplicationRecord
 
   PROFIT=1
   LOSS=2
+  default_scope { order(created_at: :desc) }
 end

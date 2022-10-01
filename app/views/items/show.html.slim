@@ -5,37 +5,36 @@
         i.fa.fa-info.fa-2x.pb-2 aria-hidden="true" 
         br
         | Info 
-    - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
-        li.nav-item
-          a#profile-tab-classic-blue.nav-link.waves-light aria-controls="prices" aria-selected="true" data-toggle="tab" href="#prices" role="tab" 
-            i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
-            br
-            | Harga
-        li.nav-item
-          a#profile-tab-classic-blue.nav-link.waves-light aria-controls="supplier" aria-selected="true" data-toggle="tab" href="#supplier" role="tab" 
-            i.fa.fa-user.fa-2x.pb-2 aria-hidden="true" 
-            br
-            | Supplier
-        li.nav-item
-          a#profile-tab-classic-blue.nav-link.waves-light aria-controls="buy_sell" aria-selected="true" data-toggle="tab" href="#buy_sell" role="tab" 
-            i.fa.fa-cart-arrow-down.fa-2x.pb-2 aria-hidden="true" 
-            br
-            | Penjualan - Pembelian 
-        li.nav-item
-          a#follow-tab-classic-blue.nav-link.waves-light aria-controls="loss" aria-selected="false" data-toggle="tab" href="#loss" role="tab" 
-            i.fas.fa-trash.fa-2x.pb-2 aria-hidden="true" 
-            br
-            | Loss
-        li.nav-item
-          a#follow-tab-classic-blue.nav-link.waves-light aria-controls="loss" aria-selected="false" data-toggle="tab" href="#retur" role="tab" 
-            i.fas.fa-exchange-alt.fa-2x.pb-2 aria-hidden="true" 
-            br
-            | Retur
-        / li.nav-item
-          a#contact-tab-classic-blue.nav-link.waves-light aria-controls="bundling" aria-selected="false" data-toggle="tab" href="#bundling" role="tab" 
-            i.fa.fa-thumbs-up.fa-2x.pb-2 aria-hidden="true" 
-            br
-            | Bundling
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="prices" aria-selected="true" data-toggle="tab" href="#prices" role="tab" 
+        i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Harga
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="supplier" aria-selected="true" data-toggle="tab" href="#supplier" role="tab" 
+        i.fa.fa-user.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Supplier
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="buy_sell" aria-selected="true" data-toggle="tab" href="#buy_sell" role="tab" 
+        i.fa.fa-cart-arrow-down.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Penjualan - Pembelian 
+    li.nav-item
+      a#follow-tab-classic-blue.nav-link.waves-light aria-controls="loss" aria-selected="false" data-toggle="tab" href="#loss" role="tab" 
+        i.fas.fa-trash.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Loss
+    li.nav-item
+      a#follow-tab-classic-blue.nav-link.waves-light aria-controls="loss" aria-selected="false" data-toggle="tab" href="#retur" role="tab" 
+        i.fas.fa-exchange-alt.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Retur
+    / li.nav-item
+      a#contact-tab-classic-blue.nav-link.waves-light aria-controls="bundling" aria-selected="false" data-toggle="tab" href="#bundling" role="tab" 
+        i.fa.fa-thumbs-up.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Bundling
 
   #myClassicTabContentOrange.tab-content.card
     #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 

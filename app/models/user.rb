@@ -57,5 +57,5 @@ class User < ApplicationRecord
   has_many :invoice_transactions
   has_many :complains
   has_many :user_salaries
-
+  has_many :logs
 end

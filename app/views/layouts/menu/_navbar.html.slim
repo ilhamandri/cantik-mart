@@ -167,7 +167,24 @@ li
         li
           a.waves-effect href="#{kasbons_path}"  Kasbon
 
+
+
+- if user_level == "owner" || user_level == "super_admin"
+  li
+    a.collapsible-header.waves-effect.arrow-r  href="#{activities_path}"
+      i.w-fa.fas.fa-rss
+      | Aktivitas Pengguna
+  li
+    a.collapsible-header.waves-effect.arrow-r  href="#{controllers_path}"
+      i.w-fa.fas.fa-cog
+      | Hak Akses
+
 - if current_user.email.include? "pardev"
+  hr
+  li 
+    a.collapsible-header.waves-effect.arrow-r  href="#{logs_path}"
+      i.w-fa.fas.fa-file
+      | Log
   li 
     a.collapsible-header.waves-effect.arrow-r  href="#{stock_recaps_path}"
       i.w-fa.fas.fa-file
@@ -177,18 +194,6 @@ li
     a.collapsible-header.waves-effect.arrow-r  href="#{backups_path}"
       i.w-fa.fas.fa-history
       | Backup
-
-- if user_level == "owner" || user_level == "super_admin"
-  li
-    a.collapsible-header.waves-effect.arrow-r  href="#{activities_path}"
-      i.w-fa.fas.fa-rss
-      | Aktivitas Pengguna
-
-- if user_level == "super_admin"
-  li
-    a.collapsible-header.waves-effect.arrow-r  href="#{controllers_path}"
-      i.w-fa.fas.fa-cog
-      | Hak Akses
   li
     a.collapsible-header.waves-effect.arrow-r  href="#{server_informations_path}"
       i.w-fa.fas.fa-info-circle

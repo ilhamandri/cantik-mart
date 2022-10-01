@@ -118,6 +118,7 @@ Rails.application.routes.draw do
   resources :item_cats
   resources :departments
   resources :notifications, only: %i[index]
+  resources :logs, only: %i[index]
 
   resources :stocks
   resources :users

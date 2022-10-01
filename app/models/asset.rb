@@ -11,5 +11,6 @@ class Asset < ApplicationRecord
 
   STORE=1
   CAR=2
+  default_scope { order(created_at: :desc) }
   
 end

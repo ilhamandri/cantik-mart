@@ -19,10 +19,6 @@ x bersihin error di log_console
 	x transform origin
 	x dist js bootstrap.min.js
 	x autonumeric
-
-x perbaiki hak akses 
-	1. super_visi :
-		x item (edit) --> 
 		
 
 x tambah user yang terakhir update ()
@@ -31,14 +27,21 @@ x tambah user yang terakhir update ()
 	x Barang
 
 x dropdown notif melenceng
-x grafik penjualan untuk supervisi hanya omzet
+
 x stock admin akses transaksi ?
 x perbaiki tampilan print recap
 x print salary error production mode
-x redirect if error 500
+x block ip address if too many attempt login => rack:attack
+x rec user log
+	x out
+	- in
+x kasir scan barang +1
 
 ======================================================================
 DONE:
+- order lewat item error
+- grafik penjualan untuk supervisi hanya omzet
+- logs views
 - transaction split coin tax
 - profit minus tanggal 28
 - perbaiki semua button pakai hak akses

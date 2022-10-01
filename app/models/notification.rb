@@ -17,5 +17,6 @@ class Notification < ApplicationRecord
 	SUCCESS = 'success'
 	INFO = 'info'
 
+  default_scope { order(created_at: :desc) }
 end
 

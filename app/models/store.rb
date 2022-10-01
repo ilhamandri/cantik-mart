@@ -15,5 +15,6 @@ class Store < ApplicationRecord
     retail: 0,
     warehouse: 1
   }
+  default_scope { order(created_at: :desc) }
 end
 

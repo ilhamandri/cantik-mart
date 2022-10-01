@@ -5,4 +5,5 @@ class TransactionItem < ApplicationRecord
   belongs_to :item
   belongs_to :supplier, optional: true
   belongs_to :store
+  default_scope { order(created_at: :desc) }
 end

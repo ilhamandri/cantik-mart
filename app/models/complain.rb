@@ -3,5 +3,6 @@ class Complain < ApplicationRecord
   has_many :complain_items
   belongs_to :store
   belongs_to :user
+  default_scope { order(created_at: :desc) }
 end
 

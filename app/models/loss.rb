@@ -4,5 +4,6 @@ class Loss < ApplicationRecord
   belongs_to :store
   belongs_to :user
   has_many :loss_items
+  default_scope { order(created_at: :desc) }
   
 end

@@ -10,5 +10,6 @@ class Retur < ApplicationRecord
   	belongs_to :approved_by, class_name: "User", foreign_key: "approved_by", optional: true
   	belongs_to :confirmed_by, class_name: "User", foreign_key: "approved_by", optional: true
   
+  	default_scope { order(created_at: :desc) }
 end
 

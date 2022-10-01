@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_30_033413) do
+ActiveRecord::Schema.define(version: 2022_10_01_063303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -838,6 +838,16 @@ ActiveRecord::Schema.define(version: 2022_09_30_033413) do
     t.index ["user_id"], name: "index_transfers_on_user_id"
   end
 
+  create_table "user_devices", force: :cascade do |t|
+    t.string "device", null: false
+    t.bigint "user_id", null: false
+    t.string "ip", null: false
+    t.string "action", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_devices_on_user_id"
+  end
+
   create_table "user_methods", force: :cascade do |t|
     t.string "user_level", null: false
     t.bigint "controller_method_id", null: false
@@ -997,6 +1007,7 @@ ActiveRecord::Schema.define(version: 2022_09_30_033413) do
   add_foreign_key "transfers", "stores", column: "from_store_id"
   add_foreign_key "transfers", "stores", column: "to_store_id"
   add_foreign_key "transfers", "users"
+  add_foreign_key "user_devices", "users"
   add_foreign_key "user_methods", "controller_methods"
   add_foreign_key "user_salaries", "users"
   add_foreign_key "vouchers", "exchange_points"

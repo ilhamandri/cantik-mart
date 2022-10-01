@@ -40,6 +40,7 @@ gem 'axlsx_rails'
 gem 'apriori-ruby'
 gem 'sidekiq'
 gem "psych", "~> 3.1"
+gem 'browser'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

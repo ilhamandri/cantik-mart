@@ -16,4 +16,5 @@ class Debt < ApplicationRecord
   OTHER=2
   BANK=3
   OTHERLOAN=4
+  default_scope { order(created_at: :desc) }
 end

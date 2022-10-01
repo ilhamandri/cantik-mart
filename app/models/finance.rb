@@ -11,5 +11,6 @@ class Finance < ApplicationRecord
 
   AKTIFA=1
   PASSIVA=2
+  default_scope { order(created_at: :desc) }
   
 end

@@ -5,5 +5,6 @@ class Print < ApplicationRecord
 
   belongs_to :grocer_item, optional: true
   belongs_to :promotion, optional: true
+  default_scope { order(created_at: :desc) }
 end
 

@@ -12,5 +12,6 @@ class ReturItem < ApplicationRecord
   CASH = 'cash'
   RETUR_ITEM = 'retur_item'
   LOSS = 'loss'
+  default_scope { order(created_at: :desc) }
 end
 

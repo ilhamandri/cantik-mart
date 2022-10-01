@@ -10,5 +10,6 @@ class Transfer < ApplicationRecord
   belongs_to :confirmed_by, class_name: "User", foreign_key: "confirmed_by", optional: true
 
   
+  default_scope { order(created_at: :desc) }
 end
 

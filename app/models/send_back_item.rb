@@ -10,5 +10,6 @@ class SendBackItem < ApplicationRecord
 
   ONPROCESS = 'onprocess'
   SUCCESS = 'success'
+  default_scope { order(created_at: :desc) }
 end
 
