@@ -11,12 +11,21 @@
         br
         | Sub Kategori
 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="recap_dept" aria-selected="true" data-toggle="tab" href="#recap_dept" role="tab" 
+        i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Rekap
+
   #myClassicTabContentOrange.tab-content.card
     #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
         = render partial: 'info'
 
     #all_data.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         = render partial: 'all_data'
+
+    #recap_dept.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'recap_dept'
 
       
 

@@ -16,5 +16,8 @@ class Store < ApplicationRecord
     warehouse: 1
   }
   default_scope { order(created_at: :desc) }
+
+  belongs_to :edited_by, class_name: "User", foreign_key: "edited_by", optional: true
+
 end
 

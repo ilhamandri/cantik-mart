@@ -249,6 +249,7 @@ class ItemsController < ApplicationController
     item.local_item = params[:item][:local_item]
     item.price_updated = DateTime.now
     item.margin = params[:item][:margin]
+    item.edited_by = current_user
 
     ItemPrice.create item: item, buy: item.buy, sell: item.sell, month: Date.today.month.to_i, year: Date.today.year.to_i, created_at: DateTime.now - 1.month
     return redirect_back_data_error new_item_path, "Data Barang Tidak Valid" if item.invalid?
@@ -293,6 +294,9 @@ class ItemsController < ApplicationController
       grocer_item.selisih_pembulatan = grocer_item.price - (((grocer_item.price) / ((item.tax/100.0)+1)) + grocer_item.ppn)
       grocer_item.save!
     end
+
+    item.edited_by = current_user
+    item.save!
 
     if changes["sell"].present?
       item.price_updated = DateTime.now

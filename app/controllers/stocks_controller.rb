@@ -33,7 +33,11 @@ class StocksController < ApplicationController
       item.save!
     end
     changes = store_item.changes
-    store_item.save! if store_item.changed?
+    if store_item.changed?
+      item.edited_by = current_user
+      item.save!
+      store_item.save! 
+    end
     if changes.include? "min_stock"
       if store_item.stock <= store_item.min_stock
         set_notification current_user, current_user, "warning", store_item.item.name + " berada dibawah limit", warning_items_path

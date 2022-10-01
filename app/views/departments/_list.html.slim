@@ -1,15 +1,7 @@
 tr
 	td #{department.name}
   	td.text-right
-  		- if Controller.find_by(name: 'item_cats').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
-	    	a.btn.btn-warning href='#{edit_department_path(id: department.id)}'
-		    	| Edit
-	
- 		| &nbsp
 		a.btn.btn-info href='#{department_path(id: department.id)}'
 			| Detil
 
-	- subdept = ItemCat.where(department: department).count
-	- if subdept == 0		
- 		| &nbsp
-		= button_to "Hapus", department, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Are you sure you want to reset the indexes?" }
+			

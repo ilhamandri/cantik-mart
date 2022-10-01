@@ -46,6 +46,7 @@ class DepartmentsController < ApplicationController
     department_name = params[:department][:name].camelize
     department.name = department_name
     return redirect_back_data_error new_department_path, "Data Dapartemen Tidak Valid" if department.invalid?
+    department.edited_by = current_user
     department.save!
     department.create_activity :create, owner: current_user
     urls = item_cats_path dept_id: department.id
@@ -66,6 +67,7 @@ class DepartmentsController < ApplicationController
     department.name = item_name
     changes = department.changes
     if department.changed?
+      department.edited_by = current_user
       department.save! 
       department.create_activity :edit, owner: current_user, params: changes
     end

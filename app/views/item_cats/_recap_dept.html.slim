@@ -1,0 +1,9 @@
+.row
+  	.col.text-center
+    	a href="#{item_cats_path(dept_id: @dept.id,format: :pdf)}" class="btn btn-dark"
+	      	b
+	        	| CETAK SEMUA BARANG
+  	.col.text-center
+    	a href="#{departments_popular_items_path(id: @dept.id,format: :pdf)}" class="btn btn-primary"
+      		b
+        		| TOP 25

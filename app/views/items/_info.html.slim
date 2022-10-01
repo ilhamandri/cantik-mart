@@ -27,21 +27,27 @@
           input type='number' value="#{@stock.stock}" disabled= true class="form-control md-form"
       .col-lg-12
         hr
-      .col-md-6.col-lg-4
+      .col-md-6.col-lg-3
         .form-group
           label for="stock" Limit AO
           = form.number_field :limit, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.limit}", disabled: "disabled"
-      .col-md-6.col-lg-4
+      .col-md-6.col-lg-3
         .form-group
           label for="stock" Stok Ideal
           = form.number_field :ideal_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.ideal_stock}", disabled: "disabled"
-      .col-md-6.col-lg-4
+      .col-md-6.col-lg-3
         .form-group
           label for="item" Jenis Barang
           - if !@item.local_item
             input class="md-form form-control" value="Barang dari Pusat" disabled="disabled"
           - else
             input class="md-form form-control" value="Barang Lokal" disabled="disabled"
+      .col-md-6.col-lg-3
+        .form-group
+          - last_update = @item.updated_at.to_s
+          - last_update += " (" + @item.edited_by.name + ")" if @item.edited_by.present?
+          label for="stock" Terakhir Update
+          input class="md-form form-control" value="#{last_update}" disabled="disabled"
       .col-lg-12
         hr
       .col-md-6.col-lg-3
@@ -69,7 +75,7 @@
           - price_updated = @item.updated_at
           - price_updated = @item.price_updated if @item.price_updated.present?
           input class="md-form form-control" value="#{number_with_delimiter(normal_sell, delimiter:'.')}     ( #{price_updated} )"  disabled="disabled"
-      .col-12
+      .col-lg-12
         hr.primary-color
       .col-12
         .form-group.table-responsive.text-nowrap
@@ -139,18 +145,19 @@
                         a class="btn btn-danger" href="#{grocer_item_path(id: item.id)}"
                           |   Hapus
         .form-group.text-center     
-          - if Controller.find_by(name: 'stocks').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+          - if buttonAccess "stocks", "edit"
               .col-12.text-center
                 - stock = StoreItem.find_by(item: @item, store: current_user.store)
                 a href='#{edit_stock_path(id: stock.id)}' class="btn btn-danger" type="button" 
-                      | Edit Stok         
+                      | Edit Stok  
+                             
           - if current_user.store.store_type == "warehouse"
-            - if Controller.find_by(name: 'items').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+            - if buttonAccess "items", "edit"
               a href="#{edit_item_path(id: @item.id)}"
                 button.btn.btn-warning type="button" 
                   |   Edit
 
-            - if Controller.find_by(name: 'grocer_items').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+            - if buttonAccess "grocer_items", "new"
               a href="#{new_grocer_item_path(id: @item.id)}"
                 button.btn.btn-info type="button" 
                   i.fas.fa-plus 

@@ -1,0 +1,14 @@
+table.table
+	thead
+		th Nama
+		th Level
+		th Aksi
+	tbody
+		- @store.users.each do |user|
+			tr
+				td #{user.name}
+				td #{user.level.gsub("_", " ").upcase}
+				td
+					- if buttonAccess "users", "index"
+						a.btn.btn-primary href="#{user_path(user)}"
+							| Detil

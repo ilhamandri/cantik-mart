@@ -338,6 +338,9 @@ class OrdersController < ApplicationController
       order_item.last_sell = this_item.sell
       order_item.save!
 
+      this_item.edited_by = current_user
+      this_item.save!
+
       new_total +=  total_item_without_disc_global
       new_grand_total += item_grand_total
       order_item.save!

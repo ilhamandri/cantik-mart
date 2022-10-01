@@ -49,6 +49,7 @@ class ItemCatsController < ApplicationController
     item_name = params[:item_cat][:name].camelize
     item_cat.name = item_name
     return redirect_back_data_error new_item_cat_path, "Data Tidak Lengkap" if item_cat.invalid?
+    item_cat.edited_by = current_user
     item_cat.save!
     item_cat.create_activity :create, owner: current_user
     params = "?" + { :dept_id => item_cat.department_id }.to_param
@@ -70,11 +71,12 @@ class ItemCatsController < ApplicationController
     item_cat.name = item_name
     changes = item_cat.changes
     if item_cat.changed?
+      item_cat.edited_by = current_user
       item_cat.save!
       item_cat.create_activity :edit, owner: current_user, parameters: changes
     end
     params = "?" + { :dept_id => item_cat.department_id }.to_param
-    return redirect_success item_cats_path + params , "Kategori Item - " + item_cat.name + " Berhasil Diubah"
+    return redirect_success item_cat_path(item_cat) , "Kategori Item - " + item_cat.name + " Berhasil Diubah"
   end
 
   def destroy

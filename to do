@@ -1,16 +1,5 @@
 TO DO:
 x clean code
-x ubah desgin sign_in
-	x logo cm ga center tengah
-
-x ubah design dashboard
-	x super_admin
-	x finance
-	- super_visi
-		- 	kasi lap penjualan hari ini 
-		- 	kasi jumlah item yang perlu dicetak
-	- stock_admin
-
 x bersihin error di log_console
 	x perfect scroll bar
 	- Di sign_in
@@ -19,23 +8,55 @@ x bersihin error di log_console
 	x transform origin
 	x dist js bootstrap.min.js
 	x autonumeric
-		
-
-x tambah user yang terakhir update ()
-	x Departmen
-	x Sub-departmen
-	x Barang
-
-x dropdown notif melenceng
-
-x stock admin akses transaksi ?
-x perbaiki tampilan print recap
-x print salary error production mode
-x block ip address if too many attempt login => rack:attack
 x rec user log
 	x out
 	- in
+x print salary error production mode
+
+
+x dropdown notif melenceng
+x ubah design dashboard
+	x super_admin
+	x finance
+	- super_visi
+		- 	kasi lap penjualan hari ini 
+		- 	kasi jumlah item yang perlu dicetak
+	- stock_admin
+x perbaiki tampilan print recap
+x tambah user yang terakhir update 
+	- Departmen
+		- edit
+		- new
+		- view => show
+	- Store
+		- edit
+		- new
+		- view => show
+	x Sub-departmen
+		- edit
+		- new
+		- view => show
+	x Barang
+		- order
+		- edit
+		- new
+		- view => show
+	x Grocer item
+		-> edit
+		-> new
+		-> view => show
+
+
+
+
+x block ip address if too many attempt login => rack:attack
 x kasir scan barang +1
+		
+
+
+
+
+
 
 ======================================================================
 DONE:

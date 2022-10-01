@@ -1,17 +1,44 @@
-h3
-	| Daftar Sub-Department (#{@dept.name})
 .row
-	
-  	- if buttonAccess "item_cats", "new"
-  		.col.text-center
+	.col
+		.alert.alert-primary
+			.alert-heading
+				| DEPARTEMEN - #{@dept.name}
+	- if buttonAccess "item_cats", "new"
+		.col-3.text-right
 	      	a.btn.btn-success href="#{new_item_cat_path(dept_id: @dept.id)}"
 	          	i.fas.fa-plus 
-	          	|   Sub-Department
-  	.col.text-center
-    	a href="#{item_cats_path(dept_id: @dept.id,format: :pdf)}" class="btn btn-dark"
-	      	b
-	        	| CETAK SEMUA BARANG
-  	.col.text-center
-    	a href="#{departments_popular_items_path(id: @dept.id,format: :pdf)}" class="btn btn-success"
-      		b
-        		| TOP 25
+	          	|  &nbsp Sub-departemen
+
+= form_for :dept, url: '' do |form|
+	.row
+	  	.col-6
+	    	.form-group
+	      		label for="n_item" Jumlah Sub-departemen
+	      		input class="md-form form-control" value="#{@dept.item_cat.count}" disabled="disabled"
+	    .col-6
+	    	.form-group
+	      		label for="n_item" Jumlah Barang
+	      		- items = Item.where(item_cat: @dept.item_cat)
+	      		input class="md-form form-control" value="#{items.count}" disabled="disabled"
+	    .col-6
+	    	.form-group
+	      		label for="n_item" Terakhir Update
+	      		- items = Item.where(item_cat: @dept.item_cat)
+	      		input class="md-form form-control" value="#{@dept.updated_at}" disabled="disabled"
+		.col-6
+	    	.form-group
+	      		label for="code" Diupdate oleh
+	      		input class="md-form form-control" value="#{@dept.edited_by.name if @dept.edited_by.present?}" disabled="disabled"
+
+
+.row.text-center
+	- if buttonAccess "item_cats", "edit"
+		.col
+			a.btn.btn-warning href='#{edit_department_path(id: @dept.id)}'
+		    	| Edit
+		    	
+	- subdept = ItemCat.where(department: @dept).count
+	- if subdept == 0	
+		- if buttonAccess "item_cats", "destroy"	
+			.col
+				= button_to "Hapus", @dept, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Are you sure you want to reset the indexes?" }

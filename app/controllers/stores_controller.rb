@@ -33,6 +33,7 @@ class StoresController < ApplicationController
     store = Store.new store_params
     store.name = params[:store][:name].camelize
     store.address = params[:store][:address].camelize
+    store.edited_by = current_user
     store.save!
     store.create_activity :create, owner: current_user
     return redirect_success stores_path, "Toko - " + store.name + " - Berhasil Disimpan"
@@ -52,9 +53,12 @@ class StoresController < ApplicationController
     store.name = params[:store][:name].camelize
     store.address = params[:store][:address].camelize
     changes = store.changes
-    store.save! if store.changed?
+    if store.changed?
+      store.edited_by = current_user
+      store.save! 
+    end
     store.create_activity :edit, owner: current_user, parameters: changes
-    return redirect_success stores_path, "Data Toko - " + store.name + " - Berhasil Diubah"
+    return redirect_success store_path(store), "Data Toko - " + store.name + " - Berhasil Diubah"
   end
 
   def show

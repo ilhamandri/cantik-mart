@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_01_063303) do
+ActiveRecord::Schema.define(version: 2022_10_01_103406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -175,6 +175,7 @@ ActiveRecord::Schema.define(version: 2022_10_01_063303) do
     t.string "name", default: "DEFAULT (NO DEPARTMENT)", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "edited_by"
   end
 
   create_table "discounts", force: :cascade do |t|
@@ -224,6 +225,7 @@ ActiveRecord::Schema.define(version: 2022_10_01_063303) do
     t.bigint "member_price", default: 0
     t.float "selisih_pembulatan", default: 0.0, null: false
     t.float "ppn", default: 0.0, null: false
+    t.bigint "edited_by"
     t.index ["item_id"], name: "index_grocer_items_on_item_id"
   end
 
@@ -258,6 +260,7 @@ ActiveRecord::Schema.define(version: 2022_10_01_063303) do
     t.datetime "updated_at", null: false
     t.bigint "department_id"
     t.boolean "use_in_point", default: true, null: false
+    t.bigint "edited_by"
     t.index ["department_id"], name: "index_item_cats_on_department_id"
   end
 
@@ -296,6 +299,7 @@ ActiveRecord::Schema.define(version: 2022_10_01_063303) do
     t.bigint "tax", default: 0
     t.float "ppn", default: 0.0, null: false
     t.float "selisih_pembulatan", default: 0.0, null: false
+    t.bigint "edited_by"
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 
@@ -694,6 +698,7 @@ ActiveRecord::Schema.define(version: 2022_10_01_063303) do
     t.datetime "updated_at", null: false
     t.bigint "limit", default: 5
     t.bigint "ideal_stock", default: 10
+    t.bigint "edited_by"
     t.index ["item_id"], name: "index_store_items_on_item_id"
     t.index ["store_id"], name: "index_store_items_on_store_id"
   end
@@ -714,6 +719,7 @@ ActiveRecord::Schema.define(version: 2022_10_01_063303) do
     t.bigint "bank", default: 0, null: false
     t.bigint "grand_total_card_before", default: 0, null: false
     t.boolean "online_store", default: false
+    t.bigint "edited_by"
   end
 
   create_table "supplier_items", force: :cascade do |t|
