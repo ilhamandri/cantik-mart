@@ -1,18 +1,21 @@
 #customer
   table#meta
     tr
-      td.meta-head Toko 
-      td
-        textarea #{@store_name}
-    tr
-      td.meta-head Jenis
-      td 
-        textarea Operasional
-    tr
-      td.meta-head Kriteria
-      td
+      td.meta-head colspan="2" 
         b  
           | #{@search}
+    tr
+      td.meta-head User
+      td 
+        textarea #{current_user.name.to_s}
+    tr
+      td.meta-head *
+      td 
+        textarea #{current_user.level.to_s.gsub("_"," ").camelize} (#{current_user.store.name.to_s})
+    tr
+      td.meta-head Tanggal   
+      td
+        textarea #{DateTime.now.in_time_zone.to_s}
 
 
 table#items

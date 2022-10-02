@@ -1,21 +1,32 @@
+- loss = @loss_items.first.loss
 #customer
   table#meta
     tr
-      td.meta-head Invoice #
-      td
-        textarea #{@loss.invoice}
+      td.meta-head colspan="2" 
+        b  
+          | Barang Hangus - (#{loss.invoice})
     tr
-      td.meta-head Tanggal
-      td
-        textarea #{@loss.created_at.to_date} - #{@loss.user.name}
+      td.meta-head User
+      td 
+        textarea #{current_user.name.to_s}
     tr
-      td.meta-head Toko
-      td
-        .due #{@loss.store.name}
+      td.meta-head *
+      td 
+        textarea #{current_user.level.to_s.gsub("_"," ").camelize} (#{current_user.store.name.to_s})
     tr
-      td.meta-head Jumlah Item
+      td.meta-head Tanggal   
       td
-        textarea #{@loss.total_item}
+        textarea #{DateTime.now.in_time_zone.to_s}
+
+table#items
+  tr
+    th Toko
+    th User
+    th Tanggal
+  tr style="text-align: center;"
+    td #{loss.store.name}
+    td #{loss.user.name }
+    td #{loss.created_at}
 
 table#items
   tr
@@ -26,12 +37,8 @@ table#items
 
   - @loss_items.each do |loss_item|
     tr.item-row
-      td.item-name
-        textarea #{loss_item.item.code}
-      td.item-name
-        textarea #{loss_item.item.name}
-      td.item-name
-        textarea #{loss_item.quantity}
-      td.description
-        textarea #{loss_item.description}
+      td #{loss_item.item.code}
+      td #{loss_item.item.name}
+      td #{loss_item.quantity}
+      td #{loss_item.description}
      

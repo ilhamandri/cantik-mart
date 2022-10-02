@@ -1,0 +1,83 @@
+.form-group.table-responsive.text-nowrap
+  .row
+    .col
+      label
+        h3 Harga Jual
+    - if buttonAccess "grocer_items", "new"
+      .col-3.text-right
+        a href="#{new_grocer_item_path(id: @item.id)}"
+          button.btn.btn-primary type="button" 
+            i.fas.fa-plus 
+            |   Harga
+
+  table class="table table-hover"
+    thead
+      th Min
+      th Max
+      th Diskon
+      th Pajak
+      th Harga Jual
+      th Profit
+      th Diperbarui
+      th
+    tbody
+      tr
+        td 0
+        td 1
+        - disc = @item.discount
+        - disc = @item.discount * @item.buy / 100 if disc < 100
+        - base = @item.sell-@item.ppn-@item.selisih_pembulatan+disc
+       
+        - if disc > 0
+          - if @item.discount < 100
+            td #{number_with_delimiter(disc, delimiter: ".", separator: ",")} (#{@item.discount} %)
+          - else
+            td #{number_with_delimiter(disc, delimiter: ".", separator: ",")}
+        - else
+          td -
+
+        td #{number_with_delimiter(@item.ppn.ceil(2), delimiter: ".", separator: ",")}
+        td #{number_with_delimiter(@item.sell, delimiter: ".", separator: ",")}
+        td #{number_with_delimiter((@item.sell - @item.buy - @item.ppn).round, delimiter: ".", separator: ",")}
+        td.text-right
+          - if current_user.store.store_type == "retail"
+            a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
+              |   + Cetak
+
+
+
+      / HARGA GROSIR ---------------------------------------------------------------------------------------------------------------------------------
+      - item_grocers = @item.grocer_items.order("min ASC")
+      - if item_grocers.present?
+        -item_grocers.each do |item|
+          tr 
+            td #{item.min}
+            td #{item.max}
+            - disc = item.discount
+            - disc = item.discount * @item.buy / 100 if disc < 100
+            - if disc > 0
+                - if item.discount < 100
+                  td #{number_with_delimiter(disc, delimiter: ".")} (#{item.discount} %)
+                - else
+                  td #{number_with_delimiter(disc, delimiter: ".")}
+            - else
+              td -
+
+            td #{number_with_delimiter(item.ppn.ceil(2), delimiter: ".", separator: ",")}
+            td #{number_with_delimiter(item.price, delimiter: ".")}
+            td #{number_with_delimiter((item.price - @item.buy - @item.ppn).round, delimiter: ".")}
+            - last_update = item.updated_at.to_s
+            - last_update += " (" + item.edited_by.name + ")" if item.edited_by.present?
+            td #{last_update}
+            td.text-right
+              - if current_user.store.store_type != "warehouse"
+                a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
+                  |   + Cetak
+              - else
+                - if buttonAccess "groce_items", "new"
+                  | &nbsp&nbsp&nbsp
+                  a class="btn btn-warning" href="#{edit_grocer_item_path(id: item.id)}"
+                    |   Edit
+                  | &nbsp&nbsp&nbsp
+                  a class="btn btn-danger" href="#{grocer_item_path(id: item.id)}"
+                    |   Hapus

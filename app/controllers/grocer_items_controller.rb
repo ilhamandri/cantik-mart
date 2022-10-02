@@ -2,7 +2,6 @@ class GrocerItemsController < ApplicationController
   before_action :require_login
   before_action :screening
   
-  
   def new
     return redirect_back_data_error items_path, "Data tidak valid" unless params[:id].present?
     item = Item.find_by_id params[:id]
@@ -22,7 +21,7 @@ class GrocerItemsController < ApplicationController
     min = grocer_item.min
     max = grocer_item.max
     grocer_items = GrocerItem.where(item: item)
-    
+    grocer_item.edited_by = current_user
     if grocer_item.discount <= 0
       return redirect_back_data_error item_path(id: item.id), "Silahkan Set Diskon Supaya Harga Jual Lebih Besar dari Harga Beli"
     end
@@ -104,7 +103,7 @@ class GrocerItemsController < ApplicationController
 
     grocer_item.ppn = grocer_item.price - ((grocer_item.price) / ((item.tax/100.0)+1))
     grocer_item.selisih_pembulatan = grocer_item.price - (((grocer_item.price) / ((item.tax/100.0)+1)) + grocer_item.ppn)
-
+    grocer_item.edited_by = current_user
     grocer_item.save!
     to_users = User.where(level: ["owner", "super_admin", "super_visi"])
     item = grocer_item.item

@@ -22,29 +22,9 @@ x ubah design dashboard
 		- 	kasi lap penjualan hari ini 
 		- 	kasi jumlah item yang perlu dicetak
 	- stock_admin
+	
 x perbaiki tampilan print recap
-x tambah user yang terakhir update 
-	- Departmen
-		- edit
-		- new
-		- view => show
-	- Store
-		- edit
-		- new
-		- view => show
-	x Sub-departmen
-		- edit
-		- new
-		- view => show
-	x Barang
-		- order
-		- edit
-		- new
-		- view => show
-	x Grocer item
-		-> edit
-		-> new
-		-> view => show
+
 
 
 
@@ -60,6 +40,10 @@ x kasir scan barang +1
 
 ======================================================================
 DONE:
+- tambah user yang terakhir update (Departmen, Store, Sub-dept, barang, grocer_item)
+	- edit
+	- new
+	- view => show
 - order lewat item error
 - grafik penjualan untuk supervisi hanya omzet
 - logs views

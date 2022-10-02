@@ -1,10 +1,18 @@
 .card-body
-  / .row
-  /   .col-12.text-center
-  /     - if @item.image.present?
-  /       =image_tag("#{@item.image}", height: '200', width: '200', class:"z-depth-2")
-  /     - else
-  /       =image_tag("/images/default_item.jpg", height: '200', width: '200', class:"z-depth-2")
+  .form-group
+    .row.text-center
+      - if buttonAccess "stocks", "edit"
+        .col
+          - stock = StoreItem.find_by(item: @item, store: current_user.store)
+          a href='#{edit_stock_path(id: stock.id)}' class="btn btn-danger" type="button" 
+                | Edit Stok  
+                         
+      - if current_user.store.store_type == "warehouse"
+        - if buttonAccess "items", "edit"
+          .col
+            a.btn.btn-warning href="#{edit_item_path(id: @item.id)}"
+              |   Edit
+
   = form_for :item, url: '' do |form|
     .row
       .col-md-6.col-lg-2
@@ -78,92 +86,11 @@
       .col-lg-12
         hr.primary-color
       .col-12
-        .form-group.table-responsive.text-nowrap
-          label for="sell" Harga Jual
-          table class="table table-hover"
-            thead
-              th Min
-              th Max
-              th Diskon
-              th Pajak
-              th Harga Jual
-              th Profit
-              th
-            tbody
-              tr
-                td 0
-                td 1
-                - disc = @item.discount
-                - disc = @item.discount * @item.buy / 100 if disc < 100
-                - base = @item.sell-@item.ppn-@item.selisih_pembulatan+disc
-               
-                - if disc > 0
-                  - if @item.discount < 100
-                    td #{number_with_delimiter(disc, delimiter: ".", separator: ",")} (#{@item.discount} %)
-                  - else
-                    td #{number_with_delimiter(disc, delimiter: ".", separator: ",")}
-                - else
-                  td -
-
-                td #{number_with_delimiter(@item.ppn.ceil(2), delimiter: ".", separator: ",")}
-                td #{number_with_delimiter(@item.sell, delimiter: ".", separator: ",")}
-                td #{number_with_delimiter((@item.sell - @item.buy - @item.ppn).round, delimiter: ".", separator: ",")}
-                td.text-right
-                  a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
-                    |   + Cetak
+        = render partial: 'grocer_item'
 
 
 
-              / HARGA GROSIR ---------------------------------------------------------------------------------------------------------------------------------
-              - item_grocers = @item.grocer_items.order("min ASC")
-              - if item_grocers.present?
-                -item_grocers.each do |item|
-                  tr 
-                    td #{item.min}
-                    td #{item.max}
-                    - disc = item.discount
-                    - disc = item.discount * @item.buy / 100 if disc < 100
-                    - if disc > 0
-                        - if item.discount < 100
-                          td #{number_with_delimiter(disc, delimiter: ".")} (#{item.discount} %)
-                        - else
-                          td #{number_with_delimiter(disc, delimiter: ".")}
-                    - else
-                      td -
-
-                    td #{number_with_delimiter(item.ppn.ceil(2), delimiter: ".", separator: ",")}
-                    td #{number_with_delimiter(item.price, delimiter: ".")}
-                    td #{number_with_delimiter((item.price - @item.buy - @item.ppn).round, delimiter: ".")}
-                    td.text-right
-                      a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
-                        |   + Cetak
-                      | &nbsp&nbsp&nbsp
-                      - if current_user.store.store_type == "warehouse"
-                        a class="btn btn-warning" href="#{edit_grocer_item_path(id: item.id)}"
-                          |   Ubah
-                        | &nbsp&nbsp&nbsp
-                        a class="btn btn-danger" href="#{grocer_item_path(id: item.id)}"
-                          |   Hapus
-        .form-group.text-center     
-          - if buttonAccess "stocks", "edit"
-              .col-12.text-center
-                - stock = StoreItem.find_by(item: @item, store: current_user.store)
-                a href='#{edit_stock_path(id: stock.id)}' class="btn btn-danger" type="button" 
-                      | Edit Stok  
-                             
-          - if current_user.store.store_type == "warehouse"
-            - if buttonAccess "items", "edit"
-              a href="#{edit_item_path(id: @item.id)}"
-                button.btn.btn-warning type="button" 
-                  |   Edit
-
-            - if buttonAccess "grocer_items", "new"
-              a href="#{new_grocer_item_path(id: @item.id)}"
-                button.btn.btn-info type="button" 
-                  i.fas.fa-plus 
-                  |   Tambah Harga
-
-            - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? current_user.level
+            /- if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'index').user_methods.pluck(:user_level).include? current_user.level
               / a href='#{item_suppliers_path(id: @item.id)}'
                     button.btn.btn-primary type="button" 
                       | Supplier
