@@ -220,8 +220,6 @@ class ApisController < ApplicationController
     item << find_item.code
     item << find_item.name
     item << find_item.id
-
-    binding.pry
     json_result << item
 
     render :json => json_result

@@ -120,7 +120,7 @@ class SendBacksController < ApplicationController
 	  	@send_back.date_receive = DateTime.now
 	  	@send_back.save!
 	  	urls = send_back_path(id: @send_back.id)
-	  	message = "Retur Barang BS "+ @send_back.invoice.to_s + " telah diterima oleh "+ current_user.name.to_s + " ( " + @send_back.date_receive.to_s + " )"
+	  	message = "Retur Barang "+ @send_back.invoice.to_s + "\ntelah diterima oleh "+ current_user.name.to_s + " ( " + @send_back.date_receive.to_s + " )"
 	  	set_notification(current_user, @send_back.user, 
 	          Notification::INFO, message, urls)
 		return redirect_success urls, "Retur barang BS ke Gudang telah diterima."

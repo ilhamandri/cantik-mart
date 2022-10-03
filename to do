@@ -1,4 +1,4 @@
-TO DO:
+TO DO: 
 x block ip address if too many attempt login => rack:attack
 x clean code
 x bersihin error di log_console
@@ -12,7 +12,6 @@ x bersihin error di log_console
 x print salary error production mode
 
 
-x dropdown notif melenceng
 x ubah design dashboard
 	x super_admin
 	x finance
@@ -31,7 +30,8 @@ x kasir scan barang +1
 
 ======================================================================
 DONE:
-x rec user log
+- dropdown notif kepotong
+- rec user log
 	- out
 	- in
 - gudang tidak bisa terima sendback
