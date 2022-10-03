@@ -9,6 +9,8 @@ class ApisController < ApplicationController
       get_item_trx params
     elsif api_type == "transfer"
       get_item_trf params
+    elsif api_type == "send_back"
+      get_item_send_back params
     elsif api_type == "member"
       get_member params
     elsif api_type == "voucher"
@@ -199,6 +201,27 @@ class ApisController < ApplicationController
     item << find_item.sell
     item << stock 
 
+    json_result << item
+
+    render :json => json_result
+  end
+
+  def get_item_send_back params
+    json_result = []
+    search = params[:search].squish
+    return render :json => json_result unless search.present?
+    search = search.gsub(/\s+/, "")
+    find_item = Item.find_by(code: search)
+    return render :json => json_result unless find_item.present?
+    
+    return render :json => json_result if find_item.local_item
+    
+    item = []
+    item << find_item.code
+    item << find_item.name
+    item << find_item.id
+
+    binding.pry
     json_result << item
 
     render :json => json_result

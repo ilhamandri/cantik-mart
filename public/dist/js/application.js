@@ -570,6 +570,25 @@ function getData(table_types) {
              document.getElementById("itemId").focus();
          }
        });
+     }else if (table_types == "send_back") {
+      $.ajax({
+         method: "GET",
+         cache: false,
+         url: "/api/send_back?search=" + item_id+"&target="+store_id,
+         success: function(result_arr) {
+            if(result_arr == ""){
+              document.getElementById("itemId").value = "";
+              alert("Data Barang Tidak Ditemukan / Barang merupakan barang lokal")
+              return
+            }else{
+                addNewRowSendBack(result_arr);
+             }
+         },
+         error: function(error) {
+             document.getElementById("itemId").value = "";
+             document.getElementById("itemId").focus();
+         }
+       });
      }else if (table_types == "transfer") {
       $.ajax({
          method: "GET",
@@ -715,6 +734,35 @@ function addNewRowTransfer(result_arr){
    cell5.innerHTML = quantity;
    cell6.innerHTML = desc;
    cell7.innerHTML = remove;
+   add_counter++;
+   document.getElementById("itemId").value = "";
+}
+
+function addNewRowSendBack(result_arr){
+   var table = document.getElementById("myTable");
+   var result = result_arr[0];
+   var qty = 1;
+   var total = parseFloat(qty) * (parseFloat(result[3]) - parseFloat("100"));
+   
+   var row = table.insertRow(1);
+   var cell1 = row.insertCell(0);
+   var cell2 = row.insertCell(1);
+   var cell3 = row.insertCell(2);
+   var cell4 = row.insertCell(3);
+   var cell5 = row.insertCell(4);
+
+
+   let id = "<input style='display: none;' type='text' class='md-form form-control' value='"+result[2]+"' readonly name='transfer[transfer_items]["+add_counter+"][item_id]'/>";
+   let code = id+result[0]+"<input style='display: none;' type='text' class='md-form form-control' value='"+result[0]+"' readonly />";
+   let name = result[1]+"<input style='display: none;' type='text' class='md-form form-control' value='"+result[1]+"' readonly />";
+   let quantity = "<input type='number' min=1 class='md-form form-control' value='1' name='transfer[transfer_items]["+add_counter+"][quantity]'/>";
+   let desc = "<input type='text' class='md-form form-control' value=''  name='transfer[transfer_items]["+add_counter+"][description]'/>";
+   let remove = "<i class='fa fa-trash text-danger' onclick='removeThisRow(this)'></i>"; 
+   cell1.innerHTML = code;
+   cell2.innerHTML = name;
+   cell3.innerHTML = quantity;
+   cell4.innerHTML = desc;
+   cell5.innerHTML = remove;
    add_counter++;
    document.getElementById("itemId").value = "";
 }

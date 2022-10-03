@@ -22,8 +22,7 @@ x ubah design dashboard
 		- 	kasi lap penjualan hari ini 
 		- 	kasi jumlah item yang perlu dicetak
 	- stock_admin
-	
-x perbaiki tampilan print recap
+x gudang tidak bisa terima sendback
 
 
 
@@ -40,6 +39,7 @@ x kasir scan barang +1
 
 ======================================================================
 DONE:
+- retur konsumen -> super_visi
 - tambah user yang terakhir update (Departmen, Store, Sub-dept, barang, grocer_item)
 	- edit
 	- new

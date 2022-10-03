@@ -4,7 +4,7 @@
         .alert-heading
           | Semua Data #{@title}
 
-  - if buttonAccess "complains_path", "new"
+  - if buttonAccess "complains", "new"
     .col-2.text-center
       a href="#{transactions_path(from: "complain")}"
         button.btn.btn-success type="button" 

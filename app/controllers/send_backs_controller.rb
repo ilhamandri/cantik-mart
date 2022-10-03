@@ -6,12 +6,8 @@ class SendBacksController < ApplicationController
   		@send_backs = SendBack.page param_page
   		@send_backs = @send_backs.order("created_at DESC")
   		
-  		if current_user.store != Store.first
+  		if current_user.store.store_type == "retail"
   			@send_backs = @send_backs.where(store: current_user.store)
-  		end
-
-  		if !["owner", "super_admin"].include? current_user.level
-  			@send_backs = SendBack.page param_page
   		end
 
   		search = ""
