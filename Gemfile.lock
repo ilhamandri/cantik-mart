@@ -230,6 +230,8 @@ GEM
     puma (3.12.6)
     racc (1.6.0)
     rack (2.2.4)
+    rack-attack (6.6.1)
+      rack (>= 1.0, < 3)
     rack-proxy (0.7.4)
       rack
     rack-test (2.0.2)
@@ -413,6 +415,7 @@ DEPENDENCIES
   psych (~> 3.1)
   public_activity
   puma (~> 3.11)
+  rack-attack
   rails (~> 5.2.0)
   rails_12factor
   rake
