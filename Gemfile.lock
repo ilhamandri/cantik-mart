@@ -213,7 +213,7 @@ GEM
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    pdfkit (0.8.6)
+    pdfkit (0.8.7)
     pg (1.4.3)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -413,7 +413,6 @@ DEPENDENCIES
   psych (~> 3.1)
   public_activity
   puma (~> 3.11)
-  rack-attack
   rails (~> 5.2.0)
   rails_12factor
   rake
