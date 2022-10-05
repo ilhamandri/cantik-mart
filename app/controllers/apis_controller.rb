@@ -127,9 +127,13 @@ class ApisController < ApplicationController
     search = params[:search].squish
     return render :json => json_result unless search.present?
     search = search.gsub(/\s+/, "")
-    members = Member.where('lower(name) like ? OR card_number = ?', "%"+search.downcase+"%", search)
+    if params[:only].present?
+      members = Member.where(card_number: search)
+    else
+      members = Member.where('lower(name) like ? OR card_number = ?', "%"+search.downcase+"%", search)
+    end
     members.each do|member|
-      json_result << [member.card_number, member.name, member.address, member.phone]
+      json_result << [member.card_number, member.name, member.address, member.phone, member.id]
     end
     render :json => json_result
   end

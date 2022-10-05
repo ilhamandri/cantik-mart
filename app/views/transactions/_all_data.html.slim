@@ -11,16 +11,14 @@
 			      	i.fas.fa-plus 
 			      	|  #{@title}
 
-- if ["owner", "super_visi", "finance", "super_admin", "candy_dream"].include? current_user.level
+- if ["owner", "super_visi", "finance", "super_admin", "candy_dream", "developer"].include? current_user.level
 	table class="table"
 	  thead
 	    th Invoice
 	    th Tanggal
 	    th Toko
-	    th Member
-	    th Poin
-	    th Profit
-	    th Aksi
+	    th Nominal
+	    th.text-right Aksi
 	  tbody
 	    = render partial: 'list', collection: @transactions, as: :transaction
 	.container.pagination.justify-content-center

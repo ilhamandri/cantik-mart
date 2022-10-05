@@ -65,14 +65,14 @@ class MembersController < ApplicationController
     return redirect_back_data_error members_path, "Data Member Tidak Ditemukan" unless params[:id].present?
     @member = Member.find_by_id params[:id]
     return redirect_back_data_error members_path, "Data Member Tidak Ditemukan" unless @member.present?
-    @transactions = Transaction.where(member_card: @member.card_number).order("date_created DESC")
-    @trx_items = TransactionItem.where(transaction_id: @transactions.pluck(:id)).group(:item_id).count
-    @points = Point.where(member: @member).order("created_at DESC").limit(10)
-    @transactions = @transactions.limit(10)
-    @trx_item_cats = Item.where(id: @trx_items.to_h.keys).group(:item_cat_id).count
+    @transactions = Transaction.where("member_card = ?", @member.id).order("date_created DESC").page param_page
+    # @trx_items = TransactionItem.where(transaction_id: @transactions.pluck(:id)).group(:item_id).count
+    # @points = Point.where(member: @member).order("created_at DESC").limit(10)
+    # @transactions = @transactions.limit(10)
+    # @trx_item_cats = Item.where(id: @trx_items.to_h.keys).group(:item_cat_id).count
 
-    @trx_item_cats = @trx_item_cats.sort_by(&:last).reverse.first(10)
-    @trx_items = @trx_items.sort_by(&:last).reverse.first(10)
+    # @trx_item_cats = @trx_item_cats.sort_by(&:last).reverse.first(10)
+    # @trx_items = @trx_items.sort_by(&:last).reverse.first(10)
   end
 
   private

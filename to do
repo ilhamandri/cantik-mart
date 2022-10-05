@@ -21,86 +21,18 @@ x ubah design dashboard
 	- stock_admin
 
 x kasir scan barang +1
-		
 
+x MEMBER
+	x hapus semua member_card fill di lokal dan pusat
+		x Transaction.where("member_card IS NOT NULL").update_all(member_card: nil)
+	x modif model (member, trx)
+	x modif trx list
+	x modif trx new
+	x modif app cont
+	x hapus create & post member di lokal
+	x disebelah member tab local ada garis
 
-
-
-
-
-======================================================================
-DONE:
-- dropdown notif kepotong
-- rec user log
-	- out
-	- in
-- gudang tidak bisa terima sendback
-- retur konsumen -> super_visi
-- tambah user yang terakhir update (Departmen, Store, Sub-dept, barang, grocer_item)
-	- edit
-	- new
-	- view => show
-- order lewat item error
-- grafik penjualan untuk supervisi hanya omzet
-- logs views
-- transaction split coin tax
-- profit minus tanggal 28
-- perbaiki semua button pakai hak akses
-- menu gajian
-- stock_admin penjualan supplier
-- stock admin --> minta akses laporan penjualan toko = ga dikasi akses
-- slow get item local
-- stock_admin tidak ada notif permintaan barang 
-- sv - item (info: tidak ada tab yang lain) 
-- sv - department & sub-dept 
-- sv - item (info) --> beri akses ke item_cats=super_visi
-- sv - order (receive)
-- sv - retur supplier (submit feedback -> tidak ada hak akses)
-- sv - receive transfer
-- sv - supplier (new)
-- sv - order (NA) 
-- sv - retur (NA)
-- print (clear) --> kasi akses super_visi(clean)
-- hapus kolom foto 
-	- transfer
-	- retur
-- retur supplier
-	- tambah user yang mengisi feedback
-	- controller tambah user isi feedback (confirmed_by, date_confirm)
-	- di list item nominal muncul jika sudah ada confirmed_by
-- bersihin trash_code di transfer
-- hapus hak akses stock_admin new transfer atau bikin 1 page buat nge handle req_transfer dan direct_transfer ==> DTRF & TRF jadi 1 method
-- download recap trx item (super_visi) data tidak ditemukan
-- redirect error
-- user show -> add kasbon tab
-- Kasbon-> index
-- Voucher -> index
-- Member Point -> index
-- Promotion -> index
-- item -> show (delete image, restruct info)
-- stocks -> index, show (DELETE)
-- supplier_items -> index (DELETE)
-- exchange point -> index
-- Discount -> index
-- balance -> hide route
-- backup -> index
-- activities -> index
-- controllers -> index
-- notification -> index
-- SEMUA DATA -> SEMUA DATA #{@title}
-- error nav
-- sub-sistem -> index
-- refresh_notification -> stop
-- error di clearance -> cookie_domain
-- candy dream gabisa login
-- run
-	1. UserMethod.where(user_level: ["super_admin", "owner"]).destroy_all
-	2. 	
-		- controllers = Controller.where(name: ["cheats", "codes", "candy_dreams", "result_items", "tests"])
-		- controllers_methods = ControllerMethod.where(controller: controllers)
-		- UserMethod.where(controller_method_id: controllers_methods.pluck(:id)).destroy_all
-		- controllers_methods.destroy_all
-		- controllers.destroy_all
+x hapus 0 di no telp 
 
 ======================================================================
 UNUSED FEATURE :

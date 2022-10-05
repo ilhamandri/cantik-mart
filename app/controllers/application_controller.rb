@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
     if current_user.present?
       can_access = false
       return not_found_path if !current_user.active
-      return if current_user.level == "owner" || current_user.level == "super_admin"
+      return if ["owner", "super_admin", "developer"].include? current_user.level
         
       if request.controller_class.to_s != "SessionsController"
         can_access = authorization

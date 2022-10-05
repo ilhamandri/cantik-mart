@@ -32,7 +32,7 @@ class TransactionsController < ApplicationController
             end_day = (start_day + 7.days).end_of_day
           end 
         end
-        if ["super_visi", "super_admin", "super_visi", "candy_dream"].include? current_user.level
+        if ["super_visi", "super_admin", "super_visi", "candy_dream", "developer"].include? current_user.level
           transactions = transactions_profit_graph start_day, end_day
           gon.grand_totals = transactions[0]
           gon.hpp_totals = transactions[1]
@@ -256,8 +256,10 @@ class TransactionsController < ApplicationController
     gon.store_id = current_user.store.id
     gon.cashier_name = current_user.name.upcase.split(" ")[0]
     trx_last_store_id = Transaction.last.store.id
-    if !current_user.store.online_store
-      return redirect_back_data_error root_path, "ID kasir tidak terdaftar." if trx_last_store_id != current_user.store.id
+    if current_user.level != "developer"
+      if !current_user.store.online_store 
+        return redirect_back_data_error root_path, "ID kasir tidak terdaftar." if trx_last_store_id != current_user.store.id
+      end
     end
     respond_to do |format|
       format.html { render "transactions/new", :layout => false  } 
@@ -286,14 +288,11 @@ class TransactionsController < ApplicationController
     trx = Transaction.new
     trx.invoice = "TRX-"+DateTime.now.to_i.to_s+"-"+current_user.store.id.to_s+"-"+current_user.id.to_s
     trx.user = current_user
-    member_card = nil
+    member = nil
     if params[:member] != ""
-      member = Member.find_by(card_number: params[:member].to_i)
-      if member.present?
-        member_card = member.card_number
-      end
+      member = Member.find_by(id: params[:member])
+      trx.member_card = member if member.present?
     end
-    trx.member_card = member_card
     trx.date_created = Time.now
     trx.payment_type = params[:payment].to_i
     trx.store = current_user.store
@@ -385,6 +384,16 @@ class TransactionsController < ApplicationController
     new_point = trx_total_for_point / @@point
     trx.point = new_point
     trx.save!
+
+    if trx.member_card.present?
+      member = trx.member_card
+      member.point = member.point + trx.point
+
+      Point.create member: member, point: trx.point, point_type: Point::GET, transaction_id: trx.id
+      
+      member.save!
+    end
+    
     render status: 200, json: {
       invoice: trx.invoice.to_s,
       time: trx.created_at.strftime("%d/%m/%Y %H:%M:%S"),
@@ -448,7 +457,7 @@ class TransactionsController < ApplicationController
       if r_type == "html"
         @transactions = @transactions.page param_page if r_type=="html"
       end
-      @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance", "candy_dream"].include? current_user.level
+      @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance", "candy_dream", "developer"].include? current_user.level
       @transactions = @transactions.where(has_coin: true) if current_user.level == "candy_dream"
       
       @search = ""

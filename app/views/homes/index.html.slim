@@ -4,9 +4,9 @@
       .col
         .alert.alert-primary
           .alert-heading
-            | Halo. #{current_user.name}!
+            | Halo, #{current_user.name}!
 
-    - if (Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level) && (current_user.store.online_store)
+    - if (buttonAccess "transactions", "new") && (current_user.store.online_store)
       .row
         = render "homes/card/transaction"
 
@@ -42,3 +42,6 @@
 
     - if ["candy_dream", "super_admin", "owner", "finance"].include? current_user.level
       = render "homes/card/trx_recap"
+
+    - if isDeveloper
+      = render "homes/dashboard/developer"

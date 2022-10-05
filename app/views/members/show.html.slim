@@ -10,21 +10,21 @@
         i.fa.fa-shopping-cart.fa-2x.pb-2 aria-hidden="true" 
         br
         | Riwayat Belanja
-    li.nav-item
+    / li.nav-item
       a#contact-tab-classic-blue.nav-link.waves-light aria-controls="points" aria-selected="false" data-toggle="tab" href="#points" role="tab" 
         i.fa.fa-exchange.fa-2x.pb-2 aria-hidden="true" 
         br
         | Riwayat Penukaran Poin
-    li.nav-item
+    / li.nav-item
       a#contact-tab-classic-blue.nav-link.waves-light aria-controls="item_cats" aria-selected="false" data-toggle="tab" href="#item_cats" role="tab" 
         i.fa.fa-fax.fa-2x.pb-2 aria-hidden="true" 
         br
-        | Departemen Paling Sering
-    li.nav-item
+        | Favorit Departemen
+    / li.nav-item
       a#contact-tab-classic-blue.nav-link.waves-light aria-controls="items" aria-selected="false" data-toggle="tab" href="#items" role="tab" 
         i.fa.fa-archive.fa-2x.pb-2 aria-hidden="true" 
         br
-        | Item Paling Sering
+        | Favorit Item
 
   #myClassicTabContentOrange.tab-content.card
     #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
@@ -33,12 +33,12 @@
     #transactions.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel"
         = render partial: 'transactions'
 
-    #points.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-        = render partial: 'points'
+    / #points.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+    /     = render partial: 'points'
 
-    #item_cats.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-        = render partial: 'item_cats'
+    / #item_cats.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+    /     = render partial: 'item_cats'
 
-    #items.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-      = render partial: 'items'
+    / #items.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+    /   = render partial: 'items'
       

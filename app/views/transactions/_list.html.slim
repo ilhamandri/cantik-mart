@@ -2,28 +2,14 @@ tr
   td #{transaction.invoice.gsub("/TP", "")}
   td #{transaction.date_created}
   td #{transaction.user.store.name}
-  td 
-    - member = Member.find_by(card_number: transaction.member_card)
-    - if member.nil?
-      | -
-    - else 
-      | #{member.name}
-  td #{transaction.point}
-  td 
-    - profit = transaction.grand_total - transaction.hpp_total - transaction.tax
-    - if profit >= 0
-      .text-success
-        | #{number_with_delimiter(profit, delimiter: ".", separator:",", precision: 2)}
-    - else
-      .text-danger
-        | #{number_with_delimiter(profit, delimiter: ".", separator:",", precision: 2)}
+  td #{number_with_delimiter(transaction.grand_total, delimiter: ".", separator:",", precision: 2)}
   td.text-right
-    - if Controller.find_by(name: 'transactions').controller_methods.find_by(name: 'show').user_methods.pluck(:user_level).include? current_user.level
+    - if buttonAccess "transactions", "show"
       a href='#{transaction_path(id: transaction.id)}'
         button class="btn  btn-primary"
           | Detil
 
-    - if Controller.find_by(name: 'returs').controller_methods.find_by(name: 'new').user_methods.pluck(:user_level).include? current_user.level
+    - if buttonAccess "returs", "new"
       - complain = Complain.where(transaction_id: transaction).first
       - in_range_complain = (transaction.created_at >= (DateTime.now - 30.days))
       - if in_range_complain && !transaction.from_complain && complain.nil?

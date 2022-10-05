@@ -14,7 +14,8 @@ class User < ApplicationRecord
     finance: 6,
     visitor: 7,
     pramuniaga: 8,
-    candy_dream: 9
+    candy_dream: 9,
+    developer: 10,
   }
 
   enum sex: {
@@ -47,6 +48,7 @@ class User < ApplicationRecord
   FEMALE = 'perempuan'
 
   CANDY_DREAM = 'candy_dream'
+  DEVELOPER = 'developer'
 
   has_many :transactions
   has_many :absents

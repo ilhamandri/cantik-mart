@@ -31,7 +31,9 @@
           .form-group
             label for="level" Peran 
             select name="user[level]" required=true class="mdb-select md-form colorful-select dropdown-primary" id="level" 
-              - User::levels.each do |user_level|
+              - levels = User::levels
+              - levels = levels.except("owner","developer", "super_admin")
+              - levels.each do |user_level|
                 option value='#{user_level[0]}'
                   | #{user_level[0].upcase.gsub('_', ' ')}
           .form-group

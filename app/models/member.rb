@@ -10,5 +10,6 @@ class Member < ApplicationRecord
   belongs_to :store
   has_many :points
   default_scope { order(created_at: :desc) }
+  has_many :transactions
 end
 

@@ -88,12 +88,13 @@
                   <div class="row">
                     <div class="col-sm-8">
                       <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-12">
                           <label>MEMBER</label>
-                          <input type="text" placeholder="Nomor Kartu Member ..." id="memberId"/>
+                          <input type="text" placeholder="Nomor Kartu Member ..." id="memberCard"/>
                           <input type="text" style="display: none", disabled="disabled" id="memberName">
+                          <input type="text" style="display: none", disabled="disabled" id="member_id", name="member_id">
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" style="display: none;">
                           <label>VOUCHER</label>
                           <input type="text" placeholder="Nomor Voucher ..." id="voucher_code"/>
                           <input type="text" style="display: none", disabled="disabled" id="voucher_name">
@@ -158,9 +159,8 @@
                         <table id="memberSearchList" style="width:100%">
                            <thead>
                               <tr> 
-                                 <th class="width50">No. Kartu</th> 
+                                 <th class="width50">Kartu</th> 
                                  <th class="width10">Nama</th>
-                                 <th class="width55">Alamat</th>
                                  <th class="width15">Telepon</th>
                               </tr>
                            </thead>
@@ -476,8 +476,8 @@
          
          var itemId = document.getElementById('itemId');
          var itemSearchId = document.getElementById('itemSearchId');
-         var memberId = document.getElementById('memberId');
-         var memberSearchId = document.getElementById('memberSearchId');
+         var memberCard = document.getElementById('memberCard');
+         var memberSearch = document.getElementById('memberSearchId');
          var qtyInput = document.getElementById('item_qty');
          var timeout = null;
          
@@ -488,26 +488,25 @@
            }, 600);
          };
 
-         memberId.onkeyup = function(e) {
+         memberCard.onkeyup = function(e) {
            clearTimeout(timeout);
            timeout = setTimeout(function() {
-             var member = document.getElementById("memberId").value;
+             var member = document.getElementById("memberCard").value;
              $.ajax({
              method: "GET",
              cache: false,
-             url: "/api/member?search=" + member,
+             url: "/api/member?search=" + member + "&only=card",
              success: function(result_arr) {
-                 if(result_arr == ""){
-                  alert("Member Tidak Ditemukan")
-                 }
-                 if(result_arr.size > 1){
+                 if((result_arr.size > 1)||(result_arr == "")||(!result_arr)){
                   alert("Member Tidak Ditemukan")
                  }else{
                    name = result_arr[0][1]
                    phone = result_arr[0][3]
+                   $("#member_id").val(result_arr[0][4])
                    $("#memberName").val(name + " - " + phone);
                    $("#memberName").show();
-                   $("#memberId").hide();
+                   $("#memberCard").val("")
+                   $("#memberCard").hide();
                  }
              },
              error: function(error) {
@@ -566,7 +565,7 @@
                  table.clear().draw();
                  for (var i = 0; i < result_arr.length; i++) {
                      var result = result_arr[i];
-                     var dataSet = [result[0], result[1], result[2], result[3], idx];
+                     var dataSet = [result[0], result[1], result[3], idx];
                     idx+=1;
                      table.row.add(dataSet).draw();
                  }
@@ -611,7 +610,7 @@
            timeout = setTimeout(function() {
            var item_id = document.getElementById("itemId").value;
            var item_qty = document.getElementById("item_qty").value;
-           var member_id = document.getElementById("memberId").value;
+           var member_id = document.getElementById("member_id").value;
            $.ajax({
              method: "GET",
              cache: false,
@@ -898,7 +897,7 @@
              var nominal = $('#label-total').html();
              var voucher_code = $("#voucher_code").val();
              var payment = $("#payment-method-select").val();
-             var member = $("#memberId").val();
+             var member = $("#member_id").val();
              var change = "0";
              var bank = $("#bank-select").val();
              var edc = $("#edc-nnumber").val();

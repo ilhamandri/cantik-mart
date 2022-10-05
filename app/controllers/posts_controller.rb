@@ -20,13 +20,20 @@ class PostsController < ApplicationController
 					json_trx_data3 = JSON.parse(string_data3)
 					end_date = DateTime.now.end_of_day
 					start_date = (end_date - 5.days).beginning_of_day
+
 					json_trx_data1.each do |data|
 						trx_data = JSON.parse(data[0])
 						trx_items_datas = JSON.parse(data[1])
 						trx_data.delete("id")
+						member_data = trx_data.delete("member_card")
 						check_trx = Transaction.where(invoice: trx_data["invoice"])
 						next if check_trx.present?
 						trx = Transaction.create trx_data
+						member = nil
+						if member_data.present?
+							member = Member.find_by(id: member_data["id"])
+							trx.member_card = member if member.present?
+						end
 						trx_total_for_point = 0
 						hpp_totals = 0
 						has_coin = false
@@ -37,7 +44,6 @@ class PostsController < ApplicationController
 							trx_item.delete("id")
 							trx_item["transaction_id"] = trx.id
 							new_trx_item = TransactionItem.create trx_item 
-
 						    item = new_trx_item.item
 
 							store_stock = StoreItem.find_by(store: trx.user.store, item: item)
@@ -116,9 +122,7 @@ class PostsController < ApplicationController
 							trx.save!
 						end
 
-						if trx.member_card.present?
-							member = Member.find_by(card_number: trx.member_card)
-							next if member.nil?
+						if member.present?
 							member.point = member.point + trx.point
 
 							Point.create member: member, point: trx.point, point_type: Point::GET, transaction_id: trx.id
@@ -126,6 +130,7 @@ class PostsController < ApplicationController
 							member.save!
 						end
 					end
+
 					json_trx_data3.each do |data|
 						start_date = data["created_at"].to_datetime.beginning_of_day
 						end_date = data["created_at"].to_datetime.end_of_day

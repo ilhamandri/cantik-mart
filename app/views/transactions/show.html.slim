@@ -1,6 +1,6 @@
 - transaction = @transaction_items.first.trx
-- member = transaction.member_card
-- member = Member.find_by(card_number: transaction.member_card).name  if transaction.member_card.present?
+- member_name = "-"
+- member_name = transaction.member_card.name if transaction.member_card.present?
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
@@ -9,9 +9,16 @@
           | Informasi Transaksi 
       .card-body
         .row
-          .col-12
-            label Member
-            input disabled="disabled" class="form-control md-form" value="#{member}"
+          - if isDeveloper
+            - if member_name != "-"
+              .col-9
+                label Member
+                input disabled="disabled" class="form-control md-form" value="#{member_name}"
+              .col-3
+                label Poin
+                input disabled="disabled" class="form-control md-form" value="#{transaction.point}"
+              .col-12
+                hr.primary-color
           - if transaction.from_complain?
             - complain = Complain.find_by(id: transaction.complain_id)
             .col-6
@@ -30,6 +37,8 @@
           .col-4
             label Tgl. Transaksi
             input disabled="disabled" class="form-control md-form" value="#{transaction.created_at}"
+          .col-12
+            hr.primary-color
           .col-3
             label Pembayaran
             input disabled="disabled" class="form-control md-form" value="#{transaction.payment_type}"
