@@ -129,23 +129,23 @@ class AccountBalance
   end
 
   def self.stock_values store
-    stocks = StoreItem.where(store: store).where('stock != 0')
-    values = 0
-    stocks.each do |store_stock|
-      next if store_stock.stock <= 0
-      next if store_stock.item.id == 30331
-      values += (store_stock.stock * store_stock.item.buy)
-    end
+    # record tiap hari
     time_start = DateTime.now.beginning_of_day
     time_end = DateTime.now.end_of_day
-    values = values
-    # record tiap hari
-    stock_value = StockValue.where(store: store).where("created_at >= ? AND created_at <= ?", time_start.beginning_of_day, time_end.end_of_day).first
+    stock_value = StockValue.where(store: store).where(created_at: time_start.beginning_of_day..time_end.end_of_day).first
     if stock_value.nil?
+
+      stocks = StoreItem.where(store: store).where('stock != 0')
+      values = 0
+      stocks.each do |store_stock|
+        next if store_stock.stock <= 0
+        next if store_stock.item.id == 30331
+        values += (store_stock.stock * store_stock.item.buy)
+      end
+      
+      values = values
+
       StockValue.create store: store, user: User.first, date_created: DateTime.now, nominal: values, description: "Nilai Stock - "+Date.today.month.to_s+"/"+Date.today.year.to_s
-    else
-      stock_value.nominal = values
-      stock_value.save!
     end
     return values
   end

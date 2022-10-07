@@ -41,6 +41,43 @@ class HomesController < ApplicationController
         @transactions = @transactions.where(has_coin: true) 
       end
     end
+
+
+    #DEVELOPER
+    if current_user.level == "developer"
+      AccountBalance.stock_values current_user.store 
+      @debt = Debt.where(store: current_user.store).sum(:deficiency).to_f
+      @receivable = Receivable.where(store: current_user.store).sum(:deficiency).to_f
+      @stock_value = StockValue.where(store: current_user.store).first.nominal.to_f
+      transactions = Transaction.where(store: current_user.store, created_at: DateTime.now.beginning_of_month..DateTime.now.end_of_month)
+
+      # Nilai asset + kas + piutang 
+      activa = @stock_value + @receivable
+      # Penjualan 
+      gross = transactions.sum(:grand_total).to_f
+      hpp = transactions.sum(:hpp_total).to_f
+      tax = transactions.sum(:tax).to_f
+      netto = gross-tax
+      profit = netto-hpp
+
+      # LIQUIDITY RATIO
+      @quick_ratio = (activa / @debt ) * 100.0
+
+      # PROFIBILITY RATIO
+      @gross_profit_margin = (gross/hpp) *100.0
+      @net_profit_margin = (profit/netto) * 100.0
+      @roi = (@net_profit_margin/@quick_ratio) * 100.0
+      # roe dan ronw harus pakai jumlah modal awal
+
+      # SOLVABILITY RATIO
+      @solvable = (activa > @debt)
+
+      # ACTIVITY RATIO
+      @receivable_turnover = (gross/@receivable) * 100.0
+      @total_asset_turnover = (gross/activa) * 100.0
+      @average_collection_turnover = ((@receivable/gross) / 365) * 100.0
+      @working_capital_turnover = (gross/(activa-@debt)) * 100.0
+    end
     
   end
 

@@ -1,3 +1,4 @@
+- @stock = StoreItem.find_by(item: @item, store: current_user.store)
 .card-body
   .form-group
     .row.text-center
@@ -28,11 +29,13 @@
           label for="item" Kategori
           input class="md-form form-control" value="#{@item.item_cat.name}" disabled="disabled"
 
-        -  @stock = StoreItem.find_by(item: @item, store: current_user.store)
+      
       .col-md-6.col-lg-3
         .form_group
-          label for="category" Stok 
-          input type='number' value="#{@stock.stock}" disabled= true class="form-control md-form"
+          label for="category" Stok
+          - last_update = @stock.updated_at.to_s
+          - last_update += " (" + @stock.edited_by.name + ")" if @stock.edited_by.present? 
+          input type='text' value="#{@stock.stock.to_f.to_s + ' [' + last_update + ']'}" disabled= true class="form-control md-form"
       .col-lg-12
         hr
       .col-md-6.col-lg-3

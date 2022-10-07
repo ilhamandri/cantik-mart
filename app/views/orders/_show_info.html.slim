@@ -1,35 +1,27 @@
 - order = @order_items.first.order
 - order_id = order.id
+- debts = Debt.find_by(finance_type: "ORDER", ref_id: order.id)
+- due_date = nil
+- due_date = debts.due_date.to_date if debts.present?
 - @idx = 1
 
 
 .card-body
   .row
-    .col-4
-      label for="form" INVOICE
-      input type="text" class="form-control md-form" disabled=true value="#{order.invoice}"
-    - debts = Debt.find_by(finance_type: "ORDER", ref_id: order.id)
-    - due_date = "-"
-    - due_date = debts.due_date.to_date if debts.present?
-    .col-2
-      label for="form" Jatuh Tempo
-      input type="text" class="form-control md-form" disabled=true value="#{due_date}"
-
-
-    .col-6
-      .row
-        .col.text-right
-          a href="#{order_path(id: order_id, format: :pdf)}"
-            button.btn.btn-primary type="button" 
-              i.fas.fa-print 
-              | &nbsp&nbsp&nbsp CETAK
-
-        - if Controller.find_by(name: 'orders').controller_methods.find_by(name: 'confirmation').user_methods.pluck(:user_level).include? current_user.level
-          - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
-              a href="#{order_confirmation_path(id: order_id)}"
-                button.btn.btn-success type="button" 
-                  | Terima
-
+    .col
+      .alert.alert-primary
+        .alert-heading  
+          | #{order.invoice}
+    - if buttonAccess "orders", "confirmation"
+      - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
+        .col-lg-2.col-md-2.text-right
+          a.btn.btn-success href="#{order_confirmation_path(id: order_id)}"
+              | Terima
+    .col-lg-2.col-md-3.text-right
+      a href="#{order_path(id: order_id, format: :pdf)}"
+        button.btn.btn-dark type="button" 
+          | &nbsp&nbsp&nbsp CETAK
+  .row      
     .col-6
       .form-group
         label for="from" Toko / Gudang
@@ -39,8 +31,18 @@
       .form-group
         label for="from" Supplier
         input type="text" class="form-control md-form" disabled=true value="#{order.supplier.name}"
+
+    .col-6
+      .form-group
+        label for="from" Jumlah Barang
+        input type="text" class="form-control md-form" disabled=true value="#{order.order_items.sum(:quantity).to_i}"
+
+    - if due_date
+      .col-6
+        label for="form" Jatuh Tempo
+        input type="text" class="form-control md-form" disabled=true value="#{due_date}"
     .col-12
-      hr
+      hr.primary-color
 
     .col-6
       .form-group
@@ -50,10 +52,10 @@
     - receive = "-"
     - if order.date_receive.present?
       - receive = order.date_receive.to_s + " ( " + order.received_by.name + " )"
-    .col-6
-      .form-group
-        label for="from" Terima
-        input type="text" class="form-control md-form" disabled=true value="#{receive}"
+      .col-6
+        .form-group
+          label for="from" Terima
+          input type="text" class="form-control md-form" disabled=true value="#{receive}"
 
     - if order.date_receive.present?
       .col-12
@@ -81,3 +83,17 @@
           - retur = retur_item.retur
           a href="#{retur_path(id: retur.id)}" class="btn btn-primary"
             | #{retur.invoice}
+
+    .col-12
+      hr.primary-color
+      - progress = "30"
+      - bg = "bg-warning"
+      - if order.date_receive.present?
+        - progress = "60" 
+      - if debts.present?
+        - if debts.deficiency == 0
+          - progress = "100"
+          - bg = "bg-success" 
+      .progress
+        .progress-bar class="#{bg}" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
+          | #{progress} %

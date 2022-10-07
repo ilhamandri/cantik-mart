@@ -1,85 +1,90 @@
 - transfer = @transfer_items.first.transfer 
 - transfer_id = transfer.id
-
-.row
-  - if ["","-", nil].exclude? transfer.description
-    .col-9
-      .alert.alert-danger
-        .alert-heading  
-          | #{transfer.description}
-
-
-  - if transfer.confirmed_by.present?
-    .col-9
-      .alert.alert-success
-        .alert-heading
-         | Telah diterima oleh #{transfer.confirmed_by.name + ' ('+transfer.status.to_s+')'}
-
-
-  .col.text-right
-    a href="#{transfer_path(id: transfer_id, format: :pdf)}"
-      button.btn.btn-dark type="button" 
-        i.fas.fa-print 
-        | &nbsp&nbsp&nbsp CETAK
-
-  - if transfer.invoice.include? "DTRF"
-    - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.to_store.id == current_user.store.id
-      .col.text-right
-      .col-md-6.text-right
-        a href="#{transfer_receive_path(id: transfer_id)}"
-          button class="btn btn-success"
-            | TERIMA
-
-  - else
-
-    - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.from_store.id == current_user.store.id
-      .col.text-right
-      .col-md-6.text-right
-        a href="#{transfer_receive_path(id: transfer_id)}"
-          button class="btn btn-success"
-            | TERIMA
-        |  
-    - if transfer.date_approve.nil? && transfer.to_store.id == current_user.store.id && ( current_user.level == User::SUPERVISI || current_user.level == User::OWNER || current_user.level == User::SUPER_ADMIN )
-      .col.text-right
-      .col-md-6.text-right
-        a href="#{transfer_confirmation_path(id: transfer_id)}"
-          button class="btn btn-warning"
-            | KONFIRMASI
-      |  
-    - if transfer.date_approve.present? && transfer.date_picked.nil? && transfer.to_store.id == current_user.store.id
-      .col.text-right
-      .col-md-6.text-right
-        a href="#{transfer_picked_path(id: transfer_id)}"
-          button class="btn btn-warning"
-            | SIAPKAN BARANG
-
-hr.primary-color
-.row
-  .col
-    label Invoice
-    input disabled="disabled" class="form-control md-form" value="#{transfer.invoice}"
-  .col
-    - if transfer.invoice.include? "DTRF"
-      label Dikirim dari
-    - else
-      label Permintaan dari
-    input disabled="disabled" class="form-control md-form" value="#{transfer.from_store.name}"
-  .col
-    label Kepada
-    input disabled="disabled" class="form-control md-form" value="#{transfer.to_store.name}"
-  .col
-    label Total Barang
-    input disabled="disabled" class="form-control md-form" value="#{transfer.total_items}"
-hr.primary-color
+.card-body
   .row
     .col
-      label Dibuat
-      input disabled="disabled" class="form-control md-form" value="#{transfer.user.name + ' ('+transfer.created_at.to_s+')'}"
+      - if ["","-", nil].exclude? transfer.description
+        .alert.alert-danger
+          .alert-heading  
+            | #{transfer.description}
+      - elsif transfer.confirmed_by.present?
+        .alert.alert-success
+          .alert-heading
+           | Telah diterima oleh #{transfer.confirmed_by.name + ' ('+transfer.status.to_s+')'}
+      - else
+        .alert.alert-primary
+          .alert-heading  
+            | TRANSFER #{transfer.invoice}
 
-    - if transfer.invoice.exclude? "DTRF"
+
+
+
+    - if transfer.invoice.include? "DTRF"
+      - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.to_store.id == current_user.store.id
+        .col-lg-1.col-md-2.text-right
+          a.btn.btn-success href="#{transfer_receive_path(id: transfer_id)}"
+            | TERIMA
+    - else
+
+      - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.from_store.id == current_user.store.id
+        .col-lg-1.col-md-2.text-right
+          a.btn.btn-success href="#{transfer_receive_path(id: transfer_id)}"
+            | TERIMA
+
+      - if transfer.date_approve.nil? && transfer.to_store.id == current_user.store.id 
+        .col-lg-1.col-md-2.text-right
+          a.btn.btn-warning href="#{transfer_confirmation_path(id: transfer_id)}"
+            | KONFIRMASI
+
+      - if transfer.date_approve.present? && transfer.date_picked.nil? && transfer.to_store.id == current_user.store.id
+        .col-lg-2.col-md-3.text-right
+          a.btn.btn-warning href="#{transfer_picked_path(id: transfer_id)}"
+              | SIAPKAN BARANG
+
+
+    .col-lg-1.col-md-2.text-right
+      a.btn.btn-dark type="button" href="#{transfer_path(id: transfer_id, format: :pdf)}"
+        | CETAK
+
+  hr.primary-color
+  .row
+    .col
+      - if transfer.invoice.include? "DTRF"
+        label Dikirim dari
+      - else
+        label Permintaan dari
+      input disabled="disabled" class="form-control md-form" value="#{transfer.from_store.name}"
+    .col
+      label Kepada
+      input disabled="disabled" class="form-control md-form" value="#{transfer.to_store.name}"
+    .col
+      label Total Barang
+      input disabled="disabled" class="form-control md-form" value="#{transfer.total_items}"
+  hr.primary-color
+    .row
       .col
-        label Konfirmasi
-        input disabled="disabled" class="form-control md-form" value="#{(transfer.approved_by.name + ' ('+transfer.date_approve.to_s+')') if transfer.approved_by.present?}"
-      .col
-        label Kirim
-        input disabled="disabled" class="form-control md-form" value="#{(transfer.picked_by.name + ' ('+transfer.date_picked.to_s+')') if transfer.picked_by.present?}"
+        label Dibuat
+        input disabled="disabled" class="form-control md-form" value="#{transfer.user.name + ' ('+transfer.created_at.to_s+')'}"
+
+      - if transfer.invoice.exclude? "DTRF"
+        .col
+          label Konfirmasi
+          input disabled="disabled" class="form-control md-form" value="#{(transfer.approved_by.name + ' ('+transfer.date_approve.to_s+')') if transfer.approved_by.present?}"
+        .col
+          label Kirim
+          input disabled="disabled" class="form-control md-form" value="#{(transfer.picked_by.name + ' ('+transfer.date_picked.to_s+')') if transfer.picked_by.present?}"
+
+      .col-12
+        hr.primary-color
+        - bg = "bg-warning"
+        - progress = 25
+        - progress = 50 if transfer.date_approve.present?
+        - progress = 75 if transfer.date_picked.present?
+        - if transfer.confirmed_by.present?
+          - progress = 100
+          - bg = "bg-success"
+        - if ["","-", nil].exclude? transfer.description
+          - bg = "bg-danger"
+        .progress
+          .progress-bar class="#{bg}" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
+            | #{progress} %

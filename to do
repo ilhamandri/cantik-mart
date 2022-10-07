@@ -1,47 +1,7 @@
 TO DO: 
-x block ip address if too many attempt login => rack:attack
-x clean code
-x bersihin error di log_console
-	x perfect scroll bar
-	- Di sign_in
-		* error js => start_time (clock)
-	x quirks mode
-	x transform origin
-	x dist js bootstrap.min.js
-	x autonumeric
-x print salary error production mode
 
 
-x ubah design dashboard
-	x super_admin
-	x finance
-	- super_visi
-		- 	kasi lap penjualan hari ini 
-		- 	kasi jumlah item yang perlu dicetak
-	- stock_admin
-
-x kasir scan barang +1
-
-x MEMBER
-	x hapus semua member_card fill di lokal dan pusat
-		x Transaction.where("member_card IS NOT NULL").update_all(member_card: nil)
-	x modif model (member, trx)
-	x modif trx list
-	x modif trx new
-	x modif app cont
-	x hapus create & post member di lokal
-	x disebelah member tab local ada garis
-
-x hapus 0 di no telp 
-
+	
 ======================================================================
 UNUSED FEATURE :
-- Voucher
-- Member Point
-- Promotion
-- Balance
-- Exchange Point
-- Discount
-- User performance (absent, avg. pay debt)
-- Bundling recomendations
-- Item KPI 
+

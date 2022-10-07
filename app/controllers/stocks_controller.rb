@@ -34,8 +34,8 @@ class StocksController < ApplicationController
     end
     changes = store_item.changes
     if store_item.changed?
-      item.edited_by = current_user
-      item.save!
+      store_item.edited_by = current_user
+      store_item.save!
       store_item.save! 
     end
     if changes.include? "min_stock"

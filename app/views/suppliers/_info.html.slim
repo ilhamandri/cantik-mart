@@ -16,13 +16,19 @@
 
 
     - receivables = Receivable.where(finance_type: Receivable::RETUR, to_user: @supplier.id).where("deficiency > 0").sum(:deficiency)
+    .row
+      .col
+        .form-group
+          label for="phone" Total Piutang
+          input class="form-control md-form" value=" #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}" disabled="disabled"
+      .col
+        .form-group
+          label for="phone" Pajak Faktur
+          input class="form-control md-form" value=" #{number_with_delimiter(@supplier.tax.to_i, delimiter: ".", separator: ",")} %" disabled="disabled"
     .form-group
-      label for="phone" Total Piutang
-      input class="form-control md-form" value=" #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}" disabled="disabled"
+      label for="phone" Terakhir Update
+      input.text-danger class="form-control md-form" value="#{@supplier.updated_at}" disabled="disabled"
 
-    .form-group
-      label for="phone" Pajak Faktur
-      input class="form-control md-form" value=" #{number_with_delimiter(@supplier.tax.to_i, delimiter: ".", separator: ",")} %" disabled="disabled"
     .row
       .col-12.text-center
         - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level

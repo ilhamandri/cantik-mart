@@ -4,35 +4,46 @@
   - received += " ( " 
   - received += @send_back.created_at.to_s 
   - received += " )" 
-.row
-  - if received != ""
+.card-body
+  .row
     .col
-      .alert.alert-success
-        .alert-heading
-          | Diterima oleh #{received}
-  .col-2.text-right
-    a href="#{send_back_path(id: @send_back.id, format: :pdf)}"
-      button.btn.btn-dark type="button" 
-        i.fas.fa-print 
-        | &nbsp&nbsp&nbsp CETAK
-  - if @send_back.received_by.nil? && current_user.store.store_type == "warehouse"
-    .col-2.text-right
-      a href="#{send_back_receive_path(id: @send_back.id)}"
-        button class="btn btn-warning"
-          | TERIMA
-  .col-12
-    hr
+      - if received != ""
+        .col
+          .alert.alert-success
+            .alert-heading
+              | Diterima oleh #{received}
+      - else
+        .alert.alert-primary
+          .alert-heading  
+            | #{@send_back.invoice}
+    - if @send_back.received_by.nil? && current_user.store.store_type == "warehouse"
+      .col-lg-1.col-md-2.text-right
+        a.btn.btn-warning href="#{send_back_receive_path(id: @send_back.id)}"
+          button class=""
+            | TERIMA
+    .col-lg-1.col-md-2.text-right
+      a.btn.btn-dark href="#{send_back_path(id: @send_back.id, format: :pdf)}"
+        | CETAK
+    .col-12
+      hr
 
-.row
-  .col-4
-    label Invoice
-    input disabled="disabled" class="form-control md-form" value="#{@send_back.invoice}"
-  .col-4
-    label Dari
-    input disabled="disabled" class="form-control md-form" value="#{@send_back.store.name}"
-  .col-4
-    label Total Barang
-    input disabled="disabled" class="form-control md-form" value="#{@send_back.total_items}"
-  .col-6
-    label Dibuat Oleh
-    input disabled="disabled" class="form-control md-form" value="#{@send_back.user.name} ( #{@send_back.created_at} )"
+  .row
+    .col
+      label Dari
+      input disabled="disabled" class="form-control md-form" value="#{@send_back.store.name}"
+    .col
+      label Total Barang
+      input disabled="disabled" class="form-control md-form" value="#{@send_back.total_items}"
+    .col
+      label Dibuat Oleh
+      input disabled="disabled" class="form-control md-form" value="#{@send_back.user.name} ( #{@send_back.created_at} )"
+    .col-12
+      hr.primary-color
+      - progress = "50"
+      - bg = "bg-warning"
+      - if @send_back.received_by.present?
+        - progress = "100"
+        - bg = "bg-success" 
+      .progress
+        .progress-bar class="#{bg}" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
+          | #{progress} %

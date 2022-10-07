@@ -65,7 +65,7 @@
             input class="form-control md-form" value="#{number_with_delimiter(@user.salary, delimiter: " ")}" disabled="disabled"
           .form-group
             label for="id-card" Terakhir Update
-            input type="text" value="#{@user.updated_at}" class="form-control md-form" disabled="disabled"
+            input class="form-control md-form" value="#{@user.updated_at}" disabled="disabled"
       
       - if current_user.level == "super_admin"
         .col.text-center

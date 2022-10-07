@@ -5,15 +5,19 @@
         label for="name" Nama
         = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
     .col-6
+      .form_group
+        label for="address" Alamat
+        = form.text_field :address, required: true, class: "form-control md-form", id: "address", disabled: "disabled"
+    .col-6
+      .form-group
+        label for="phone" Jumlah Karyawan
+        input type="number" class="form-control md-form" value='#{number_with_delimiter(@store.users.count, delimiter: ".")}' disabled= "disabled"
+    .col-6
       .form-group
         label for="phone" Jumlah Member
         - members_count = Member.where(store: @store).count
         input type="number" class="form-control md-form" value='#{number_with_delimiter(members_count, delimiter: ".")}' disabled= "disabled"
-    .col-6
-      .form_group
-        label for="address" Alamat
-        = form.text_field :address, required: true, class: "form-control md-form", id: "address", disabled: "disabled"
-    
+
     .col-6
       .form-group
         label for="phone" Nomor Telepon
@@ -22,12 +26,9 @@
     .col-6
       .form-group
         label for="phone" Terakhir Update
-        input type="text" class="form-control md-form" value='#{@store.updated_at}' disabled= "disabled"
-
-    .col-6
-      .form-group
-        label for="phone" Diupdate Oleh
-        input type="text" class="form-control md-form" value='#{@store.edited_by.name if @store.edited_by.present?}' disabled= "disabled"
+        - edited_by = "()"
+        - edited_by = " (" + @store.edited_by.name + ")" if @store.edited_by.present?
+        input type="text" class="form-control md-form" value='#{@store.updated_at.to_s + " " + edited_by}' disabled= "disabled"
 
     .col-12.text-center
       - if buttonAccess "stores", "destroy"

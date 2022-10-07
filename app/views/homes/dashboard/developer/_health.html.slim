@@ -1,0 +1,72 @@
+.card
+  .card-header.white-text.grey
+    h5.font-weight-500.my-1
+      | HEALTH
+
+  .card-body
+    .row
+      .col-5 
+        .row
+          .col-6.text-left
+            | Hutang
+          .col-6.text-right
+            | #{number_with_delimiter(@debt.to_i, delimiter: ".", separator: ",")}
+
+          .col-6.text-left
+            | Piutang
+          .col-6.text-right
+            | #{number_with_delimiter(@receivable.to_i, delimiter: ".", separator: ",")}
+          .col-6.text-left
+            | Nilai Aset
+          .col-6.text-right
+            | #{number_with_delimiter(@stock_value.to_i, delimiter: ".", separator: ",")}
+          .col-6.text-left
+            | Quick Ratio
+          .col-6.text-right
+            | #{number_with_delimiter(@quick_ratio.round(2), delimiter: ".", separator: ",")} % 
+
+      .col-7 style="border-left: thick solid #ff0000;"
+        .row
+          .col-6.text-left
+            | Gross Profit Margin
+          .col-6.text-right
+            | #{number_with_delimiter(@gross_profit_margin.round(2), delimiter: ".", separator: ",")} % 
+          .col-6.text-left
+            | Nett Profit Margin
+          .col-6.text-right
+            | #{number_with_delimiter(@net_profit_margin.round(2), delimiter: ".", separator: ",")} % 
+          .col-6.text-left
+            | ROI
+          .col-6.text-right
+            | #{number_with_delimiter(@roi.round(2), delimiter: ".", separator: ",")} % 
+          .col-6.text-left
+            | Solvable
+          .col-6.text-right
+            | #{@solvable}
+          .col-6.text-left
+            | Receivable Turnover
+          .col-6.text-right
+            | #{number_with_delimiter(@receivable_turnover.round(2), delimiter: ".", separator: ",")} % 
+          .col-6.text-left
+            | Total Asset Turnover
+          .col-6.text-right
+            | #{number_with_delimiter(@total_asset_turnover.round(2), delimiter: ".", separator: ",")} % 
+          .col-6.text-left
+            | Average Collection Turnover
+          .col-6.text-right
+            | #{number_with_delimiter(@average_collection_turnover.round(2), delimiter: ".", separator: ",")} % 
+          .col-6.text-left
+            | Working Capital Turnover
+          .col-6.text-right
+            | #{number_with_delimiter(@working_capital_turnover.round(2), delimiter: ".", separator: ",")} % 
+
+
+  .card-body.text-center
+    - if @total_orders > 0
+      a.btn.btn-outline-dark[href="#{orders_path(type: 'ongoing')}"]
+        | ORDER &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
+    - else
+      a.btn.btn-outline-dark[href="#{orders_path}"]
+        | ORDER  &nbsp&nbsp&nbsp<i class="fa fa-arrow-right"></i>
+
+      

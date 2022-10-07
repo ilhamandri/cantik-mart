@@ -11,15 +11,15 @@
           label for="address" Alamat
           = form.text_field :address, required: true, class: "form-control md-form", id: "address", disabled: "disabled"
       
-      .col-4
+      .col-6
         .form-group
           label for="phone" No. Telepon
           input class="form-control md-form" value="#{number_to_phone(@member.phone, country_code: 62)}"  disabled="disabled"
       
-      .col-4
+      .col-6
         .form-group
           label for="sex" Jenis Kelamin
-          input type="text" class="form-control md-form" value='#{@member.sex}'  disabled="disabled"
+          input type="text" class="form-control md-form" value='#{@member.sex.gsub("_","-").camelize}'  disabled="disabled"
 
       .col-12
         hr.primary-color
@@ -42,12 +42,12 @@
       .col-4
         .form-group
           label for="card-card" Dibuat Di Toko
-          input type="text" class="form-control md-form" value='#{@member.store.name}'  disabled="disabled"
+          input type="text" class="form-control md-form" value='#{@member.store.name + " ("+@member.user.name+")"}'  disabled="disabled"
       
       .col-4
         .form-group
-          label for="card-card" Dibuat Oleh
-          input type="text" class="form-control md-form" value='#{@member.user.name}' disabled="disabled"
+          label for="card-card" Terakhir Update
+          input type="text" class="form-control md-form" value='#{@member.updated_at}' disabled="disabled"
       
       - if buttonAccess "members", "edit"
         .col

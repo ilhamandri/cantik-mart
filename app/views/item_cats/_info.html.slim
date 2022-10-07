@@ -9,26 +9,29 @@
 	          	i.fas.fa-plus 
 	          	|  &nbsp Sub-departemen
 
+- items = Item.where(item_cat: @dept.item_cat)
+- suppliers = SupplierItem.where(item: items).pluck(:supplier_id).uniq
 = form_for :dept, url: '' do |form|
 	.row
 	  	.col-6
 	    	.form-group
 	      		label for="n_item" Jumlah Sub-departemen
 	      		input class="md-form form-control" value="#{@dept.item_cat.count}" disabled="disabled"
+
 	    .col-6
 	    	.form-group
 	      		label for="n_item" Jumlah Barang
-	      		- items = Item.where(item_cat: @dept.item_cat)
 	      		input class="md-form form-control" value="#{items.count}" disabled="disabled"
 	    .col-6
 	    	.form-group
-	      		label for="n_item" Terakhir Update
-	      		- items = Item.where(item_cat: @dept.item_cat)
-	      		input class="md-form form-control" value="#{@dept.updated_at}" disabled="disabled"
-		.col-6
+	      		label for="n_item" Jumlah Supplier
+	      		input class="md-form form-control" value="#{suppliers.count}" disabled="disabled"
+	    .col-6
 	    	.form-group
-	      		label for="code" Diupdate oleh
-	      		input class="md-form form-control" value="#{@dept.edited_by.name if @dept.edited_by.present?}" disabled="disabled"
+	      		label for="n_item" Terakhir Update
+	      		- edited_by = "()"
+	      		- edited_by = "("+@dept.edited_by.name+")" if @dept.edited_by.present?
+	      		input class="md-form form-control" value="#{@dept.updated_at.to_s+" "+edited_by}" disabled="disabled"
 
 
 .row.text-center

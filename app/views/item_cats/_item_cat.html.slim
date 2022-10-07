@@ -1,23 +1,36 @@
+- items = Item.where(item_cat: @item_cat)
+- suppliers = SupplierItem.where(item: items).pluck(:supplier_id).uniq
+
 .card-body 
   = form_for :item_cat, url: "" do |form|
-    .form-group
-      label for="name" Departemen
-      input type="text" class="form-control md-form" value="#{@item_cat.department.name}" disabled="disabled"
-	  .form-group
-	    label for="name" Sub Departemen
-	    = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
-    .form-group
-      label for="name" Jumlah Barang
-      - items_count = Item.where(item_cat: @item_cat).count
-      input type="text" class="form-control md-form" value="#{items_count}" disabled= "disabled"
+    .row
+      .col-6
+        .form-group
+          label for="name" Departemen
+          input type="text" class="form-control md-form" value="#{@item_cat.department.name}" disabled="disabled"
+	  
+      .col-6
+        .form-group
+    	    label for="name" Sub Departemen
+    	    = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
+    
+      .col-6
+        .form-group
+          label for="name" Jumlah Barang
+          input type="text" class="form-control md-form" value="#{items.count}" disabled= "disabled"
 
-    .form-group
-      label for="name" Terakhir Update
-      input type="text" class="form-control md-form" value="#{@item_cat.updated_at}" disabled="disabled"
+      .col-6
+        .form-group
+          label for="name" Jumlah Supplier
+          input type="text" class="form-control md-form" value="#{suppliers.count}" disabled= "disabled"
 
-    .form-group
-      label for="name" Diupdate Oleh
-      input type="text" class="form-control md-form" value="#{@item_cat.edited_by.name if @item_cat.edited_by.present?}" disabled="disabled"
+      .col-6
+        .form-group
+          label for="name" Terakhir Update
+          - edited_by = "()"
+          - edited_by = "("+@item_cat.edited_by.name+")" if @item_cat.edited_by.present?
+          input type="text" class="form-control md-form" value="#{@item_cat.updated_at.to_s+" "+edited_by}" disabled="disabled"
+          
     / .form-group
       label for="name" Termasuk Dalam Perhitungan Poin
       - if @item_cat.use_in_point
