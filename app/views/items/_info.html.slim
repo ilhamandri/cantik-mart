@@ -39,6 +39,7 @@
                 | #{current_user.store.name} : #{@stock.stock}
               - Store.where(store_type: "retail").each do |store|
                 - stock = StoreItem.find_by(store: store, item: @item).stock
+                
                 option
                   | #{store.name} : #{stock}
 

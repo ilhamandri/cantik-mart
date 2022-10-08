@@ -30,7 +30,8 @@
       = render partial: 'list_payment', collection: @order_invs, as: :order_inv
 
 - bg = "bg-warning"
-- paid = @order_invs.sum(:nominal).to_f
+- paid = 1
+- paid = @order_invs.sum(:nominal).to_f if @order_invs.present?
 - total = order.grand_total.to_f
 - progress = ( (paid / total) * 100 ).to_i
 - if progress == 100
