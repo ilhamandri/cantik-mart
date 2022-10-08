@@ -31,7 +31,7 @@
 
     .row
       .col-12.text-center
-        - if Controller.find_by(name: 'suppliers').controller_methods.find_by(name: 'edit').user_methods.pluck(:user_level).include? current_user.level
+        - if buttonAccess "suppliers", "edit"
           a href='#{edit_supplier_path(id: @supplier.id)}'
             button.btn.btn-warning type="button" 
               | Edit

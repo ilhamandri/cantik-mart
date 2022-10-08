@@ -1,8 +1,8 @@
 tr
-  td #{@idx}
-  - @idx +=1
-  td #{r_item.item.code}
-  td #{r_item.item.name}
+  td 
+    b.text-primary #{r_item.item.code}
+    br
+    | #{r_item.item.name}
   - buy = 0
   - margin = r_item.item.margin
   - prev_sell = r_item.item.sell + r_item.item.discount
@@ -35,7 +35,7 @@ tr
 
 
     td  
-      input type="number" class="form-control" value="#{r_item.item.margin}" name="order[order_items][#{r_item_counter}][[margin]]" required="required" id="#{r_item.id.to_s+"Margins"}" onchange="changePrice(#{r_item.id})" step="0.1"
+      input type="number" class="form-control" value="#{r_item.item.margin}" name="order[order_items][#{r_item_counter}][[margin]]" required="required" id="#{r_item.id.to_s+"Margins"}" onchange="changePrice(#{r_item.id})" step="0.1" width="80%"
 
     td 
       input type="text" class="form-control" value="#{prev_sell}" name="order[order_items][#{r_item_counter}][[sell]]" required="required" id="#{r_item.id.to_s+"Sell"}"  min="#{prev_sell}" readonly="true"

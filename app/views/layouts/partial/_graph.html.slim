@@ -301,6 +301,7 @@
 - if ["homes"].include? controller_name
   - if isDeveloper
     javascript:
+      // DEBT RECEIVABLE
       var ctxL = document.getElementById("dashboard_debt_receivable").getContext('2d');
       var myLineChart = new Chart(ctxL, {
         type: 'line',
@@ -335,4 +336,123 @@
           responsive: true
         }
       });
+
+      // TRANSACTION
+      var ctxL = document.getElementById("dashboard_transaction").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.transaction_label,
+          datasets: [
+            {
+              label: "Omzet",
+              data: gon.transaction_omzet,
+              backgroundColor: [
+              'rgba(0, 137, 132, .1)'
+              ],
+              borderColor: [
+              'rgba(0, 10, 130, 1)'
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "HPP",
+              data: gon.transaction_hpp,
+              backgroundColor: [
+              'rgba(255, 206, 86, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "Profit",
+              data: gon.transaction_profit,
+              backgroundColor: [
+              'rgba(75, 192, 192, 0.1)',
+              ],
+              borderColor: [
+              "rgb(75, 192, 192, 1)",
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "Tax",
+              data: gon.transaction_tax,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+      // TAX
+      var ctxL = document.getElementById("dashboard_tax").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.tax_label,
+          datasets: [
+            {
+              label: "Pajak",
+              data: gon.tax_data,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
       
+
+      // INCOME OUTCOME 
+      var ctxL = document.getElementById("dashboard_income_outcome").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.income_outcome_label,
+          datasets: [
+            {
+              label: "Pemasukkan",
+              data: gon.income_data,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "Pengeluaran",
+              data: gon.outcome_data,
+              backgroundColor: [
+              'rgba(255, 206, 86, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });

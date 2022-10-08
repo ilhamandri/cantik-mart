@@ -45,7 +45,7 @@ tr
       button class="btn btn-primary"
         | Item
 
-  - if Controller.find_by(name: 'transfers').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
+  - if buttonAccess "transfers", "destroy"
     - unless transfer.date_approve.present?
       td
         = form_for :transfer, url: transfer_path(id: transfer.id), method: "DELETE" do |form|

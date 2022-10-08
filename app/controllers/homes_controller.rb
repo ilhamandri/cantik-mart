@@ -80,6 +80,7 @@ class HomesController < ApplicationController
 
       store = nil
       store = current_user.store if ["super_admin", "finance", "owner", "developer"].exclude? current_user.level
+      
       debts = Calculate.graph_debt store
       gon.debt_label = debts.keys
       gon.debt_data = debts.values
@@ -87,6 +88,22 @@ class HomesController < ApplicationController
       receivables = Calculate.graph_receivable store
       gon.receivable_label = receivables.keys
       gon.receivable_data = receivables.values
+
+      # trxs = Calculate.graph_transaction store
+      # gon.transaction_label = trxs["label"]
+      # gon.transaction_omzet = trxs["grand_total"]
+      # gon.transaction_hpp = trxs["hpp"]
+      # gon.transaction_tax = trxs["tax"]
+      # gon.transaction_profit = trxs["profit"]
+
+      taxs = Calculate.graph_tax store
+      gon.tax_label = taxs.keys
+      gon.tax_data = taxs.values
+      
+      income_outcomes = Calculate.graph_income_outcome store
+      gon.income_outcome_label = income_outcomes["label"]
+      gon.income_data = income_outcomes["income"]   
+      gon.outcome_data = income_outcomes["outcome"]   
     end
     
   end
