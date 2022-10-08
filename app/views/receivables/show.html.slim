@@ -1,74 +1,22 @@
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Data Piutang
-      .card-body 
-        .row
-          .col-12
-            .form-group
-              label for="name" Deskripsi
-              input type="text" class="form-control md-form" value="#{@receivable.description}"
-        .row
-          - if @receivable.finance_type == "EMPLOYEE"
-            - target = @receivable.to_user
-            - user = User.find_by(id: target.to_i)
-            - target = user.name + " (" + user.store.name + ")"
+.classic-tabs.mx-2
+  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="info" aria-selected="true" data-toggle="tab" href="#info" role="tab" 
+        i.fa.fa-info.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Info
+    
+    li.nav-item
+      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="payment" aria-selected="true" data-toggle="tab" href="#payment" role="tab" 
+        i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
+        br
+        | Pembayaran
 
-            .col
-              .form-group
-                label for="name" Karyawan
-                input type="text" class="form-control md-form" value="#{target}"
+  #myClassicTabContentOrange.tab-content.card
+    #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'show_info'
 
-          .col
-            .form-group
-              label for="name" Dibuat Oleh
-              input type="text" class="form-control md-form" value="#{@receivable.user.name} (#{@receivable.user.store.name})"
-        .row
-          .col-3
-            .form-group
-              label for="name" Nominal
-              input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.nominal, delimiter: ".", separator: ",")}"
-          .col-3
-            .form-group
-              label for="name" Jumlah Cicilan
-              input type="text" class="form-control md-form" value="#{@receivable.n_term} x"
-          .col-3
-            .form-group
-              label for="name" Nominal Percicilan
-              - if @receivable.nominal_term == 0
-                input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.nominal, delimiter: ".", separator: ",")}"
-              - else
-                input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.nominal_term, delimiter: ".", separator: ",")}"
-          .col-3
-            .form-group
-              label for="name" Kurang
-              input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.deficiency, delimiter: ".", separator: ",")}"
-          - if @receivable.deficiency > 0
-            .col-12.text-center
-              a href='#{new_pay_path(id: @receivable.id, type: "receivable")}' class="btn btn-warning"
-                | Bayar
+    #payment.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel"
+        = render partial: 'show_payment'
 
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Riwayat Pembayaran
-      .card-body 
-        table.table
-          tr
-            th  No. Invoice
-            th  Diterima Oleh              
-            th  Tanggal
-            th  Nominal
-          - pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivable.id)
-          - pays.each do |pay|
-            tr
-              td #{pay.invoice}
-              td #{pay.user.name} - #{pay.store.name}
-              td #{pay.created_at}
-              td #{number_with_delimiter(pay.nominal, delimiter: ".", separator: ",")}
-        
-        
+    

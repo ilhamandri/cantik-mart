@@ -15,11 +15,6 @@
       td #{user.name} (#{user.store.name}) 
     td #{finance.date_created}
   	td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
-    td #{finance.n_term} x
-    - if finance.nominal_term == 0
-      td #{number_with_delimiter(finance.nominal, delimiter: ".", separator: ",")}
-    - else
-      td #{number_with_delimiter(finance.nominal_term, delimiter: ".", separator: ",")}
     td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}
     - if finance.deficiency.abs > 0 
       td 

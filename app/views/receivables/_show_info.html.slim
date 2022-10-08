@@ -1,0 +1,65 @@
+.card-body
+  .row
+    .col
+      .alert.alert-primary
+        .alert-heading  
+          | #{@receivable.description}
+      
+    - if buttonAccess "pays", "new"
+      - if @receivable.deficiency > 0
+        .col-2.text-right
+          a.btn.btn-warning href='#{new_pay_path(id: @receivable.id, type: "receivable")}' class="btn btn-warning"
+            | Bayar
+
+  .row
+    - if @receivable.finance_type == "EMPLOYEE"
+      - target = @receivable.to_user
+      - user = User.find_by(id: target.to_i)
+      - target = user.name + " (" + user.store.name + ")"
+
+      .col
+        .form-group
+          label for="name" Karyawan
+          input type="text" class="form-control md-form" value="#{target}" disabled="disabled"
+
+    .col
+      .form-group
+        label for="name" Dibuat Oleh
+        input type="text" class="form-control md-form" value="#{@receivable.user.name} (#{@receivable.user.store.name})" disabled="disabled"
+  
+  .row
+    .col
+      .form-group
+        label for="name" Nominal
+        input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.nominal, delimiter: ".", separator: ",")}" disabled="disabled"
+    
+    - if @receivable.n_term != 1
+      .col-3
+        .form-group
+          label for="name" Jumlah Cicilan
+          input type="text" class="form-control md-form" value="#{@receivable.n_term} x"  disabled="disabled"
+      .col-3
+        .form-group
+          label for="name" Nominal Percicilan
+          - if @receivable.nominal_term == 0
+            input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.nominal, delimiter: ".", separator: ",")}" disabled="disabled"
+          - else
+            input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.nominal_term, delimiter: ".", separator: ",")}" disabled="disabled"
+    .col
+      .form-group
+        label for="name" Kekurangan
+        input type="text" class="form-control md-form" value="#{number_with_delimiter(@receivable.deficiency, delimiter: ".", separator: ",")}" disabled="disabled"
+
+    .col-12
+      hr.primary-color
+      - bg = "bg-warning"
+      - paid = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivable.id).sum(:nominal).to_f
+      - total = @receivable.nominal.to_f
+      - progress = ( (paid / total) * 100 ).to_i
+      - if progress == 100
+        - bg = "bg-success" 
+        - progress = 100
+      .progress
+        .progress-bar class="#{bg}" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
+          | #{progress} %
+

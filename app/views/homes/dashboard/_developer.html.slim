@@ -1,3 +1,13 @@
-.card_body
-	/ = render "homes/dashboard/developer/health"
-	= render "homes/dashboard/developer/graph_debt_receivable"
+.card.card-cascade.narrower
+  	.section
+    	.row
+	      	.col-xl-6.col-md-12
+	        	.card-body.card-body-cascade.pb-0
+	            	= render "homes/dashboard/developer/graph_debt_receivable"
+
+.card.card-cascade.narrower
+  	.section
+    	.row
+      		.col-xl-6.col-md-12
+        		.card-body.card-body-cascade.pb-0
+					= render "homes/dashboard/developer/health"

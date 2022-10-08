@@ -33,9 +33,33 @@
       .col-md-6.col-lg-3
         .form_group
           label for="category" Stok
-          - last_update = @stock.updated_at.to_s
-          - last_update += " (" + @stock.edited_by.name + ")" if @stock.edited_by.present? 
-          input type='text' value="#{@stock.stock.to_f.to_s + ' [' + last_update + ']'}" disabled= true class="form-control md-form"
+          - if current_user.store.store_type == "warehouse"
+            select name="item[item_cat_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
+              option selected="selected"
+                | #{current_user.store.name} : #{@stock.stock}
+              - Store.where(store_type: "retail").each do |store|
+                - stock = StoreItem.find_by(store: store, item: @item).stock
+                option
+                  | #{store.name} : #{stock}
+
+          - else
+            - last_update = @stock.updated_at.to_s
+            - last_update += " (" + @stock.edited_by.name + ")" if @stock.edited_by.present? 
+
+            - bg = "bg-warning"
+            - ideal = @stock.ideal_stock.to_f
+            - total = @stock.stock.to_f
+            - progress = ( (total / ideal) * 100 ).to_i 
+            - if progress >= 100
+              - bg = "bg-success" 
+              - progress = 100
+
+            input type='text' value="#{@stock.stock.to_f.to_s + ' [' + last_update + ']'}" disabled= true class="form-control md-form"
+
+            .progress
+              .progress-bar class="#{bg}" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
+                | #{progress} %
+
       .col-lg-12
         hr
       .col-3

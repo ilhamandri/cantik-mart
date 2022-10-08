@@ -2,31 +2,41 @@
 - order_id = order.id
 - @idx = 1
 - if order.date_receive.present?
-  br
   .row
     .col
-      h5
-        - if @pay > 0
-          .text-danger
+      - if @pay > 0
+        .alert.alert-danger
+          .alert-heading
             | KEKURANGAN : #{number_to_currency(@pay, unit: "Rp. ")}
-        - else
-          .text-success
-            | LUNAS
-    - if @order_items.first.order.date_receive.present? && @order_items.first.order.date_paid_off.nil? && @pay != 0
-      .col.text-right
+      - else
+        .alert.alert-success
+          .alert-heading
+            | LUNAS (#{order.date_paid_off})
+    - if order.date_receive.present? && order.date_paid_off.nil? && @pay != 0
+      .col-2.text-right
         a href="#{order_pay_path(id: order_id)}"
           button.btn.btn-success type="button" 
             | Bayar
-br
-  .card-body.table-responsive.text-nowrap
-    table class="table"
-      thead
-        th Invoice
-        th Dibayar
-        th Tanggal
-        th Nominal
-        th Catatan
-      tbody
-        = render partial: 'list_payment', collection: @order_invs, as: :order_inv
+            
+.card-body.table-responsive.text-nowrap
+  table class="table"
+    thead
+      th Invoice
+      th Dibayar
+      th Tanggal
+      th Nominal
+      th Catatan
+    tbody
+      = render partial: 'list_payment', collection: @order_invs, as: :order_inv
 
+- bg = "bg-warning"
+- paid = @order_invs.sum(:nominal).to_f
+- total = order.grand_total.to_f
+- progress = ( (paid / total) * 100 ).to_i
+- if progress == 100
+  - bg = "bg-success" 
+  - progress = 100
+.progress
+  .progress-bar class="#{bg}" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
+    | #{progress} %
 

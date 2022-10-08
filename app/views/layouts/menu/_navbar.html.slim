@@ -29,11 +29,11 @@ li
           a.waves-effect href="#{suppliers_path}"  Daftar Suplier
 
 
-        - buttonAccess "orders", "index"
+        - if buttonAccess "orders", "index"
           li
             a.collapsible-header.waves-effect.arrow-r  href="#{orders_path}" Order Barang
 
-        - buttonAccess "returs", "index"
+        - if buttonAccess "returs", "index"
           li
             a.waves-effect href="#{returs_path}" Retur Suplier
 

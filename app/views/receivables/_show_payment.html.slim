@@ -1,0 +1,14 @@
+.card-body 
+  table.table
+    tr
+      th  No. Invoice
+      th  Diterima Oleh              
+      th  Tanggal
+      th  Nominal
+    - pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivable.id)
+    - pays.each do |pay|
+      tr
+        td #{pay.invoice}
+        td #{pay.user.name} - #{pay.store.name}
+        td #{pay.created_at}
+        td #{number_with_delimiter(pay.nominal, delimiter: ".", separator: ",")}
