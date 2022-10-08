@@ -20,7 +20,7 @@ tr
     - else
       | #{retur.status.to_date}
 
-  - if Controller.find_by(name: 'returs').controller_methods.find_by(name: 'destroy').user_methods.pluck(:user_level).include? current_user.level
+  - if buttonAccess "retur", "destroy"
     - if retur.date_picked.nil?
       td
         = form_for :retur, url: retur_path(id: retur.id), method: "DELETE" do |form|

@@ -75,3 +75,6 @@ kill -9 PID
 3. alias backup='~/backup.sh'
 4. source ~/.bashrc
 5. backup_db
+
+--------------------- Git Conflict -----------------------------
+
