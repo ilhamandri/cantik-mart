@@ -1,3 +1,5 @@
+- last_update = @item.updated_at.to_s
+- last_update += " (" + @item.edited_by.name + ")" if @item.edited_by.present?
 .form-group.table-responsive.text-nowrap
   .row
     .col
@@ -39,6 +41,7 @@
         td #{number_with_delimiter(@item.ppn.ceil(2), delimiter: ".", separator: ",")}
         td #{number_with_delimiter(@item.sell, delimiter: ".", separator: ",")}
         td #{number_with_delimiter((@item.sell - @item.buy - @item.ppn).round, delimiter: ".", separator: ",")}
+        td #{last_update}
         td.text-right
           - if current_user.store.store_type == "retail"
             a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
@@ -74,7 +77,7 @@
                 a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
                   |   + Cetak
               - else
-                - if buttonAccess "groce_items", "new"
+                - if buttonAccess "grocer_items", "new"
                   | &nbsp&nbsp&nbsp
                   a class="btn btn-warning" href="#{edit_grocer_item_path(id: item.id)}"
                     |   Edit

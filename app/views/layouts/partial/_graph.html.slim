@@ -301,6 +301,38 @@
 - if ["homes"].include? controller_name
   - if isDeveloper
     javascript:
-      
-
+      var ctxL = document.getElementById("dashboard_debt_receivable").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.debt_label,
+          datasets: [
+            {
+              label: "Hutang",
+              data: gon.debt_data,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "Piutang",
+              data: gon.receivable_data,
+              backgroundColor: [
+              'rgba(255, 206, 86, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
       

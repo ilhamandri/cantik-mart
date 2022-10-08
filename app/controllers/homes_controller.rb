@@ -6,7 +6,7 @@ class HomesController < ApplicationController
     UpdateData.updateItemDiscountExpired
     ReCheck.complain
 
-    if !["super_admin", "owner", "candy_dream"].include? current_user.level
+    if ["super_admin", "owner", "candy_dream"].exclude? current_user.level
       @total_limit_items = StoreItem.where(store_id: current_user.store.id).where('stock < min_stock').count
       @total_orders = Order.where(store_id: current_user.store.id).where(date_receive: nil).count
       @total_payments = Order.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null').count
@@ -77,6 +77,16 @@ class HomesController < ApplicationController
       @total_asset_turnover = (gross/activa) * 100.0
       @average_collection_turnover = ((@receivable/gross) / 365) * 100.0
       @working_capital_turnover = (gross/(activa-@debt)) * 100.0
+
+      store = nil
+      store = current_user.store if ["super_admin", "finance", "owner", "developer"].exclude? current_user.level
+      debts = Calculate.graph_debt store
+      gon.debt_label = debts.keys
+      gon.debt_data = debts.values
+
+      receivables = Calculate.graph_receivable store
+      gon.receivable_label = receivables.keys
+      gon.receivable_data = receivables.values
     end
     
   end
@@ -99,4 +109,5 @@ class HomesController < ApplicationController
     end
     redirect_success populars_path, "Refresh rekap item selesai."
   end
+
 end

@@ -38,27 +38,21 @@
           input type='text' value="#{@stock.stock.to_f.to_s + ' [' + last_update + ']'}" disabled= true class="form-control md-form"
       .col-lg-12
         hr
-      .col-md-6.col-lg-3
+      .col-3
         .form-group
           label for="stock" Limit AO
           = form.number_field :limit, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.limit}", disabled: "disabled"
-      .col-md-6.col-lg-3
+      .col-3
         .form-group
           label for="stock" Stok Ideal
           = form.number_field :ideal_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.ideal_stock}", disabled: "disabled"
-      .col-md-6.col-lg-3
+      .col-6
         .form-group
           label for="item" Jenis Barang
           - if !@item.local_item
             input class="md-form form-control" value="Barang dari Pusat" disabled="disabled"
           - else
             input class="md-form form-control" value="Barang Lokal" disabled="disabled"
-      .col-md-6.col-lg-3
-        .form-group
-          - last_update = @item.updated_at.to_s
-          - last_update += " (" + @item.edited_by.name + ")" if @item.edited_by.present?
-          label for="stock" Terakhir Update
-          input class="md-form form-control" value="#{last_update}" disabled="disabled"
       .col-lg-12
         hr
       .col-md-6.col-lg-3
