@@ -41,7 +41,7 @@
             th  Tanggal
             th  Nominal
             th  Catatan
-          - pays = CashFlow.where(finance_type: "Outcome", payment: "debt", ref_id: @debt.id)
+          - pays = CashFlow.where(description: @debt.description)
           - pays.each do |pay|
             tr
               td #{pay.invoice}
@@ -49,5 +49,11 @@
               td #{pay.created_at}
               td #{number_with_delimiter(pay.nominal, delimiter: ".", separator: ",")}
               td #{pay.description}
+
+        - if @debt.description.include? "ORD-" 
+          - order = Order.find_by(invoice: @debt.description)
+          .col-12.text-center
+            a.btn.btn-primary href="#{order_path(order)}"
+              | #{@debt.description}
         
         

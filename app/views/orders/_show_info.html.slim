@@ -1,6 +1,6 @@
 - order = @order_items.first.order
 - order_id = order.id
-- debts = Debt.find_by(finance_type: "ORDER", ref_id: order.id)
+- debts = Debt.find_by(finance_type: "ORDER", description: order.invoice)
 - due_date = nil
 - due_date = debts.due_date.to_date if debts.present?
 - @idx = 1

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_01_103406) do
+ActiveRecord::Schema.define(version: 2022_10_11_062627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -251,6 +251,8 @@ ActiveRecord::Schema.define(version: 2022_10_01_103406) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "description", default: "-", null: false
+    t.bigint "store_id"
+    t.index ["store_id"], name: "index_invoice_transactions_on_store_id"
     t.index ["user_id"], name: "index_invoice_transactions_on_user_id"
   end
 
@@ -686,6 +688,23 @@ ActiveRecord::Schema.define(version: 2022_10_01_103406) do
     t.index ["store_id"], name: "index_store_balances_on_store_id"
   end
 
+  create_table "store_data", force: :cascade do |t|
+    t.bigint "store_id", null: false
+    t.float "debt", default: 0.0, null: false
+    t.float "receivable", default: 0.0, null: false
+    t.float "tax", default: 0.0, null: false
+    t.float "transaction_total", default: 0.0, null: false
+    t.float "transaction_hpp", default: 0.0, null: false
+    t.float "transaction_profit", default: 0.0, null: false
+    t.float "transaction_tax", default: 0.0, null: false
+    t.float "income", default: 0.0, null: false
+    t.float "outcome", default: 0.0, null: false
+    t.datetime "date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["store_id"], name: "index_store_data_on_store_id"
+  end
+
   create_table "store_items", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "item_id", null: false
@@ -933,6 +952,7 @@ ActiveRecord::Schema.define(version: 2022_10_01_103406) do
   add_foreign_key "grocer_items", "items"
   add_foreign_key "incomes", "stores"
   add_foreign_key "incomes", "users"
+  add_foreign_key "invoice_transactions", "stores"
   add_foreign_key "invoice_transactions", "users"
   add_foreign_key "item_cats", "departments"
   add_foreign_key "item_prices", "items"
@@ -996,6 +1016,7 @@ ActiveRecord::Schema.define(version: 2022_10_01_103406) do
   add_foreign_key "stock_values", "stores"
   add_foreign_key "stock_values", "users"
   add_foreign_key "store_balances", "stores"
+  add_foreign_key "store_data", "stores"
   add_foreign_key "store_items", "items"
   add_foreign_key "store_items", "stores"
   add_foreign_key "supplier_items", "items"

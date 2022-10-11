@@ -3,8 +3,17 @@ class HomesController < ApplicationController
   require 'usagewatch'
 
   def index
-    UpdateData.updateItemDiscountExpired
+    # UpdateData.updateItemDiscountExpired
     ReCheck.complain
+    if current_user.level == "developer"
+      # UpdateData.updateCashFlowInvoice
+      # UpdateData.updateInvoiceTransaction
+
+      # UpdateData.updateDebtDefZero
+      # ReCheck.checkDebtPayment
+      # ReCheck.checkInvoiceTransaction
+      # Calculate.calculateData
+    end
 
     if ["super_admin", "owner", "candy_dream"].exclude? current_user.level
       @total_limit_items = StoreItem.where(store_id: current_user.store.id).where('stock < min_stock').count
@@ -78,29 +87,27 @@ class HomesController < ApplicationController
       @average_collection_turnover = ((@receivable/gross) / 365) * 100.0
       @working_capital_turnover = (gross/(activa-@debt)) * 100.0
 
-      store = nil
-      store = current_user.store if ["super_admin", "finance", "owner", "developer"].exclude? current_user.level
       
-      debts = Calculate.graph_debt store
+      debts = Serve.graph_debt dataFilter
       gon.debt_label = debts.keys
       gon.debt_data = debts.values
 
-      receivables = Calculate.graph_receivable store
+      receivables = Serve.graph_receivable dataFilter
       gon.receivable_label = receivables.keys
       gon.receivable_data = receivables.values
 
-      # trxs = Calculate.graph_transaction store
-      # gon.transaction_label = trxs["label"]
-      # gon.transaction_omzet = trxs["grand_total"]
-      # gon.transaction_hpp = trxs["hpp"]
-      # gon.transaction_tax = trxs["tax"]
-      # gon.transaction_profit = trxs["profit"]
+      trxs = Serve.graph_transaction dataFilter
+      gon.transaction_label = trxs["label"]
+      gon.transaction_omzet = trxs["grand_total"]
+      gon.transaction_hpp = trxs["hpp"]
+      gon.transaction_tax = trxs["tax"]
+      gon.transaction_profit = trxs["profit"]
 
-      taxs = Calculate.graph_tax store
+      taxs = Serve.graph_tax dataFilter
       gon.tax_label = taxs.keys
       gon.tax_data = taxs.values
       
-      income_outcomes = Calculate.graph_income_outcome store
+      income_outcomes = Serve.graph_income_outcome dataFilter
       gon.income_outcome_label = income_outcomes["label"]
       gon.income_data = income_outcomes["income"]   
       gon.outcome_data = income_outcomes["outcome"]   

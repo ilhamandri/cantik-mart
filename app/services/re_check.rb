@@ -36,6 +36,74 @@ class ReCheck
 		end
 	end
 
+	# PAYMENT
+	def self.checkDebtPayment
+		debts_id = []
+		Debt.where(id: [7193]).each do |debt|
+			nominal_debt = debt.nominal
+			payments = CashFlow.where(description: debt.description)
+			total_payment = payments.sum(:nominal)
+			payment_diff = nominal_debt - total_payment
+			debt.deficiency = payment_diff
+			debt.save!
+			next if payment_diff <= 0 || payments.empty?
+			debts_id << debt.id
+			payments_id = payments.pluck(:id)
+			if payments_id.size == 1
+				payment = CashFlow.find payments_id.first
+				payments.first.update(nominal: payments.first.nominal + payment_diff)
+			else
+				payments_id.shift(2)
+				CashFlow.where(id: payments_id).destroy_all if payments_id.present?
+				payments = CashFlow.where(description: debt.description)
+				payment_diff = nominal_debt - payments.sum(:nominal)
+				payments.last.update(nominal: payments.last.nominal + payment_diff)
+			end
+			debt.deficiency = 0
+			debt.save!
+		end
+		CashFlow.where(nominal: 0).destroy_all
+	end
+
+	# CHECK INVOICE TRX
+	def self.checkInvoiceTransaction
+		orders_id = []
+		Order.all.each do |order|
+			nominal_order = order.grand_total
+			payments = InvoiceTransaction.where(invoice: order.invoice)
+			total_payment = payments.sum(:nominal)
+			payment_diff = nominal_order - total_payment
+			next if payment_diff <= 0 || payments.empty?
+
+			orders_id << order.id
+
+			payments_id = payments.pluck(:id)
+			if payments_id.size == 1
+				payment = InvoiceTransaction.find payments_id.first
+				payments.first.update(nominal: payments.first.nominal + payment_diff)
+			else
+				payments_id.shift(2)
+				InvoiceTransaction.where(id: payments_id).destroy_all if payments_id.present?
+				payments = InvoiceTransaction.where(invoice: order.invoice)
+				payment_diff = nominal_order - payments.sum(:nominal)
+				next if payment_diff == 0
+				payments.last.update(nominal: payments.last.nominal + payment_diff)
+			end
+			if nominal_order != 0
+				debt = Debt.find_by(finance_type: "ORDER", description: order.invoice)
+				if debt.present?
+					debt.deficiency = 0
+					debt.save!
+				else
+					Debt.create user: order.user, store: order.store, nominal: order.grand_total, deficiency: 0, date_created: order.date_created, ref_id: order.id,description: order.invoice, finance_type: Debt::ORDER,due_date: order.created_at+1.day, supplier_id: order.supplier.id
+				end
+
+			end
+			order.update(date_paid_off: payments.last.date_created)
+		end
+		InvoiceTransaction.where(nominal: 0).destroy_all
+	end
+
 	# KOIN
 
 end

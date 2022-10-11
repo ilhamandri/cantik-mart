@@ -1,129 +1,3 @@
-- if ["transactions"].include? controller_name
-  - if ["super_admin", "finance", "owner"].include? current_user.level
-    javascript:
-      var ctxL = document.getElementById("transactions").getContext('2d');
-      var myLineChart = new Chart(ctxL, {
-        type: 'line',
-        data: {
-          labels: gon.days,
-          datasets: [
-            {
-              label: "Profit",
-              data: gon.profits,
-              backgroundColor: [
-              'rgba(75, 192, 192, 0.2)',
-              ],
-              borderColor: [
-              "rgb(75, 192, 192)",
-              ],
-              borderWidth: 2
-            },
-            {
-              label: "Omzet",
-              data: gon.grand_totals,
-              backgroundColor: [
-              'rgba(255, 99, 132, 0.1)',
-              ],
-              borderColor: [
-              'rgba(255, 99, 132, 1)',
-              ],
-              borderWidth: 2
-            },
-            {
-              label: "HPP",
-              data: gon.hpp_totals,
-              backgroundColor: [
-              'rgba(54, 162, 235, 0.1)',
-              ],
-              borderColor: [
-              'rgba(54, 162, 235, 1)',
-              ],
-              borderWidth: 2
-            }
-
-          ]
-        },
-        options: {
-          responsive: true
-        }
-      });
-
-  - if ["candy_dream", "super_visi"].include? current_user.level
-    javascript:
-      var ctxL = document.getElementById("transactions").getContext('2d');
-      var myLineChart = new Chart(ctxL, {
-        type: 'line',
-        data: {
-          labels: gon.days,
-          datasets: [
-            {
-              label: "Omzet",
-              data: gon.grand_totals,
-              backgroundColor: [
-              'rgba(255, 99, 132, 0.1)',
-              ],
-              borderColor: [
-              'rgba(255, 99, 132, 1)',
-              ],
-              borderWidth: 2
-            }
-          ]
-        },
-        options: {
-          responsive: true
-        }
-      });
-
-// HOME DASHBOARD TRX => UNUSED
-- if ["homess"].include? controller_name
-  javascript:
-      var ctxL = document.getElementById("transactions_days").getContext('2d');
-      var myLineChart = new Chart(ctxL, {
-        type: 'line',
-        data: {
-          labels: gon.month_days,
-          datasets: [
-            {
-              label: "Profit",
-              data: gon.profits_days,
-              backgroundColor: [
-              'rgba(75, 192, 192, 0.2)',
-              ],
-              borderColor: [
-              "rgb(75, 192, 192)",
-              ],
-              borderWidth: 2
-            },
-            {
-              label: "Omzet",
-              data: gon.grand_totals_days,
-              backgroundColor: [
-              'rgba(255, 99, 132, 0.1)',
-              ],
-              borderColor: [
-              'rgba(255, 99, 132, 1)',
-              ],
-              borderWidth: 2
-            },
-            {
-              label: "HPP",
-              data: gon.hpp_totals_days,
-              backgroundColor: [
-              'rgba(54, 162, 235, 0.1)',
-              ],
-              borderColor: [
-              'rgba(54, 162, 235, 1)',
-              ],
-              borderWidth: 2
-            }
-
-          ]
-        },
-        options: {
-          responsive: true
-        }
-      });
-
 - if ["items"].include? controller_name
   javascript:
     var ctxL = document.getElementById("bs").getContext('2d');
@@ -298,11 +172,11 @@
       }
     });
 
-- if ["homes"].include? controller_name
-  - if isDeveloper
+- if isDeveloper
+  - if ["homes", "debts", "receivables"].include? controller_name
     javascript:
       // DEBT RECEIVABLE
-      var ctxL = document.getElementById("dashboard_debt_receivable").getContext('2d');
+      var ctxL = document.getElementById("debt_receivable").getContext('2d');
       var myLineChart = new Chart(ctxL, {
         type: 'line',
         data: {
@@ -337,8 +211,78 @@
         }
       });
 
+  
+  - if ["homes", "taxs"].include? controller_name
+    javascript:
+      // TAX
+      var ctxL = document.getElementById("tax").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.tax_label,
+          datasets: [
+            {
+              label: "Pajak",
+              data: gon.tax_data,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+  - if ["homes", "operationals"].include? controller_name
+    javascript:
+      // INCOME OUTCOME 
+      var ctxL = document.getElementById("income_outcome").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.income_outcome_label,
+          datasets: [
+            {
+              label: "Pemasukkan",
+              data: gon.income_data,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "Pengeluaran",
+              data: gon.outcome_data,
+              backgroundColor: [
+              'rgba(255, 206, 86, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+
+- if ["homes", "transactions"].include? controller_name
+  - if ["super_admin", "owner", "developer", "finance"].include? current_user.level
+    javascript:
       // TRANSACTION
-      var ctxL = document.getElementById("dashboard_transaction").getContext('2d');
+      var ctxL = document.getElementById("transaction").getContext('2d');
       var myLineChart = new Chart(ctxL, {
         type: 'line',
         data: {
@@ -394,22 +338,23 @@
           responsive: true
         }
       });
-
-      // TAX
-      var ctxL = document.getElementById("dashboard_tax").getContext('2d');
+  - if ["candy_dream", "super_visi"].include? current_user.level
+    javascript:
+      // TRANSACTION
+      var ctxL = document.getElementById("transaction").getContext('2d');
       var myLineChart = new Chart(ctxL, {
         type: 'line',
         data: {
-          labels: gon.tax_label,
+          labels: gon.transaction_label,
           datasets: [
             {
-              label: "Pajak",
-              data: gon.tax_data,
+              label: "Omzet",
+              data: gon.transaction_omzet,
               backgroundColor: [
-              'rgba(255, 99, 132, 0.1)',
+              'rgba(0, 137, 132, .1)'
               ],
               borderColor: [
-              'rgba(255, 99, 132, 1)',
+              'rgba(0, 10, 130, 1)'
               ],
               borderWidth: 2
             }
@@ -419,40 +364,4 @@
           responsive: true
         }
       });
-      
 
-      // INCOME OUTCOME 
-      var ctxL = document.getElementById("dashboard_income_outcome").getContext('2d');
-      var myLineChart = new Chart(ctxL, {
-        type: 'line',
-        data: {
-          labels: gon.income_outcome_label,
-          datasets: [
-            {
-              label: "Pemasukkan",
-              data: gon.income_data,
-              backgroundColor: [
-              'rgba(255, 99, 132, 0.1)',
-              ],
-              borderColor: [
-              'rgba(255, 99, 132, 1)',
-              ],
-              borderWidth: 2
-            },
-            {
-              label: "Pengeluaran",
-              data: gon.outcome_data,
-              backgroundColor: [
-              'rgba(255, 206, 86, 0.1)',
-              ],
-              borderColor: [
-              'rgba(255, 206, 86, 1)',
-              ],
-              borderWidth: 2
-            }
-          ]
-        },
-        options: {
-          responsive: true
-        }
-      });

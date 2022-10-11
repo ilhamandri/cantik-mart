@@ -5,7 +5,6 @@ class FixCostsController < ApplicationController
 
   def index
     filter = filter_search params
-    filter = filter.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
     @search = filter[0]
     @finances = filter[1]
     @params = params
@@ -45,13 +44,18 @@ class FixCostsController < ApplicationController
 
       store_name = "SEMUA TOKO"
       if params["store_id"].present?
-        store = Store.find_by(id: params["store_id"])
-        if store.present?
-          filters = filters.where(store: store)
-          search_text += "di Toko '"+store.name+"' "
-          store_name = store.name
+        if dataFilter.nil?
+          store = Store.find_by(id: params["store_id"])
+          if store.present?
+            filters = filters.where(store: store)
+            search_text += "di Toko '"+store.name+"' "
+            store_name = store.name
+          else
+            search_text += "di Semua Toko "
+          end
         else
-          search_text += "di Semua Toko "
+          filter = filter.where(store: current_user.store)
+          search_text += "di Toko '"+store.name+"' "
         end
       end
 

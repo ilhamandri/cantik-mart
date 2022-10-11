@@ -5,6 +5,11 @@ class ReceivablesController < ApplicationController
 
   def index
   	filter = filter_search params
+
+    debts = Serve.graph_receivable dataFilter
+    gon.receivable_label = debts.keys
+    gon.receivable_data = debts.values
+
     @search = filter[0]
     @finances = filter[1]
     @params = params.to_s

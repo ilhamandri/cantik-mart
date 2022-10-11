@@ -54,12 +54,18 @@
             - if progress >= 100
               - bg = "bg-success" 
               - progress = 100
+            - elsif progress < 0
+              - bg = "bg-danger"
+              - progress = 100
 
             input type='text' value="#{@stock.stock.to_f.to_s + ' [' + last_update + ']'}" disabled= true class="form-control md-form"
 
             .progress
-              .progress-bar class="#{bg}" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
-                | #{progress} %
+              .progress-bar class="#{bg}" role="progressbar" aria-valuenow="#{progress}" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
+                - if bg == "bg-danger"
+                  | SILAHKAN RESTOCK
+                - else
+                  | #{progress} %
 
       .col-lg-12
         hr

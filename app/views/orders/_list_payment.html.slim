@@ -4,4 +4,5 @@ tr
   	td #{order_inv.date_created.to_date} 
   	td #{number_with_delimiter(order_inv.nominal, delimiter: ".")}
   	td #{order_inv.description}
-
+  	- if isDeveloper
+  		td #{order_inv.id}

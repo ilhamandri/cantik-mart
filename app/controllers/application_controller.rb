@@ -4,6 +4,13 @@ class ApplicationController < ActionController::Base
   include Clearance::Controller
   include PublicActivity::StoreController 
   before_action :weather
+
+  def dataFilter
+    store = nil
+    store = current_user.store if ["super_admin", "finance", "owner", "developer"].exclude? current_user.level
+        
+    return store
+  end
   
   # def authorize *authorized_level
   #   return not_found_path unless authorized_level.include? current_user.level

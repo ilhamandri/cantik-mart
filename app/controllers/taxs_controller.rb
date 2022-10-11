@@ -5,6 +5,11 @@ class TaxsController < ApplicationController
 
   def index
   	filter = filter_search params
+
+    taxs = Serve.graph_tax dataFilter
+    gon.tax_label = taxs.keys
+    gon.tax_data = taxs.values
+
     @search = filter[0]
     @finances = filter[1]
     @params = params.to_s

@@ -420,6 +420,7 @@ class OrdersController < ApplicationController
       "Data Order Tidak Valid (Pembayaran > Jumlah / Pembayaran < 100 )" if (totals-paid+nominal) > totals || nominal < 0 || ( ((totals - nominal) < 0) && ((totals - nominal) > 0))
     return redirect_back_data_error orders_path, "Tanggal pembayaran harus diisi." if params[:order_pay][:date_paid].nil?
     order_inv = InvoiceTransaction.new 
+    order_inv.store = current_user.store
     order_inv.invoice = order.invoice
     order_inv.transaction_type = 0
     order_inv.transaction_invoice = "PAID-" + Time.now.to_i.to_s
@@ -438,7 +439,7 @@ class OrdersController < ApplicationController
       return redirect_back_data_error orders_path, "Data Order Tidak Valid" unless dec_receivable
     else
       CashFlow.create user: current_user, store: current_user.store, description: order.invoice, nominal: order_inv.nominal, 
-                    date_created: params[:order_pay][:date_paid], finance_type: CashFlow::OUTCOME, ref_id: order.id, payment: "order"
+                    date_created: params[:order_pay][:date_paid], finance_type: CashFlow::OUTCOME, ref_id: order.id, payment: "order", invoice: order_inv.transaction_invoice
       store = current_user.store
       store.cash = store.cash - nominal
       store.save!

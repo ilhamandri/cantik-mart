@@ -48,7 +48,7 @@ class PaysController < ApplicationController
   	if f_type == "debt"
   		invoice = " OUT-"+inv_number+"-1"
 	    cash_flow = CashFlow.create user: user, store: store, nominal: pay_nominal, date_created: date_created, description: desc+" (Pembayaran Hutang - "+@data.description+")", 
-	                finance_type: CashFlow::OUTCOME, invoice: invoice, payment: "debt", ref_id: @data.id
+	                finance_type: CashFlow::OUTCOME, invoice: invoice, payment: "debt", ref_id: @data.id, invoice: "PAID-"+Time.now.to_i.to_s
 	    store.cash = store.cash - pay_nominal
 	    store.save!
 	    cash_flow.create_activity :create, owner: current_user   

@@ -32,12 +32,17 @@ class TransactionsController < ApplicationController
             end_day = (start_day + 7.days).end_of_day
           end 
         end
-        if ["super_visi", "super_admin", "super_visi", "candy_dream", "developer"].include? current_user.level
-          transactions = transactions_profit_graph start_day, end_day
-          gon.grand_totals = transactions[0]
-          gon.hpp_totals = transactions[1]
-          gon.profits = transactions[2]
-          gon.days = transactions[3]
+        if ["finance", "super_admin", "owner","developer"].include? current_user.level
+          trxs = Serve.graph_transaction dataFilter
+          gon.transaction_label = trxs["label"]
+          gon.transaction_omzet = trxs["grand_total"]
+          gon.transaction_hpp = trxs["hpp"]
+          gon.transaction_tax = trxs["tax"]
+          gon.transaction_profit = trxs["profit"]
+        elsif ["candy_dream", "super_visi"].include? current_user.level
+          trxs = Serve.transactions_graph_manual DateTime.now.beginning_of_month-1.year, DateTime.now, "monthly", current_user
+          gon.transaction_label = trxs["label"]
+          gon.transaction_omzet = trxs["grand_total"]
         end
       end
       format.pdf do
@@ -402,40 +407,6 @@ class TransactionsController < ApplicationController
   end
 
   private
-    def transactions_profit_graph start_day, end_day
-      trx = nil
-      if current_user.level == "candy_dream"
-        trx = Transaction.where(has_coin: true) 
-      else
-        trx = Transaction.where(has_coin: false) 
-      end
-      transaction_datas = trx.where("created_at >= ? AND created_at <= ?", start_day, end_day).group_by{ |m| m.created_at.beginning_of_day}
-      
-      graphs = {}
-
-      transaction_datas.each do |trxs|
-        grand_total = 0
-        hpp_total = 0
-        day_idx = trxs[0].day.to_i - 1
-        trxs[1].each do |trx|
-          grand_total += trx.grand_total
-          hpp_total += trx.hpp_total
-        end
-        profit = grand_total - hpp_total
-        graphs[trxs[0].to_date] = [grand_total, hpp_total, profit]
-      end
-      graphs = graphs.sort.to_h
-      vals = graphs.values
-      grand_totals = vals.collect {|ind| ind[0]}
-      hpp_totals = vals.collect {|ind| ind[1]}
-      profits = vals.collect {|ind| ind[2]}
-      days = graphs.keys
-      days.each_with_index do |day, idx|
-        days[idx] = day.to_date.to_s
-      end
-
-      return grand_totals, hpp_totals, profits, days
-    end
 
     def filter_search params, r_type
       results = []

@@ -28,7 +28,6 @@ class CashFlow < ApplicationRecord
 
   belongs_to :store
   belongs_to :user
-  default_scope { order(created_at: :desc) }
 
   ASSET=1
   DEBT=2

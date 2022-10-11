@@ -1,4 +1,36 @@
 class UpdateData
+	
+	# UpdateData.updateDebtDefZero
+	def self.updateDebtDefZero
+		orders = Order.where(date_paid_off: nil).where("created_at < '01-01-2022'")
+		orders.each do |order|
+			db = Debt.where(description: order.invoice).update(deficiency: 0)
+			cf = CashFlow.create user: order.user, store: order.store, description: order.invoice, nominal: order.grand_total, date_created: order.date_paid_off, finance_type: CashFlow::OUTCOME, ref_id: order.id, payment: "order"
+			it = InvoiceTransaction.create invoice: order.invoice, transaction_type: 0, transaction_invoice: "PAID-" + Time.now.to_i.to_s, date_created: (order.date_receive + 2.days), nominal: order.grand_total.to_f, description: "CASH-BYPASS",user: order.user
+		end
+	end
+
+	# UpdateData.updateInvoiceTransaction
+	def self.updateInvoiceTransaction
+		InvoiceTransaction.all.each do |invoice_transaction|
+			order = Order.find_by(invoice: invoice_transaction.invoice)
+			if order.nil?
+				invoice_transaction.destroy
+				next
+			end
+			invoice_transaction.store = order.store
+			invoice_transaction.save!
+		end
+	end
+	
+	# UpdateData.updateCashFlowInvoice
+	def self.updateCashFlowInvoice
+		cash_flows = CashFlow.where(finance_type: "Outcome", payment: ["order"])
+		cash_flows.each do |cash_flow|
+			cash_flow.invoice = "PAID-"+cash_flow.date_created.to_i.to_s
+			cash_flow.save!
+		end
+	end
 
 	# UpdateData.updateDuplicateItem
 	def self.updateDuplicateItem
