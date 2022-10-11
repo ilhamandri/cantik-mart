@@ -4,11 +4,11 @@
     var myLineChart = new Chart(ctxL, {
       type: 'line',
       data: {
-        labels: gon.month,
+        labels: gon.label,
         datasets: [
           {
             label: "Pembelian",
-            data: gon.buy,
+            data: gon.order,
             backgroundColor: [
             'rgba(255, 206, 86, 0.1)',
             ],
@@ -19,6 +19,42 @@
           },
           {
             label: "Penjualan",
+            data: gon.transaction,
+            backgroundColor: [
+            'rgba(54, 162, 235, 0.1)',
+            ],
+            borderColor: [
+            'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 2
+          }
+
+        ]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+    var ctxL = document.getElementById("price").getContext('2d');
+    var myLineChart = new Chart(ctxL, {
+      type: 'line',
+      data: {
+        labels: gon.price_label,
+        datasets: [
+          {
+            label: "Harga Beli",
+            data: gon.buy,
+            backgroundColor: [
+            'rgba(255, 99, 132, 0.1)',
+            ],
+            borderColor: [
+            'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 2
+          },
+          {
+            label: "Harga Jual",
             data: gon.sell,
             backgroundColor: [
             'rgba(54, 162, 235, 0.1)',
@@ -36,15 +72,15 @@
       }
     });
 
-    var ctxL = document.getElementById("loss_canvas").getContext('2d');
+    var ctxL = document.getElementById("loss_item").getContext('2d');
     var myLineChart = new Chart(ctxL, {
       type: 'line',
       data: {
-        labels: gon.month,
+        labels: gon.loss_label,
         datasets: [
           {
-            label: "Loss",
-            data: gon.loss_vals,
+            label: "JUMLAH",
+            data: gon.loss_item,
             backgroundColor: [
             'rgba(255, 206, 86, 0.1)',
             ],
@@ -53,43 +89,6 @@
             ],
             borderWidth: 2
           }
-
-        ]
-      },
-      options: {
-        responsive: true
-      }
-    });
-
-    var ctxL = document.getElementById("price").getContext('2d');
-    var myLineChart = new Chart(ctxL, {
-      type: 'line',
-      data: {
-        labels: gon.month,
-        datasets: [
-          {
-            label: "Harga Beli",
-            data: gon.buy_price,
-            backgroundColor: [
-            'rgba(255, 99, 132, 0.1)',
-            ],
-            borderColor: [
-            'rgba(255, 99, 132, 1)',
-            ],
-            borderWidth: 2
-          },
-          {
-            label: "Harga Jual",
-            data: gon.sell_price,
-            backgroundColor: [
-            'rgba(54, 162, 235, 0.1)',
-            ],
-            borderColor: [
-            'rgba(54, 162, 235, 1)',
-            ],
-            borderWidth: 2
-          }
-
         ]
       },
       options: {
@@ -277,6 +276,195 @@
         }
       });
 
+  - if ["losses"].include? controller_name
+    javascript:
+      // LOSS
+      var ctxL = document.getElementById("loss").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.loss_label,
+          datasets: [
+            {
+              label: "JUMLAH INVOICE HANGUS",
+              data: gon.loss,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "JUMLAH BARANG YANG HANGUS",
+              data: gon.loss_item,
+              backgroundColor: [
+              'rgba(255, 206, 86, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+  - if ["returs"].include? controller_name
+    javascript:
+      // RETUR
+      var ctxL = document.getElementById("retur").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.loss_label,
+          datasets: [
+            {
+              label: "JUMLAH RETUR",
+              data: gon.retur,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "JUMLAH BARANG YANG DIRETUR",
+              data: gon.retur_item,
+              backgroundColor: [
+              'rgba(255, 206, 86, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+  - if ["complains"].include? controller_name
+    javascript:
+      // COMPLAIN CUSTOMER
+      var ctxL = document.getElementById("complain").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.loss_label,
+          datasets: [
+            {
+              label: "JUMLAH RETUR",
+              data: gon.complain,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "JUMLAH BARANG",
+              data: gon.complain_item,
+              backgroundColor: [
+              'rgba(255, 206, 86, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+  - if ["orders"].include? controller_name
+    javascript:
+      // ORDER GENERAL
+      var ctxL = document.getElementById("order").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.loss_label,
+          datasets: [
+            {
+              label: "JUMLAH ORDER",
+              data: gon.order,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "NOMINAL ORDER",
+              data: gon.order_nominal,
+              backgroundColor: [
+              'rgba(255, 206, 86, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+  - if ["suppliers"].include? controller_name
+    javascript:
+      // SUPPLIER ORDER
+      var ctxL = document.getElementById("supplier_order").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.loss_label,
+          datasets: [
+            {
+              label: "JUMLAH ORDER",
+              data: gon.order,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "NOMINAL ORDER",
+              data: gon.order_nominal,
+              backgroundColor: [
+              'rgba(255, 206, 86, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
 
 - if ["homes", "transactions"].include? controller_name
   - if ["super_admin", "owner", "developer", "finance"].include? current_user.level

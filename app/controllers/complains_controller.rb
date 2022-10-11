@@ -11,6 +11,10 @@ class ComplainsController < ApplicationController
     @finances = filter[1]
     @params = params.to_s
 
+    complains = Serve.complain_graph_monthly dataFilter
+    gon.loss_label = complains["label"]
+    gon.complain = complains["complain"]
+    gon.complain_item = complains["complain_item"]
 
     respond_to do |format|
       format.html

@@ -95,108 +95,21 @@ class ItemsController < ApplicationController
     # @bundlings = PredictCategory.where(buy: @item.item_cat).order("percentage DESC").limit(10)
     losses = Loss.where(id: LossItem.where(item: @item).pluck(:loss_id)).where("created_at >= ?", DateTime.now-13.months).group_by { |m| m.created_at.beginning_of_month }
     store_items = @item.store_items
-    # if store_items.count != Store.all.count
-    #   Store.all.each do |store|
-    #     if store_items.find_by(store: store).nil?
-    #       StoreItem.create item: @item, store: store
-    #     end
-    #   end
-    # end
     @item = Item.find_by_id params[:id]
-    graphs_buy_sell = {}
-    graphs_losses = {}
-    13.times do |i|
-      date = Date.today - i.month
-      month = date.strftime("%B %Y")
-      graphs_buy_sell[month] = [0,0,0,0,0]
-      graphs_losses[month] = 0
-    end
-    @losses = graphs_losses
-    losses.each do |r_loss|
-      month = r_loss.first.to_date.strftime("%B %Y")
-      loss_items = LossItem.where(loss_id: r_loss.second.pluck(:id), item: @item).sum(:quantity)
-      graphs_losses[month] = loss_items
-    end
-    gon.loss_vals = graphs_losses.values.reverse
-    raw_trx_items = TransactionItem.where(item: @item).where("created_at >= ?", DateTime.now-13.months).group_by { |m| m.created_at.beginning_of_month }
-    raw_trx_items.each do |trx_items|
-      month = trx_items.first.to_date.strftime("%B %Y")
-      sell = 0
-      trx_items[1].each do |trx_item|
-        sell += trx_item.quantity.to_i
-      end
-      next if graphs_buy_sell[month].nil?
-      graphs_buy_sell[month] = [0, sell, 0,0,0]
-    end
-
-    raw_order_items = OrderItem.where(item: @item).where("created_at >= ?", DateTime.now-13.months).group_by { |m| m.created_at.beginning_of_month }
-    raw_order_items.each do |order_items|
-      month = order_items.first.to_date.strftime("%B %Y")
-      buy = 0
-      order_items[1].each do |order_item|
-        buy += order_item.receive.to_i
-      end
-      data = graphs_buy_sell[month]
-      next if graphs_buy_sell[month].nil?
-      data[0] = buy
-      graphs_buy_sell[month] = data
-    end
-
-    raw_prices = ItemPrice.where(item: @item).where("created_at >= ?", DateTime.now-13.months).group(:month, :year).average(:buy)
-    raw_prices.each do |item_price|
-      month = Date::MONTHNAMES[item_price[0][0]] + " " + item_price[0][1].to_s
-      b = item_price[1]
-
-      next if graphs_buy_sell[month].nil?
-      data = graphs_buy_sell[month]
-      data[2] = b
-      graphs_buy_sell[month] = data
-    end
-
-    raw_prices = ItemPrice.where(item: @item).where("created_at >= ?", DateTime.now-13.months).group(:month, :year).average(:sell)
-    raw_prices.each do |item_price|
-      month = Date::MONTHNAMES[item_price[0][0]] + " " + item_price[0][1].to_s
-      s = item_price[1]
-
-      next if graphs_buy_sell[month].nil?
-      data = graphs_buy_sell[month]
-      data[3] = s
-      graphs_buy_sell[month] = data
-    end
-
-    gon.month = graphs_buy_sell.keys.reverse
-
-    graphs_buy_sell_val = graphs_buy_sell.values
-    sell = graphs_buy_sell_val.collect{|ind| ind[1]}.reverse
-    gon.sell = sell
-    buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse
-    gon.buy = graphs_buy_sell_val.collect{|ind| ind[0]}.reverse 
     
+    loss_items = Serve.loss_item_graph_monthly dataFilter, @item
+    gon.loss_label = loss_items["label"]
+    gon.loss_item = loss_items["loss_item"]
 
+    transaction_order = Serve.graph_item_order_sell dataFilter, @item
+    gon.label = transaction_order["label"]
+    gon.order = transaction_order["order"]
+    gon.transaction = transaction_order["transaction"]
 
-    b_prices = graphs_buy_sell_val.collect{|ind| ind[2]}.reverse
-    before = 0
-    b_prices.each_with_index do |price, idx|
-      if price == 0
-        b_prices[idx] = before
-      else
-        before = price
-      end
-    end
-    gon.buy_price = b_prices
-    
-    s_prices = graphs_buy_sell_val.collect{|ind| ind[3]}.reverse
-    before = 0
-    s_prices.each_with_index do |price, idx|
-      if price == 0
-        s_prices[idx] = before
-      else
-        before = price
-      end
-    end
-    gon.sell_price = s_prices
-
-    @buy_sell = graphs_buy_sell
+    item_prices = Serve.graph_item_price @item
+    gon.price_label = item_prices["label"]
+    gon.buy = item_prices["buy"]
+    gon.sell = item_prices["sell"]
 
     # calculate_kpi @item
     respond_to do |format|

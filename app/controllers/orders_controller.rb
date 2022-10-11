@@ -9,6 +9,12 @@ class OrdersController < ApplicationController
     @search = filter[0]
     @orders = filter[1]
     @params = params.to_s
+
+    orders = Serve.order_graph_monthly dataFilter, nil
+    gon.loss_label = orders["label"]
+    gon.order = orders["order"]
+    gon.order_nominal = orders["order_nominal"]
+
     respond_to do |format|
       format.html
         @holds = Order.where('date_receive is null')
@@ -298,6 +304,7 @@ class OrdersController < ApplicationController
   
       old_sell = this_item.sell
       this_item.buy = based_item_price 
+      item_price = ItemPrice.create item: this_item, buy: this_item.buy, sell: 0, month: Date.today.month.to_i, year: Date.today.year.to_i
       this_item.margin = margin
       sell_before_tax = based_item_price + ( based_item_price * this_item.margin / 100 )
 
@@ -306,6 +313,8 @@ class OrdersController < ApplicationController
 
       if old_sell != sell_price
         this_item.sell = sell_price
+        item_price.sell = this_item.sell
+        item_price.save!
         Store.all.each do |store|
           Print.create item: this_item, store: store
         end

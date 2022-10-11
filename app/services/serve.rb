@@ -1,12 +1,15 @@
 class Serve 
 
-  def self.transactions_graph_manual start_day, end_day, group_type, current_user
+  def self.transactions_graph_manual start_day, end_day, group_type, current_user, store
     trxs = nil
     if current_user.level == "candy_dream"
       trxs = Transaction.where(has_coin: true) 
     else
       trxs = Transaction.where(has_coin: false) 
     end
+    
+    trxs = trxs.where(store: store) if store.present?
+
     transaction_datas = nil
     if group_type == "daily"
       transaction_datas = trxs.where(created_at: start_day..end_day).group_by{ |m| m.created_at.beginning_of_day}
@@ -41,9 +44,240 @@ class Serve
     return results
   end 
 
-  def self.graph_debt store
+  def self.graph_item_price item
     start_date = Time.now.beginning_of_month-1.year
-    date_range = start_date..Time.now.beginning_of_month-1.month
+    date_range = start_date..Time.now.end_of_month
+    raw_price = ItemPrice.where(created_at: date_range, item: item)
+    dates = [start_date]
+    
+    20.times do |index|
+      dates << dates.last + 1.month 
+      break if Time.now.end_of_month == dates.last.end_of_month
+    end
+
+    item_prices = raw_price.group_by{ |m| m.created_at.beginning_of_month}
+    
+    arr_label = []
+    arr_buy = []
+    arr_sell = []
+
+    dates.each do |date|
+      arr_label << date.to_date.strftime("%B %Y")
+
+      item_price = item_prices[date]
+
+      buy = 0
+      sell = 0
+      n_buy = 0
+      n_sell = 0
+
+      if item_price.present?
+        item_price.each do |price|
+          buy += price.buy
+          n_buy += 1 if price.buy > 0
+          sell += price.sell
+          n_sell += 1 if price.sell > 0
+        end
+        buy /= n_buy if n_buy > 1
+        sell /= n_sell if n_sell > 1
+      end
+      arr_buy << buy
+      arr_sell << sell
+    end
+
+    first_buy = 0
+    temp = 0
+    arr_buy.each_with_index do |buy, idx|
+      first_buy = buy if first_buy == 0 && buy != 0
+      temp = buy if buy != 0
+      arr_buy[idx] = temp if arr_buy[idx] == 0
+    end
+    arr_buy = arr_buy.map { |x| x == 0 ? first_buy : x }
+
+    first_sell = 0
+    temp = 0
+    arr_sell.each_with_index do |sell, idx|
+      first_sell = sell if first_sell == 0 && sell != 0
+      temp = sell if sell != 0
+      arr_sell[idx] = temp if arr_sell[idx] == 0
+    end
+    arr_sell = arr_sell.map { |x| x == 0 ? first_sell : x }
+
+    results = {}
+    results["label"] = arr_label
+    results["buy"] = arr_buy
+    results["sell"] = arr_sell
+
+    return results
+  end
+
+
+  def self.graph_item_order_sell store, item
+    start_date = Time.now.beginning_of_month-1.year
+    date_range = start_date..Time.now.end_of_month
+    raw_order = OrderItem.where(created_at: date_range, item: item)
+    raw_transaction = TransactionItem.where(created_at: date_range, item: item)
+    dates = [start_date]
+    
+    20.times do |index|
+      dates << dates.last + 1.month 
+      break if Time.now.end_of_month == dates.last.end_of_month
+    end
+
+    trx_datas = raw_transaction.group_by{ |m| m.created_at.beginning_of_month}
+    order_datas = raw_order.group_by{ |m| m.created_at.beginning_of_month}
+
+    arr_label = []
+    arr_order = []
+    arr_transaction = []
+
+    dates.each do |date|
+      arr_label << date.to_date.strftime("%B %Y")
+      trx = 0
+      trxs = trx_datas[date]
+      trx = trxs.sum{|data| data.quantity} if trxs.present?
+
+      order = 0
+      orders = order_datas[date]
+      order = orders.sum{|data| data.receive} if orders.present?
+
+      arr_order << order
+      arr_transaction << trx
+      
+    end
+
+    results = {}
+    results["label"] = arr_label
+    results["transaction"] = arr_transaction
+    results["order"] = arr_order
+
+    return results
+  
+  end
+
+  def self.loss_graph_monthly store
+    date_range = Time.now.beginning_of_month-1.year..Time.now.end_of_month
+    raw_loss = Loss.where(created_at: date_range)
+    raw_loss = raw_loss.where(store: store) if store.present?
+
+    loss_datas = raw_loss.group_by{ |m| m.created_at.beginning_of_month}
+    
+    results = {}
+    arr_label = []
+    arr_loss = []
+    arr_loss_item = []
+    
+    loss_datas.each do |date, datas|
+      arr_label << date.to_date.strftime("%B %Y")
+     
+      arr_loss << datas.size
+      arr_loss_item << datas.sum{|data| data.total_item}
+    end
+    results["label"] = arr_label
+    results["loss"] = arr_loss
+    results["loss_item"] = arr_loss_item
+    return results
+  end 
+
+  def self.loss_item_graph_monthly store, item
+    raw_loss = LossItem.where(item: item)
+
+    results = {}
+    
+    return results if raw_loss.empty?
+
+    raw_loss = raw_loss.where(store: store) if store.present?
+
+    loss_datas = raw_loss.group_by{ |m| m.created_at.beginning_of_month}
+
+    arr_label = []
+    arr_loss = []
+    arr_loss_item = []
+    
+    loss_datas.each do |date, datas|
+      arr_label << date.to_date.strftime("%B %Y")
+      arr_loss_item << datas.sum{|data| data.quantity}
+    end
+    results["label"] = arr_label
+    results["loss_item"] = arr_loss_item
+    return results
+  end 
+
+  def self.order_graph_monthly store, supplier
+    date_range = Time.now.beginning_of_month-1.year..Time.now.end_of_month
+    raw_order = Order.where(created_at: date_range)
+    raw_order = raw_order.where(store: store) if store.present?
+    raw_order = raw_order.where(supplier: supplier) if supplier.present?
+
+    order_datas = raw_order.group_by{ |m| m.created_at.beginning_of_month}
+    
+    results = {}
+    arr_label = []
+    arr_order= []
+    arr_order_nominal = []
+    
+    order_datas.each do |date, datas|
+      arr_label << date.to_date.strftime("%B %Y")
+     
+      arr_order<< datas.size
+      arr_order_nominal << datas.sum{|data| data.grand_total}
+    end
+    results["label"] = arr_label
+    results["order"] = arr_order
+    results["order_nominal"] = arr_order_nominal
+    return results
+  end
+
+  def self.retur_graph_monthly store
+    date_range = Time.now.beginning_of_month-1.year..Time.now.end_of_month
+    raw_returs = Retur.where(created_at: date_range)
+    raw_returs = raw_returs.where(store: store) if store.present?
+
+    retur_datas = raw_returs.group_by{ |m| m.created_at.beginning_of_month}
+
+    results = {}
+    arr_label = []
+    arr_retur = []
+    arr_retur_item = []
+    
+    retur_datas.each do |date, datas|
+      arr_label << date.to_date.strftime("%B %Y")
+     
+      arr_retur << datas.size
+      arr_retur_item << datas.sum{|data| data.total_items}
+    end
+    results["label"] = arr_label
+    results["retur"] = arr_retur
+    results["retur_item"] = arr_retur_item
+    return results
+  end 
+
+  def self.complain_graph_monthly store
+    date_range = Time.now.beginning_of_month-1.year..Time.now.end_of_month
+    raw_complains = Complain.where(created_at: date_range)
+    raw_complains = raw_complains.where(store: store) if store.present?
+
+    complain_datas = raw_complains.group_by{ |m| m.created_at.beginning_of_month}
+
+    results = {}
+    arr_label = []
+    arr_complain = []
+    arr_complain_item = []
+    
+    complain_datas.each do |date, datas|
+      arr_label << date.to_date.strftime("%B %Y")
+     
+      arr_complain << datas.size
+      arr_complain_item << datas.sum{|data| data.total_items}
+    end
+    results["label"] = arr_label
+    results["complain"] = arr_complain
+    results["complain_item"] = arr_complain_item
+    return results
+  end 
+
+  def self.graph_debt store
+    date_range = Time.now.beginning_of_month-1.year..Time.now.beginning_of_month
     raw_debts = StoreData.where(date: date_range)
     raw_debts = raw_debts.where(store: store) if store.present?
 
@@ -60,7 +294,7 @@ class Serve
 
   def self.graph_receivable store
     start_date = Time.now.beginning_of_month-1.year
-    date_range = start_date..Time.now.beginning_of_month-1.month
+    date_range = start_date..Time.now.beginning_of_month
     raw_receivables = StoreData.where(date: date_range)
     raw_receivables = raw_receivables.where(store: store) if store.present?
 
@@ -76,7 +310,7 @@ class Serve
 
   def self.graph_transaction store
     start_date = Time.now.beginning_of_month-1.year
-    date_range = start_date..Time.now.beginning_of_month-1.month
+    date_range = start_date..Time.now.beginning_of_month
     raw_transactions = StoreData.where(date: date_range)
     raw_transactions = raw_transactions.where(store: store) if store.present?
 
@@ -107,7 +341,7 @@ class Serve
 
   def self.graph_tax store
     start_date = Time.now.beginning_of_month-1.year
-    date_range = start_date..Time.now.beginning_of_month-1.month
+    date_range = start_date..Time.now.beginning_of_month
     raw_taxs = StoreData.where(date: date_range)
     raw_taxs = raw_taxs.where(store: store) if store.present?
 
@@ -124,7 +358,7 @@ class Serve
   
   def self.graph_income_outcome store
     start_date = Time.now.beginning_of_month-1.year
-    date_range = start_date..Time.now.beginning_of_month-1.month
+    date_range = start_date..Time.now.beginning_of_month
     raw_transactions = StoreData.where(date: date_range)
     raw_transactions = raw_transactions.where(store: store) if store.present?
 

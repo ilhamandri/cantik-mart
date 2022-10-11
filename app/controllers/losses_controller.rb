@@ -6,6 +6,10 @@ class LossesController < ApplicationController
   def index
   	@losses = Loss.page param_page
     @losses = @losses.order("created_at DESC")
+    losses = Serve.loss_graph_monthly dataFilter
+    gon.loss_label = losses["label"]
+    gon.loss = losses["loss"]
+    gon.loss_item = losses["loss_item"]
   end
 
   def create

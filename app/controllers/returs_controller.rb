@@ -8,6 +8,12 @@ class RetursController < ApplicationController
     @returs = filter[1]
     @params = params.to_s
 
+
+    returs = Serve.retur_graph_monthly dataFilter
+    gon.loss_label = returs["label"]
+    gon.retur = returs["retur"]
+    gon.retur_item = returs["retur_item"]
+
     respond_to do |format|
       format.html
       format.pdf do

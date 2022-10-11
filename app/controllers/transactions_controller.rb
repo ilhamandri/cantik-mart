@@ -40,7 +40,7 @@ class TransactionsController < ApplicationController
           gon.transaction_tax = trxs["tax"]
           gon.transaction_profit = trxs["profit"]
         elsif ["candy_dream", "super_visi"].include? current_user.level
-          trxs = Serve.transactions_graph_manual DateTime.now.beginning_of_month-1.year, DateTime.now, "monthly", current_user
+          trxs = Serve.transactions_graph_manual DateTime.now.beginning_of_month-1.year, DateTime.now, "monthly", current_user, dataFilter
           gon.transaction_label = trxs["label"]
           gon.transaction_omzet = trxs["grand_total"]
         end

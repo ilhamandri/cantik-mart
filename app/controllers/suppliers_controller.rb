@@ -43,7 +43,12 @@ class SuppliersController < ApplicationController
     id = Supplier.first.id if params[:id] == "0"
     @supplier = Supplier.find_by_id id
     return redirect_back_data_error suppliers_path, "Data Supplier Tidak Ditemukan" unless @supplier.present?
-    
+
+    orders = Serve.order_graph_monthly dataFilter, @supplier
+    gon.loss_label = orders["label"]
+    gon.order = orders["order"]
+    gon.order_nominal = orders["order_nominal"]
+
     respond_to do |format|
       format.html
         @orders = Order.where(supplier: @supplier).order("created_at DESC")
