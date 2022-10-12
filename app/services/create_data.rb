@@ -12,7 +12,7 @@ class CreateData
 	    end
 	end
 
-	def self.insert_user
+	def self.createUserFromFile
 		puts "INSERT USER!"
 		store_1 = nil
 		store_2 = nil
@@ -57,7 +57,7 @@ class CreateData
 		end
 	end
 
-	def self.insert_access_grant
+	def self.createUserMethodFromFile
 		UserMethod.delete_all
 		xlsx = Roo::Spreadsheet.open("./data/grant/grant.xlsx", extension: :xlsx)
 		xlsx.each_with_pagename do |name, sheet|
@@ -97,7 +97,7 @@ class CreateData
 	end
 
 
-	def self.read_file_category
+	def self.createCategoryFromFile
 		files = Dir["./data/backup/department/*.xlsx"]
 		files.each do |file|
 
@@ -134,28 +134,9 @@ class CreateData
 		end
 	end
 
-	def self.delete_items
-		files = Dir["./data/backup/delete/*.xlsx"]
-		files.each do |file|
-			xlsx = Roo::Spreadsheet.open(file, extension: :xlsx)
-			xlsx.each_with_index do |row, idx|
-				code = row[0]
-				item = Item.find_by(code: code)
-				next if item.nil?
-				trx_items = item.transaction_items
-				transfer_items = item.transfer_items
-				order_items = item.order_items
-				send_back_items = item.send_back_items
-				if send_back_items.empty? && trx_items.empty? && transfer_items.empty? && order_items.empty? 
-					item.store_items.destroy_all
-					item.item_prices.destroy_all 
-					item.destroy
-				end
-	 		end
-	 	end
-	end
+	
 
-	def self.additional_file 
+	def self.createItemFromFile 
 		files = Dir["./data/backup/barang_baru/*.xlsx"]
 		files.each do |file|
 			xlsx = Roo::Spreadsheet.open(file, extension: :xlsx)

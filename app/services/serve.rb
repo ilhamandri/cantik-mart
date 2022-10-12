@@ -55,8 +55,9 @@ class Serve
       break if Time.now.end_of_month == dates.last.end_of_month
     end
 
-    item_prices = raw_price.group_by{ |m| m.created_at.beginning_of_month}
-    
+    sell_data = raw_price.where("sell > 0").group_by{ |m| m.created_at.beginning_of_month}
+    buy_data = raw_price.where("buy > 0").group_by{ |m| m.created_at.beginning_of_month}
+
     arr_label = []
     arr_buy = []
     arr_sell = []
@@ -64,23 +65,14 @@ class Serve
     dates.each do |date|
       arr_label << date.to_date.strftime("%B %Y")
 
-      item_price = item_prices[date]
+      buys = buy_data[date]
+      sells = sell_data[date]
 
       buy = 0
+      buy = buys.sum{|data| data.buy} / buys.size if buys.present?
       sell = 0
-      n_buy = 0
-      n_sell = 0
-
-      if item_price.present?
-        item_price.each do |price|
-          buy += price.buy
-          n_buy += 1 if price.buy > 0
-          sell += price.sell
-          n_sell += 1 if price.sell > 0
-        end
-        buy /= n_buy if n_buy > 1
-        sell /= n_sell if n_sell > 1
-      end
+      sell = sells.sum{|data| data.sell} / sells.size if sells.present?
+      
       arr_buy << buy
       arr_sell << sell
     end

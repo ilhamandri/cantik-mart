@@ -15,4 +15,9 @@ module ApplicationHelper
 		return true if current_user.level=="developer"
 		return false
 	end
+
+	def isFinance
+		return true if ["super_admin", "owner", "developer", "finance"].include? current_user.level
+		return false
+	end
 end

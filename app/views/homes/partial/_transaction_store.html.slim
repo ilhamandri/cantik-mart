@@ -1,0 +1,57 @@
+.carousel.slide id="carouselExampleControls" data-ride="carousel"
+  .carousel-inner
+    - stores = Store.where.not(store_type: "warehouse")
+    - stores = [current_user.store] if current_user.level == "super_visi"
+    - stores.each do |store|
+      - trxs = @daily_transaction.where(store: store)
+      - trx_last_timestamp = "Tidak ada transaksi"
+      - trx_last_timestamp = trxs.last.created_at if trxs.present?
+      .carousel-item class="#{"active" if store == stores.first}"
+        h4.text-center #{store.name.upcase} 
+        p.text-center.text-danger #{trx_last_timestamp}
+        .col-xl-12.col-lg-12.col-md-12
+          .card-body.table-responsive.text-nowrap
+            table.table
+              tr
+                th Kasir
+                th Tunai
+                th Debit / Kredit / QRIS
+                th Total
+                - if isFinance
+                  th Profit 
+
+              - User.where(id: trxs.pluck(:user_id).uniq).each do |cashier|
+                tr
+                  - cash = trxs.where(payment_type: "CASH", user: cashier).sum(:grand_total)
+                  - debit = trxs.where.not(payment_type: "CASH").where(user: cashier).sum(:grand_total)
+                  - grand_total = trxs.where(user: cashier).sum(:grand_total)
+                  - hpp_total = trxs.where(user: cashier).sum(:hpp_total)
+                  - ppn_total = trxs.where(user: cashier).sum(:tax)
+                  td #{cashier.name}
+                  td #{number_with_delimiter( cash.to_i, delimiter: ".", separator: ",")}
+                  td #{number_with_delimiter( debit.to_i, delimiter: ".", separator: ",")}
+                  td #{number_with_delimiter( grand_total.to_i, delimiter: ".", separator: ",")}
+                  - if isFinance
+                    td #{number_with_delimiter( (grand_total-hpp_total-ppn_total).to_i, delimiter: ".", separator: ",")}
+
+              tr
+                td 
+                - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total)
+                - debit_total = trxs.where.not(payment_type: "CASH").sum(:grand_total)
+                - hpp_total = trxs.sum(:hpp_total)
+                - grand_total = trxs.sum(:grand_total)
+                - ppn_total = trxs.sum(:tax)
+                td #{number_with_delimiter( (cash_total).to_i, delimiter: ".", separator: ",")}
+                td #{number_with_delimiter( (debit_total).to_i, delimiter: ".", separator: ",")}
+                td #{number_with_delimiter( (grand_total).to_i, delimiter: ".", separator: ",")}
+                - if isFinance
+                    td #{number_with_delimiter( (grand_total-hpp_total-ppn_total).to_i, delimiter: ".", separator: ",")}
+
+  a.carousel-control-prev href="#carouselExampleControls" role="button" data-slide="prev"
+    span class="carousel-control-prev-icon" aria-hidden="true"
+    span class="sr-only" 
+      | Previous
+  a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next"
+      span class="carousel-control-next-icon" aria-hidden="true"
+      span class="sr-only"
+        | Next

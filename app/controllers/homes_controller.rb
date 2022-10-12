@@ -10,58 +10,53 @@ class HomesController < ApplicationController
       # UpdateData.updateInvoiceTransaction
 
       # UpdateData.updateDebtDefZero
+      # UpdateData.updateItemPrice
       # ReCheck.checkDebtPayment
       # ReCheck.checkInvoiceTransaction
       # Calculate.calculateData
     end
 
-    if ["super_admin", "owner", "candy_dream"].exclude? current_user.level
-      @total_limit_items = StoreItem.where(store_id: current_user.store.id).where('stock < min_stock').count
-      @total_orders = Order.where(store_id: current_user.store.id).where(date_receive: nil).count
-      @total_payments = Order.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null').count
-      @total_returs = Retur.where(store_id: current_user.store.id).where(date_picked: nil).count
-      @total_transfers = Transfer.where(from_store: current_user.store).where(date_approve: nil).count
-    end
-
+    
+    @total_limit_items = StoreItem.where(store_id: current_user.store.id).where('stock < 0').count
+    @total_orders = Order.where(store_id: current_user.store.id).where(date_receive: nil).count
+    @total_payments = Order.where(store_id: current_user.store.id).where('date_receive is not null and date_paid_off is null').count
+    @total_returs = Retur.where(store_id: current_user.store.id).where(date_confirm: nil).count
+    @total_transfers = Transfer.where("from_store_id = ? OR to_store_id = ?", current_user.store.id, current_user.store.id).where(date_approve: nil).count
+    
     start_day = DateTime.now.beginning_of_day
     end_day = start_day.end_of_day
 
 
     # PENGELUARAN
-    if ["super_admin", "owner", "finance"].include? current_user.level
-      
-      cash_flow = CashFlow.where("created_at >= ? AND created_at <= ?", start_day, end_day)
-      @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
-      @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
-      
-      @total_outcome = @operational + @fix_cost
+    cash_flow = CashFlow.where(created_at: start_day..end_day)
+    cash_flow = cash_flow.where(store: current_user.store) if current_user.level == "super_visi"
+    @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
+    @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
+    
+    @total_outcome = @operational + @fix_cost
 
-
-      @debt = Debt.where("deficiency > ?",0)
-      @receivable = Receivable.where("deficiency > ?",0)
-
-    end
+    @debt = Debt.where("deficiency > ?",0).where(store: current_user.store) 
+    @receivable = Receivable.where("deficiency > ?",0).where(store: current_user.store)\
 
     # TRANSAKSI HARI INI
-    if ["super_admin", "owner", "candy_dream", "finance"].include? current_user.level
-      @transactions = Transaction.where(created_at: start_day..end_day).order("created_at ASC")
-      
-      if current_user.level == "candy_dream"
-        @transactions = @transactions.where(has_coin: true) 
-      end
+    if ["super_admin", "owner", "candy_dream", "finance", "super_visi"].include? current_user.level
+      @daily_transaction = Transaction.where(created_at: start_day..end_day)
+      @transactions = Transaction.where("created_at >= ?", DateTime.now.beginning_of_month-1.month)
+      @transactions = @transactions.where(store: current_user.store) if current_user.level == "super_visi"
+      @transactions = @transactions.where(has_coin: true) if current_user.level == "candy_dream"
     end
 
 
     #DEVELOPER
     if current_user.level == "developer"
       AccountBalance.stock_values current_user.store 
-      @debt = Debt.where(store: current_user.store).sum(:deficiency).to_f
-      @receivable = Receivable.where(store: current_user.store).sum(:deficiency).to_f
+      debt = Debt.where(store: current_user.store).sum(:deficiency).to_f
+      receivable = Receivable.where(store: current_user.store).sum(:deficiency).to_f
       @stock_value = StockValue.where(store: current_user.store).first.nominal.to_f
       transactions = Transaction.where(store: current_user.store, created_at: DateTime.now.beginning_of_month..DateTime.now.end_of_month)
 
       # Nilai asset + kas + piutang 
-      activa = @stock_value + @receivable
+      activa = @stock_value + receivable
       # Penjualan 
       gross = transactions.sum(:grand_total).to_f
       hpp = transactions.sum(:hpp_total).to_f
@@ -70,7 +65,7 @@ class HomesController < ApplicationController
       profit = netto-hpp
 
       # LIQUIDITY RATIO
-      @quick_ratio = (activa / @debt ) * 100.0
+      @quick_ratio = (activa / debt ) * 100.0
 
       # PROFIBILITY RATIO
       @gross_profit_margin = (gross/hpp) *100.0
@@ -79,13 +74,13 @@ class HomesController < ApplicationController
       # roe dan ronw harus pakai jumlah modal awal
 
       # SOLVABILITY RATIO
-      @solvable = (activa > @debt)
+      @solvable = (activa > debt)
 
       # ACTIVITY RATIO
-      @receivable_turnover = (gross/@receivable) * 100.0
+      @receivable_turnover = (gross/receivable) * 100.0
       @total_asset_turnover = (gross/activa) * 100.0
-      @average_collection_turnover = ((@receivable/gross) / 365) * 100.0
-      @working_capital_turnover = (gross/(activa-@debt)) * 100.0
+      @average_collection_turnover = ((receivable/gross) / 365) * 100.0
+      @working_capital_turnover = (gross/(activa-debt)) * 100.0
 
       
       debts = Serve.graph_debt dataFilter

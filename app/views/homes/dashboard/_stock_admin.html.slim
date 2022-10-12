@@ -1,0 +1,85 @@
+.col-6
+  a href="#{warning_items_path}"
+    .alert.alert-primary
+      .row
+        .col-6.text-left
+          | Item limit:
+        .col-6.text-right
+          | #{number_with_delimiter(@total_limit_items, delimiter: ".")}
+  a href="#{returs_path}"
+    .alert.alert-warning
+      .row
+        .col-6.text-left
+          | Retur :
+        .col-6.text-right
+          | #{@total_returs}
+  a href="#{orders_path}"
+    .alert.alert-danger
+      .row
+        .col-6.text-left
+          | Belum lunas :
+        .col-6.text-right
+          | #{@total_payments}
+
+- color = "success-color"
+- color = "danger-color" if @total_orders > 0
+.col-md-6.col-lg-4
+  .card.bg-dark
+    a.container.text-center.text-white href="#{orders_path}"
+      br
+      h3.font-weight-bold
+        i.fa.fa-cart-plus.fa-2x.pb-2 aria-hidden="true" 
+        .lead #{@total_orders} Pesanan
+      hr class="#{color}"
+      p
+        | Lihat Detil 
+
+- color = "success-color"
+- color = "danger-color" if @total_transfers > 0
+.col-md-6.col-lg-4
+  .card.bg-dark
+    - color = "success-color"
+    - color = "danger-color" if @total_transfers > 0
+    a.container.text-center.text-white href="#{transfers_path}"
+      br
+      h3.font-weight-bold
+        i.fa.fa-truck.fa-2x.pb-2 aria-hidden="true" 
+        .lead #{@total_transfers} Transfer
+      hr class="#{color}"
+      p
+        | Lihat Detil 
+
+- color = "success-color"
+- color = "danger-color" if @total_returs > 0
+.col-md-6.col-lg-4
+  .card.bg-dark
+    - color = "success-color"
+    - color = "danger-color" if @total_returs > 0
+    a.container.text-center.text-white href="#{returs_path}"
+      br
+      h3.font-weight-bold
+        i.fa.fa-exchange.fa-2x.pb-2 aria-hidden="true" 
+        .lead #{@total_returs} Retur 
+      hr class="#{color}"
+      p
+        | Lihat Detil 
+
+.col-12.pt-3
+  .card.bg-white
+    .container.text-center
+      .row.pt-3.pb-3
+        .col
+          a href="#{suppliers_path}"
+            h3
+              i.fa.fa-users.fa-2x.pb-2 aria-hidden="true" 
+            .lead #{Supplier.all.count} Suplier
+        .col
+          a href="#{departments_path}"
+            h3
+              i.fa.fa-archive.fa-2x.pb-2 aria-hidden="true" 
+            .lead #{Department.all.count} Departemen
+        .col
+          a href="#{items_path}"
+            h3
+              i.fa.fa-shopping-basket.fa-2x.pb-2 aria-hidden="true" 
+            .lead #{number_with_delimiter(Item.all.count, delimiter: ".")} Barang

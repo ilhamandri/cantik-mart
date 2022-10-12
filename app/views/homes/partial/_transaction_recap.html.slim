@@ -1,0 +1,85 @@
+- trx = @transactions
+.card-body
+  .row
+    .col-6
+      - start_month = (DateTime.now-1.month).beginning_of_month
+      - end_month = start_month.end_of_month
+
+      h3
+        b.lead #{start_month.strftime("%B %Y")}
+
+      - trxs_month_before = trx.where(created_at: start_month..end_month)
+      - sum_grand_total = trxs_month_before.sum(:grand_total)
+      - sum_hpp_total = trxs_month_before.sum(:hpp_total)
+      - sum_ppn_total = trxs_month_before.sum(:tax)
+
+      .row
+        .col-6 Omzet :
+        .col-6.text-right
+          strong #{number_to_currency(sum_grand_total, unit: "Rp. ")}
+
+        - if isFinance
+          .col-6 Profit :
+          .col-6.text-right
+            strong #{number_to_currency(sum_grand_total-sum_hpp_total-sum_ppn_total, unit: "Rp. ")}
+        - else
+          .col-6 Transaksi :
+          .col-6.text-right
+            strong  #{trxs_month_before.count} x
+
+      hr.my-4
+
+      h3
+        b.lead #{Date.today.strftime("%B %Y")}
+
+      - current_month = DateTime.now.beginning_of_month
+      - trxs_current_month = trx.where("created_at > ? ", current_month)
+      - sum_grand_total = trxs_current_month.sum(:grand_total)
+      - sum_hpp_total = trxs_current_month.sum(:hpp_total)
+      - sum_ppn_total = trxs_current_month.sum(:tax)
+
+      .row
+        .col-6 Omzet :
+        .col-6.text-right
+          strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
+
+
+        - if isFinance
+          .col-6 Profit :
+          .col-6.text-right
+            strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_ppn_total, unit: "Rp. ")}
+        - else
+          .col-6 Transaksi :
+          .col-6.text-right
+            strong  #{trxs_current_month.count} x
+
+    .col-6 style="border-left: thick solid black;"
+      h3
+        b.lead #{Date.today}
+      .row
+        - trxs_day = trx.where(created_at: DateTime.now.beginning_of_day..DateTime.now.end_of_day)
+        - sum_grand_total = trxs_day.sum(:grand_total)
+        - sum_hpp_total = trxs_day.sum(:hpp_total)
+        - sum_tax_total = trxs_day.sum(:tax)
+        .col-6 Omzet :
+        .col-6.text-right
+          strong  #{number_to_currency(sum_grand_total, unit: "Rp. ")}
+        
+        - if isFinance
+          .col-6 Profit :
+          .col-6.text-right
+            strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_tax_total, unit: "Rp. ")}
+
+      - if ["super_admin", "owner", "developer", "finance", "super_visi"].include? current_user.level
+        hr.my-4
+          .row
+            .col-6 Pengeluaran : 
+            .col-6.text-right
+               strong.text-danger #{number_to_currency(@total_outcome, unit: "Rp. ")}
+
+      - if isFinance
+        hr.my-4
+          .row
+            .col-6 Profit Bersih :
+            .col-6.text-right.text-success
+              strong  #{number_to_currency(sum_grand_total-sum_hpp_total-@total_outcome-sum_tax_total, unit: "Rp. ")}

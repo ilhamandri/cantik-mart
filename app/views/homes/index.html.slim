@@ -1,47 +1,33 @@
 .container-fluid
-  .section.pb-3
-    .row
-      .col
-        .alert.alert-primary
-          .alert-heading
-            | Halo, #{current_user.name}!
+  .section
+    .row.pb-2
+      .col-md-12.col-lg-6.pb-2
+        .card.bg-primary.text-white
+          .container
+            .row
+              .col-8.text-left.pb-3
+                br
+                h2.font-weight-bold Halo, #{current_user.name.split(" ")[0].upcase}!
+                hr.my-4
+                .lead
+                  | #{current_user.level.gsub("_", " ").upcase}
+                | #{ current_user.store.name.camelize}
+              .col-4.text-right.pt-3
+                - if current_user.image.present?
+                  =image_tag("/uploads/profile_picture/#{current_user.image}", class:"rounded-circle", width:"150px", height:"150px;")
+                - else
+                  =image_tag("/uploads/profile_picture/default.png", height: '150px', width: '150px', class:"rounded-circle ")
+            
+      - if isDeveloper
+        = render "homes/dashboard/developer"
+      - elsif isAdmin
+        = render "homes/dashboard/admin"
+      - elsif current_user.level == "finance"
+        = render "homes/dashboard/finance"
+      - elsif current_user.level == "super_visi"
+        = render "homes/dashboard/super_visi"
+      - elsif current_user.level == "stock_admin"
+        = render "homes/dashboard/stock_admin"
+      - elsif current_user.level == "candy_dream"
+        = render "homes/dashboard/candy_dream"
 
-    - if (buttonAccess "transactions", "new") && (current_user.store.online_store)
-      .row
-        = render "homes/card/transaction"
-
-    - if ["stock_admin", "super_visi"].include? current_user.level
-      .row
-        .col-3
-          = render "homes/card/order"
-          br
-        .col-3
-          = render "homes/card/payment"
-          br
-        .col-3
-          = render "homes/card/retur"
-        .col-3
-          = render "homes/card/transfer"
-          br
-        / .col-6
-          = render "homes/card/print"
-
-        - if current_user.level == "super_visi"
-          .col-12
-            = render "homes/card/trx_super_visi"
-            br
-
-    - if current_user.level  == "candy_dream"
-      .row
-        = render "homes/card/candy"
-
-
-    - if ["super_admin", "owner", "finance"].include? current_user.level
-      = render "homes/card/recap"
-
-
-    - if ["candy_dream", "super_admin", "owner", "finance"].include? current_user.level
-      = render "homes/card/trx_recap"
-
-    - if isDeveloper
-      = render "homes/dashboard/developer"

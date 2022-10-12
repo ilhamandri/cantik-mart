@@ -1,4 +1,13 @@
 class UpdateData
+
+	def self.updateItemPrice
+		order_items = OrderItem.where("receive > 0 AND grand_total > 0").where(created_at: DateTime.now-2.year..DateTime.now)
+		order_items.each do |order_item|
+			item = order_item.item
+			buy = order_item.grand_total / order_item.receive
+			item_price = ItemPrice.create item: item, buy: buy, sell: 0, month: order_item.created_at.month.to_i, year: order_item.created_at.year.to_i, created_at: order_item.created_at
+		end
+	end
 	
 	# UpdateData.updateDebtDefZero
 	def self.updateDebtDefZero
