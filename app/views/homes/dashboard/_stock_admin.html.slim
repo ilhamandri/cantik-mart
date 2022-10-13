@@ -1,4 +1,4 @@
-.col-6
+.col-md-6.col-lg-3.pb-3
   a href="#{warning_items_path}"
     .alert.alert-primary
       .row
@@ -21,9 +21,40 @@
         .col-6.text-right
           | #{@total_payments}
 
+.col-md-6.col-lg-3.pb-3
+  .card.bg-white
+    .container.text-center
+      .row
+        .col-12.pb-3.pt-2
+          | INFORMASI
+        .col
+          a href="#{suppliers_path}"
+            h3
+              i.fa.fa-users.fa-2x.pb-2 aria-hidden="true" 
+            p
+              | #{Supplier.all.count} 
+              br
+              | Supplier
+        .col
+          a href="#{departments_path}"
+            h3
+              i.fa.fa-archive.fa-2x.pb-2 aria-hidden="true" 
+            p 
+              | #{Department.all.count} 
+              br
+              | Departemen
+        .col
+          a href="#{items_path}"
+            h3
+              i.fa.fa-cubes.fa-2x.pb-2 aria-hidden="true" 
+            p 
+              | #{number_with_delimiter(Item.all.count, delimiter: ".")} 
+              br
+              | Barang
+
 - color = "success-color"
 - color = "danger-color" if @total_orders > 0
-.col-md-6.col-lg-4
+.col-md-6.col-lg-4.pb-3
   .card.bg-dark
     a.container.text-center.text-white href="#{orders_path}"
       br
@@ -36,10 +67,8 @@
 
 - color = "success-color"
 - color = "danger-color" if @total_transfers > 0
-.col-md-6.col-lg-4
+.col-md-6.col-lg-4.pb-3
   .card.bg-dark
-    - color = "success-color"
-    - color = "danger-color" if @total_transfers > 0
     a.container.text-center.text-white href="#{transfers_path}"
       br
       h3.font-weight-bold
@@ -51,35 +80,26 @@
 
 - color = "success-color"
 - color = "danger-color" if @total_returs > 0
-.col-md-6.col-lg-4
+.col-md-6.col-lg-4.pb-3
   .card.bg-dark
-    - color = "success-color"
-    - color = "danger-color" if @total_returs > 0
     a.container.text-center.text-white href="#{returs_path}"
       br
       h3.font-weight-bold
         i.fa.fa-exchange.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@total_returs} Retur 
+        .lead #{@total_returs} Retur Supplier
       hr class="#{color}"
       p
         | Lihat Detil 
 
-.col-12.pt-3
-  .card.bg-white
-    .container.text-center
-      .row.pt-3.pb-3
-        .col
-          a href="#{suppliers_path}"
-            h3
-              i.fa.fa-users.fa-2x.pb-2 aria-hidden="true" 
-            .lead #{Supplier.all.count} Suplier
-        .col
-          a href="#{departments_path}"
-            h3
-              i.fa.fa-archive.fa-2x.pb-2 aria-hidden="true" 
-            .lead #{Department.all.count} Departemen
-        .col
-          a href="#{items_path}"
-            h3
-              i.fa.fa-shopping-basket.fa-2x.pb-2 aria-hidden="true" 
-            .lead #{number_with_delimiter(Item.all.count, delimiter: ".")} Barang
+- color = "success-color"
+- color = "danger-color" if @total_send_backs.count > 0
+.col-md-6.col-lg-4.pb-3
+  .card.bg-dark
+    a.container.text-center.text-white href="#{send_backs_path}"
+      br
+      h3.font-weight-bold
+        i.fa.fa-refresh.fa-2x.pb-2 aria-hidden="true" 
+        .lead #{@total_send_backs.count} Retur BS
+      hr class="#{color}"
+      p
+        | Lihat Detil 

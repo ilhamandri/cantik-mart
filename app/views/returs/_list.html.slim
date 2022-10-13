@@ -4,21 +4,21 @@ tr
   td #{retur.supplier.name}
   td #{retur.total_items.to_i}
   td #{retur.date_created.to_date}
-  td
-    - if retur.date_approve.nil?
-      | - 
-    - else
-      | #{retur.approved_by.name} (#{retur.date_approve.to_date})
-  td
-    - if retur.date_picked.nil?
-      | - 
-    - else
-      | #{retur.picked_by.name} (#{retur.date_picked.to_date})
-  td
-    - if retur.status.nil?
-      | -
-    - else
-      | #{retur.status.to_date}
+  - color = "text-dark"
+  - status = "Menunggu Konfirmasi"
+
+  - if retur.date_approve.present?
+    - status = "Dikonfirmasi - " + retur.approved_by.name + " ("+ retur.date_approve.to_date.to_s + ")"
+
+  - if retur.date_picked.present?
+    - status = "Diambil Supplier - " + retur.picked_by.name + " (" + retur.date_picked.to_date.to_s + ")"
+
+  - if retur.status.present?
+    - color = "text-success"
+    - confirmed = retur.confirmed_by.name if retur.confirmed_by.present?
+    - status = "Diterima - " + confirmed + " (" + retur.status.to_date.to_s + ")"
+
+  td class="#{color}" #{status}
 
   - if buttonAccess "retur", "destroy"
     - if retur.date_picked.nil?

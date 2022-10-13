@@ -1,0 +1,49 @@
+- trx_items = TransactionItem.where(item_id: 30331).where("created_at > ? ", DateTime.now.beginning_of_month)
+- sell = trx_items.sum(:quantity).to_i
+- trxs_current_month = @transactions.where("created_at > ? ", DateTime.now.beginning_of_month)
+- total = trxs_current_month.sum(:grand_total_coin)
+
+.col-md-6.col-lg-3.pb-3
+  .card.bg-dark.text-center.text-white
+    .container
+      p.pt-3 #{Date.today}
+      hr.success-color
+      h4.font-weight-bold
+        i.fas.fa-coins.fa-1x.pb-2 aria-hidden="true" 
+        .lead #{number_with_delimiter(sell.to_i, delimiter: ".")} Koin Terjual
+      p #{number_to_currency(total.to_i, delimiter: ".", unit: "Rp. ", delimiter: ".", separator:",")}
+
+.col-md-6.col-lg-3.pb-3
+  .card.bg-dark.text-white
+    .container.text-center
+      p.pt-3 PEMBAGIAN HASIL
+      hr.primary-color
+      h4.font-weight-bold
+        i.fas.fa-handshake-o.fa-1x aria-hidden="true"
+      .row.pb-1
+        .col-7
+          p.text-left
+            | Cantik Mart (35%)
+            br
+            | Candy Dream (65%)
+        .col-5
+          p.text-right
+            | #{number_with_delimiter((total * 35 / 100).to_i, delimiter: ".")}
+            br
+            | #{number_with_delimiter((total * 65 / 100).to_i, delimiter: ".")}
+
+.col-md-12.col-lg-6.pb-3
+  .card
+    .view.view-cascade.gradient-card-header.primary-color.text-white
+      h2.pb-2.pt-2.text-center
+        b PENJUALAN HARI INI 
+    .card-body
+      = render "homes/partial/transaction_store"
+
+.col-md-12.col-lg-6.pb-3
+  .card
+    .view.view-cascade.gradient-card-header.primary-color.text-white
+      h2.pb-2.pt-2.text-center
+        b REKAP PENJUALAN
+    .card-body
+      = render "homes/partial/transaction_recap"

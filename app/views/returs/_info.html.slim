@@ -57,8 +57,8 @@ hr.primary-color
     label Diambil
     input type="text" class="form-control md-form" disabled=true value="#{(retur.picked_by.name + ' (' + retur.date_picked.to_s + ')') if retur.picked_by.present?}"
   .col-6
-    label Kembalian
-    input type="text" class="form-control md-form" disabled=true value="#{(retur.confirmed_by.name + ' (' + retur.date_confirm.to_s + ')') if retur.confirmed_by.present?}"
+    label Diterima
+    input type="text" class="form-control md-form" disabled=true value="#{(retur.confirmed_by.name + ' (' + retur.status.to_s + ')') if retur.confirmed_by.present?}"
   .col-12
     hr.primary-color
     - progress = "25"

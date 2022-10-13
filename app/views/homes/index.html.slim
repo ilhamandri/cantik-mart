@@ -1,7 +1,7 @@
 .container-fluid
   .section
     .row.pb-2
-      .col-md-12.col-lg-6.pb-2
+      .col-md-12.col-lg-6.pb-3
         .card.bg-primary.text-white
           .container
             .row
@@ -11,7 +11,10 @@
                 hr.my-4
                 .lead
                   | #{current_user.level.gsub("_", " ").upcase}
-                | #{ current_user.store.name.camelize}
+                - if current_user.level != "candy_dream"
+                  | #{ current_user.store.name.camelize}
+                - else
+                  | -
               .col-4.text-right.pt-3
                 - if current_user.image.present?
                   =image_tag("/uploads/profile_picture/#{current_user.image}", class:"rounded-circle", width:"150px", height:"150px;")
