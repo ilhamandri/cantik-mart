@@ -1,22 +1,16 @@
 tr
   td #{order.invoice}
   td #{order.supplier.name}
-  - item_order_count = order.order_items.sum(:quantity)
-  - if order.order_items.sum(:receive) != 0
-    - item_order_count = order.order_items.sum(:receive)
-  td #{item_order_count.to_i}
   td #{number_with_delimiter(order.grand_total, delimiter: ".")}
   td #{order.user.name} (#{order.date_created.to_date})
-  td
-    - if order.date_receive.nil?
-      | - 
-    - else
-      | #{order.received_by.name} (#{order.date_receive.to_date})
-  td
-    - if order.date_paid_off.nil?
-      | - 
-    - else
-      | LUNAS (#{order.date_paid_off.to_date})
+  - status = "Menunggu pengiriman"
+  - if order.date_receive.present?
+    - color = "text-danger"
+    - status = "Menunggu pelunasan"
+  - if order.date_paid_off.present?
+    - color = "text-success"
+    - status = "Order selesai"
+  td class="#{color}" #{status}
 
   td
     - if buttonAccess "orders", "destroy"

@@ -4,50 +4,33 @@ tr
   td #{transfer.to_store.name}
   td #{transfer.total_items}
   td #{transfer.date_created}
-  td
-    - if transfer.date_approve.nil?
-      | - 
-    - elsif transfer.date_approve.to_date == "01-01-1999".to_date
-      .text-danger
-        - if transfer.approved_by.present?
-          | DIBATALKAN #{transfer.approved_by.name}
-        - else
-          | DIBATALKAN SISTEM
-    - else
-      .text-success
-        | DISETUJUI #{transfer.approved_by.name} (#{transfer.date_approve})
-  td
-    - if transfer.date_picked.nil?
-      | - 
-    - else 
-      - if transfer.date_picked.to_date == "01-01-1999".to_date
-        .text-danger
-          | x
-      - else
-        - if transfer.status.present?
-          - if transfer.status.to_date == "01-01-1999".to_date
-            .text-danger
-              | #{transfer.picked_by.name} (#{transfer.date_picked})
-          - else
-            | #{transfer.picked_by.name} (#{transfer.date_picked})
-        - else
-          | #{transfer.picked_by.name} (#{transfer.date_picked})
-  td
-    - if transfer.status.nil?
-      | 
-    - elsif transfer.status.to_date == "01-01-1999".to_date
-      .text-danger
-        | x
-    - else
-      | #{transfer.confirmed_by.name} (#{transfer.status})
-  td
-    a href='#{transfer_path(id: transfer.id)}'
-      button class="btn btn-primary"
-        | Item
+  - color = "text-dark"
+  - status = "Menunggu Konfirmasi"
+  - if ["","-", nil].include? transfer.description
+    - if transfer.date_approve.present?
+      - color = "text-primary"
+      - status = "Disetujui oleh " + transfer.approved_by.name + " (" + transfer.date_approve.to_s + ")"
+    - if transfer.date_picked.present?
+      - color = "text-warning"
+      - status = "Diambil oleh " + transfer.picked_by.name + " (" + transfer.date_picked.to_s + ")"
+    - if transfer.status.present?
+      - color = "text-success"
+      - status = "Diterima oleh " + transfer.confirmed_by.name + " (" + transfer.status.to_s + ")"
+  - else
+    - color = "text-danger"
+    - status = transfer.description
 
-  - if buttonAccess "transfers", "destroy"
-    - unless transfer.date_approve.present?
-      td
-        = form_for :transfer, url: transfer_path(id: transfer.id), method: "DELETE" do |form|
-          = form.submit "Hapus", class: "btn btn-danger"
+  td class="#{color}" #{status}
+  td.text-right 
+    .row
+      .col
+        a href='#{transfer_path(id: transfer.id)}'
+          button class="btn btn-primary"
+            | Item
+
+      - unless transfer.date_approve.present?
+        - if buttonAccess "transfers", "destroy"
+          .col
+            = form_for :transfer, url: transfer_path(id: transfer.id), method: "DELETE" do |form|
+              = form.submit "Hapus", class: "btn btn-danger"
 

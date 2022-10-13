@@ -13,20 +13,18 @@
             | &nbsp Transfer
 
             
-table class="table"
-  thead
-    th Invoice
-    th Dari
-    th Kepada
-    th Total Item
-    th Dibuat
-    th Status
-    th Kirim
-    th Terima
-    th 
-  tbody
-    = render partial: 'list', collection: @transfers, as: :transfer
-.container.pagination.justify-content-center
-  = paginate @transfers
-.text-center
-  = page_entries_info @transfers
+  table class="table"
+    thead
+      th Invoice
+      th Dari
+      th Kepada
+      th Jumlah Barang
+      th Dibuat
+      th Status
+      th
+    tbody
+      = render partial: 'list', collection: @transfers, as: :transfer
+  .container.pagination.justify-content-center
+    = paginate @transfers
+  .text-center
+    = page_entries_info @transfers

@@ -22,44 +22,29 @@
         button.btn.btn-dark type="button" 
           | &nbsp&nbsp&nbsp CETAK
   .row      
-    .col-6
+    .col
       .form-group
         label for="from" Toko / Gudang
         input type="text" class="form-control md-form" disabled=true value="#{order.store.name}"
 
-    .col-6
+    .col
       .form-group
         label for="from" Supplier
         input type="text" class="form-control md-form" disabled=true value="#{order.supplier.name}"
 
-    .col-6
+    .col
       .form-group
         label for="from" Jumlah Barang
         input type="text" class="form-control md-form" disabled=true value="#{order.order_items.sum(:quantity).to_i}"
 
     - if due_date
-      .col-6
+      .col
         label for="form" Jatuh Tempo
         input type="text" class="form-control md-form" disabled=true value="#{due_date}"
-    .col-12
-      hr.primary-color
-
-    .col-6
-      .form-group
-        label for="from" Dibuat
-        input type="text" class="form-control md-form" disabled=true value="#{order.created_at.to_s + " (" + order.user.name + ")"}"
-
-    - receive = "-"
-    - if order.date_receive.present?
-      - receive = order.date_receive.to_s + " ( " + order.received_by.name + " )"
-      .col-6
-        .form-group
-          label for="from" Terima
-          input type="text" class="form-control md-form" disabled=true value="#{receive}"
 
     - if order.date_receive.present?
       .col-12
-        hr
+        hr.my-4
       .col-3
         label for="form" Total
         input type="text" class="form-control md-form" disabled=true value="#{number_to_currency(order.total, unit: "Rp. ")}"
@@ -84,8 +69,57 @@
           a href="#{retur_path(id: retur.id)}" class="btn btn-primary"
             | #{retur.invoice}
 
-    .col-12
-      hr.primary-color
+    .col-12 
+      hr.my-4
+      .stepper-wrapper
+        .stepper-item.completed
+          .step-counter.text-white 
+            i.fa.fa-file-text  aria-hidden="true"
+          .step-name.text-center
+            | Dibuat
+            br
+            br
+            b
+              | #{order.user.name}
+              br
+              | #{order.created_at}
+
+        - if order.date_receive.present?
+          .stepper-item.completed
+            .step-counter.text-white 
+              i.fa.fa-cube  aria-hidden="true"
+            .step-name.text-center
+              | Diterima
+              br
+              br
+              b
+                | #{order.received_by.name}
+                br
+                | #{order.date_receive}
+        - else
+          .stepper-item
+            .step-counter.text-white 
+              i.fa.fa-truck  aria-hidden="true"
+            .step-name.text-center Menunggu Pengiriman
+
+        - if order.date_paid_off.present?
+          .stepper-item.completed
+            .step-counter.text-white 
+              i.fa.fa-check  aria-hidden="true"
+            .step-name.text-center
+              | Selesai
+              br
+              br
+              | 
+              br
+              b #{order.date_paid_off}
+        - else
+          .stepper-item
+            .step-counter.text-white 
+              i.fa.fa-credit-card  aria-hidden="true"
+            .step-name.text-center Menunggu Pelunasan
+
+    /.col-12
       - progress = "30"
       - bg = "bg-warning"
       - if order.date_receive.present?
