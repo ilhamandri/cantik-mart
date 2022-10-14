@@ -152,7 +152,7 @@ class PostsController < ApplicationController
 			logger.error e.message
   			# e.backtrace.each { |line| logger.error line }
   			puts e.message
-  			binding.pry
+  			# binding.pry
 			render status: 400
 		end
 	end
