@@ -8,13 +8,13 @@
 table class="table"
   thead
     th Nama
-    th Toko
+    th Lokasi
     th Waktu Masuk
     th Waktu Keluar
-    th Mulai Lembur
-    th Selesai Lembur
+    / th Mulai Lembur
+    / th Selesai Lembur
     th Jam Kerja
-    th Jam Lembur
+    / th Jam Lembur
   tbody
     = render partial: 'list', collection: @absents, as: :absent
 .container.pagination.justify-content-center
