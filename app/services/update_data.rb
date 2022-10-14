@@ -1,5 +1,6 @@
 class UpdateData
 
+	# UpdateData.updateItemPrice
 	def self.updateItemPrice
 		order_items = OrderItem.where("receive > 0 AND grand_total > 0").where(created_at: DateTime.now-2.year..DateTime.now)
 		order_items.each do |order_item|

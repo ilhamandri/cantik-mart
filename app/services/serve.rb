@@ -220,6 +220,31 @@ class Serve
     return results
   end
 
+  def self.supplier_trx_graph_monthly store, supplier
+    items = SupplierItem.where(supplier: supplier).pluck(:item_id)
+    date_range = Time.now.beginning_of_month-1.year..Time.now.end_of_month
+    raw_trxs = TransactionItem.where(created_at: date_range, item_id: items)
+    raw_trxs = raw_trxs.where(store: store) if store.present?
+
+    trx_datas = raw_trxs.group_by{ |m| m.created_at.beginning_of_month}
+    results = {}
+    arr_label = []
+    arr_trx_items= []
+    arr_trx_nominal = []
+    
+    trx_datas.each do |date, datas|
+      arr_label << date.to_date.strftime("%B %Y")
+     
+      arr_trx_items<< datas.size
+      arr_trx_nominal << datas.sum{|data| data.total}
+    end
+    results["label"] = arr_label
+    results["trx_items"] = arr_trx_items
+    results["trx_nominal"] = arr_trx_nominal
+    return results
+  end
+
+
   def self.retur_graph_monthly store
     date_range = Time.now.beginning_of_month-1.year..Time.now.end_of_month
     raw_returs = Retur.where(created_at: date_range)

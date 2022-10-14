@@ -1,3 +1,9 @@
+- if isDeveloper
+  .col-xl-12.col-lg-12.col-md-12.pb-2
+    .card-body.table-responsive.text-nowrap
+          canvas id="supplier_order"
+    hr.my-4
+    
 .col-xl-12.col-lg-12.col-md-12.pb-2
   .container-fluid
       = form_for :supplier_item_recap, url: supplier_order_recaps_path(id: @supplier.id), method: 'POST' do |form|
@@ -12,7 +18,7 @@
             button class="btn btn-primary"
               | Unduh
 
-hr            
+            
 / .table-responsive.text-nowrap
     table class="table table-hover"
         thead

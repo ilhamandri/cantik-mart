@@ -45,9 +45,15 @@ class SuppliersController < ApplicationController
     return redirect_back_data_error suppliers_path, "Data Supplier Tidak Ditemukan" unless @supplier.present?
 
     orders = Serve.order_graph_monthly dataFilter, @supplier
-    gon.loss_label = orders["label"]
+    gon.order_label = orders["label"]
     gon.order = orders["order"]
     gon.order_nominal = orders["order_nominal"]
+
+    trxs = Serve.supplier_trx_graph_monthly dataFilter, @supplier
+    gon.trx_label = trxs["label"]
+    gon.trx_items = trxs["trx_items"]
+    gon.trx_nominal = trxs["trx_nominal"]
+
 
     respond_to do |format|
       format.html

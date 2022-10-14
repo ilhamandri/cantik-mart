@@ -435,7 +435,7 @@
       var myLineChart = new Chart(ctxL, {
         type: 'line',
         data: {
-          labels: gon.loss_label,
+          labels: gon.order_label,
           datasets: [
             {
               label: "JUMLAH ORDER",
@@ -451,6 +451,42 @@
             {
               label: "NOMINAL ORDER",
               data: gon.order_nominal,
+              backgroundColor: [
+              'rgba(255, 206, 86, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+      // SUPPLIER TRX
+      var ctxL = document.getElementById("supplier_trxs").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.trx_label,
+          datasets: [
+            {
+              label: "JUMLAH BARANG",
+              data: gon.trx_items,
+              backgroundColor: [
+              'rgba(255, 99, 132, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 2
+            },
+            {
+              label: "NOMINAL TERJUAL",
+              data: gon.trx_nominal,
               backgroundColor: [
               'rgba(255, 206, 86, 0.1)',
               ],
