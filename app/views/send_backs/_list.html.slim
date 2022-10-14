@@ -3,16 +3,15 @@ tr
 	td #{send_back.store.name}
 	td #{send_back.total_items}
 	td #{send_back.user.name} ( #{send_back.created_at} )
-	- if send_back.received_by.nil?
-		td -
-		td
-			a.btn.btn-primary href="#{send_back_path(id: send_back.id)}"
-				| DETIL
-		td 
-			= form_for :send_back, url: send_back_path(id: send_back.id), method: "DELETE" do |form|
-          		= form.submit "HAPUS", class: "btn btn-danger"
-	- else
-		td #{send_back.received_by.name} ( #{send_back.date_receive} )
-		td
-			a.btn.btn-primary href="#{send_back_path(id: send_back.id)}"
-				| DETIL
+	- color = "alert-dark"
+	- status = "Menunggu disetujui"
+	- if send_back.received_by.present?
+		- color = "alert-success"
+		- status = "Diterima oleh " + send_back.received_by.name + " (" + send_back.date_receive.to_s + ")"
+	td 
+		.alert class="#{color}"
+			.alert-heading
+				| #{status}
+	td
+		a.btn.btn-primary href="#{send_back_path(id: send_back.id)}"
+			| DETIL

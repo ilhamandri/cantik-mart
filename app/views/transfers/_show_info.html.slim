@@ -59,6 +59,7 @@
     label Total Barang
     input disabled="disabled" class="form-control md-form" value="#{transfer.total_items}"
 
+- status = true
 hr.my-4
 .stepper-wrapper
   .stepper-item.completed
@@ -73,74 +74,20 @@ hr.my-4
         br
         | #{transfer.created_at}
 
-  - if ["","-", nil].include? transfer.description
-    - if transfer.approved_by.present?
-      .stepper-item.completed
-        .step-counter.text-white 
-          i.fa.fa-pencil-square-o  aria-hidden="true"
-        .step-name.text-center
-          | Disetujui
-          br
-          br
-          b
-            | #{transfer.approved_by.name}
-            br
-            | #{transfer.date_approve}
-    - else
-      .stepper-item
-        .step-counter.text-white 
-          i.fa.fa-check-square-o  aria-hidden="true"
-        .step-name.text-center Menunggu Disetujui
-
-
-    - if transfer.approved_by.present?
-      .stepper-item.completed
-        .step-counter.text-white 
-          i.fa.fa-truck  aria-hidden="true"
-        .step-name.text-center
-          | Dikirim
-          br
-          br
-          b
-            | #{transfer.approved_by.name}
-            br
-            | #{transfer.date_approve}
-    - else
-      .stepper-item
-        .step-counter.text-white 
-          i.fa.fa-upload  aria-hidden="true"
-        .step-name.text-center Menunggu Dikirim
-
-    - if transfer.confirmed_by.present?
-      .stepper-item.completed
-        .step-counter.text-white 
-          i.fa.fa-check  aria-hidden="true"
-        .step-name.text-center
-          | Diterima
-          br
-          br
-          b
-            | #{transfer.confirmed_by.name}
-            br
-            | #{transfer.status}
-    - else
-      .stepper-item
-        .step-counter.text-white 
-          i.fa.fa-download  aria-hidden="true"
-        .step-name.text-center Menunggu Barang
-  - elsif transfer.description.include? "sistem"
-    .stepper-item
-      .step-counter.text-danger 
-        i.fa.fa-times  aria-hidden="true"
+  - if (transfer.approved_by.present?) && (transfer.date_approve.to_time != "01-01-1999 00:00:00".to_time)
+    .stepper-item.completed
+      .step-counter.text-white 
+        i.fa.fa-pencil-square-o  aria-hidden="true"
       .step-name.text-center
-        | Dibatalkan oleh sistem
+        | Disetujui
         br
         br
-        b 
-          | 
+        b
+          | #{transfer.approved_by.name}
           br
-          | #{transfer.updated_at}
-  - else
+          | #{transfer.date_approve}
+  - elsif transfer.description.include? "pada"
+    - status = false
     .stepper-item
       .step-counter.text-danger 
         i.fa.fa-times  aria-hidden="true"
@@ -152,3 +99,67 @@ hr.my-4
           | #{transfer.approved_by.name}
           br
           | #{transfer.updated_at}
+  - else
+    .stepper-item
+      .step-counter.text-white 
+        i.fa.fa-check-square-o  aria-hidden="true"
+      .step-name.text-center Menunggu Disetujui
+
+  - if status
+    - if transfer.picked_by.present? 
+      .stepper-item.completed
+        .step-counter.text-white 
+          i.fa.fa-truck  aria-hidden="true"
+        .step-name.text-center
+          | Dikirim
+          br
+          br
+          b
+            | #{transfer.picked_by.name}
+            br
+            | #{transfer.date_picked}
+    - else
+      .stepper-item
+        .step-counter.text-white 
+          i.fa.fa-upload  aria-hidden="true"
+        .step-name.text-center Menunggu Dikirim
+
+  - if status
+    - if transfer.confirmed_by.present? && (transfer.status.to_time != "01-01-1999 00:00:00".to_time)
+      .stepper-item.completed
+        .step-counter.text-white 
+          i.fa.fa-check  aria-hidden="true"
+        .step-name.text-center
+          | Diterima
+          br
+          br
+          b
+            | #{transfer.confirmed_by.name}
+            br
+            | #{transfer.status}
+    - elsif transfer.description.include? "sistem"
+      - status = false
+      .stepper-item
+        .step-counter.text-danger 
+          i.fa.fa-times  aria-hidden="true"
+        .step-name.text-center
+          | Dibatalkan oleh sistem
+          br
+          br
+          b 
+            | 
+            br
+            | #{transfer.updated_at}
+    - else
+      .stepper-item
+        .step-counter.text-white 
+          i.fa.fa-download  aria-hidden="true"
+        .step-name.text-center Menunggu Barang
+
+- unless transfer.date_approve.present?
+  - if buttonAccess "transfers", "destroy"
+    .col-12.text-center
+      hr.my-4
+      = form_for :transfer, url: transfer_path(id: transfer.id), method: "DELETE" do |form|
+        = form.submit "Hapus", class: "btn btn-danger"
+

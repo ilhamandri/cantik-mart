@@ -143,3 +143,10 @@ hr.my-4
 /     .progress
 /       .progress-bar class="#{bg}" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
 /         | #{progress} %
+
+.col-12.text-center
+  - if buttonAccess "retur", "destroy"
+    - if retur.date_picked.nil?
+      hr.my-4
+      = form_for :retur, url: retur_path(id: retur.id), method: "DELETE" do |form|
+        = form.submit "Hapus", class: "btn btn-danger"

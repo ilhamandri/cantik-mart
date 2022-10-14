@@ -131,3 +131,11 @@
       .progress
         .progress-bar class="#{bg}" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
           | #{progress} %
+
+    .col-12.text-center
+      - if buttonAccess "orders", "destroy"
+        - order_invs = InvoiceTransaction.find_by(invoice: order.invoice)
+        - if order_invs.nil? && !order.from_retur
+          hr.my-4
+          = form_for :order, url: "#{order_path(id: order.id)}", method: "DELETE" do |form|
+            = form.submit "Hapus", class: "btn btn-danger"

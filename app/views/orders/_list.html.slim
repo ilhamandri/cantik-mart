@@ -3,21 +3,18 @@ tr
   td #{order.supplier.name}
   td #{number_with_delimiter(order.grand_total, delimiter: ".")}
   td #{order.user.name} (#{order.date_created.to_date})
+  - color = "alert-warning"
   - status = "Menunggu pengiriman"
   - if order.date_receive.present?
-    - color = "text-danger"
+    - color = "alert-danger"
     - status = "Menunggu pelunasan"
   - if order.date_paid_off.present?
-    - color = "text-success"
+    - color = "alert-success"
     - status = "Order selesai"
-  td class="#{color}" #{status}
-
-  td
-    - if buttonAccess "orders", "destroy"
-      - order_invs = InvoiceTransaction.find_by(invoice: order.invoice)
-      - if order_invs.nil? && !order.from_retur
-        = form_for :order, url: "#{order_path(id: order.id)}", method: "DELETE" do |form|
-          = form.submit "Hapus", class: "btn btn-danger"
+  td 
+    .alert class="#{color}"
+      .alert-heading
+        |  #{status}
   td
     a href='#{order_path(id: order.id)}'
       button class="btn btn-primary"

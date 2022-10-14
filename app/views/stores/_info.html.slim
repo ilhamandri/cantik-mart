@@ -34,7 +34,7 @@
       - if buttonAccess "stores", "destroy"
         - if !@store.users.present? && !@store.store_items.present?
           .col
-            = button_to "Hapus Toko", @store, :method=>:delete, :class=>"btn btn-danger"
+            = button_to "Hapus", @store, :method=>:delete, :class=>"btn btn-danger"
       - if buttonAccess "stores", "edit"
         .col
           a.btn.btn-warning href="#{edit_store_path(@store)}"

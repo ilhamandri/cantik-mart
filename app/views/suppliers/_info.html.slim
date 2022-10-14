@@ -30,8 +30,14 @@
       input.text-danger class="form-control md-form" value="#{@supplier.updated_at}" disabled="disabled"
 
     .row
-      .col-12.text-center
-        - if buttonAccess "suppliers", "edit"
+      - if buttonAccess "suppliers", "edit"
+        .col.text-center
           a href='#{edit_supplier_path(id: @supplier.id)}'
             button.btn.btn-warning type="button" 
               | Edit
+
+
+      - if buttonAccess "suppliers", "destroy"
+        - if @supplier.orders.empty?
+          .col.text-center
+            = button_to "Hapus", @suppliers, :method=>:delete, :class=>"btn btn-danger"

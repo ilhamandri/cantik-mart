@@ -1,8 +1,6 @@
 .col-md-12.text-right.grey-text
-  a.btn.btn-danger href="#{supplier_path(id: @supplier.id,format: :pdf)}"
-    b
-    	i.fas.fa-print
-      	|     CETAK    
+  a.btn.btn-dark href="#{supplier_path(id: @supplier.id,format: :pdf)}"
+    | CETAK    
 .table-responsive.text-nowrap
   table class="table"
     thead

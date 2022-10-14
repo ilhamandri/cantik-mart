@@ -19,31 +19,49 @@
     - if @send_back.received_by.nil? && current_user.store.store_type == "warehouse"
       .col-lg-1.col-md-2.text-right
         a.btn.btn-warning href="#{send_back_receive_path(id: @send_back.id)}"
-          button class=""
             | TERIMA
     .col-lg-1.col-md-2.text-right
       a.btn.btn-dark href="#{send_back_path(id: @send_back.id, format: :pdf)}"
         | CETAK
     .col-12
-      hr
+      hr.my-4
 
-  .row
-    .col
-      label Dari
-      input disabled="disabled" class="form-control md-form" value="#{@send_back.store.name}"
-    .col
-      label Total Barang
-      input disabled="disabled" class="form-control md-form" value="#{@send_back.total_items}"
-    .col
-      label Dibuat Oleh
-      input disabled="disabled" class="form-control md-form" value="#{@send_back.user.name} ( #{@send_back.created_at} )"
     .col-12
-      hr.primary-color
-      - progress = "50"
-      - bg = "bg-warning"
-      - if @send_back.received_by.present?
-        - progress = "100"
-        - bg = "bg-success" 
-      .progress
-        .progress-bar class="#{bg}" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
-          | #{progress} %
+      .stepper-wrapper
+        .stepper-item.completed
+          .step-counter.text-white 
+            i.fa.fa-file-text  aria-hidden="true"
+          .step-name.text-center
+            | Dibuat
+            br
+            br
+            b
+              | #{@send_back.user.name}
+              br
+              | #{@send_back.created_at}
+
+        - if @send_back.received_by.present?
+          .stepper-item.completed
+            .step-counter.text-white 
+              i.fa.fa-cube  aria-hidden="true"
+            .step-name.text-center
+              | Diterima
+              br
+              br
+              b
+                | #{order.received_by.name}
+                br
+                | #{order.date_receive}
+        - else
+          .stepper-item
+            .step-counter.text-white 
+              i.fa.fa-truck  aria-hidden="true"
+            .step-name.text-center Menunggu Pengiriman
+
+
+    .col-12.text-center
+      -if buttonAccess "send_backs", "destroy"
+        - if @send_back.received_by.nil?
+          hr.my-4
+          = form_for :send_back, url: send_back_path(id: @send_back.id), method: "DELETE" do |form|
+                  = form.submit "HAPUS", class: "btn btn-danger"

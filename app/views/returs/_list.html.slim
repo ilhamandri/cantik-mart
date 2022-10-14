@@ -4,27 +4,27 @@ tr
   td #{retur.supplier.name}
   td #{retur.total_items.to_i}
   td #{retur.date_created.to_date}
-  - color = "text-dark"
-  - status = "Menunggu Konfirmasi"
+  - color = "alert-dark"
+  - status = "Menunggu disetujui"
 
   - if retur.date_approve.present?
-    - status = "Dikonfirmasi - " + retur.approved_by.name + " ("+ retur.date_approve.to_date.to_s + ")"
+    - color = "alert-primary"
+    - status = "Retur disetujui " + retur.approved_by.name + " ("+ retur.date_approve.to_date.to_s + ")"
 
   - if retur.date_picked.present?
-    - status = "Diambil Supplier - " + retur.picked_by.name + " (" + retur.date_picked.to_date.to_s + ")"
+    - color = "alert-warning"
+    - status = "Barang sudah diambil " + retur.supplier.name + " (" + retur.date_picked.to_date.to_s + ")"
 
   - if retur.status.present?
-    - color = "text-success"
+    - color = "alert-success"
     - confirmed = retur.confirmed_by.name if retur.confirmed_by.present?
-    - status = "Diterima - " + confirmed + " (" + retur.status.to_date.to_s + ")"
+    - status = "Retur telah diterima " + confirmed + " (" + retur.status.to_date.to_s + ")"
 
-  td class="#{color}" #{status}
+  td 
+    .alert class="#{color}" 
+      .alert-heading
+        | #{status}
 
-  - if buttonAccess "retur", "destroy"
-    - if retur.date_picked.nil?
-      td
-        = form_for :retur, url: retur_path(id: retur.id), method: "DELETE" do |form|
-          = form.submit "Hapus", class: "btn btn-danger"
   td
     a href='#{retur_path(id: retur.id)}'
       button class="btn btn-primary"
