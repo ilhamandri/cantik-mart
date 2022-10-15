@@ -60,28 +60,28 @@ class UsersController < ApplicationController
     gon.absent_label = absents.keys
     gon.work_hour_data = absents.values
 
-    @date = []
-    @work_hours = []
-    @work_hours_morning = []
-    @work_hours_afternoon = []
-    @overtime_hours = []
-    @work_totals = 0
-    @work_morning = 0
-    @work_afternoon = 0
-    @overtime_totals = 0
-    @no_check_out = 0
-    @no_check_out_morning = 0
-    @no_check_out_afternoon = 0
-    @no_check_out_overtime = 0
-    @n_absents = 0
-    @late_morning = []
-    @late_afternoon = []
-    @late_general = []
-    @performance = 0
+    # @date = []
+    # @work_hours = []
+    # @work_hours_morning = []
+    # @work_hours_afternoon = []
+    # @overtime_hours = []
+    # @work_totals = 0
+    # @work_morning = 0
+    # @work_afternoon = 0
+    # @overtime_totals = 0
+    # @no_check_out = 0
+    # @no_check_out_morning = 0
+    # @no_check_out_afternoon = 0
+    # @no_check_out_overtime = 0
+    # @n_absents = 0
+    # @late_morning = []
+    # @late_afternoon = []
+    # @late_general = []
+    # @performance = 0
     
-    absent @user
+    # absent @user
 
-    @receivables = Receivable.where(to_user: @user, finance_type: "EMPLOYEE").order("created_at DESC").page param_page
+    # @receivables = Receivable.where(to_user: @user, finance_type: "EMPLOYEE").order("created_at DESC").page param_page
     
     # # if params[:month].present?
     # #   start_date = ("01-" + params[:month].to_s + "-" + params[:year].to_s).to_time.beginning_of_month
