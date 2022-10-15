@@ -12,11 +12,12 @@
         .alert.alert-success
           .alert-heading
             | LUNAS (#{order.date_paid_off})
-    - if order.date_receive.present? && order.date_paid_off.nil? && @pay != 0
-      .col-2.text-right
-        a href="#{order_pay_path(id: order_id)}"
-          button.btn.btn-success type="button" 
-            | Bayar
+    - if ((current_user.store == order.store) && (["finance", "super_visi"].include? current_user.level)) || isAdmin
+      - if order.date_receive.present? && order.date_paid_off.nil? && @pay != 0
+        .col-2.text-right
+          a href="#{order_pay_path(id: order_id)}"
+            button.btn.btn-success type="button" 
+              | Bayar
             
 .card-body.table-responsive.text-nowrap
   table class="table"

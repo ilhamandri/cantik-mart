@@ -502,7 +502,7 @@ class OrdersController < ApplicationController
       if r_type == "html"
         @orders = @orders.page param_page if r_type=="html"
       end
-      @orders = @orders.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      @orders = @orders.where(store: current_user.store) if  !["owner", "super_admin", "developer"].include? current_user.level
       @search = ""
       if params["search"].present?
         @search += "Pencarian "+params["search"]
