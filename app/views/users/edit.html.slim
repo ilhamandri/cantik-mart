@@ -54,7 +54,7 @@
                       label.custom-file-label[for="inputGroupFile01"]
                         | Choose file
 
-            - if current_user.level == User::SUPER_ADMIN || current_user.level == User::OWNER
+            - if isAdmin
               .col-12
                hr.primary-color
               .col-md-4.col-lg-3
@@ -62,6 +62,7 @@
                   label for="level" Peran 
                   select name="user[level]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="level" searchable="Cari..."
                     - User::levels.each do |user_level|
+                      - next if ["owner", "super_admin", "developer"].include? user_level[0]
                       - if user_level[0] == @user.level
                         option value='#{user_level[0]}' selected="selected"
                           | #{user_level[0].upcase.gsub('_', ' ')}

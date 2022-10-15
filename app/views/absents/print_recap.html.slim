@@ -21,33 +21,40 @@ br
 br
 br
 
-table#items
-  tr
-    th Nama
-    th Masuk
-    th Pulang
-    th Jam Kerja
-    th
-    th Mulai Lembur
-    th Selesai Lembur
-    th Jam Lembur
-
-  - @absents.each do |absent|
+- absent_group = @absents.group_by(&:store_id)
+- absent_group.each do |store_id, data|
+  - store_name = "(NOT DEFINED)"
+  - store_name = Store.find_by(id: store_id).name if store_id.present?
+  table#items
     tr
-      td #{absent.user.name}
-      td #{absent.check_in}
-      td #{absent.check_out}
-      td
-        - if absent.check_out.present?
-          - time_split = absent.work_hour.split(":")
-          | #{time_split[0]} Jam #{time_split[1]} Menit #{time_split[2]} Detik
-        
-      td
-      td #{absent.overtime_in}
-      td #{absent.overtime_out}
-      td
-        - if absent.overtime_out.present?
-          - time_split = absent.overtime_hour.split(":")
-          | #{time_split[0]} Jam #{time_split[1]} Menit #{time_split[2]} Detik
+      th colspan="4"
+        | #{store_name}
+    tr
+      th Nama
+      th Masuk
+      th Pulang
+      th Jam Kerja
+      / th
+      / th Mulai Lembur
+      / th Selesai Lembur
+      / th Jam Lembur
 
+    - data.each do |absent|
+      tr
+        td #{absent.user.name}
+        td #{absent.check_in}
+        td #{absent.check_out}
+        td
+          - if absent.check_out.present?
+            - time_split = absent.work_hour.split(":")
+            | #{time_split[0]} Jam #{time_split[1]} Menit #{time_split[2]} Detik
           
+        / td
+        / td #{absent.overtime_in}
+        / td #{absent.overtime_out}
+        / td
+        /   - if absent.overtime_out.present?
+        /     - time_split = absent.overtime_hour.split(":")
+        /     | #{time_split[0]} Jam #{time_split[1]} Menit #{time_split[2]} Detik
+
+              
