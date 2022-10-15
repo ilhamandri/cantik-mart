@@ -59,7 +59,7 @@ class Serve
     result = {}
     
     dates.each do |date|
-      next if (date.strftime("%A") == "Sunday") && (["stock_admin", "finance", "stock_admin", "owner"].include? user.level)
+      next if (date.strftime("%A") == "Sunday") && (["super_admin", "finance", "stock_admin", "owner"].include? user.level)
       absents = absent_data[date]
       work_hour = 0.0
       if absents.present?
