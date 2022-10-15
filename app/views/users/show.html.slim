@@ -5,11 +5,12 @@
         i.fa.fa-info.fa-2x.pb-2 aria-hidden="true" 
         br
         | Info 
-    / li.nav-item
-      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="absent" aria-selected="true" data-toggle="tab" href="#absent" role="tab" 
-        i.fa.fa-calendar.fa-2x.pb-2 aria-hidden="true" 
-        br
-        | Absensi
+    - if isDeveloper
+      li.nav-item
+        a#profile-tab-classic-blue.nav-link.waves-light aria-controls="absent" aria-selected="true" data-toggle="tab" href="#absent" role="tab" 
+          i.fa.fa-calendar.fa-2x.pb-2 aria-hidden="true" 
+          br
+          | Absensi
     li.nav-item
       a#contact-tab-classic-blue.nav-link.waves-light aria-controls="receivables" aria-selected="false" data-toggle="tab" href="#receivables" role="tab" 
         i.fa.fa-handshake-o.fa-2x.pb-2 aria-hidden="true" 
@@ -32,7 +33,8 @@
     #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
         = render partial: 'info'
 
-    / #absent.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel"
+    - if isDeveloper
+      #absent.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel"
         = render partial: 'absent'
 
     #receivables.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 

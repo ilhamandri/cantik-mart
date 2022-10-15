@@ -44,6 +44,36 @@ class Serve
     return results
   end 
 
+  def self.graph_absent user
+    start_date = Time.now.beginning_of_day - 1.month
+    date_range = start_date..Time.now.end_of_day
+    raw_absent = Absent.where(check_in: date_range, user: user)
+    dates = [start_date]
+    while true
+      dates << dates.last + 1.day 
+      break if Time.now.beginning_of_day == dates.last
+    end
+
+    absent_data = raw_absent.group_by{ |m| m.created_at.beginning_of_day}
+
+    result = {}
+    
+    dates.each do |date|
+      absents = absent_data[date]
+      work_hour = 0.0
+      if absents.present?
+        absent = absents.first
+        work_hour_raw = absent.work_hour.split(":")
+        work_hour += work_hour_raw[0].to_f
+        work_hour += (work_hour_raw[1].to_f / 100)
+        work_hour += 1 if work_hour_raw[2].to_f > 0
+      end
+      result[date.to_date.strftime("%d %B %Y")] = work_hour
+    end
+
+    return result
+  end
+
   def self.graph_item_price item
     start_date = Time.now.beginning_of_month-1.year
     date_range = start_date..Time.now.end_of_month

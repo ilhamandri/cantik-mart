@@ -97,43 +97,7 @@
     });
 
 // ABSENT GRAPH => UNUSED
-- if ["absentss"].include? controller_name
-  javascript:
-    var ctxL = document.getElementById("workhour").getContext('2d');
-    var myLineChart = new Chart(ctxL, {
-      type: 'line',
-      data: {
-        labels: gon.label_work_hour,
-        datasets: [
-          {
-            label: "Jam Kerja",
-            data: gon.work_hour,
-            backgroundColor: [
-            'rgba(255, 206, 86, 0.1)',
-            ],
-            borderColor: [
-            'rgba(255, 206, 86, 1)',
-            ],
-            borderWidth: 2
-          },
-          {
-            label: "Lembur",
-            data: gon.overtime_hour,
-            backgroundColor: [
-            'rgba(255, 99, 132, 0.1)',
-            ],
-            borderColor: [
-            'rgba(255, 99, 132, 1)',
-            ],
-            borderWidth: 2
-          }
 
-        ]
-      },
-      options: {
-        responsive: true
-      }
-    });
 
 - if ["populars"].include? controller_name
   javascript:
@@ -172,7 +136,33 @@
     });
 
 - if isDeveloper
-  - if ["homes", "debts", "receivables"].include? controller_name
+  - if ["users"].include? controller_name
+    javascript:
+      var ctxL = document.getElementById("user_absent_wh").getContext('2d');
+      var myLineChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: gon.absent_label,
+          datasets: [
+            {
+              label: "Jam Kerja",
+              data: gon.work_hour_data,
+              backgroundColor: [
+              'rgba(255, 206, 86, 0.1)',
+              ],
+              borderColor: [
+              'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 2
+            }
+
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      });
+  - if ["debts", "receivables"].include? controller_name
     javascript:
       // DEBT RECEIVABLE
       var ctxL = document.getElementById("debt_receivable").getContext('2d');
@@ -211,7 +201,7 @@
       });
 
   
-  - if ["homes", "taxs"].include? controller_name
+  - if ["taxs"].include? controller_name
     javascript:
       // TAX
       var ctxL = document.getElementById("tax").getContext('2d');
@@ -238,7 +228,7 @@
         }
       });
 
-  - if ["homes", "operationals"].include? controller_name
+  - if ["operationals"].include? controller_name
     javascript:
       // INCOME OUTCOME 
       var ctxL = document.getElementById("income_outcome").getContext('2d');
@@ -502,7 +492,7 @@
         }
       });
 
-- if ["homes", "transactions"].include? controller_name
+- if ["transactions"].include? controller_name
   - if ["super_admin", "owner", "developer", "finance"].include? current_user.level
     javascript:
       // TRANSACTION

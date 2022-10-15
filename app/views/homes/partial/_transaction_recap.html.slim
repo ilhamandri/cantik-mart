@@ -5,11 +5,15 @@
       h3
         b.lead #{Date.today}
       .row
-        - trxs_day = trx.where(created_at: DateTime.now.beginning_of_day..DateTime.now.end_of_day)
-        - sum_grand_total = trxs_day.sum(:grand_total)
-        - sum_grand_total = trxs_day.sum(:grand_total_coin) if current_user.level == "candy_dream"
-        - sum_hpp_total = trxs_day.sum(:hpp_total)
-        - sum_tax_total = trxs_day.sum(:tax)
+        - sum_grand_total = 0
+        - sum_hpp_total = 0
+        - sum_tax_total = 0
+        - if trx.present?
+          - trxs_day = trx.where(created_at: DateTime.now.beginning_of_day..DateTime.now.end_of_day)
+          - sum_grand_total = trxs_day.sum(:grand_total) if trx
+          - sum_grand_total = trxs_day.sum(:grand_total_coin) if current_user.level == "candy_dream"
+          - sum_hpp_total = trxs_day.sum(:hpp_total)
+          - sum_tax_total = trxs_day.sum(:tax)
         .col-6 Omzet :
         .col-6.text-right
           strong  #{number_to_currency(sum_grand_total, unit: "Rp. ", delimiter: ".", separator:",")}
@@ -41,11 +45,15 @@
         br
         b.lead.text-primary #{start_month.strftime("%B %Y")}
 
-      - trxs_month_before = trx.where(created_at: start_month..end_month)
-      - sum_grand_total = trxs_month_before.sum(:grand_total)
-      - sum_grand_total = trxs_month_before.sum(:grand_total_coin) if current_user.level == "candy_dream"
-      - sum_hpp_total = trxs_month_before.sum(:hpp_total)
-      - sum_ppn_total = trxs_month_before.sum(:tax)
+      - sum_grand_total = 0
+      - sum_hpp_total = 0
+      - sum_tax_total = 0
+      - if trx.present?
+        - trxs_month_before = trx.where(created_at: start_month..end_month)
+        - sum_grand_total = trxs_month_before.sum(:grand_total)
+        - sum_grand_total = trxs_month_before.sum(:grand_total_coin) if current_user.level == "candy_dream"
+        - sum_hpp_total = trxs_month_before.sum(:hpp_total)
+        - sum_tax_total = trxs_month_before.sum(:tax)
 
       .row
         .col-6 Omzet :
@@ -55,7 +63,7 @@
         - if isFinance
           .col-6 Profit :
           .col-6.text-right
-            strong #{number_to_currency(sum_grand_total-sum_hpp_total-sum_ppn_total, unit: "Rp. ", delimiter: ".", separator:",")}
+            strong #{number_to_currency(sum_grand_total-sum_hpp_total-sum_tax_total, unit: "Rp. ", delimiter: ".", separator:",")}
         - else
           .col-6 Transaksi :
           .col-6.text-right
@@ -66,12 +74,16 @@
       h3
         b.lead.text-primary #{Date.today.strftime("%B %Y")}
 
+      - sum_grand_total = 0
+      - sum_hpp_total = 0
+      - sum_tax_total = 0
       - current_month = DateTime.now.beginning_of_month
-      - trxs_current_month = trx.where("created_at > ? ", current_month)
-      - sum_grand_total = trxs_current_month.sum(:grand_total)
-      - sum_grand_total = trxs_current_month.sum(:grand_total_coin) if current_user.level == "candy_dream"
-      - sum_hpp_total = trxs_current_month.sum(:hpp_total)
-      - sum_ppn_total = trxs_current_month.sum(:tax)
+      - if trx.present?
+        - trxs_current_month = trx.where("created_at > ? ", current_month)
+        - sum_grand_total = trxs_current_month.sum(:grand_total)
+        - sum_grand_total = trxs_current_month.sum(:grand_total_coin) if current_user.level == "candy_dream"
+        - sum_hpp_total = trxs_current_month.sum(:hpp_total)
+        - sum_tax_total = trxs_current_month.sum(:tax)
 
       .row
         .col-4 Omzet :
@@ -82,7 +94,7 @@
         - if isFinance
           .col-4 Profit :
           .col-8.text-right
-            strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_ppn_total, unit: "Rp. ", delimiter: ".", separator:",")}
+            strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_tax_total, unit: "Rp. ", delimiter: ".", separator:",")}
         - else
           .col-4 Transaksi :
           .col-8.text-right

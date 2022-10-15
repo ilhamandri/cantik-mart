@@ -55,26 +55,31 @@ class UsersController < ApplicationController
     return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless @user.present?
 
     @salaries = UserSalary.where(user: @user).order("created_at DESC").limit(12)
-    # @date = []
-    # @work_hours = []
-    # @work_hours_morning = []
-    # @work_hours_afternoon = []
-    # @overtime_hours = []
-    # @work_totals = 0
-    # @work_morning = 0
-    # @work_afternoon = 0
-    # @overtime_totals = 0
-    # @no_check_out = 0
-    # @no_check_out_morning = 0
-    # @no_check_out_afternoon = 0
-    # @no_check_out_overtime = 0
-    # @n_absents = 0
-    # @late_morning = []
-    # @late_afternoon = []
-    # @late_general = []
-    # @performance = 0
     
-    # absent @user
+    absents = Serve.graph_absent @user
+    gon.absent_label = absents.keys
+    gon.work_hour_data = absents.values
+
+    @date = []
+    @work_hours = []
+    @work_hours_morning = []
+    @work_hours_afternoon = []
+    @overtime_hours = []
+    @work_totals = 0
+    @work_morning = 0
+    @work_afternoon = 0
+    @overtime_totals = 0
+    @no_check_out = 0
+    @no_check_out_morning = 0
+    @no_check_out_afternoon = 0
+    @no_check_out_overtime = 0
+    @n_absents = 0
+    @late_morning = []
+    @late_afternoon = []
+    @late_general = []
+    @performance = 0
+    
+    absent @user
 
     @receivables = Receivable.where(to_user: @user, finance_type: "EMPLOYEE").order("created_at DESC").page param_page
     
@@ -102,9 +107,7 @@ class UsersController < ApplicationController
     # @avg_pay_complete_pinjaman = 1 if @avg_pay_complete_pinjaman.nan?
     # @receivables = Receivable.where(user: @user, finance_type: "EMPLOYEE").page param_page
 
-    # gon.work_hour = @work_hours
-    # gon.label_work_hour = @date
-    # gon.overtime_hours = @overtime_hours 
+
   end
 
   def new
@@ -344,9 +347,9 @@ class UsersController < ApplicationController
         end
         days = nil
         if ['super_visi', 'pramuniaga', 'cashier', 'super_admin'].include? @user.level
-          days = [1,2,3,4,5,6,7] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
+          days = [1..7] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
         else
-          days = [1,2,3,4,5,6] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
+          days = [1..6] # day of the week in 0-6. Sunday is day-of-week 0; Saturday is day-of-week 6.
         end
         
         work_days = (start_date..end_date).to_a.select {|k| days.include?(k.wday)}

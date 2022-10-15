@@ -22,7 +22,7 @@
                   =image_tag("/uploads/profile_picture/default.png", height: '150px', width: '150px', class:"rounded-circle ")
             
       - if isDeveloper
-        = render "homes/dashboard/developer"
+        = render "homes/dashboard/admin"
       - elsif isAdmin
         = render "homes/dashboard/admin"
       - elsif current_user.level == "finance"
