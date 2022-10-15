@@ -5,7 +5,7 @@
   .col
     .alert.alert-primary
       .alert-heading
-        | #{@retur_items.first.retur.invoice}
+        | Retur Supplier #{@retur_items.first.retur.invoice}
   .col-lg-1.col-md-2.text-right
     a href="#{retur_path(id: retur_id, format: :pdf)}"
       button.btn.btn-dark type="button" 

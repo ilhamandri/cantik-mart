@@ -41,7 +41,7 @@ class HomesController < ApplicationController
     @receivable = Receivable.where("deficiency > ?",0).where(store: current_user.store)\
 
     # TRANSAKSI HARI INI
-    if ["super_admin", "owner", "candy_dream", "finance", "super_visi"].include? current_user.level
+    if ["super_admin", "owner", "candy_dream", "finance", "super_visi", "developer"].include? current_user.level
       @daily_transaction = Transaction.where(created_at: start_day..end_day)
       @transactions = Transaction.where("created_at >= ?", DateTime.now.beginning_of_month-1.month)
       @transactions = @transactions.where(store: current_user.store) if current_user.level == "super_visi"

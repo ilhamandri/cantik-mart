@@ -19,7 +19,6 @@
                 th Total
                 - if isFinance
                   th Profit 
-
               -if trxs.present?
                 - trxs = trxs.where(store: store)
                 - User.where(id: trxs.pluck(:user_id).uniq).each do |cashier|

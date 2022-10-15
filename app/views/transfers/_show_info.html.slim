@@ -5,15 +5,11 @@
     - if ["","-", nil].exclude? transfer.description
       .alert.alert-danger
         .alert-heading  
-          | #{transfer.description}
-    - elsif transfer.confirmed_by.present?
-      .alert.alert-success
-        .alert-heading
-         | Telah diterima oleh #{transfer.confirmed_by.name + ' ('+transfer.status.to_s+')'}
+          | Transfer #{transfer.invoice} - #{transfer.description}
     - else
       .alert.alert-primary
         .alert-heading  
-          | TRANSFER #{transfer.invoice}
+          | Transfer #{transfer.invoice}
 
 
 

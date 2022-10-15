@@ -7,15 +7,9 @@
 .card-body
   .row
     .col
-      - if received != ""
-        .col
-          .alert.alert-success
-            .alert-heading
-              | Diterima oleh #{received}
-      - else
-        .alert.alert-primary
-          .alert-heading  
-            | #{@send_back.invoice}
+      .alert.alert-primary
+        .alert-heading  
+          | Retur Gudang #{@send_back.invoice}
     - if @send_back.received_by.nil? && current_user.store.store_type == "warehouse"
       .col-lg-1.col-md-2.text-right
         a.btn.btn-warning href="#{send_back_receive_path(id: @send_back.id)}"

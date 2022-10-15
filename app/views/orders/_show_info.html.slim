@@ -11,7 +11,7 @@
     .col
       .alert.alert-primary
         .alert-heading  
-          | #{order.invoice}
+          | Order #{order.invoice}
     - if buttonAccess "orders", "confirmation"
       - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
         .col-lg-2.col-md-2.text-right
