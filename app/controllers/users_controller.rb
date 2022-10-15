@@ -55,6 +55,7 @@ class UsersController < ApplicationController
     return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless @user.present?
 
     @salaries = UserSalary.where(user: @user).order("created_at DESC").limit(12)
+    @receivables = Receivable.where(to_user: @user, finance_type: "EMPLOYEE").order("created_at DESC").page param_page
     
     absents = Serve.graph_absent @user
     gon.absent_label = absents.keys
@@ -81,8 +82,7 @@ class UsersController < ApplicationController
     
     # absent @user
 
-    # @receivables = Receivable.where(to_user: @user, finance_type: "EMPLOYEE").order("created_at DESC").page param_page
-    
+    # 
     # # if params[:month].present?
     # #   start_date = ("01-" + params[:month].to_s + "-" + params[:year].to_s).to_time.beginning_of_month
     # #   end_date = start_date.end_of_month
@@ -105,6 +105,7 @@ class UsersController < ApplicationController
     # total_n_term = @receivables.sum(:n_term)
     # @avg_pay_complete_pinjaman = total_n_term.to_f / n_pays.to_f
     # @avg_pay_complete_pinjaman = 1 if @avg_pay_complete_pinjaman.nan?
+    
     # @receivables = Receivable.where(user: @user, finance_type: "EMPLOYEE").page param_page
 
 
