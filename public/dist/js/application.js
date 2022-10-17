@@ -1,5 +1,29 @@
 // setInterval(get_notification, 10000);
 
+var x = document.getElementById("coordinates");
+
+function getLocation() {
+  navigator.geolocation.getCurrentPosition( 
+  successHandler, errorHandler, 
+  {enableHighAccuracy: true, maximumAge: 10000});
+}
+
+var successHandler = function(position) { 
+  showPosition(position);
+}; 
+
+var errorHandler = function (errorObj) { 
+  alert(errorObj.code + ": " + errorObj.message); 
+
+}; 
+
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude + 
+  "<br>Longitude: " + position.coords.longitude;
+}
+
+
+
 var separator = '<p class="medium">===========================================================</p>';
 
 var header_cirata = '<!DOCTYPE html> <html> <head> <meta content="text/html;charset=utf-8" http-equiv="Content-Type"> <meta content="utf-8" http-equiv="encoding"> <style type="text/css"> table {table-layout:auto; width:100%;} td { font-size: 15px; padding: 0 !important; border-top: none !important;} </style> <title></title> </head> <body> ' + '<table widht: "100%;" ><tr><td style="text-align: left; vertical-align: middle;"><img src="/images/logo.png" style="width: 150px"/></td><td style="text-align: right;font-size: 12px !important;">' + 'PT. Cantik Berkah Sejahtera <br>' + 'NPWP: 53.925.657.9-409.000 <br>' +  'Jl. Cirata - Cilangkap, Ds. Cadassari<br> Kec. Tegalwaru, Kabupaten Purwakarta,<br>Jawa Barat'+'</td></tr></table>'+separator;

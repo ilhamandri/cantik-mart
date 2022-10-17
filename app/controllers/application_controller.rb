@@ -6,20 +6,16 @@ class ApplicationController < ActionController::Base
   before_action :weather
 
   def isFinance
-    return true if ["owner", "super_admin", "finance", "developer"].include? current_user.level 
-    return false
+    return ["owner", "super_admin", "finance", "developer"].include? current_user.level 
   end
   def isAdmin
-    return true if ["owner", "super_admin", "developer"].include? current_user.level 
-    return false
+    return ["owner", "super_admin", "developer"].include? current_user.level 
   end
   def isSuperVisi
-    return true if ["owner", "super_admin", "super_visi", "developer"].include? current_user.level 
-    return false
+    return ["owner", "super_admin", "super_visi", "developer"].include? current_user.level 
   end
   def isDeveloper
-    return true if ["developer"].include? current_user.level 
-    return false
+    return ["developer"].include? current_user.level 
   end
 
   def checkAccessStore model

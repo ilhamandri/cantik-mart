@@ -97,7 +97,7 @@ Rails.application.routes.draw do
   get '/sync/:id/:target', to: 'apis#get_sync', as: 'get_sync'
   post '/reset/user/:id', to: 'users#reset_password', as: "reset_password"
 
-
+  resources :attends
   resources :discounts
   resources :pays, only: %i[new create]
   resources :populars
