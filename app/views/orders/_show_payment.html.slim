@@ -12,7 +12,7 @@
         .alert.alert-success
           .alert-heading
             | LUNAS (#{order.date_paid_off})
-    - if ((current_user.store == order.store) && (["finance", "super_visi"].include? current_user.level)) || isAdmin
+    - if (current_user.store == order.store) && (buttonAccess "orders", "pay")
       - if order.date_receive.present? && order.date_paid_off.nil? && @pay != 0
         .col-2.text-right
           a href="#{order_pay_path(id: order_id)}"

@@ -12,7 +12,7 @@
             - users_level = UserMethod.where(controller_method: @method).pluck(:user_level)
             - levels = User.levels
             - levels.keys.each do |level|
-              - next if level == "owner" || level == "super_admin"
+              - next if ["super_admin", "developer", "owner"].include? level
               - if users_level.include? level
                 option selected="selected" value="#{levels[level]}"  #{level.underscore.humanize.upcase}
               - else

@@ -5,6 +5,18 @@ class ApplicationController < ActionController::Base
   include PublicActivity::StoreController 
   before_action :weather
 
+  def checkAccessStore model
+    model_name = controller_name.classify
+    if model_name == "Transfer"
+      return ((model.from_store != current_user.store) || (model.to_store != current_user.store))
+    elsif model_name == "SendBack"
+      return true if current_user.store.store_type == "warehouse"
+      return model.store == current_user
+    else
+      return model.store == current_user.store
+    end
+  end
+
   def dataFilter
     store = nil
     store = current_user.store if ["super_admin", "finance", "owner", "developer"].exclude? current_user.level

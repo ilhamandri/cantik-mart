@@ -169,6 +169,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
     order = Order.find params[:id]
     return redirect_back_data_error orders_path, "Data Order Tidak Dapat Dihapus" unless order.present?
+    return redirect_back_data_error orders_path, "Data Tidak Ditemukan" unless checkAccessStore order
     return redirect_back_data_error orders_path, "Data Order Tidak Dapat Dihapus, FeedBack dari Retur" if order.from_retur
     order_invs = InvoiceTransaction.where(invoice: order.invoice)
     return redirect_back_data_error orders_path, "Data Order Tidak Dapat Dihapus" if order_invs.present?
@@ -199,6 +200,7 @@ class OrdersController < ApplicationController
   def confirmation
     return redirect_back_data_error orders_path unless params[:id].present?
     @order = Order.find params[:id]
+    return redirect_back_data_error orders_path, "Data Tidak Ditemukan" unless checkAccessStore @order
     @order_items = OrderItem.where(order_id: @order.id)
     @order_items.each do |order_item|
       Store.all.each do |store|
@@ -225,6 +227,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
     order = Order.find params[:id]
     return redirect_back_data_error orders_path unless order.present?
+    return redirect_back_data_error orders_path, "Data Tidak Ditemukan" unless checkAccessStore order
     return redirect_back_data_error orders_path, "Order Tidak Dapat Diubah" if order.date_receive.present? || order.date_paid_off.present?
     order_from_retur = order.from_retur
     due_date = params[:order][:due_date]
@@ -408,6 +411,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
     @order = Order.find params[:id]
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if @order.nil?
+    return redirect_back_data_error orders_path, "Data Tidak Ditemukan" unless checkAccessStore @order
     return redirect_back_data_error orders_path, "Data Order Tidak Valid"if @order.date_receive.nil? || @order.date_paid_off.present?
     @order_invs = InvoiceTransaction.where(invoice: @order.invoice)
     @pay = @order.grand_total.to_i - @order_invs.sum(:nominal) 
@@ -417,6 +421,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
     order = Order.find params[:id]
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if order.nil?
+    return redirect_back_data_error orders_path, "Data Tidak Ditemukan" unless checkAccessStore order
     return redirect_back_data_error orders_path, "Data Order Tidak Valid" if order.date_receive.nil? || order.date_paid_off.present?
     order_invs = InvoiceTransaction.where(invoice: order.invoice)
     totals = order.grand_total.to_f 
@@ -474,6 +479,8 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless params[:id].present?
     @order = Order.find_by(id: params[:id])
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless @order.present?
+    return redirect_back_data_error orders_path, "Data Tidak Ditemukan" unless checkAccessStore @order
+    return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if @order.store != current_user.store
     @order_items = OrderItem.where(order_id: params[:id])
     @order_invs = InvoiceTransaction.where(invoice: @order.invoice)
     @pay = @order.grand_total.to_i - @order_invs.sum(:nominal) 

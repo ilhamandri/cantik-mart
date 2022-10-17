@@ -59,6 +59,7 @@ class LossesController < ApplicationController
   	return redirect_back_data_error orders_path, "Data Barang Loss Tidak Ditemukan" unless params[:id].present?
     @loss = Loss.find_by(id: params[:id])
     return redirect_back_data_error orders_path, "Data Barang Loss Tidak Ditemukan" unless @loss.present?
+     return redirect_back_data_error orders_path, "Data Tidak Ditemukan" unless checkAccessStore @loss
     @loss_items = LossItem.where(loss: @loss)
     
     respond_to do |format|

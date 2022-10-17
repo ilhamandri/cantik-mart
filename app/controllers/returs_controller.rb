@@ -98,6 +98,7 @@ class RetursController < ApplicationController
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless params[:id].present?
     @retur = Retur.find params[:id]
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" if @retur.nil?
+    return redirect_back_data_error returs_path, "Data Tidak Ditemukan" unless checkAccessStore @retur
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" if @retur.date_picked.present? || @retur.date_approve.present?
     @retur_items = ReturItem.where(retur_id: @retur.id)
   end
@@ -106,6 +107,7 @@ class RetursController < ApplicationController
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless params[:id].present?
     retur = Retur.find params[:id]
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" if retur.nil?
+    return redirect_back_data_error returs_path, "Data Tidak Ditemukan" unless checkAccessStore retur
     return redirect_back_data_error returs_path, "Data Retur Tidak Valid" if retur.date_picked.present? || retur.date_approve.present?
     items = retur_items
     any_item_to_retur = false
@@ -140,6 +142,7 @@ class RetursController < ApplicationController
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless params[:id].present?
     retur = Retur.find params[:id]
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" if retur.nil?
+    return redirect_back_data_error returs_path, "Data Tidak Ditemukan" unless checkAccessStore retur
     return redirect_back_data_error returs_path, "Data Retur Tidak Valid" unless retur.date_picked.present? || retur.date_approve.present?
     retur.date_picked = Time.now
     retur.picked_by = current_user
@@ -155,6 +158,7 @@ class RetursController < ApplicationController
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless params[:id].present?
     retur = Retur.find params[:id]
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless retur.present?
+    return redirect_back_data_error returs_path, "Data Tidak Ditemukan" unless checkAccessStore retur
     return redirect_back_data_error returs_path, "Data Retur Tidak Valid" if retur.date_picked.present?
     ReturItem.where(retur_id: params[:id]).destroy_all
     retur.destroy
@@ -164,6 +168,9 @@ class RetursController < ApplicationController
   def show
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless params[:id].present?
     @retur = Retur.find_by(id: params[:id])
+    return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless @retur.present?
+    return redirect_back_data_error returs_path, "Data Tidak Ditemukan" unless checkAccessStore @retur
+    
     @retur_items = ReturItem.page param_page
     @retur_items = @retur_items.where(retur: @retur)
     respond_to do |format|
