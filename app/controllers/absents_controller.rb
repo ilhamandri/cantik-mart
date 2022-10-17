@@ -15,7 +15,7 @@ class AbsentsController < ApplicationController
     end
     
     @params = params
-    if ["owner", "super_admin", "finance"].include? current_user.level 
+    if isFinance
       if new_params.present?
         @search_id = new_params["id"] if new_params["id"].present?
         search_params = new_params["search"]

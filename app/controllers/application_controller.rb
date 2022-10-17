@@ -5,6 +5,23 @@ class ApplicationController < ActionController::Base
   include PublicActivity::StoreController 
   before_action :weather
 
+  def isFinance
+    return true if ["owner", "super_admin", "finance", "developer"].include? current_user.level 
+    return false
+  end
+  def isAdmin
+    return true if ["owner", "super_admin", "developer"].include? current_user.level 
+    return false
+  end
+  def isSuperVisi
+    return true if ["owner", "super_admin", "super_visi", "developer"].include? current_user.level 
+    return false
+  end
+  def isDeveloper
+    return true if ["developer"].include? current_user.level 
+    return false
+  end
+
   def checkAccessStore model
     model_name = controller_name.classify
     if model_name == "Transfer"

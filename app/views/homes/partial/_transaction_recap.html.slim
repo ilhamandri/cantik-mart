@@ -48,13 +48,14 @@
       - sum_grand_total = 0
       - sum_hpp_total = 0
       - sum_tax_total = 0
+      - trx_total = 0
       - if trx.present?
         - trxs_month_before = trx.where(created_at: start_month..end_month)
         - sum_grand_total = trxs_month_before.sum(:grand_total)
         - sum_grand_total = trxs_month_before.sum(:grand_total_coin) if current_user.level == "candy_dream"
         - sum_hpp_total = trxs_month_before.sum(:hpp_total)
         - sum_tax_total = trxs_month_before.sum(:tax)
-
+        - trx_total = trxs_month_before.count
       .row
         .col-6 Omzet :
         .col-6.text-right
@@ -67,7 +68,7 @@
         - else
           .col-6 Transaksi :
           .col-6.text-right
-            strong  #{number_with_delimiter(trxs_month_before.count, delimiter: ".")} x
+            strong  #{number_with_delimiter(trx_total, delimiter: ".")} x
 
       hr.my-4
 
@@ -77,6 +78,7 @@
       - sum_grand_total = 0
       - sum_hpp_total = 0
       - sum_tax_total = 0
+      - trx_total = 0
       - current_month = DateTime.now.beginning_of_month
       - if trx.present?
         - trxs_current_month = trx.where("created_at > ? ", current_month)
@@ -84,7 +86,7 @@
         - sum_grand_total = trxs_current_month.sum(:grand_total_coin) if current_user.level == "candy_dream"
         - sum_hpp_total = trxs_current_month.sum(:hpp_total)
         - sum_tax_total = trxs_current_month.sum(:tax)
-
+        - trx_total = trxs_current_month.count
       .row
         .col-4 Omzet :
         .col-8.text-right
@@ -98,6 +100,6 @@
         - else
           .col-4 Transaksi :
           .col-8.text-right
-            strong  #{number_with_delimiter(trxs_current_month.count, delimiter: ".")} x
+            strong  #{number_with_delimiter(trx_total, delimiter: ".")} x
 
     
