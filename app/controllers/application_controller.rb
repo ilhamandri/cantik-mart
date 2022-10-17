@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
       return ((model.from_store != current_user.store) || (model.to_store != current_user.store))
     elsif model_name == "SendBack"
       return true if current_user.store.store_type == "warehouse"
-      return model.store == current_user
+      return model.store == current_user.store
     else
       return model.store == current_user.store
     end
