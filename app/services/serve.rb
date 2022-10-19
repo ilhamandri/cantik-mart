@@ -1,5 +1,33 @@
 class Serve 
 
+  def self.item_trx_order item, store, start_date, end_date
+    dates = []
+    buy_sell = []
+    (start_date..end_date).each { |date| dates << date.to_time}
+    results = []
+
+    transaction_datas = TransactionItem.where(item: item, store: store,  created_at: start_date..end_date).group_by{ |m| m.created_at.beginning_of_day}
+
+    orders = Order.where(store: store, created_at: start_date..end_date)
+    order_datas = OrderItem.where(item: item, order: orders).group_by{ |m| m.created_at.beginning_of_day}
+
+
+    dates.each_with_index do |date| 
+      
+      buy = 0
+      buys = order_datas[date]
+      buy = buys.sum{|data| data.receive} if buys.present?
+
+      sell = 0
+      trxs = transaction_datas[date]
+      sell = trxs.sum{|data| data.quantity} if trxs.present?
+
+      
+      results << [date.to_date, buy, sell]
+    end
+    return results
+  end
+
   def self.transactions_graph_manual start_day, end_day, group_type, current_user, store
     trxs = nil
     if current_user.level == "candy_dream"

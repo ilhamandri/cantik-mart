@@ -1,5 +1,4 @@
-- if ["owner", "super_visi", "finance", "super_admin", "candy_dream"].include? current_user.level
-  br
+- if isFinance || (["candy_dream", "super_visi"].include? current_user.level)
   .container-fluid
     .row
       .col-6.pb-2
@@ -68,7 +67,7 @@
                   button.btn.btn-primary
                     i.fas.fa-download
                     |   Unduh
-- if ["owner", "super_visi", "finance", "super_admin"].include? current_user.level
+- if isFinance || (["super_visi"].include? current_user.level)
   .col.pb-2
     .card-header.white-text.bg-dark
         h5.font-weight-500.my-1

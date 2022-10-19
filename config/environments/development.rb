@@ -63,5 +63,5 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.assets.compile = true
-  config.assets.precompile = ['jquery-3.4.0.min.js', 'bootstrap.min.js', 'bootstap.css']
+  config.assets.precompile = ['*.js', '*.css']
 end

@@ -12,7 +12,8 @@
               .form-group
                 label for="name" Nama
                 = form.text_field :name, required: true, class: "form-control md-form", id: "name"
-              - if current_user == @user
+            - if current_user == @user
+              .col-6
                 .form-group
                   label for="name" Password
                   = form.password_field :password, required: true, class: "form-control md-form", id: "password"
@@ -24,11 +25,11 @@
               .form-group
                 label for="address" Alamat
                 = form.text_field :address, required: true, class: "form-control md-form", id: "address"
-            .col-6.col-lg-4
+            .col
               .form-group
                 label for="phone" Nomor Telepon
                 = form.number_field :phone, required: true, class: "form-control md-form", id: "phone"
-            .col-6.col-lg-4
+            .col-6
               .form-group
                 label for="sex" Jenis Kelamin
                 select name="user[sex]" required=true class="mdb-select md-form colorful-select dropdown-primary" 
@@ -42,7 +43,7 @@
                       | Laki - laki
                     option value='perempuan' selected="selected"
                       | Perempuan
-            .col-12.col-lg-3
+            .col-6
               .form-group
                   label for="store" Foto
                   .input-group
@@ -61,14 +62,19 @@
                 .form-group
                   label for="level" Peran 
                   select name="user[level]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="level" searchable="Cari..."
-                    - User::levels.each do |user_level|
-                      - next if ["owner", "super_admin", "developer"].include? user_level[0]
-                      - if user_level[0] == @user.level
-                        option value='#{user_level[0]}' selected="selected"
-                          | #{user_level[0].upcase.gsub('_', ' ')}
-                      - else
-                        option value='#{user_level[0]}'
-                          | #{user_level[0].upcase.gsub('_', ' ')}
+
+                    - if current_user == @user
+                      option value='#{current_user.level}' selected="selected"
+                            | #{current_user.level.upcase.gsub('_', ' ')}
+                    - else
+                      - User::levels.each do |user_level|
+                        - next if ["owner", "super_admin", "developer"].include? user_level[0]
+                        - if user_level[0] == @user.level
+                          option value='#{user_level[0]}' selected="selected"
+                            | #{user_level[0].upcase.gsub('_', ' ')}
+                        - else
+                          option value='#{user_level[0]}'
+                            | #{user_level[0].upcase.gsub('_', ' ')}
               .col-md-4.col-lg-3
                 .form-group
                   label for="store" Toko
@@ -101,4 +107,4 @@
                   = form.number_field :salary, required: true, class: "form-control md-form", id: "id-card"
               
               .col.form-group.text-center.align-items-center
-                = form.submit "Ubah - #{@user.name}", class: "btn btn-warning black-text"
+                = form.submit "Ubah", class: "btn btn-warning black-text"

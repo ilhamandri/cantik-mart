@@ -20,8 +20,9 @@ html
 
     link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" /
 
-    = stylesheet_link_tag '/dist/css/bootstrap.min.css'
+    = stylesheet_link_tag "https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
     = stylesheet_link_tag '/dist/css/mdb.min.css'
+    = stylesheet_link_tag "https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css"
     = stylesheet_link_tag "/dist/css/application", media: "all"
     
   body.fixed-sn.white-skin onload="startTime()"
@@ -58,11 +59,13 @@ html
 
     = javascript_include_tag '/dist/js/jquery-3.4.0.min.js'
     = javascript_include_tag '/dist/js/popper.min.js'
-    = javascript_include_tag '/dist/js/bootstrap.min.js'
+    = javascript_include_tag "https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
     = javascript_include_tag '/dist/js/mdb.min.js'
     = javascript_include_tag '/dist/js/application'
     = javascript_include_tag "https://use.fontawesome.com/aa85c1019a.js"
-    = javascript_include_tag "https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"
+    = javascript_include_tag "https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"
+    = javascript_include_tag "https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"
+    / = javascript_include_tag "https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"
 
     - if flash.present?
       - flash.each do |key, value|

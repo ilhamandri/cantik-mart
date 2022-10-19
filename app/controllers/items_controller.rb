@@ -36,20 +36,14 @@ class ItemsController < ApplicationController
     return redirect_back_data_error item_path(id: item.id), "Silahkan cek tanggal kembali" if start_params.empty? || end_params.empty? 
     date_from = start_params.to_date
     date_to = end_params.to_date
-    dates = []
-    buy_sell = []
-    (date_from..date_to).each { |date| dates << date}
-    dates.each do |date| 
-      buy_sell << [date, 0, 0]
+    datas = {}
+    stores = Store.all
+    stores = [current_user.store] if current_user.level == "super_visi"
+    stores.each do |store|
+      datas[store.name] = Serve.item_trx_order item, store, date_from, date_to
     end
-    dates.each_with_index do |date, idx| 
-      buy = OrderItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:receive)
-      sell = TransactionItem.where(item: item, created_at: date.beginning_of_day..date.end_of_day).sum(:quantity)
-      buy_sell[idx][1] = buy
-      buy_sell[idx][2] = sell
-    end
-    @buy_sell = buy_sell
-    @description = "Rekap jual-beli " + item.name.upcase + " ( " + date_from.to_s + " ... " + date_to.to_s + " )"
+
+    description = "Rekap jual-beli " + item.name.upcase + " ( " + date_from.to_s + " ... " + date_to.to_s + " )"
 
     filename = "./report/item/" + "ITEM-" + DateTime.now.to_i.to_s + ".xlsx"
     
@@ -66,21 +60,25 @@ class ItemsController < ApplicationController
     wb = p.workbook 
     
     wb.add_worksheet(:name => "INFO")do |sheet|
-      sheet.add_row ["Dekripsi", @description]
+      sheet.add_row ["Dekripsi", description]
       sheet.add_row ["Suplier", supplier]
       sheet.add_row ["Harga Beli Terakhir", harga_beli]
 
     end
-    
-    wb.add_worksheet(:name => "TRX") do |sheet|
-      sheet.add_row ["Tanggal", "Order", "Terjual"]
-      @buy_sell.each do |buy_sell|
-        d = buy_sell[0].to_date.strftime("%d / %m / %y")
-        b = buy_sell[1]
-        s = buy_sell[2]
-        sheet.add_row [d,b,s]
+
+    datas.each do |store_name, data|
+      wb.add_worksheet(:name => store_name) do |sheet|
+        sheet.add_row ["Tanggal", "Order", "Terjual"]
+        data.each do |buy_sell|
+          d = buy_sell[0]
+          b = buy_sell[1]
+          s = buy_sell[2]
+          sheet.add_row [d,b,s]
+        end
       end
     end
+    
+    
 
     p.serialize(filename)
     send_file(filename)

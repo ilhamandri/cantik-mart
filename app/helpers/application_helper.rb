@@ -25,6 +25,7 @@ module ApplicationHelper
 
 	def isFinance
 		return false if current_user.nil?
+		return true if isAdmin
 		return true if ["super_admin", "owner", "developer", "finance"].include? current_user.level
 		return false
 	end
