@@ -145,7 +145,7 @@ hr.my-4
 /         | #{progress} %
 
 .col-12.text-center
-  - if buttonAccess "retur", "destroy"
+  - if buttonAccess "returs", "destroy"
     - if retur.date_picked.nil?
       hr.my-4
       = form_for :retur, url: retur_path(id: retur.id), method: "DELETE" do |form|
