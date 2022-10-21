@@ -11,9 +11,7 @@ table class="table"
     th Nominal
   tbody
     = render partial: 'show_list', collection: @retur_items, as: :ret_item
-    
-.container.pagination.justify-content-center
-  = paginate @retur_items
+
 
 
 - cash_feedback = @retur_items.where(feedback:"cash").sum(:nominal).to_i
