@@ -1,6 +1,6 @@
 = form_for :transaction, url: transactions_path, method: 'GET' do |form|
     .row
-      	- if ["owner", "super_admin", "super_finance"].include? current_user.level
+      	- if isAdmin
 	        .col-6
 	          select class="mdb-select md-form" id="months" name="store_id"
 	            option value="0"

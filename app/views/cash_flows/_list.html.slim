@@ -1,9 +1,9 @@
 - status = true
 - if finance.description.include? "Gaji" 
-  - if !["owner", "super_admin"].include? current_user.level
+  - if !isAdmin
     - status = false
 - if finance.description.include? "Pembayaran piutang"
-  - if !["owner", "super_admin"].include? current_user.level
+  - if !isAdmin
     - status = false
 
 - if status

@@ -23,10 +23,31 @@ module ApplicationHelper
 		return false
 	end
 
+	def isStockAdmin
+		return false if current_user.nil?
+		return true if isAdmin
+		return true if ["stock_admin"].include? current_user.level
+		return false
+	end
+
 	def isFinance
 		return false if current_user.nil?
 		return true if isAdmin
-		return true if ["super_admin", "owner", "developer", "finance"].include? current_user.level
+		return true if ["finance"].include? current_user.level
+		return false
+	end
+
+	def isSuperVisi
+		return false if current_user.nil?
+		return true if isAdmin
+		return true if ["super_visi"].include? current_user.level
+		return false
+	end
+
+	def isLevel levels
+		return false if current_user.nil?
+		return true if isAdmin
+		return true if levels.include? current_user.level
 		return false
 	end
 end

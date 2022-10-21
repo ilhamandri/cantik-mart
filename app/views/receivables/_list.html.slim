@@ -1,6 +1,6 @@
 - show = true
 - if finance.finance_type == "EMPLOYEE"
-  - if !["owner", "super_admin"].include? current_user.level
+  - if !isAdmin
     - show = false
 
 - if show 

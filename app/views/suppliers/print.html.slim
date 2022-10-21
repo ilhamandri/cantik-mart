@@ -33,11 +33,11 @@ table#items
     - curr_debt = 0
     - curr_receivable = 0
     - debts = Debt.where(finance_type: Debt::ORDER, supplier: supplier).where("deficiency > 0")
-    - debts = debts.where(store: current_user.store) if ["super_admin", "super_visi"].include? current_user.level
+    - debts = debts.where(store: current_user.store) if isSuperVisi
     - curr_debt = debts.sum(:deficiency) if debts.present?
     - total_debt += debts.sum(:deficiency) if debts.present?
     - receivables = Receivable.where(finance_type: Receivable::RETUR, to_user: supplier.id).where("deficiency > 0")
-    - receivables = receivables.where(store: current_user.store) if ["super_admin", "super_visi"].include? current_user.level
+    - receivables = receivables.where(store: current_user.store) if isSuperVisi
     - curr_receivable = receivables.sum(:deficiency) if receivables.present?
     - total_receivable += receivables.sum(:deficiency) if receivables.present?
 

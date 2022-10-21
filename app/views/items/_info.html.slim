@@ -33,7 +33,7 @@
       .col-md-6.col-lg-3
         .form_group
           label for="category" Stok
-          - if current_user.store.store_type == "warehouse"
+          - if current_user.store.store_type == "warehouse" || isAdmin
             select name="item[item_cat_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
               option selected="selected"
                 | #{current_user.store.name} : #{@stock.stock}
@@ -116,13 +116,7 @@
       .col-12
         = render partial: 'grocer_item'
 
-
-
-            /- if buttonAccess "suppliers", "index"
-              / a href='#{item_suppliers_path(id: @item.id)}'
-                    button.btn.btn-primary type="button" 
-                      | Supplier
-
-            / - if buttonAccess "item", "destroy"
-              - if !@item.store_items.present? && !@item.supplier_items.present?
-                = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-danger"
+      / - if buttonAccess "item", "destroy"
+        - if !@item.store_items.present? && !@item.supplier_items.present?
+          .col-12
+            = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-danger"

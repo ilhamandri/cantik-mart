@@ -493,7 +493,7 @@
       });
 
 - if ["transactions"].include? controller_name
-  - if ["super_admin", "owner", "developer", "finance"].include? current_user.level
+  - if isFinance
     javascript:
       // TRANSACTION
       var ctxL = document.getElementById("transaction").getContext('2d');
@@ -552,7 +552,7 @@
           responsive: true
         }
       });
-  - if ["candy_dream", "super_visi"].include? current_user.level
+  - if isLevel ["candy_dream", "super_visi"]
     javascript:
       // TRANSACTION
       var ctxL = document.getElementById("transaction").getContext('2d');

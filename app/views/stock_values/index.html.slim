@@ -1,6 +1,6 @@
 .classic-tabs.mx-2
   ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
-    - if ["owner", "finance", "super_admin"].include? current_user.level
+    - if isFinance
       li.nav-item
         a#profile-tab-classic-blue.nav-link.waves-light aria-controls="search" aria-selected="true" data-toggle="tab" href="#search" role="tab" 
           i.fa.fa-search.fa-2x.pb-2 aria-hidden="true" 
@@ -15,7 +15,7 @@
 
 
   #myClassicTabContentOrange.tab-content.card
-    - if ["owner", "finance", "super_admin"].include? current_user.level
+    - if isFinance
       #search.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
         = render partial: 'search'
 

@@ -26,10 +26,10 @@ br
 
         
 
-- if ["finance", "owner", "super_admin", "super_visi"].include? current_user.level 
+- if isLevel ["super_visi", "finance"]
   h2 CANTIK MART
   - stores = Store.where.not(store_type: "warehouse")
-  - stores = [current_user.store] if ["finance", "owner", "super_admin"].exclude? current_user.level
+  - stores = [current_user.store] if !isFinance
   - stores.each do |store|
     - trxs = @transactions.where(store: store)
     - trx_last_timestamp = "Tidak ada transaksi"
@@ -95,7 +95,7 @@ br
 h2
   | CANDY DREAM
 - stores = Store.where.not(store_type: "warehouse")
-- stores = [current_user.store] if ["finance", "owner", "super_admin", "candy_dream"].exclude? current_user.level
+- stores = [current_user.store] if isLevel ["finance", "candy_dream"]
 - stores.each do |store|
   - trxs = @transactions.where(store: store)
   - trx_last_timestamp = "Tidak ada transaksi"
@@ -123,7 +123,7 @@ h2
       td #{number_with_delimiter( (trxs.sum(:grand_total_coin)).to_i, delimiter: ".", separator: ",")}
 
 
-- if ["finance", "owner", "super_admin"].include? current_user.level 
+- if isFinance
   br
   hr
   br

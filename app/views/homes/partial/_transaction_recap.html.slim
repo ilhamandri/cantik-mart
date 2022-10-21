@@ -23,7 +23,7 @@
           .col-8.text-right
             strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_tax_total, unit: "Rp. ", delimiter: ".", separator:",")}
 
-      - if ["super_admin", "owner", "developer", "finance", "super_visi"].include? current_user.level
+      - if isLevel ["super_visi", "finance"]
         hr.my-4
           .row
             .col-4 Pengeluaran : 

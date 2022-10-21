@@ -1,6 +1,6 @@
 = form_for :finances, url: salaries_path, method: 'GET' do |form|
   .row
-    - if ["owner", "super_admin", "super_finance"].include? current_user.level
+    - if isAdmin
       .col-md-12
         select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="user_id"
           option value="0"

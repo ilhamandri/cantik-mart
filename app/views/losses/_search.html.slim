@@ -1,6 +1,6 @@
 = form_for :loss, url: losses_path, method: 'GET' do |form|
   .row
-    - if ["owner", "super_admin", "finance"].include? current_user.level
+    - if isFinance
       .col.text-left
         select class="mdb-select md-form" id="months" name="store_id"
           option value="0"
@@ -9,7 +9,7 @@
             option value="#{store.id}"
               | #{store.name}
     .col.text-center
-      input type="text" class="form-control md-form" id="search" name="search" placeholder="Cari barang ..."
+      input type="text" class="form-control md-form" id="search" name="search" placeholder="Cari ..."
     .col-12.text-center
       button class="btn btn-primary"
         | Cari

@@ -167,6 +167,7 @@ class Serve
     start_date = Time.now.beginning_of_month-1.year
     date_range = start_date..Time.now.end_of_month
     raw_order = OrderItem.where(created_at: date_range, item: item)
+    raw_order = raw_order.where("receive is not null") if raw_order.present?
     raw_transaction = TransactionItem.where(created_at: date_range, item: item)
     dates = [start_date]
     

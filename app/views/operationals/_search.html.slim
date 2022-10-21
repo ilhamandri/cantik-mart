@@ -1,6 +1,6 @@
 = form_for :finances, url: operationals_path, method: 'GET' do |form|
   .row
-    - if ["owner", "super_admin", "finance"].include? current_user.level
+    - if isFinance
       .col-md-12
         select class="mdb-select md-form" id="months" name="store_id"
           option value="0"

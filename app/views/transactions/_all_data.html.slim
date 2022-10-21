@@ -11,7 +11,7 @@
 			      	i.fas.fa-plus 
 			      	|  #{@title}
 
-- if ["owner", "super_visi", "finance", "super_admin", "candy_dream", "developer"].include? current_user.level
+- if isLevel ["super_visi", "finance", "candy_dream"]
 	table class="table"
 	  thead
 	    th Invoice
