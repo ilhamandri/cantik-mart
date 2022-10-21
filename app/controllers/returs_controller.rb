@@ -171,8 +171,7 @@ class RetursController < ApplicationController
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless @retur.present?
     return redirect_back_data_error returs_path, "Data Tidak Ditemukan" unless checkAccessStore @retur
     
-    @retur_items = ReturItem.page param_page
-    @retur_items = @retur_items.where(retur: @retur)
+    @retur_items = ReturItem.where(retur: @retur)
     respond_to do |format|
       format.html
       format.pdf do
