@@ -78,8 +78,7 @@ nav.navbar.fixed-top.navbar-expand-lg.scrolling-navbar.double-nav
               /     .font-weight-bold.red-text
               /       | Silahkan melakukan absensi
               hr
-                | #{@weather["temp"]}&#176c &nbsp | &nbsp &nbsp
-                img src="#{@weather["icon"]}" width="35px"
+                | #{Date.today}
             .col-12
               hr
               a.dropdown-item href="#{user_path(id: current_user.id)}"  Akun

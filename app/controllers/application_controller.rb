@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   include Clearance::Controller
   include PublicActivity::StoreController 
-  before_action :weather
+  # before_action :weather
 
   def isFinance
     return ["owner", "super_admin", "finance", "developer"].include? current_user.level 
