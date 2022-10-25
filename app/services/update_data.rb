@@ -1,5 +1,25 @@
 class UpdateData
 
+	# UpdateData.updateStoreItem
+	def self.updateStoreItem
+		ids = []
+		Store.all.each do |store|
+			duplicates = StoreItem.where(store: store).select(:item_id).group(:item_id).having("count(*) > 1").size
+			duplicates.each do |item_id|
+				store_items = StoreItem.where(store: store, item_id: item_id).order("updated_at ASC").pluck(:id)
+				store_items.pop
+				ids += store_items
+				store_items.where(id: store_items).destroy_all
+			end
+		end
+
+		content = ids.to_s.gsub("[", "").gsub("]", "").gsub(",", "")
+		path = "./report/remove_store_item_id_"+DateTime.now.to_i.to_s+".txt"
+		File.open(path, "w+") do |f|
+		  f.write(content)
+		end
+	end
+
 	# UpdateData.updateItemPrice
 	def self.updateItemPrice
 		order_items = OrderItem.where("receive > 0 AND grand_total > 0").where(created_at: DateTime.now-2.year..DateTime.now)
