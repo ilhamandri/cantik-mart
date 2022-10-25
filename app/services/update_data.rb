@@ -9,7 +9,7 @@ class UpdateData
 				store_items = StoreItem.where(store: store, item_id: item_id).order("updated_at ASC").pluck(:id)
 				store_items.pop
 				ids += store_items
-				store_items.where(id: store_items).destroy_all
+				StoreItem.where(id: store_items).destroy_all
 			end
 		end
 

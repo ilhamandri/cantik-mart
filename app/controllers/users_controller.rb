@@ -3,7 +3,6 @@ class UsersController < ApplicationController
   before_action :screening
   
   def index
-    UpdateData.updateStoreItem
     @users = User.page param_page
     if params[:search].present?
       @search = params[:search].downcase
