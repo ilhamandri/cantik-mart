@@ -34,7 +34,7 @@ class LossesController < ApplicationController
     	end
     	qty = loss_item[4].to_i
     	description = loss_item[5]
-    	create_loss_item = LossItem.create item: item, quantity: qty, loss: loss, description: description
+    	create_loss_item = LossItem.create item: item, store: current_user.store, quantity: qty, loss: loss, description: description
     	if create_loss_item.id.nil?
     		LossItem.where(loss: loss).delete_all
     		loss.delete

@@ -1,5 +1,13 @@
 class UpdateData
 
+
+	# UpdateData.updateStoreLossItem
+	def self.updateStoreLossItem
+		Loss.all.each do |loss|
+			loss.loss_items.update_all(store_id: loss.store.id)
+		end
+	end
+
 	# UpdateData.updateStoreItem
 	def self.updateStoreItem
 		ids = []

@@ -88,14 +88,14 @@ br
         - if current_user.level != "super_visi"
           td #{number_with_delimiter( (grand_total-hpp_total-tax_total).to_i, delimiter: ".", separator: ",")}
 
-br
-hr
-br
+  br
+  hr
+  br
 
 h2
   | CANDY DREAM
 - stores = Store.where.not(store_type: "warehouse")
-- stores = [current_user.store] if isLevel ["finance", "candy_dream"]
+- stores = [current_user.store] if isLevel ["finance"]
 - stores.each do |store|
   - trxs = @transactions.where(store: store)
   - trx_last_timestamp = "Tidak ada transaksi"

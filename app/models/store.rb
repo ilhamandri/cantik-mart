@@ -11,6 +11,7 @@ class Store < ApplicationRecord
   has_many :transaction_items
   has_many :not_popular_items
   has_many :store_datas
+  has_many :loss_items
   
   enum store_type:{
     retail: 0,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_14_115634) do
+ActiveRecord::Schema.define(version: 2022_10_26_045353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -322,8 +322,10 @@ ActiveRecord::Schema.define(version: 2022_10_14_115634) do
     t.string "description", default: "-", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.bigint "store_id"
     t.index ["item_id"], name: "index_loss_items_on_item_id"
     t.index ["loss_id"], name: "index_loss_items_on_loss_id"
+    t.index ["store_id"], name: "index_loss_items_on_store_id"
   end
 
   create_table "losses", force: :cascade do |t|
@@ -963,6 +965,7 @@ ActiveRecord::Schema.define(version: 2022_10_14_115634) do
   add_foreign_key "kasbons", "users"
   add_foreign_key "loss_items", "items"
   add_foreign_key "loss_items", "losses"
+  add_foreign_key "loss_items", "stores"
   add_foreign_key "losses", "stores"
   add_foreign_key "losses", "users"
   add_foreign_key "members", "stores"

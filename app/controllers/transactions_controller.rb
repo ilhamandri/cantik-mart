@@ -109,7 +109,6 @@ class TransactionsController < ApplicationController
     end
 
     @transactions = trx
-
     @profits = []
 
     @total_income = 0
