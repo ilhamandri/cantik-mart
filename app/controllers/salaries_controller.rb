@@ -156,7 +156,7 @@ class SalariesController < ApplicationController
       results = []
       search_text = "Pencarian "
       filters = UserSalary.page param_page
-      filters = filters.where(store: current_user.store) if  !["owner", "super_admin", "super_finance","finance"].include? current_user.level
+      filters = filters.where(user: current_user) if  !["owner", "super_admin", "super_finance","finance"].include? current_user.level
       before_months = 5
       if params[:months].present?
         before_months = params[:months].to_i
