@@ -11,7 +11,7 @@
             select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="user_id" onchange="getUserSalary(this)"
               - @users.all.each do |user|
                 option value="#{user.id}"
-                  | #{user.name} - #{user.store.name}
+                  | #{user.name} - #{user.store.name} (#{user.level.gsub("_"," ").upcase})
           .row
             .col-12
               br

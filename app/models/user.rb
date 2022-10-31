@@ -26,7 +26,7 @@ class User < ApplicationRecord
   belongs_to :store
 
 
-  default_scope { order(created_at: :desc) }
+  default_scope { order(name: :asc) }
 
 
   # KINDI / SYIFA

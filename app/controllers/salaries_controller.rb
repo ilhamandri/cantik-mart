@@ -52,7 +52,7 @@ class SalariesController < ApplicationController
   end
 
   def new
-    @users = User.where.not(level: [1,2]).order("name ASC")
+    @users = User.where.not(level: [1, 10])
   end
 
   def print_salary
