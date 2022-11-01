@@ -61,7 +61,7 @@
               .col-md-4.col-lg-3
                 .form-group
                   label for="level" Peran 
-                  select name="user[level]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="level" searchable="Cari..."
+                  select name="user[level]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="level" searchable="Cari..." disabled="disabled"
 
                     - if current_user == @user
                       option value='#{current_user.level}' selected="selected"
@@ -78,7 +78,7 @@
               .col-md-4.col-lg-3
                 .form-group
                   label for="store" Toko
-                  select name="user[store_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store" searchable="Cari..."
+                  select name="user[store_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store" searchable="Cari..." 
                     - @stores.each do |store|
                       - if store == @user.store
                         option value="#{store.id}" selected="selected"
@@ -90,12 +90,12 @@
               .col-md-4.col-lg-3
                 .form-group
                   label for="id-card" ID Fingerprint
-                  = form.number_field :fingerprint, required: true, class: "form-control md-form", id: "id-card"
+                  = form.number_field :fingerprint, required: true, class: "form-control md-form", id: "id-card", disabled: "disabled"
 
               .col-md-6.col-lg-3
                 .form-group
                   label for="active" Status
-                  select name="user[active]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="active"
+                  select name="user[active]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="active" disabled="disabled"
                       option value="true" selected="selected"
                         | Aktif
                       option value="false"
