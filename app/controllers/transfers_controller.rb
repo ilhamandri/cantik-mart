@@ -73,6 +73,9 @@ class TransfersController < ApplicationController
       next if qty < 1
       transfer_item = TransferItem.create item_id: item[0], transfer_id: transfer.id, request_quantity: qty, description: item[2]
       if current_user.store.store_type == "warehouse"
+        store_item = StoreItem.find_by(store: current_user.store, item: check_item)
+        store_item.stock = store_item.stock - qty
+        store_item.save!
         transfer_item.sent_quantity = transfer_item.request_quantity
         transfer_item.save!
       end
