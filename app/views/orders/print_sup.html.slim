@@ -2,9 +2,9 @@
 #customer
   table#meta
     tr
-      td.meta-head Invoice #
-      td
-        textarea #{@order.invoice}
+      th colspan="2"
+        = wicked_pdf_image_tag_for_public( @barcode )
+        | #{@order.invoice}
     tr
       td.meta-head Tanggal
       td

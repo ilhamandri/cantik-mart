@@ -1,3 +1,7 @@
+require 'chunky_png'
+require 'barby'
+require 'barby/barcode/code_128'    
+require 'barby/outputter/png_outputter'  
 class SendBacksController < ApplicationController
   before_action :require_login
   before_action :screening
@@ -78,6 +82,7 @@ class SendBacksController < ApplicationController
 	  	respond_to do |format|
 	      format.html
 	      format.pdf do
+        	@barcode = barcode_output @send_back
         	@recap_type = "bs"
 	        render pdf: DateTime.now.to_i.to_s,
 	          layout: 'pdf_layout.html.erb',
@@ -139,6 +144,14 @@ class SendBacksController < ApplicationController
   	end
 
   	private
+	    def barcode_output transfer
+	      barcode_string = transfer.invoice      
+	      barcode = Barby::Code128B.new(barcode_string)
+
+	      # PNG OUTPUT
+	      data = barcode.to_image(height: 15, margin: 5) .to_data_url
+	      return data
+	    end
 	  	def param_page
 	  		params[:page]
 	  	end

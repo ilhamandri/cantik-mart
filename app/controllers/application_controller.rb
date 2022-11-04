@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
   end
 
   def checkAccessStore model
+    return true if ["developer", "super_admin", "owner"].include? current_user.level 
     model_name = controller_name.classify
     if model_name == "Transfer"
       return ((model.from_store != current_user.store) || (model.to_store != current_user.store))

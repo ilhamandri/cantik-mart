@@ -1,3 +1,7 @@
+require 'chunky_png'
+require 'barby'
+require 'barby/barcode/code_128'    
+require 'barby/outputter/png_outputter'  
 class TransfersController < ApplicationController
   before_action :require_login
   before_action :screening
@@ -232,6 +236,7 @@ class TransfersController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
+        @barcode = barcode_output @transfer
         if @transfer.approved_by.nil?
           @recap_type = "req_transfer"
         elsif @transfer.picked_by.present?
@@ -245,6 +250,15 @@ class TransfersController < ApplicationController
   end
 
   private
+    def barcode_output transfer
+      barcode_string = transfer.invoice      
+      barcode = Barby::Code128B.new(barcode_string)
+
+      # PNG OUTPUT
+      data = barcode.to_image(height: 15, margin: 5) .to_data_url
+      return data
+    end
+
     def filter_search params, r_type
       results = []
       @transfers = Transfer.all
@@ -357,5 +371,4 @@ class TransfersController < ApplicationController
     def param_page
       params[:page]
     end
-
 end

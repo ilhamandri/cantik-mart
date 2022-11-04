@@ -1,3 +1,8 @@
+require 'chunky_png'
+require 'barby'
+require 'barby/barcode/code_128'    
+require 'barby/outputter/png_outputter'  
+
 include ActionView::Helpers::NumberHelper
 class OrdersController < ApplicationController
   before_action :require_login
@@ -213,14 +218,6 @@ class OrdersController < ApplicationController
     gon.ids = @order_items.pluck(:id)
     return redirect_back_data_error orders_path, "Data Order Tidak Valid" if @order.date_receive.present? || @order.date_paid_off.present?
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if @order.nil?
-  end
-
-  def edit_confirmation
-    return redirect_back_data_error orders_path unless params[:id].present?
-    @order = Order.find params[:id]
-    return redirect_back_data_error orders_path unless @order.present? || @order.editable == false
-    return redirect_back_data_error orders_path if @order.date_paid_off.present? || @order.date_receive.nil?
-    @order_items = OrderItem.where(order_id: @order.id)
   end
 
   def receive
@@ -480,13 +477,14 @@ class OrdersController < ApplicationController
     @order = Order.find_by(id: params[:id])
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless @order.present?
     return redirect_back_data_error orders_path, "Data Tidak Ditemukan" unless checkAccessStore @order
-    return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" if @order.store != current_user.store
     @order_items = OrderItem.where(order_id: params[:id])
     @order_invs = InvoiceTransaction.where(invoice: @order.invoice)
     @pay = @order.grand_total.to_i - @order_invs.sum(:nominal) 
+
     respond_to do |format|
       format.html
       format.pdf do
+        @barcode = barcode_output @order
         @recap_type = "order"
         @order_items = OrderItem.where(order_id: params[:id])
         if @order.date_receive.nil?
@@ -503,13 +501,23 @@ class OrdersController < ApplicationController
   end
 
   private
+
+    def barcode_output order
+      barcode_string = order.invoice      
+      barcode = Barby::Code128B.new(barcode_string)
+
+      # PNG OUTPUT
+      data = barcode.to_image(height: 15, margin: 5) .to_data_url
+      return data
+    end
+
     def filter_search params, r_type
       results = []
       @orders = Order.all
       if r_type == "html"
         @orders = @orders.page param_page if r_type=="html"
       end
-      @orders = @orders.where(store: current_user.store) if  !["owner", "super_admin", "developer"].include? current_user.level
+      @orders = @orders.where(store: current_user.store) if  !isAdmin
       @search = ""
       if params["search"].present?
         @search += "Pencarian "+params["search"]

@@ -175,6 +175,7 @@ class RetursController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
+        @barcode = barcode_output @retur
         @recap_type = "retur"
         render pdf: @retur.invoice,
           layout: 'pdf_layout.html.erb',
@@ -184,6 +185,15 @@ class RetursController < ApplicationController
   end
 
   private
+    def barcode_output retur
+      barcode_string = retur.invoice      
+      barcode = Barby::Code128B.new(barcode_string)
+
+      # PNG OUTPUT
+      data = barcode.to_image(height: 15, margin: 5) .to_data_url
+      return data
+    end
+
     def filter_search params, r_type
       results = []
       @returs = Retur.all.order("created_at DESC")

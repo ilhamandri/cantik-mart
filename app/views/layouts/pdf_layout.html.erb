@@ -6,26 +6,26 @@
   
   <style type="text/css">
     * { margin: 0; padding: 0; }
-    body { font: 14px/1.4 Georgia, serif; }
+    body { font: 14px/1.4 Helvetica, serif; }
     #page-wrap { width: 800px; margin: 0 auto; }
 
-    textarea { border: 0; font: 14px Georgia, Serif; overflow: hidden; resize: none; }
+    textarea { border: 0; font: 14px Helvetica, Serif; overflow: hidden; resize: none; }
     table { border-collapse: collapse; }
     table td, table th { border: 1px solid black; padding: 5px; }
 
-    #header { height: 15px; width: 100%; margin: 20px 0; background: #222; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+    #header { height: 15px; width: 100%; margin-top: 10px; background: #222; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
 
-    #header_order { height: 15px; width: 100%; margin: 20px 0; background: #FFC0CB; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+    #header_order { height: 15px; width: 100%; margin-top: 10px; background: #FFC0CB; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
 
-    #header_retur { height: 15px; width: 100%; margin: 20px 0; background: yellow; text-align: center; color: black; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+    #header_retur { height: 15px; width: 100%; margin-top: 10px; background: yellow; text-align: center; color: black; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
 
-    #header_bs { height: 15px; width: 100%; margin: 20px 0; background: red; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decbisaoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+    #header_bs { height: 15px; width: 100%; margin-top: 10px; background: red; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decbisaoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
 
-    #header_transfer { height: 15px; width: 100%; margin: 20px 0; background: green; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+    #header_transfer { height: 15px; width: 100%; margin-top: 10px; background: green; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
 
-    #header_send { height: 15px; width: 100%; margin: 20px 0; background: blue; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
+    #header_send { height: 15px; width: 100%; margin-top: 10px; background: blue; text-align: center; color: white; font: bold 15px Helvetica, Sans-Serif; text-decoration: uppercase; letter-spacing: 20px; padding: 8px 0px; }
 
-    #address { width: 250px; height: 150px; float: left; }
+    #address { width: 450px; height: 150px; float: left; padding-bottom: 20px;}
     #customer { overflow: hidden; }
 
     #logo { text-align: right; float: right; position: relative; margin-top: 25px; border: 1px solid #fff; max-width: 540px; max-height: 100px; overflow: hidden; }
@@ -38,7 +38,7 @@
     #customer-title { font-size: 20px; font-weight: bold; float: left; }
 
     #meta { margin-top: 1px; width: 300px; float: right; }
-    #meta td { text-align: right;  }
+    td { text-align: right;  }
     #meta td.meta-head { text-align: left; background: #eee; }
     #meta td textarea { width: 100%; height: 20px; text-align: right; }
 
@@ -56,7 +56,7 @@
     #items td.balance { background: #eee; }
     #items td.blank { border: 0; }
 
-    #terms { text-align: center; margin: 20px 0 0 0; }
+    #terms { text-align: center; margin-top: 10px 0 0; }
     #terms h5 { text-transform: uppercase; font: 13px Helvetica, Sans-Serif; letter-spacing: 10px; border-bottom: 1px solid black; padding: 0 0 8px 0; margin: 0 0 8px 0; }
     #terms textarea { width: 100%; text-align: center;}
 
@@ -94,17 +94,17 @@
     <% end %>
     
     <div id="identity">
-        <textarea id="address">CANTIK MART
-Jl. Raya Plered,Purwakarta No.17
-Kec. Plered, Kabupaten Purwakarta, Jawa Barat 
+        <div id="address">
+            <img src="http://cantikmart.com/images/logo.png" style="width: 200px;"/>
         </textarea>
+        </div>
     </div>
-    
+    <br>
+    <br>
     <%= yield %>
     
-    <div id="terms" style="display: none;">
-      <h5>Terms</h5>
-      <textarea>NET 30 Days. Finance Charge of 1.5% will be made on unpaid balances after 30 days.</textarea>
+    <div id="terms" style="display: block;">
+        <p style="padding-top: 50px;"><%= current_user.store.name.upcase %> - <%= current_user.store.address %><br><b>PT. Cantik Berkah Sejahtera<br>53.925.657.9-409.000</b></p>
     </div>
   
   </div>
