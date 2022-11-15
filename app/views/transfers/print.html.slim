@@ -32,7 +32,7 @@ table#items
    th Kirim
    th Terima
   tr
-    td
+    td.text-center
       - if transfer.date_approve.nil?
         | - 
       - elsif transfer.date_approve.to_date == "01-01-1999".to_date
@@ -41,7 +41,7 @@ table#items
       - else
         .text-success
           | #{transfer.approved_by.name} (#{transfer.date_approve.to_date})
-    td
+    td.text-center
       - if transfer.date_picked.nil?
         | - 
       - else 
@@ -57,7 +57,7 @@ table#items
               | #{transfer.picked_by.name} (#{transfer.date_picked.to_date})
           - else
             | #{transfer.picked_by.name} (#{transfer.date_picked.to_date})
-    td
+    td.text-center
       - if transfer.status.nil?
         | -
       - elsif transfer.status.to_date == "01-01-1999".to_date
@@ -82,6 +82,6 @@ table#items
       - @idx += 1
       td #{transfer_item.item.code}
       td #{transfer_item.item.name}
-      td #{transfer_item.request_quantity}
-      td #{transfer_item.sent_quantity}
-      td #{transfer_item.receive_quantity}
+      td.number #{transfer_item.request_quantity}
+      td.number #{transfer_item.sent_quantity}
+      td.number #{transfer_item.receive_quantity}

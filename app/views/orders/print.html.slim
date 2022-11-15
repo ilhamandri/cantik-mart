@@ -8,25 +8,25 @@
         | #{@order.invoice}
     tr
       td.meta-head Tanggal
-      td
+      td.text-right
         textarea #{@order.created_at.to_date} - #{@order.user.name}
     tr
       td.meta-head Toko
-      td
+      td.text-right
         .due #{@order.store.name}
     tr
       td.meta-head Suplier
-      td
+      td.text-right
         .due #{@order.supplier.name}
     - if received
       tr
         td.meta-head Terima
-        td
+        td.text-right
           .due #{@order.date_receive} - #{@order.received_by.name}
       tr
         - due_date = Debt.find_by(finance_type: "ORDER", ref_id: @order.id).due_date
         td.meta-head Jatuh Tempo
-        td
+        td.text-right
           .due #{due_date.to_date}
 
 table#items
@@ -48,35 +48,35 @@ table#items
     tr.item-row
       td #{idx+1}
       td #{order_item.item.code}
-      td  #{order_item.item.name}
-      td  #{order_item.quantity}
-      td
+      td #{order_item.item.name}
+      td.number #{order_item.quantity}
+      td.number
         - receive = "-"
         - receive = order_item.receive if order_item.receive.present?
         | #{receive}
-      td
+      td.number
         - price = "-"
         - price = order_item.price if received
         | #{number_with_delimiter(price, delimiter: ".", separator: ",")}
-      td
+      td.number
         - discount_1 = "-"
         - if received
           - disc_1 = order_item.discount_1
           - discount_1 = number_with_delimiter(disc_1, delimiter: ".", separator: ",") if disc_1 > 100
           - discount_1 = disc_1.to_s+"%" if disc_1 < 100
         | #{discount_1}
-      td
+      td.number
         - discount_2 = "-"
         - if received
           - disc_2 = order_item.discount_2
           - discount_2 = disc_2.to_s+"%" if disc_2 < 100
           - discount_2 = number_with_delimiter(disc_2, delimiter: ".", separator: ",") if disc_2 > 100
         | #{discount_2}
-      td
+      td.number
         - ppn = "-"
-        - ppn = order_item.ppn.to_s+"%" if received
+        - ppn = order_item.ppn.to_i.to_s+"%" if received
         | #{ppn}
-      td
+      td.number
         - grand_total = "-"
         - grand_total = order_item.grand_total if received
         | #{number_with_delimiter(grand_total, delimiter: ".", separator: ",")}
@@ -87,21 +87,21 @@ table#items
     tr style="text-align: right;"
       td.blank colspan="7" 
       td.total-line colspan="2"  Sub Total
-      td.total-value
+      td.total-value.number
         #subtotal #{number_with_delimiter(@order.total, delimiter: ".", separator: ",")}
     tr style="text-align: right;"
       td.blank colspan="7" 
       td.total-line colspan="2"  Pajak Masukan
-      td.total-value
+      td.total-value.number
         #subtotal #{number_with_delimiter(@order.tax, delimiter: ".", separator: ",")}
     tr style="text-align: right;"
       td.blank colspan="7" 
       td.total-line colspan="2"  
         | Diskon Faktur
-      td.total-value
+      td.total-value.number
         #total #{number_with_delimiter(@order.discount, delimiter: ".", separator: ",")}
     tr style="text-align: right;font-weight: bold;"
       td.blank colspan="7" 
       td.total-line.balance colspan="2"  Grand Total
-      td.total-value.balance
+      td.total-value.balance.number
         .due #{number_with_delimiter(@order.grand_total, delimiter: ".", separator: ",")}

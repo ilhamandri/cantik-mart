@@ -63,15 +63,15 @@ br
           - hpp_total = cashier_trxs.sum(:hpp_total) - cashier_trxs.sum(:hpp_total_coin)
           - tax_total = cashier_trxs.sum(:tax) - cashier_trxs.sum(:tax_coin)
 
-          td #{number_with_delimiter(cash.to_i, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter(debit.to_i, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter(credit.to_i, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter(qris.to_i, delimiter: ".", separator: ",")}
-          td #{number_with_delimiter(grand_total.to_i, delimiter: ".", separator: ",")}
+          td.number #{number_with_delimiter(cash.to_i, delimiter: ".", separator: ",")}
+          td.number #{number_with_delimiter(debit.to_i, delimiter: ".", separator: ",")}
+          td.number #{number_with_delimiter(credit.to_i, delimiter: ".", separator: ",")}
+          td.number #{number_with_delimiter(qris.to_i, delimiter: ".", separator: ",")}
+          td.number #{number_with_delimiter(grand_total.to_i, delimiter: ".", separator: ",")}
           - if current_user.level != "super_visi"
-            td #{number_with_delimiter((grand_total-tax_total-hpp_total).to_i, delimiter: ".", separator: ",")}
+            td.number #{number_with_delimiter((grand_total-tax_total-hpp_total).to_i, delimiter: ".", separator: ",")}
       tr
-        td 
+        td.number 
         - cash_total = trxs.where(payment_type: "CASH").sum(:grand_total) - trxs.where(payment_type: "CASH").sum(:grand_total_coin)
         - debit_total = trxs.where(payment_type: "DEBIT",).sum(:grand_total) - trxs.where(payment_type: "DEBIT").sum(:grand_total_coin)
         - credit_total = trxs.where(payment_type: "CREDIT",).sum(:grand_total) - trxs.where(payment_type: "CREDIT").sum(:grand_total_coin)
@@ -80,13 +80,13 @@ br
         - hpp_total = trxs.sum(:hpp_total) - trxs.sum(:hpp_total_coin)
         - tax_total = trxs.sum(:tax) - trxs.sum(:tax_coin)
 
-        td #{number_with_delimiter(cash_total.to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter(debit_total.to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter(credit_total.to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter(qris_total.to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter(grand_total.to_i, delimiter: ".", separator: ",")}
+        td.number #{number_with_delimiter(cash_total.to_i, delimiter: ".", separator: ",")}
+        td.number #{number_with_delimiter(debit_total.to_i, delimiter: ".", separator: ",")}
+        td.number #{number_with_delimiter(credit_total.to_i, delimiter: ".", separator: ",")}
+        td.number #{number_with_delimiter(qris_total.to_i, delimiter: ".", separator: ",")}
+        td.number #{number_with_delimiter(grand_total.to_i, delimiter: ".", separator: ",")}
         - if current_user.level != "super_visi"
-          td #{number_with_delimiter( (grand_total-hpp_total-tax_total).to_i, delimiter: ".", separator: ",")}
+          td.number #{number_with_delimiter( (grand_total-hpp_total-tax_total).to_i, delimiter: ".", separator: ",")}
 
   br
   hr
@@ -95,7 +95,7 @@ br
 h2
   | CANDY DREAM
 - stores = Store.where.not(store_type: "warehouse")
-- stores = [current_user.store] if isLevel ["finance"]
+- stores = [current_user.store] if !isFinance
 - stores.each do |store|
   - trxs = @transactions.where(store: store)
   - trx_last_timestamp = "Tidak ada transaksi"
@@ -115,12 +115,12 @@ h2
       - next if cashier_trxs.empty?
       tr
         td #{user.name.camelize}
-        td #{number_with_delimiter( cashier_trxs.sum(:quantity_coin).to_i, delimiter: ".", separator: ",")}
-        td #{number_with_delimiter( cashier_trxs.sum(:grand_total_coin).to_i, delimiter: ".", separator: ",")}
+        td.number #{number_with_delimiter( cashier_trxs.sum(:quantity_coin).to_i, delimiter: ".", separator: ",")}
+        td.number #{number_with_delimiter( cashier_trxs.sum(:grand_total_coin).to_i, delimiter: ".", separator: ",")}
     tr
       td 
-      td #{number_with_delimiter( (trxs.sum(:quantity_coin)).to_i, delimiter: ".", separator: ",")}
-      td #{number_with_delimiter( (trxs.sum(:grand_total_coin)).to_i, delimiter: ".", separator: ",")}
+      td.number #{number_with_delimiter( (trxs.sum(:quantity_coin)).to_i, delimiter: ".", separator: ",")}
+      td.number #{number_with_delimiter( (trxs.sum(:grand_total_coin)).to_i, delimiter: ".", separator: ",")}
 
 
 - if isFinance
@@ -149,9 +149,9 @@ h2
     - @profits.each do |profit|
       tr style="text-align: right"
         td style="text-align: left" #{profit[0]}
-        td #{number_with_delimiter(profit[1].to_i, delimiter: ".")}
-        td #{number_with_delimiter(profit[3].to_i, delimiter: ".")}
-        td #{number_with_delimiter(profit[2].to_i, delimiter: ".")}
+        td.number #{number_with_delimiter(profit[1].to_i, delimiter: ".")}
+        td.number #{number_with_delimiter(profit[3].to_i, delimiter: ".")}
+        td.number #{number_with_delimiter(profit[2].to_i, delimiter: ".")}
         - omzet += profit[1]
         - pajak += profit[3]
         - profits += profit[2]
@@ -159,9 +159,9 @@ h2
       td colspan="4"
     tr style="text-align: right"
       td
-      td #{number_with_delimiter(omzet.to_i, delimiter: ".")}
-      td #{number_with_delimiter(pajak.to_i, delimiter: ".")}
-      td #{number_with_delimiter(profits.to_i, delimiter: ".")}
+      td.number #{number_with_delimiter(omzet.to_i, delimiter: ".")}
+      td.number #{number_with_delimiter(pajak.to_i, delimiter: ".")}
+      td.number #{number_with_delimiter(profits.to_i, delimiter: ".")}
 
 
   table#items
@@ -170,11 +170,11 @@ h2
         h4 PEMASUKAN
     tr
       td Bonus
-      td style="text-align: right"
+      td.number style="text-align: right"
         b #{number_with_delimiter(@bonus.to_i, delimiter: ".")}
     tr
       td Lainnya
-      td style="text-align: right"
+      td.number style="text-align: right"
         b #{number_with_delimiter(@other_income.to_i, delimiter: ".")}
 
   table#items
@@ -183,24 +183,24 @@ h2
         h4 PENGELUARAN
     tr
       td Operasional
-      td style="text-align: right"
+      td.number style="text-align: right"
         b #{number_with_delimiter(@operational.to_i, delimiter: ".")}
     tr
       td Biaya Pasti
-      td style="text-align: right"
+      td.number style="text-align: right"
         b #{number_with_delimiter(@fix_cost.to_i, delimiter: ".")}
 
   table#items
     tr
       td Total Pemasukkan
-      td style="text-align: right"
+      td.number style="text-align: right"
         b #{number_with_delimiter(@total_income.to_i, delimiter: ".")}
     tr
       td Total Pengeluaran
-      td style="text-align: right"
+      td.number style="text-align: right"
         b #{number_with_delimiter(@total_outcome.to_i, delimiter: ".")}
     tr
       td Profit Bersih
-      td style="text-align: right"
+      td.number style="text-align: right"
         b #{number_with_delimiter(@total_income.to_i - @total_outcome.to_i, delimiter: ".")}
 
