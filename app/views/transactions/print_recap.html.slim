@@ -95,7 +95,7 @@ br
 h2
   | CANDY DREAM
 - stores = Store.where.not(store_type: "warehouse")
-- stores = [current_user.store] if !isFinance
+- stores = [current_user.store] if !isCandyDream
 - stores.each do |store|
   - trxs = @transactions.where(store: store)
   - trx_last_timestamp = "Tidak ada transaksi"

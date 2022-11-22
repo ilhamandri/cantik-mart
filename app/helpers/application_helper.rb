@@ -59,4 +59,10 @@ module ApplicationHelper
 		return true if levels.include? current_user.level
 		return false
 	end
+
+	def isCandyDream 
+		return false if current_user.nil?
+		return true if ["super_admin", "owner", "developer", "candy_dream", "finance"].include? current_user.level
+		return false
+	end
 end
