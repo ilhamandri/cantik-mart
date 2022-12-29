@@ -44,7 +44,7 @@
             = form.text_field :buy_item, required: true, class: "form-control md-form", id: "buy", readonly: "true", value:"#{number_with_delimiter(@item.buy.to_i, delimiter: '.')}"
           .form-group
             label for="sell" PPn
-            = form.text_field :tax, required: true, class: "form-control md-form", id: "tax", readonly: "true", value:"#{@item.tax} %", onchange:"changePriceEditItem()"
+            = form.text_field :tax, required: true, class: "form-control md-form", id: "tax", readonly: "true", value:"#{@item.tax} %", onchange:"changePriceNormalEditItem()"
             
           .form-group
             label for="sell" Margin
@@ -62,7 +62,7 @@
             label.text-danger * 0 - 100 = Dianggap %
             br
             label.text-danger * lebih dari 100 = Dianggap harga Rupiah
-            = form.number_field :discount, required: true, class: "form-control md-form", id: "discount", min: "0", onchange:"changeDiscountEditItem()", step: "1"
+            = form.number_field :discount, required: true, class: "form-control md-form", id: "discount", min: "0", onchange:"changePriceNormalEditItem()", step: "1"
           .form-group
             label for="sell" Harga Jual Akhir
             = form.text_field :sell, required: true, class: "form-control md-form", id: "sell", value: "#{@item.sell.to_i}", readonly:"true"
