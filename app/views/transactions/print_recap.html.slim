@@ -53,6 +53,7 @@ br
 
       - User.where(id: trxs.pluck(:user_id).uniq).each do |user|       
         - cashier_trxs = trxs.where(user: user)
+        - binding.pry if user.id == 45
         tr
           td #{user.name.camelize}
           - cash = cashier_trxs.where(payment_type: "CASH").sum(:grand_total)- cashier_trxs.where(payment_type: "CASH").sum(:grand_total_coin)

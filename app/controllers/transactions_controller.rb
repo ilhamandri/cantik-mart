@@ -122,8 +122,6 @@ class TransactionsController < ApplicationController
       @profits << [store.name, grand_total, profit, ppn]
     end
 
-    binding.pry
-
     @supplier_income = 0
     @bonus = cash_flow.where(finance_type: CashFlow::BONUS).sum(:nominal)
     @other_income = cash_flow.where(finance_type: CashFlow::INCOME).sum(:nominal)
