@@ -95,7 +95,7 @@ class TransactionsController < ApplicationController
   end
 
   def daily_recap
-    end_day = params[:date].to_s.time.end_of_day
+    end_day = params[:date].to_s.to_time.end_of_day
     start_day = end_day.beginning_of_day
     @end = end_day
     @start = start_day
