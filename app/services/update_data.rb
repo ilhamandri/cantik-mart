@@ -2,6 +2,7 @@ class UpdateData
 
 	# UpdateData.updatePopularItems
 	def self.updatePopularItems store_id
+		PopularItem.where(date: DateTime.now.beginning_of_month).destroy_all
 	    item_sells = TransactionItem.where(created_at: (DateTime.now - 1.month)..DateTime.now).group(:item_id).count
 	    high_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
 	    highs = high_results

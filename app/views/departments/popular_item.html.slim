@@ -14,7 +14,7 @@
       td
         textarea 
           - last = PopularItem.last
-          | TOP 100 - #{last.date.strftime("%B %Y").upcase} 
+          | TOP 100 - #{DateTime.now.beginning_of_month.strftime("%B %Y").upcase} 
 
 table#items
   tr
