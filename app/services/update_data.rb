@@ -1,14 +1,14 @@
 class UpdateData
 
 	# UpdateData.updatePopularItems
-	def self.updatePopularItems store_id
+	def self.updatePopularItems store_id, department_id
 		PopularItem.where(date: DateTime.now.beginning_of_month).destroy_all
-	    item_sells = TransactionItem.where(created_at: (DateTime.now - 1.month)..DateTime.now).group(:item_id).count
+	    item_sells = TransactionItem.where(department_id: department_id, created_at: (DateTime.now - 1.month)..DateTime.now).group(:item_id).count
 	    high_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
 	    highs = high_results
 	    curr_date_pop_item = PopularItem.where("date = ?", DateTime.now.beginning_of_month)
 	    curr_date_pop_item.destroy_all if curr_date_pop_item.present?
-	    date = DateTime.now.beginning_of_month
+	    date = DateTime.now.beginning_of_month - 1.month
 	    highs.each do |data|
 	      item = Item.find_by(id: data[0])
 	      item_cat = item.item_cat
