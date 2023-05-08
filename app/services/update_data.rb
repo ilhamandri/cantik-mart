@@ -1,7 +1,7 @@
 class UpdateData
 
 	# UpdateData.updatePopularItems
-	def self.updatePopularItems
+	def self.updatePopularItems store_id
 	    trxs = Transaction.where(created_at: (DateTime.now - 1.month)..DateTime.now).pluck(:id).uniq
 	    item_sells = TransactionItem.where(transaction_id: trxs).group(:item_id).count
 	    high_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
@@ -15,7 +15,7 @@ class UpdateData
 	      department = item_cat.department
 	      sell = data[1]
 	      pop_item = PopularItem.create item: item, item_cat: item_cat,
-	       department: department, n_sell: sell, date: date, store: nil
+	       department: department, n_sell: sell, date: date, store_id: store_id
 	    end
 	  end
 
