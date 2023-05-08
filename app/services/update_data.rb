@@ -3,7 +3,8 @@ class UpdateData
 	# UpdateData.updatePopularItems
 	def self.updatePopularItems store_id, department_id
 		PopularItem.where(date: DateTime.now.beginning_of_month, department_id: department_id).destroy_all
-	    item_sells = TransactionItem.where(department_id: department_id, created_at: (DateTime.now - 1.month)..DateTime.now).group(:item_id).count
+
+	    item_sells = TransactionItem.where(item: Item.where(item_cat: Department.find_by(id: department_id).item_cat), created_at: (DateTime.now - 1.month)..DateTime.now).group(:item_id).count
 	    high_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
 	    highs = high_results
 	    curr_date_pop_item = PopularItem.where("date = ?", DateTime.now.beginning_of_month)
