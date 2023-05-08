@@ -2,8 +2,7 @@ class UpdateData
 
 	# UpdateData.updatePopularItems
 	def self.updatePopularItems store_id
-	    trxs = Transaction.where(created_at: (DateTime.now - 1.month)..DateTime.now).pluck(:id).uniq
-	    item_sells = TransactionItem.where(transaction_id: trxs).group(:item_id).count
+	    item_sells = TransactionItem.where(created_at: (DateTime.now - 1.month)..DateTime.now).group(:item_id).count
 	    high_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
 	    highs = high_results
 	    curr_date_pop_item = PopularItem.where("date = ?", DateTime.now.beginning_of_month)
