@@ -23,7 +23,7 @@ table#items
     th Sub Departemen
     th Terjual 
   
-  - datas.each do |pop_item|
+  - @datas.each do |pop_item|
     - item = pop_item.item
     tr.item-row
       td #{item.code}
