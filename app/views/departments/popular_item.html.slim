@@ -13,7 +13,7 @@
       td.meta-head Pencarian
       td
         textarea 
-          | TOP 100 - #{@selected_date.strftime("%B %Y").upcase} 
+          | TOP 100 - #{(DateTime.now.beginning_of_month-1.month).strftime("%B %Y").upcase} 
 
 table#items
   tr
