@@ -20,7 +20,8 @@ class DepartmentsController < ApplicationController
     return redirect_back_data_error departments_path, "Data Dapartemen Tidak Ditemukan" unless params[:id].present?
     @department = Department.find_by_id params[:id]
     return redirect_back_data_error departments_path, "Data Dapartemen Tidak Ditemukan" if @department.nil?
-    UpdateData.updatePopularItems current_user.store.id, @department.id
+    @datas = PopularItem.where(department: @department, date: DateTime.now.beginning_of_month-1.month)
+    UpdateData.updatePopularItems(current_user.store.id, @department.id) if !@datas.present?
     respond_to do |format|
       format.html
       format.pdf do

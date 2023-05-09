@@ -2,21 +2,21 @@ class UpdateData
 
 	# UpdateData.updatePopularItems
 	def self.updatePopularItems store_id, department_id
-		PopularItem.where(date: DateTime.now.beginning_of_month, department_id: department_id).destroy_all
-
-	    item_sells = TransactionItem.where(item: Item.where(item_cat: Department.find_by(id: department_id).item_cat), created_at: (DateTime.now - 1.month)..DateTime.now).group(:item_id).count
+		start_date =  DateTime.now.beginning_of_month - 1.month
+		end_date = start_date.end_of_month
+	    item_sells = TransactionItem.where(item: Item.where(item_cat: Department.find_by(id: department_id).item_cat), created_at:).group(:item_id).count
 	    high_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
 	    highs = high_results
 	    curr_date_pop_item = PopularItem.where("date = ?", DateTime.now.beginning_of_month)
 	    curr_date_pop_item.destroy_all if curr_date_pop_item.present?
-	    date = DateTime.now.beginning_of_month
-	    highs.each do |data|
-	      item = Item.find_by(id: data[0])
-	      item_cat = item.item_cat
-	      department = item_cat.department
-	      sell = data[1]
-	      pop_item = PopularItem.create item: item, item_cat: item_cat,
-	       department: department, n_sell: sell, date: date, store_id: store_id
+	    date = start_date
+	    highs.each_with_index do |data, idx|
+	    	break if idx == 100
+		    item = Item.find_by(id: data[0])
+		    item_cat = item.item_cat
+		    department = item_cat.department
+		    sell = data[1]
+		    pop_item = PopularItem.create item: item, item_cat: item_cat, department: department, n_sell: sell, date: date, store_id: store_id
 	    end
 	  end
 

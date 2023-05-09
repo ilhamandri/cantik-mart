@@ -73,8 +73,8 @@ class WarningItemsController < ApplicationController
       idx = 1
       store_items.each do |store_item|
         item = store_item.item
-        b = item.buy
-        s = item.sell
+        b = item.buy.to_i
+        s = item.sell.to_i
         a = sheet.add_row [idx, item.code.to_s+" ", item.name, b, s, store_item.stock]
         idx+=1
       end

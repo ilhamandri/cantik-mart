@@ -22,8 +22,8 @@ table#items
     th Nama
     th Sub Departemen
     th Terjual 
-  - data =  PopularItem.where(department: @department).order("created_at ASC, n_sell DESC")
-  - data.each do |pop_item|
+  
+  - datas.each do |pop_item|
     - item = pop_item.item
     tr.item-row
       td #{item.code}
