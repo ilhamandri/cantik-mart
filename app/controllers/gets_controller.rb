@@ -20,7 +20,6 @@ class GetsController < ApplicationController
 
 			 render :json =>json_result if store.nil?
 			 # json_result["stores"] = Store.where(updated_at: from..to)
-			 json_result["users"] = User.where.not(level: ["candy_dream", "developer"])
 			 json_result["members"] = Member.where(updated_at: from..to)
 			 json_result["departments"] = Department.where(updated_at: from..to)
 			 json_result["item_cats"] = ItemCat.where(updated_at: from..to)
@@ -28,6 +27,7 @@ class GetsController < ApplicationController
 			 json_result["stocks"] = StoreItem.where(store: store).where(updated_at: from..to)
 			 json_result["grocers"] = GrocerItem.all
 			 json_result["promotions"] = Promotion.where(updated_at: from..to)
+			 json_result["users"] = User.where.not(level: ["candy_dream", "developer"])
 		 	 # json_result["exchange_points"] = ExchangePoint.where(updated_at: from..to)
 		 	 # json_result["vouchers"] = Voucher.where(updated_at: from..to)
 		 	
