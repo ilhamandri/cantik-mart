@@ -1,8 +1,8 @@
 class UpdateData
 
 	# UpdateData.updatePopularItems
-	def self.updatePopularItems store_id, department_id
-		start_date =  DateTime.now.beginning_of_month - 1.month
+	def self.updatePopularItems store_id, department_id, start_date
+		start_date =  DateTime.now.beginning_of_month - 1.month if start_date.nil?
 		end_date = start_date.end_of_month
 	    item_sells = TransactionItem.where(item: Item.where(item_cat: Department.find_by(id: department_id).item_cat), created_at: start_date..end_date).group(:item_id).count
 	    high_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
@@ -18,7 +18,11 @@ class UpdateData
 		    sell = data[1]
 		    pop_item = PopularItem.create item: item, item_cat: item_cat, department: department, n_sell: sell, date: date, store_id: store_id
 	    end
-	  end
+	end
+
+	def self.updateAllPopularItems store_id, start_date
+		
+	end
 
 	# UpdateData.updateStoreLossItem
 	def self.updateStoreLossItem

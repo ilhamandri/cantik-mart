@@ -6,4 +6,4 @@
   	.col.text-center
     	a href="#{departments_popular_items_path(id: @dept.id,format: :pdf)}" class="btn btn-primary"
       		b
-        		| TOP 25
+        		| TOP 100 - #{DateTime.now.beginning_of_day.strftime("%B %Y").upcase}

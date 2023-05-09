@@ -13,8 +13,7 @@
       td.meta-head Pencarian
       td
         textarea 
-          - last = PopularItem.last
-          | TOP 100 - #{last.date.strftime("%B %Y").upcase} 
+          | TOP 100 - #{@selected_date.strftime("%B %Y").upcase} 
 
 table#items
   tr
@@ -23,9 +22,10 @@ table#items
     th Sub Departemen
     th Terjual 
   
-  - @datas.each do |pop_item|
+  - @datas.each_with_index do |pop_item, idx|
     - item = pop_item.item
     tr.item-row
+      td #{idx+1}
       td #{item.code}
       td #{item.name}
       td #{item.item_cat.name}
