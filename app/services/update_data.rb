@@ -2,7 +2,7 @@ class UpdateData
 
 	# UpdateData.UpdateDataTransactionItemTotal start_date, end_date
 	def self.UpdateDataTransactionItemTotal start_date, end_date
-		trx_items = TransactionItem.where(total: 0, created_at: start_date..end_date).where.not(item_id: [29670, 29671, 29672])
+		trx_items = TransactionItem.where(total: 0, created_at: start_date..end_date).where.not(item_id: [29670, 29671, 29672], price: 0)
 		trx_items.each do |trx_item|
 			trx_item.store_id = trx_item.trx.store_id
 			supplier_items = SupplierItem.where(item: trx_item.item)

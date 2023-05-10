@@ -28,7 +28,7 @@ class Calculate
 			start_date = Time.now.beginning_of_year - 3.years
 		end
 
-		return if end_date == Time.now.beginning_of_month - 1.month
+		return if (end_date == Time.now.beginning_of_month - 1.month) && (last_data.present?)
 
 		dates = [start_date]
 		while dates.last != end_date
