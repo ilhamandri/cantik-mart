@@ -1,9 +1,21 @@
 class UpdateData
 
-	def self.UpdateDataTransactionItemTotal
-		trx_items = TransactionItem.where(total: 0)
+	# UpdateData.UpdateDataTransactionItemTotal
+	def self.UpdateDataTransactionItemTotal start_date, end_date
+		trx_items = TransactionItem.where(total: 0, created_at: start_date..end_date).where.not(item_id: [29670, 29671, 29672])
 		trx_items.each do |trx_item|
-			trx_item.total = trx_item.price * trx_item.quantity
+			trx_item.store_id = trx_item.trx.store_id
+			supplier_items = SupplierItem.where(item: trx_item.item)
+			trx_item.supplier_id = supplier_items.first.supplier.id if supplier_items.present?
+
+			sell = trx_item.price-trx_item.discount
+			qty = trx_item.quantity
+
+			trx_item.total = sell * qty
+			ppn = sell-(sell/(1+(trx_item.item.tax.to_f/100.0)))
+			trx_item.ppn = ppn*qty
+			trx_item.profit = (sell-ppn-trx_item.item.buy)*qty
+
 			trx_item.save!
 		end
 	end
