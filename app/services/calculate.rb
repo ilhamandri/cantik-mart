@@ -28,6 +28,7 @@ class Calculate
 			start_date = Time.now.beginning_of_year - 3.years
 		end
 
+		start_date = start_date + 1.month
 		end_date = end_date.end_of_month
 
 
