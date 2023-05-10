@@ -60,7 +60,9 @@ class TransactionsController < ApplicationController
 
 
   def check_duplicate
-    duplicate_trxs = Transaction.select(:invoice).group(:invoice).having("count(*) > 1").size
+    start_date = DateTime.now-3.days
+    end_date = DateTime.now
+    duplicate_trxs = Transaction.where(created_at: start_date..end_date).select(:invoice).group(:invoice).having("count(*) > 1").size
     duplicate_trxs.each do |trx_data|
       trx = Transaction.find_by(invoice: trx_data[0])
       store = trx.store

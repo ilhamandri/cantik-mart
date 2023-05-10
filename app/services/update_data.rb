@@ -1,6 +1,6 @@
 class UpdateData
 
-	# UpdateData.UpdateDataTransactionItemTotal
+	# UpdateData.UpdateDataTransactionItemTotal start_date, end_date
 	def self.UpdateDataTransactionItemTotal start_date, end_date
 		trx_items = TransactionItem.where(total: 0, created_at: start_date..end_date).where.not(item_id: [29670, 29671, 29672])
 		trx_items.each do |trx_item|

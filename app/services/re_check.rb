@@ -104,6 +104,24 @@ class ReCheck
 		InvoiceTransaction.where(nominal: 0).destroy_all
 	end
 
-	# KOIN
+	def self.checkInvoiceOrder
+		start_date = DateTime.now-7.days
+		end_date = DateTime.now
+		duplicate_orders = Order.where(created_at: start_date..end_date).select(:invoice).group(:invoice).having("count(*) > 1").size
+	    duplicate_orders.each do |order_data|
+	      orders = Order.where(invoice: order_data[0])
+	      order = orders.last
 
+	      store = order.store
+	      order.order_items.each do |order_item|
+	        store_item = StoreItem.find_by(item: order_item.item, store: store)
+	        if order_item.receive.present?
+	          store_item.stock = store_item.stock - order_item.receive
+	          store_item.save!
+	        end
+	      end
+	      order.order_items.destroy_all
+	      order.destroy
+	    end
+	end
 end
