@@ -65,8 +65,8 @@ class ReCheck
 		CashFlow.where(nominal: 0).destroy_all
 	end
 
-	# CHECK INVOICE TRX
-	def self.checkInvoiceTransaction
+	# CHECK INVOICE Payment
+	def self.checkInvoiceOrderPayment
 		orders_id = []
 		Order.all.each do |order|
 			nominal_order = order.grand_total
@@ -122,6 +122,26 @@ class ReCheck
 	      end
 	      order.order_items.destroy_all
 	      order.destroy
+	    end
+	end
+
+	def self.checkInvoiceTransaction
+	    start_date = DateTime.now-6.days
+	    end_date = DateTime.now
+	    duplicate_trxs = Transaction.where(created_at: start_date..end_date).select(:invoice).group(:invoice).having("count(*) > 1").size
+	    duplicate_trxs.each do |trx_data|
+	      trxs = Transaction.where(invoice: trx_data[0])
+	      trx = trxs.last
+	      store = trx.store
+	      if trx.transaction_items.present?
+	        trx.transaction_items.each do |trx_item|
+	          store_item = StoreItem.find_by(item: trx_item.item, store: store)
+	          store_item.stock = store_item.stock + trx_item.quantity
+	          store_item.save!
+	        end
+	        trx.transaction_items.destroy_all
+	      end
+	      trx.destroy
 	    end
 	end
 end

@@ -7,7 +7,6 @@ class TransactionsController < ApplicationController
   @@point = 10000
 
   def index
-    check_duplicate
     filter = filter_search params, "html"
     @search = "Rekap transaksi " + filter[0]
     @transactions = filter[1]
@@ -55,26 +54,6 @@ class TransactionsController < ApplicationController
           layout: 'pdf_layout.html.erb',
           template: "transactions/print_all.html.slim"
       end
-    end
-  end
-
-
-  def check_duplicate
-    start_date = DateTime.now-3.days
-    end_date = DateTime.now
-    duplicate_trxs = Transaction.where(created_at: start_date..end_date).select(:invoice).group(:invoice).having("count(*) > 1").size
-    duplicate_trxs.each do |trx_data|
-      trx = Transaction.find_by(invoice: trx_data[0])
-      store = trx.store
-      if trx.transaction_items.present?
-        trx.transaction_items.each do |trx_item|
-          store_item = StoreItem.find_by(item: trx_item.item, store: store)
-          store_item.stock = store_item.stock + trx_item.quantity
-          store_item.save!
-        end
-        trx.transaction_items.destroy_all
-      end
-      trx.destroy
     end
   end
 

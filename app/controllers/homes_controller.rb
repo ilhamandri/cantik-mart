@@ -3,19 +3,13 @@ class HomesController < ApplicationController
   require 'usagewatch'
 
   def index
-    # UpdateData.updateItemDiscountExpired
-    ReCheck.complain
-    if current_user.level == "developer"
-      # UpdateData.updateCashFlowInvoice
-      # UpdateData.updateInvoiceTransaction
-
-      # UpdateData.updateDebtDefZero
-      # UpdateData.updateItemPrice
-      # ReCheck.checkDebtPayment
-      # ReCheck.checkInvoiceTransaction
-      # Calculate.calculateData
+    if  ["super_admin", "developer", "owner"].include? current_user.level
+      ReCheck.complain
+      Calculate.calculateData
+      ReCheck.checkInvoiceTransaction
     end
 
+    ReCheck.checkInvoiceOrder
     
     @total_limit_items = StoreItem.where(store_id: current_user.store.id).where('stock < 0').count
     @total_orders = Order.where(store_id: current_user.store.id).where(date_receive: nil).count

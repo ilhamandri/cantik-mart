@@ -9,7 +9,6 @@ class OrdersController < ApplicationController
   before_action :screening
   
   def index
-    ReCheck.checkInvoiceOrder
     filter = filter_search params, "html"
     @search = filter[0]
     @orders = filter[1]
