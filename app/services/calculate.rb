@@ -16,7 +16,7 @@ class Calculate
 		outcome_val = 0
 
 		start_date = nil
-		end_date = Time.now.beginning_of_month - 1.month
+		end_date = (Time.now - 1.month).end_of_month
 		last_data = StoreData.where(store: store)
 
 		if last_data.present?
@@ -27,8 +27,6 @@ class Calculate
 		else
 			start_date = Time.now.beginning_of_year - 3.years
 		end
-
-		return if start_date == Time.now.beginning_of_month - 1.month
 
 		dates = [start_date]
 		while dates.last != end_date
