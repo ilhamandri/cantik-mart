@@ -30,12 +30,17 @@ class Calculate
 
 		end_date = end_date.end_of_month
 
+
+		puts start_date.to_s + " ----- " + end_date.to_s
+
 		dates = [start_date]
 		while dates.last != end_date
 			dates << (dates.last + 1.month).to_time
 		end
 
 		date_range = start_date..end_date
+
+		puts date_range
 		
 		if StoreData.where(store: store).present?
 			debt_val = StoreData.where(store: store).last.debt 
