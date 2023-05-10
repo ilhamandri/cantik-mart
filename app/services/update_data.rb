@@ -1,5 +1,13 @@
 class UpdateData
 
+	def self.UpdateDataTransactionItemTotal
+		trx_items = TransactionItem.where(total: 0)
+		trx_items.each do |trx_item|
+			trx_item.total = trx_item.price * trx_item.quantity
+			trx_item.save!
+		end
+	end
+
 	# UpdateData.updatePopularItems
 	def self.updatePopularItems store_id, department_id, start_date
 		start_date =  DateTime.now.beginning_of_month - 1.month if start_date.nil?
