@@ -29,19 +29,17 @@ class Calculate
 		end
 
 		start_date = start_date + 1.month
-		end_date = end_date.end_of_month
 
-
-		puts start_date.to_s + " ----- " + end_date.to_s
+		puts "START DATE : " + start_date.to_s 
 
 		dates = [start_date]
 		while dates.last != end_date
 			dates << (dates.last + 1.month).to_time
 		end
 
-		date_range = start_date..end_date
+		date_range = start_date..(end_date.end_of_month)
 
-		puts date_range
+		puts "RANGE : " + date_range.to_s
 		
 		if StoreData.where(store: store).present?
 			debt_val = StoreData.where(store: store).last.debt 
