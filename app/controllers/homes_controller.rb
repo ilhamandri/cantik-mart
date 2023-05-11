@@ -43,7 +43,6 @@ class HomesController < ApplicationController
     if ["super_admin", "owner", "candy_dream", "finance", "super_visi", "developer"].include? current_user.level
       @daily_transaction = Transaction.where(created_at: start_day..end_day)
       @transactions = Transaction.where("created_at >= ?", DateTime.now.beginning_of_month-1.month)
-      @transactions = @transactions.where(store: current_user.store) if current_user.level == "super_visi"
       @transactions = @transactions.where(has_coin: true) if current_user.level == "candy_dream"
     end
 
