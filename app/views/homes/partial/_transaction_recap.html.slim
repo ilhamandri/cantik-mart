@@ -38,68 +38,36 @@
               strong  #{number_to_currency(sum_grand_total-sum_hpp_total-@total_outcome-sum_tax_total, unit: "Rp. ", delimiter: ".", separator:",")}
       br
     .col-12
-      - start_month = (DateTime.now-1.month).beginning_of_month
-      - end_month = start_month.end_of_month
-
-      h3
-        br
-        b.lead.text-primary #{start_month.strftime("%B %Y")}
-
+      - dates = StoreData.where(store: current_user.store).last(2).pluck(:date)
       - sum_grand_total = 0
       - sum_hpp_total = 0
       - sum_tax_total = 0
-      - trx_total = 0
-      - if trx.present?
-        - trxs_month_before = trx.where(created_at: start_month..end_month)
-        - sum_grand_total = trxs_month_before.sum(:grand_total)
-        - sum_grand_total = trxs_month_before.sum(:grand_total_coin) if current_user.level == "candy_dream"
-        - sum_hpp_total = trxs_month_before.sum(:hpp_total)
-        - sum_tax_total = trxs_month_before.sum(:tax)
-        - trx_total = trxs_month_before.count
-      .row
-        .col-6 Omzet :
-        .col-6.text-right
-          strong #{number_to_currency(sum_grand_total, unit: "Rp. ", delimiter: ".", separator:",")}
-
-        - if isFinance
-          .col-6 Profit :
-          .col-6.text-right
-            strong #{number_to_currency(sum_grand_total-sum_hpp_total-sum_tax_total, unit: "Rp. ", delimiter: ".", separator:",")}
+      - sum_profit_total = 0
+     
+      - dates.each do |store_date|
+        - if isFinance 
+          - sum_grand_total = StoreData.where(date: store_date).sum(:transaction_total)
+          - sum_hpp_total = StoreData.where(date: store_date).sum(:transaction_hpp)
+          - sum_tax_total = StoreData.where(date: store_date).sum(:transaction_tax)
+          - sum_profit_total = StoreData.where(date: store_date).sum(:transaction_profit)
         - else
-          .col-6 Transaksi :
+          - sum_grand_total = StoreData.where(date: store_date, store: current_user.store).sum(:transaction_total)
+        h3
+          br
+          b.lead.text-primary #{store_date.strftime("%B %Y")}
+        .row
+          .col-6 Omzet :
           .col-6.text-right
-            strong  #{number_with_delimiter(trx_total, delimiter: ".")} x
+            strong #{number_to_currency(sum_grand_total, unit: "Rp. ", delimiter: ".", separator:",")}
 
-      hr.my-4
-
-      h3
-        b.lead.text-primary #{Date.today.strftime("%B %Y")}
-
-      - sum_grand_total = 0
-      - sum_hpp_total = 0
-      - sum_tax_total = 0
-      - trx_total = 0
-      - current_month = DateTime.now.beginning_of_month
-      - if trx.present?
-        - trxs_current_month = trx.where("created_at > ? ", current_month)
-        - sum_grand_total = trxs_current_month.sum(:grand_total)
-        - sum_grand_total = trxs_current_month.sum(:grand_total_coin) if current_user.level == "candy_dream"
-        - sum_hpp_total = trxs_current_month.sum(:hpp_total)
-        - sum_tax_total = trxs_current_month.sum(:tax)
-        - trx_total = trxs_current_month.count
-      .row
-        .col-4 Omzet :
-        .col-8.text-right
-          strong  #{number_to_currency(sum_grand_total, unit: "Rp. ", delimiter: ".", separator:",")}
-
-
-        - if isFinance
-          .col-4 Profit :
-          .col-8.text-right
-            strong  #{number_to_currency(sum_grand_total-sum_hpp_total-sum_tax_total, unit: "Rp. ", delimiter: ".", separator:",")}
-        - else
-          .col-4 Transaksi :
-          .col-8.text-right
-            strong  #{number_with_delimiter(trx_total, delimiter: ".")} x
-
+          - if isFinance
+            .col-6 HPP :
+            .col-6.text-right
+              strong #{number_to_currency(sum_hpp_total, unit: "Rp. ", delimiter: ".", separator:",")}
+            .col-6 Pajak :
+            .col-6.text-right
+              strong #{number_to_currency(sum_tax_total, unit: "Rp. ", delimiter: ".", separator:",")}
+            .col-6 Pajak :
+            .col-6.text-right
+              strong #{number_to_currency(sum_profit_total, unit: "Rp. ", delimiter: ".", separator:",")}
     
