@@ -8,7 +8,7 @@
         - sum_hpp_total = 0
         - sum_tax_total = 0
         - if @daily_transaction.present?
-          - sum_grand_total = @daily_transaction.sum(:grand_total) if trx
+          - sum_grand_total = @daily_transaction.sum(:grand_total)
           - sum_grand_total = @daily_transaction.sum(:grand_total_coin) if current_user.level == "candy_dream"
           - sum_hpp_total = @daily_transaction.sum(:hpp_total)
           - sum_tax_total = @daily_transaction.sum(:tax)
