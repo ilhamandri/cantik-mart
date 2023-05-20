@@ -38,15 +38,20 @@ br
     - data.each do |absent|
       tr
         td #{absent.user.name}
-        td 
+        td.text-center 
           - if absent.check_in.present?
             | #{absent.check_in.strftime("%H.%M")}
-        td 
+        td.text-center
           - if absent.check_out.present?
-            | #{absent.check_in.strftime("%H.%M")}
-        td
+            | #{absent.check_out.strftime("%H.%M")}
+        td.text-center
           - if absent.check_out.present?
             - time_split = absent.work_hour.split(":")
-            | #{time_split[0]} Jam #{time_split[1]} Menit
+            - work_hour = ""
+            - work_hour += time_split[0].to_s + "."
+            - work_hour += time_split[1].to_s  if time_split[1].to_i > 10
+            - work_hour += "0" + time_split[1].to_s  if time_split[1].to_i < 10
+
+            | #{work_hour}
           
               
