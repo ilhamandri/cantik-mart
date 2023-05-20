@@ -38,8 +38,16 @@ br
     - data.each do |absent|
       tr
         td #{absent.user.name}
-        td #{absent.check_in.strftime("%H.%M")}
-        td #{absent.check_out.strftime("%H.%M")}
+        td 
+          - if absent.check_in.present?
+            | #{absent.check_in.strftime("%H.%M")}
+          - else
+            | x
+        td 
+          - if absent.check_out.present?
+            | #{absent.check_in.strftime("%H.%M")}
+          - else
+            | x
         td
           - if absent.check_out.present?
             - time_split = absent.work_hour.split(":")
