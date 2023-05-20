@@ -21,21 +21,21 @@ br
 br
 br
 
-- absent_group = @absents.group_by(&:store_id)
-- absent_group.each do |store_id, data|
+- Store.where(store_type: 0).each do |store|
+  - absents = @absents.where(store: store).order("check_in ASC")
   - store_name = "(NOT DEFINED)"
-  - store_name = Store.find_by(id: store_id).name if store_id.present?
+  - store_name = store.name.upcase
   table#items
     tr
       th colspan="4"
-        | #{store_name}
+        | #{store_name.gsub("TOKO ","")}
     tr
       th Nama
       th Masuk
       th Pulang
       th Jam Kerja
 
-    - data.each do |absent|
+    - absents.each do |absent|
       tr
         td #{absent.user.name}
         td.text-center 
@@ -48,8 +48,8 @@ br
           - if absent.check_out.present?
             - time_split = absent.work_hour.split(":")
             - work_hour = ""
-            - work_hour += time_split[0].to_s if time_split[1].to_i > 10
-            - work_hour += "0" + time_split[0].to_s if time_split[1].to_i < 10
+            - work_hour += time_split[0].to_s if time_split[0].to_i > 10
+            - work_hour += "0" + time_split[0].to_s if time_split[0].to_i < 10
             - work_hour += "."
             - work_hour += time_split[1].to_s  if time_split[1].to_i > 10
             - work_hour += "0" + time_split[1].to_s  if time_split[1].to_i < 10
