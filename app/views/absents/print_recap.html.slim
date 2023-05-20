@@ -48,10 +48,12 @@ br
           - if absent.check_out.present?
             - time_split = absent.work_hour.split(":")
             - work_hour = ""
-            - work_hour += time_split[0].to_s + "."
+            - work_hour += time_split[0].to_s if time_split[1].to_i > 10
+            - work_hour += "0" + time_split[0].to_s if time_split[1].to_i < 10
+            - work_hour += "."
             - work_hour += time_split[1].to_s  if time_split[1].to_i > 10
             - work_hour += "0" + time_split[1].to_s  if time_split[1].to_i < 10
 
-            | #{work_hour}
+            b #{work_hour}
           
               
