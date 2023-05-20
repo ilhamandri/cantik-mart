@@ -34,27 +34,15 @@ br
       th Masuk
       th Pulang
       th Jam Kerja
-      / th
-      / th Mulai Lembur
-      / th Selesai Lembur
-      / th Jam Lembur
 
     - data.each do |absent|
       tr
         td #{absent.user.name}
-        td #{absent.check_in}
-        td #{absent.check_out}
+        td #{absent.check_in.strftime("%H.%M")}
+        td #{absent.check_out.strftime("%H.%M")}
         td
           - if absent.check_out.present?
             - time_split = absent.work_hour.split(":")
-            | #{time_split[0]} Jam #{time_split[1]} Menit #{time_split[2]} Detik
+            | #{time_split[0]} Jam #{time_split[1]} Menit
           
-        / td
-        / td #{absent.overtime_in}
-        / td #{absent.overtime_out}
-        / td
-        /   - if absent.overtime_out.present?
-        /     - time_split = absent.overtime_hour.split(":")
-        /     | #{time_split[0]} Jam #{time_split[1]} Menit #{time_split[2]} Detik
-
               
