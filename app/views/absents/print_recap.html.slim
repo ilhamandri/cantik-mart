@@ -41,13 +41,9 @@ br
         td 
           - if absent.check_in.present?
             | #{absent.check_in.strftime("%H.%M")}
-          - else
-            | x
         td 
           - if absent.check_out.present?
             | #{absent.check_in.strftime("%H.%M")}
-          - else
-            | x
         td
           - if absent.check_out.present?
             - time_split = absent.work_hour.split(":")
