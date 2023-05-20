@@ -21,8 +21,9 @@ br
 br
 br
 
-- Store.where(store_type: 0).each do |store|
-  - absents = @absents.where(store: store).order("check_in ASC")
+- @absents.pluck(:store_id).uniq.each do |store_id|
+  - store = Store.find_by_id store_id
+  - absents = @absents.where(store: store).order("check_in DESC")
   - store_name = "(NOT DEFINED)"
   - store_name = store.name.upcase
   table#items
