@@ -42,19 +42,28 @@ br
         td.text-center 
           - if absent.check_in.present?
             | #{absent.check_in.strftime("%H.%M")}
+          - else
+            .text-danger x
         td.text-center
           - if absent.check_out.present?
             | #{absent.check_out.strftime("%H.%M")}
+          - else
+            .text-danger x
         td.text-center
+          - work_hour = ""
           - if absent.check_out.present?
             - time_split = absent.work_hour.split(":")
-            - work_hour = ""
             - work_hour += time_split[0].to_s if time_split[0].to_i > 10
             - work_hour += "0" + time_split[0].to_s if time_split[0].to_i < 10
             - work_hour += "."
             - work_hour += time_split[1].to_s  if time_split[1].to_i > 10
             - work_hour += "0" + time_split[1].to_s  if time_split[1].to_i < 10
 
-            b #{work_hour}
+          b 
+            - if work_hour != ""
+              | #{work_hour}
+            - else
+              .text-danger
+                | -
           
               
