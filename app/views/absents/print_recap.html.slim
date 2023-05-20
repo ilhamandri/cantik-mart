@@ -19,7 +19,6 @@
 
 br
 br
-br
 
 - @absents.pluck(:store_id).uniq.each do |store_id|
   - store = Store.find_by_id store_id
@@ -43,12 +42,12 @@ br
           - if absent.check_in.present?
             | #{absent.check_in.strftime("%H.%M")}
           - else
-            .text-danger x
+            | -
         td.text-center
           - if absent.check_out.present?
             | #{absent.check_out.strftime("%H.%M")}
           - else
-            .text-danger x
+            | -
         td.text-center
           - work_hour = ""
           - if absent.check_out.present?
@@ -63,7 +62,6 @@ br
             - if work_hour != ""
               | #{work_hour}
             - else
-              .text-danger
-                | -
+              | -
           
               
