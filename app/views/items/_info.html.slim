@@ -35,7 +35,7 @@
           label for="category" Stok
           - if current_user.store.store_type == "warehouse" || isAdmin
             select name="item[item_cat_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
-              - Store.each do |store|
+              - Store.all.each do |store|
                 - stock = StoreItem.find_by(store: store, item: @item).stock
                 option
                   | #{store.name} : #{stock}
