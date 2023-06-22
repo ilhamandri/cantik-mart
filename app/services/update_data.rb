@@ -132,6 +132,7 @@ class UpdateData
 			PopularItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
 			NotPopularItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
 			LossItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			Print.where(item_id: remove_ids).update_all(item_id: use_item_id)
 			Item.where(id: remove_ids).destroy_all
 		end
 	end
