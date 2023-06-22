@@ -121,7 +121,6 @@ class UpdateData
 			item_ids = items.pluck(:id)
 			use_item_id = items.last.id
 			remove_ids = item_ids-[use_item_id]
-			StoreItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
 			OrderItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
 			TransferItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
 			TransactionItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
@@ -133,6 +132,7 @@ class UpdateData
 			NotPopularItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
 			LossItem.where(item_id: remove_ids).update_all(item_id: use_item_id)
 			Print.where(item_id: remove_ids).update_all(item_id: use_item_id)
+			StoreItem.where(item_id: remove_ids).destroy_all
 			Item.where(id: remove_ids).destroy_all
 		end
 	end
