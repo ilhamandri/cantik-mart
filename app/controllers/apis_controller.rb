@@ -35,7 +35,7 @@ class ApisController < ApplicationController
   def get_item_code
     json_result = []
     code = params[:code].squish
-    item = Item.find_by_code code
+    item = Item.find_by_code code.upcase
     json_result << ["TRUE"] if item.present?
     render :json => json_result
   end
