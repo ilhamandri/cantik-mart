@@ -22,6 +22,28 @@ function showPosition(position) {
   "<br>Longitude: " + position.coords.longitude;
 }
 
+function checkItemCode(input){
+  code = input.value;
+  $.ajax({ 
+    type: 'GET', 
+    url: '/api/get_item_code?code='+code, 
+    success: function (result) { 
+      if(result=="TRUE"){
+        $('#label_check').show();
+        $('#buttonSubmit').hide();
+      }else{
+        $('#label_check').hide();
+        $('#buttonSubmit').show();
+      }
+    },
+    error: function(error) {
+      $('#label_check').show();
+      $('#buttonSubmit').hide();
+      alert("ERROR")
+    }
+  });
+}
+
 
 
 var separator = '<p class="medium">===========================================================</p>';

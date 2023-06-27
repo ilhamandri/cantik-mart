@@ -27,7 +27,17 @@ class ApisController < ApplicationController
       get_sync params
     elsif api_type == "update_item_id"
       get_update_item 
+    elsif api_type == "get_item_code"
+      get_item_code 
     end   
+  end
+
+  def get_item_code
+    json_result = []
+    code = params[:code].squish
+    item = Item.find_by_code code
+    json_result << ["TRUE"] if item.present?
+    render :json => json_result
   end
 
   def get_update_item

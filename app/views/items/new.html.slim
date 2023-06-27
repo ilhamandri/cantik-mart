@@ -8,7 +8,8 @@
         = form_for :item, url: items_path, method: "POST" do |form|
           .form-group
             label for="code" Kode
-            = form.text_field :code, required: true, class: "form-control md-form", id: "code"
+
+            = form.text_field :code, required: true, class: "form-control md-form", id: "code", onchange: "checkItemCode(this)"
           .form-group
             label for="name" Nama
             = form.text_field :name, required: true, class: "form-control md-form", id: "name"
@@ -29,5 +30,9 @@
             label for="buy" Margin
             = form.number_field :margin, required: true, class: "form-control md-form", id: "buy", min: "0", value: "0"
           .form-group style="display: none"
+          .form-group
+            h4.text-center style="display: none; color: red;" id="label_check"
+              br
+              | KODE TELAH DIGUNAKAN
           .form-group.text-center
-            = form.submit "Tambah Barang", class: "btn btn-primary"
+            = form.submit "Tambah Barang", class: "btn btn-primary", id:"buttonSubmit"
