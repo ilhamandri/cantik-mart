@@ -18,12 +18,12 @@ tr
         	| #{supplier_item.supplier.name},&nbsp
   td
     - if @ongoing_orders.present?
+      - total = 0
       - @ongoing_orders.each do |order|
-        - total = 0
         - order.order_items.each do |order_item|
           -if order_item.item.id == inventory.item.id
             - total += order_item.quantity
-        | #{total}
+      | #{total}
     - else
       | -
   td
