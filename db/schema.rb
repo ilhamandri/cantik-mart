@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_26_045353) do
+ActiveRecord::Schema.define(version: 2023_09_08_134118) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -305,6 +305,14 @@ ActiveRecord::Schema.define(version: 2022_10_26_045353) do
     t.float "selisih_pembulatan", default: 0.0, null: false
     t.bigint "edited_by"
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
+  end
+
+  create_table "jm_items", force: :cascade do |t|
+    t.string "code", default: "DEFAULT_CODE", null: false
+    t.string "name", default: "DEFAULT_NAME", null: false
+    t.bigint "sell", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "kasbons", force: :cascade do |t|

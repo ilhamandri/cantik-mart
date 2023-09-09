@@ -57,3 +57,15 @@ javascript:
     selectMonths: true,
     selectYears: true
   })
+
+  var table = $('#jm_items').DataTable({
+    "orderable": false,
+    "paging" : false,
+    "info": false,
+    "ordering": false
+  });
+ 
+  // #myInput is a <input type="text"> element
+  $('#myInput').on( 'keyup', function () {
+      table.search( this.value ).draw();
+  } );

@@ -1,0 +1,20 @@
+.container-fluid
+  .col-lg-12.col-md-12
+    .card.mb-4
+      .card-header.white-text.info-color
+        h5.font-weight-500.my-1
+          | EDIT - #{@item.name} 
+      .card-body
+        = form_for :item, url: jm_item_path(id: @item.id), method: "PUT" do |form|
+          .form-group
+            label for="code" CODE
+            = form.text_field :code, required: true, class: "form-control md-form", id: "code"
+          .form-group
+            label for="name" NAME
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name"
+         
+          .form-group
+            label for="sell" SELL
+            = form.text_field :sell, required: true, class: "form-control md-form", id: "sell", value: "#{@item.sell.to_i}"
+          .form-group.text-center
+            = form.submit "Ubah Barang", class: "btn btn-primary"

@@ -107,6 +107,7 @@ Rails.application.routes.draw do
   resources :prints
   resources :loss_profits
   resources :stock_recaps
+  resources :jm_items
 
   resources :send_backs
   

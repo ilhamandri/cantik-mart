@@ -1,5 +1,6 @@
 // setInterval(get_notification, 10000);
 
+
 var x = document.getElementById("coordinates");
 
 function getLocation() {
