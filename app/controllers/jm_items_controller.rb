@@ -5,7 +5,7 @@ class JmItemsController < ApplicationController
   require 'apriori'
   
   def index
-    @items = JmItem.all
+    @items = JmItem.all.order("name ASC")
   end
 
   def new
@@ -16,7 +16,7 @@ class JmItemsController < ApplicationController
     code = "-" if code == ""
     item = JmItem.new 
     item.code = code.gsub(" ", "")
-    item.name = params[:jm_item][:name]
+    item.name = params[:jm_item][:name].camelize
     item.sell = params[:jm_item][:sell]
     item.save!
     urls = jm_items_path id: item.id
@@ -36,7 +36,7 @@ class JmItemsController < ApplicationController
 
     code = params[:item][:code]
     code = "-" if code == ""
-    item.name = params[:item][:name]
+    item.name = params[:item][:name].camelize
     item.sell = params[:item][:sell]
     item.save!
     urls = jm_items_path id: item.id
