@@ -61,6 +61,7 @@ class PaysController < ApplicationController
 	    store.cash = store.cash + pay_nominal
 	    store.save!
 	    cash_flow.create_activity :create, owner: current_user 
+    	@data.deficiency = 0 if @data.deficiency <= 0
 	    @data.save!
       return redirect_success receivable_path(id: @data.id), "Pembayaran berhasil disimpan"
     else
