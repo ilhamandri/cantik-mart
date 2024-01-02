@@ -134,7 +134,6 @@ class AccountBalance
     time_end = DateTime.now.end_of_day
     stock_value = StockValue.where(store: store).where(created_at: time_start.beginning_of_day..time_end.end_of_day).first
     if stock_value.nil?
-
       stocks = StoreItem.where(store: store).where('stock != 0')
       values = 0
       stocks.each do |store_stock|
@@ -143,7 +142,7 @@ class AccountBalance
         values += (store_stock.stock * store_stock.item.buy)
       end
       
-      values = values
+      values = values - 5000000000000000 if values > 5000000000000000
 
       StockValue.create store: store, user: User.first, date_created: DateTime.now, nominal: values, description: "Nilai Stock - "+Date.today.month.to_s+"/"+Date.today.year.to_s
     end
