@@ -141,7 +141,7 @@ class AccountBalance
         next if store_stock.item.id == 30331
         values += (store_stock.stock * store_stock.item.buy)
       end
-      
+      # bypass
       values = values - 5000000000000000 if values > 5000000000000000
 
       StockValue.create store: store, user: User.first, date_created: DateTime.now, nominal: values, description: "Nilai Stock - "+Date.today.month.to_s+"/"+Date.today.year.to_s
