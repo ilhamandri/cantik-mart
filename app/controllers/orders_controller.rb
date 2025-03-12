@@ -21,11 +21,11 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       format.html
-        @holds = Order.where('date_receive is null')
-        @holds = @holds.where(store: current_user.store) if !["owner", "super_admin", "finance"].include? current_user.level
+        # @holds = Order.where('date_receive is null')
+        # @holds = @holds.where(store: current_user.store) if !["owner", "super_admin", "finance"].include? current_user.level
 
-        @debts = Order.where('date_receive is not null and date_paid_off is null')
-        @debts = @debts.where(store: current_user.store) if !["owner", "super_admin", "finance"].include? current_user.level
+        # @debts = Order.where('date_receive is not null and date_paid_off is null')
+        # @debts = @debts.where(store: current_user.store) if !["owner", "super_admin", "finance"].include? current_user.level
       
       format.pdf do
         new_params = eval(params[:option])
