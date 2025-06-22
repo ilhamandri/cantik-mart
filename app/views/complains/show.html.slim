@@ -1,12 +1,9 @@
 - member = "-"
 - member = Member.find_by(card_number: @transaction.member_card) if @transaction.member_card.present?
-.row
-  .col.text-left
-    h5
-      | Retur #{@complain.invoice}
-  .col.text-right
-    a href="#{complain_path(id: @complain.id, format: :pdf)}"
-      button.btn.btn-dark type="button" 
+
+.container-fluid
+  .col-lg-12.col-md-12
+    a.btn.btn-primary.col-12 href="#{complain_path(id: @complain.id, format: :pdf)}"
         | CETAK
 br
 
@@ -14,14 +11,16 @@ br
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.primary-color
-        h5.font-weight-500.my-1
-          | Data Retur Pelanggan
+      .card-header.white-text.bg-dark
+        .row
+          .col
+            h5.font-weight-500.my-1
+              | RETUR PELANGGAN
+          .col.text-right
+            h5.font-weight-500.my-1
+              | #{@complain.invoice}
       .card-body
         .row
-          .col-4
-            label No. Invoice
-            input disabled="disabled" class="form-control md-form" value="#{@complain.invoice}"
           .col-4
             label Dari Transaksi
             input disabled="disabled" class="form-control md-form" value="#{@transaction.invoice.gsub("/TP", "")}"
@@ -31,21 +30,21 @@ br
             - inv = new_trx.invoice if new_trx.present?
             input disabled="disabled" class="form-control md-form" value="#{inv}"
           .col-4
-            label Member
-            input disabled="disabled" class="form-control md-form" value="#{member}"
-          .col-4
-            label Tanggal Transaksi
-            input disabled="disabled" class="form-control md-form" value="#{@transaction.date_created}"
-          .col-4
-            label Tanggal Komplain
-            input disabled="disabled" class="form-control md-form" value="#{@complain.date_created}"
-          .col-4
             label Toko
             input disabled="disabled" class="form-control md-form" value="#{@transaction.user.store.name}"
-          .col-4
-            label Barang yang Dikembalikan
+          / .col-4
+            label Member
+            input disabled="disabled" class="form-control md-form" value="#{member}"
+          .col-3
+            label Tanggal Transaksi
+            input disabled="disabled" class="form-control md-form" value="#{@transaction.date_created}"
+          .col-3
+            label Tanggal Komplain
+            input disabled="disabled" class="form-control md-form" value="#{@complain.date_created}"
+          .col-3
+            label Barang Dikembalikan
             input disabled="disabled" class="form-control md-form" value="#{@complain.total_items} item"
-          .col-4
+          .col-3
             label Nominal Tambahan
             input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(@complain.nominal.to_i, delimiter: ".")}"
 
@@ -54,7 +53,7 @@ br
     .card.mb-4
       .card-header.white-text.danger-color
         h5.font-weight-500.my-1
-          | Barang yang Ditukar
+          | BARANG RETUR
       .card-body
         table.table id="myTable2"
           tr
@@ -83,9 +82,14 @@ br
   .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.success-color
-          h5.font-weight-500.my-1
-            | Tambahan Barang
+        .card-header.dark-text.success-color
+          .row
+            .col
+              h5.font-weight-500.my-1
+                | TRANSAKSI TAMBAHAN
+            .col.text-right
+              h5.font-weight-500.my-1
+                | #{new_trx.invoice}
         .card-body
           table.table id="myTable2"
             tr

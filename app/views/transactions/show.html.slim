@@ -2,11 +2,30 @@
 - member_name = "-"
 - member_name = transaction.member_card.name if transaction.member_card.present?
 .container-fluid
+  - if buttonAccess "returs", "new"
+    - complain = Complain.where(transaction_id: transaction).first
+    - in_range_complain = (transaction.created_at >= (DateTime.now - 30.days))
+    - if in_range_complain && !transaction.from_complain && complain.nil?
+      a.btn.btn-danger.col-12 href='#{new_complain_path(id: transaction.id)}'
+          | Retur
+br
+.container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Informasi Transaksi 
+      .card-header.white-text.bg-dark
+        .row
+          .col
+            h5.font-weight-500.my-1
+              | TRANSAKSI 
+              - if transaction.from_complain?
+                - complain = Complain.find_by(id: transaction.complain_id)
+                | RETUR ( 
+                b.text-danger
+                  | #{complain.invoice}
+                | )
+          .col.text-right
+            h5.font-weight-500.my-1
+              | #{transaction.invoice}
       .card-body
         .row
           - if isDeveloper
@@ -28,13 +47,10 @@
               label NOMINAL
               input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(complain.nominal, delimiter: ".")}"
             br
-          .col-4
-            label Invoice
-            input disabled="disabled" class="form-control md-form" value="#{transaction.invoice}"
-          .col-4
+          .col-6
             label Kasir
             input disabled="disabled" class="form-control md-form" value="#{transaction.user.name}"
-          .col-4
+          .col-6
             label Tgl. Transaksi
             input disabled="disabled" class="form-control md-form" value="#{transaction.created_at}"
           .col-12
@@ -72,12 +88,12 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
+      .card-header.white-text.bg-dark
         h5.font-weight-500.my-1
           - if transaction.from_complain?
-            | Daftar Tambahan Item
+            | ITEM TAMBAHAN
           - else
-            | Daftar Belanja 
+            | DAFTAR BELANJA
       .card-body.table-responsive.text-nowrap
         table class="table"
           thead
@@ -119,8 +135,14 @@
     .col-lg-12.col-md-12
       .card.mb-4
         .card-header.white-text.danger-color
-          h5.font-weight-500.my-1
-            | Barang yang di Retur 
+          .row
+            .col
+              h5.font-weight-500.my-1
+                | RETUR
+            - if check_complain.present?
+              .col.text-right
+                h5.font-weight-500.my-1
+                  | #{check_complain.invoice}
         .card-body.table-responsive.text-nowrap
           table class="table"
             thead

@@ -2,12 +2,11 @@
   .col
     .alert.alert-primary
       .alert-heading
-        | Semua Data #{@title}
+        | SEMUA DATA
   
   - if buttonAccess "losses", "new"
-    .col-2.text-center
-      a href="#{new_loss_path}"
-        button.btn.btn-success type="button" 
+    .col-3.text-center
+      a.btn.btn-dark href="#{new_loss_path}"
           i.fas.fa-plus 
           | &nbsp Loss
 

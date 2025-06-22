@@ -1,9 +1,14 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Ubah Barang - #{@item.name} (#{@item.code})
+      .card-header.white-text.bg-dark
+        .row
+          .col
+            h5.font-weight-500.my-1
+              | EDIT 
+          .col.text-right
+            h5.font-weight-500.my-1
+              | #{@item.name}
       .card-body
         = form_for :item, url: item_path(id: @item.id), method: "PUT" do |form|
           .form-group
@@ -74,4 +79,4 @@
             label style="display: none;" for="sell" Link Foto 
             = form.text_field :image, class: "form-control md-form", id: "sell", style:"display: none;"
           .form-group.text-center
-            = form.submit "Ubah Barang", class: "btn btn-primary"
+            = form.submit "EDIT", class: "btn btn-warning"

@@ -1,6 +1,9 @@
-.col-md-12.text-right.grey-text
-  a.btn.btn-dark href="#{supplier_path(id: @supplier.id,format: :pdf)}"
+.col-md-12.text-center
+  a.btn.btn-dark.col-12 href="#{supplier_path(id: @supplier.id,format: :pdf)}"
     | CETAK    
+
+br
+
 .table-responsive.text-nowrap
   table class="table"
     thead

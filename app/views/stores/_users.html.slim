@@ -5,10 +5,6 @@ table.table
 		th 
 	tbody
 		- @store.users.each do |user|
-			tr
+			tr onclick="window.location='#{user_path(user)}'"
 				td #{user.name}
 				td #{user.level.gsub("_", " ").upcase}
-				td
-					- if buttonAccess "users", "index"
-						a.btn.btn-primary href="#{user_path(user)}"
-							| Detil

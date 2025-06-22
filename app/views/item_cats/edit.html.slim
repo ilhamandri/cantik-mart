@@ -1,9 +1,14 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Ubah Sub Departemen (#{@item_cat.name})
+      .card-header.white-text.bg-dark
+        .row
+          .col
+            h5.font-weight-500.my-1
+              | EDIT
+          .col.text-right
+            h5.font-weight-500.my-1
+              | #{@item_cat.name}
       .card-body 
         = form_for :item_cat, url: item_cat_path, method: "PUT" do |form|
           .form-group
@@ -29,4 +34,4 @@
                 option value="false" selected="selected"
                   | Tidak Termasuk Perhitungan
           .form-group.text-center
-            = form.submit "Ubah Sub Departemen", class: "btn btn-warning"
+            = form.submit "EDIT", class: "btn btn-warning"

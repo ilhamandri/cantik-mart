@@ -1,9 +1,14 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Ubah Item - #{@item.name} (#{@item.code})
+      .card-header.white-text.bg-dark
+        .row
+          .col
+            h5.font-weight-500.my-1
+              | EDIT STOCK
+          .col.text-right
+            h5.font-weight-500.my-1
+              | #{@item.name} 
       .card-body
         = form_for :item, url: stock_path(id: @stock.id), method: "PUT" do |form|
           .form-group
@@ -43,4 +48,4 @@
               label for="sell" Harga Jual
               = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", readonly: "true"
           .form-group.text-center
-            = form.submit "Ubah Stok Item - #{@item.name}", class: "btn btn-primary"
+            = form.submit "EDIT Stok Item - #{@item.name}", class: "btn btn-warning"

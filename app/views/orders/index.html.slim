@@ -16,21 +16,13 @@
         i.fa.fa-book.fa-2x.pb-2 aria-hidden="true" 
         br
         | Rekap
+
     li.nav-item
       a#profile-tab-classic-blue.nav-link.waves-light aria-controls="recap" aria-selected="true" data-toggle="tab" href="#taxs" role="tab" 
         i.fa.fa-tags.fa-2x.pb-2 aria-hidden="true" 
         br
         | PPn
-/    li.nav-item
-      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="holds" aria-selected="true" data-toggle="tab" href="#holds" role="tab" 
-        i.fa.fa-shopping-cart.fa-2x.pb-2 aria-hidden="true" 
-        br
-        | Dalam Proses
-/    li.nav-item
-      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="debts" aria-selected="true" data-toggle="tab" href="#debts" role="tab" 
-        i.fa.fa-times.fa-2x.pb-2 aria-hidden="true" 
-        br
-        | Belum Lunas 
+
 
     - if isDeveloper
 /      li.nav-item
@@ -40,27 +32,27 @@
           | Grafik
     
 
-  #myClassicTabContentOrange.tab-content.card
-    #search.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
-        = render partial: 'search'
+#myClassicTabContentOrange.tab-content.card
+  #search.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+      = render partial: 'search'
 
-    #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
-        = render partial: 'info'
+  #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+      = render partial: 'info'
 
-    #holds.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-        = render partial: 'holds'
+  #holds.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+      = render partial: 'holds'
 
-    #recap.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel"
-        = render partial: 'recap'
+  #recap.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel"
+      = render partial: 'recap'
 
-    #debts.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-        = render partial: 'debts'
+  #debts.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+      = render partial: 'debts'
 
-    #taxs.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-        = render partial: 'taxs'
+  #taxs.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+      = render partial: 'taxs'
 
 
-    - if isDeveloper
-      #graph.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-          = render partial: 'graph'
-    
+  - if isDeveloper
+    #graph.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'graph'
+  

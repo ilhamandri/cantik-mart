@@ -3,7 +3,7 @@
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Ubah Kriteria Penukaran Poin - #{@point.name}
+          | EDIT Kriteria Penukaran Poin - #{@point.name}
       .card-body
         = form_for :point, url: exchange_point_path, method: "PUT" do |form|
         	.form-group

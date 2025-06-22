@@ -1,16 +1,12 @@
-tr
-	td 
+tr onclick="window.location='#{user_path(user)}'"
+	td
 		- if user.image.present?
 			=image_tag("/uploads/profile_picture/#{user.image}", height: '90', width: '70')
 		- else
 			=image_tag("/uploads/profile_picture/default.png", height: '90', width: '70')
-  	td #{user.name}
-    td #{user.level.gsub("_"," ").camelize}
-  	td #{user.address}
-  	td #{number_to_phone(user.phone, country_code: 62)}
-  	td #{user.sex.gsub("_"," ").camelize}
-  	td
-    	a href='#{user_path(id: user.id)}'
-          button.btn.btn-primary type="button" 
-              | Detil
-      
+	td #{user.name}
+	td #{user.level.gsub("_"," ").camelize}
+	td #{user.address}
+	td.text-center #{number_to_phone(user.phone, country_code: 62)}
+	td.text-center #{user.sex.gsub("_"," ").camelize}
+	

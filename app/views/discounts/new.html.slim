@@ -3,7 +3,7 @@
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Tambah Promo Diskon
+          | CREATE Promo Diskon
       .card-body
 
         = form_for :discount, url: discounts_path, method: "POST" do |form|
@@ -25,5 +25,5 @@
               label for="name" Tanggal Selesai Promo
               input class="date-picker-example md-form form-control datepicker" type="date" name="discount[end]" id="date_from" value="#{Date.today+1}" required="true"
             .form-group.col-12.text-center
-              = form.submit "Tambah Promo", class: "btn btn-primary"
+              = form.submit "CREATE Promo", class: "btn btn-primary"
 

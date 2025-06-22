@@ -1,9 +1,9 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
+      .card-header.white-text.bg-dark
         h5.font-weight-500.my-1
-          | Bayar Gaji Pengguna
+          | GAJI KARYAWAN
       .card-body
         = form_for :salary, url: salaries_path, method: "POST" do |form|
           .form-group
@@ -61,6 +61,6 @@
               h3.text-success id="receive"
                 | TERIMA : 
 
-
+          hr
           .form-group.text-center
             = form.submit "Bayar Gaji", class: "btn btn-primary"

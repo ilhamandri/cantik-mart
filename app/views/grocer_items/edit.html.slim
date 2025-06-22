@@ -4,7 +4,7 @@
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Ubah Harga Barang GROSIR- #{item.name} (#{item.item_cat.name})
+          | EDIT Harga Barang GROSIR- #{item.name} (#{item.item_cat.name})
       .card-body
         = form_for :grocer_item, url: grocer_item_path(id: @grocer_item.id), method: "PUT" do |form|
           label.text-danger 
@@ -40,4 +40,4 @@
             label for="name" Harga Jual Satuan Akhir
             = form.number_field :price, required: true, class: "form-control md-form", value: "#{normal_sell}", id: "sell", readonly: "true"
           .form-group.text-center
-            = form.submit "Ubah Harga Barang", class: "btn btn-warning"
+            = form.submit "EDIT Harga Barang", class: "btn btn-warning"

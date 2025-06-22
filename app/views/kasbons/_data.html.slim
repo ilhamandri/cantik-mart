@@ -2,11 +2,11 @@
 	.col
 	    .alert.alert-primary
 	        .alert-heading
-	          | Semua Data #{@title}
+	          | SEMUA DATA
 	
   	- if buttonAccess "kasbons", "new"
-		.col-2.text-center
-		    a.btn.btn-success href="#{new_kasbon_path}"
+		.col-3.text-right
+		    a.btn.btn-dark href="#{new_kasbon_path}"
 		      i.fas.fa-plus 
 		      |  Kasbon
 
@@ -14,6 +14,7 @@
 table class="table"
   	thead
 	    th Nama
+	    th Tanggal
 	    th Nominal
 	    th 
   	tbody

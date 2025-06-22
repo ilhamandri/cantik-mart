@@ -1,8 +1,10 @@
 li
   a.collapsible-header.waves-effect.arrow-r
-    i.w-fa.fas.fa-user
-    | Karyawan
-    i.fas.fa-angle-down.rotate-icon
+    .row
+      .col-9
+        | Karyawan
+      .col-1
+        i.fas.fa-angle-down.rotate-icon
   .collapsible-body
     ul
       - if buttonAccess "users", "index"
@@ -20,9 +22,11 @@ li
 - if buttonAccess "suppliers", "index"
   li
     a.collapsible-header.waves-effect.arrow-r
-      i.w-fa.fas.fa-edit
-      | Suplier
-      i.fas.fa-angle-down.rotate-icon
+      .row
+        .col-9
+          | Supplier
+        .col-1
+          i.fas.fa-angle-down.rotate-icon
     .collapsible-body
       ul
         li
@@ -41,9 +45,11 @@ li
 - if buttonAccess "members", "index"
   li
     a.collapsible-header.waves-effect.arrow-r
-      i.w-fa.fas.fa-users
-      | Member
-      i.fas.fa-angle-down.rotate-icon
+      .row
+        .col-9
+          | Member
+        .col-1
+          i.fas.fa-angle-down.rotate-icon
     .collapsible-body
       ul
         li
@@ -67,9 +73,11 @@ li
 - if buttonAccess "stores", "index"
   li
     a.collapsible-header.waves-effect.arrow-r
-      i.w-fa.fas.fa-home
-      | Toko
-      i.fas.fa-angle-down.rotate-icon
+      .row
+        .col-9
+          | Toko
+        .col-1
+          i.fas.fa-angle-down.rotate-icon
     .collapsible-body
       ul
         li
@@ -91,9 +99,11 @@ li
 - if buttonAccess "items", "index"
   li
     a.collapsible-header.waves-effect.arrow-r
-      i.w-fa.fas.fa-archive
-      | Barang
-      i.fas.fa-angle-down.rotate-icon
+      .row
+        .col-9
+          | Barang
+        .col-1
+          i.fas.fa-angle-down.rotate-icon
     .collapsible-body
       ul
         / - if buttonAccess "promotions", "index"
@@ -137,9 +147,11 @@ li
 - if buttonAccess "cash_flows", "index"
   li
     a.collapsible-header.waves-effect.arrow-r
-      i.w-fa.fas.fa-book
-      | Keuangan
-      i.fas.fa-angle-down.rotate-icon
+      .row
+        .col-9
+          | Keuangan
+        .col-1
+          i.fas.fa-angle-down.rotate-icon
     .collapsible-body
       ul
         / li
@@ -168,35 +180,29 @@ li
 
 
 - if isAdmin
+  hr
   li
     a.collapsible-header.waves-effect.arrow-r  href="#{activities_path}"
-      i.w-fa.fas.fa-rss
       | Aktivitas Pengguna
   li
     a.collapsible-header.waves-effect.arrow-r  href="#{controllers_path}"
-      i.w-fa.fas.fa-cog
       | Hak Akses
 
 - if isDeveloper
   hr
   li 
     a.collapsible-header.waves-effect.arrow-r  href="#{attends_path}"
-      i.w-fa.fas.fa.fa-globe
       | Attend
   li 
     a.collapsible-header.waves-effect.arrow-r  href="#{logs_path}"
-      i.w-fa.fas.fa-book
       | Log
   li 
     a.collapsible-header.waves-effect.arrow-r  href="#{stock_recaps_path}"
-      i.w-fa.fas.fa-file
       | Stock Recap
 
   li 
     a.collapsible-header.waves-effect.arrow-r  href="#{backups_path}"
-      i.w-fa.fas.fa-history
       | Backup
   li
     a.collapsible-header.waves-effect.arrow-r  href="#{server_informations_path}"
-      i.w-fa.fas.fa-info-circle
       | Informasi Sistem

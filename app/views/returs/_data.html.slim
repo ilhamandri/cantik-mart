@@ -15,16 +15,16 @@
     - else
       .alert.alert-primary
         .alert-heading
-          | Semua Data #{@title}
+          | SEMUA DATA
 
     
   - if buttonAccess "returs", "new"
-    .col-2.text-center
+    .col-lg-2.col-md-3.text-right
       a href="#{new_retur_path}"
-        button.btn.btn-danger type="button" 
+        button.btn.btn-dark type="button" 
           i.fas.fa-plus 
           |   Retur
-
+hr
 table class="table table-hover"
   thead
     th Invoice
@@ -33,7 +33,6 @@ table class="table table-hover"
     th Total Item
     th Buat
     th Status
-    th 
   tbody
     = render partial: 'list', collection: @returs, as: :retur
 

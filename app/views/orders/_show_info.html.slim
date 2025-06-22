@@ -14,13 +14,12 @@
           | Order #{order.invoice}
     - if buttonAccess "orders", "confirmation"
       - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
-        .col-lg-2.col-md-2.text-right
+        .col-lg-2.col-md-2.text-center
           a.btn.btn-success href="#{order_confirmation_path(id: order_id)}"
               | Terima
     .col-lg-2.col-md-3.text-right
-      a href="#{order_path(id: order_id, format: :pdf)}"
-        button.btn.btn-dark type="button" 
-          | &nbsp&nbsp&nbsp CETAK
+      a.btn.btn-dark href="#{order_path(id: order_id, format: :pdf)}"
+          |  CETAK
   .row      
     .col
       .form-group

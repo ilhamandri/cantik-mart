@@ -6,14 +6,10 @@
         tr
             th Invoice
             th Tanngal
-            th 
         - @losses.each do|loss|
-            tr
+            tr onclick="window.location='#{loss_path(id: loss.id)}'"
                 td #{loss.invoice}
                 td #{loss.created_at}
-                td
-                    a href="#{loss_path(id: loss.id)}" class="btn btn-primary"
-                        | DETIL
     
     / table.table
         tr

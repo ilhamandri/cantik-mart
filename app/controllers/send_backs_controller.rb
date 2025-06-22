@@ -16,14 +16,17 @@ class SendBacksController < ApplicationController
 
   		search = ""
   		if params[:search].present?
-  			search += params[:search]+" "
-  			@send_backs = @send_backs.where("lower(invoice) like ? ","%"+params[:search]+"%")
+  			search += params[:search].downcase
+  			s = "BS-"+params[:search].gsub("BS-", "")
+  			@send_backs = @send_backs.search_by_invoice s
   		end
 
-  		if params[:store_id].present?
-  			store = Store.find_by(id: params[:store_id])
-  			search += "di "+store.name+" " if store.present?
-  			@send_backs = @send_backs.where(store_id: params[:store_id])
+  		if params[:store_id].present? 
+  			if params[:store_id] != "0"
+					store = Store.find_by(id: params[:store_id])
+					search += "di "+store.name+" " if store.present?
+					@send_backs = @send_backs.where(store_id: params[:store_id])
+  			end
   		end
 
   		if params[:type].present?

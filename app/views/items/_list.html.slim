@@ -19,10 +19,11 @@ tr
   td #{number_with_delimiter(item.buy.to_i, delimiter: ".")}
   td #{number_with_delimiter(item.sell.to_i, delimiter: ".")}
   td
-    a href='#{item_path(id: item.id)}'
-      button.btn.btn-primary type="button" 
-        | Detil
-    a href='#{item_path(id: item.id, format: :pdf)}'
-      button.btn.btn-dark type="button" 
-        | + Cetak
+    .row.text-right
+      .col
+        a.btn.btn-primary href='#{item_path(id: item.id)}'
+          | Detil
+      .col
+        a.btn.btn-dark href='#{item_path(id: item.id, format: :pdf)}'
+          | Cetak
 

@@ -49,7 +49,6 @@ class HomesController < ApplicationController
 
     #DEVELOPER
     if false
-      binding.pry
       AccountBalance.stock_values current_user.store 
       debt = Debt.where(store: current_user.store).sum(:deficiency).to_f
       receivable = Receivable.where(store: current_user.store).sum(:deficiency).to_f

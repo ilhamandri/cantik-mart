@@ -31,6 +31,7 @@ class TransactionsController < ApplicationController
             end_day = (start_day + 7.days).end_of_day
           end 
         end
+
         if ["finance", "super_admin", "owner","developer"].include? current_user.level
           trxs = Serve.graph_transaction dataFilter
           gon.transaction_label = trxs["label"]
@@ -43,6 +44,7 @@ class TransactionsController < ApplicationController
           gon.transaction_label = trxs["label"]
           gon.transaction_omzet = trxs["grand_total"]
         end
+        
       end
       format.pdf do
         new_params = eval(params[:option])
@@ -240,8 +242,9 @@ class TransactionsController < ApplicationController
   def new
     gon.store_id = current_user.store.id
     gon.cashier_name = current_user.name.upcase.split(" ")[0]
-    trx_last_store_id = Transaction.last.store.id
+    
     if current_user.level != "developer"
+      trx_last_store_id = Transaction.last.store.id
       if !current_user.store.online_store 
         return redirect_back_data_error root_path, "ID kasir tidak terdaftar." if trx_last_store_id != current_user.store.id
       end
@@ -391,13 +394,16 @@ class TransactionsController < ApplicationController
     def filter_search params, r_type
       results = []
       trx = nil
+
       if current_user.level == "candy_dream"
         trx = Transaction.where(has_coin: true) 
       else
         trx = Transaction.where(has_coin: false) 
       end
+
       @transactions = trx.order("created_at DESC")
       @transactions = @transactions.where.not("invoice like '%/TP'")
+
       if params[:from].present?
         if params[:from] == "complain"
           curr_date = Date.today - 3.days
@@ -405,17 +411,19 @@ class TransactionsController < ApplicationController
           @transactions = @transactions.where("created_at > ?", curr_date)
         end
       end
+
       if r_type == "html"
         @transactions = @transactions.page param_page if r_type=="html"
       end
       @transactions = @transactions.where(store: current_user.store) if  !["owner", "super_admin", "finance", "candy_dream", "developer"].include? current_user.level
       @transactions = @transactions.where(has_coin: true) if current_user.level == "candy_dream"
-      
+
       @search = ""
       if params["search"].present?
         @search += "Pencarian "+params["search"]
-        search = params["search"].downcase
-        @transactions =@transactions.where("invoice like ?", "%"+ search+"%")
+        search_query = params["search"].gsub("INV-","")
+        search = "INV-"+search_query
+        @transactions = @transactions.search_by_invoice search
       end
 
       date_start = params["date_start"]

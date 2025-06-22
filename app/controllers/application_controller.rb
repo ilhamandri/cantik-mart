@@ -120,7 +120,6 @@ class ApplicationController < ActionController::Base
   end
 
   def authentication controller_name, method_name
-
     controller = Controller.find_by(name: controller_name.to_s)
     return true if ["notifications", "absents"].include? controller.name
 
@@ -133,5 +132,19 @@ class ApplicationController < ActionController::Base
   def set_notification from_user, to_user, m_type, message, link
     Notification.create from_user: from_user, to_user: to_user, m_type: m_type,
       message: message, link: link, date_created: DateTime.now
+  end
+
+  def create_dummy
+    1000000.times do |i|
+      inv = "INV-135792481" + i.to_s
+      x = Transaction.create invoice: inv, items: i, grand_total: i*1000, payment_type: 1, user: User.last, store: Store.last, total: i*1000, date_created: DateTime.now
+    end
+  end
+
+  def create_dummy_item
+    1000.times do |i|
+      name = "ITEM TEST - 021" + i.to_s
+      x = Item.create name: name, item_cat: ItemCat.last,brand: "-", code: "CT-"+i.to_s
+    end
   end
 end

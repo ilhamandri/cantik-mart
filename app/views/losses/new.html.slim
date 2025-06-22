@@ -1,21 +1,25 @@
 = form_for :order, url: losses_path, method: "POST" do |form|
   .container-fluid
     .col-lg-12.col-md-12
-      .card-header.white-text.info-color
+      .card-header.white-text.bg-dark
           h5.font-weight-500.my-1
-            | Buat Laporan Barang Loss
+            | BARANG RUSAK
       .card.mb-4
         .card-body
           .row
-            .col-12
+            .col-9
               label for="from" Kode Barang
               input class="md-form form-control" placeholder="Barcode Barang..." id="itemId" onkeyup="getData('order')"
+            .col-3
+              br
+              .form-group.text-center
+                = form.submit "CREATE", class: "btn btn-primary"
 
   .container-fluid
     .col-lg-12.col-md-12
-      .card-header.white-text.info-color
+      .card-header.white-text.bg-dark
           h5.font-weight-500.my-1
-            | Daftar Barang
+            | DAFTAR BARANG
       .card.mb-4
         .card-body
           .row
@@ -34,6 +38,3 @@
                   th
                     | Deskripsi
                   th
-            .col-md-12.text-center
-              .form-group.text-center
-                = form.submit "Buat Laporan", class: "btn btn-primary"

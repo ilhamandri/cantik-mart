@@ -3,7 +3,7 @@
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Tambah Kriterian Penukaran Poin
+          | CREATE Kriterian Penukaran Poin
       .card-body
         = form_for :point, url: exchange_points_path, method: "POST" do |form|
         	.form-group
@@ -22,4 +22,4 @@
 	            label.text-danger * Jika ditukar voucher, isi dengan nominal voucher
 	            = form.text_field :quantity, required: true, class: "form-control md-form", id: "id-card", minlength:"1", maxlength:"18", minimum:"0", pattern:"[0-9]+", title:"Jumlah barang yang diberikan", placeholder: "Nominal"
 	        .form-group.text-center
-	        	= form.submit "Tambah Kriteria", class: "btn btn-primary"
+	        	= form.submit "CREATE Kriteria", class: "btn btn-primary"

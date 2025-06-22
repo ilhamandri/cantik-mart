@@ -1,4 +1,9 @@
 class Order < ApplicationRecord
+
+  include PgSearch::Model
+  pg_search_scope :search_by_invoice, against: :invoice
+
+  pg_search_scope :search_by_invoice, against: :invoice
   validates :invoice,:total_items, :total, :store_id, presence: true
   has_many :order_items
   has_many :order_inv

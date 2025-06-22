@@ -1,9 +1,9 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
+      .card-header.white-text.bg-dark
         h5.font-weight-500.my-1
-          | Tambah Sub Departemen
+          | CREATE - SUB DEPARTEMEN
       .card-body
 
         = form_for :item_cat, url: item_cats_path, method: "POST" do |form|
@@ -15,4 +15,4 @@
             label for="name" Nama
             = form.text_field :name, required: true, class: "form-control md-form", id: "name"
           .form-group.text-center
-            = form.submit "Tambah Sub-Departemen", class: "btn btn-primary"
+            = form.submit "CREATE", class: "btn btn-primary"

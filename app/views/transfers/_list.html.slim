@@ -1,4 +1,4 @@
-tr
+tr onclick="window.location='#{transfer_path(id: transfer.id)}'"
   td #{transfer.invoice}
   td #{transfer.from_store.name}
   td #{transfer.to_store.name}
@@ -15,20 +15,12 @@ tr
       - status = "Dikirim oleh " + transfer.picked_by.name + " (" + transfer.date_picked.to_s + ")"
     - if transfer.status.present?
       - color = "alert-success"
-      - status = "Diterima oleh " + transfer.confirmed_by.name + " (" + transfer.status.to_s + ")"
+      - status = "DITERIMA - " + transfer.confirmed_by.name + " (" + transfer.status.to_s + ")"
   - else
     - color = "alert-danger"
     - status = transfer.description
 
   td 
     .alert class="#{color}"
-      .alert-heading
         | #{status}
-  td.text-right 
-    .row
-      .col
-        a href='#{transfer_path(id: transfer.id)}'
-          button class="btn btn-primary"
-            | Item
-
       

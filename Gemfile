@@ -43,6 +43,7 @@ gem "psych", "~> 3.1"
 gem 'browser'
 gem "barby"
 gem "chunky_png"
+gem 'pg_search', '~> 2.3', '>= 2.3.5'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

@@ -1,12 +1,8 @@
-tr
+tr  onclick="window.location='#{store_path(store)}'"
   td #{store.name}
   - store_type = "Toko"
   - store_type = "Gudang" if store.store_type == "warehouse"
   td #{store_type}
   td #{store.address}
   td #{number_to_phone(store.phone, country_code: 62)}
-  td.text-right
-  	a href='#{store_path(id: store.id)}'
-      	button.btn.btn-info type="button" 
-  	       	| Detil
 

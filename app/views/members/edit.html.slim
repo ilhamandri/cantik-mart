@@ -1,9 +1,14 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Ubah Member - #{@member.name}
+      .card-header.white-text.bg-dark
+        .row
+          .col
+            h5.font-weight-500.my-1
+              | EDIT
+          .col.text-right
+            h5.font-weight-500.my-1
+              | #{@member.name}
       .card-body
        = form_for :member, url: member_path(id: @member.id), method: "PUT" do |form|
         .form-group
@@ -26,4 +31,4 @@
           label for="card-card" Nomor Kartu
           = form.text_field :card_number, required: true, class: "form-control md-form", id: "card_number", minlength:"51", pattern:"[0-9]+", title:"nomor kartu"
         .form-group.text-center
-          = form.submit "Ubah Member", class: "btn btn-warning"
+          = form.submit "EDIT Member", class: "btn btn-warning"

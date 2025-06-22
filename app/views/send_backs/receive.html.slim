@@ -1,49 +1,54 @@
-.container-fluid
-  .col-lg-12.col-md-12
-    .card-header.white-text.info-color
-      h5.font-weight-500.my-1
-       | Informasi Retur BS ke GUDANG
-    .card.mb-4
-      .card-body
+= form_for :send_back, url: send_back_received_path(id: @send_back.id), method: "POST" do |form|
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card-header.white-text.bg-dark
         .row
-          .col
-            label Invoice
-            input disabled="disabled" class="form-control md-form" value="#{@send_back.invoice}"
-          .col
-            label Dari
-            input disabled="disabled" class="form-control md-form" value="#{@send_back.store.name}"
-          .col
-            label Tanggal Buat
-            input disabled="disabled" class="form-control md-form" value="#{@send_back.created_at}"
-          .col
-            label Oleh
-            input disabled="disabled" class="form-control md-form" value="#{@send_back.user.name}"
-          .col
-            label Total Barang
-            input disabled="disabled" class="form-control md-form" value="#{@send_back.total_items}"
+          .col-6
+            h5.font-weight-500.my-1
+             | RETUR BS
+          .col-6.text-right
+            h5.font-weight-500.my-1
+             | #{@send_back.invoice}
+      .card.mb-4
+        .card-body
+          .row
+            .col
+              label Dari
+              input disabled="disabled" class="form-control md-form" value="#{@send_back.store.name}"
+            .col
+              label Tanggal Buat
+              input disabled="disabled" class="form-control md-form" value="#{@send_back.created_at}"
+            .col
+              label Oleh
+              input disabled="disabled" class="form-control md-form" value="#{@send_back.user.name}"
+            .col
+              label Total Barang
+              input disabled="disabled" class="form-control md-form" value="#{@send_back.total_items}"
 
-.container-fluid
-  .col-lg-12.col-md-12
-    .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Terima Barang 
-      .card-body.table-responsive.text-nowrap
-        = form_for :send_back, url: send_back_received_path(id: @send_back.id), method: "POST" do |form|
-          .col-12
-            table class="table"
-              thead
-                th No
-                - @idx = 1
-                th Kode
-                th Nama
-                th Jumlah Kirim
-                th Keterangan
-                th Jumlah Terima
-              tbody
-                = render partial: 'list_receive', collection: @send_back_items, as: :send_back_item
-          .col-md-12
-            .form-group.text-center
-              = form.submit "Konfirmasi Penerimaan", class: "btn btn-primary"
+
+            .col-md-12
+              hr
+              .form-group.text-center
+                = form.submit "Konfirmasi Penerimaan", class: "btn btn-primary"
+
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card.mb-4
+        .card-header.white-text.bg-dark
+          h5.font-weight-500.my-1
+            | KONFIRMASI BARANG 
+        .card-body.table-responsive.text-nowrap
+            .col-12
+              table class="table"
+                thead
+                  th No
+                  - @idx = 1
+                  th Kode
+                  th Nama
+                  th Jumlah Kirim
+                  th Keterangan
+                  th Jumlah Terima
+                tbody
+                  = render partial: 'list_receive', collection: @send_back_items, as: :send_back_item
 
 

@@ -1,4 +1,9 @@
 class Transfer < ApplicationRecord
+
+  include PgSearch::Model
+  pg_search_scope :search_by_invoice, against: :invoice
+
+  pg_search_scope :search_by_invoice, against: :invoice
   validates :invoice, :from_store, :to_store,:date_created, presence: true
   belongs_to :from_store, class_name: "Store", foreign_key: "from_store_id", optional: true
   belongs_to :to_store, class_name: "Store", foreign_key: "to_store_id", optional: true

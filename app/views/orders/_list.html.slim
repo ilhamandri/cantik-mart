@@ -1,4 +1,4 @@
-tr
+tr onclick="window.location='#{order_path(order)}'"
   td #{order.invoice}
   td #{order.supplier.name}
   td #{number_with_delimiter(order.grand_total, delimiter: ".")}
@@ -15,8 +15,3 @@ tr
     .alert class="#{color}"
       .alert-heading
         |  #{status}
-  td
-    a href='#{order_path(id: order.id)}'
-      button class="btn btn-primary"
-        | Detil
-

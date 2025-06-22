@@ -2,11 +2,11 @@
   .col
     .alert.alert-primary
       .alert-heading
-        | Semua Data #{@title}
+        | SEMUA DATA
   - if buttonAccess "salaries", "new"
-    .col-2.text-center
+    .col-3.text-right
       a href="#{new_salary_path}"
-        button.btn.btn-success type="button" 
+        button.btn.btn-dark type="button" 
           i.fas.fa-plus 
           | &nbsp Gaji
 

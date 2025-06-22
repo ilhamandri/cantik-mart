@@ -2,19 +2,20 @@
 = form_for :transfer, url: transfers_path, method: "POST" do |form|
   .container-fluid
     .col-lg-12.col-md-12
-      .card-header.white-text.info-color
+      .card-header.white-text.bg-dark
           h5.font-weight-500.my-1
             - if current_user.store.store_type == "retail"
-              | Buat Permintaan Barang 
+              | MINTA BARANG &nbsp&nbsp 
+              i.fas.fa-arrow-right
+              | &nbsp&nbsp GUDANG
             - else
-              | Kirim Barang ke Toko (DIRECT)
+              | KIRIM BARANG &nbsp&nbsp
+              i.fas.fa-arrow-right 
+              | &nbsp&nbsp TOKO (DIRECT)
       .card.mb-4
         .card-body
           .row
             .col-8
-              label for="from" Kode Barang
-              input class="md-form form-control" placeholder="Barcode Barang..." id="itemId" onkeyup="getData('transfer')"
-            .col-4.text-right
               .form-group
                 label for="from" Kepada
                 select id="storeId" class="mdb-select md-form md-outline colorful-select dropdown-primary" searchable="Cari..." name="transfer[store_id]"
@@ -28,11 +29,21 @@
                       - if store != current_user.store
                         option data-subtext="#{store.address}" value="#{store.id}"
                           | #{store.name}
+               
+            .col-4.text-right
+              .form-group
+                br
+                br
+                = form.submit "Buat Transfer", class: "btn btn-primary"
+            .col-12
+              hr
+              label for="from" Kode Barang
+              input class="md-form form-control" placeholder="Barcode Barang..." id="itemId" onkeyup="getData('transfer')"
                           
   .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.info-color
+        .card-header.white-text.bg-dark
           h5.font-weight-500.my-1
             | Daftar Barang
         .card-body
@@ -52,7 +63,4 @@
                     | Jumlah
                   th
                     | Deskripsi
-                  th                
-            .col-md-12.text-center
-              .form-group.text-center
-                = form.submit "Buat Transfer", class: "btn btn-primary"
+                  th 

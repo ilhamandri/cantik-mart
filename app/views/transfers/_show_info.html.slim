@@ -1,22 +1,28 @@
 - transfer = @transfer_items.first.transfer 
 - transfer_id = transfer.id
 .row
-  .col
+  .col-10
     - if ["","-", nil].exclude? transfer.description
       .alert.alert-danger
         .alert-heading  
-          | Transfer #{transfer.invoice} - #{transfer.description}
+          | #{transfer.invoice} - #{transfer.description}
     - else
       .alert.alert-primary
         .alert-heading  
-          | Transfer #{transfer.invoice}
+          .row
+            .col
+              h5.font-weight-500.my-1
+                | TRANSFER
+            .col.text-right
+              h5.font-weight-500.my-1
+                | #{transfer.invoice}
 
 
 
 
   - if transfer.invoice.include? "DTRF"
     - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.to_store.id == current_user.store.id
-      .col-lg-1.col-md-2.text-right
+      .col-2.text-right
         a.btn.btn-success href="#{transfer_receive_path(id: transfer_id)}"
           | TERIMA
   - else
@@ -73,7 +79,7 @@ hr.my-4
   - if (transfer.approved_by.present?) && (transfer.date_approve.to_time != "01-01-1999 00:00:00".to_time)
     .stepper-item.completed
       .step-counter.text-white 
-        i.fa.fa-pencil-square-o  aria-hidden="true"
+        i.fa.fa-pencil-square  aria-hidden="true"
       .step-name.text-center
         | Disetujui
         br

@@ -1,4 +1,8 @@
 class Retur < ApplicationRecord
+
+  	include PgSearch::Model
+  	pg_search_scope :search_by_invoice, against: :invoice
+
 	max_paginates_per 10
   	validates :total_items, :store_id, presence: true
   	has_many :retur_items

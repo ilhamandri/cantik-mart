@@ -3,7 +3,7 @@
   .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.info-color
+        .card-header.white-text.bg-dark
           h5.font-weight-500.my-1
             | Penerimaan Pesanan
         .card-body
@@ -45,11 +45,12 @@
                 .form-group
                   label for="from" PPn (%)
                   input type="number" class="form-control md-form" value="#{@order.supplier.tax}" name="order[ppn]" required=true id="ppn" step="0.01"
-  .container-fluid
+
+
   .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.info-color
+        .card-header.white-text.bg-dark
           h5.font-weight-500.my-1
             | Data Barang
         .card-body.table-responsive.text-nowrap
@@ -75,7 +76,7 @@
                   | -
                 br
             .form-group.text-center
-              = form.submit "TERIMA", class: "btn btn-success"
+              = form.submit "TERIMA", class: "btn btn-primary"
 
 
 

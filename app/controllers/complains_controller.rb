@@ -235,8 +235,8 @@ class ComplainsController < ApplicationController
       @search = ""
       if params["search"].present?
         @search += "Pencarian "+params["search"]
-        search = params["search"].downcase
-        @complains =@complains.where("invoice like ?", "%"+ search+"%")
+        search = "CMP-"+params["search"].gsub("CMP-","")
+        @complains =@complains.search_by_invoice search
       end
 
       before_months = params["months"].to_i

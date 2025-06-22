@@ -27,9 +27,10 @@
 					td #{last}
 					td #{number_to_currency(price, unit: "Rp. ", separator: ",", delimiter: ".")}
 					td
-						a href='#{supplier_path(id: supplier.supplier.id)}'
-							button.btn.btn-info type="button"
-						        | Detil
-						a href='#{new_order_path(supplier_id: supplier.supplier.id)}'
-							button.btn.btn-success type="button"
-						        | Order
+						.row.text-right
+							.col
+								a.btn.btn-dark href='#{supplier_path(id: supplier.supplier.id)}'
+									| Detil
+							.col
+								a.btn.btn-success href='#{new_order_path(supplier_id: supplier.supplier.id)}'
+									| Order

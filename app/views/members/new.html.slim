@@ -1,9 +1,9 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
+      .card-header.white-text.bg-dark
         h5.font-weight-500.my-1
-          | Tambah Member
+          | CREATE MEMBER
       .card-body
         = form_for :member, url: members_path, method: "POST" do |form|
           .form-row
@@ -38,4 +38,4 @@
 
             .form-group.col-6.text-center
               .align-bottom
-                = form.submit "Tambah Member", class: "btn btn-lg btn-primary"
+                = form.submit "CREATE Member", class: "btn btn-lg btn-primary"

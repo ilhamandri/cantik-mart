@@ -1,28 +1,5 @@
-tr
+tr onclick="window.location='#{item_cat_path(id: item_cat.id)}'"
   td #{item_cat.name}
   td
   	- items_count = Item.where(item_cat: item_cat).count
   	| #{items_count}
-  /td
-    - if item_cat.use_in_point
-      | Ya
-    - else
-      | Tidak
-  td.text-right
-    .row
-      .col
-        - if buttonAccess "item_cats", "edit"
-          a href='#{edit_item_cat_path(id: item_cat.id)}'
-          	button.btn.btn-warning.black-text type="button" 
-      	       	| Edit
-
-      - item_cat_count = Item.where(item_cat: item_cat).count
-      - if buttonAccess "item_cats", "destroy"
-        - if item_cat_count == 0
-          .col
-            = button_to "Hapus", item_cat, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Are you sure you want to reset the indexes?" }
-
-      .col
-        a href='#{item_cat_path(id: item_cat.id)}'
-        	button.btn.btn-info type="button" 
-    	       	| Detil

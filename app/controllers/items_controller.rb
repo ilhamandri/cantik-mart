@@ -9,9 +9,8 @@ class ItemsController < ApplicationController
 
     @items = Item.all
     if params[:search].present?
-      @search = params[:search].downcase
-      search = "%"+@search+"%"
-      @items = @items.where("lower(name) like ? OR lower(code) like ?", search, search)
+      @search = params[:search]
+      @items = @items.search_by_name :name, @search
     end
     if params[:order_by].present? && params[:order_type].present?
       @order_by = params[:order_by].downcase
@@ -161,6 +160,7 @@ class ItemsController < ApplicationController
     item.price_updated = DateTime.now
     item.margin = params[:item][:margin]
     item.edited_by = current_user
+    item.name = item.name.upcase
 
     ItemPrice.create item: item, buy: item.buy, sell: item.sell, month: Date.today.month.to_i, year: Date.today.year.to_i, created_at: DateTime.now - 1.month
     return redirect_back_data_error new_item_path, "Data Barang Tidak Valid" if item.invalid?
@@ -185,6 +185,7 @@ class ItemsController < ApplicationController
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless params[:id].present?
     item = Item.find_by_id params[:id]
     item.image = params[:item][:image]
+    item.name = item.name.upcase
     code = params[:item][:code].gsub(" ","")
     item.assign_attributes item_params
     item.sell = params[:item][:sell].gsub(".","").to_f

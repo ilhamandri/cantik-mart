@@ -1,14 +1,13 @@
-.row
-  .col-md-9.text-left
-    h5
-      | Loss & Profits
-br
-
 .container-fluid
   .col-lg-12.col-md-12
-    .card-header.white-text.info-color
+    .card-header.white-text.bg-dark
+      .row
+        .col
           h5.font-weight-500.my-1
-            | Data ( #{@start.to_date.to_s + " - " + DateTime.now.to_date.to_s} )
+            | Loss & Profits
+        .col.text-right
+          h5.font-weight-500.my-1
+            | #{@start.to_date.to_s + " ... " + DateTime.now.to_date.to_s}
     .card.mb-4 
       .card-body.table-responsive.text-nowrap	
       	table class="table"

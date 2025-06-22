@@ -9,7 +9,13 @@
     .col
       .alert.alert-primary
         .alert-heading  
-          | Retur Gudang #{@send_back.invoice}
+          .row
+            .col
+              h5.font-weight-500.my-1
+                | BARANG RUSAK (BS)
+            .col.text-right
+              h5.font-weight-500.my-1
+                | #{@send_back.invoice}
     - if @send_back.received_by.nil? && current_user.store.store_type == "warehouse"
       .col-lg-1.col-md-2.text-right
         a.btn.btn-warning href="#{send_back_receive_path(id: @send_back.id)}"
@@ -17,6 +23,15 @@
     .col-lg-1.col-md-2.text-right
       a.btn.btn-dark href="#{send_back_path(id: @send_back.id, format: :pdf)}"
         | CETAK
+
+  .row
+    .col
+      label Dari
+      input disabled="disabled" class="form-control md-form" value="#{@send_back.store.name}"
+    .col
+      label Total Barang
+      input disabled="disabled" class="form-control md-form" value="#{@send_back.total_items}"
+
     .col-12
       hr.my-4
 

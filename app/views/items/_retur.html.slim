@@ -3,12 +3,8 @@
         tr
             th Invoice
             th Tanngal
-            th 
         - @returs.each do|retur|
-            tr
+            tr onclick="window.location='#{retur_path(id: retur.id)}'"
                 td #{retur.invoice}
                 td #{retur.created_at}
-                td
-                    a href="#{retur_path(id: retur.id)}" class="btn btn-primary"
-                        | DETIL
     

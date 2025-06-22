@@ -2,18 +2,18 @@
   .col
     .alert.alert-primary
       .alert-heading
-        | Semua Data #{@title}
+        | SEMUA DATA
   
   - if buttonAccess "suppliers", "new"
-    .col-2.text-center
+    .col-3.text-center
       a href="#{new_supplier_path}"
-        button.btn.btn-success type="button" 
+        button.btn.btn-dark type="button" 
           i.fas.fa-plus 
           | &nbsp Supplier
 
-
+hr
 table class="table"
-  thead
+  thead.text-center
     th Nama
     th Alamat
     th Telepon

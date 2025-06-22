@@ -503,8 +503,8 @@ class OrdersController < ApplicationController
       @search = ""
       if params["search"].present?
         @search += "Pencarian "+params["search"]
-        search = params["search"].downcase
-        @orders =@orders.where("invoice like ?", "%"+ search+"%")
+        search = "ORD-"+params["search"].gsub("ORD-","")
+        @orders =@orders.search_by_invoice search
       end
 
       before_months = params["months"].to_i

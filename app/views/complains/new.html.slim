@@ -1,20 +1,27 @@
 - member = "NO MEMBER"
 - member = Member.find_by(card_number: @transaction.member_card).name if @transaction.member_card.present?
-.row
-  .col.text-left
-    h5
-      | Buat Retur Member - #{member}
-  .col.text-right.text-danger
-    h5#total_text
-      | 0
+
+.container-fluid
+  .row
+    .col.text-left
+      h3
+        | &nbsp&nbsp&nbspRETUR BARU
+    .col.text-right.text-danger
+      h3#total_text
+        | 0
 br
 = form_for :complain, url: complains_path(id: @transaction.id), method: "POST" do |form|
   .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.info-color
-          h5.font-weight-500.my-1
-            | Data Pembelian (#{@transaction.invoice}) 
+        .card-header.white-text.bg-dark
+          .row
+            .col
+              h5.font-weight-500.my-1
+                | Data Pembelian 
+            .col.text-right
+              h5.font-weight-500.my-1
+                | #{@transaction.invoice}
         .card-body
           table.table id="myTable2"
             tr
@@ -57,9 +64,9 @@ br
   .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.info-color
+        .card-header.white-text.bg-primary
           h5.font-weight-500.my-1
-            | Tambah Pembelian
+            | TAMBAHAN PEMBELIAN
         .card-body
           .row
             .col-8
@@ -87,4 +94,4 @@ br
 
   .col-md-12.text-center
     .form-group.text-center
-      = form.submit "Buat Retur", class: "btn btn-primary", id: "submitButton", style:"display: none;"
+      = form.submit "Buat Retur", class: "btn btn-danger", id: "submitButton", style:"display: none;"

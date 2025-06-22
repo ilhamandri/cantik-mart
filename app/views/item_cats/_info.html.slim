@@ -4,10 +4,12 @@
 			.alert-heading
 				| DEPARTEMEN - #{@dept.name}
 	- if buttonAccess "item_cats", "new"
-		.col-3.text-right
-	      	a.btn.btn-success href="#{new_item_cat_path(dept_id: @dept.id)}"
+		.col-4.text-right
+	      	a.btn.btn-dark href="#{new_item_cat_path(dept_id: @dept.id)}"
 	          	i.fas.fa-plus 
-	          	|  &nbsp Sub-departemen
+	          	|  &nbsp Sub - departemen
+
+hr
 
 - items = Item.where(item_cat: @dept.item_cat)
 - suppliers = SupplierItem.where(item: items).pluck(:supplier_id).uniq

@@ -3,15 +3,15 @@
     .col
       .alert.alert-primary
         .alert-heading
-          | Semua Data #{@title}
+          | SEMUA DATA
     
     - if buttonAccess "transfers", "new"
-      .col-2.text-center
+      .col-3.text-right
         a href="#{new_transfer_path}"
-          button.btn.btn-success type="button" 
+          button.btn.btn-dark type="button" 
             i.fas.fa-plus 
             | &nbsp Transfer
-
+hr
             
   table class="table"
     thead
@@ -21,7 +21,6 @@
       th Jumlah Barang
       th Dibuat
       th Status
-      th
     tbody
       = render partial: 'list', collection: @transfers, as: :transfer
   .container.pagination.justify-content-center

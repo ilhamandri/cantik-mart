@@ -11,16 +11,16 @@
     - else
       .alert.alert-primary
         .alert-heading
-          | Semua Data #{@title}
+          | SEMUA DATA
 
   
   - if buttonAccess "send_backs", "new"
-    .col-2.text-center
+    .col-3.text-right
       a href="#{new_send_back_path}"
-        button.btn.btn-success type="button" 
+        button.btn.btn-black type="button" 
           i.fas.fa-plus 
           | &nbsp Kirim BS
-
+hr
 table class="table table-hover"
   thead
     th Invoice
@@ -28,7 +28,6 @@ table class="table table-hover"
     th Jumlah Barang
     th Dibuat
     th Status
-    th 
   tbody
     = render partial: 'list', collection: @send_backs, as: :send_back
 

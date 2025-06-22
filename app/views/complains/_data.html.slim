@@ -2,12 +2,12 @@
   .col
     .alert.alert-primary
         .alert-heading
-          | Semua Data #{@title}
+          | SEMUA DATA
 
   - if buttonAccess "complains", "new"
-    .col-2.text-center
+    .col-3.text-center
       a href="#{transactions_path(from: "complain")}"
-        button.btn.btn-success type="button" 
+        button.btn.btn-dark type="button" 
           i.fas.fa-plus 
           | &nbsp Komplain
 

@@ -1,5 +1,6 @@
 tr
 	td #{kasbon.user.name}
+	td #{kasbon.created_at.to_date}
 	td #{number_with_delimiter(kasbon.nominal, delimiter: ".")}
 	td.text-right
 		= button_to "Hapus", kasbon, :method=>:delete, :class=>"btn btn-danger", data: {confirm: "Are you sure you want to reset the indexes?" }

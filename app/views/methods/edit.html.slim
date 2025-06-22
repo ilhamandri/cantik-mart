@@ -3,7 +3,7 @@
     .card.mb-4
       .card-header.white-text.info-color
         h5.font-weight-500.my-1
-          | Ubah Hak Akses - #{@method.controller.name.underscore.humanize.upcase} => #{@method.name.underscore.humanize.upcase}
+          | EDIT Hak Akses - #{@method.controller.name.underscore.humanize.upcase} => #{@method.name.underscore.humanize.upcase}
       .card-body
        = form_for :method, url: method_path(id: @method.id), method: "PUT" do |form|
         .form-group
@@ -20,4 +20,4 @@
           label.mdb-main-label Label example
 
         .form-group.text-center
-          = form.submit "Ubah Hak Akses", class: "btn btn-warning"
+          = form.submit "EDIT Hak Akses", class: "btn btn-warning"

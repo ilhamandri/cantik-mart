@@ -2,22 +2,21 @@
   .col
     .alert.alert-primary
         .alert-heading
-          | Semua Data #{@title}
+          | SEMUA DATA
   
   - if buttonAccess "members", "new"
-    .col-2.text-center
+    .col-3.text-center
       a href="#{new_member_path}"
-        button.btn.btn-success type="button" 
+        button.btn.btn-dark type="button" 
           i.fas.fa-plus 
           | &nbsp Member
-
+hr
 table class="table"
   thead
     th Nama
     th Alamat
     th Nomor Kartu
     th Nomor Telepon
-    th 
   tbody
     = render partial: 'list', collection: @members, as: :member
 .container.pagination.justify-content-center

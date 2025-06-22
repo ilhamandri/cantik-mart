@@ -105,27 +105,31 @@ class ReceivablesController < ApplicationController
       results = []
       search_text = "Pencarian "
       filters = Receivable.page param_page
-      filters = filters.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
+      filters = filters.where(store: current_user.store) if  !["developer", "owner", "super_admin", "finance"].include? current_user.level
 
       switch_data_month_param = params["switch_date_month"]
-      if switch_data_month_param == "due_date" 
-        end_date = DateTime.now.to_date + 1.day
-        start_date = DateTime.now.to_date - 1.weeks
-        end_date = params["end_date"].to_date if params["end_date"].present?
-        start_date = params["date_from"].to_date if params["date_from"].present?
-        search_text += "jatuh tempo dari " + start_date.to_s + " hingga " + end_date.to_s + " "
-        filters = filters.where("due_date >= ? AND due_date <= ?", start_date, end_date)
-      elsif switch_data_month_param == "date"
-        end_date = Date.today + 1.day
-        start_date = Date.today - 1.weeks
-        end_date = params["end_date"].to_date if params["end_date"].present?
-        start_date = params["date_from"].to_date if params["date_from"].present?
-        search_text += "dari " + start_date.to_s + " hingga " + end_date.to_s + " "
-        filters = filters.where("date_created >= ? AND date_created <= ?", start_date, end_date)
-      else
-        filters = filters.where("due_date <= ?", Date.today.end_of_week.end_of_day)
-        search_text += "jatuh tempo di minggu ini "
-      end
+
+
+      # if switch_data_month_param == "due_date" 
+      #   end_date = DateTime.now.to_date + 1.day
+      #   start_date = DateTime.now.to_date - 1.weeks
+      #   end_date = params["end_date"].to_date if params["end_date"].present?
+      #   start_date = params["date_from"].to_date if params["date_from"].present?
+      #   search_text += "jatuh tempo dari " + start_date.to_s + " hingga " + end_date.to_s + " "
+      #   filters = filters.where("due_date >= ? AND due_date <= ?", start_date, end_date)
+      # elsif switch_data_month_param == "date"
+      #   end_date = Date.today + 1.day
+      #   start_date = Date.today - 1.weeks
+      #   end_date = params["end_date"].to_date if params["end_date"].present?
+      #   start_date = params["date_from"].to_date if params["date_from"].present?
+      #   search_text += "dari " + start_date.to_s + " hingga " + end_date.to_s + " "
+      #   filters = filters.where("date_created >= ? AND date_created <= ?", start_date, end_date)
+      # else
+      #   filters = filters.where("due_date <= ?", Date.today.end_of_week.end_of_day)
+      #   search_text += "jatuh tempo di minggu ini "
+      # end
+
+      
       
       store_name = "SEMUA TOKO"
 

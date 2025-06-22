@@ -5,7 +5,7 @@
   .col
     .alert.alert-primary
       .alert-heading
-        | Retur Supplier #{@retur_items.first.retur.invoice}
+        | #{@retur_items.first.retur.invoice}
   .col-lg-1.col-md-2.text-right
     a href="#{retur_path(id: retur_id, format: :pdf)}"
       button.btn.btn-dark type="button" 
@@ -63,7 +63,7 @@ hr.my-4
   - if retur.date_approve.present?
     .stepper-item.completed
       .step-counter.text-white 
-        i.fa.fa-check-square-o  aria-hidden="true"
+        i.fa.fa-check-square  aria-hidden="true"
       .step-name.text-center
         | Disetujui
         br
@@ -75,7 +75,7 @@ hr.my-4
   - else
     .stepper-item
       .step-counter.text-white 
-        i.fa.fa-pencil-square-o  aria-hidden="true"
+        i.fa.fa-pencil-square  aria-hidden="true"
       .step-name.text-center Menunggu Disetujui
 
   - if retur.date_picked.present?
@@ -111,7 +111,7 @@ hr.my-4
   - else
     .stepper-item
       .step-counter.text-white 
-        i.fa.fa-clock-o  aria-hidden="true"
+        i.fa.fa-clock  aria-hidden="true"
       .step-name.text-center 
         | Menunggu
         br

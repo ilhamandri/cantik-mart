@@ -1,5 +1,5 @@
 .row
-  .col
+  .col-9
     - if @color == "danger"
       .alert.alert-danger
         .alert-heading
@@ -15,14 +15,13 @@
     - else
       .alert.alert-primary
         .alert-heading
-          | Semua Data #{@title}
+          | SEMUA DATA
 
   - if buttonAccess "orders", "new"
-    .col-2.text-center
-      a href="#{new_order_path}"
-        button.btn.btn-success type="button" 
-          i.fas.fa-plus 
-          |   Order
+    .col-3.text-center
+      a.btn.btn-dark href="#{new_order_path}"
+        i.fas.fa-plus 
+        |   Order
 
 table class="table table-hover"
   thead
@@ -30,8 +29,7 @@ table class="table table-hover"
     th Supplier
     th Tagihan
     th Tgl. Order
-    th status
-    th 
+    th Status
   tbody
     = render partial: 'list', collection: @orders, as: :order
 .container.pagination.justify-content-center

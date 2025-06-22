@@ -1,4 +1,21 @@
 class Item < ApplicationRecord
+  include PgSearch::Model
+
+  pg_search_scope :search_by_code, against: [:code]
+  
+  pg_search_scope :search_by_name, lambda { |name_part, query|
+    raise ArgumentError unless [:name].include?(name_part)
+    {
+      against: name_part,
+      query: query
+    }
+  }
+
+  pg_search_scope :item_search, associated_against: {
+    cheeses: [:kind, :brand],
+    cracker: :kind
+  }
+
   validates :item_cat_id, :name, :code, presence: true
   belongs_to :item_cat
   has_many :store_items

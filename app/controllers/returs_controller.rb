@@ -204,8 +204,8 @@ class RetursController < ApplicationController
       @search = ""
       if params["search"].present?
         @search += "Pencarian "+params["search"]
-        search = params["search"].downcase
-        @returs =@returs.where("invoice like ?", "%"+ search+"%")
+        search = "RE-"+params["search"].gsub("RE-","")
+        @returs =@returs.search_by_invoice search
       end
 
       before_months = params["months"].to_i

@@ -1,9 +1,14 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Ubah Toko - #{@store.name}
+      .card-header.white-text.bg-dark
+        .row
+          .col
+            h5.font-weight-500.my-1
+              | EDIT
+          .col.text-right
+            h5.font-weight-500.my-1
+              | #{@store.name}
       .card-body
         = form_for :store, url: store_path(id: @store.id), method: "PUT" do |form|
           .form-group
@@ -23,4 +28,4 @@
               option value="warehouse"
                 | Gudang
           .form-group.text-center
-            = form.submit "Ubah Toko - #{@store.name}", class: "btn btn-primary"
+            = form.submit "EDIT", class: "btn btn-warning"

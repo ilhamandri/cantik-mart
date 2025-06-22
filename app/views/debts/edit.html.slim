@@ -1,23 +1,27 @@
 .container-fluid
   .col-lg-12.col-md-12
-    .card-header.white-text.info-color
-        h5.font-weight-500.my-1
-          | Ubah - HUTANG (#{@debt.description})
+    .card-header.white-text.bg-dark
+      .row
+        .col
+          h5.font-weight-500.my-1
+            | EDIT HUTANG 
+        .col.text-right
+          h5.font-weight-500.my-1
+            | #{@debt.description}
     .card.mb-4
       .card-body
         = form_for :debt, url: debt_path, method: "PUT" do |form|
           .form-group
-            label.text-primary for="type" Deskripsi
-            input type="text" value="#{@debt.description}" name="pay[from_to]" class="form-control md-form" disabled="disabled"
+            input type="text" value="#{@debt.description}" name="pay[from_to]" class="form-control md-form" disabled="disabled" style="display:none;"
           .form-group
-            label.text-primary for="type" Nominal saat Ini
+            label for="type" Nominal saat Ini
             input type="text" value="#{@debt.nominal}" name="pay[nominal]" class="form-control md-form"disabled="disabled"
           .form-group
-            label.text-primary for="type" Kekurangan saat ini
+            label for="type" Kekurangan saat ini
             input type="text" value="#{@debt.deficiency}" name="pay[deficiency]" class="form-control md-form" disabled="disabled"
           hr
           .form-group
-            label.text-primary for="nominal" Nominal baru
+            label for="nominal" Nominal baru
             = form.number_field :nominal, required: true, class: "form-control md-form", id: "nominal", min:"0" , value:"#{@debt.nominal}"
           .form-group.text-center
             = form.submit "UBAH", class: "btn btn-warning"

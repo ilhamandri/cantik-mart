@@ -1,17 +1,19 @@
 .row
-  .col-10
+  .col-9
     .alert.alert-primary
         .alert-heading
-          | Semua Data #{@title}
+          | SEMUA DATA
 
   - if isAdmin
-    .col-2.text-center
-      a.btn.btn-success href="#{new_user_path}"
+    .col-3.text-center
+      a.btn.btn-dark href="#{new_user_path}"
         i.fas.fa-plus 
         |  Pengguna
 
+hr
+
 table class="table" id="table"
-  thead
+  thead.text-center
     th Foto
     th Nama
     th Jabatan

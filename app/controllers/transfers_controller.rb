@@ -269,8 +269,8 @@ class TransfersController < ApplicationController
       @search = ""
       if params["search"].present?
         @search += "Pencarian "+params["search"]
-        search = params["search"].downcase
-        @transfers =@transfers.where("invoice like ?", "%"+ search+"%")
+        search = "DTRF-"+params["search"].gsub("DTRF-", "")
+        @transfers =@transfers.search_by_invoice search
       end
 
       before_months = params["months"].to_i

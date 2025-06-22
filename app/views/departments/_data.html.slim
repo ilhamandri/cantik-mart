@@ -2,18 +2,17 @@
   .col
     .alert.alert-primary
       .alert-heading
-        | Semua Data #{@title}
+        | SEMUA DATA
   
   - if buttonAccess "departments", "new"
-    .col-2.text-center
-      a.btn.btn-success href="#{new_department_path}"
+    .col-3.text-rightt
+      a.btn.btn-dark href="#{new_department_path}"
         i.fas.fa-plus 
         | &nbsp Departemen
 
-
 table class="table"
   thead
-    th Name
+    th Nama 
     th.text-right 
   tbody
     = render partial: 'list', collection: @departments, as: :department

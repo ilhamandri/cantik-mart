@@ -1,4 +1,4 @@
-tr
+tr onclick="window.location='#{retur_path(retur)}'"
   td #{retur.invoice}
   td #{retur.store.name}
   td #{retur.supplier.name}
@@ -24,9 +24,3 @@ tr
     .alert class="#{color}" 
       .alert-heading
         | #{status}
-
-  td
-    a href='#{retur_path(id: retur.id)}'
-      button class="btn btn-primary"
-        | Item
-

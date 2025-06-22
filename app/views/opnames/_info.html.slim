@@ -4,13 +4,13 @@
   hr
   p 
     | Stok opname terakhir 
-    b 
+    / b 
       u #{@opnames.last.created_at.strftime("%d/%m/%Y %H:%M:%S")}
 
 .card.mb-4
-  .card-header.white-text.info-color
+  .card-header.white-text.bg-dark
     h5.font-weight-500.my-1
-      | Unduh Data SO
+      | UNDUH DATA STOCK OPNAME (.xlsx)
   .row
     .col-6
       .card-body
@@ -29,7 +29,7 @@
       .card-body
         = form_for :opname, url: opname_day_path(so_type: "supplier"), method: "POST" do |form|
           .form-group
-            label for="department" Pilih SUPLIER
+            label for="department" Pilih SUPPLIER
             select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="opname[supplier_id]" id="supplierId" 
               - Supplier.all.each do |supplier|
                 option value="#{supplier.id}"
@@ -38,13 +38,13 @@
             = form.submit "UNDUH", class: "btn btn-primary white-text"
 
 .card.mb-4
-  .card-header.white-text.info-color
+  .card-header.white-text.bg-dark
     h5.font-weight-500.my-1
-      | Kirim File Opname 
+      | UNGGAH FILE STOCK OPNAME (.xlsx)
   .card-body
     = form_for :opname, url: opname_path, html: { multipart: true }, method: "POST" do |form|
       .form-group
-        label for="store" File Opname (.xlsx)
+        label for="store" File 
         .input-group
           .input-group-prepend
             span#inputGroupFileAddon01.input-group-text

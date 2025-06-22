@@ -1,45 +1,43 @@
 - loss = @loss
-.row
-  .col
-    h5
-      | Data #{loss.invoice}
+.container-fluid
   .col.text-right
-    a href="#{loss_path(id: loss.id, format: :pdf)}"
-      button.btn.btn-dark type="button" 
+    a.btn.btn-primary.col-12 href="#{loss_path(id: loss.id, format: :pdf)}"
         | CETAK
 br
 .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.info-color
-          h5.font-weight-500.my-1
-            | Laporan Barang Loss
+        .card-header.white-text.bg-dark
+          .row
+            .col
+              h5.font-weight-500.my-1
+                | BARANG RUSAK
+            .col-text-right
+              h5.font-weight-500.my-1
+                | &nbsp&nbsp#{loss.invoice}
         .card-body
           .row
-            .col-md-8
-              label for="form" INVOICE
-              input type="text" class="form-control md-form" disabled=true value="#{loss.invoice}"
 
-            .col-md-4
+            .col-md-3
               .form-group
                 label for="from" Toko
                 input type="text" class="form-control md-form" disabled=true value="#{loss.store.name}"
 
-            .col-md-8
+            .col-md-6
               .form-group
                 label for="from" Dibuat 
                 input type="text" class="form-control md-form" disabled=true value="#{loss.created_at} ( #{loss.user.name} )"
 
-            .col-md-4
-              label for="form" Jumlah Item
-              input type="number" class="form-control md-form" disabled=true value="#{loss.total_item}"
+            .col-md-3
+              label for="form" TOTAL
+              input type="text" class="form-control md-form" disabled=true value="#{loss.total_item} Item"
 br
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
+      .card-header.white-text.bg-dark
         h5.font-weight-500.my-1
-          | Daftar Barang
+          | DAFTAR BARANG
       .card-body.table-responsive.text-nowrap
         table class="table"
           thead
