@@ -35,7 +35,7 @@ class ApisController < ApplicationController
   def get_item_code
     json_result = []
     code = params[:code].squish
-    item = Item.search_by_code code.upcase
+    item = Item.search_by_code(code.upcase).take
     json_result << ["TRUE"] if item.present?
     render :json => json_result
   end
@@ -254,9 +254,17 @@ class ApisController < ApplicationController
     return render :json => json_result unless qty.present?
     return render :json => json_result if qty.to_f <= 0
     search = search.gsub(/\s+/, "")
-    items = Item.search_by_code(search)
+
+
+    benchmark_2 = Benchmark.measure { Item.find_by(code: search) }
+    benchmark = Benchmark.measure { Item.search_by_code(search).take }
+    
+    items = Item.search_by_code(search).take
     return render :json => json_result unless items.present?
-    item_id = items.first
+    
+
+    
+    item_id = items
     item_store = StoreItem.find_by(store_id: current_user.store.id, item: item_id)
     return render :json => json_result unless item_store.present?
 
@@ -330,6 +338,9 @@ class ApisController < ApplicationController
       item << promo.free_item.name
       item << hit_promo * promo.free_quantity
     end
+
+    item << benchmark
+    item << benchmark_2
     
     json_result << item
     render :json => json_result

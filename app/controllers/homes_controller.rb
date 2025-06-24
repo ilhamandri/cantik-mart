@@ -15,11 +15,17 @@ class HomesController < ApplicationController
     ReCheck.checkInvoiceOrder
     
     @total_limit_items = StoreItem.where(store_id: current_user.store.id).where('stock < 0').count
+
     @total_orders = Order.where(store_id: current_user.store.id, date_receive: nil, created_at: start_date..end_date).count
+
     @total_payments = Order.where(store_id: current_user.store.id, created_at: start_date..end_date).where('date_receive is not null and date_paid_off is null').count
+
     @total_returs = Retur.where(store_id: current_user.store.id, created_at: start_date..end_date).where("status is null").count
+
     @total_transfers = Transfer.where(created_at: start_date..end_date).where("from_store_id = ? OR to_store_id = ?", current_user.store.id, current_user.store.id).where(date_approve: nil).count
+
     @total_send_backs = SendBack.where("received_by is null")
+    
     @total_send_backs = @total_send_backs.where(store: current_user.store) if current_user.level != "stock_admin"
 
     @total_member = Member.where(store: current_user).count

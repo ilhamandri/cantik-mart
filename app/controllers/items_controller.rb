@@ -6,25 +6,17 @@ class ItemsController < ApplicationController
   
   def index
     UpdateData.updateDuplicateItem
+    @search = params[:search]
+    @items = Item.page param_page
+    if params[:search_by] == "name"
+      @items = Item.search_by_name :name, @search
+      @items = @items.page param_page if @items.present?
+    elsif params[:search_by] == "code"
+      @items = Item.search_by_code_s :code, @search
+      @items = @items.page param_page if @items.present?
+    end
+    @items = @items.order(name: :asc) if @items.present?
 
-    @items = Item.all
-    if params[:search].present?
-      @search = params[:search]
-      @items = @items.search_by_name :name, @search
-    end
-    if params[:order_by].present? && params[:order_type].present?
-      @order_by = params[:order_by].downcase
-      order_type = params[:order_type].upcase
-      if order_type == "ASC" 
-        @order_type = "menaik (A - Z)"
-      else
-        @order_type = "menurun (Z - A)"
-      end
-          
-      order = @order_by+" "+order_type
-      @items = @items.order(order)
-    end
-    @items = @items.page param_page
   end
 
   def item_recaps

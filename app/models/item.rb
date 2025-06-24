@@ -7,7 +7,15 @@ class Item < ApplicationRecord
     raise ArgumentError unless [:name].include?(name_part)
     {
       against: name_part,
-      query: query
+      query: query.to_s
+    }
+  }
+
+  pg_search_scope :search_by_code_s, lambda { |name_part, query|
+    raise ArgumentError unless [:code].include?(name_part)
+    {
+      against: name_part,
+      query: query.to_s
     }
   }
 

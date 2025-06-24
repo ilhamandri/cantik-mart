@@ -17,16 +17,16 @@ class GetsController < ApplicationController
 			 # LOCALHOST
 			 # from = params[:from].to_time
 			 # to = params[:to].to_time 
-
+			 
 			 render :json =>json_result if store.nil?
 			 # json_result["stores"] = Store.where(updated_at: from..to)
-			 json_result["members"] = Member.where(updated_at: from..to)
+			 json_result["members"] = Member.where(updated_at: from..to).limit(100)
 			 json_result["departments"] = Department.where(updated_at: from..to)
 			 json_result["item_cats"] = ItemCat.where(updated_at: from..to)
-			 json_result["items"] = Item.where(updated_at: from..to)
+			 json_result["items"] = Item.where(updated_at: from..to).limit(10)
 			 json_result["stocks"] = StoreItem.where(store: store).where(updated_at: from..to)
 			 json_result["grocers"] = GrocerItem.all
-			 json_result["promotions"] = Promotion.where(updated_at: from..to)
+			 json_result["promotions"] = Promotion.where(updated_at: from..to).limit(100)
 			 json_result["users"] = User.where.not(level: ["candy_dream", "developer"])
 		 	 # json_result["exchange_points"] = ExchangePoint.where(updated_at: from..to)
 		 	 # json_result["vouchers"] = Voucher.where(updated_at: from..to)

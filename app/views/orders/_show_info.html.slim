@@ -11,7 +11,13 @@
     .col
       .alert.alert-primary
         .alert-heading  
-          | Order #{order.invoice}
+          .row
+            .col
+              h5.font-weight-500.my-1
+                | ORDER
+            .col.text-right
+              h5.font-weight-500.my-1
+                | #{order.invoice}
     - if buttonAccess "orders", "confirmation"
       - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
         .col-lg-2.col-md-2.text-center
@@ -20,6 +26,7 @@
     .col-lg-2.col-md-3.text-right
       a.btn.btn-dark href="#{order_path(id: order_id, format: :pdf)}"
           |  CETAK
+  br
   .row      
     .col
       .form-group

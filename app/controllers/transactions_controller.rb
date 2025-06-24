@@ -421,8 +421,8 @@ class TransactionsController < ApplicationController
       @search = ""
       if params["search"].present?
         @search += "Pencarian "+params["search"]
-        search_query = params["search"].gsub("INV-","")
-        search = "INV-"+search_query
+        search_query = params["search"].gsub("TRX-","")
+        search = "TRX-"+search_query
         @transactions = @transactions.search_by_invoice search
       end
 

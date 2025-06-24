@@ -1,7 +1,7 @@
 - transfer = @transfer_items.first.transfer 
 - transfer_id = transfer.id
 .row
-  .col-10
+  .col
     - if ["","-", nil].exclude? transfer.description
       .alert.alert-danger
         .alert-heading  
@@ -22,23 +22,23 @@
 
   - if transfer.invoice.include? "DTRF"
     - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.to_store.id == current_user.store.id
-      .col-2.text-right
+      .col-3.text-right
         a.btn.btn-success href="#{transfer_receive_path(id: transfer_id)}"
           | TERIMA
-  - else
 
+  - else
     - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.from_store.id == current_user.store.id
-      .col-lg-1.col-md-2.text-right
+      .col-3.text-right
         a.btn.btn-success href="#{transfer_receive_path(id: transfer_id)}"
           | TERIMA
 
     - if transfer.date_approve.nil? && transfer.to_store.id == current_user.store.id 
-      .col-lg-1.col-md-2.text-right
+      .col-3.text-right
         a.btn.btn-warning href="#{transfer_confirmation_path(id: transfer_id)}"
           | KONFIRMASI
 
     - if transfer.date_approve.present? && transfer.date_picked.nil? && transfer.to_store.id == current_user.store.id
-      .col-lg-2.col-md-3.text-right
+      .col-3.text-right
         a.btn.btn-warning href="#{transfer_picked_path(id: transfer_id)}"
             | SIAPKAN BARANG
 
@@ -46,6 +46,8 @@
   .col-lg-1.col-md-2.text-right
     a.btn.btn-dark type="button" href="#{transfer_path(id: transfer_id, format: :pdf)}"
       | CETAK
+
+br
 
 .row
   .col
@@ -104,7 +106,7 @@ hr.my-4
   - else
     .stepper-item
       .step-counter.text-white 
-        i.fa.fa-check-square-o  aria-hidden="true"
+        i.fa.fa-check-square  aria-hidden="true"
       .step-name.text-center Menunggu Disetujui
 
   - if status

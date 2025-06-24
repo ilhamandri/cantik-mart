@@ -21,11 +21,14 @@
           =image_tag("/uploads/profile_picture/default.png", height: '200', width: '200', class:"rounded-circle z-depth-2")
       .col-6
           .form-group
-            label for="name" Status
-            - if @user.active
-              input class="form-control md-form" style="color: green;" value="Aktif" disabled="disabled"
-            - else
-              input class="form-control md-form" style="color: red;" value="Non - Aktif" disabled="disabled"
+            - active = "alert-success"
+            - status = "KARYAWAN AKTIF"
+            - if !@user.active
+              - active = "alert-danger" 
+              - status = "KARYAWAN TIDAK AKTIF"
+            .alert class="#{active}"
+              .alert-heading.text-center
+                | #{status}
           .form-group
             label for="name" Nama
             = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"

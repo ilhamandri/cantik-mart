@@ -2,6 +2,7 @@ require 'chunky_png'
 require 'barby'
 require 'barby/barcode/code_128'    
 require 'barby/outputter/png_outputter'  
+
 class TransfersController < ApplicationController
   before_action :require_login
   before_action :screening
@@ -268,9 +269,15 @@ class TransfersController < ApplicationController
       @transfers = @transfers.where("to_store_id = ? OR from_store_id= ?" , current_user.store.id, current_user.store.id) if  !["owner", "super_admin", "finance"].include? current_user.level
       @search = ""
       if params["search"].present?
-        @search += "Pencarian "+params["search"]
-        search = "DTRF-"+params["search"].gsub("DTRF-", "")
-        @transfers =@transfers.search_by_invoice search
+        @search += "Pencarian "+params["search"]+" "
+        search = "TRF-"+params["search"].gsub("TRF-", "")
+        trfs = @transfers.search_by_invoice search
+        if trfs.empty?
+          search = "DTRF-"+params["search"].gsub("DTRF-", "")
+          @transfers = @transfers.search_by_invoice search
+        else
+          @transfers = trfs
+        end
       end
 
       before_months = params["months"].to_i

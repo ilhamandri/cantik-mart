@@ -5,7 +5,13 @@
   .col
     .alert.alert-primary
       .alert-heading
-        | #{@retur_items.first.retur.invoice}
+          .row
+            .col
+              h5.font-weight-500.my-1
+                | RETUR SUPPLIER
+            .col.text-right
+              h5.font-weight-500.my-1
+                | #{@retur_items.first.retur.invoice}
   .col-lg-1.col-md-2.text-right
     a href="#{retur_path(id: retur_id, format: :pdf)}"
       button.btn.btn-dark type="button" 
