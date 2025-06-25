@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
   require 'apriori'
   
   def index
-    UpdateData.updateDuplicateItem
+    # UpdateData.updateDuplicateItem
     @search = params[:search]
     @items = Item.page param_page
     if params[:search_by] == "name"

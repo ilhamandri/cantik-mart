@@ -1,11 +1,11 @@
-tr
-	td #{@idx}
+tr.text-right
+	td.text-left width="5%" #{@idx}
 	- @idx += 1
-	td #{send_back_item.item.code}
-	td #{send_back_item.item.name}
-	td #{send_back_item.quantity}
+	td.text-left width="15%" #{send_back_item.item.code}
+	td.text-left width="35%" #{send_back_item.item.name}
+	td width="15%" #{send_back_item.quantity}
 	- if send_back_item.receive < 0
-		td -
+		td.text-center width="15%" -
 	- else
-		td #{send_back_item.receive}
-	td #{send_back_item.description}
+		td width="15%" #{send_back_item.receive}
+	td.text-left width="15%" #{send_back_item.description}

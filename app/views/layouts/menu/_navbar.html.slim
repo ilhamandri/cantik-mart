@@ -1,7 +1,7 @@
 li
   a.collapsible-header.waves-effect.arrow-r
     .row
-      .col-9
+      .col-9 style="padding: 0; padding-left: 1.8rem"
         | Karyawan
       .col-1
         i.fas.fa-angle-down.rotate-icon
@@ -15,7 +15,7 @@ li
 
 - if current_user.level == "candy_dream"
   li
-    a.collapsible-header.waves-effect.arrow-r href="#{transactions_path}"
+    a.collapsible-header.waves-effect.arrow-r href="#{transactions_path}" style="padding: 0; padding-left: 1.8rem"
       i.w-fa.fas.fa-book
       | Transaksi
 
@@ -23,7 +23,7 @@ li
   li
     a.collapsible-header.waves-effect.arrow-r
       .row
-        .col-9
+        .col-9 style="padding: 0; padding-left: 1.8rem"
           | Supplier
         .col-1
           i.fas.fa-angle-down.rotate-icon
@@ -46,8 +46,8 @@ li
   li
     a.collapsible-header.waves-effect.arrow-r
       .row
-        .col-9
-          | Member
+        .col-9 style="padding: 0; padding-left: 1.8rem"
+          | Member 
         .col-1
           i.fas.fa-angle-down.rotate-icon
     .collapsible-body
@@ -74,7 +74,7 @@ li
   li
     a.collapsible-header.waves-effect.arrow-r
       .row
-        .col-9
+        .col-9 style="padding: 0; padding-left: 1.8rem"
           | Toko
         .col-1
           i.fas.fa-angle-down.rotate-icon
@@ -100,7 +100,7 @@ li
   li
     a.collapsible-header.waves-effect.arrow-r
       .row
-        .col-9
+        .col-9 style="padding: 0; padding-left: 1.8rem"
           | Barang
         .col-1
           i.fas.fa-angle-down.rotate-icon
@@ -148,7 +148,7 @@ li
   li
     a.collapsible-header.waves-effect.arrow-r
       .row
-        .col-9
+        .col-9 style="padding: 0; padding-left: 1.8rem"
           | Keuangan
         .col-1
           i.fas.fa-angle-down.rotate-icon
@@ -182,7 +182,7 @@ li
 - if isAdmin
   hr
   li
-    a.collapsible-header.waves-effect.arrow-r  href="#{activities_path}"
+    a.collapsible-header.waves-effect.arrow-r  href="#{activities_path}" 
       | Aktivitas Pengguna
   li
     a.collapsible-header.waves-effect.arrow-r  href="#{controllers_path}"
@@ -206,3 +206,29 @@ li
   li
     a.collapsible-header.waves-effect.arrow-r  href="#{server_informations_path}"
       | Informasi Sistem
+
+
+
+
+
+
+
+
+.footer
+  .text-center.bg-white.text-dark 
+    hr.section-title-hr
+    .row.padding-left-2 onclick="window.location='#{user_path(id: current_user.id)}'"
+      .col-4
+        =image_tag("/uploads/profile_picture/#{current_user.image}", class:"rounded-circle", width:"70px", height:"70px;") 
+      .col-8.text-left
+          b #{current_user.name.split(" ")[0].upcase}
+          br
+          | #{current_user.level.gsub("_"," ").upcase}
+          br
+          | #{current_user.store.name.upcase}
+    hr.section-title-hr
+  = button_to "Keluar", log_out_path, method: :get, class: "btn btn-danger"
+  br
+  .text-center.bg-primary.text-white.display-none
+    b
+      #txt

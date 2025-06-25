@@ -785,8 +785,8 @@
 
          var separator = '<p class="medium">===========================================================</p>';
 
-         var items = ' <div><table class="table">';
-         var HTML_totals = '<table class="table">';
+         var items = ' <div><table.table.table-hover >';
+         var HTML_totals = '<table.table.table-hover >';
          
 
 
@@ -795,7 +795,7 @@
 
          function PrintBill(invoice, time, cashier_id) {
             body_html = '';
-            var ext = '===========================================================<table class="table"><tr><td style="text-align: left;">'+invoice+'</td><td style="text-align: center;">'+cashier_name+'</td><td style="text-align: right;">'+time+'</td></tr></table>=========================================================== </div>';
+            var ext = '===========================================================<table.table.table-hover ><tr><td style="text-align: left;">'+invoice+'</td><td style="text-align: center;">'+cashier_name+'</td><td style="text-align: right;">'+time+'</td></tr></table>=========================================================== </div>';
              var total_diskon = 0;
              var subtotal = 0;
              var table = $('#itemList').DataTable();
@@ -861,8 +861,8 @@
             wnd = window.open("about:blank", "", "_blank");
             wnd.document.write(html);
             wnd.print();
-            items = ' <div class="col-sm-12"><table class="table">';
-            HTML_totals = '<table class="table">';
+            items = ' <div class="col-sm-12"><table.table.table-hover >';
+            HTML_totals = '<table.table.table-hover >';
          }
 
          function splitRibuan(total){

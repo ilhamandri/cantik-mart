@@ -1,33 +1,50 @@
 .card-body
   = form_for :supplier, url: "" do |form|
-    .form-group
-      label for="name" Nama
-      = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
-    .form_group
-      label for="address" Alamat
-      = form.text_field :address, required: true, class: "form-control md-form", id: "address", disabled: "disabled"
-    .form-group
-      label for="phone" Nomor Telepon
-      input class="form-control md-form" value="#{number_to_phone(@supplier.phone, country_code: 62)}" disabled="disabled"
-    - debts = Debt.where(finance_type: Debt::ORDER, supplier: @supplier).where("deficiency > 0").sum(:deficiency)
-    .form-group
-      label for="phone" Total Hutang
-      input class="form-control md-form" value="#{number_with_delimiter(debts.to_i, delimiter: ".", separator: ",")}" disabled="disabled"
-
-
-    - receivables = Receivable.where(finance_type: Receivable::RETUR, to_user: @supplier.id).where("deficiency > 0").sum(:deficiency)
     .row
-      .col
+      .col-6
         .form-group
-          label for="phone" Total Piutang
+          label for="name" Nama
+          = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: "disabled"
+      
+      .col-6
+        .form-group
+          label for="phone" Nomor Telepon
+          input class="form-control md-form" value="#{number_to_phone(@supplier.phone, country_code: 62)}" disabled="disabled"
+      .col-12
+        .form_group
+          label for="address" Alamat
+          = form.text_field :address, required: true, class: "form-control md-form", id: "address", disabled: "disabled"
+
+      .col-12
+        hr
+
+      .col-4
+        - debts = Debt.where(finance_type: Debt::ORDER, supplier: @supplier).where("deficiency > 0").sum(:deficiency)
+        .form-group
+          label for="phone" Hutang
+          input class="form-control md-form" value="#{number_with_delimiter(debts.to_i, delimiter: ".", separator: ",")}" disabled="disabled"
+
+      - receivables = Receivable.where(finance_type: Receivable::RETUR, to_user: @supplier.id).where("deficiency > 0").sum(:deficiency)
+      .col-4
+        .form-group
+          label for="phone" Piutang
           input class="form-control md-form" value=" #{number_with_delimiter(receivables.to_i, delimiter: ".", separator: ",")}" disabled="disabled"
-      .col
+
+      .col-4
         .form-group
           label for="phone" Pajak Faktur
           input class="form-control md-form" value=" #{number_with_delimiter(@supplier.tax.to_i, delimiter: ".", separator: ",")} %" disabled="disabled"
+
+      .col-12
+        hr
+        .row
+          .col-6.text-right
+            | LAST UPDATE : 
+          .col-6.text-danger
+            | #{@supplier.updated_at}
+        hr
     .form-group
-      label for="phone" Terakhir Update
-      input.text-danger class="form-control md-form" value="#{@supplier.updated_at}" disabled="disabled"
+      
 
     .row
       - if buttonAccess "suppliers", "edit"

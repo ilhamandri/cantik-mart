@@ -1,23 +1,25 @@
 - trx = Transaction.find_by(id: retur.transaction_id)
 - if trx.present?
   tr
-    td #{retur.invoice}
-    td #{trx.invoice.gsub("/TP", "")}
-    td #{retur.store.name}
-    td.text-center
-      | #{trx.created_at} 
+    td width="15%" #{retur.invoice}
+    td width="15%" #{trx.invoice.gsub("/TP", "")}
+    td width="15%" #{retur.store.name}
+    td.text-center width="15%"
+      | #{trx.created_at.to_date} 
       br
       | ( #{trx.user.name} )
-    td.text-center
-      | #{retur.created_at} 
+    td.text-center width="15%"
+      | #{retur.created_at.to_date} 
       br
       | ( #{retur.user.name} )
-    td #{retur.total_items}
-    td
-      a href='#{transaction_path(id: retur.transaction_id)}'
-        button class="btn btn-warning"
-          | Transaksi
-    td
-      a href='#{complain_path(id: retur.id)}'
-        button class="btn btn-primary"
-          | Detil
+    td width="5%" #{retur.total_items}
+    td width="20%"
+      .row.text-center
+        .col-6
+          a href='#{transaction_path(id: retur.transaction_id)}'
+            button class="btn btn-warning"
+              | Transaksi
+        .col-6
+          a href='#{complain_path(id: retur.id)}'
+            button class="btn btn-primary"
+              | Detil

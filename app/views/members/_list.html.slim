@@ -2,6 +2,5 @@ tr onclick="window.location='#{member_path(member)}'"
   td #{member.name}
   td #{member.address}
   td #{number_with_delimiter(member.card_number, delimiter: " ")}
-  td #{number_to_phone(member.phone, country_code: 62)}
-  td
+  td #{number_to_phone(member.phone.to_i.to_s, country_code: 62)}
 

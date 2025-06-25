@@ -1,27 +1,34 @@
-.row
-  	.col
-    	.alert.alert-primary
-        	.alert-heading
-          	| SEMUA DATA
-   	
-  	- if buttonAccess "transactions", "new"
-	    - if current_user.store.online_store
-		  	.col-2.text-center
-			    a.btn.btn-success href="#{new_transaction_path}"
-			      	i.fas.fa-plus 
-			      	|  #{@title}
+.data-header
+	.row.padding-top-1
+	  	.col
+	    	.alert.alert-primary
+	        	.alert-heading
+	          		.row
+	          			.col
+	          				| TRANSAKSI
+	          			.col.text-right
+	          				= page_entries_info @transactions
+	   	
+	  	- if buttonAccess "transactions", "new"
+		    - if current_user.store.online_store
+			  	.col-2.text-center
+				    a.btn.btn-success href="#{new_transaction_path}"
+				      	i.fas.fa-plus 
+				      	|  #{@title}
+
+	- if isLevel ["super_visi", "finance", "candy_dream"]
+		table.table.table-hover 
+		  thead.text-right
+		    th Invoice
+		    th Tanggal
+		    th Toko
+		    th Nominal
 
 - if isLevel ["super_visi", "finance", "candy_dream"]
-	table class="table"
-	  thead
-	    th Invoice
-	    th Tanggal
-	    th Toko
-	    th Nominal
-	    th.text-right 
+	table.table.table-hover
 	  tbody
 	    = render partial: 'list', collection: @transactions, as: :transaction
 	.container.pagination.justify-content-center
   		= paginate @transactions
-	.text-center
-  		= page_entries_info @transactions
+
+  		

@@ -1,11 +1,11 @@
-- if isDeveloper
+/ - if isDeveloper
   .col-xl-12.col-lg-12.col-md-12.pb-2
     .card-body.table-responsive.text-nowrap
           canvas id="supplier_trxs"
     hr.my-4
 
-.col-xl-12.col-lg-12.col-md-12.pb-2
-	.container-fluid
+.data-header
+	.container-fluid.padding-top-1
 	  	= form_for :supplier_item_recap, url: supplier_item_recaps_path(id: @supplier.id), method: 'POST' do |form|
 		    .row
 		      .col

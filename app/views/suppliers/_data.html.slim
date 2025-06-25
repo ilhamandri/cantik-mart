@@ -1,28 +1,30 @@
-.row
-  .col
-    .alert.alert-primary
-      .alert-heading
-        | SEMUA DATA
-  
-  - if buttonAccess "suppliers", "new"
-    .col-3.text-center
-      a href="#{new_supplier_path}"
-        button.btn.btn-dark type="button" 
+.data-header
+  .row
+    .col.padding-top-1
+      .alert.alert-primary
+        .alert-heading
+          .row
+            .col-3
+              | SUPPLIER
+            .col.text-right
+              = page_entries_info @suppliers
+    
+    - if buttonAccess "suppliers", "new"
+      .col-md-3.col-lg-2.text-center.padding-top-1
+        a.btn.btn-dark href="#{new_supplier_path}"
           i.fas.fa-plus 
           | &nbsp Supplier
 
-hr
-table class="table"
-  thead.text-center
-    th Nama
-    th Alamat
-    th Telepon
-    th Hutang
-    th Piutang
-    th 
+  table.table.table-hover 
+    thead.text-center
+      th width="20%" Nama
+      th width="25%" Alamat
+      th width="25%" Telepon
+      th width="15%" Hutang
+      th width="15%" Piutang
+
+table.table.table-hover 
   tbody
     = render partial: 'list', collection: @suppliers, as: :supplier
 .container.pagination.justify-content-center
   = paginate @suppliers
-.text-center
-  = page_entries_info @suppliers

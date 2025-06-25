@@ -1,15 +1,10 @@
 - order = @order_items.first.order
-tr
-  td #{@idx}
+tr.text-right
+  td width="5%" #{@idx}
   - @idx += 1
-  td #{order_item.item.code} 
-  / td
-    - if order_item.item.image.present?
-      img src="#{order_item.item.image}" width="50px"
-    - else
-      =image_tag("/images/default_item.jpg", height: '70', width: '70')
-  td #{order_item.item.name}
-  td #{order_item.quantity.to_i}
+  td.text-left width="15%" #{order_item.item.code} 
+  td.text-left width="25%" #{order_item.item.name}
+  td width="10%" #{order_item.quantity.to_i}
   
   - price = order_item.price
   - disc_1 = order_item.discount_1
@@ -27,34 +22,34 @@ tr
     - based_price = based_item_price
 
   - if !order.editable && !order.from_retur
-  	td
+  	td width="10%" 
       | #{order_item.receive} &nbsp
       span 
         i.fas.fa-arrow-right
       | &nbsp #{order_item.new_receive.to_i}
-    td #{number_with_delimiter(price, delimiter: ".", separator: ",")}
+    td width="15%" #{number_with_delimiter(price, delimiter: ".", separator: ",")}
     - disc_i = order_item.discount_1 + order_item.discount_2
     - disc = ""
     - if disc_i < 100
       - disc = disc_i + " %"
-    td #{number_with_delimiter(disc, delimiter: ".", separator: ",")}
-    td.text-danger.text-right
+    td width="10%" #{number_with_delimiter(disc, delimiter: ".", separator: ",")}
+    td.text-danger.text-right width="10%"
 		  | #{number_with_delimiter(order_item.grant_total, delimiter: ".", separator: ",")}
 
 
   - else
     - if order_item.receive.present?
-      td #{order_item.receive}
-      td #{number_with_delimiter(price, delimiter: ".", separator: ",")}
-      td #{number_with_delimiter(order_item.discount_2 + order_item.discount_1, delimiter: ".", separator: ",")}
-      td.text-danger.text-right
+      td width="10%" #{order_item.receive}
+      td width="15%" #{number_with_delimiter(price, delimiter: ".", separator: ",")}
+      td width="10%" #{number_with_delimiter(order_item.discount_2 + order_item.discount_1, delimiter: ".", separator: ",")}
+      td.text-danger.text-right width="10%"
         | #{number_with_delimiter(order_item.total, delimiter: ".", separator: ",")}
     - else
       - 3.times do
-        td 
+        td width="10%"
           span 
             i.fas.fa-times
       
-      td.text-danger.text-right
+      td.text-danger.text-right width="10%"
         | #{number_with_delimiter(0, delimiter: ".", separator: ",")}
 

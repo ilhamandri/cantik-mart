@@ -4,8 +4,8 @@
           canvas id="supplier_order"
     hr.my-4
     
-.col-xl-12.col-lg-12.col-md-12.pb-2
-  .container-fluid
+.data-header
+  .container-fluid.padding-top-1
       = form_for :supplier_item_recap, url: supplier_order_recaps_path(id: @supplier.id), method: 'POST' do |form|
         .row
           .col

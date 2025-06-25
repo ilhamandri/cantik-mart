@@ -1,8 +1,8 @@
 tr onclick="window.location='#{order_path(order)}'"
-  td #{order.invoice}
-  td #{order.supplier.name}
-  td #{number_with_delimiter(order.grand_total, delimiter: ".")}
-  td #{order.user.name} (#{order.date_created.to_date})
+  td width="20%"  #{order.invoice}
+  td width="20%" #{order.supplier.name}
+  td width="20%" #{number_with_delimiter(order.grand_total, delimiter: ".")}
+  td width="20%" #{order.user.name} (#{order.date_created.to_date})
   - color = "alert-warning"
   - status = "Menunggu pengiriman"
   - if order.date_receive.present?
@@ -11,7 +11,7 @@ tr onclick="window.location='#{order_path(order)}'"
   - if order.date_paid_off.present?
     - color = "alert-success"
     - status = "Order selesai"
-  td 
+  td width="20%" 
     .alert class="#{color}"
       .alert-heading
         |  #{status}

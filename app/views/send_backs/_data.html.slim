@@ -1,33 +1,40 @@
-.row
-  .col
-    - if @color == "warning"
-      .alert.alert-warning
-        .alert-heading
-          | Dalam Proses
-    - elsif @color == "success"
-      .alert.alert-success
-        .alert-heading
-          | Selesai
-    - else
-      .alert.alert-primary
-        .alert-heading
-          | SEMUA DATA
+.data-header
+  .row.padding-top-1
+    .col
+      - if @color == "warning"
+        .alert.alert-warning
+          .alert-heading
+            | Dalam Proses
+      - elsif @color == "success"
+        .alert.alert-success
+          .alert-heading
+            | Selesai
+      - else
+        .alert.alert-primary
+          .alert-heading
+            .row
+              .col-4
+                | BARANG RUSAK
+              .col.text-right
+                = page_entries_info @send_backs
 
   
-  - if buttonAccess "send_backs", "new"
-    .col-3.text-right
-      a href="#{new_send_back_path}"
-        button.btn.btn-black type="button" 
-          i.fas.fa-plus 
-          | &nbsp Kirim BS
-hr
-table class="table table-hover"
-  thead
-    th Invoice
-    th Dari
-    th Jumlah Barang
-    th Dibuat
-    th Status
+    - if buttonAccess "send_backs", "new"
+      .col-md-3.col-lg-2.text-right
+        a href="#{new_send_back_path}"
+          button.btn.btn-black type="button" 
+            i.fas.fa-plus 
+            | &nbsp Kirim BS
+
+  table.table.table-hover
+    thead
+      th width="20%" Invoice
+      th width="15%" Tanggal
+      th width="15%" Dari
+      th width="15%" Qty
+      th width="35%" Status
+
+table.table.table-hover
   tbody
     = render partial: 'list', collection: @send_backs, as: :send_back
 
@@ -35,4 +42,4 @@ table class="table table-hover"
 .container.pagination.justify-content-center
   = paginate @send_backs
 .text-center
-  = page_entries_info @send_backs
+  

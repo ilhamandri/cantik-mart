@@ -2,7 +2,7 @@ tr onclick="window.location='#{transaction_path(id: transaction.id)}'"
   td #{transaction.invoice.gsub("/TP", "")}
   td #{transaction.date_created}
   td #{transaction.user.store.name}
-  td #{number_with_delimiter(transaction.grand_total, delimiter: ".", separator:",", precision: 2)}
+  td.text-right #{number_with_delimiter(transaction.grand_total, delimiter: ".", separator:",", precision: 2)}
 
     
 

@@ -1,11 +1,12 @@
-.col-md-12.text-center
-  a.btn.btn-dark.col-12 href="#{supplier_path(id: @supplier.id,format: :pdf)}"
-    | CETAK    
+.data-header
+  .col-md-12.text-center.padding-top-1
+    a.btn.btn-dark.col-12 href="#{supplier_path(id: @supplier.id,format: :pdf)}"
+      | CETAK    
 
 br
 
 .table-responsive.text-nowrap
-  table class="table"
+  table.table.table-hover 
     thead
       th Kode
       th Nama

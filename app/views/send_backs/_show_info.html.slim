@@ -18,7 +18,7 @@
                 | #{@send_back.invoice}
     - if @send_back.received_by.nil? && current_user.store.store_type == "warehouse"
       .col-lg-1.col-md-2.text-right
-        a.btn.btn-warning href="#{send_back_receive_path(id: @send_back.id)}"
+        a.btn.btn-primary href="#{send_back_receive_path(id: @send_back.id)}"
             | TERIMA
     .col-lg-1.col-md-2.text-right
       a.btn.btn-dark href="#{send_back_path(id: @send_back.id, format: :pdf)}"

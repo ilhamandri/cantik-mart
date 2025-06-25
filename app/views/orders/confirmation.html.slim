@@ -1,11 +1,11 @@
 - @idx = 1
 = form_for :order, url: order_receive_path, method: "POST" do |form|
-  .container-fluid
+  .data-header-dark
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.bg-dark
+        .card-header.white-text.bg-primary
           h5.font-weight-500.my-1
-            | Penerimaan Pesanan
+            | PENERIMAAN ORDER
         .card-body
           .row
             .col-md-4
@@ -20,7 +20,7 @@
                 input type="text" class="form-control md-form" disabled=true value="#{@order.store.name}"
             .col-4
               .form-group
-                label for="from" Kepada
+                label for="from" Supplier
                 input type="text" class="form-control md-form" disabled=true value="#{@order.supplier.name}"
             
             - if !@order.from_retur
@@ -46,15 +46,13 @@
                   label for="from" PPn (%)
                   input type="number" class="form-control md-form" value="#{@order.supplier.tax}" name="order[ppn]" required=true id="ppn" step="0.01"
 
-
-  .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.bg-dark
+        .card-header.white-text.bg-primary
           h5.font-weight-500.my-1
-            | Data Barang
+            | BARANG
         .card-body.table-responsive.text-nowrap
-            table class="table"
+            table.table
               thead
                 th Barang
                 th Pesan
@@ -69,11 +67,13 @@
               tbody
                 = render partial: 'conflist', collection: @order_items, as: :r_item
             .col-md-12.text-center
+              hr
               h3
                 b
                   | TOTAL : 
                 b id="grand_total_all"
                   | -
+              hr
                 br
             .form-group.text-center
               = form.submit "TERIMA", class: "btn btn-primary"

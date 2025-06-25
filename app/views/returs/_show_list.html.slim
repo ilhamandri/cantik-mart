@@ -1,19 +1,24 @@
 tr
-  td #{@idx}
+  td width="5%" #{@idx}
   - @idx += 1
-  td #{ret_item.item.code} 
-  td #{ret_item.item.name}
-  td.text-center #{ret_item.quantity}
+  td width="20%" #{ret_item.item.code} 
+  td width="20%" #{ret_item.item.name}
+  td width="10%" #{ret_item.quantity}
   - if ret_item.accept_item.present?
     - if ret_item.accept_item > 0
-      td.text-center #{ret_item.accept_item}
+      td.text-center width="10%" #{ret_item.accept_item}
     - else
-      td.text-center
+      td.text-center width="10%"
         i.fas.fa-times
   - else
-    td.text-center
+    td.text-center width="10%"
       i.fas.fa-times
-  td #{ret_item.description}
+  td width="15%" 
+    - if ret_item.description == "-"
+      .text-center
+        | -
+    - else
+      | #{ret_item.description}
   - if ret_item.feedback.present?
     td 
       - if ret_item.feedback == "retur_item"
@@ -22,10 +27,10 @@ tr
         | PIUTANG
       - elsif ret_item.feedback == "loss"
         | LOSS
-    td.text-right #{number_with_delimiter(ret_item.nominal, delimiter: ".")}
+    td.text-right width="10%" #{number_with_delimiter(ret_item.nominal, delimiter: ".")}
   - else
-    td.text-right
+    td.text-right width="10%"
       i.fas.fa-times
-    td.text-right
+    td.text-right width="10%"
       i.fas.fa-times
 

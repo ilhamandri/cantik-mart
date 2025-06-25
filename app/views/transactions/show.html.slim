@@ -95,7 +95,7 @@ br
           - else
             | DAFTAR BELANJA
       .card-body.table-responsive.text-nowrap
-        table class="table"
+        table.table.table-hover 
           thead
             th Kode
             th Nama
@@ -117,7 +117,7 @@ br
           h5.font-weight-500.my-1
             | Barang Promo
         .card-body.table-responsive.text-nowrap
-          table class="table"
+          table.table.table-hover 
             thead
               th Kode Promo
               th Promo
@@ -144,7 +144,7 @@ br
                 h5.font-weight-500.my-1
                   | #{check_complain.invoice}
         .card-body.table-responsive.text-nowrap
-          table class="table"
+          table.table.table-hover 
             thead
               th Kode
               th Barang
@@ -175,7 +175,9 @@ br
       .col-12.text-center
         - trx_from_retur = Transaction.find_by(from_complain: true, complain_id: check_complain.id)
         - if trx_from_retur.present?
-          a href="#{transaction_path(id: trx_from_retur.id)}" class="btn btn-primary"
-            | Transaksi Baru -> #{trx_from_retur.invoice}
+          a href="#{transaction_path(id: trx_from_retur.id)}" class="btn btn-primary col-12"
+            | Transaksi Baru &nbsp&nbsp&nbsp
+            i.fas.fa-arrow-right
+            | &nbsp&nbsp&nbsp#{trx_from_retur.invoice}
 
 

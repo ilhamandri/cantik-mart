@@ -1,8 +1,10 @@
-table.table
-	thead
-		th Nama
-		th Level
-		th 
+.data-header
+	table.table.table-hover 
+		thead
+			th Nama
+			th.text-center Level
+			
+table.table.table-hover 
 	tbody
 		- @store.users.each do |user|
 			tr onclick="window.location='#{user_path(user)}'"

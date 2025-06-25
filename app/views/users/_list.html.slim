@@ -1,12 +1,12 @@
 tr onclick="window.location='#{user_path(user)}'"
-	td
+	td width="10%"
 		- if user.image.present?
-			=image_tag("/uploads/profile_picture/#{user.image}", height: '90', width: '70')
+			=image_tag("/uploads/profile_picture/#{user.image}", height: '70', width: '90')
 		- else
 			=image_tag("/uploads/profile_picture/default.png", height: '90', width: '70')
-	td #{user.name}
-	td #{user.level.gsub("_"," ").camelize}
-	td #{user.address}
-	td.text-center #{number_to_phone(user.phone, country_code: 62)}
-	td.text-center #{user.sex.gsub("_"," ").camelize}
+	td width="20%" #{user.name}
+	td width="10%" #{user.level.gsub("_"," ").camelize}
+	td width="20%" #{user.address}
+	td.text-center width="20%" #{number_to_phone(user.phone, country_code: 62)}
+	td.text-center width="20%" #{user.sex.gsub("_"," ").camelize}
 	

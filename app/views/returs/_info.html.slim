@@ -1,7 +1,7 @@
 - @idx = 1
 - retur_id = @retur_items.first.retur.id
 - retur = @retur_items.first.retur
-.row
+.row.padding-top-1
   .col
     .alert.alert-primary
       .alert-heading
@@ -12,14 +12,10 @@
             .col.text-right
               h5.font-weight-500.my-1
                 | #{@retur_items.first.retur.invoice}
-  .col-lg-1.col-md-2.text-right
-    a href="#{retur_path(id: retur_id, format: :pdf)}"
-      button.btn.btn-dark type="button" 
-        | CETAK
   
   - if buttonAccess "retur_items", "feedback"
     - if retur.date_approve.present? && retur.date_picked.present? && retur.status.nil?
-      .col-lg-1.col-md-3.text-right
+      .col-1.text-center
         a href="#{retur_feedback_path(id: retur_id)}"
           button class="btn btn-primary"
             | FEEDBACK
@@ -27,7 +23,7 @@
 
   - if buttonAccess "returs", "confirmation"
     - if retur.date_approve.nil?
-      .col-lg-1.col-md-3.text-right
+      .col-1.text-center
         a href="#{retur_confirmation_path(id: retur_id)}"
           button class="btn btn-warning"
             | KONFIRMASI
@@ -35,10 +31,15 @@
 
   - if buttonAccess "returs", "picked"
     - if retur.date_picked.nil? && retur.date_approve.present?
-      .col-lg-1.col-md-3.text-right
+      .col-1.text-center
         a href="#{retur_picked_path(id: retur_id)}"
           button class="btn btn-warning"
             | AMBIL
+
+  .col-2.text-center
+    a href="#{retur_path(id: retur_id, format: :pdf)}"
+      button.btn.btn-dark type="button" 
+        | CETAK
 br
 
 .row

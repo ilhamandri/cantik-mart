@@ -1,6 +1,6 @@
 - transfer = @transfer_items.first.transfer 
 - transfer_id = transfer.id
-.row
+.row.padding-top-1
   .col
     - if ["","-", nil].exclude? transfer.description
       .alert.alert-danger

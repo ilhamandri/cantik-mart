@@ -2,7 +2,7 @@
 - order_id = order.id
 - @idx = 1
 - if order.date_receive.present?
-  .row
+  .row.padding-top-1
     .col
       - if @pay > 0
         .alert.alert-danger
@@ -20,7 +20,7 @@
               | Bayar
             
 .card-body.table-responsive.text-nowrap
-  table class="table"
+  table.table.table-hover 
     thead
       th Invoice
       th Dibayar

@@ -22,37 +22,29 @@
         i.fa.fa-tags.fa-2x.pb-2 aria-hidden="true" 
         br
         | PPn
+    
+
+  #myClassicTabContentOrange.tab-content.card
+    #search.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'search'
+
+    #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+        = render partial: 'info'
+
+    #holds.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'holds'
+
+    #recap.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel"
+        = render partial: 'recap'
+
+    #debts.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'debts'
+
+    #taxs.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+        = render partial: 'taxs'
 
 
     - if isDeveloper
-/      li.nav-item
-        a#profile-tab-classic-blue.nav-link.waves-light aria-controls="graph" aria-selected="true" data-toggle="tab" href="#graph" role="tab" 
-          i.fa.fa-line-chart.fa-2x.pb-2 aria-hidden="true" 
-          br
-          | Grafik
+      #graph.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+          = render partial: 'graph'
     
-
-#myClassicTabContentOrange.tab-content.card
-  #search.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
-      = render partial: 'search'
-
-  #info.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
-      = render partial: 'info'
-
-  #holds.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-      = render partial: 'holds'
-
-  #recap.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel"
-      = render partial: 'recap'
-
-  #debts.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-      = render partial: 'debts'
-
-  #taxs.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-      = render partial: 'taxs'
-
-
-  - if isDeveloper
-    #graph.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
-        = render partial: 'graph'
-  

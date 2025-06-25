@@ -1,14 +1,17 @@
 - total_piutang = 0
-table class="table"
-  thead
-    th No
-    th Kode
-    th Name
-    th Kuantiti
-    th Konfirmasi
-    th Alasan Retur
-    th Hasil
-    th Nominal
+.data-header
+  table.table.table-hover.padding-top-1 
+    thead
+      th width="5%" No
+      th width="20%" Kode
+      th width="20%" Name
+      th width="10%" Qty
+      th width="10%" Konfirmasi
+      th width="15%" Keterangan
+      th width="10%" Feedback
+      th width="10%" Nominal
+
+table.table.table-hover.padding-top-1 
   tbody
     = render partial: 'show_list', collection: @retur_items, as: :ret_item
 

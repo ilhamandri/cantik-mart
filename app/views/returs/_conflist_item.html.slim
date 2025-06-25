@@ -1,6 +1,6 @@
 = form_for :retur, url: retur_accept_path, method: "POST" do |form|
   .col-md-12
-      table class="table"
+      table.table.table-hover 
         thead
           th No
           th Kode
@@ -38,5 +38,5 @@
 
   .col-md-12
     .form-group.text-center
-      = form.submit "Konfirmasi", class: "btn btn-dark"
+      = form.submit "Konfirmasi", class: "btn btn-warning"
 

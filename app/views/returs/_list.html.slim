@@ -1,26 +1,26 @@
 tr onclick="window.location='#{retur_path(retur)}'"
-  td #{retur.invoice}
-  td #{retur.store.name}
-  td #{retur.supplier.name}
-  td #{retur.total_items.to_i}
-  td #{retur.date_created.to_date}
+  td width="15%" #{retur.invoice}
+  td width="20%" #{retur.store.name}
+  td width="20%" #{retur.supplier.name}
+  td width="10%" #{retur.total_items.to_i}
+  td width="10%" #{retur.date_created.to_date}
   - color = "alert-dark"
   - status = "Menunggu disetujui"
 
   - if retur.date_approve.present?
     - color = "alert-primary"
-    - status = "Retur disetujui " + retur.approved_by.name + " ("+ retur.date_approve.to_date.to_s + ")"
+    - status = "DISETUJUI - " + retur.approved_by.name + " ("+ retur.date_approve.to_date.to_s + ")"
 
   - if retur.date_picked.present?
     - color = "alert-warning"
-    - status = "Barang sudah diambil " + retur.supplier.name + " (" + retur.date_picked.to_date.to_s + ")"
+    - status = "DIAMBIL - " + retur.supplier.name + " (" + retur.date_picked.to_date.to_s + ")"
 
   - if retur.status.present?
     - color = "alert-success"
     - confirmed = retur.confirmed_by.name if retur.confirmed_by.present?
-    - status = "Retur telah diterima " + confirmed + " (" + retur.status.to_date.to_s + ")"
+    - status = "DITERIMA - " + confirmed + " (" + retur.status.to_date.to_s + ")"
 
-  td 
+  td  width="25%"
     .alert class="#{color}" 
       .alert-heading
         | #{status}

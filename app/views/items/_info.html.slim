@@ -1,5 +1,6 @@
 - @stock = StoreItem.find_by(item: @item, store: current_user.store)
-.card-body
+
+.data-header
   .form-group
     .row.text-center
       - if buttonAccess "stocks", "edit"
@@ -14,106 +15,106 @@
             a.btn.btn-warning href="#{edit_item_path(id: @item.id)}"
               |   Edit
 
-  = form_for :item, url: '' do |form|
-    .row
-      .col-md-6.col-lg-2
-        .form-group
-          label for="code" Kode
-          = form.text_field :code, required: true, class: "form-control md-form", id: "code", disabled:"disabled"
-      .col-md-6.col-lg-4
-        .form-group
-          label for="name" Nama
-          = form.text_field :name, required: true, class: "form-control md-form", id: "name",  disabled:"disabled"
-      .col-md-6.col-lg-3
-        .form-group
-          label for="item" Kategori
-          input class="md-form form-control" value="#{@item.item_cat.name}" disabled="disabled"
+    = form_for :item, url: '' do |form|
+      .row
+        .col-md-6.col-lg-2
+          .form-group
+            label for="code" Kode
+            = form.text_field :code, required: true, class: "form-control md-form", id: "code", disabled:"disabled"
+        .col-md-6.col-lg-4
+          .form-group
+            label for="name" Nama
+            = form.text_field :name, required: true, class: "form-control md-form", id: "name",  disabled:"disabled"
+        .col-md-6.col-lg-3
+          .form-group
+            label for="item" Kategori
+            input class="md-form form-control" value="#{@item.item_cat.name}" disabled="disabled"
 
-      
-      .col-md-6.col-lg-3
-        .form_group
-          label for="category" Stok
-          - if current_user.store.store_type == "warehouse" || isAdmin
-            select name="item[item_cat_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
-              - Store.all.each do |store|
-                - stock = StoreItem.find_by(store: store, item: @item).stock
-                option
-                  | #{store.name} : #{stock}
+        
+        .col-md-6.col-lg-3
+          .form_group
+            label for="category" Stok
+            - if current_user.store.store_type == "warehouse" || isAdmin
+              select name="item[item_cat_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" 
+                - Store.all.each do |store|
+                  - stock = StoreItem.find_by(store: store, item: @item).stock
+                  option
+                    | #{store.name} : #{stock}
 
-          - else
-            - last_update = @stock.updated_at.to_s
-            - last_update += " (" + @stock.edited_by.name + ")" if @stock.edited_by.present? 
+            - else
+              - last_update = @stock.updated_at.to_s
+              - last_update += " (" + @stock.edited_by.name + ")" if @stock.edited_by.present? 
 
-            - bg = "bg-warning"
-            - ideal = @stock.ideal_stock.to_f
-            - total = @stock.stock.to_f
-            - progress = ( (total / ideal) * 100 ).to_i 
-            - if progress >= 100
-              - bg = "bg-success" 
-              - progress = 100
-            - elsif progress < 0
-              - bg = "bg-danger"
-              - progress = 100
+              - bg = "bg-warning"
+              - ideal = @stock.ideal_stock.to_f
+              - total = @stock.stock.to_f
+              - progress = ( (total / ideal) * 100 ).to_i 
+              - if progress >= 100
+                - bg = "bg-success" 
+                - progress = 100
+              - elsif progress < 0
+                - bg = "bg-danger"
+                - progress = 100
 
-            input type='text' value="#{@stock.stock.to_f.to_s + ' [' + last_update + ']'}" disabled= true class="form-control md-form"
+              input type='text' value="#{@stock.stock.to_f.to_s + ' [' + last_update + ']'}" disabled= true class="form-control md-form"
 
-            .progress
-              .progress-bar class="#{bg}" role="progressbar" aria-valuenow="#{progress}" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
-                - if bg == "bg-danger"
-                  | SILAHKAN RESTOCK
-                - else
-                  | #{progress} %
+              .progress
+                .progress-bar class="#{bg}" role="progressbar" aria-valuenow="#{progress}" aria-valuemin="0" aria-valuemax="100" style="width: #{progress}%"
+                  - if bg == "bg-danger"
+                    | SILAHKAN RESTOCK
+                  - else
+                    | #{progress} %
 
-      .col-lg-12
-        hr
-      .col-3
-        .form-group
-          label for="stock" Limit AO
-          = form.number_field :limit, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.limit}", disabled: "disabled"
-      .col-3
-        .form-group
-          label for="stock" Stok Ideal
-          = form.number_field :ideal_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.ideal_stock}", disabled: "disabled"
-      .col-6
-        .form-group
-          label for="item" Jenis Barang
-          - if !@item.local_item
-            input class="md-form form-control" value="Barang dari Pusat" disabled="disabled"
-          - else
-            input class="md-form form-control" value="Barang Lokal" disabled="disabled"
-      .col-lg-12
-        hr
-      .col-md-6.col-lg-3
-        .form-group
-          label for="item" Harga Beli
-          input class="md-form form-control" value="#{number_with_delimiter(@item.buy.round, delimiter: ".")}" disabled="disabled"
-      .col-md-6.col-lg-3
-        .form-group
-          label for="item" Margin
-          - margin = @item.margin 
-          - margin = margin.to_s + " %" if margin <= 100
-          input class="md-form form-control" value="#{margin}" disabled="disabled"
-      .col-md-6.col-lg-3
-        .form-group
-          label for="item" PPn
-          - ppn = @item.tax.to_i.to_s + " %"
-          input class="md-form form-control" value="#{ppn}" disabled="disabled"
-      .col-md-6.col-lg-3
-        .form-group
-          label for="item" Harga Jual (*Rekomendasi Sistem)
-          - buy = @item.buy
-          - base_price = (buy + (buy*@item.margin/100.0)) 
-          - ppn = base_price * @item.tax / 100.0
-          - normal_sell = (base_price + ppn).ceil(-2)
-          - price_updated = @item.updated_at
-          - price_updated = @item.price_updated if @item.price_updated.present?
-          input class="md-form form-control" value="#{number_with_delimiter(normal_sell, delimiter:'.')}     ( #{price_updated} )"  disabled="disabled"
-      .col-lg-12
-        hr.primary-color
-      .col-12
-        = render partial: 'grocer_item'
+        .col-lg-12
+          hr
+        .col-lg-1.col-md-2
+          .form-group
+            label for="stock" Limit AO
+            = form.number_field :limit, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.limit}", disabled: "disabled"
+        .col-lg-1.col-md-2
+          .form-group
+            label for="stock" Stok Ideal
+            = form.number_field :ideal_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.ideal_stock}", disabled: "disabled"
+        .col-lg-1.col-md-2.text-center
+          .form-group
+            label for="item" Jenis Barang
+            - if !@item.local_item
+              input class="md-form form-control text-center" value="PUSAT" disabled="disabled"
+            - else
+              input class="md-form form-control text-center" value="LOKAL" disabled="disabled"
 
-      / - if buttonAccess "item", "destroy"
-        - if !@item.store_items.present? && !@item.supplier_items.present?
-          .col-12
-            = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-danger"
+        .col-2
+          .form-group
+            label for="item" Harga Beli
+            input class="md-form form-control" value="#{number_with_delimiter(@item.buy.round, delimiter: ".")}" disabled="disabled"
+        .col-2
+          .form-group
+            label for="item" Margin
+            - margin = @item.margin 
+            - margin = margin.to_s + " %" if margin <= 100
+            input class="md-form form-control" value="#{margin}" disabled="disabled"
+        .col-2
+          .form-group
+            label for="item" PPn
+            - ppn = @item.tax.to_i.to_s + " %"
+            input class="md-form form-control" value="#{ppn}" disabled="disabled"
+        .col-lg-3.col-md-12
+          .form-group
+            label for="item" Harga Jual (*Rekomendasi Sistem)
+            - buy = @item.buy
+            - base_price = (buy + (buy*@item.margin/100.0)) 
+            - ppn = base_price * @item.tax / 100.0
+            - normal_sell = (base_price + ppn).ceil(-2)
+            - price_updated = @item.updated_at
+            - price_updated = @item.price_updated if @item.price_updated.present?
+            input class="md-form form-control" value="#{number_with_delimiter(normal_sell, delimiter:'.')}     ( #{price_updated} )"  disabled="disabled"
+        .col-lg-12
+          hr.primary-color
+          
+.col-12
+  = render partial: 'grocer_item'
+
+/ - if buttonAccess "item", "destroy"
+  - if !@item.store_items.present? && !@item.supplier_items.present?
+    .col-12
+      = button_to "Hapus Barang", @item, :method=>:delete, :class=>"btn btn-danger"

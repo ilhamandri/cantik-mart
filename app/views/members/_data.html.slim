@@ -1,8 +1,12 @@
-.row
+.row.padding-top-1
   .col
     .alert.alert-primary
         .alert-heading
-          | SEMUA DATA
+          .row
+            .col
+              | MEMBER
+            .col.text-right
+              = page_entries_info @members
   
   - if buttonAccess "members", "new"
     .col-3.text-center
@@ -11,15 +15,15 @@
           i.fas.fa-plus 
           | &nbsp Member
 hr
-table class="table"
+table.table.table-hover 
   thead
     th Nama
-    th Alamat
-    th Nomor Kartu
+    th width="35%" Alamat
+    th MEMBER ID
     th Nomor Telepon
   tbody
     = render partial: 'list', collection: @members, as: :member
 .container.pagination.justify-content-center
   = paginate @members
 .text-center
-  = page_entries_info @members
+  

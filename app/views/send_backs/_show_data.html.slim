@@ -1,11 +1,14 @@
-table class="table"
-  thead
-    th No
-    - @idx = 1
-    th Kode
-    th Nama
-    th Jumlah Kirim
-    th Jumlah Terima
-    th Keterangan
+.data-header
+  table.table.table-hover.padding-top-1
+    thead.text-right
+      th.text-left width="5%" No
+      - @idx = 1
+      th.text-left width="15%" Kode
+      th.text-left width="35%" ITEM
+      th width="15%" Kirim
+      th.text-center width="15%" Terima
+      th.text-center width="15%" Keterangan
+
+table.table.table-hover
   tbody
     = render partial: 'list_show', collection: @send_back_items, as: :send_back_item

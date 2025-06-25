@@ -1,8 +1,8 @@
-.row
+.row.padding-top-1
   .col
     .alert.alert-primary
       .alert-heading
-        | SEMUA DATA
+        | TOKO
   
   - if buttonAccess "stores", "new"
     .col-3.text-right
@@ -11,7 +11,7 @@
           i.fas.fa-plus 
           | &nbsp Toko
 hr
-table class="table"
+table.table.table-hover 
   thead
     th Name
     th Tipe

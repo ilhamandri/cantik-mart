@@ -1,42 +1,45 @@
-.row
-  .col
-    - if @color == "danger"
-      .alert.alert-danger
-        .alert-heading
-          | Telah Diterima & Belum Lunas
-    - elsif @color == "success"
-      .alert.alert-success
-        .alert-heading
-          | Lunas
-    - elsif @color == "warning"
-      .alert.alert-warning
-        .alert-heading
-          | Dalam Proses
-    - else
-      .alert.alert-primary
-        .alert-heading
-          | SEMUA DATA
+.data-header
+  .row.padding-top-1
+    .col
+      - if @color == "danger"
+        .alert.alert-danger
+          .alert-heading
+            | Telah Diterima & Belum Lunas
+      - elsif @color == "success"
+        .alert.alert-success
+          .alert-heading
+            | Lunas
+      - elsif @color == "warning"
+        .alert.alert-warning
+          .alert-heading
+            | Dalam Proses
+      - else
+        .alert.alert-primary
+          .alert-heading
+            = page_entries_info @returs
 
     
-  - if buttonAccess "returs", "new"
-    .col-lg-2.col-md-3.text-right
-      a href="#{new_retur_path}"
-        button.btn.btn-dark type="button" 
-          i.fas.fa-plus 
-          |   Retur
-hr
+    - if buttonAccess "returs", "new"
+      .col-2.text-center
+        a href="#{new_retur_path}"
+          button.btn.btn-dark type="button" 
+            i.fas.fa-plus 
+            |   Retur
+
+
+    table class="table table-hover"
+      thead
+        th width="15%" Invoice
+        th width="20%" Dari
+        th width="20%" Kepada
+        th width="10%" Item
+        th width="10%" TANGGAL
+        th width="25%" Status
+
+
 table class="table table-hover"
-  thead
-    th Invoice
-    th Dari
-    th Kepada
-    th Total Item
-    th Buat
-    th Status
   tbody
     = render partial: 'list', collection: @returs, as: :retur
 
 .container.pagination.justify-content-center
   = paginate @returs
-.text-center
-  = page_entries_info @returs

@@ -1,18 +1,19 @@
 - order = @order_items.first.order
 - order_id = order.id
 - @idx = 1
-.card-body.table-responsive.text-nowrap
-  table class="table"
-    thead
-      th No
-      th Kode
-      / th Foto
-      th Nama
-      th Jumlah
-      th Terima
-      th Harga / Item
-      th Diskon
-      th.text-right Total
+.data-header
+  table.table.table-hover.padding-top-1 
+    thead.text-right
+      th.text-left width="5%" No
+      th.text-left width="15%" Kode
+      th.text-left width="25%" Nama
+      th width="10%" Jumlah
+      th width="10%" Terima
+      th width="15%" Harga / Item
+      th width="10%" Diskon
+      th.text-right width="10%" Total
+table.table.table-hover.padding-top-1 
+    
     tbody
       = render partial: 'list_show', collection: @order_items, as: :order_item
     tfoot.text-right.text-danger

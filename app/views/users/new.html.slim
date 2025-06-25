@@ -1,9 +1,9 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.bg-dark
+      .card-header.white-text.bg-primary
         h5.font-weight-500.my-1
-          | CREATE - KARYAWAN
+          | KARYAWAN BARU
       .card-body
         = form_for :user, url: users_path, method: "POST" do |form|
           .form-group
@@ -52,4 +52,4 @@
             label for="id-card" Gaji
             = form.number_field :salary, required: true, class: "form-control md-form", id: "id-card", min:"0", value:'0'
           .form-group.text-center
-            = form.submit "CREATE", class: "btn btn-primary"
+            = form.submit "TAMBAH", class: "btn btn-warning"

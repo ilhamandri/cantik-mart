@@ -1,30 +1,35 @@
-.row
-  .col
-    .alert.alert-primary
-      .alert-heading
-        | SEMUA DATA
-  
-  - if buttonAccess "items", "new"
-    .col-3.text-center
-      a href="#{new_item_path}"
-        button.btn.btn-dark type="button" 
-          i.fas.fa-plus 
-          | &nbsp Barang
-hr
-table class="table"
-  thead
-    th Kode
-    / th Foto
-    th Name
-    / th Merek
-    th Kategori
-    th Beli
-    th Jual
-    th 
+.data-header
+  .row.padding-top-1
+    .col
+      .alert.alert-primary
+        .alert-heading
+          .row
+            .col
+              | BARANG
+            .col-8.text-right
+              = page_entries_info @items
+    
+    - if buttonAccess "items", "new"
+      .col-md-3.col-lg-2.text-center
+        a href="#{new_item_path}"
+          button.btn.btn-rounded.btn-dark type="button" 
+            i.fas.fa-plus 
+            | &nbsp Barang
+    hr
+    table.table.table-hover 
+      thead
+        th width="15%" Kode
+        th width="25%" Nama
+        th width="15%" Kategori
+        th.text-right width="12%" Beli
+        th.text-right width="13%" Jual
+        th  
+        
+table.table.table-hover 
   tbody
     = render partial: 'list', collection: @items, as: :item
 
 .container.pagination.justify-content-center
   = paginate @items,pagination_class: "pagination-sm" 
 .text-center
-  = page_entries_info @items
+  

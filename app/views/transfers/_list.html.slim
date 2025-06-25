@@ -1,9 +1,9 @@
 tr onclick="window.location='#{transfer_path(id: transfer.id)}'"
-  td #{transfer.invoice}
-  td #{transfer.from_store.name}
-  td #{transfer.to_store.name}
-  td #{transfer.total_items}
-  td #{transfer.date_created}
+  td width="15%" #{transfer.invoice}
+  td width="15%" #{transfer.date_created.to_date}
+  td width="15%" #{transfer.from_store.name}
+  td width="15%" #{transfer.to_store.name}
+  td width="10%" #{transfer.total_items}
   - color = "alert-dark"
   - status = "Menunggu Konfirmasi"
   - if ["","-", nil].include? transfer.description
@@ -20,7 +20,7 @@ tr onclick="window.location='#{transfer_path(id: transfer.id)}'"
     - color = "alert-danger"
     - status = transfer.description
 
-  td 
+  td  width="30%"
     .alert class="#{color}"
         | #{status}
       

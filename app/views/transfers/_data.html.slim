@@ -1,29 +1,33 @@
-.container-fluid
-  .row
+.data-header
+  .row.padding-top-1
     .col
       .alert.alert-primary
         .alert-heading
-          | SEMUA DATA
+          .row
+            .col-3
+              | TRANSFER
+            .col.text-right
+              = page_entries_info @transfers
     
     - if buttonAccess "transfers", "new"
-      .col-3.text-right
-        a href="#{new_transfer_path}"
-          button.btn.btn-dark type="button" 
-            i.fas.fa-plus 
-            | &nbsp Transfer
-hr
+      .col-2.text-right
+        a.btn.btn-dark href="#{new_transfer_path}"
+          i.fas.fa-plus 
+          | &nbsp Transfer
             
-  table class="table"
-    thead
-      th Invoice
-      th Dari
-      th Kepada
-      th Jumlah Barang
-      th Dibuat
-      th Status
-    tbody
-      = render partial: 'list', collection: @transfers, as: :transfer
-  .container.pagination.justify-content-center
-    = paginate @transfers
-  .text-center
-    = page_entries_info @transfers
+    table.table.table-hover 
+      thead
+        th width="15%" Invoice
+        th width="15%" Tanggal
+        th width="15%" Dari
+        th width="15%" Kepada
+        th width="10%" Jumlah Barang
+        th width="30%" Status
+   
+table.table.table-hover 
+  tbody
+    = render partial: 'list', collection: @transfers, as: :transfer
+
+.container.pagination.justify-content-center
+  = paginate @transfers
+    

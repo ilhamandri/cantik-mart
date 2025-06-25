@@ -1,9 +1,9 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.bg-dark
+      .card-header.white-text.bg-primary
         h5.font-weight-500.my-1
-          | CREATE - SUPPLIER
+          | SUPPLIER BARU
       .card-body
         = form_for :supplier, url: suppliers_path, method: "POST" do |form|
           .form-group
@@ -16,4 +16,4 @@
             label for="phone" Nomor Telepon
             = form.number_field :phone, required: true, class: "form-control md-form", id: "phone", minlength:"6", maxlength: "13", pattern:"[0-9]+", title:"6-13 digit nomor telepon"
           .form-group.text-center
-            = form.submit "CREATE", class: "btn btn-primary"
+            = form.submit "TAMBAH", class: "btn btn-warning"

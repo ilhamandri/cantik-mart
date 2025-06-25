@@ -4,7 +4,7 @@
       i.fas.fa-desktop
       |  Lebih Detail    
 .card-body
-  table class="table"
+  table.table.table-hover 
     tr
       th Dibuat Oleh
       th Untuk
@@ -43,6 +43,3 @@
                 | #{finance.description}
   .container.pagination.justify-content-center
     = paginate @receivables
-
-  .text-center
-    = page_entries_info @receivables

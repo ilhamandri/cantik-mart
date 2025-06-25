@@ -23,28 +23,120 @@ html
 
     css:
       td { vertical-align: middle !important;}
-    
-  body.fixed-sn.white-skin onload="startTime()"
+      .data-header{
+        position: sticky; 
+        top: 0;
+        background: white;
+        z-index: 1000;
+      }
+      .data-header-dark{
+        position: sticky; 
+        top: 0;
+        background: black;
+        z-index: 1000;
+      }
+      .padding-top-1{
+        padding-top: 1rem;
+      }
+      .padding-left-1{
+        padding-left: 1rem;
+      }
+      .padding-left-2{
+        padding-left: 1rem;
+      }
+      .padding-left-3{
+        padding-left: 1rem;
+      }
+      .tab-content{
+        height: 88vh; overflow: scroll; padding-top: 0;
+      }
+      @media (min-width:1200px) {
+        .fixed-sn .page-footer .container-fluid, .fixed-sn main {
+          margin-left:0%;
+          margin-right:0%;
+        }
+      }
+
+      body{
+        background: black;
+      }
+
+
+      .fixed-sn main, .hidden-sn main{
+        padding-top: .5rem !important;
+      }
+
+      thead, tbody{
+        text-transform: uppercase;
+      }
+
+      .btn-warning{
+        color: black;
+      }
+
+      th{
+        font-weight: 700 !important;
+        font-size: 1em !important;
+      }
+
+      td{
+        font-size: 1em !important;
+      }
+
+      .btn{
+        font-size: 1em;
+      }
+
+      .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+      }
+
+      .display-none{
+        display: none;
+      }
+
+      .section-title-hr {
+        width: inherit;
+        height: 1px;
+        border: 1px solid rgb(255, 111, 0);
+        background-color: rgb(255, 111, 0);
+        display: block;
+      }
+      
+  body.fixed-sn.white-skin onload="startTime()" 
     - if params[:controller] != "sessions" && params[:controller] != "registers"
       header
         #slide-out.side-nav.fixed
           ul.custom-scrollbar
-            li.logo-sn.waves-effect.py-3
-              .text-center
-                a.pl-0 href="#" 
+            / li.logo-sn.waves-effect.text-center
+              =image_tag("/images/logo.png", height: '100px')
+            li.logo-sn.waves-effect.text-center
+              ul.collapsible.collapsible-accordion
+                li.logo-sn.waves-effect.text-center
                   =image_tag("/images/logo.png", height: '100')
+                /li
+                  / =image_tag("/uploads/profile_picture/#{current_user.image}", class:"rounded-circle", width:"80px", height:"80px;") 
+                  a.collapsible-header.waves-effect.arrow-r style="padding: 0;" href="#{user_path(id: current_user.id)}"
+                    b style="font-size: 1rem;" #{current_user.name.upcase}
+                  a.collapsible-header.waves-effect.arrow-r style="padding: 0;" href="#{user_path(id: current_user.id)}"
+                    | #{current_user.level.gsub("_"," ").upcase} -  #{current_user.store.name.upcase}
+                  
+
+
             li
               ul.collapsible.collapsible-accordion
-                li
-                  hr
-                  a.collapsible-header.waves-effect.arrow-r href="#{root_path}"
+                li.bg-dark.text-left
+                  a.text-white.collapsible-header.waves-effect.arrow-r href="#{root_path}" style="padding: 0; padding-left: 1.3rem"
                     | H O M E
-                  hr
                 
                 = render "layouts/menu/navbar"
           .sidenav-bg.mask-strong
 
-        = render "layouts/menu/top_nav"
+        / = render "layouts/menu/top_nav"
 
       main
         = yield

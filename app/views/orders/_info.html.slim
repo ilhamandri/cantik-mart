@@ -1,39 +1,61 @@
-.row
-  .col-9
-    - if @color == "danger"
-      .alert.alert-danger
-        .alert-heading
-          | Telah Diterima & Belum Lunas
-    - elsif @color == "success"
-      .alert.alert-success
-        .alert-heading
-          | Lunas
-    - elsif @color == "warning"
-      .alert.alert-warning
-        .alert-heading
-          | Dalam Proses
-    - else
-      .alert.alert-primary
-        .alert-heading
-          | SEMUA DATA
+.data-header
+  .row.padding-top-1
+    .col
+      - if @color == "danger"
+        .alert.alert-danger
+          .alert-heading
+            .row
+              .col
+                | ORDER
+              .col.text-right
+                | Telah Diterima & Belum Lunas
+      - elsif @color == "success"
+        .alert.alert-success
+          .alert-heading
+            .row
+              .col
+                | ORDER
+              .col.text-right
+                | Lunas
+      - elsif @color == "warning"
+        .alert.alert-warning
+          .alert-heading
+            .row
+              .col
+                | ORDER
+              .col.text-right
+                | Dalam Proses
+      - else
+        .alert.alert-primary
+          .alert-heading
+            .row
+              .col
+                | ORDER
+              .col-9.text-right
+                = page_entries_info @orders
 
-  - if buttonAccess "orders", "new"
-    .col-3.text-center
-      a.btn.btn-dark href="#{new_order_path}"
-        i.fas.fa-plus 
-        |   Order
+    - if buttonAccess "orders", "new"
+      .col-2.text-center
+        a.btn.btn-dark href="#{new_order_path}"
+          i.fas.fa-plus 
+          |   Order
 
-table class="table table-hover"
-  thead
-    th Invoice
-    th Supplier
-    th Tagihan
-    th Tgl. Order
-    th Status
+    .col-12
+      table.table.table-hover 
+        thead
+          th width="20%" Invoice
+          th width="20%" Supplier
+          th width="20%" Tagihan
+          th width="20%" Info Order
+          th width="20%" Status
+
+
+table.table.table-hover 
   tbody
     = render partial: 'list', collection: @orders, as: :order
+
+
 .container.pagination.justify-content-center
   = paginate @orders
-.text-center
-  = page_entries_info @orders
+  
 

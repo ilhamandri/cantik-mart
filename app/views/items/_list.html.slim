@@ -1,24 +1,20 @@
 tr
-  td #{item.code}
-  / td
-    - if item.image.present?
-      img src="#{item.image}" width="50px"
-    - else
-      =image_tag("/images/default_item.jpg", height: '70', width: '70')
-  td #{item.name}
-  / td #{item.brand}
-  td 
+  td width="15%" #{item.code}
+  td width="25%" #{item.name}
+  td.text-center width="15%" 
     - department = item.item_cat.department.name
     - item_cat = item.item_cat.name
     - if department == item_cat
       | #{item_cat}
     - else
-      | #{department} - #{item_cat}
+      | #{department}
+      br
+      | #{item_cat}
   - buy = item.buy
   - buy = StoreItem.find_by(store: current_user.store, item: item).buy if item.local_item && StoreItem.find_by(store: current_user.store, item: item).present?
-  td #{number_with_delimiter(item.buy.to_i, delimiter: ".")}
-  td #{number_with_delimiter(item.sell.to_i, delimiter: ".")}
-  td
+  td.text-right width="12%" #{number_with_delimiter(item.buy.to_i, delimiter: ".")}
+  td.text-right width="13%" #{number_with_delimiter(item.sell.to_i, delimiter: ".")}
+  td 
     .row.text-right
       .col
         a.btn.btn-primary href='#{item_path(id: item.id)}'

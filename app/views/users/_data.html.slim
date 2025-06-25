@@ -1,29 +1,33 @@
-.row
-  .col-9
-    .alert.alert-primary
-        .alert-heading
-          | SEMUA DATA
+.data-header
+  .row.padding-top-1
+    .col
+      .alert.alert-primary
+          .alert-heading
+            .row
+              .col
+                | KARYAWAN
+              .col.text-right
+                = page_entries_info @users
 
-  - if isAdmin
-    .col-3.text-center
-      a.btn.btn-dark href="#{new_user_path}"
-        i.fas.fa-plus 
-        |  Pengguna
+    - if isAdmin
+      .col-md-3.col-lg-2.text-center
+        a.btn.btn-dark href="#{new_user_path}"
+          i.fas.fa-plus 
+          |  Pengguna
 
-hr
 
-table class="table" id="table"
-  thead.text-center
-    th Foto
-    th Nama
-    th Jabatan
-    th Alamat
-    th No. Telp
-    th Jenis Kelamin
-    th 
+
+  table.table.table-hover  id="table"
+    thead.text-center
+      th width="10%" Foto
+      th width="20%" Nama
+      th width="10%" Jabatan
+      th width="20%" Alamat
+      th width="20%" No. Telp
+      th width="20%" Jenis Kelamin
+
+table.table.table-hover 
   tbody
     = render partial: 'list', collection: @users, as: :user
 .container.pagination.justify-content-center
   = paginate @users
-.text-center
-  = page_entries_info @users

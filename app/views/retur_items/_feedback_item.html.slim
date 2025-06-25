@@ -1,6 +1,6 @@
  = form_for :retur, url: retur_feedback_confirmation_path(id: @retur.id), method: "POST" do |form|
   .col-md-12
-      table class="table" id="myTable"
+      table.table.table-hover  id="myTable"
         thead
           th Barang
           th Jumlah
@@ -10,7 +10,7 @@
         tbody
           - @retur_items.each_with_index do |r_item, idx|
             tr
-              td #{r_item.item.name}
+              td.text-left #{r_item.item.name}
               - hpp = OrderItem.where(item_id: r_item.item.id).last
               - hpp = hpp.price if hpp.present?
               - hpp = 0 if hpp.nil?

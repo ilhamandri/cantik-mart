@@ -1,14 +1,17 @@
 tr onclick="window.location='#{send_back_path(id: send_back.id)}'"
-	td #{send_back.invoice}
-	td #{send_back.store.name}
-	td #{send_back.total_items}
-	td #{send_back.user.name} ( #{send_back.created_at} )
+	td width="15%" #{send_back.invoice}
+	td.text-center width="20%" 
+		| #{send_back.user.name} 
+		br
+		| ( #{send_back.created_at.to_date} )
+	td width="15%" #{send_back.store.name}
+	td width="15%" #{send_back.total_items}
 	- color = "alert-dark"
 	- status = "Menunggu disetujui"
 	- if send_back.received_by.present?
 		- color = "alert-success"
 		- status = "DITERIMA - " + send_back.received_by.name + " (" + send_back.date_receive.to_s + ")"
-	td 
+	td width="35%" 
 		.alert class="#{color}"
 			.alert-heading
 				| #{status}

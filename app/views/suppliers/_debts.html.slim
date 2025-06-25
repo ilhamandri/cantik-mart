@@ -1,39 +1,38 @@
-.card-body
-	.col-12
-		h3
-			| Daftar Hutang
-	.col-12
-	  	table class="table"
-		    thead
-		      	th Invoice
-		      	th Jatuh Tempo
-		      	th Kekurangan
-		      	th 
+.data-header
+	.row
+		.col-6.text-center.padding-top-1
+			h3 HUTANG
+		.col-6.text-center.padding-top-1
+			h3 PIUTANG
+
+		.col-6
+		  	table.table.table-hover 
+			    thead
+			      	th width="30%" Invoice
+			      	th width="30%" Jatuh Tempo
+			      	th width="40%" Kekurangan
+
+		.col-6
+			table.table.table-hover 
+			    thead
+			      th width="40%" Invoice
+			      th width="60%" Kekurangan
+
+.row
+	.col-6
+	  	table.table.table-hover 
 		    tbody
 		    	- @debts.each do |debt|	
-		    		tr 
-		    			td #{debt.description}
-		    			td #{debt.due_date.to_date.strftime("%d-%m-%Y")}
-		    			td #{number_with_delimiter(debt.deficiency.to_i, delimiter: ".", separator: ",")}
-		    			td
-				    		a href='#{order_path(id: debt.ref_id)}' class="text-primary"
-        		  				| Detil
+		    		tr onclick="window.location='#{order_path(id: debt.ref_id)}'"
+		    			td width="30%" #{debt.description}
+		    			td width="30%" #{debt.due_date.to_date.strftime("%d-%m-%Y")}
+		    			td.text-right width="40%" #{number_with_delimiter(debt.deficiency.to_i, delimiter: ".", separator: ",")}
 
-.card-body
-	.col-12
-		h3
-			| Daftar Piutang
-	.col-12
-	  	table class="table"
-		    thead
-		      th Invoice
-		      th Kekurangan
-		      th 
+
+	.col-6
+	  	table.table.table-hover 
 		    tbody
 		    	- @receivables.each do |receivable|
-		    		tr
-		    			td #{receivable.description}
-		    			td #{number_with_delimiter(receivable.deficiency.to_i, delimiter: ".", separator: ",")}
-		    			td 
-		    				a href='#{receivable.ref_id}' class="text-primary"
-        		  				| Detil
+		    		tr  onclick="window.location='#{receivable.ref_id}'"
+		    			td width="40%" #{receivable.description}
+		    			td width="60%" #{number_with_delimiter(receivable.deficiency.to_i, delimiter: ".", separator: ",")}
