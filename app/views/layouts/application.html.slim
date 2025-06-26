@@ -95,15 +95,23 @@ html
         text-align: center;
       }
 
+      .header-nav {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        text-align: center;
+      }
+
       .display-none{
         display: none;
       }
 
       .section-title-hr {
         width: inherit;
-        height: 1px;
-        border: 1px solid rgb(255, 111, 0);
-        background-color: rgb(255, 111, 0);
+        height: 3px;
+        border: 1px solid black;
+        background-color: black;
         display: block;
       }
       
@@ -112,25 +120,30 @@ html
       header
         #slide-out.side-nav.fixed
           ul.custom-scrollbar
-            / li.logo-sn.waves-effect.text-center
-              =image_tag("/images/logo.png", height: '100px')
             li.logo-sn.waves-effect.text-center
               ul.collapsible.collapsible-accordion
                 li.logo-sn.waves-effect.text-center
                   =image_tag("/images/logo.png", height: '100')
-                /li
-                  / =image_tag("/uploads/profile_picture/#{current_user.image}", class:"rounded-circle", width:"80px", height:"80px;") 
-                  a.collapsible-header.waves-effect.arrow-r style="padding: 0;" href="#{user_path(id: current_user.id)}"
-                    b style="font-size: 1rem;" #{current_user.name.upcase}
-                  a.collapsible-header.waves-effect.arrow-r style="padding: 0;" href="#{user_path(id: current_user.id)}"
-                    | #{current_user.level.gsub("_"," ").upcase} -  #{current_user.store.name.upcase}
-                  
-
+                li.header-nav
+                  p
+                  .text-center.bg-white.text-dark 
+                    .row.padding-left-2.padding-top-1 onclick="window.location='#{user_path(id: current_user.id)}'"
+                      .col-4
+                        =image_tag("/uploads/profile_picture/#{current_user.image}", class:"rounded-circle", width:"70px", height:"70px;") 
+                      .col-8.text-left
+                          b #{current_user.name.split(" ")[0].upcase}
+                          br
+                          | #{current_user.level.gsub("_"," ").upcase}
+                          br
+                          | #{current_user.store.name.upcase}
+                      
+                    hr.section-title-hr
 
             li
+              - class_select = "bg-dark text-white"
               ul.collapsible.collapsible-accordion
-                li.bg-dark.text-left
-                  a.text-white.collapsible-header.waves-effect.arrow-r href="#{root_path}" style="padding: 0; padding-left: 1.3rem"
+                li 
+                  a.collapsible-header.waves-effect.arrow-r href="#{root_path}" style="padding: 0; padding-left: 1.3rem" class="#{class_select if controller_name.include? 'home'}"
                     | H O M E
                 
                 = render "layouts/menu/navbar"

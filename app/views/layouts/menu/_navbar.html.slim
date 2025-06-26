@@ -1,5 +1,7 @@
+- class_select = "bg-dark text-white"
+
 li
-  a.collapsible-header.waves-effect.arrow-r
+  a.collapsible-header.waves-effect.arrow-r class="#{class_select if ['users', 'absents'].include? controller_name}"
     .row
       .col-9 style="padding: 0; padding-left: 1.8rem"
         | Karyawan
@@ -21,7 +23,7 @@ li
 
 - if buttonAccess "suppliers", "index"
   li
-    a.collapsible-header.waves-effect.arrow-r
+    a.collapsible-header.waves-effect.arrow-r class="#{class_select if ['suppliers', 'orders', 'returs'].include? controller_name}"
       .row
         .col-9 style="padding: 0; padding-left: 1.8rem"
           | Supplier
@@ -44,7 +46,7 @@ li
 
 - if buttonAccess "members", "index"
   li
-    a.collapsible-header.waves-effect.arrow-r
+    a.collapsible-header.waves-effect.arrow-r class="#{class_select if ['members', 'complains'].include? controller_name}"
       .row
         .col-9 style="padding: 0; padding-left: 1.8rem"
           | Member 
@@ -72,7 +74,7 @@ li
 
 - if buttonAccess "stores", "index"
   li
-    a.collapsible-header.waves-effect.arrow-r
+    a.collapsible-header.waves-effect.arrow-r class="#{class_select if ['stores', 'transfers', 'send_backs', 'transactions'].include? controller_name}"
       .row
         .col-9 style="padding: 0; padding-left: 1.8rem"
           | Toko
@@ -98,7 +100,7 @@ li
 
 - if buttonAccess "items", "index"
   li
-    a.collapsible-header.waves-effect.arrow-r
+    a.collapsible-header.waves-effect.arrow-r class="#{class_select if ['items', 'departments', 'item_cats', 'opnames', 'warning_items', 'populars', 'prints', 'losses'].include? controller_name}"
       .row
         .col-9 style="padding: 0; padding-left: 1.8rem"
           | Barang
@@ -146,7 +148,7 @@ li
 
 - if buttonAccess "cash_flows", "index"
   li
-    a.collapsible-header.waves-effect.arrow-r
+    a.collapsible-header.waves-effect.arrow-r class="#{class_select if ['balances', 'loss_profits', 'cash_flows', 'debts', 'receivables', 'taxs', 'operationals', 'fix_costs', 'stock_values', 'salaries', 'kasbons'].include? controller_name}"
       .row
         .col-9 style="padding: 0; padding-left: 1.8rem"
           | Keuangan
@@ -182,10 +184,10 @@ li
 - if isAdmin
   hr
   li
-    a.collapsible-header.waves-effect.arrow-r  href="#{activities_path}" 
+    a.collapsible-header.waves-effect.arrow-r  href="#{activities_path}"  class="#{class_select if ['activities'].include? controller_name}"
       | Aktivitas Pengguna
   li
-    a.collapsible-header.waves-effect.arrow-r  href="#{controllers_path}"
+    a.collapsible-header.waves-effect.arrow-r  href="#{controllers_path}"  class="#{class_select if ['controllers'].include? controller_name}"
       | Hak Akses
 
 - if isDeveloper
@@ -215,7 +217,7 @@ li
 
 
 .footer
-  .text-center.bg-white.text-dark 
+  /.text-center.bg-white.text-dark 
     hr.section-title-hr
     .row.padding-left-2 onclick="window.location='#{user_path(id: current_user.id)}'"
       .col-4
