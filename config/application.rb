@@ -20,5 +20,6 @@ module Zerd
     config.serve_static_assets = true
     config.assets.compile = false
     # config.exceptions_app = self.routes
+    
   end
 end
