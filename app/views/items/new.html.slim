@@ -1,9 +1,9 @@
-.container-fluid
+
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.bg-dark
+      .card-header.white-text.bg-primary
         h5.font-weight-500.my-1
-          | CREATE - BARANG
+          | TAMBAH BARANG
       .card-body
         = form_for :item, url: items_path, method: "POST" do |form|
           .form-group
@@ -35,4 +35,4 @@
               br
               | KODE TELAH DIGUNAKAN
           .form-group.text-center
-            = form.submit "CREATE", class: "btn btn-primary", id:"buttonSubmit"
+            = form.submit "TAMBAH", class: "btn btn-warning", id:"buttonSubmit"

@@ -1,23 +1,28 @@
-.row
-  .col
-    .alert.alert-primary
-      .alert-heading
-        | SEMUA DATA
-  
-  - if buttonAccess "departments", "new"
-    .col-3.text-rightt
-      a.btn.btn-dark href="#{new_department_path}"
-        i.fas.fa-plus 
-        | &nbsp Departemen
+.data-header
+  .row.padding-top-1
+    .col
+      .alert.alert-primary
+        .alert-heading
+          .row
+            .col
+              | DEPARTEMEN
+            .col.text-right
+              = page_entries_info @departments
+    
+    - if buttonAccess "departments", "new"
+      .col-2.text-center
+        a.btn.btn-dark.btn-rounded href="#{new_department_path}"
+          i.fas.fa-plus 
+          | &nbsp Departemen
+
+  table.table 
+    thead
+      th Nama 
 
 table.table.table-hover 
-  thead
-    th Nama 
-    th.text-right 
   tbody
     = render partial: 'list', collection: @departments, as: :department
 .container.pagination.justify-content-center
   = paginate @departments
-.text-center
-  = page_entries_info @departments
+
 

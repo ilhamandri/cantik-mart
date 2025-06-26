@@ -22,28 +22,28 @@
 
   - if transfer.invoice.include? "DTRF"
     - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.to_store.id == current_user.store.id
-      .col-3.text-right
+      .col-1.text-center
         a.btn.btn-success href="#{transfer_receive_path(id: transfer_id)}"
           | TERIMA
 
   - else
     - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.from_store.id == current_user.store.id
-      .col-3.text-right
+      .col-1.text-center
         a.btn.btn-success href="#{transfer_receive_path(id: transfer_id)}"
           | TERIMA
 
     - if transfer.date_approve.nil? && transfer.to_store.id == current_user.store.id 
-      .col-3.text-right
+      .col-2.text-center
         a.btn.btn-warning href="#{transfer_confirmation_path(id: transfer_id)}"
           | KONFIRMASI
 
     - if transfer.date_approve.present? && transfer.date_picked.nil? && transfer.to_store.id == current_user.store.id
-      .col-3.text-right
+      .col-2.text-center
         a.btn.btn-warning href="#{transfer_picked_path(id: transfer_id)}"
             | SIAPKAN BARANG
 
 
-  .col-lg-1.col-md-2.text-right
+  .col-2.text-center
     a.btn.btn-dark type="button" href="#{transfer_path(id: transfer_id, format: :pdf)}"
       | CETAK
 

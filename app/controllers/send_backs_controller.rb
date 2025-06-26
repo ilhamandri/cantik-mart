@@ -81,6 +81,7 @@ class SendBacksController < ApplicationController
 	  	@send_back = SendBack.find_by(id: params[:id])
 	  	return redirect_back_data_error send_back_path , "Data Tidak Ditemukan" if @send_back.nil?
 	  	return redirect_back_data_error send_back_path , "Data Tidak Ditemukan" unless checkAccessStore @send_back
+
 	  	@send_back_items = @send_back.send_back_items
 	  	respond_to do |format|
 	      format.html

@@ -2,7 +2,7 @@
 
 .data-header
   .form-group
-    .row.text-center
+    .row.text-center.padding-top-1
       - if buttonAccess "stocks", "edit"
         .col
           - stock = StoreItem.find_by(item: @item, store: current_user.store)

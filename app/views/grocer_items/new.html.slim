@@ -2,9 +2,13 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.info-color
+      .card-header.white-text.bg-primary
         h5.font-weight-500.my-1
-          | CREATE Harga Barang - #{item.name}
+          .row
+            .col
+              | TAMBAH HARGA
+            .col.text-right
+              | #{item.name}
       .card-body
         = form_for :grocer_item, url: grocer_items_path(id: @id), method: "POST" do |form|
           - mins = GrocerItem.where(item_id: params[:id]).order("max DESC").first
@@ -47,4 +51,4 @@
             label for="name" Harga Jual Akhir
             = form.number_field :price, required: true, class: "form-control md-form", value: "#{normal_sell}", id: "sell", readonly:"true"
           .form-group.text-center
-            = form.submit "CREATE Harga Barang", class: "btn btn-primary"
+            = form.submit "TAMBAH", class: "btn btn-warning"

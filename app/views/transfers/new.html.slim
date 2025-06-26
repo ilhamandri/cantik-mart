@@ -2,7 +2,7 @@
 = form_for :transfer, url: transfers_path, method: "POST" do |form|
   .container-fluid
     .col-lg-12.col-md-12
-      .card-header.white-text.bg-dark
+      .card-header.white-text.bg-primary
           h5.font-weight-500.my-1
             - if current_user.store.store_type == "retail"
               | MINTA BARANG &nbsp&nbsp 
@@ -11,7 +11,7 @@
             - else
               | KIRIM BARANG &nbsp&nbsp
               i.fas.fa-arrow-right 
-              | &nbsp&nbsp TOKO (DIRECT)
+              | &nbsp&nbsp TOKO 
       .card.mb-4
         .card-body
           .row
@@ -34,7 +34,7 @@
               .form-group
                 br
                 br
-                = form.submit "Buat Transfer", class: "btn btn-primary"
+                = form.submit "TRANSFER", class: "btn btn-warning"
             .col-12
               hr
               label for="from" Kode Barang
@@ -43,7 +43,7 @@
   .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.bg-dark
+        .card-header.white-text.bg-primary
           h5.font-weight-500.my-1
             | Daftar Barang
         .card-body

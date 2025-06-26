@@ -1,4 +1,5 @@
 - transaction = @transaction_items.first.trx
+- check_complain = Complain.find_by(transaction_id: transaction.id)
 - member_name = "-"
 - member_name = transaction.member_card.name if transaction.member_card.present?
 .container-fluid
@@ -8,11 +9,21 @@
     - if in_range_complain && !transaction.from_complain && complain.nil?
       a.btn.btn-danger.col-12 href='#{new_complain_path(id: transaction.id)}'
           | Retur
+
+  - if check_complain.present? 
+    .col-12.text-center
+      - trx_from_retur = Transaction.find_by(from_complain: true, complain_id: check_complain.id)
+      - if trx_from_retur.present?
+        a href="#{transaction_path(id: trx_from_retur.id)}" class="btn btn-success col-12"
+          | Transaksi Baru &nbsp&nbsp&nbsp
+          i.fas.fa-arrow-right
+          | &nbsp&nbsp&nbsp#{trx_from_retur.invoice}
+
 br
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.bg-dark
+      .card-header.white-text.bg-primary
         .row
           .col
             h5.font-weight-500.my-1
@@ -20,7 +31,7 @@ br
               - if transaction.from_complain?
                 - complain = Complain.find_by(id: transaction.complain_id)
                 | RETUR ( 
-                b.text-danger
+                b
                   | #{complain.invoice}
                 | )
           .col.text-right
@@ -88,7 +99,7 @@ br
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.bg-dark
+      .card-header.white-text.bg-primary
         h5.font-weight-500.my-1
           - if transaction.from_complain?
             | ITEM TAMBAHAN
@@ -129,7 +140,7 @@ br
           .text-center
             = page_entries_info 
 
-- check_complain = Complain.find_by(transaction_id: transaction.id)
+
 - if check_complain.present? || transaction.from_complain?
   .container-fluid
     .col-lg-12.col-md-12
@@ -171,13 +182,5 @@ br
                     td #{number_with_delimiter(trx_item.ppn.to_i, delimiter: ".")}
                     td #{number_with_delimiter(trx_item.profit.to_i, delimiter: ".")}
 
-    - if check_complain.present? 
-      .col-12.text-center
-        - trx_from_retur = Transaction.find_by(from_complain: true, complain_id: check_complain.id)
-        - if trx_from_retur.present?
-          a href="#{transaction_path(id: trx_from_retur.id)}" class="btn btn-primary col-12"
-            | Transaksi Baru &nbsp&nbsp&nbsp
-            i.fas.fa-arrow-right
-            | &nbsp&nbsp&nbsp#{trx_from_retur.invoice}
-
+   
 

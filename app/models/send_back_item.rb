@@ -3,13 +3,12 @@ class SendBackItem < ApplicationRecord
   belongs_to :item
   belongs_to :send_back
 
-  enum feedback: {
-    onprocess: 1,
-    success: 2
-  }
+  # enum feedback: {
+  #   onprocess: 1,
+  #   success: 2
+  # }
 
   ONPROCESS = 'onprocess'
   SUCCESS = 'success'
-  default_scope { order(created_at: :desc) }
 end
 

@@ -1,11 +1,11 @@
-.row
+.row.padding-top-1
 	.col
 		.alert.alert-primary
 			.alert-heading
 				| DEPARTEMEN - #{@dept.name}
 	- if buttonAccess "item_cats", "new"
-		.col-4.text-right
-	      	a.btn.btn-dark href="#{new_item_cat_path(dept_id: @dept.id)}"
+		.col-3.text-center
+	      	a.btn.btn-dark.btn-rounded href="#{new_item_cat_path(dept_id: @dept.id)}"
 	          	i.fas.fa-plus 
 	          	|  &nbsp Sub - departemen
 

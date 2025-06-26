@@ -17,8 +17,8 @@
               h5.font-weight-500.my-1
                 | #{@send_back.invoice}
     - if @send_back.received_by.nil? && current_user.store.store_type == "warehouse"
-      .col-lg-1.col-md-2.text-right
-        a.btn.btn-primary href="#{send_back_receive_path(id: @send_back.id)}"
+      .col-1.text-right
+        a.btn.btn-warning href="#{send_back_receive_path(id: @send_back.id)}"
             | TERIMA
     .col-lg-1.col-md-2.text-right
       a.btn.btn-dark href="#{send_back_path(id: @send_back.id, format: :pdf)}"
@@ -41,8 +41,9 @@
           .step-counter.text-white 
             i.fa.fa-file-text  aria-hidden="true"
           .step-name.text-center
-            | Dibuat
+            | DIBUAT
             br
+            |-
             br
             b
               | #{@send_back.user.name}
@@ -54,8 +55,9 @@
             .step-counter.text-white 
               i.fa.fa-cube  aria-hidden="true"
             .step-name.text-center
-              | Diterima
+              | DITERIMA
               br
+              |-
               br
               b
                 | #{@send_back.received_by.name}
@@ -65,7 +67,7 @@
           .stepper-item
             .step-counter.text-white 
               i.fa.fa-truck  aria-hidden="true"
-            .step-name.text-center Menunggu Pengiriman
+            .step-name.text-center MENUNGGU PENGAMBILAN
 
 
     .col-12.text-center

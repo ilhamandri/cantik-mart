@@ -12,9 +12,9 @@
 	  	- if buttonAccess "transactions", "new"
 		    - if current_user.store.online_store
 			  	.col-2.text-center
-				    a.btn.btn-success href="#{new_transaction_path}"
+				    a.btn.btn-dark.btn-rounded href="#{new_transaction_path}"
 				      	i.fas.fa-plus 
-				      	|  #{@title}
+				      	|  TRANSAKSI
 
 	- if isLevel ["super_visi", "finance", "candy_dream"]
 		table.table.table-hover 

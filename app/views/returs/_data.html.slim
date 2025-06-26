@@ -16,24 +16,27 @@
       - else
         .alert.alert-primary
           .alert-heading
-            = page_entries_info @returs
+            .row
+              .col
+                | RETUR
+              .col.text-right  
+                = page_entries_info @returs
 
     
     - if buttonAccess "returs", "new"
       .col-2.text-center
         a href="#{new_retur_path}"
-          button.btn.btn-dark type="button" 
+          button.btn.btn-dark.btn-rounded type="button" 
             i.fas.fa-plus 
             |   Retur
 
 
-    table class="table table-hover"
+    table.table
       thead
-        th width="15%" Invoice
+        th width="20%" Invoice
         th width="20%" Dari
         th width="20%" Kepada
-        th width="10%" Item
-        th width="10%" TANGGAL
+        th width="15%" TANGGAL
         th width="25%" Status
 
 

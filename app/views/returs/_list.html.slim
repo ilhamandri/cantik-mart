@@ -1,9 +1,8 @@
 tr onclick="window.location='#{retur_path(retur)}'"
-  td width="15%" #{retur.invoice}
+  td width="20%" #{retur.invoice}
   td width="20%" #{retur.store.name}
   td width="20%" #{retur.supplier.name}
-  td width="10%" #{retur.total_items.to_i}
-  td width="10%" #{retur.date_created.to_date}
+  td width="15%" #{retur.date_created.to_date}
   - color = "alert-dark"
   - status = "Menunggu disetujui"
 

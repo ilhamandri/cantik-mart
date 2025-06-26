@@ -37,3 +37,23 @@ en:
   time:
     formats:
       default: "%d/%m/%Y %H:%M:%S"
+
+en:
+  views:
+    pagination:
+      first: "&laquo; First"
+      last: "Last &raquo;"
+      previous: "&lsaquo; Prev"
+      next: "Next &rsaquo;"
+      truncate: "&hellip;"
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "Tidak %{entry_name} ditemukan"
+          one: "Menampilkan <b>1</b> %{entry_name}"
+          other: "Menampilkan <b>semua %{count}</b> %{entry_name}"
+      more_pages:
+        display_entries: "Menampilkan %{entry_name} <b>%{first}–%{last}</b> dari <b>%{total}</b>"
+
+

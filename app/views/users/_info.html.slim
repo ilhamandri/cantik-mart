@@ -1,17 +1,17 @@
-- if @user.temp_password.present?
-  - if current_user == @user
-    .alert.alert-danger
-      .alert-heading
-        h5 WARNING 
-      .alert-body
-        p Segera ganti password anda.
-  - elsif current_user.level == "super_admin"
-    .alert.alert-danger
-      .alert-heading
-        h5 RESET PASSWORD 
-      .alert-body
-        p PASSWORD : #{@user.temp_password.to_s}
 .card-body
+  - if @user.temp_password.present?
+    - if current_user == @user
+      .alert.alert-danger
+        .alert-heading
+          h5 WARNING 
+        .alert-body
+          p Segera ganti password anda.
+    - elsif current_user.level == "super_admin"
+      .alert.alert-danger
+        .alert-heading
+          h5 RESET PASSWORD 
+        .alert-body
+          p PASSWORD : #{@user.temp_password.to_s}
   = form_for :user, url: users_path, method: "POST" do |form|
     .row
 

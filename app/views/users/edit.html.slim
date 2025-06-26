@@ -1,35 +1,37 @@
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
+      .card-header.white-text.bg-primary
+        .row
+          .col
+            h5.font-weight-500.my-1
+              | EDIT
+          .col.text-right
+            h5.font-weight-500.my-1
+              | #{@user.name}
       .card-body  
         = form_for :user, url: user_path(id: @user.id), html: { multipart: true }, method: "PUT" do |form|
           .row
-            .col-6
+            .col-4
               .form-group
                 label for="email" Email
                 = form.text_field :email, required: true, class: "form-control md-form", id: "email", disabled: true
-            .col-6
+            .col-4
               .form-group
                 label for="name" Nama
                 = form.text_field :name, required: true, class: "form-control md-form", id: "name"
-            - if current_user == @user
-              .col-6
-                .form-group
-                  label for="name" Password
-                  = form.password_field :password, required: true, class: "form-control md-form", id: "password"
-            .col-6
+            .col-4
               .form-group
                 label for="id-card" KTP
                 = form.text_field :id_card, required: true, class: "form-control md-form", id: "id-card"
-            .col-6 
-              .form-group
-                label for="address" Alamat
-                = form.text_field :address, required: true, class: "form-control md-form", id: "address"
-            .col
-              .form-group
-                label for="phone" Nomor Telepon
-                = form.number_field :phone, required: true, class: "form-control md-form", id: "phone"
-            .col-6
+            - if current_user == @user
+              .col-12
+                .form-group
+                  label for="name" Password
+                  = form.password_field :password, required: true, class: "form-control md-form", id: "password"
+
+
+            .col-3
               .form-group
                 label for="sex" Jenis Kelamin
                 select name="user[sex]" required=true class="mdb-select md-form colorful-select dropdown-primary" 
@@ -43,7 +45,15 @@
                       | Laki - laki
                     option value='perempuan' selected="selected"
                       | Perempuan
+            .col-3
+              .form-group
+                label for="phone" Nomor Telepon
+                = form.number_field :phone, required: true, class: "form-control md-form", id: "phone"
             .col-6
+              .form-group
+                label for="address" Alamat
+                = form.text_field :address, required: true, class: "form-control md-form", id: "address"
+            .col-12
               .form-group
                   label for="store" Foto
                   .input-group
@@ -58,7 +68,7 @@
             - if isAdmin
               .col-12
                hr.primary-color
-              .col-md-4.col-lg-3
+              .col-2
                 .form-group
                   label for="level" Peran 
                   select name="user[level]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="level" searchable="Cari..." 
@@ -75,7 +85,9 @@
                         - else
                           option value='#{user_level[0]}'
                             | #{user_level[0].upcase.gsub('_', ' ')}
-              .col-md-4.col-lg-3
+
+
+              .col-2
                 .form-group
                   label for="store" Toko
                   select name="user[store_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store" searchable="Cari..." 
@@ -86,13 +98,14 @@
                       - else
                         option value="#{store.id}"
                           | #{store.name}
+
               
-              .col-md-4.col-lg-3
+              .col-2
                 .form-group
                   label for="id-card" ID Fingerprint
                   = form.number_field :fingerprint, required: true, class: "form-control md-form", id: "id-card", disabled: "disabled"
 
-              .col-md-6.col-lg-3
+              .col-2
                 .form-group
                   label for="active" Status
                   select name="user[active]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="active" disabled="disabled"
@@ -101,10 +114,10 @@
                       option value="false"
                         | Non-aktif
 
-              .col-6
+              .col
                 .form-group
                   label for="id-card" Gaji
                   = form.number_field :salary, required: true, class: "form-control md-form", id: "id-card"
               
-              .col.form-group.text-center.align-items-center
+              .col-12.form-group.text-center.align-items-center
                 = form.submit "EDIT", class: "btn btn-warning black-text"

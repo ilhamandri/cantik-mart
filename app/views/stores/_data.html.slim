@@ -1,13 +1,17 @@
 .row.padding-top-1
   .col
     .alert.alert-primary
-      .alert-heading
-        | TOKO
+      .alert-heading 
+        .row
+          .col
+            | TOKO
+          .col.text-right
+            = page_entries_info @stores
   
   - if buttonAccess "stores", "new"
-    .col-3.text-right
+    .col-2.text-center
       a href="#{new_store_path}"
-        button.btn.btn-dark type="button" 
+        button.btn.btn-dark.btn-rounded type="button" 
           i.fas.fa-plus 
           | &nbsp Toko
 hr
@@ -22,6 +26,5 @@ table.table.table-hover
 .container.pagination.justify-content-center
   = paginate @stores
 .text-center
-  = page_entries_info @stores
 
 

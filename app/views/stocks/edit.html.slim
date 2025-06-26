@@ -1,51 +1,62 @@
-.container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.bg-dark
+      .card-header.white-text.bg-primary
         .row
           .col
             h5.font-weight-500.my-1
-              | EDIT STOCK
+              | UBAH STOCK
           .col-8.text-right
             h5.font-weight-500.my-1
               | #{@item.name} 
       .card-body
         = form_for :item, url: stock_path(id: @stock.id), method: "PUT" do |form|
-          .form-group
-            label for="code" Toko
-            = form.text_field :store_id, required: true, class: "form-control md-form", id: "code", disabled: true, value: "#{@stock.store.name}"
-          .form-group
-            label for="code" Kode
-            = form.text_field :code, required: true, class: "form-control md-form", id: "code", disabled: true
-          .form-group
-            label for="name" Nama
-            = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: true
-          - if @item.name.upcase == "TELOR RETAK" || (["002024", "002030", "002040"].include? @item.code)
-            / -  if isSuperVisi
-              .form_group
-                label for="category" Stok
-                = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}"
+          .row
+            .col-3
               .form-group
-                label for="sell" Harga Beli Saat Ini
-                label.text-danger for="type" (*Isi dengan harga satuan sesuai dengan harga beli saat ini)
-                = form.number_field :buy, required: true, class: "form-control md-form", id: "buy"
-          - if isStockAdmin
-            .form_group
-              label for="category" Stok
-              = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}", step: "0.001"
-          .form-group
-            label for="stock" Limit
-            = form.number_field :limit, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.limit}"
-          .form-group
-            label for="stock" Ideal Stok
-            = form.number_field :ideal_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.ideal_stock}"
-          - if @item.local_item
-            .form-group
-              label for="sell" Harga Jual
-              = form.number_field :sell, required: true, class: "form-control md-form", id: "sell"
-          - else
-            .form-group
-              label for="sell" Harga Jual
-              = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", readonly: "true"
-          .form-group.text-center
-            = form.submit "EDIT Stok Item - #{@item.name}", class: "btn btn-warning"
+                label for="code" Toko
+                = form.text_field :store_id, required: true, class: "form-control md-form", id: "code", disabled: true, value: "#{@stock.store.name}"
+            .col-3
+              .form-group
+                label for="code" Kode
+                = form.text_field :code, required: true, class: "form-control md-form", id: "code", disabled: true
+            .col-6
+              .form-group
+                label for="name" Nama
+                = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: true
+            .col-12
+              hr
+            .col
+              - if @item.name.upcase == "TELOR RETAK" || (["002024", "002030", "002040"].include? @item.code)
+                / -  if isSuperVisi
+                  .form_group
+                    label for="category" Stok
+                    = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}"
+                  .form-group
+                    label for="sell" Harga Beli Saat Ini
+                    label.text-danger for="type" (*Isi dengan harga satuan sesuai dengan harga beli saat ini)
+                    = form.number_field :buy, required: true, class: "form-control md-form", id: "buy"
+              - if isStockAdmin
+                .form_group
+                  label for="category" Stok
+                  = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}", step: "0.001"
+            .col
+              .form-group
+                label for="stock" Limit
+                = form.number_field :limit, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.limit}"
+            .col
+              .form-group
+                label for="stock" Ideal Stok
+                = form.number_field :ideal_stock, required: true, class: "form-control md-form", id: "stock", value:"#{@stock.ideal_stock}"
+            .col
+              - if @item.local_item
+                .form-group
+                  label for="sell" Harga Jual
+                  = form.number_field :sell, required: true, class: "form-control md-form", id: "sell"
+              - else
+                .form-group
+                  label for="sell" Harga Jual
+                  = form.number_field :sell, required: true, class: "form-control md-form", id: "sell", readonly: "true"
+            .col-12
+              hr
+              .form-group.text-center
+                = form.submit "EDIT", class: "btn btn-warning"

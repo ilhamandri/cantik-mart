@@ -1,11 +1,11 @@
-.container-fluid
-  .col-lg-12.col-md-12
-    .card-header.white-text.info-color
-      h5.font-weight-500.my-1
-       | Konfirmasi Transfer
-    .card.mb-4
-      .card-body.table-responsive.text-nowrap
-        = form_for :transfer, url: transfer_sent_path, method: "POST" do |form|
+= form_for :transfer, url: transfer_sent_path, method: "POST" do |form|
+  .container-fluid
+    .col-lg-12.col-md-12
+      .card-header.white-text.primary-color
+        h5.font-weight-500.my-1
+         | PENGIRIMAN TRANSFER
+      .card.mb-4
+        .card-body.table-responsive.text-nowrap
           .row
             .col-12
               label Invoice
@@ -33,4 +33,4 @@
                 = render partial: 'picked', collection: @transfer_items, as: :r_item
           
             .col.text-center
-              = form.submit "KIRIM", class: "btn btn-primary"
+              = form.submit "KIRIM", class: "btn btn-warning"

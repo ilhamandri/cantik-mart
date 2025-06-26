@@ -1,7 +1,7 @@
 = form_for :retur, url: send_backs_path, method: "POST" do |form|
   .container-fluid
     .col-lg-12.col-md-12
-      .card-header.white-text.bg-dark
+      .card-header.white-text.bg-primary
           h5.font-weight-500.my-1
             | KIRIM BARANG BS &nbsp&nbsp 
             i.fas.fa-arrow-right 
@@ -16,13 +16,13 @@
             .col-4.text-right
               .form-group.text-right
                 br
-                = form.submit "Buat retur bs", class: "btn btn-primary"
+                = form.submit "Buat retur bs", class: "btn btn-warning"
 
 
   .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.bg-dark
+        .card-header.white-text.bg-primary
           h5.font-weight-500.my-1
             | Daftar Barang
         .card-body

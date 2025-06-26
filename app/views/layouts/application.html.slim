@@ -129,15 +129,16 @@ html
                   .text-center.bg-white.text-dark 
                     .row.padding-left-2.padding-top-1 onclick="window.location='#{user_path(id: current_user.id)}'"
                       .col-4
-                        =image_tag("/uploads/profile_picture/#{current_user.image}", class:"rounded-circle", width:"70px", height:"70px;") 
+                        =image_tag("/uploads/profile_picture/#{current_user.image}", class:"rounded-circle", width:"60px", height:"60px;") 
                       .col-8.text-left
                           b #{current_user.name.split(" ")[0].upcase}
                           br
-                          | #{current_user.level.gsub("_"," ").upcase}
-                          br
-                          | #{current_user.store.name.upcase}
+                          p style="font-size: .8em; color: gray;"
+                            | #{current_user.level.gsub("_"," ").upcase}
+                            br
+                            | #{current_user.store.name.upcase}
                       
-                    hr.section-title-hr
+                    / hr.section-title-hr
 
             li
               - class_select = "bg-dark text-white"

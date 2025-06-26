@@ -1,8 +1,8 @@
 .container-fluid
   .col-lg-12.col-md-12
-    .card-header.white-text.info-color
+    .card-header.white-text.primary-color
       h5.font-weight-500.my-1
-       | Konfirmasi Permintaan Barang 
+       | KONFIRMASI
     .card.mb-4
       .card-body.table-responsive.text-nowrap
         .row
@@ -30,14 +30,17 @@
               tbody
                 = render partial: 'conflist', collection: @transfer_items, as: :r_item
 
+          .col-12
+            hr
+            
           .col.text-center
             .form-group
               = form_for :transfer, url: transfer_accept_path, method: "POST" do |form|
                 input type="hidden" value=0 name="transfer[status]"
-                = form.submit "Batalkan Permintaan", class: "btn btn-danger"
+                = form.submit "TOLAK", class: "btn btn-danger"
           .col.text-center
             .form-group
               = form_for :transfer, url: transfer_accept_path, method: "POST" do |form|
                 input type="hidden" value=1 name="transfer[status]"
-                = form.submit "Konfirmasi Permintaan", class: "btn btn-primary"
+                = form.submit "Konfirmasi", class: "btn btn-warning"
     
