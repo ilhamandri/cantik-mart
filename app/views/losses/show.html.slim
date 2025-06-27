@@ -1,13 +1,13 @@
 - loss = @loss
 .container-fluid
   .col.text-right
-    a.btn.btn-primary.col-12 href="#{loss_path(id: loss.id, format: :pdf)}"
+    a.btn.btn-warning.col-12 href="#{loss_path(id: loss.id, format: :pdf)}"
         | CETAK
 br
 .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
-        .card-header.white-text.bg-dark
+        .card-header.white-text.bg-primary
           .row
             .col
               h5.font-weight-500.my-1
@@ -26,7 +26,7 @@ br
             .col-md-6
               .form-group
                 label for="from" Dibuat 
-                input type="text" class="form-control md-form" disabled=true value="#{loss.created_at} ( #{loss.user.name} )"
+                input type="text" class="form-control md-form" disabled=true value="#{loss.user.name} ( #{loss.created_at.to_date} )"
 
             .col-md-3
               label for="form" TOTAL
@@ -35,7 +35,7 @@ br
 .container-fluid
   .col-lg-12.col-md-12
     .card.mb-4
-      .card-header.white-text.bg-dark
+      .card-header.white-text.bg-primary
         h5.font-weight-500.my-1
           | DAFTAR BARANG
       .card-body.table-responsive.text-nowrap

@@ -22,8 +22,10 @@ class TransfersController < ApplicationController
         @transfers = filter[1]
         @store_name= filter[2]
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "transfers/print_all.html.slim"
+          layout: 'pdf_layout',
+          template: "transfers/print_all", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end
@@ -244,8 +246,10 @@ class TransfersController < ApplicationController
           @recap_type = "send_transfer"
         end
         render pdf: @transfer.invoice,
-          layout: 'pdf_layout.html.erb',
-          template: "transfers/print.html.slim"
+          layout: 'pdf_layout',
+          template: "transfers/print", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end

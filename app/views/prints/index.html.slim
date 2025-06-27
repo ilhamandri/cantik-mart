@@ -1,4 +1,4 @@
-.container-fluid
+.container-fluid.data-header.bg-dark
   .col-lg-12.col-md-12
     .row
       .col-4.text-left
@@ -7,7 +7,7 @@
             |   Bersihkan Daftar
       .col-4.text-center
         a href="#{items_path}"
-          button.btn.btn-primary type="button" 
+          button.btn.btn-warning type="button" 
             i.fas.fa-plus 
             |  Item
 
@@ -16,20 +16,19 @@
           button.btn.btn-success type="button" 
             |   Cetak
 br
-
-.container-fluid
-  .col-lg-12.col-md-12
-    .card-header.white-text.bg-dark
-        h5.font-weight-500.my-1
-          | DATA BARANG
-    .card.mb-4
-      .card-body.table-responsive.text-nowrap
-        table.table.table-hover 
-          thead
-            th Kode
-            th Nama
-            th Jenis
-            th Harga Satuan
-          tbody
-            = render partial: 'list', collection: @prints, as: :print
+.col-lg-12.col-md-12
+  .card-header.white-text.bg-primary
+      h5.font-weight-500.my-1
+        | DATA BARANG
+  .card.mb-4
+    .card-body.table-responsive.text-nowrap
+      table.table.table-hover 
+        thead
+          th Kode
+          th Nama
+          th Jenis
+          th Harga Satuan
+          th
+        tbody
+          = render partial: 'list', collection: @prints, as: :print
             

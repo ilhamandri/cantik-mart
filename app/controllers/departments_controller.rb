@@ -27,8 +27,10 @@ class DepartmentsController < ApplicationController
       format.html
       format.pdf do
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "departments/popular_item.html.slim"
+          layout: 'pdf_layout',
+          template: "departments/popular_item", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end

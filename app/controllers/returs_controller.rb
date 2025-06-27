@@ -23,8 +23,10 @@ class RetursController < ApplicationController
         @returs = filter[1]
         @store_name= filter[2]
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "returs/print_all.html.slim"
+          layout: 'pdf_layout',
+          template: "returs/print_all", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end
@@ -178,8 +180,10 @@ class RetursController < ApplicationController
         @barcode = barcode_output @retur
         @recap_type = "retur"
         render pdf: @retur.invoice,
-          layout: 'pdf_layout.html.erb',
-          template: "returs/print.html.slim"
+          layout: 'pdf_layout',
+          template: "returs/print", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end

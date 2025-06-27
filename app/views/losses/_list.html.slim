@@ -1,9 +1,5 @@
-tr
-	td #{loss.invoice}
-	td #{loss.store.name}
-	td #{loss.total_item}
-	td #{loss.created_at} ( #{loss.user.name} )
-	td
-	    a href='#{loss_path(id: loss.id)}'
-	      button class="btn btn-primary"
-	        | Item
+tr onclick="window.location='#{loss_path(id: loss.id)}'"
+	td width="25%" #{loss.invoice}
+	td width="25%" #{loss.store.name}
+	td.text-center width="25%" #{loss.total_item}
+	td width="25%" #{loss.user.name} ( #{loss.created_at.to_date} )

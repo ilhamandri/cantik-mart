@@ -1,24 +1,27 @@
-.row
-  .col
-    .alert.alert-primary
-      .alert-heading
-        | SEMUA DATA
+.data-header
+  .row.padding-top-1
+    .col
+      .alert.alert-primary.padding-top-1
+        .alert-heading
+          .row
+            .col
+              | STOK MENIPIS
+            .col.text-right
+              = page_entries_info @inventories
 
         
-table.table.table-hover 
-  thead
-    th Kode
-    / th Foto
-    th Name
-    th Kategori
-    th Stok
-    th Limit
-    th Supplier
-    th Dalam Proses
-    th 
+  table.table
+    thead
+      th width="10%" Kode
+      th width="30%" Nama
+      th width="15%"Kategori
+      th width="5%" Stok
+      th width="5%" Limit
+      th width="25%" Supplier
+      th width="10%" Dalam Proses
+
+table.table.table-hover
   tbody
     = render partial: 'list', collection: @inventories, as: :inventory
 .container.pagination.justify-content-center
   = paginate @inventories
-.text-center
-  = page_entries_info @inventories

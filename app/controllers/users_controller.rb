@@ -15,8 +15,10 @@ class UsersController < ApplicationController
       format.pdf do
         @users = User.all
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "users/print.html.slim"
+          layout: 'pdf_layout',
+          template: "users/print", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end

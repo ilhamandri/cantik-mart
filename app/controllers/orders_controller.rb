@@ -34,8 +34,10 @@ class OrdersController < ApplicationController
         @orders = filter[1]
         @store_name= filter[2]
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "orders/print_all.html.slim"
+          layout: 'pdf_layout',
+          template: "orders/print_all", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end
@@ -91,8 +93,10 @@ class OrdersController < ApplicationController
       end
     end
     render pdf: DateTime.now.to_i.to_s,
-      layout: 'pdf_layout.html.erb',
-      template: "orders/recap.html.slim"
+      layout: 'pdf_layout',
+      template: "orders/recap", 
+      formats: [:html], 
+      disposition: :inline
   end
 
   def new
@@ -471,12 +475,16 @@ class OrdersController < ApplicationController
         @order_items = OrderItem.where(order_id: params[:id])
         if @order.date_receive.nil?
           render pdf: @order.invoice,
-            layout: 'pdf_layout.html.erb',
-            template: "orders/print_sup.html.slim"
+            layout: 'pdf_layout',
+            template: "orders/print_sup", 
+            formats: [:html], 
+            disposition: :inline
         else
           render pdf: @order.invoice,
-            layout: 'pdf_layout.html.erb',
-            template: "orders/print.html.slim"
+            layout: 'pdf_layout',
+            template: "orders/print", 
+            formats: [:html], 
+            disposition: :inline
         end
       end
     end

@@ -104,8 +104,12 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        Print.create item: @item, store: current_user.store
-        return redirect_success items_path, "Data Barang Telah Ditambahkan di Daftar Cetak"
+        exist = Print.find_by(item: @item)
+        if exist.nil?
+          Print.create item: @item, store: current_user.store
+          return redirect_success items_path, "Data Barang Telah Ditambahkan di Daftar Cetak"
+        end
+        return redirect_back_data_error items_path, "Data Barang Sudah Ada di Daftar Cetak"
       end
     end
 

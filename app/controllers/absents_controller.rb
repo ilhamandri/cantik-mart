@@ -240,8 +240,10 @@ class AbsentsController < ApplicationController
     @start_day = start_day
     @kriteria = "Rekap Absensi Harian - "+Date.today.to_s
     render pdf: DateTime.now.to_i.to_s,
-      layout: 'pdf_layout.html.erb',
-      template: "absents/print_recap.html.slim"
+      layout: 'pdf_layout',
+      template: "absents/print_recap", 
+      formats: [:html], 
+      disposition: :inline
   end
 
   def show

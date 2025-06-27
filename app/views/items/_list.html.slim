@@ -19,7 +19,12 @@ tr
       .col
         a.btn.btn-primary href='#{item_path(id: item.id)}'
           | Detil
-      .col
-        a.btn.btn-dark href='#{item_path(id: item.id, format: :pdf)}'
-          | Cetak
+      .col-6
+        - print = Print.find_by(item_id: item.id)
+        - if print.nil?
+          a.btn.btn-dark href='#{item_path(id: item.id, format: :pdf)}'
+            | Cetak
+        - else
+          a.btn.btn-danger href='#{delete_item_prints_path print.id, f: 1}'
+            | HAPUS
 

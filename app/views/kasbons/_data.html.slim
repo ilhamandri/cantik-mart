@@ -1,12 +1,15 @@
-.row
+.row.padding-top-1
 	.col
 	    .alert.alert-primary
 	        .alert-heading
-	          | SEMUA DATA
+	          .row
+	          	.col KASBON
+	          	.col.text-right
+  					= page_entries_info @kasbons
 	
   	- if buttonAccess "kasbons", "new"
-		.col-3.text-right
-		    a.btn.btn-dark href="#{new_kasbon_path}"
+		.col-2.text-center
+		    a.btn.btn-dark.btn-rounded href="#{new_kasbon_path}"
 		      i.fas.fa-plus 
 		      |  Kasbon
 
@@ -21,5 +24,4 @@ table.table.table-hover
     	= render partial: 'list', collection: @kasbons, as: :kasbon
 .container.pagination.justify-content-center
   	= paginate @kasbons
-.text-center
-  	= page_entries_info @kasbons
+

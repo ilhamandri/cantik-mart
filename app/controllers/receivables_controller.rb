@@ -23,8 +23,10 @@ class ReceivablesController < ApplicationController
         @finances = filter[1]
         @store_name= filter[2]
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "receivables/print.html.slim"
+          layout: 'pdf_layout',
+          template: "receivables/print", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end

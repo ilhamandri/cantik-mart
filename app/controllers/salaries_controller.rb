@@ -17,8 +17,10 @@ class SalariesController < ApplicationController
         @finances = filter[1]
         @user_name= filter[2]
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "salaries/print.html.slim"
+          layout: 'pdf_layout',
+          template: "salaries/print", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end
@@ -71,7 +73,9 @@ class SalariesController < ApplicationController
         render pdf: DateTime.now.to_i.to_s,
           show_as_html: false,
           page_size: "a4",
-          template: "salaries/print_salary.html.slim"
+          template: "salaries/print_salary", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end

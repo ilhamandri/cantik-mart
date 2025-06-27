@@ -267,5 +267,17 @@ class UpdateData
 		end
 	end
 
+	def check_duplicate_prints
+		ids = []
+		duplicates = []
+		Print.all.each do |print|
+			if ids.include? print.item.id
+				duplicates << print.id
+			else
+				ids << print.item.id
+			end
+		end
+	end
+
 
 end

@@ -1,12 +1,17 @@
-.row
+.row.padding-top-1
   .col
     .alert.alert-primary
       .alert-heading
-        | SEMUA DATA
+        .row
+          .col
+            | GAJI KARYAWAN
+          .col.text-right
+            = page_entries_info @salaries
+
   - if buttonAccess "salaries", "new"
-    .col-3.text-right
+    .col-2.text-center
       a href="#{new_salary_path}"
-        button.btn.btn-dark type="button" 
+        button.btn.btn-dark.btn-rounded type="button" 
           i.fas.fa-plus 
           | &nbsp Gaji
 
@@ -29,5 +34,5 @@ table.table.table-hover
   = paginate @salaries
 
 .text-center
-  = page_entries_info @salaries
+
 

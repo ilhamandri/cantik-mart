@@ -22,8 +22,10 @@ class StockValuesController < ApplicationController
         @finances = filter[1]
         @store_name= filter[2]
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "stock_values/print.html.slim"
+          layout: 'pdf_layout',
+          template: "stock_values/print", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end

@@ -32,3 +32,7 @@ tr
 		- disc = print.item.discount
 		- disc = price*print.item.discount/100 if print.item.discount < 100
 		td #{number_with_delimiter(print.item.sell, delimiter: ".")}
+
+	td.text-right.text-danger
+		a.text-danger href="#{delete_item_prints_path print.id}"
+			i.fas.fa-times

@@ -31,8 +31,10 @@ class SuppliersController < ApplicationController
           @search += "semua data"
         end
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "suppliers/print.html.slim"
+          layout: 'pdf_layout',
+          template: "suppliers/print", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end
@@ -72,8 +74,10 @@ class SuppliersController < ApplicationController
         @inventories = @order_items.group(:item_id).sum(:quantity)
         @inventories = @inventories.sort_by(&:last).reverse
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "suppliers/print_supplier_items.html.slim"
+          layout: 'pdf_layout',
+          template: "suppliers/print_supplier_items", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
     
@@ -138,8 +142,10 @@ class SuppliersController < ApplicationController
         @search = "Daftar Hutang Piutang Semua Supplier"
         @type = "debtlist"
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "suppliers/print.html.slim"
+          layout: 'pdf_layout',
+          template: "suppliers/print", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end

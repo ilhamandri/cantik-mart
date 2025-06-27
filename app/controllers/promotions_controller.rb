@@ -16,8 +16,10 @@ class PromotionsController < ApplicationController
         @search = filter[0]
         @promotions = filter[1]
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "promotions/print_all.html.slim"
+          layout: 'pdf_layout',
+          template: "promotions/print_all", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end

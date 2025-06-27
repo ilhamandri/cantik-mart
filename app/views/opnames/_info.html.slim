@@ -1,11 +1,14 @@
+br
 .alert.alert-warning
-  h4.alert-heading 
-    b #{current_user.store.name.upcase}
-  hr
-  p 
-    | Stok opname terakhir 
-    / b 
-      u #{@opnames.last.created_at.strftime("%d/%m/%Y %H:%M:%S")}
+  .row
+    .col
+      h4.alert-heading 
+        b #{current_user.store.name.upcase}
+    .col.text-right
+      p 
+        | Opname Terakhir : 
+        / b 
+          u #{@opnames.last.created_at.strftime("%d/%m/%Y %H:%M:%S")}
 
 .card.mb-4
   .card-header.white-text.bg-dark

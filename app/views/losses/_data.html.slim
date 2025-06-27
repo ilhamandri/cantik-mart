@@ -1,26 +1,30 @@
-.row
-  .col
-    .alert.alert-primary
-      .alert-heading
-        | SEMUA DATA
-  
-  - if buttonAccess "losses", "new"
-    .col-3.text-center
-      a.btn.btn-dark href="#{new_loss_path}"
-          i.fas.fa-plus 
-          | &nbsp Loss
+.data-header
+  .row.padding-top-1
+    .col
+      .alert.alert-primary
+        .alert-heading
+          .row
+            .col
+              | BARANG RUSAK
+            .col.text-right
+              = page_entries_info @losses
+    
+    - if buttonAccess "losses", "new"
+      .col-2.text-center
+        a.btn.btn-dark.btn-rounded href="#{new_loss_path}"
+            i.fas.fa-plus 
+            | &nbsp Loss
 
 
+  table.table
+    thead
+      th width="25%" Invoice
+      th width="25%" Toko
+      th width="25%" Jumlah Item
+      th width="25%" Tgl. Buat
+      
 table.table.table-hover 
-  thead
-    th Invoice
-    th Toko
-    th Jumlah Item
-    th Tgl. Buat
-    th 
   tbody
     = render partial: 'list', collection: @losses, as: :loss
 .container.pagination.justify-content-center
   = paginate @losses
-.text-center
-  = page_entries_info @losses

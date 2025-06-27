@@ -89,8 +89,10 @@ class SendBacksController < ApplicationController
         	@barcode = barcode_output @send_back
         	@recap_type = "bs"
 	        render pdf: DateTime.now.to_i.to_s,
-	          layout: 'pdf_layout.html.erb',
-	          template: "send_backs/print.html.slim"
+	          layout: 'pdf_layout',
+	          template: "send_backs/print", 
+		        formats: [:html], 
+		        disposition: :inline
 	      end
 	    end
   	end

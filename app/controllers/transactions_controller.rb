@@ -53,8 +53,10 @@ class TransactionsController < ApplicationController
         @transactions = filter[1]
         @store_name= filter[2]
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "transactions/print_all.html.slim"
+          layout: 'pdf_layout',
+          template: "transactions/print_all", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end
@@ -73,8 +75,10 @@ class TransactionsController < ApplicationController
     @month = start_day.month
     @transaction_datas = trx.order("created_at ASC").group_by{ |m| m.created_at.beginning_of_day}
     render pdf: DateTime.now.to_i.to_s,
-      layout: 'pdf_layout.html.erb',
-      template: "transactions/print_recap_monthly.html.slim"
+      layout: 'pdf_layout',
+      template: "transactions/print_recap_monthly", 
+      formats: [:html], 
+      disposition: :inline
   end
 
   def daily_recap
@@ -116,8 +120,10 @@ class TransactionsController < ApplicationController
     
     @search = "Rekap Harian - " + start_day.to_date.to_s
     render pdf: DateTime.now.to_i.to_s,
-      layout: 'pdf_layout.html.erb',
-      template: "transactions/print_recap.html.slim"
+      layout: 'pdf_layout',
+      template: "transactions/print_recap", 
+      formats: [:html], 
+      disposition: :inline
   end
 
   def daily_recap_item

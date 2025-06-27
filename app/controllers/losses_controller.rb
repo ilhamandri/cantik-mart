@@ -66,8 +66,10 @@ class LossesController < ApplicationController
       format.html
       format.pdf do
         render pdf: @loss.invoice,
-          layout: 'pdf_layout.html.erb',
-          template: "losses/print.html.slim"
+          layout: 'pdf_layout',
+          template: "losses/print", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end

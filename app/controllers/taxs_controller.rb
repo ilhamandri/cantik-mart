@@ -23,8 +23,10 @@ class TaxsController < ApplicationController
         @finances = filter[1]
         @store_name= filter[2]
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "taxs/print.html.slim"
+          layout: 'pdf_layout',
+          template: "taxs/print", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end
@@ -131,8 +133,10 @@ class TaxsController < ApplicationController
       send_file(filename)
     else
       render pdf: DateTime.now.to_i.to_s,
-        layout: 'pdf_layout.html.erb',
-        template: "taxs/print_recap_monthly.html.slim"
+        layout: 'pdf_layout',
+        template: "taxs/print_recap_monthly", 
+        formats: [:html], 
+        disposition: :inline
     end
   end
 

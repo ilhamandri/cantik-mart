@@ -1,22 +1,17 @@
-tr
-  td #{inventory.item.code}
-  / td
-    - if inventory.item.image.present?
-      img src="#{inventory.item.image}" width="50px"
-    - else
-      =image_tag("/images/default_item.jpg", height: '70', width: '70')
-  td #{inventory.item.name}
-  td #{inventory.item.item_cat.name}
-  td #{inventory.stock}
-  td #{inventory.min_stock}
-  td 
+tr onclick="window.location='#{item_path(inventory.item)}'"
+  td width="10%" #{inventory.item.code}
+  td width="30%" #{inventory.item.name}
+  td width="15%" #{inventory.item.item_cat.name}
+  td width="5%" #{inventory.stock}
+  td width="5%" #{inventory.min_stock}
+  td width="25%" 
     - supplier_items = SupplierItem.where(item_id: inventory.item.id)
     - supplier_items.each do |supplier_item|
       	- if supplier_items.last == supplier_item
         	| #{supplier_item.supplier.name}
       	- else
         	| #{supplier_item.supplier.name},&nbsp
-  td
+  td.text-right width="10%"
     - if @ongoing_orders.present?
       - total = 0
       - @ongoing_orders.each do |order|
@@ -26,8 +21,4 @@ tr
       | #{total}
     - else
       | -
-  td
-    - if buttonAccess "orders", "new"
-      a.btn.btn-primary href='#{new_order_path(item_id: inventory.item.id)}'
-        | Order
 

@@ -1,78 +1,88 @@
 = form_for :finance, url: cash_flows_path, method: "POST" do |form|
   .container-fluid
     .col-lg-12.col-md-12
-      .card-header.white-text.bg-dark
+      .card-header.white-text.bg-primary
           h5.font-weight-500.my-1
             | TAMBAH PENGELUARAN / PEMASUKAN (KEUANGAN)
       .card.mb-4
         .card-body
-            .form-group
-              label for="type" Tipe
-              select class="mdb-select md-form" name="finance[finance_type]" required=true 
-                option value="BankLoan"
-                  | Pinjaman Bank 
-                option value="OtherLoan"
-                  | Pinjaman Lain 
-                option value="Loan"
-                  | Pinjaman Karyawan 
-                option value="Income"
-                  | Pemasukkan 
-                option value="Bonus"
-                  | Bonus 
-                option value="Outcome"
-                  | Pengeluaran 
-                option value="Operational"
-                  | Operasinal 
-                option value="Fix_Cost"
-                  | Biaya Pasti (Selain Gaji) 
-                option value="Tax"
-                  | Pajak 
-                option value="Asset"
-                  | Aset
-                option value="Modal"
-                  | Modal
-                option value="Withdraw"
-                  | Tarik Modal
-                option value="transfer_to_cash"
-                  | Tarik Saldo Bank
-                option value="transfer_to_bank"
-                  | Transfer ke Saldo Bank
-                option value="Receive"
-                  | Transfer Kas TOKO ke GUDANG
-                option value="Sent"
-                  | Transfer Kas GUDANG ke TOKO
-            .form-group
-              label for="nominal" Nominal
-              = form.number_field :nominal, required: true, class: "form-control md-form", id: "nominal"
-            .form-group
-              label for="description" Catatan
-              = form.text_field :description, required: true, class: "form-control md-form", id: "description"
-            .form-group
-              label for="store" Toko
-              select name="finance[store_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store" searchable="Cari..."
-                - Store.all.each do |store|
-                  option value="#{store.id}"
-                    | #{store.name}
+          .row
+            .col-3
+              .form-group
+                label for="type" Tipe
+                select class="mdb-select md-form" name="finance[finance_type]" required=true 
+                  option value="BankLoan"
+                    | Pinjaman Bank 
+                  option value="OtherLoan"
+                    | Pinjaman Lain 
+                  option value="Loan"
+                    | Pinjaman Karyawan 
+                  option value="Income"
+                    | Pemasukkan 
+                  option value="Bonus"
+                    | Bonus 
+                  option value="Outcome"
+                    | Pengeluaran 
+                  option value="Operational"
+                    | Operasinal 
+                  option value="Fix_Cost"
+                    | Biaya Pasti (Selain Gaji) 
+                  option value="Tax"
+                    | Pajak 
+                  option value="Asset"
+                    | Aset
+                  option value="Modal"
+                    | Modal
+                  option value="Withdraw"
+                    | Tarik Modal
+                  option value="transfer_to_cash"
+                    | Tarik Saldo Bank
+                  option value="transfer_to_bank"
+                    | Transfer ke Saldo Bank
+                  option value="Receive"
+                    | Transfer Kas TOKO ke GUDANG
+                  option value="Sent"
+                    | Transfer Kas GUDANG ke TOKO
+            .col-3
+              .form-group
+                label for="store" Toko
+                select name="finance[store_id]" required=true class="mdb-select md-form md-outline colorful-select dropdown-primary" id="store" searchable="Cari..."
+                  - Store.all.each do |store|
+                    option value="#{store.id}"
+                      | #{store.name}
+            .col-6
+              .form-group
+                label for="nominal" Nominal
+                = form.number_field :nominal, required: true, class: "form-control md-form", id: "nominal"
+            .col
+              .form-group
+                label for="description" Catatan
+                = form.text_field :description, required: true, class: "form-control md-form", id: "description"
 
   .container-fluid
     .col-lg-12.col-md-12
-      .card-header.text-danger.bg-dark
+      .card-header.text-danger.bg-white
           h4.font-weight-500.my-1
             b DATA WAJIB PINJAMAN
       .card.mb-4
         .card-body
-            .form-group
-              label for="type" Yang Berkenaan 
-              select class="mdb-select md-form" name="finance[to_user]" 
-                - @users.each do |user|
-                   option value="#{user.id}" 
-                    | #{user.name} 
-            .form-group
-              label for="type" Tanggal Jatuh Tempo 
-              input class="form-control md-form" type="date" name="finance[due_date]" id="date_from"
-            .form-group
-              label for="type" Banyak Cicilan 
-              input class="form-control md-form" type="number" name="finance[n_term]" id="date_from" default="1" min="1" value="1"
-  .row
-    .col.text-center
-      = form.submit "CREATE", class: "btn btn-primary"
+          .row
+            .col
+              .form-group
+                label for="type" Yang Berkenaan 
+                select class="mdb-select md-form" name="finance[to_user]" 
+                  - @users.each do |user|
+                     option value="#{user.id}" 
+                      | #{user.name} 
+            .col-12
+              hr
+            .col-6
+              .form-group
+                label for="type" Tanggal Jatuh Tempo 
+                input class="form-control md-form" type="date" name="finance[due_date]" id="date_from"
+            .col-6
+              .form-group
+                label for="type" Banyak Cicilan 
+                input class="form-control md-form" type="number" name="finance[n_term]" id="date_from" default="1" min="1" value="1"
+            .col-12.text-center
+              = form.submit "TAMBAH", class: "btn btn-warning"

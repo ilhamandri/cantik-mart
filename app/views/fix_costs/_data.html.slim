@@ -1,12 +1,16 @@
-.row
+.row.padding-top-1
   .col
     .alert.alert-primary
       .alert-heading
-        | SEMUA DATA
+        .row
+          .col
+            | BIAYA PASTI
+          .col.text-right
+            = page_entries_info @finances
   
   - if buttonAccess "cash_flows", "new"
-    .col-3.text-right
-      a.btn.btn-dark href="#{new_cash_flow_path}"
+    .col-2.text-center
+      a.btn.btn-dark.btn-rounded href="#{new_cash_flow_path}"
         i.fas.fa-plus 
         | &nbsp Keuangan
 
@@ -20,6 +24,5 @@ table.table.table-hover
     = render partial: 'list', collection: @finances, as: :finance
 .container.pagination.justify-content-center
   = paginate @finances
-.text-center
-  = page_entries_info @finances
+
 

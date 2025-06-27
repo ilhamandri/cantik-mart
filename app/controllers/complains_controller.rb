@@ -25,8 +25,10 @@ class ComplainsController < ApplicationController
         @finances = filter[1]
         @store_name= filter[2]
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "complains/print_all.html.slim"
+          layout: 'pdf_layout',
+          template: "complains/print_all", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end
@@ -218,8 +220,10 @@ class ComplainsController < ApplicationController
       format.html
       format.pdf do
         render pdf: DateTime.now.to_i.to_s,
-          layout: 'pdf_layout.html.erb',
-          template: "complains/print.html.slim"
+          layout: 'pdf_layout',
+          template: "complains/print", 
+          formats: [:html], 
+          disposition: :inline
       end
     end
   end
