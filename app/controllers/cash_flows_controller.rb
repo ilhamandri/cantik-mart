@@ -287,7 +287,7 @@ class CashFlowsController < ApplicationController
         search_text+= "secara menurun"
       end
       results << search_text
-      results << filters
+      results << filters.includes(:user, :store)
       results << store_name
       return results
     end

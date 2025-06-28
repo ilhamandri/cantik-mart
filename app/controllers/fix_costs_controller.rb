@@ -33,7 +33,7 @@ class FixCostsController < ApplicationController
     def filter_search params
       results = []
       search_text = "Pencarian "
-      filters = CashFlow.where(finance_type: CashFlow::FIX_COST).page param_page
+      filters = CashFlow.where(finance_type: CashFlow::FIX_COST).includes(:user, :store).page param_page
       filters = filters.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
       before_months = 5
       if params["months"].present?

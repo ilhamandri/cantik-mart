@@ -36,7 +36,7 @@ class OperationalsController < ApplicationController
       results = []
       search_text = "Pencarian "
 
-      filters = CashFlow.where(finance_type: CashFlow::OPERATIONAL)
+      filters = CashFlow.where(finance_type: CashFlow::OPERATIONAL).includes(:user, :store)
 
       filters = filters.page param_page if params["type"].nil? 
 

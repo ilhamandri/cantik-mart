@@ -5,7 +5,7 @@ class WarningItemsController < ApplicationController
   
 
   def index
-    @inventories = StoreItem.page param_page
+    @inventories = StoreItem.includes(:item, :item => :item_cat).page param_page
     store_id = current_user.store.id
     @inventories = @inventories.where(store_id: store_id).where('stock < ideal_stock')
     if params[:search].present?
@@ -14,8 +14,10 @@ class WarningItemsController < ApplicationController
       items = Item.where('lower(name) like ? OR code like ?', search, search).pluck(:id)
       @inventories = @inventories.where(item_id: items)
     end
-    @ongoing_orders = Order.where('date_receive is null and date_paid_off is null')
     
+    # @ongoing_orders = Order.where('date_receive is null and date_paid_off is null').includes(:order_item, :order_item => :item)
+    # @ongoing_orders = Order.where(date_receive: nil, date_paid_off: nil)
+
     respond_to do |format|
       format.html
       format.xlsx do

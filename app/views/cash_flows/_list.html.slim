@@ -17,7 +17,7 @@
     - else
       td 0
       td #{number_with_delimiter(nominal.to_i, delimiter: ".", separator: ",")}
-    td #{finance.date_created}
+    td #{finance.date_created.to_date}
     td
 
       - if finance.ref_id.present?

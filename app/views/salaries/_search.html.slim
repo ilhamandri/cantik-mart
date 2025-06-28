@@ -5,7 +5,7 @@
         select class="md-form mdb-select md-outline colorful-select dropdown-primary" searchable="Cari..." name="user_id"
           option value="0"
             | Semua Karyawan
-          - User.all.each do |user|
+          - User.includes(:store).all.each do |user|
             option value="#{user.id}"
               | #{user.name} - #{user.store.name}
     .col

@@ -10,7 +10,7 @@ tr onclick="window.location='#{send_back_path(id: send_back.id)}'"
 	- status = "Menunggu disetujui"
 	- if send_back.received_by.present?
 		- color = "alert-success"
-		- status = "DITERIMA - " + send_back.received_by.name + " (" + send_back.date_receive.to_s + ")"
+		- status = "DITERIMA - " + send_back.received_by.name + " (" + send_back.date_receive.to_date.to_s + ")"
 	td width="35%" 
 		.alert class="#{color}"
 			.alert-heading

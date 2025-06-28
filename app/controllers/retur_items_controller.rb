@@ -13,7 +13,7 @@ class ReturItemsController < ApplicationController
     @retur = Retur.find params[:id]
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless @retur.present?
     return redirect_back_data_error returs_path, "Data Retur Tidak Valid" if @retur.status.present?
-    @retur_items = ReturItem.where(retur_id: @retur.id)
+    @retur_items = ReturItem.where(retur_id: @retur.id).includes(:item)
   end
 
   def feedback_confirmation
@@ -170,6 +170,7 @@ class ReturItemsController < ApplicationController
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless params[:id].present?
     @retur_item = ReturItem.find_by_id params[:id]
     return redirect_back_data_error new_retur_item_path, "Data Retur Tidak Ditemukan" unless @retur_item.present?
+    @retur_item = @retur_item.includes(:item)
   end
 
   private

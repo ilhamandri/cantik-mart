@@ -9,13 +9,13 @@ tr onclick="window.location='#{transfer_path(id: transfer.id)}'"
   - if ["","-", nil].include? transfer.description
     - if transfer.date_approve.present?
       - color = "alert-primary"
-      - status = "Disetujui oleh " + transfer.approved_by.name + " (" + transfer.date_approve.to_s + ")"
+      - status = "Disetujui oleh " + transfer.approved_by.name + " (" + transfer.date_approve.to_date.to_s + ")"
     - if transfer.date_picked.present?
       - color = "alert-warning"
-      - status = "Dikirim oleh " + transfer.picked_by.name + " (" + transfer.date_picked.to_s + ")"
+      - status = "Dikirim oleh " + transfer.picked_by.name + " (" + transfer.date_picked.to_date.to_s + ")"
     - if transfer.status.present?
       - color = "alert-success"
-      - status = "DITERIMA - " + transfer.confirmed_by.name + " (" + transfer.status.to_s + ")"
+      - status = "DITERIMA - " + transfer.confirmed_by.name + " (" + transfer.status.to_date.to_s + ")"
   - else
     - color = "alert-danger"
     - status = transfer.description

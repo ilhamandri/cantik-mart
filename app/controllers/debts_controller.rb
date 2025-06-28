@@ -152,7 +152,7 @@ class DebtsController < ApplicationController
       count_debt = filters.count
       filters = filters.page param_page
       results << search_text
-      results << filters
+      results << filters.includes(:user, :store)
       results << store_name
       results << count_debt
       

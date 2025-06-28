@@ -2,6 +2,7 @@
   "name": "zerd",
   "private": true,
   "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
     "@rails/webpacker": "3.5",
     "chart.js": "^2.8.0",
     "chartkick": "^3.1.0"

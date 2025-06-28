@@ -241,7 +241,7 @@ class TransactionsController < ApplicationController
 
   def show
     return redirect_back_data_error transactions_path, "Data Transaksi Tidak Ditemukan" if params[:id].nil?
-    @transaction_items = TransactionItem.where(transaction_id: params[:id])
+    @transaction_items = TransactionItem.where(transaction_id: params[:id]).includes(:item)
     return redirect_back_data_error transactions_path, "Data Transaksi Tidak Ditemukan" if @transaction_items.empty?
   end
 
@@ -407,7 +407,7 @@ class TransactionsController < ApplicationController
         trx = Transaction.where(has_coin: false) 
       end
 
-      @transactions = trx.order("created_at DESC")
+      @transactions = trx.order("created_at DESC").includes(:user, :user => :store)
       @transactions = @transactions.where.not("invoice like '%/TP'")
 
       if params[:from].present?

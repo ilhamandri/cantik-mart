@@ -10,8 +10,6 @@ br
     thead
       th Kode
       th Nama
-      th Merek
-      th Kategori
       th Total Pesan
       th 
     tbody
@@ -22,8 +20,6 @@ br
         tr
           td #{item.code}
           td #{item.name}
-          td #{item.brand}
-          td #{item.item_cat.name}
           td.text-center #{number_with_delimiter(order_qty.to_i, delimiter: ".")}
           td
             - if buttonAccess "orders", "new"

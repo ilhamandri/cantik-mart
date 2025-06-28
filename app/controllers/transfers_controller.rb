@@ -32,7 +32,7 @@ class TransfersController < ApplicationController
 
   def new
     @stores = Store.all
-    @inventories = StoreItem.page param_page
+    @inventories = StoreItem.includes(:item, :store).page param_page
     all_options = ""
     @inventories.each do |inventory|
       stock = inventory.item
@@ -127,7 +127,7 @@ class TransfersController < ApplicationController
     return redirect_back_data_error transfers_path, "Data Tidak Ditemukan" unless @transfer.present?
     return redirect_back_data_error transfers_path, "Data Tidak Ditemukan"  unless checkAccessStore @transfer
     return redirect_back_data_error transfers_path, "Data Tidak Ditemukan"  if @transfer.date_approve.present?
-    @transfer_items = TransferItem.where(transfer_id: @transfer.id)
+    @transfer_items = TransferItem.where(transfer_id: @transfer.id).includes(:item, :item => :item_cat)
   end
 
   def accept
@@ -161,7 +161,7 @@ class TransfersController < ApplicationController
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless @transfer.present?
     return redirect_back_data_error transfers_path, "Data Tidak Ditemukan"  unless checkAccessStore @transfer
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" if @transfer.date_approve.nil? || @transfer.date_picked.present?
-    @transfer_items = TransferItem.where(transfer_id: @transfer.id)
+    @transfer_items = TransferItem.where(transfer_id: @transfer.id).includes(:item)
   end
 
   def sent
@@ -192,7 +192,7 @@ class TransfersController < ApplicationController
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless @transfer.present?
     return redirect_back_data_error transfers_path, "Data Tidak Ditemukan"  unless checkAccessStore @transfer
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Valid" if @transfer.date_approve.nil? || @transfer.date_picked.nil?|| @transfer.status.present?
-    @transfer_items = TransferItem.where(transfer_id: @transfer.id)
+    @transfer_items = TransferItem.where(transfer_id: @transfer.id).includes(:item, :item => :item_cat)
   end
 
   def received
@@ -233,8 +233,8 @@ class TransfersController < ApplicationController
     @transfer = Transfer.find_by_id params[:id]
     return redirect_back_data_error transfers_path, "Data Transfer Tidak Ditemukan" unless @transfer.present?
     return redirect_back_data_error transfers_path, "Data Tidak Ditemukan"  unless checkAccessStore @transfer
-    @transfer_items = TransferItem.where(transfer: @transfer)
-    @item = Item.page param_page
+    @transfer_items = TransferItem.where(transfer: @transfer).includes(:item)
+
 
     respond_to do |format|
       format.html
@@ -266,9 +266,9 @@ class TransfersController < ApplicationController
 
     def filter_search params, r_type
       results = []
-      @transfers = Transfer.all
+      @transfers = Transfer.includes(:to_store, :from_store, :to_store, :approved_by, :picked_by, :confirmed_by).all
       if r_type == "html"
-        @transfers = @transfers.page param_page
+        @transfers = @transfers.includes(:to_store, :from_store, :to_store, :approved_by, :picked_by).page param_page
       end
       @transfers = @transfers.where("to_store_id = ? OR from_store_id= ?" , current_user.store.id, current_user.store.id) if  !["owner", "super_admin", "finance"].include? current_user.level
       @search = ""

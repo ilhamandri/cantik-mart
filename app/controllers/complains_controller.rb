@@ -231,9 +231,9 @@ class ComplainsController < ApplicationController
   private
     def filter_search params, r_type
       results = []
-      @complains = Complain.all.order("created_at DESC")
+      @complains = Complain.includes(:store, :user).all.order("created_at DESC")
       if r_type=="html"
-        @complains = @complains.page param_page
+        @complains = @complains.includes(:store, :user).page param_page
       end
       @complains = @complains.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
       @search = ""

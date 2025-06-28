@@ -104,7 +104,7 @@ class OrdersController < ApplicationController
     @suppliers = Supplier.select(:id, :name, :address).order("supplier_type DESC").all
     if params[:item_id].present?
       @add_item = Item.find_by(id: params[:item_id])
-      supplier_items = SupplierItem.where(item: @add_item).pluck(:supplier_id)
+      supplier_items = SupplierItem.where(item: @add_item).includes([:item]).pluck(:supplier_id)
       @suppliers = @suppliers.where(id: supplier_items)
       # return redirect_back_data_error new_order_path if @add_items.nil?
     end
@@ -114,9 +114,9 @@ class OrdersController < ApplicationController
     end
 
     ongoing_order_ids = Order.where('date_receive is null and date_paid_off is null').pluck(:id)
-    @ongoing_order_items = OrderItem.where(order_id: ongoing_order_ids)
+    @ongoing_order_items = OrderItem.where(order_id: ongoing_order_ids).includes([:item])
     @items = Item.all.limit(50)
-    @inventories = StoreItem.where(store: current_user.store).where('stock < min_stock').page param_page
+    @inventories = StoreItem.where(store: current_user.store).where('stock < min_stock').includes([:item]).page param_page
 
     gon.inv_count = @inventories.count+3
   end
@@ -192,7 +192,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path unless params[:id].present?
     @order = Order.find params[:id]
     return redirect_back_data_error orders_path, "Data Tidak Ditemukan" unless checkAccessStore @order
-    @order_items = OrderItem.where(order_id: @order.id)
+    @order_items = OrderItem.where(order_id: @order.id).includes([:item])
     @order_items.each do |order_item|
       Store.all.each do |store|
         store_item = StoreItem.find_by(store: store, item: order_item.item)
@@ -463,7 +463,7 @@ class OrdersController < ApplicationController
     @order = Order.find_by(id: params[:id])
     return redirect_back_data_error orders_path, "Data Order Tidak Ditemukan" unless @order.present?
     return redirect_back_data_error orders_path, "Data Tidak Ditemukan" unless checkAccessStore @order
-    @order_items = OrderItem.where(order_id: params[:id])
+    @order_items = OrderItem.where(order_id: params[:id]).includes([:item])
     @order_invs = InvoiceTransaction.where(invoice: @order.invoice)
     @pay = @order.grand_total.to_i - @order_invs.sum(:nominal) 
 
@@ -505,7 +505,7 @@ class OrdersController < ApplicationController
       results = []
       @orders = Order.all
       if r_type == "html"
-        @orders = @orders.page param_page if r_type=="html"
+        @orders = @orders.includes(:supplier, :user).page param_page if r_type=="html"
       end
       @orders = @orders.where(store: current_user.store) if  !isAdmin
       @search = ""

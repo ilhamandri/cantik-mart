@@ -6,9 +6,6 @@ ruby '3.3.6'
 gem 'rake'
 gem 'clearance'
 gem 'creek'
-gem 'faker'
-# gem 'fog'
-# gem 'fog-core'
 gem 'ffi'
 gem 'gon'
 gem 'jbuilder', '~> 2.5'
@@ -46,6 +43,7 @@ gem "barby"
 gem "chunky_png"
 gem 'pg_search', '~> 2.3', '>= 2.3.5'
 gem 'concurrent-ruby', '1.3.4'
+gem 'bullet'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -71,3 +69,4 @@ group :test do
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+

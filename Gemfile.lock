@@ -123,6 +123,9 @@ GEM
       racc
     browser (6.2.0)
     builder (3.3.0)
+    bullet (8.0.8)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     byebug (12.0.0)
     capybara (3.40.0)
       addressable
@@ -192,8 +195,6 @@ GEM
     factory_bot_rails (6.5.0)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faker (3.5.1)
-      i18n (>= 1.8.11, < 2)
     ffi (1.17.2)
     ffi (1.17.2-aarch64-linux-gnu)
     ffi (1.17.2-aarch64-linux-musl)
@@ -463,6 +464,7 @@ GEM
       concurrent-ruby (~> 1.0)
     uglifier (4.2.1)
       execjs (>= 0.3.0, < 3)
+    uniform_notifier (1.17.0)
     usagewatch (0.0.7)
     useragent (0.16.11)
     web-console (4.2.1)
@@ -514,6 +516,7 @@ DEPENDENCIES
   barby
   brakeman
   browser
+  bullet
   byebug
   capybara
   capybara-screenshot
@@ -525,7 +528,6 @@ DEPENDENCIES
   creek
   database_cleaner
   factory_bot_rails
-  faker
   ffi
   gon
   jbuilder (~> 2.5)

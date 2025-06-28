@@ -148,7 +148,7 @@ class TaxsController < ApplicationController
     def filter_search params
       results = []
       search_text = "Pencarian "
-      filters = CashFlow.where(finance_type: CashFlow::TAX)
+      filters = CashFlow.where(finance_type: CashFlow::TAX).includes(:user, :store)
 
       filters = filters.page param_page if params["type"].nil? 
 

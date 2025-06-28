@@ -7,15 +7,13 @@ class ItemsController < ApplicationController
   def index
     # UpdateData.updateDuplicateItem
     @search = params[:search]
-    @items = Item.page param_page
+    @items = Item.order(name: :asc).includes(:item_cat, :item_cat => :department).page param_page
     if params[:search_by] == "name"
-      @items = Item.search_by_name :name, @search
-      @items = @items.page param_page if @items.present?
+      @items = Item.search_by_name(:name, @search).includes(:item_cat, :item_cat => :department).order(name: :asc).page param_page
+      @items = @items if @items.present?
     elsif params[:search_by] == "code"
-      @items = Item.search_by_code_s :code, @search
-      @items = @items.page param_page if @items.present?
+      @items = Item.search_by_code_s(:code, @search).includes(:item_cat, :item_cat => :department).order(name: :asc).page param_page
     end
-    @items = @items.order(name: :asc) if @items.present?
 
   end
 

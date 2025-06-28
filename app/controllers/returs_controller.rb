@@ -5,7 +5,7 @@ class RetursController < ApplicationController
   def index
     filter = filter_search params, "html"
     @search = filter[0]
-    @returs = filter[1]
+    @returs = filter[1].includes(:store, :supplier, :approved_by, :confirmed_by)
     @params = params.to_s
 
 
@@ -46,16 +46,16 @@ class RetursController < ApplicationController
       @supplier_id = @suppliers.first.id.to_i
     end
 
-    @supplier_items = SupplierItem.where(supplier_id: @supplier_id)
+    @supplier_items = SupplierItem.where(supplier_id: @supplier_id).includes([:item])
     all_options = ""
     @supplier_items.each do |supplier_item|
       s_item = supplier_item.item
-      all_options+= "<option value="+s_item.id.to_s+" data-subtext='"+s_item.item_cat.name+"'>"+s_item.name+"</option>"
+      all_options+= "<option value="+s_item.id.to_s+" data-subtext='"+"-"+"'>"+s_item.name+"</option>"
     end
     gon.select_options = all_options
 
     ongoing_order_ids = Order.where('date_receive is null and date_paid_off is null').pluck(:id)
-    @ongoing_order_items = OrderItem.where(order_id: ongoing_order_ids)
+    @ongoing_order_items = OrderItem.where(order_id: ongoing_order_ids).includes(:item)
 
     @inventories = StoreItem.page param_page
     store_id = current_user.store.id
@@ -102,7 +102,7 @@ class RetursController < ApplicationController
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" if @retur.nil?
     return redirect_back_data_error returs_path, "Data Tidak Ditemukan" unless checkAccessStore @retur
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" if @retur.date_picked.present? || @retur.date_approve.present?
-    @retur_items = ReturItem.where(retur_id: @retur.id)
+    @retur_items = ReturItem.where(retur_id: @retur.id).includes(:item, :item => :item_cat)
   end
 
   def accept
@@ -172,8 +172,9 @@ class RetursController < ApplicationController
     @retur = Retur.find_by(id: params[:id])
     return redirect_back_data_error returs_path, "Data Retur Tidak Ditemukan" unless @retur.present?
     return redirect_back_data_error returs_path, "Data Tidak Ditemukan" unless checkAccessStore @retur
+  
+    @retur_items = ReturItem.where(retur: @retur).includes(:item)
     
-    @retur_items = ReturItem.where(retur: @retur)
     respond_to do |format|
       format.html
       format.pdf do

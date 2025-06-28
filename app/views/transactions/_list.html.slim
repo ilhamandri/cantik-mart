@@ -1,8 +1,8 @@
 tr onclick="window.location='#{transaction_path(id: transaction.id)}'"
-  td #{transaction.invoice.gsub("/TP", "")}
-  td #{transaction.date_created}
-  td #{transaction.user.store.name}
-  td.text-right #{number_with_delimiter(transaction.grand_total, delimiter: ".", separator:",", precision: 2)}
+  td width="30%" #{transaction.invoice.gsub("/TP", "")}
+  td width="25%" #{transaction.date_created.strftime('%d %b %Y - %H:%M:%S')}
+  td width="25%" #{transaction.user.store.name}
+  td.text-right width="20%" #{number_with_delimiter(transaction.grand_total, delimiter: ".", separator:",", precision: 2)}
 
     
 

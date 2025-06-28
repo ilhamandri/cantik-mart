@@ -7,12 +7,13 @@ class SendBacksController < ApplicationController
   before_action :screening
 
   	def index
-  		@send_backs = SendBack.page param_page
-  		@send_backs = @send_backs.order("created_at DESC")
+  		@send_backs = SendBack.order("created_at DESC").page param_page
   		
   		if current_user.store.store_type == "retail"
   			@send_backs = @send_backs.where(store: current_user.store)
   		end
+
+  		@send_backs = @send_backs.includes(:user, :store, :received_by)
 
   		search = ""
   		if params[:search].present?
@@ -40,6 +41,8 @@ class SendBacksController < ApplicationController
   				@send_backs = @send_backs.where("received_by is not null")
   			end	
   		end
+
+
 
   		search = "Pencarian "+search if search != ""
   		@search = search
@@ -82,7 +85,7 @@ class SendBacksController < ApplicationController
 	  	return redirect_back_data_error send_back_path , "Data Tidak Ditemukan" if @send_back.nil?
 	  	return redirect_back_data_error send_back_path , "Data Tidak Ditemukan" unless checkAccessStore @send_back
 
-	  	@send_back_items = @send_back.send_back_items
+	  	@send_back_items = @send_back.send_back_items.includes(:item)
 	  	respond_to do |format|
 	      format.html
 	      format.pdf do
@@ -101,7 +104,7 @@ class SendBacksController < ApplicationController
   		return redirect_back_data_error send_back_path , "Data Tidak Ditemukan" if params[:id].nil?
 	  	@send_back = SendBack.find_by(id: params[:id])
 	  	return redirect_back_data_error send_back_path , "Data Tidak Ditemukan" if @send_back.nil?
-	  	@send_back_items = @send_back.send_back_items
+	  	@send_back_items = @send_back.send_back_items.includes(:item)
 	  	return redirect_back_data_error send_back_path(id: @send_back.id) , "Data Tidak Ditemukan" if @send_back.received_by.present?
 	  	
   	end

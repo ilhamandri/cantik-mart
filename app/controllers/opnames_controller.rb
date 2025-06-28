@@ -3,7 +3,7 @@ class OpnamesController < ApplicationController
   before_action :screening
 
   def index
-  	@opnames = Opname.where(store: current_user.store).order("created_at DESC").page param_page
+  	@opnames = Opname.where(store: current_user.store).includes(:store, :user).order("created_at DESC").page param_page
   end
 
   private 
