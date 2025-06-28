@@ -12,10 +12,10 @@
           tbody
           	- @suppliers.each do |supplier|
           		tr
-					td #{supplier.supplier.name}
-					td #{supplier.supplier.address}
-					td #{number_to_phone(supplier.supplier.phone, country_code: 62)}
-					- orders = Order.where(supplier: supplier.supplier)
+					td #{supplier.name}
+					td #{supplier.address}
+					td #{number_to_phone(supplier.phone, country_code: 62)}
+					- orders = Order.where(supplier: supplier)
 					- last = DateTime.now - 10.years
 					- price = 0
 					- orders.each do |order|
@@ -29,8 +29,8 @@
 					td
 						.row.text-right
 							.col
-								a.btn.btn-dark href='#{supplier_path(id: supplier.supplier.id)}'
+								a.btn.btn-dark href='#{supplier_path(id: supplier.id)}'
 									| Detil
 							.col
-								a.btn.btn-success href='#{new_order_path(supplier_id: supplier.supplier.id)}'
+								a.btn.btn-success href='#{new_order_path(supplier_id: supplier.id)}'
 									| Order

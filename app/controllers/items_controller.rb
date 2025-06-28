@@ -77,26 +77,27 @@ class ItemsController < ApplicationController
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless params[:id].present?
     @item = Item.find_by_id params[:id]
     return redirect_back_data_error items_path, "Data Barang Tidak Ditemukan" unless @item.present?
-    @suppliers = SupplierItem.where(item: @item)
+    suppliers_id = SupplierItem.where(item: @item).pluck(:supplier_id).uniq
+    @suppliers = Supplier.where(id: suppliers_id)
+
 
     # @bundlings = PredictCategory.where(buy: @item.item_cat).order("percentage DESC").limit(10)
     losses = Loss.where(id: LossItem.where(item: @item).pluck(:loss_id)).where("created_at >= ?", DateTime.now-13.months).group_by { |m| m.created_at.beginning_of_month }
     store_items = @item.store_items
-    @item = Item.find_by_id params[:id]
     
     loss_items = Serve.loss_item_graph_monthly dataFilter, @item
     gon.loss_label = loss_items["label"]
     gon.loss_item = loss_items["loss_item"]
 
-    transaction_order = Serve.graph_item_order_sell dataFilter, @item
-    gon.label = transaction_order["label"]
-    gon.order = transaction_order["order"]
-    gon.transaction = transaction_order["transaction"]
+    # transaction_order = Serve.graph_item_order_sell dataFilter, @item
+    # gon.label = transaction_order["label"]
+    # gon.order = transaction_order["order"]
+    # gon.transaction = transaction_order["transaction"]
 
-    item_prices = Serve.graph_item_price @item
-    gon.price_label = item_prices["label"]
-    gon.buy = item_prices["buy"]
-    gon.sell = item_prices["sell"]
+    # item_prices = Serve.graph_item_price @item
+    # gon.price_label = item_prices["label"]
+    # gon.buy = item_prices["buy"]
+    # gon.sell = item_prices["sell"]
 
     # calculate_kpi @item
     respond_to do |format|
