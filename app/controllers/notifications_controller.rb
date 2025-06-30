@@ -4,13 +4,9 @@ class NotificationsController < ApplicationController
   
 
   def index
-    @notifications = Notification.where(to_user: current_user).order("date_created DESC").page param_page
-    @notifications = @notifications.where(to_user: current_user)
-    if params[:search].present?
-      @search = params[:search].downcase
-      search = "%"+@search+"%"
-      @notifications = @notifications.where("lower(name) like ? OR phone like ?", search, search)
-    end
+    @notifications = Notification.where(to_user: current_user).includes(:from_user).order("date_created DESC")
+    @notifications.update_all(read: 0)
+    @notifications = @notifications.page param_page
   end
 
   private

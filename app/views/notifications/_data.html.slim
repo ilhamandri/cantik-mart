@@ -1,8 +1,12 @@
-.row
+.row.padding-top-1
   .col
       .alert.alert-primary
           .alert-heading
-            | SEMUA DATA
+            .row
+              .col
+                | NOTIFIKASI
+              .col.text-right
+                = page_entries_info @notifications 
             
 table.table.table-hover 
   thead
@@ -13,7 +17,7 @@ table.table.table-hover
     = render partial: 'list', collection: @notifications, as: :notification
 .container.pagination.justify-content-center
   = paginate @notifications
-.text-center
-  = page_entries_info @notifications 
+
+  
 
   

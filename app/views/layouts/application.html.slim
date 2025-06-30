@@ -143,8 +143,22 @@ html
             li
               - class_select = "bg-dark text-white"
               ul.collapsible.collapsible-accordion
+                li
+                  a.collapsible-header.waves-effect.arrow-r  href="#{notifications_path}"  class="#{class_select if ['notifications'].include? controller_name}"
+                    .row
+                      .col-9 style="padding: 0; padding-left: 1rem"
+                        | Notifikasi
+                      .col
+                        - total_notifications = Notification.where(to_user: current_user, read: 0).count
+
+                        - if total_notifications > 0
+                          span.badge.red id="notif_number_badge"
+                            | #{total_notifications}
+                        - else
+                          span style="vertical-align: middle !important;"
+                            i.fas.fa-check.text-success
                 li 
-                  a.collapsible-header.waves-effect.arrow-r href="#{root_path}" style="padding: 0; padding-left: 1.3rem" class="#{class_select if controller_name.include? 'home'}"
+                  a.collapsible-header.waves-effect.arrow-r href="#{root_path}" style="padding: 0; padding-left: 1.3rem" class="bg-secondary text-white #{class_select if controller_name.include? 'home'}"
                     | H O M E
                 
                 = render "layouts/menu/navbar"
