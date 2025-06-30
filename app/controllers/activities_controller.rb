@@ -3,21 +3,6 @@ class ActivitiesController < ApplicationController
   before_action :screening
   
 	def index
-		# duplicate_trxs = Transaction.select(:invoice).group(:invoice).having("count(*) > 1").size
-		# duplicate_trxs.each do |duplicate_trx|
-		# 	trx = Transaction.find_by(invoice: duplicate_trx[0])
-		# 	store = trx.store
-		# 	trx_items = trx.transaction_items
-		# 	trx_items.each do |trx_item|
-		# 		item = trx_item.item
-		# 		store_item = StoreItem.find_by(item: item, store: store)
-		# 		new_stock = store_item.stock + trx_item.quantity
-		# 		store_item.stock = new_stock
-		# 		store_item.save!
-		# 	end
-		# 	trx_items.destroy_all
-		# 	trx.destroy
-		# end
 		@models = PublicActivity::Activity.pluck(:trackable_type)
 	  	@models = @models.uniq
 	  	@activities = PublicActivity::Activity.order("created_at desc").page param_page

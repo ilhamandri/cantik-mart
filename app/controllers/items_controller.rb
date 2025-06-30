@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
   require 'apriori'
   
   def index
-    # UpdateData.updateDuplicateItem
+    UpdateData.updateDuplicateItem
     @search = params[:search]
     @items = Item.order(name: :asc).includes(:item_cat, :item_cat => :department).page param_page
     if params[:search_by] == "name"
