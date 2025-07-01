@@ -1,105 +1,101 @@
-.col-md-6.col-lg-3.pb-3
-  a href="#{warning_items_path}"
-    .alert.alert-primary
+.section
+  .row
+    .col-6.pb-3
       .row
-        .col-6.text-left
-          | Item limit:
-        .col-6.text-right
-          | #{number_with_delimiter(@total_limit_items, delimiter: ".")}
-  a href="#{returs_path}"
-    .alert.alert-warning
-      .row
-        .col-6.text-left
-          | Retur :
-        .col-6.text-right
-          | #{@total_returs}
-  a href="#{orders_path}"
-    .alert.alert-danger
-      .row
-        .col-6.text-left
-          | Belum lunas :
-        .col-6.text-right
-          | #{@total_payments}
-
-.col-md-6.col-lg-3.pb-3
-  .card.bg-white
-    .container.text-center
-      .row
-        .col-12.pb-3.pt-2
-          | INFORMASI
-        .col
-          a href="#{suppliers_path}"
-            h3
-              i.fa.fa-users.fa-2x.pb-2 aria-hidden="true" 
-            p
-              | #{Supplier.all.count} 
+        .col-3
+          .card.bg-primary
+            a.container.text-center.text-white href="#{orders_path}"
               br
-              | Supplier
-        .col
-          a href="#{departments_path}"
-            h3
-              i.fa.fa-archive.fa-2x.pb-2 aria-hidden="true" 
-            p 
-              | #{Department.all.count} 
+              h3.font-weight-bold
+                i.fa.fa-truck.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{@orders.where(date_paid_off: nil).count} 
+                .lead ORDER 
+
+
+        .col-3
+          .card.bg-danger
+            a.container.text-center.text-white href="#{returs_path}"
               br
-              | Departemen
-        .col
-          a href="#{items_path}"
-            h3
-              i.fa.fa-cubes.fa-2x.pb-2 aria-hidden="true" 
-            p 
-              | #{number_with_delimiter(Item.all.count, delimiter: ".")} 
+              h3.font-weight-bold
+                i.fa.fa-reply.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{@total_returs}
+                .lead RETUR
+
+
+        .col-3
+          .card.bg-dark
+            - color = "success-color"
+            - color = "danger-color" if @total_transfers > 0
+            a.container.text-center.text-white href="#{transfers_path}"
               br
-              | Barang
+              h3.font-weight-bold
+                i.fa.fa-retweet.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{@total_transfers} 
+                .lead TRANSFER
 
-- color = "success-color"
-- color = "danger-color" if @total_orders > 0
-.col-md-6.col-lg-4.pb-3
-  .card.bg-dark
-    a.container.text-center.text-white href="#{orders_path}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-cart-plus.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@total_orders} Pesanan
-      hr class="#{color}"
-      p
-        | Lihat Detil 
 
-- color = "success-color"
-- color = "danger-color" if @total_transfers > 0
-.col-md-6.col-lg-4.pb-3
-  .card.bg-dark
-    a.container.text-center.text-white href="#{transfers_path}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-truck.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@total_transfers} Transfer
-      hr class="#{color}"
-      p
-        | Lihat Detil 
+        .col-3
+          .card.bg-white
+            a.text-danger.container.text-center href="#{send_backs_path}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-refresh.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{@total_send_backs} 
+                .lead RETUR BS
 
-- color = "success-color"
-- color = "danger-color" if @total_returs > 0
-.col-md-6.col-lg-4.pb-3
-  .card.bg-dark
-    a.container.text-center.text-white href="#{returs_path}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-exchange.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@total_returs} Retur Supplier
-      hr class="#{color}"
-      p
-        | Lihat Detil 
 
-- color = "success-color"
-- color = "danger-color" if @total_send_backs.count > 0
-.col-md-6.col-lg-4.pb-3
-  .card.bg-dark
-    a.container.text-center.text-white href="#{send_backs_path}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-refresh.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@total_send_backs.count} Retur BS
-      hr class="#{color}"
-      p
-        | Lihat Detil 
+        .col-12.pt-3
+          .card
+            .card-header.text-center style="background: gray;"
+              h5.my-1.text-white
+                b TOP SUPPLIER
+            .card-body
+              table.table
+                thead
+                  tr
+                    th RANK
+                    th SUPPLIER
+                tbody.table-hover
+                  - 10.times do |x|
+                    - supplier = Supplier.find_by_id @top_suppliers.keys[x]
+                    tr onclick="window.location='#{supplier_path(supplier)}'"
+                      td #{x+1}
+                      td #{supplier.name.upcase}
+
+
+    .col-6
+      .row
+        .col-12
+          .card.bg-warning 
+            - prints = Print.where(store: current_user.store)
+            - color = "success-color"
+            - color = "danger-color" if prints.present?
+            a.container.text-center.text-dark href="#{prints_path}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-print.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{prints.count} 
+                .lead HARGA BARU
+
+
+        .col-12.pt-3
+          .card
+            .card-header.text-center.bg-success
+              h5.my-1.text-white
+                b TOP ITEM
+            .card-body
+              table.table
+                thead
+                  tr
+                    th RANK
+                    th SUPPLIER
+                tbody.table-hover
+                  - idx = 1
+                  - 100.times do |x|
+                    - item = Item.find_by_id @top_items.keys[x]
+                    - next if item.local_item
+                    - break if idx == 11
+                    tr onclick="window.location='#{item_path(item)}'"
+                      td #{idx}
+                      td #{item.name.upcase}
+                    - idx+=1

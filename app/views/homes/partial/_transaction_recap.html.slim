@@ -36,7 +36,7 @@
               strong  #{number_to_currency(sum_grand_total-sum_hpp_total-@total_outcome-sum_tax_total, unit: "Rp. ", delimiter: ".", separator:",")}
       br
     .col-12
-      - dates = StoreData.where(store: current_user.store).last(2).pluck(:date)
+      - dates = StoreData.where(store: current_user.store).last(1).pluck(:date)
       - sum_grand_total = 0
       - sum_hpp_total = 0
       - sum_tax_total = 0

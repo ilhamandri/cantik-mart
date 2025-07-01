@@ -14,42 +14,48 @@ class HomesController < ApplicationController
 
     ReCheck.checkInvoiceOrder
     
-    @total_limit_items = StoreItem.where(store_id: current_user.store.id).where('stock < 0').count
-
-    @total_orders = Order.where(store_id: current_user.store.id, date_receive: nil, created_at: start_date..end_date).count
-
-    @total_payments = Order.where(store_id: current_user.store.id, created_at: start_date..end_date).where('date_receive is not null and date_paid_off is null').count
+    if ["super_admin", "owner", "candy_dream", "finance", "super_visi", "developer"].include? current_user.level
+    end
+    @orders = Order.where(store_id: current_user.store.id, created_at: start_date..end_date)
 
     @total_returs = Retur.where(store_id: current_user.store.id, created_at: start_date..end_date).where("status is null").count
 
     @total_transfers = Transfer.where(created_at: start_date..end_date).where("from_store_id = ? OR to_store_id = ?", current_user.store.id, current_user.store.id).where(date_approve: nil).count
 
-    @total_send_backs = SendBack.where("received_by is null")
-    
-    @total_send_backs = @total_send_backs.where(store: current_user.store) if current_user.level != "stock_admin"
+    @total_send_backs = SendBack.where("received_by is null").where(store: current_user.store).count
 
     @total_member = Member.where(store: current_user).count
 
+    if current_user.level == "stock_admin"
+      c_start = DateTime.now.beginning_of_year
+      c_end = c_start.end_of_year
+      order_data = Order.where(created_at: c_start..c_end)
+      order_item_data = OrderItem.where(created_at: c_start..c_end)
+      @top_suppliers = Hash[order_data.group(:supplier_id).count.sort_by{|k,v| v}.reverse]
+      @top_items = Hash[order_item_data.group(:item_id).count.sort_by{|k,v| v}.reverse]
+    end
 
     start_day = DateTime.now.beginning_of_day
     end_day = start_day.end_of_day
 
     # PENGELUARAN
-    cash_flow = CashFlow.where(created_at: start_day..end_day)
-    cash_flow = cash_flow.where(store: current_user.store) if current_user.level == "super_visi"
-    @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
-    @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
-    
-    @total_outcome = @operational + @fix_cost
+    if ["super_admin", "owner", "finance", "developer"].include? current_user.level
+      cash_flow = CashFlow.where(created_at: start_day..end_day)
+      cash_flow = cash_flow.where(store: current_user.store) if current_user.level == "super_visi"
+      @operational = cash_flow.where(finance_type: [CashFlow::OPERATIONAL, CashFlow::TAX]).sum(:nominal)
+      @fix_cost = cash_flow.where(finance_type: CashFlow::FIX_COST).sum(:nominal)
+      
+      @total_outcome = @operational + @fix_cost
 
-    @debt = Debt.where("deficiency > ?",0).where(store: current_user.store) 
-    @receivable = Receivable.where("deficiency > ?",0).where(store: current_user.store)\
+      @debt = Debt.where("deficiency > ?",0).where(store: current_user.store) 
+      @receivable = Receivable.where("deficiency > ?",0).where(store: current_user.store)\
+    end
 
     # TRANSAKSI HARI INI
     if ["super_admin", "owner", "candy_dream", "finance", "super_visi", "developer"].include? current_user.level
       @daily_transaction = Transaction.where(created_at: start_day..end_day)
-      @transactions = Transaction.where("created_at >= ?", DateTime.now.beginning_of_month-1.month)
-      @transactions = @transactions.where(has_coin: true) if current_user.level == "candy_dream"
+      # @transactions = Transaction.where("created_at >= ?", DateTime.now.beginning_of_month-1.month)
+      # @transactions = @transactions.where(has_coin: true) if current_user.level == "candy_dream"
     end
 
 

@@ -1,16 +1,14 @@
-.container-fluid
-  .section
-    .row.pb-2
-      - if isDeveloper
-        = render "homes/dashboard/admin"
-      - elsif isAdmin
-        = render "homes/dashboard/admin"
-      - elsif current_user.level == "finance"
-        = render "homes/dashboard/finance"
-      - elsif current_user.level == "super_visi"
-        = render "homes/dashboard/super_visi"
-      - elsif current_user.level == "stock_admin"
-        = render "homes/dashboard/stock_admin"
-      - elsif current_user.level == "candy_dream"
-        = render "homes/dashboard/candy_dream"
+.container-fluid.pl-4.pr-5
+  - if isDeveloper
+    = render "homes/dashboard/admin"
+  - elsif isAdmin
+    = render "homes/dashboard/admin"
+  - elsif current_user.level == "finance"
+    = render "homes/dashboard/finance"
+  - elsif current_user.level == "super_visi"
+    = render "homes/dashboard/super_visi"
+  - elsif current_user.level == "stock_admin"
+    = render "homes/dashboard/stock_admin"
+  - elsif current_user.level == "candy_dream"
+    = render "homes/dashboard/candy_dream"
 

@@ -1,107 +1,87 @@
-.col-md-6.col-lg-3.pb-3
-  a href="#{transactions_path}"
-    .alert.alert-primary
-      .alert-heading
-        .row
-          .col-8.text-left
-            | Penjualan #{Date.today} : 
-          .col-4.text-right
-            - trx = 0
-            - trx = @daily_transaction.sum(:grand_total) if @daily_transaction.present?
-            | #{number_with_delimiter(trx.to_i, delimiter: ".")}
-  a href="#{debts_path}"
-    .alert.alert-danger
-      .alert-heading
-        .row
-          .col-5.text-left
-            | Hutang : 
-          .col-7.text-right
-            - debt = 0
-            - debt = @debt.sum(:deficiency) if @debt.present?
-            | #{number_with_delimiter(debt.to_i, delimiter: ".")}
-  a href="#{receivables_path}"
-    .alert.alert-warning
-      .alert-heading
-        .row
-          .col-5.text-left
-            | Piutang :
-          .col-7.text-right
-            - receivable = 0
-            - receivable = @receivable.sum(:deficiency) if @receivable.present?
-            | #{number_with_delimiter(receivable.to_i, delimiter: ".")}
+.section
+  .row.pb-2
+    .col-6.pb-3
+      .row
+        .col-6
+          a href="#{debts_path}"
+            .alert.alert-danger
+              .alert-heading
+                .row
+                  .col-5.text-left
+                    | Hutang : 
+                  .col-7.text-right
+                    - debt = 0
+                    - debt = @debt.sum(:deficiency) if @debt.present?
+                    | #{number_with_delimiter(debt.to_i, delimiter: ".")}
+        .col-6
+          a href="#{receivables_path}"
+            .alert.alert-warning
+              .alert-heading
+                .row
+                  .col-5.text-left
+                    | Piutang :
+                  .col-7.text-right
+                    - receivable = 0
+                    - receivable = @receivable.sum(:deficiency) if @receivable.present?
+                    | #{number_with_delimiter(receivable.to_i, delimiter: ".")}
+
+        .col-3
+          .card.bg-danger
+            a.container.text-center.text-white href="#{orders_path(type: 'payment')}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-truck.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{@orders.where("date_receive is not null", date_paid_off: nil).count} ORDER 
+                hr.bg-white
+              p BELUM LUNAS
 
 
+        .col-3
+          .card.bg-white
+            a.container.text-center.text-danger href="#{returs_path}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-reply.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{@total_returs} RETUR 
+                hr.bg-white
+              p BELUM SELESAI
+
+        .col-3
+          .card.bg-primary
+            a.container.text-center.text-white href="#{daily_absent_recap_path(date: Date.today)}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-address-card.fa-2x.pb-2 aria-hidden="true" 
+                .lead ABSENSI
+              hr
+              p #{Date.today}
 
 
-- color = "success-color"
-- color = "danger-color" if @total_orders > 0
-.col-md-6.col-lg-3.pb-3
-  .card.bg-dark
-    a.container.text-center.text-white href="#{orders_path(type: 'payment')}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-cart-plus.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@total_orders} Pesanan
-      hr class="#{color}"
-      p Lihat Detil 
-
-.col-3.pb-3
-  .card.bg-warning
-    a.container.text-center.text-white href="#{daily_absent_recap_path(date: Date.today)}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-download.fa-2x.pb-2 aria-hidden="true" 
-        .lead ABSENSI
-      hr
-      p #{Date.today}
+        .col-3
+          .card.bg-success
+            a.container.text-center.text-white href="#{daily_trx_recap_path(date: Date.today)}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-handshake.fa-2x.pb-2 aria-hidden="true" 
+                .lead TRANSAKSI
+              hr 
+              p #{Date.today}
 
 
-.col-3.pb-3
-  .card.bg-success
-    a.container.text-center.text-white href="#{daily_trx_recap_path(date: Date.today)}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-file-text.fa-2x.pb-2 aria-hidden="true" 
-        .lead TRANSAKSI
-      hr 
-      p #{Date.today}
+        .col-12.pt-3
+          .card
+            .view.view-cascade.gradient-card-header.primary-color.text-white
+              h2.pb-2.pt-2.text-center
+                b REKAP PENJUALAN
+            .card-body
+              = render "homes/partial/transaction_recap"
 
-- color = "success-color"
-- color = "danger-color" if @debt.size > 0
-.col-3.pb-3
-  .card.bg-danger
-    a.container.text-center.text-white href="#{debts_path(type: '1')}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-credit-card.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@debt.size} Hutang
-      hr class="#{color}"
-      p Lihat Detil 
-
-- color = "success-color"
-- color = "danger-color" if @receivable.size > 0
-.col-3.pb-3
-  .card.bg-info
-    a.container.text-center.text-white href="#{receivables_path}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-book.fa-2x.pb-2 aria-hidden="true"
-        .lead #{@receivable.size} Piutang
-      hr
-      p Lihat Detil 
-
-.col-md-12.col-lg-6.pb-3
-  .card
-    .view.view-cascade.gradient-card-header.primary-color.text-white
-      h2.pb-2.pt-2.text-center
-        b PENJUALAN HARI INI 
-    .card-body
-      = render "homes/partial/transaction_store"
-
-.col-md-12.col-lg-6.pb-3
-  .card
-    .view.view-cascade.gradient-card-header.primary-color.text-white
-      h2.pb-2.pt-2.text-center
-        b REKAP PENJUALAN
-    .card-body
-      = render "homes/partial/transaction_recap"
+    .col-6.pb-3
+      .row
+        .col-12
+          .card
+            .view.view-cascade.gradient-card-header.primary-color.text-white
+              h2.pb-2.pt-2.text-center
+                b PENJUALAN HARI INI 
+            .card-body
+              = render "homes/partial/transaction_store"

@@ -1,176 +1,99 @@
-.col-md-6.col-lg-3.pb-3
-  a href="#{transactions_path}"
-    .alert.alert-primary
-      .alert-heading
-        .row
-          .col-8.text-left
-            | Penjualan #{Date.today} : 
-          .col-4.text-right
-            - trx = 0
-            - trx = @daily_transaction.sum(:grand_total) if @daily_transaction.present?
-            | #{number_with_delimiter(trx.to_i, delimiter: ".")}
-  a href="#{debts_path}"
-    .alert.alert-danger
-      .alert-heading
-        .row
-          .col-5.text-left
-            | Hutang : 
-          .col-7.text-right
-            - debt = 0
-            - debt = @debt.sum(:deficiency) if @debt.present?
-            | #{number_with_delimiter(debt.to_i, delimiter: ".")}
-  a href="#{receivables_path}"
-    .alert.alert-warning
-      .alert-heading
-        .row
-          .col-5.text-left
-            | Piutang :
-          .col-7.text-right
-            - receivable = 0
-            - receivable = @receivable.sum(:deficiency) if @receivable.present?
-            | #{number_with_delimiter(receivable.to_i, delimiter: ".")}
-
-- if current_user.store.online_store
-  .col-md-6.col-lg-3.pb-3
-    .card.pb-1.pt-1
-      - trx =  Transaction.where(created_at: DateTime.now.beginning_of_day..DateTime.now.end_of_day).where(user: current_user)
-      - trx_total = trx.sum(:grand_total)
-      - cash = trx.where(payment_type: "CASH").sum(:grand_total)
-      - debit = trx.where(payment_type: "DEBIT").sum(:grand_total)
-      - jumlah_trx = trx.count
+.section
+  .row
+    .col-6.pb-3
       .row
-        .col-6.text-center
-          button.btn.btn-warning onclick="printShift('#{trx_total.to_i}', '#{current_user.name.upcase}', '#{DateTime.now.strftime("%d/%m/%Y %H:%M:%S")}', #{cash.to_i}, #{debit.to_i}, '#{jumlah_trx.to_i}', '#{current_user.store.id}' , '#{current_user.store.name}' )"
-            h3.font-weight-bold
-              i.fa.fa-file.fa-2x.pb-2 aria-hidden="true" 
-            .lead LAPORAN SHIFT
-        .col-6.text-center
-          a href="#{new_transaction_path}"
-            button.btn.btn-success type="button" 
-              h3.font-weight-bold
-                i.fa.fa-cart-plus.fa-2x.pb-2 aria-hidden="true" 
-              .lead MENU KASIR
-- else
-  .col-md-6.col-lg-3.pb-3
-    .card.bg-warning
-      a.container.text-center.text-white href="#{transactions_path(from: "complain")}"
-        br
-        h3.font-weight-bold
-          i.fa.fa-warning.fa-2x.pb-2 aria-hidden="true" 
-          .lead RETUR 
-        hr
-        p KONSUMEN
-   
+        - if current_user.store.online_store
+          - trx =  Transaction.where(created_at: DateTime.now.beginning_of_day..DateTime.now.end_of_day).where(user: current_user)
+          - trx_total = trx.sum(:grand_total)
+          - cash = trx.where(payment_type: "CASH").sum(:grand_total)
+          - debit = trx.where(payment_type: "DEBIT").sum(:grand_total)
+          - jumlah_trx = trx.count
 
-.col-4.pb-3
-  .card.bg-white
-    a.container.text-center.text-dark href="#{members_path}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-users.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@total_member} Member
-      hr.primary-color
-      p
-        | Lihat Detil 
+          .col-12.text-center
+            .alert.alert-primary
+              a.alert-heading href="#{new_transaction_path}"
+                .lead MENU KASIR
 
-.col-4.pb-3
-  .card.bg-white 
-    - prints = Print.where(store: current_user.store)
-    - color = "success-color"
-    - color = "danger-color" if prints.present?
-    a.container.text-center.text-dark href="#{prints_path}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-print.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{prints.count} harga baru
-      hr class="#{color}"
-      p
-        - if prints.present?
-          | Cetak
+
+          .col-12.text-center
+            .alert.alert-secondary
+              .alert-heading onclick="printShift('#{trx_total.to_i}', '#{current_user.name.upcase}', '#{DateTime.now.strftime("%d/%m/%Y %H:%M:%S")}', #{cash.to_i}, #{debit.to_i}, '#{jumlah_trx.to_i}', '#{current_user.store.id}' , '#{current_user.store.name}' )"
+                .lead LAPORAN SHIFT
+
+          .col-12.pb-3
+            hr.bg-white
         - else
-          | Tidak ada perubahan harga
+          .col-12
+            .alert.alert-danger.text-center
+              a.alert-heading href="#{transactions_path(from: "complain")}"
+                .lead RETUR KONSUMEN
 
-.col-4.pb-3
-  .card.bg-white
-    a.container.text-center.text-dark href="#{items_path}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-cubes.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{number_with_delimiter(Item.all.count, delimiter:".")} Barang
-      hr.primary-color
-      p Lihat Detil
+          .col-12.pb-3
+            hr.bg-white
 
+        .col-12.pb-3
+          .card.bg-warning 
+            - prints = Print.where(store: current_user.store)
+            a.container.text-center.text-dark href="#{prints_path}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-print.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{prints.count} 
+                .lead HARGA BARU
 
-- color = "success-color"
-- color = "danger-color" if @total_orders > 0
-.col-3.pb-3
-  .card.bg-dark
-    a.container.text-center.text-white href="#{orders_path(type: 'payment')}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-cart-plus.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@total_orders} Pesanan
-      hr class="#{color}"
-      p Lihat Detil 
-
-
-
-- color = "success-color"
-- color = "danger-color" if @total_transfers > 0
-.col-3.pb-3
-  .card.bg-dark
-    - color = "success-color"
-    - color = "danger-color" if @total_transfers > 0
-    a.container.text-center.text-white href="#{transfers_path}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-truck.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@total_transfers} Transfer
-      hr class="#{color}"
-      p
-        | Lihat Detil 
-
-- color = "success-color"
-- color = "danger-color" if @total_returs > 0
-.col-3.pb-3
-  .card.bg-dark
-    - color = "success-color"
-    - color = "danger-color" if @total_returs > 0
-    a.container.text-center.text-white href="#{returs_path}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-exchange.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@total_returs} Retur 
-      hr class="#{color}"
-      p
-        | Lihat Detil 
-
-- color = "success-color"
-- color = "danger-color" if @total_send_backs.count > 0
-.col-3.pb-3
-  .card.bg-dark
-    a.container.text-center.text-white href="#{send_backs_path}"
-      br
-      h3.font-weight-bold
-        i.fa.fa-refresh.fa-2x.pb-2 aria-hidden="true" 
-        .lead #{@total_send_backs.count} Retur BS
-      hr class="#{color}"
-      p
-        | Lihat Detil 
+        .col-3
+          .card.bg-primary
+            a.container.text-center.text-white href="#{orders_path}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-truck.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{@orders.where(date_paid_off: nil).count} 
+                .lead ORDER 
 
 
-.col-md-12.col-lg-6.pb-3
-  .card
-    .view.view-cascade.gradient-card-header.primary-color.text-white
-      h2.pb-2.pt-2.text-center
-        b PENJUALAN HARI INI 
-    .card-body
-      = render "homes/partial/transaction_store"
+        .col-3
+          .card.bg-danger
+            a.container.text-center.text-white href="#{returs_path}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-reply.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{@total_returs}
+                .lead RETUR
 
-.col-md-12.col-lg-6.pb-3
-  .card
-    .view.view-cascade.gradient-card-header.primary-color.text-white
-      h2.pb-2.pt-2.text-center
-        b REKAP PENJUALAN
-    .card-body
-      = render "homes/partial/transaction_recap"
+
+        .col-3
+          .card.bg-dark
+            - color = "success-color"
+            - color = "danger-color" if @total_transfers > 0
+            a.container.text-center.text-white href="#{transfers_path}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-retweet.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{@total_transfers} 
+                .lead TRANSFER
+
+
+        .col-3
+          .card.bg-white
+            a.text-danger.container.text-center href="#{send_backs_path}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-refresh.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{@total_send_backs} 
+                .lead RETUR BS
+
+        / .col-4
+          .card.bg-white
+            a.container.text-center.text-dark href="#{members_path}"
+              br
+              h3.font-weight-bold
+                i.fa.fa-users.fa-2x.pb-2 aria-hidden="true" 
+                .lead #{@total_member} MEMBER
+
+    .col-6
+      .card
+        .view.view-cascade.gradient-card-header.primary-color.text-white
+          h2.pb-2.pt-2.text-center
+            b PENJUALAN HARI INI 
+        .card-body
+          = render "homes/partial/transaction_store"

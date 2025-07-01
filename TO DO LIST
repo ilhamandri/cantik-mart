@@ -4,7 +4,16 @@ TO DO:
 - PERBAIKAN KALIMAT STATUS
 	-> Retur telah diterima .... 
 		-> terlalu panjang
+
+- TANDAI SUPPLIER YANG PUNYA BARANG -> local_item: true
 	
 ======================================================================
 UNUSED FEATURE :
+
+	
+
+DELETE
+	- NOTIFICATION
+	- TRANSFER
+	- ActivityLog
 
