@@ -1,14 +1,4 @@
-.classic-tabs.mx-2
-  ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
+.container-fluid 
 
-    li.nav-item
-      a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="data" aria-selected="true" data-toggle="tab" href="#data" role="tab" 
-        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
-        br
-        | Data 
-
-
-
-  #myClassicTabContentOrange.tab-content.card
-    #data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
+  #myClassicTabContentOrange.tab-content.card style="height: 99vh !important;"
         = render partial: 'data'

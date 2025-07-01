@@ -1,8 +1,9 @@
 class UpdateData
 
 	def self.delete_unused_notification
-    	Notification.where("date_created < ?", DateTime.now - 2.weeks).destroy_all
-    	Notification.where(to_user: User.where(active: false)).destroy_all
+    	Notification.where("date_created < ?", DateTime.now - 10.days).destroy_all
+    	x = Notification.where(to_user: User.where(active: false)).or(Notification.where(from_user: User.where(active: false)))
+    	binding.pry
 	end
 
 	# UpdateData.UpdateDataTransactionItemTotal start_date, end_date
