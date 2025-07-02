@@ -1,9 +1,19 @@
 class UpdateData
 
+	def self.updateSupplierHandlingLocal
+		Supplier.all.each do |supplier|
+			supplier_items = supplier.supplier_items
+			next if !supplier_items.present?
+			item = supplier_items.first.item
+			supplier.local = true if item.local_item
+			supplier.save!
+		end
+	end
+
 	def self.delete_unused_notification
     	Notification.where("date_created < ?", DateTime.now - 10.days).destroy_all
     	Notification.where(to_user: User.where(active: false)).destroy_all
-    	Notification.where(from_user: User.where(active: false))).destroy_all
+    	Notification.where(from_user: User.where(active: false)).destroy_all
 
 	end
 

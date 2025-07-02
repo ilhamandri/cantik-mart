@@ -3,10 +3,14 @@ class HomesController < ApplicationController
   require 'usagewatch'
 
   def index
+
+    DeleteData.clean_data
+    
     if  ["super_admin", "developer", "owner"].include? current_user.level
       ReCheck.complain
       Calculate.calculateData
       ReCheck.checkInvoiceTransaction
+      UpdateData.updateSupplierHandlingLocal
     end
 
     start_date = DateTime.now.beginning_of_month - 3.months

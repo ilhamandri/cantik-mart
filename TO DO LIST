@@ -1,19 +1,24 @@
 TO DO: 
-- NOTIICATION
 - KEUANGAN
-- PERBAIKAN KALIMAT STATUS
-	-> Retur telah diterima .... 
-		-> terlalu panjang
 
-- TANDAI SUPPLIER YANG PUNYA BARANG -> local_item: true
+- HOME DIBERI IF -> biar ga terlalu lama load
+
+- SYNC
+
+- coin di item_cat 172
+
 	
 ======================================================================
 UNUSED FEATURE :
 
 	
 
+======================================================================
 DELETE
-	- NOTIFICATION
-	- TRANSFER
-	- ActivityLog
+	- NOTIFICATION 2.weeks
+	- ActivityLog 3.years
 
+	- TRANSFER 3.years
+	- Transaction 3.years
+	- SendBack 3.years
+	- Retur 3.years

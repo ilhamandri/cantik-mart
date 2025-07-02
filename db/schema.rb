@@ -2,29 +2,28 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_06_22_100931) do
-
+ActiveRecord::Schema[7.2].define(version: 2025_07_02_092444) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "absents", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.datetime "check_in"
-    t.datetime "check_out"
-    t.datetime "overtime_in"
-    t.datetime "overtime_out"
+    t.datetime "check_in", precision: nil
+    t.datetime "check_out", precision: nil
+    t.datetime "overtime_in", precision: nil
+    t.datetime "overtime_out", precision: nil
     t.string "work_hour", default: "0:0:0"
     t.string "overtime_hour", default: "0:0:0"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "store_id"
     t.index ["store_id"], name: "index_absents_on_store_id"
     t.index ["user_id"], name: "index_absents_on_user_id"
@@ -39,8 +38,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.text "parameters"
     t.string "recipient_type"
     t.bigint "recipient_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type"
     t.index ["owner_type", "owner_id"], name: "index_activities_on_owner_type_and_owner_id"
     t.index ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type"
@@ -53,11 +52,11 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
     t.bigint "nominal", null: false
-    t.datetime "date_created", null: false
+    t.datetime "date_created", precision: nil, null: false
     t.string "description", null: false
     t.integer "finance_type", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_assets_on_store_id"
     t.index ["user_id"], name: "index_assets_on_user_id"
   end
@@ -65,20 +64,20 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
   create_table "backups", force: :cascade do |t|
     t.string "size", null: false
     t.string "filename", null: false
-    t.datetime "created", null: false
+    t.datetime "created", precision: nil, null: false
     t.boolean "present", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "capitals", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
     t.bigint "nominal", null: false
-    t.datetime "date_created", null: false
+    t.datetime "date_created", precision: nil, null: false
     t.string "description", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_capitals_on_store_id"
     t.index ["user_id"], name: "index_capitals_on_user_id"
   end
@@ -88,12 +87,12 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "store_id", null: false
     t.bigint "nominal", null: false
     t.integer "finance_type", default: 1, null: false
-    t.datetime "date_created"
+    t.datetime "date_created", precision: nil
     t.string "description"
     t.bigint "ref_id"
     t.string "invoice", default: "-", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "payment"
     t.string "tag", default: "", null: false
     t.index ["store_id"], name: "index_cash_flows_on_store_id"
@@ -104,10 +103,10 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
     t.bigint "nominal", null: false
-    t.datetime "date_created", null: false
+    t.datetime "date_created", precision: nil, null: false
     t.string "description", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_cashes_on_store_id"
     t.index ["user_id"], name: "index_cashes_on_user_id"
   end
@@ -117,8 +116,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "complain_id", null: false
     t.integer "quantity", null: false
     t.string "description", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["complain_id"], name: "index_complain_items_on_complain_id"
     t.index ["item_id"], name: "index_complain_items_on_item_id"
   end
@@ -127,10 +126,10 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.string "invoice", null: false
     t.integer "total_items", null: false
     t.bigint "store_id", null: false
-    t.datetime "date_created"
+    t.datetime "date_created", precision: nil
     t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "transaction_id", null: false
     t.bigint "member_card"
     t.bigint "nominal", default: 0, null: false
@@ -142,15 +141,15 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
   create_table "controller_methods", force: :cascade do |t|
     t.bigint "controller_id", null: false
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["controller_id"], name: "index_controller_methods_on_controller_id"
   end
 
   create_table "controllers", force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "debts", force: :cascade do |t|
@@ -158,13 +157,13 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "user_id", null: false
     t.bigint "nominal", null: false
     t.bigint "deficiency", null: false
-    t.datetime "date_created", null: false
+    t.datetime "date_created", precision: nil, null: false
     t.string "description", null: false
     t.integer "ref_id"
     t.integer "finance_type", null: false
-    t.datetime "due_date", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "due_date", precision: nil, null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "supplier_id"
     t.integer "n_term", default: 1, null: false
     t.float "nominal_term", default: 0.0, null: false
@@ -175,8 +174,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
 
   create_table "departments", force: :cascade do |t|
     t.string "name", default: "DEFAULT (NO DEPARTMENT)", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "edited_by"
   end
 
@@ -187,8 +186,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.integer "discount", null: false
     t.bigint "item_id", null: false
     t.boolean "status", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["item_id"], name: "index_discounts_on_item_id"
   end
 
@@ -197,8 +196,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.string "name", null: false
     t.bigint "hit", default: 0, null: false
     t.integer "quantity", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "status", default: true, null: false
   end
 
@@ -207,10 +206,10 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "store_id", null: false
     t.bigint "nominal", null: false
     t.integer "finance_type", default: 1, null: false
-    t.datetime "date_created"
+    t.datetime "date_created", precision: nil
     t.string "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_finances_on_store_id"
     t.index ["user_id"], name: "index_finances_on_user_id"
   end
@@ -221,8 +220,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.integer "max", null: false
     t.bigint "price", null: false
     t.bigint "discount", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "member", default: false, null: false
     t.bigint "member_price", default: 0
     t.float "selisih_pembulatan", default: 0.0, null: false
@@ -235,10 +234,10 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
     t.bigint "nominal", null: false
-    t.datetime "date_created", null: false
+    t.datetime "date_created", precision: nil, null: false
     t.string "description", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_incomes_on_store_id"
     t.index ["user_id"], name: "index_incomes_on_user_id"
   end
@@ -248,10 +247,10 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.integer "transaction_type", default: 1, null: false
     t.string "transaction_invoice", null: false
     t.bigint "nominal", default: 0, null: false
-    t.datetime "date_created"
+    t.datetime "date_created", precision: nil
     t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "description", default: "-", null: false
     t.bigint "store_id"
     t.index ["store_id"], name: "index_invoice_transactions_on_store_id"
@@ -260,8 +259,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
 
   create_table "item_cats", force: :cascade do |t|
     t.string "name", default: "DEFAULT", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "department_id"
     t.boolean "use_in_point", default: true, null: false
     t.bigint "edited_by"
@@ -274,8 +273,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "item_id", null: false
     t.integer "month", default: 1, null: false
     t.integer "year", default: 2015, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["item_id"], name: "index_item_prices_on_item_id"
   end
 
@@ -292,11 +291,11 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.string "image"
     t.bigint "buy_grocer", default: 0
     t.bigint "discount", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "local_item", default: false
     t.float "margin", default: 0.0
-    t.datetime "price_updated"
+    t.datetime "price_updated", precision: nil
     t.bigint "sell_member", default: 0, null: false
     t.bigint "counter", default: 0
     t.bigint "kpi", default: 0
@@ -311,15 +310,15 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.string "code", default: "DEFAULT_CODE", null: false
     t.string "name", default: "DEFAULT_NAME", null: false
     t.bigint "sell", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "kasbons", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "nominal", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_kasbons_on_user_id"
   end
 
@@ -328,8 +327,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "loss_id", null: false
     t.integer "quantity", default: 0, null: false
     t.string "description", default: "-", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.bigint "store_id"
     t.index ["item_id"], name: "index_loss_items_on_item_id"
     t.index ["loss_id"], name: "index_loss_items_on_loss_id"
@@ -343,8 +342,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.boolean "from_retur", default: false
     t.bigint "ref_id"
     t.string "invoice", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_losses_on_store_id"
     t.index ["user_id"], name: "index_losses_on_user_id"
   end
@@ -358,8 +357,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.string "address"
     t.bigint "user_id", null: false
     t.bigint "store_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "point"
     t.index ["store_id"], name: "index_members_on_store_id"
     t.index ["user_id"], name: "index_members_on_user_id"
@@ -371,8 +370,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "item_cat_id", null: false
     t.bigint "department_id", null: false
     t.integer "n_sell", default: 1, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "store_id"
     t.index ["department_id"], name: "index_not_popular_items_on_department_id"
     t.index ["item_cat_id"], name: "index_not_popular_items_on_item_cat_id"
@@ -381,22 +380,22 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.datetime "date_created", null: false
+    t.datetime "date_created", precision: nil, null: false
     t.integer "read", default: 0, null: false
     t.string "link", null: false
     t.string "message", null: false
     t.integer "m_type", default: 1, null: false
     t.bigint "from_user_id", null: false
     t.bigint "to_user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["from_user_id"], name: "index_notifications_on_from_user_id"
     t.index ["to_user_id"], name: "index_notifications_on_to_user_id"
   end
 
   create_table "opnames", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "user_id", null: false
     t.bigint "store_id", null: false
     t.string "file_name", null: false
@@ -408,9 +407,9 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.string "invoice", null: false
     t.bigint "nominal", null: false
     t.bigint "order_id", null: false
-    t.datetime "date_paid"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "date_paid", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["order_id"], name: "index_order_invs_on_order_id"
   end
 
@@ -422,8 +421,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "order_id", null: false
     t.string "description", default: "-"
     t.integer "new_receive", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "discount_1", default: 0
     t.integer "discount_2", default: 0
     t.float "ppn", default: 0.0
@@ -437,20 +436,20 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
 
   create_table "orders", force: :cascade do |t|
     t.string "invoice", null: false
-    t.datetime "date_created", null: false
-    t.datetime "date_receive"
+    t.datetime "date_created", precision: nil, null: false
+    t.datetime "date_receive", precision: nil
     t.bigint "supplier_id", null: false
     t.bigint "store_id", null: false
     t.integer "total_items", null: false
     t.bigint "total", null: false
-    t.datetime "date_paid_off"
+    t.datetime "date_paid_off", precision: nil
     t.boolean "editable", default: true, null: false
     t.bigint "old_total", default: 0, null: false
-    t.datetime "date_change"
+    t.datetime "date_change", precision: nil
     t.bigint "user_id", null: false
     t.bigint "received_by"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "salesman", default: "-"
     t.string "no_faktur", default: "-"
     t.integer "discount", default: 0
@@ -467,11 +466,11 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
     t.bigint "nominal", null: false
-    t.datetime "date_created", null: false
+    t.datetime "date_created", precision: nil, null: false
     t.string "description", null: false
     t.integer "outcome_type", default: 4, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_outcomes_on_store_id"
     t.index ["user_id"], name: "index_outcomes_on_user_id"
   end
@@ -480,8 +479,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.text "content"
     t.string "searchable_type"
     t.bigint "searchable_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
   end
 
@@ -491,8 +490,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.integer "point", null: false
     t.integer "point_type", null: false
     t.bigint "exchange_point_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "voucher_id"
     t.index ["exchange_point_id"], name: "index_points_on_exchange_point_id"
     t.index ["member_id"], name: "index_points_on_member_id"
@@ -506,8 +505,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "item_cat_id", null: false
     t.bigint "department_id", null: false
     t.integer "n_sell", default: 1, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "store_id"
     t.index ["department_id"], name: "index_popular_items_on_department_id"
     t.index ["item_cat_id"], name: "index_popular_items_on_item_cat_id"
@@ -519,8 +518,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "buy_id", null: false
     t.bigint "usually_id", null: false
     t.float "percentage", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["buy_id"], name: "index_predict_categories_on_buy_id"
     t.index ["usually_id"], name: "index_predict_categories_on_usually_id"
   end
@@ -529,8 +528,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "buy_id", null: false
     t.bigint "usually_id", null: false
     t.float "percentage", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["buy_id"], name: "index_predict_items_on_buy_id"
     t.index ["usually_id"], name: "index_predict_items_on_usually_id"
   end
@@ -540,8 +539,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "store_id", null: false
     t.bigint "grocer_item_id"
     t.bigint "promotion_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["grocer_item_id"], name: "index_prints_on_grocer_item_id"
     t.index ["item_id"], name: "index_prints_on_item_id"
     t.index ["promotion_id"], name: "index_prints_on_promotion_id"
@@ -552,11 +551,11 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
     t.bigint "nominal", null: false
-    t.datetime "date_created", null: false
+    t.datetime "date_created", precision: nil, null: false
     t.string "description", null: false
     t.integer "finance_type", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_profit_losses_on_store_id"
     t.index ["user_id"], name: "index_profit_losses_on_user_id"
   end
@@ -566,13 +565,13 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.integer "buy_quantity", null: false
     t.bigint "free_item_id", null: false
     t.integer "free_quantity", null: false
-    t.datetime "start_promo", null: false
-    t.datetime "end_promo", null: false
+    t.datetime "start_promo", precision: nil, null: false
+    t.datetime "end_promo", precision: nil, null: false
     t.bigint "user_id", null: false
     t.string "promo_code", null: false
     t.integer "hit", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["buy_item_id"], name: "index_promotions_on_buy_item_id"
     t.index ["free_item_id"], name: "index_promotions_on_free_item_id"
     t.index ["user_id"], name: "index_promotions_on_user_id"
@@ -583,14 +582,14 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "user_id", null: false
     t.bigint "nominal", null: false
     t.bigint "deficiency", null: false
-    t.datetime "date_created", null: false
+    t.datetime "date_created", precision: nil, null: false
     t.string "description", null: false
     t.string "ref_id"
     t.integer "finance_type", null: false
     t.integer "to_user", default: 1, null: false
-    t.datetime "due_date", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "due_date", precision: nil, null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "n_term", default: 1, null: false
     t.float "nominal_term", default: 0.0, null: false
     t.index ["store_id"], name: "index_receivables_on_store_id"
@@ -607,8 +606,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "debt", default: 0, null: false
     t.bigint "outcome", default: 0, null: false
     t.bigint "sales", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_reports_on_store_id"
   end
 
@@ -621,8 +620,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.integer "accept_item", default: 0
     t.bigint "nominal", default: 0, null: false
     t.bigint "ref_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["item_id"], name: "index_retur_items_on_item_id"
     t.index ["retur_id"], name: "index_retur_items_on_retur_id"
   end
@@ -632,16 +631,16 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.integer "total_items", null: false
     t.bigint "store_id", null: false
     t.bigint "supplier_id", null: false
-    t.datetime "date_created"
-    t.datetime "date_picked"
-    t.datetime "date_approve"
-    t.datetime "status"
+    t.datetime "date_created", precision: nil
+    t.datetime "date_picked", precision: nil
+    t.datetime "date_approve", precision: nil
+    t.datetime "status", precision: nil
     t.bigint "user_id", null: false
     t.bigint "picked_by"
     t.bigint "approved_by"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "date_confirm"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "date_confirm", precision: nil
     t.bigint "confirmed_by"
     t.index ["store_id"], name: "index_returs_on_store_id"
     t.index ["supplier_id"], name: "index_returs_on_supplier_id"
@@ -654,8 +653,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.integer "quantity", null: false
     t.integer "receive", null: false
     t.string "description", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["item_id"], name: "index_send_back_items_on_item_id"
     t.index ["send_back_id"], name: "index_send_back_items_on_send_back_id"
   end
@@ -664,30 +663,30 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.string "invoice", null: false
     t.integer "total_items", null: false
     t.bigint "store_id", null: false
-    t.datetime "date_receive"
+    t.datetime "date_receive", precision: nil
     t.bigint "user_id", null: false
     t.bigint "received_by"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_send_backs_on_store_id"
     t.index ["user_id"], name: "index_send_backs_on_user_id"
   end
 
   create_table "stock_recaps", force: :cascade do |t|
-    t.datetime "date", null: false
+    t.datetime "date", precision: nil, null: false
     t.string "filename", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "stock_values", force: :cascade do |t|
     t.bigint "store_id", null: false
     t.bigint "user_id", null: false
     t.float "nominal", null: false
-    t.datetime "date_created", null: false
+    t.datetime "date_created", precision: nil, null: false
     t.string "description", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_stock_values_on_store_id"
     t.index ["user_id"], name: "index_stock_values_on_user_id"
   end
@@ -702,8 +701,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "transaction_value", null: false
     t.bigint "outcome", null: false
     t.bigint "store_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "filename"
     t.bigint "bank", default: 0, null: false
     t.index ["store_id"], name: "index_store_balances_on_store_id"
@@ -720,9 +719,9 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.float "transaction_tax", default: 0.0, null: false
     t.float "income", default: 0.0, null: false
     t.float "outcome", default: 0.0, null: false
-    t.datetime "date", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "date", precision: nil, null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_store_data_on_store_id"
   end
 
@@ -734,8 +733,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.float "buy", default: 0.0, null: false
     t.bigint "sell", default: 0, null: false
     t.float "head_buy", default: 0.0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "limit", default: 5
     t.bigint "ideal_stock", default: 10
     t.bigint "edited_by"
@@ -752,8 +751,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "equity", default: 100000000, null: false
     t.bigint "debt", default: 0, null: false
     t.bigint "receivable", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "grand_total_before", default: 0
     t.bigint "modals_before", default: 0
     t.bigint "bank", default: 0, null: false
@@ -765,8 +764,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
   create_table "supplier_items", force: :cascade do |t|
     t.bigint "supplier_id", null: false
     t.bigint "item_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["item_id"], name: "index_supplier_items_on_item_id"
     t.index ["supplier_id"], name: "index_supplier_items_on_supplier_id"
   end
@@ -776,16 +775,17 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.string "address", default: "DEFAULT ADDRESS SUPPLIER", null: false
     t.string "phone", default: "123456789", null: false
     t.integer "supplier_type", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "tax", default: 0
+    t.boolean "local", default: false
   end
 
   create_table "tests", force: :cascade do |t|
     t.string "name"
     t.bigint "store_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["store_id"], name: "index_tests_on_store_id"
   end
 
@@ -795,12 +795,12 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "price", null: false
     t.bigint "discount", default: 0
     t.float "quantity", null: false
-    t.datetime "date_created"
+    t.datetime "date_created", precision: nil
     t.integer "retur"
     t.integer "replace"
     t.string "reason"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.float "ppn", default: 0.0, null: false
     t.bigint "supplier_id"
     t.bigint "store_id"
@@ -822,10 +822,10 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.integer "payment_type", default: 1
     t.integer "bank", default: 0
     t.bigint "edc_inv", default: 0
-    t.datetime "date_created", null: false
+    t.datetime "date_created", precision: nil, null: false
     t.bigint "hpp_total", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "card_number"
     t.bigint "member_card"
     t.bigint "store_id", default: 1, null: false
@@ -855,20 +855,20 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.integer "sent_quantity", default: 0
     t.integer "receive_quantity", default: 0
     t.string "description", default: ""
-    t.datetime "date_created"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "date_created", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["item_id"], name: "index_transfer_items_on_item_id"
     t.index ["transfer_id"], name: "index_transfer_items_on_transfer_id"
   end
 
   create_table "transfers", force: :cascade do |t|
     t.string "invoice", null: false
-    t.datetime "date_created", null: false
-    t.datetime "date_approve"
-    t.datetime "date_picked"
-    t.datetime "date_confirm"
-    t.datetime "status"
+    t.datetime "date_created", precision: nil, null: false
+    t.datetime "date_approve", precision: nil
+    t.datetime "date_picked", precision: nil
+    t.datetime "date_confirm", precision: nil
+    t.datetime "status", precision: nil
     t.integer "total_items"
     t.bigint "from_store_id", null: false
     t.bigint "to_store_id", null: false
@@ -877,8 +877,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "approved_by"
     t.bigint "picked_by"
     t.bigint "confirmed_by"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["from_store_id"], name: "index_transfers_on_from_store_id"
     t.index ["to_store_id"], name: "index_transfers_on_to_store_id"
     t.index ["user_id"], name: "index_transfers_on_user_id"
@@ -889,16 +889,16 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "user_id", null: false
     t.string "ip", null: false
     t.string "action", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_user_devices_on_user_id"
   end
 
   create_table "user_methods", force: :cascade do |t|
     t.string "user_level", null: false
     t.bigint "controller_method_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["controller_method_id"], name: "index_user_methods_on_controller_method_id"
   end
 
@@ -906,8 +906,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "user_id", null: false
     t.bigint "nominal", default: 0, null: false
     t.integer "checking", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "bonus", default: 0, null: false
     t.bigint "pay_receivable", default: 0, null: false
     t.bigint "pay_kasbon", default: 0, null: false
@@ -928,8 +928,8 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
     t.bigint "salary", default: 0, null: false
     t.string "image"
     t.integer "fingerprint"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "encrypted_password", limit: 128
     t.string "confirmation_token", limit: 128
     t.string "remember_token", limit: 128
@@ -944,9 +944,9 @@ ActiveRecord::Schema.define(version: 2025_06_22_100931) do
   create_table "vouchers", force: :cascade do |t|
     t.bigint "exchange_point_id", null: false
     t.bigint "voucher_code", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "used"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "used", precision: nil
     t.index ["exchange_point_id"], name: "index_vouchers_on_exchange_point_id"
   end
 

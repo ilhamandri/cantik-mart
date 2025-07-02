@@ -55,12 +55,18 @@
                   tr
                     th RANK
                     th SUPPLIER
+                    th ORDER
                 tbody.table-hover
-                  - 10.times do |x|
+                  - idx = 1
+                  - 100.times do |x|
+                    - break if idx == 11
                     - supplier = Supplier.find_by_id @top_suppliers.keys[x]
+                    - next if supplier.local == true
                     tr onclick="window.location='#{supplier_path(supplier)}'"
-                      td #{x+1}
+                      td #{idx}
                       td #{supplier.name.upcase}
+                      td.text-right #{@top_suppliers.values[x]}
+                    - idx+=1
 
 
     .col-6
@@ -88,14 +94,16 @@
                 thead
                   tr
                     th RANK
-                    th SUPPLIER
+                    th ITEM
+                    th ORDER
                 tbody.table-hover
                   - idx = 1
                   - 100.times do |x|
+                    - break if idx == 11
                     - item = Item.find_by_id @top_items.keys[x]
                     - next if item.local_item
-                    - break if idx == 11
                     tr onclick="window.location='#{item_path(item)}'"
                       td #{idx}
                       td #{item.name.upcase}
+                      td.text-right #{@top_items.values[x]}
                     - idx+=1

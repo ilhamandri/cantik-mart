@@ -126,6 +126,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path, "Data Item Tidak Valid (Tidak Boleh Kosong)" if ordered_items.empty?
     total_item = ordered_items.size
     address_to = params[:order][:supplier_id]
+    supplier = Supplier.find_by_id params[:order][:supplier_id]
     invoice = "ORD-" + Time.now.to_i.to_s + address_to.to_s + current_user.id.to_s
     order = Order.create invoice: invoice,
       total_items: total_item,
@@ -142,9 +143,14 @@ class OrdersController < ApplicationController
         order.delete
         break
       end
-      supplier_item = SupplierItem.find_by(item_id: item_arr[0])
+      
+      supplier_item = SupplierItem.find_by(item_id: item_arr[0], supplier: supplier)
       supplier_item.destroy if supplier_item.present?
       SupplierItem.create supplier_id: address_to, item: item 
+      is_local = item.local_item
+      supplier.local = is_local
+      supplier.save!
+
       order_item = OrderItem.create item_id: item_arr[0], order_id: order.id, quantity: item_arr[4], price: 0, description: item_arr[5]
       total+= (item_arr[5].to_i*item_arr[4].to_i)
     end

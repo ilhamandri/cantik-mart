@@ -356,7 +356,7 @@ class TransactionsController < ApplicationController
         trx_item.save!
       end
 
-      if item.id == 30331
+      if item.item_cat == 179
         trx.has_coin = true
         trx.grand_total_coin = trx.grand_total_coin + trx_item.total
         trx.hpp_total_coin = trx.hpp_total_coin + (trx_item.item.buy * trx_item.quantity)
