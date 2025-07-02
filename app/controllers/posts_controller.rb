@@ -97,7 +97,7 @@ class PostsController < ApplicationController
 						    new_trx_item.save!
 
 
-						    if item.id == 30331
+						    if item.item_cat.id == 179
 						        trx.has_coin = true
 						        trx.grand_total_coin = trx.grand_total_coin + new_trx_item.total
 						        trx.hpp_total_coin = trx.hpp_total_coin + (new_trx_item.item.buy * new_trx_item.quantity)

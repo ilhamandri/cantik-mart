@@ -48,7 +48,7 @@
           .card
             .card-header.text-center style="background: gray;"
               h5.my-1.text-white
-                b TOP SUPPLIER
+                b TOP 10 SUPPLIER
             .card-body
               table.table
                 thead
@@ -88,19 +88,20 @@
           .card
             .card-header.text-center.bg-success
               h5.my-1.text-white
-                b TOP ITEM
+                b TOP 10 PENJUALAN
             .card-body
               table.table
                 thead
                   tr
                     th RANK
                     th ITEM
-                    th ORDER
+                    th TERJUAL
                 tbody.table-hover
                   - idx = 1
                   - 100.times do |x|
                     - break if idx == 11
                     - item = Item.find_by_id @top_items.keys[x]
+                    - next if item.name.include? "PLASTIK"
                     - next if item.local_item
                     tr onclick="window.location='#{item_path(item)}'"
                       td #{idx}

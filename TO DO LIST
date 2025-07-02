@@ -1,11 +1,7 @@
 TO DO: 
 - KEUANGAN
 
-- HOME DIBERI IF -> biar ga terlalu lama load
-
 - SYNC
-
-- coin di item_cat 172
 
 	
 ======================================================================
@@ -14,11 +10,3 @@ UNUSED FEATURE :
 	
 
 ======================================================================
-DELETE
-	- NOTIFICATION 2.weeks
-	- ActivityLog 3.years
-
-	- TRANSFER 3.years
-	- Transaction 3.years
-	- SendBack 3.years
-	- Retur 3.years
