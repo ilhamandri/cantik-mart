@@ -89,15 +89,15 @@ class ItemsController < ApplicationController
     gon.loss_label = loss_items["label"]
     gon.loss_item = loss_items["loss_item"]
 
-    # transaction_order = Serve.graph_item_order_sell dataFilter, @item
-    # gon.label = transaction_order["label"]
-    # gon.order = transaction_order["order"]
-    # gon.transaction = transaction_order["transaction"]
+    transaction_order = Serve.graph_item_order_sell dataFilter, @item
+    gon.label = transaction_order["label"]
+    gon.order = transaction_order["order"]
+    gon.transaction = transaction_order["transaction"]
 
-    # item_prices = Serve.graph_item_price @item
-    # gon.price_label = item_prices["label"]
-    # gon.buy = item_prices["buy"]
-    # gon.sell = item_prices["sell"]
+    item_prices = Serve.graph_item_price @item
+    gon.price_label = item_prices["label"]
+    gon.buy = item_prices["buy"]
+    gon.sell = item_prices["sell"]
 
     # calculate_kpi @item
     respond_to do |format|

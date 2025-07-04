@@ -1,49 +1,79 @@
-- trx_items = TransactionItem.where(item_id: 30331).where("created_at > ? ", DateTime.now.beginning_of_month)
-- sell = trx_items.sum(:quantity).to_i
-- trxs_current_month = @transactions.where("created_at > ? ", DateTime.now.beginning_of_month)
-- total = trxs_current_month.sum(:grand_total_coin)
+- total = @curr_month_transactions.sum(:grand_total_coin)
+- qty = @curr_month_transactions.sum(:quantity_coin)
+- total_before = @transactions.sum(:grand_total_coin)
+- qty_before = @transactions.sum(:quantity_coin)
 
-.col-md-6.col-lg-3.pb-3
-  .card.bg-dark.text-center.text-white
-    .container
-      p.pt-3 #{Date.today}
-      hr.success-color
-      h4.font-weight-bold
-        i.fas.fa-coins.fa-1x.pb-2 aria-hidden="true" 
-        .lead #{number_with_delimiter(sell.to_i, delimiter: ".")} Koin Terjual
-      p #{number_to_currency(total.to_i, delimiter: ".", unit: "Rp. ", delimiter: ".", separator:",")}
-
-.col-md-6.col-lg-3.pb-3
-  .card.bg-dark.text-white
-    .container.text-center
-      p.pt-3 PEMBAGIAN HASIL
-      hr.primary-color
-      h4.font-weight-bold
-        i.fas.fa-handshake-o.fa-1x aria-hidden="true"
-      .row.pb-1
-        .col-7
-          p.text-left
-            | Cantik Mart (35%)
-            br
-            | Candy Dream (65%)
-        .col-5
-          p.text-right
+.row
+  .col-12
+    .alert.alert-warning.text-center
+      .alert-heading
+        | C A N D Y - D R E A M
+  .col-6
+    .card.bg-warning.text-center
+      .container
+        .row
+          .col-12.pt-3
+            | ITEM
+            hr.bg-danger
+          - items = Item.where(item_cat_id: 179)
+          - items.each do |item|
+            .col-3.pb-2 #{item.code}
+            .col-6.pb-2 #{item.name.upcase}
+            .col-3.pb-2.text-right #{number_with_delimiter(item.sell.to_i, delimiter: ".")}
+  .col-6
+    .card.bg-white.text-dark
+      .container
+        .row
+          .col-6.pt-3 PEMBAGIAN HASIL 
+          .col-6.text-right.pt-3 #{Date.today.strftime("%B   %Y")}
+        hr.primary-color
+        .row
+          .col-7.pb-2
+            | Cantik Mart ( 35% )  
+          .col-5.text-right
             | #{number_with_delimiter((total * 35 / 100).to_i, delimiter: ".")}
+          .col-12
             br
+          .col-7.pb-2
+            | Candy Dream ( 65% )
+          .col-5.text-right
             | #{number_with_delimiter((total * 65 / 100).to_i, delimiter: ".")}
 
-.col-md-12.col-lg-6.pb-3
-  .card
-    .view.view-cascade.gradient-card-header.primary-color.text-white
-      h2.pb-2.pt-2.text-center
-        b PENJUALAN HARI INI 
-    .card-body
-      = render "homes/partial/transaction_store"
+  .col-6.pt-3
+    .card
+      .view.view-cascade.gradient-card-header.primary-color.text-white
+        h2.pb-2.pt-2.text-center
+          b PENJUALAN HARI INI 
+      .card-body
+        = render "homes/partial/transaction_store"
 
-.col-md-12.col-lg-6.pb-3
-  .card
-    .view.view-cascade.gradient-card-header.primary-color.text-white
-      h2.pb-2.pt-2.text-center
-        b REKAP PENJUALAN
-    .card-body
-      = render "homes/partial/transaction_recap"
+  .col-6.pt-3
+    .card
+      .view.view-cascade.gradient-card-header.primary-color.text-white
+        h2.pb-2.pt-2.text-center
+          b REKAP PENJUALAN
+      .card-body
+        .row
+          .col-12
+            h3
+              b.lead #{Date.today.strftime("%B   %Y")}
+            .row
+              .col-12
+                br
+              .col-6 JUMLAH KOIN :
+              .col.text-right #{number_with_delimiter(qty, delimiter: ".")}
+              .col-6 OMZET :
+              .col.text-right #{number_to_currency(total.to_i, delimiter: ".", unit: "Rp. ", delimiter: ".", separator:",")}
+              .col-12
+                br
+                hr.section-title-hr
+            .col-12
+            h3
+              b.lead #{(Date.today-1.month).strftime("%B   %Y")}
+            .row
+              .col-12
+                br
+              .col-6 JUMLAH KOIN :
+              .col.text-right #{number_with_delimiter(qty_before, delimiter: ".")}
+              .col-6 OMZET :
+              .col.text-right #{number_to_currency(total_before.to_i, delimiter: ".", unit: "Rp. ", delimiter: ".", separator:",")}

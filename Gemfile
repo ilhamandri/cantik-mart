@@ -43,7 +43,6 @@ gem "barby"
 gem "chunky_png"
 gem 'pg_search', '~> 2.3', '>= 2.3.5'
 gem 'concurrent-ruby', '1.3.4'
-gem 'bullet'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

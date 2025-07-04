@@ -1,17 +1,19 @@
 class HomesController < ApplicationController
   before_action :require_login
-  require 'usagewatch'
+  # require 'usagewatch'
 
   def index
 
     # DeleteData.clean_data
     
     if  ["super_admin", "developer", "owner"].include? current_user.level
-      ReCheck.complain
-      ReCheck.checkInvoiceOrder
-      ReCheck.checkInvoiceTransaction
-      Calculate.calculateData
-      UpdateData.updateSupplierHandlingLocal
+      Thread.start{
+        ReCheck.complain
+        ReCheck.checkInvoiceOrder
+        ReCheck.checkInvoiceTransaction
+        Calculate.calculateData
+        UpdateData.updateSupplierHandlingLocal
+      }
     end
 
     start_date = DateTime.now.beginning_of_month - 3.months
@@ -53,12 +55,24 @@ class HomesController < ApplicationController
     end
 
     # TRANSAKSI HARI INI
-    if ["super_admin", "owner", "candy_dream", "finance", "super_visi", "developer"].include? current_user.level
+    if ["super_admin", "owner", "finance", "super_visi", "developer"].include? current_user.level
       @daily_transaction = Transaction.where(created_at: start_day..end_day)
-      # @transactions = Transaction.where("created_at >= ?", DateTime.now.beginning_of_month-1.month)
-      # @transactions = @transactions.where(has_coin: true) if current_user.level == "candy_dream"
+      start_month_before = DateTime.now.beginning_of_month-1.month
+      end_month_beofre = start_month_before.end_of_month
+      if current_user.level != "candy_dream"
+        @transactions = Transaction.where(created_at: start_month_before..end_month_beofre)
+      end
     end
 
+    if current_user.level == "candy_dream"
+      start_month_before = DateTime.now.beginning_of_month-1.month
+      end_month_beofre = start_month_before.end_of_month
+      @transactions = Transaction.where(has_coin: true, created_at: start_month_before..end_month_beofre)
+      
+      curr_month_start = DateTime.now.beginning_of_month
+      curr_month_end = curr_month_start.end_of_month
+      @curr_month_transactions = Transaction.where(has_coin: true, date_created: curr_month_start..curr_month_end) 
+    end
 
     #DEVELOPER
     if false

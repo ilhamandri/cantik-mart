@@ -7,6 +7,7 @@ class DeleteData
 		deleteNotifications
 		deleteOrder start_date, end_date
 		deleteTransaction start_date, end_date
+		deleteComplain start_date, end_date
 		deleteTransfer start_date, end_date
 		deleteRetur start_date, end_date
 		deleteSendBack start_date, end_date
@@ -30,6 +31,11 @@ class DeleteData
 	def self.deleteTransaction start_date, end_date
 		trx_items = TransactionItem.where(created_at: start_date..end_date).destroy_all
 		trx = Transaction.where(created_at: start_date..end_date).destroy_all
+	end
+
+	def self.deleteComplain start_date, end_date
+		complain_items = ComplainItem.where(created_at: start_date..end_date).destroy_all
+		complain = Complain.where(created_at: start_date..end_date).destroy_all
 	end
 
 	def self.deleteTransfer start_date, end_date

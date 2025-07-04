@@ -57,7 +57,6 @@ exit
 localhost:3000/controllers
 
 
-
 --------------------- BACKUP DB -----------------------------
 pg_dump -U postgres -f cm22.bak cantik_mart
 
@@ -82,3 +81,6 @@ kill -9 PID
 
 --------------------- Git Conflict -----------------------------
 
+--------------------- ERROR ------------------------------------
+
+gem install nokogiri --platform=ruby

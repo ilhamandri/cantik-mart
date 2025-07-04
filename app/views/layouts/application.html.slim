@@ -109,9 +109,9 @@ html
 
       .section-title-hr {
         width: inherit;
-        height: 3px;
-        border: 1px solid black;
-        background-color: black;
+        height: 2px;
+        border: 1px solid green;
+        background-color: green;
         display: block;
       }
       
@@ -154,11 +154,8 @@ html
                         - if total_notifications > 0
                           span.badge.red id="notif_number_badge"
                             | #{total_notifications}
-                        - else
-                          span style="vertical-align: middle !important;"
-                            i.fas.fa-check.text-success
                 li 
-                  a.collapsible-header.waves-effect.arrow-r href="#{root_path}" style="padding: 0; padding-left: 1.3rem" class="bg-secondary text-white #{class_select if controller_name.include? 'home'}"
+                  a.collapsible-header.waves-effect.arrow-r href="#{root_path}" style="padding: 0; padding-left: 1.3rem" class="bg-warning #{class_select if controller_name.include? 'home'}"
                     | H O M E
                 
                 = render "layouts/menu/navbar"

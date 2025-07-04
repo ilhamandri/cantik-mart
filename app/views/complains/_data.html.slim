@@ -22,14 +22,13 @@
         th.text-left width="15%" Invoice
         th.text-left width="15%" Transaksi
         th.text-left width="15%" Toko
-        th width="15%" Tgl. Transaksi
-        th width="15%" Tgl. Retur
-        th width="5%" Qty.
+        th width="15%" Transaksi
+        th width="15%" Retur
         th width="20%"
 
 table.table.table-hover
   tbody
     = render partial: 'list', collection: @complains, as: :retur
+
 .container.pagination.justify-content-center
-  = paginate @complains
-.text-center
+    = paginate @complains
