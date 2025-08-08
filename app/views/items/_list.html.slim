@@ -12,8 +12,8 @@ tr
       | #{item_cat}
   - buy = item.buy
   - buy = StoreItem.find_by(store: current_user.store, item: item).buy if item.local_item && StoreItem.find_by(store: current_user.store, item: item).present?
-  td.text-right width="12%" #{number_with_delimiter(item.buy.to_i, delimiter: ".")}
-  td.text-right width="13%" #{number_with_delimiter(item.sell.to_i, delimiter: ".")}
+  td.text-right width="10%" #{number_with_delimiter(item.buy.to_i, delimiter: ".")}
+  td.text-right width="10%" #{number_with_delimiter(item.sell.to_i, delimiter: ".")}
   td 
     .row.text-right
       .col

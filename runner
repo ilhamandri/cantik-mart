@@ -84,3 +84,19 @@ kill -9 PID
 --------------------- ERROR ------------------------------------
 
 gem install nokogiri --platform=ruby
+
+
+-------------------- UPDATE ------------------------------------
+rbenv install 3.3.6
+rbenv global 3.3.6
+gem install rails -v "8.0.2"
+gem update --system 3.6.9
+gem install nokogiri --platform=ruby
+bundle install
+yarn install
+bundle config set force_ruby_platform true
+rm -rf config/credentials.yml.enc
+rm -rf config/master.key
+
+EDITOR="mate --wait" bin/rails credentials:edit
+EDITOR="atom --wait" rails credentials:edit
