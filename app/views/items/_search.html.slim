@@ -1,21 +1,11 @@
 = form_for :items, url: items_path, method: 'GET' do |form|
   .row
-    .col-3
-      select[class="mdb-select md-form md-outline colorful-select dropdown-primary" id="order_by" name="search_by"]
-        option[value="code" select]
-          | KODE
-        option[value="name"]
-          | NAMA ITEM
-    .col-9
+    .col-10
       input type="text" class="form-control md-form" id="search" name="search" value="#{@search}" placeholder="Cari..."
-    / .col
-      select[class="mdb-select md-form md-outline colorful-select dropdown-primary" id="order_type" name="order_type"]
-        option[value="asc"]
-          | secara A - Z
-        option[value="desc"]
-          | secara Z - A
-    .col-12.text-center
-      button class="btn btn-primary"
+   
+    .col.text-center
+      br
+      button class="btn btn-primary btn-rounded"
         | Cari
     br
 
@@ -24,4 +14,5 @@
     | Pencarian "
     b
       | #{@search}
+    | "
     
