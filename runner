@@ -93,10 +93,23 @@ gem install rails -v "8.0.2"
 gem update --system 3.6.9
 gem install nokogiri --platform=ruby
 bundle install
-yarn install
 bundle config set force_ruby_platform true
 rm -rf config/credentials.yml.enc
 rm -rf config/master.key
 
 EDITOR="mate --wait" bin/rails credentials:edit
 EDITOR="atom --wait" rails credentials:edit
+
+--> install python 2.7
+wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/python2.7_2.7.18-13ubuntu1.5_amd64.deb http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/libpython2.7-stdlib_2.7.18-13ubuntu1.5_amd64.deb http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/python2.7-minimal_2.7.18-13ubuntu1.5_amd64.deb http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/libpython2.7-minimal_2.7.18-13ubuntu1.5_amd64.deb  
+
+sudo apt install ./libpython2.7-minimal_2.7.18-13ubuntu1.5_amd64.deb ./libpython2.7-stdlib_2.7.18-13ubuntu1.5_amd64.deb ./python2.7-minimal_2.7.18-13ubuntu1.5_amd64.deb ./python2.7_2.7.18-13ubuntu1.5_amd64.deb
+
+ln -s /usr/bin/python2.7 /usr/bin/python
+
+npm update
+sudo npm install -g npm@11.5.2
+npm update express
+npm audit fix --f
+
+yarn install
