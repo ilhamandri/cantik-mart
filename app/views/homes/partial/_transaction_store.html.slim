@@ -9,14 +9,14 @@
       - trx_last_timestamp = store_trxs.last.created_at if store_trxs.present?
       .carousel-item class="#{"active" if store == stores.first}"
         h4.text-center #{store.name.upcase} 
-        p.text-center.text-danger #{trx_last_timestamp.to_date}
+        p.text-center.text-danger #{trx_last_timestamp.strftime("%d/%m/%Y  %H.%M")}
         .col-xl-12.col-lg-12.col-md-12
           .card-body.table-responsive.text-nowrap
             table.table.table-hover 
               tr
                 th Kasir
                 th Tunai
-                th Debit / Kredit / QRIS
+                th Kartu / QRIS
                 th Total
                 - if isFinance
                   th Profit 
@@ -28,6 +28,7 @@
                     - grand_total = store_trxs.where(user: cashier).sum(:grand_total)
                     - hpp_total = store_trxs.where(user: cashier).sum(:hpp_total)
                     - ppn_total = store_trxs.where(user: cashier).sum(:tax)
+
                     td #{cashier.name}
                     td #{number_with_delimiter( cash.to_i, delimiter: ".", separator: ",")}
                     td #{number_with_delimiter( debit.to_i, delimiter: ".", separator: ",")}
