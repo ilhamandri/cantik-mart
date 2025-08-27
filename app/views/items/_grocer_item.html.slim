@@ -1,4 +1,4 @@
-- last_update = @item.updated_at.to_s
+- last_update = @item.updated_at.strftime("%d/%m/%Y - %H.%M").to_s
 - last_update += " (" + @item.edited_by.name + ")" if @item.edited_by.present?
 .form-group.table-responsive.text-nowrap
   .row
@@ -43,7 +43,7 @@
         - profit = (@item.sell - @item.buy - @item.ppn).round
         - text_danger = "text-danger" if profit <= 0
         td class="#{text_danger}" #{number_with_delimiter(profit, delimiter: ".", separator: ",")}
-        td #{last_update.strftime("%d/%m/%Y - %H.%M")}
+        td #{last_update}
         td.text-right
           - if current_user.store.store_type == "retail"
             a class="btn btn-success" href="#{items_path(id: @item.id, format: :pdf)}"
