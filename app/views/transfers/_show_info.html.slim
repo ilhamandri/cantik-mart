@@ -140,7 +140,7 @@ hr.my-4
           b
             | #{transfer.confirmed_by.name}
             br
-            | #{transfer.status}
+            | #{transfer.status.strftime("%d/%m/%Y - %H.%M")}
     - elsif transfer.description.include? "sistem"
       - status = false
       .stepper-item

@@ -114,7 +114,7 @@ hr.my-4
         b
           | #{retur.confirmed_by.name}
           br
-          | #{retur.status}
+          | #{retur.status.strftime("%d/%m/%Y - %H.%M")}
   - else
     .stepper-item
       .step-counter.text-white 
