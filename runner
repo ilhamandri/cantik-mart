@@ -57,6 +57,13 @@ exit
 localhost:3000/controllers
 
 
+
+
+
+--------------------- Download FILE dari SERVER -----------------------------
+
+scp -O -r root@193.168.195.145:/root/dist_270820251029.bak .
+
 --------------------- BACKUP DB -----------------------------
 pg_dump -U postgres -f cm22.bak cantik_mart
 
