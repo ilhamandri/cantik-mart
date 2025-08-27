@@ -71,7 +71,7 @@
             td #{number_with_delimiter(item.ppn.ceil(2), delimiter: ".", separator: ",")}
             td #{number_with_delimiter(item.price, delimiter: ".")}
             td #{number_with_delimiter((item.price - @item.buy - @item.ppn).round, delimiter: ".")}
-            - last_update = item.updated_at.to_s
+            - last_update = item.updated_at.strftime("%d/%m/%Y - %H.%M").to_s
             - last_update += " (" + item.edited_by.name + ")" if item.edited_by.present?
             td #{last_update}
             td.text-right
