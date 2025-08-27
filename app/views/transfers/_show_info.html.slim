@@ -76,7 +76,7 @@ hr.my-4
       b
         | #{transfer.user.name}
         br
-        | #{transfer.created_at}
+        | #{transfer.created_at.strftime("%d/%m/%Y - %H.%M")}
 
   - if (transfer.approved_by.present?) && (transfer.date_approve.to_time != "01-01-1999 00:00:00".to_time)
     .stepper-item.completed
@@ -89,7 +89,7 @@ hr.my-4
         b
           | #{transfer.approved_by.name}
           br
-          | #{transfer.date_approve}
+          | #{transfer.date_approve.strftime("%d/%m/%Y - %H.%M")}
   - elsif transfer.description.include? "pada"
     - status = false
     .stepper-item
@@ -102,7 +102,7 @@ hr.my-4
         b 
           | #{transfer.approved_by.name}
           br
-          | #{transfer.updated_at}
+          | #{transfer.updated_at.strftime("%d/%m/%Y - %H.%M")}
   - else
     .stepper-item
       .step-counter.text-white 
@@ -121,7 +121,7 @@ hr.my-4
           b
             | #{transfer.picked_by.name}
             br
-            | #{transfer.date_picked}
+            | #{transfer.date_picked.strftime("%d/%m/%Y - %H.%M")}
     - else
       .stepper-item
         .step-counter.text-white 
@@ -153,7 +153,7 @@ hr.my-4
           b 
             | 
             br
-            | #{transfer.updated_at}
+            | #{transfer.updated_at.strftime("%d/%m/%Y - %H.%M")}
     - else
       .stepper-item
         .step-counter.text-white 

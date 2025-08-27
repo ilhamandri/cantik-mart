@@ -63,7 +63,7 @@ br
             input disabled="disabled" class="form-control md-form" value="#{transaction.user.name}"
           .col-6
             label Tgl. Transaksi
-            input disabled="disabled" class="form-control md-form" value="#{transaction.created_at}"
+            input disabled="disabled" class="form-control md-form" value="#{transaction.created_at.strftime("%d/%m/%Y - %H.%M")}"
           .col-12
             hr.primary-color
           .col-3

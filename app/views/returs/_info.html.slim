@@ -65,7 +65,7 @@ hr.my-4
       b
         | #{retur.user.name}
         br
-        | #{retur.created_at}
+        | #{retur.created_at.strftime("%d/%m/%Y - %H.%M")}
 
   - if retur.date_approve.present?
     .stepper-item.completed
@@ -78,7 +78,7 @@ hr.my-4
         b
           | #{retur.approved_by.name}
           br
-          | #{retur.date_approve}
+          | #{retur.date_approve.strftime("%d/%m/%Y - %H.%M")}
   - else
     .stepper-item
       .step-counter.text-white 
@@ -96,7 +96,7 @@ hr.my-4
         b
           | #{retur.picked_by.name}
           br
-          | #{retur.date_picked}
+          | #{retur.date_picked.strftime("%d/%m/%Y - %H.%M")}
   - else
     .stepper-item
       .step-counter.text-white 

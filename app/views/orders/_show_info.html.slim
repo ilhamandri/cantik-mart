@@ -88,7 +88,7 @@
             b
               | #{order.user.name}
               br
-              | #{order.created_at}
+              | #{order.created_at.strftime("%d/%m/%Y - %H.%M")}
 
         - if order.date_receive.present?
           .stepper-item.completed
@@ -101,7 +101,7 @@
               b
                 | #{order.received_by.name}
                 br
-                | #{order.date_receive}
+                | #{order.date_receive.strftime("%d/%m/%Y - %H.%M")}
         - else
           .stepper-item
             .step-counter.text-white 
@@ -118,7 +118,7 @@
               br
               | 
               br
-              b #{order.date_paid_off}
+              b #{order.date_paid_off.strftime("%d/%m/%Y - %H.%M")}
         - else
           .stepper-item
             .step-counter.text-white 
