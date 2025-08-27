@@ -56,7 +56,7 @@ class HomesController < ApplicationController
 
     # TRANSAKSI HARI INI
     if ["super_admin", "owner", "finance", "super_visi", "developer"].include? current_user.level
-      @daily_transaction = Transaction.where(created_at: start_day..end_day)
+      @daily_transaction = Transaction.where(created_at: start_day..end_day).order("created_at ASC")
       start_month_before = DateTime.now.beginning_of_month-1.month
       end_month_beofre = start_month_before.end_of_month
       if current_user.level != "candy_dream"
