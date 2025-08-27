@@ -172,10 +172,11 @@ Rails.application.routes.draw do
 
   resources :kasbons
 
+  match '*path', to: 'errors#not_found', via: :all
   
-  get "/403", to: "errors#no_access_right", as: 'no_access_right'
-  get "/404", to: "errors#not_found", as: 'not_found'
-  get "/422", to: "errors#unacceptable", as: 'unacceptable'
-  get "/500", to: "errors#internal_error", as: 'internal_error'
+  # get "/403", to: "errors#no_access_right", as: 'no_access_right'
+  # get "/404", to: "errors#not_found", as: 'not_found'
+  # get "/422", to: "errors#unacceptable", as: 'unacceptable'
+  # get "/500", to: "errors#internal_error", as: 'internal_error'
 
 end

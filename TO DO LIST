@@ -6,17 +6,7 @@ TO DO:
 
 - FITUR HAPUS cek yang belum lunas, yang dihapus yang sudah selesai saja
 
-- DATETIME +0700
-	= HOME (penjualan kasir)
-	= ORDER -> idx, show
-	= RETUR -> show
-	= TRANSFER -> show
-	= SEND_BACK -> show
-	= TRANSACTION -> show
-	= ITEM -> show (harga jual list)
-	= ITEM_CAT -> show (last update)
-
-- ITEM_CAT list -> masih pake click button
+- error routes
 	
 ======================================================================
 UNUSED FEATURE :

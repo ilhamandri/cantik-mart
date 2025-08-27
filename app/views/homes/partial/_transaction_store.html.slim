@@ -6,10 +6,10 @@
     - stores.each do |store|
       - store_trxs = trxs.where(store: store)
       - trx_last_timestamp = "Tidak ada transaksi"
-      - trx_last_timestamp = store_trxs.last.created_at if store_trxs.present?
+      - trx_last_timestamp = store_trxs.last.created_at.strftime("%d/%m/%Y - %H.%M") if store_trxs.present?
       .carousel-item class="#{"active" if store == stores.first}"
         h4.text-center #{store.name.upcase} 
-        p.text-center.text-danger #{trx_last_timestamp.strftime("%d/%m/%Y - %H.%M")}
+        p.text-center.text-danger #{trx_last_timestamp}
         .col-xl-12.col-lg-12.col-md-12
           .card-body.table-responsive.text-nowrap
             table.table.table-hover 
