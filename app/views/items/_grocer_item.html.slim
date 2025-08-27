@@ -73,7 +73,7 @@
             td #{number_with_delimiter((item.price - @item.buy - @item.ppn).round, delimiter: ".")}
             - last_update = item.updated_at.to_s
             - last_update += " (" + item.edited_by.name + ")" if item.edited_by.present?
-            td #{last_update.strftime("%d/%m/%Y - %H.%M")}
+            td #{last_update}
             td.text-right
               - if current_user.store.store_type != "warehouse"
                 a class="btn btn-success" href="#{grocer_item_path(id: item.id, format: :pdf)}"
