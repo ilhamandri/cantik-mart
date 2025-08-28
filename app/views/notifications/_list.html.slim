@@ -1,4 +1,4 @@
-tr
+tr onclick="window.location='#{notification.link}'"
 	td #{notification.from_user.name}
 	td 
 		- t = Time.now - notification.date_created
@@ -20,6 +20,4 @@ tr
 			- time+= pluralize(ss.to_i,'sec') + " ago"
 
 		| #{time}
-	td 
-		a href="#{notification.link}"
-			| #{notification.message}
+	td #{notification.message}
