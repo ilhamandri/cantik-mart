@@ -36,13 +36,14 @@ class BackupsController < ApplicationController
       files = Dir.glob("../../BACKUP/*")
       files.each do |file|
         file_size = convert_file_size File.size(file)
-        file_name = file.gsub("../../Backup/", "")
+        file_name = file.gsub("../../BACKUP/", "")
+
         filre_created_epoch = (file_name.split("_")[1]).gsub(".bak", "")
         file_created = Time.at(filre_created_epoch.to_i).to_datetime
         
         backup_file = Backup.find_by(filename: file_name)
         if backup_file.nil?
-          Backup.create filename: file_name, size: file_size, 
+          backup = Backup.create filename: file_name, size: file_size, 
             created: file_created, present: true
         else
           backup_file.created = file_created
