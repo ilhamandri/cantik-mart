@@ -61,7 +61,6 @@
                   - 100.times do |x|
                     - break if idx == 11
                     - supplier = Supplier.find_by_id @top_suppliers.keys[x]
-                    - next if supplier.local == true
                     tr onclick="window.location='#{supplier_path(supplier)}'"
                       td #{idx}
                       td #{supplier.name.upcase}
