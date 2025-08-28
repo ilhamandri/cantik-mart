@@ -1,5 +1,9 @@
 // setInterval(get_notification, 10000);
-
+$(document).ready(function() {
+  if ($('#supplierId').length > 0) {
+    $('#nilSelect').prop('selected', true);
+  }
+});
 
 var x = document.getElementById("coordinates");
 

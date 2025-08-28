@@ -14,6 +14,7 @@
               .form-group
                 label for="from" Supplier
                 select class="md-form mdb-select  md-outline colorful-select dropdown-primary" searchable="Cari..." name="retur[supplier_id]" id="supplierId"
+                  option data-subtext="" value="" id="nilSelect"
                   - if @supplier.present?
                     option data-subtext="#{@supplier.address}" value="#{@supplier.id}"
                       | #{@supplier.name}
