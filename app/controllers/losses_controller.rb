@@ -47,7 +47,7 @@ class LossesController < ApplicationController
       loss.create_activity :create, owner: current_user
 
       if store_item.stock <= store_item.min_stock
-        set_notification current_user, current_user, "warning", item.name + " berada dibawah limit", warning_items_path
+        set_notification current_user, current_user, "warning", "STOCK LIMIT - "+item.name, warning_items_path
       end
     end
           

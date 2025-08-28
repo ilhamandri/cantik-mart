@@ -201,7 +201,7 @@ class OrdersController < ApplicationController
     return redirect_back_data_error orders_path unless params[:id].present?
     @order = Order.find params[:id]
     return redirect_back_data_error orders_path, "Data Tidak Ditemukan" unless checkAccessStore @order
-    @order_items = OrderItem.where(order_id: @order.id).includes([:item])
+    @order_items = OrderItem.where(order_id: @order.id).includes([:item]).order("created_at DESC")
     @order_items.each do |order_item|
       Store.all.each do |store|
         store_item = StoreItem.find_by(store: store, item: order_item.item)
@@ -313,10 +313,10 @@ class OrdersController < ApplicationController
         Store.all.each do |store|
           Print.create item: this_item, store: store
         end
-        message = "Perubahan Harga - "+this_item.name
+        message = "Harga SATUAN -"+this_item.name
         to_users = User.where(level: ["owner", "super_admin", "super_visi"])
         to_users.each do |to_user|
-          set_notification current_user, to_user, "info", message, prints_path
+          set_notification current_user, to_user, "primary", message, prints_path
         end
       end
 
@@ -392,7 +392,7 @@ class OrdersController < ApplicationController
                 description: order.invoice, finance_type: Debt::ORDER, due_date: due_date, supplier_id: order.supplier.id
 
       set_notification(current_user, User.find_by(store: current_user.store, level: User::FINANCE), 
-        Notification::INFO, "Pembayaran "+order.invoice+" sebesar "+number_to_currency(new_total, unit: "Rp. "), urls)
+        Notification::INFO, "PAYMENT ORDER ["+order.invoice+"]  - "+number_to_currency(new_total, unit: "Rp. "), urls)
     end
     description = order.invoice + " (" + order.grand_total.to_s + ")"
     urls = order_path(id: params[:id])
@@ -462,7 +462,7 @@ class OrdersController < ApplicationController
     user = User.find_by(store: current_user.store, level: User::FINANCE)
     if user.present?
       set_notification(current_user, user, 
-        Notification::INFO, "Pembayaran "+order.invoice+" sebesar "+number_to_currency(nominal, unit: "Rp. ")+ " Telah Dikonfirmasi", urls)
+        Notification::INFO, "PAYMENT ORDER ["+order.invoice+"] - "+number_to_currency(nominal, unit: "Rp. ")+ " Telah Dikonfirmasi", urls)
     end
     return redirect_success urls, "Pembayaran Order " + order.invoice + " Sebesar " + nominal.to_s + " Telah Dikonfirmasi"
   end

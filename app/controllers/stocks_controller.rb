@@ -40,7 +40,7 @@ class StocksController < ApplicationController
     end
     if changes.include? "min_stock"
       if store_item.stock <= store_item.min_stock
-        set_notification current_user, current_user, "warning", store_item.item.name + " berada dibawah limit", warning_items_path
+        set_notification current_user, current_user, "warning", "STOCK LIMIT - "+store_item.item.name, warning_items_path
       end
     end
     store_item.create_activity :edit, owner: current_user, parameters: changes

@@ -92,7 +92,7 @@ class RetursController < ApplicationController
     end
     urls = retur_path(id: retur.id)
     set_notification(current_user, User.find_by(store: current_user.store, level: User::SUPERVISI), 
-        Notification::INFO, "Konfirmasi retur "+retur.invoice, urls)
+        "warning", "Konfirmasi retur ["+retur.invoice+"]", urls)
     return redirect_success urls, "Data Retur Telah Disimpan"
   end
 
@@ -124,7 +124,7 @@ class RetursController < ApplicationController
       store_item = StoreItem.find_by(item: retur_item.item, store: current_user.store)
 
       if store_item.stock <= store_item.min_stock
-        set_notification current_user, current_user, "warning", store_item.item.name + " berada dibawah limit", warning_items_path
+        set_notification current_user, current_user, "warning", "STOCK LIMIT - "+store_item.item.name, warning_items_path
       end
     end
     retur.date_approve = Time.now
@@ -151,7 +151,7 @@ class RetursController < ApplicationController
     retur.save!
     urls = retur_path(id: retur.id)
     set_notification(current_user, User.find_by(store: current_user.store, level: User::SUPERVISI), 
-        Notification::INFO, "Retur "+retur.invoice+" telah diambil", urls)
+        "warning", "Retur ["+retur.invoice+"] telah diambil", urls)
     decrease_stock params[:id]
     return redirect_success urls, "Retur Telah Diambil Suplier"
   end

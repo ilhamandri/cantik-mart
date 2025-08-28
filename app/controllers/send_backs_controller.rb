@@ -74,7 +74,7 @@ class SendBacksController < ApplicationController
 	  	users = User.where(store: Store.find_by(id: 1), level: User::SUPERVISI)
 	    users.each do |user|
 	        set_notification(current_user, user, 
-	          Notification::INFO, "Barang BS Dikirimkan Oleh "+current_user.store.name + " ("+invoice+")", urls)
+	          "warning", "Barang BS  ["+invoice+ "] akan dikirim "+current_user.store.name, urls)
 	    end
 	  	return redirect_success urls, "Retur barang BS ke Gudang berhasil disimpan"
   	end
@@ -135,9 +135,9 @@ class SendBacksController < ApplicationController
 	  	@send_back.date_receive = DateTime.now
 	  	@send_back.save!
 	  	urls = send_back_path(id: @send_back.id)
-	  	message = "Retur Barang "+ @send_back.invoice.to_s + "\ntelah diterima oleh "+ current_user.name.to_s + " ( " + @send_back.date_receive.to_s + " )"
+	  	message = "Retur Barang ["+ @send_back.invoice.to_s + "] diterima oleh "+ current_user.name.to_s
 	  	set_notification(current_user, @send_back.user, 
-	          Notification::INFO, message, urls)
+	          "warning", message, urls)
 		return redirect_success urls, "Retur barang BS ke Gudang telah diterima."
   	end
 

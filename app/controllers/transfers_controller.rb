@@ -108,13 +108,12 @@ class TransfersController < ApplicationController
         users = User.where(store: transfer.to_store, level: User::STOCK_ADMIN)
         users.each do |user|
           set_notification(current_user, user, 
-            Notification::INFO, "Permintaan barang "+transfer.invoice, urls)
+            "warning", "Permintaan barang ["+transfer.invoice+"]", urls)
         end
       else
         users = User.where(store: transfer.to_store, level: User::SUPERVISI)
         users.each do |user|
-          set_notification(current_user, user, 
-            Notification::INFO, "Kiriman barang "+transfer.invoice, urls)
+          set_notification(current_user, user, "success", "Kiriman barang ["+transfer.invoice+"]", urls)
         end
       end
       return redirect_success urls, "Data Transfer - " + transfer.invoice + " - Berhasil Disimpan"
@@ -142,11 +141,11 @@ class TransfersController < ApplicationController
       transfer.date_approve = Time.now
       transfer.date_picked = "01-01-1999".to_date
       transfer.status = "01-01-1999".to_date
-      set_notification current_user, transfer.user, "danger", "Transfer "+transfer.invoice+" dibatalkan oleh " + current_user.name + "("+current_user.store.name+") pada "+DateTime.now.to_date.to_s, transfer_path(id: transfer.id)
+      set_notification current_user, transfer.user, "danger", "Transfer ["+transfer.invoice+"] dibatalkan " + current_user.name, transfer_path(id: transfer.id)
     else
       transfer.date_approve = DateTime.now
       transfer.approved_by = current_user
-      set_notification current_user, transfer.user, "success", "Transfer "+transfer.invoice+" telah diterima", transfer_path(id: transfer.id)
+      set_notification current_user, transfer.user, "success", "Transfer ["+transfer.invoice+"] diterima", transfer_path(id: transfer.id)
     
     end
     
@@ -179,7 +178,7 @@ class TransfersController < ApplicationController
       transfer.status = "01-01-1999".to_date
       transfer.description = "Dibatalkan otomatis oleh sistem (tidak ada barang yang dikirim)" 
       transfer.save!
-      set_notification current_user, transfer.approved_by, "danger", "Transfer #"+transfer.invoice+" dibatalkan oleh sistem (Tidak ada item yang dikirim).", transfer_path(id: transfer.id)
+      set_notification current_user, transfer.approved_by, "danger", "Transfer ["+transfer.invoice+"] dibatalkan sistem - Tidak ada item yang dikirim", transfer_path(id: transfer.id)
       return redirect_to transfer_path(id: transfer.id)
     else
       return redirect_success transfer_path(id: transfer.id), "Transfer "+transfer.invoice+" telah dikirim"
@@ -350,7 +349,7 @@ class TransfersController < ApplicationController
 
 
         if store_item.stock <= store_item.min_stock
-          set_notification current_user, current_user, "warning", store_item.item.name + " berada dibawah limit", warning_items_path
+          set_notification current_user, current_user, "warning", "STOCK LIMIT - " +store_item.item.name, warning_items_path
         end
       end
       return status
