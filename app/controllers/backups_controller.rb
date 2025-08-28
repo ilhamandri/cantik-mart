@@ -33,7 +33,7 @@ class BackupsController < ApplicationController
 
     def refresh_files
       Backup.update_all(present: false)
-      files = Dir.glob("../../Backup/*")
+      files = Dir.glob("../../BACKUP/*")
       files.each do |file|
         file_size = convert_file_size File.size(file)
         file_name = file.gsub("../../Backup/", "")

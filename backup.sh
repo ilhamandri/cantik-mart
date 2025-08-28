@@ -1,4 +1,4 @@
-filename="$USER"_$(date +"%s").bak
+filename="BACKUP/cm"_$(date +"%s").bak
 echo "FILE: "$filename
 cd ~
 cd "Backup"

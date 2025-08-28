@@ -184,7 +184,7 @@ li
 
 
 
-- if isAdmin
+- if isDeveloper
   hr
   li
     a.collapsible-header.waves-effect.arrow-r  href="#{activities_path}"  class="#{class_select if ['activities'].include? controller_name}"
@@ -193,8 +193,8 @@ li
     a.collapsible-header.waves-effect.arrow-r  href="#{controllers_path}"  class="#{class_select if ['controllers'].include? controller_name}"
       | Hak Akses
 
-- if isDeveloper
   hr
+  
   li 
     a.collapsible-header.waves-effect.arrow-r  href="#{attends_path}"
       | Attend
