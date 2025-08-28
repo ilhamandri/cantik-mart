@@ -131,8 +131,9 @@ function changePriceNormalEditItem(){
   base_price = buy + (buy*margin/100.0);
   ppn = base_price * tax / 100.0;
   new_price = base_price + ppn;
-  var new_sell = formatangka_titik(Math.ceil(new_price/100)*100);
-  
+
+  var new_sell = formatangka_titik(Math.ceil(new_price/50)*50);
+
   $("#normal_sell").val(new_sell); 
   changeDiscountEditItem();
 }
@@ -150,7 +151,7 @@ function changeDiscountEditItem(){
   }
 
   new_price = normal_sell - discount;
-  var new_sell = formatangka_titik(Math.ceil(new_price/100)*100);
+  var new_sell = formatangka_titik(Math.ceil(new_price/50)*50);
 
   $("#sell").val(new_sell); 
 }
@@ -192,7 +193,7 @@ function changePrice(id) {
   base_price = price;
   var price_before_tax = base_price+(base_price*margin/100);
   var price_after_tax = price_before_tax + (price_before_tax*ppn/100);
-  var new_sell = formatangka_titik(Math.ceil(price_after_tax/100)*100);
+  var new_sell = formatangka_titik(Math.ceil(price_after_tax/50)*50);
 
   $("#"+id+"Sell").val(new_sell);  
 

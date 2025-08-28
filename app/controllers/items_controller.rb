@@ -5,6 +5,7 @@ class ItemsController < ApplicationController
   require 'apriori'
   
   def index
+    UpdateData.updateStockCandyDream
     UpdateData.updateDuplicateItem
     @search = params[:search]
     s = "%#{@search}%".upcase

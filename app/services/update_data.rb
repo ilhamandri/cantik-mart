@@ -1,5 +1,9 @@
 class UpdateData
 
+	def self.updateStockCandyDream
+		StoreItem.where(item: ItemCat.find(179).item).update_all(stock: 99999)
+	end
+
 	def self.updateSupplierHandlingLocal
 		Supplier.all.each do |supplier|
 			supplier_items = supplier.supplier_items
