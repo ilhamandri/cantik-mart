@@ -1,6 +1,7 @@
 tr onclick="window.location='#{notification.link}'"
-	td #{notification.from_user.name}
-	td 
+	td width="1%" class="bg-#{notification.m_type}"
+	td #{notification.message}
+	td.text-right.text-black-50 style="font-size: 12px !important;"
 		- t = Time.now - notification.date_created
 		- mm, ss = t.divmod(60)            
 		- hh, mm = mm.divmod(60)           
@@ -20,4 +21,3 @@ tr onclick="window.location='#{notification.link}'"
 			- time+= pluralize(ss.to_i,'sec') + " ago"
 
 		| #{time}
-	td #{notification.message}

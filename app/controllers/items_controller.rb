@@ -208,9 +208,9 @@ class ItemsController < ApplicationController
       Store.all.each do |store|
         Print.create item: item, store: store
       end
-      message = "Terdapat perubahan harga. Segera cetak label harga "+item.name
+      message = "Harga SATUAN - "+item.name
       to_users.each do |to_user|
-        set_notification current_user, to_user, "info", message, prints_path
+        set_notification current_user, to_user, "primary", message, prints_path
       end
 
       ItemPrice.create item: item, buy: item.buy, sell: item.sell, month: Date.today.month.to_i, year: Date.today.year.to_i

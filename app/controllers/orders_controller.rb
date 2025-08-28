@@ -158,6 +158,8 @@ class OrdersController < ApplicationController
     order.create_activity :create, owner: current_user
     order.save!
     urls = order_path id: order.id
+    messages = "CREATE - ORDER [" + order.invoice + "] - " + order.supplier.name
+    # set_notification current_user, current_user, "success", messages, order_path(order)
     return redirect_success urls, "Order Berhasil Disimpan"
   end
 
@@ -185,7 +187,9 @@ class OrdersController < ApplicationController
         item.save!
       end
     end
-
+    messages = "HAPUS ORDER [" + order.invoice + "] - " + order.supplier.name
+    # set_notification current_user, current_user, "danger", messages, order_path(order)
+    
     debt = Debt.find_by(finance_type: Debt::ORDER, ref_id: order.id)
     debt.destroy if debt.present?
     order.order_items.destroy_all
@@ -309,7 +313,7 @@ class OrdersController < ApplicationController
         Store.all.each do |store|
           Print.create item: this_item, store: store
         end
-        message = "Terdapat perubahan harga jual. Segera cetak label harga "+this_item.name
+        message = "Perubahan Harga - "+this_item.name
         to_users = User.where(level: ["owner", "super_admin", "super_visi"])
         to_users.each do |to_user|
           set_notification current_user, to_user, "info", message, prints_path

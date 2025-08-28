@@ -65,9 +65,9 @@ class GrocerItemsController < ApplicationController
     Store.all.each do |store|
       Print.create item: item, store: store, grocer_item: grocer_item
     end
-    message = "Terdapat penambahan harga grosir. Segera cetak label harga "+item.name
+    message = "Harga GROSIR - "+item.name
     to_users.each do |to_user|
-      set_notification current_user, to_user, "info", message, prints_path
+      set_notification current_user, to_user, "warning", message, prints_path
     end
 
     return redirect_back_data_error new_grocer_item_path, "Data tidak valid" if grocer_item.invalid?
@@ -110,9 +110,9 @@ class GrocerItemsController < ApplicationController
     Store.all.each do |store|
       Print.create item: item, store: store, grocer_item: grocer_item
     end
-    message = "Terdapat perubahan harga grosir. Segera cetak label harga "+item.name
+    message = "Harga GROSIR - "+item.name
     to_users.each do |to_user|
-      set_notification current_user, to_user, "info", message, prints_path
+      set_notification current_user, to_user, "warning", message, prints_path
     end
     return redirect_success item_path(item), "Harga Grosir Telah Disimpan"
   end

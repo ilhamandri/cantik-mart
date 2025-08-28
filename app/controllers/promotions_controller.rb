@@ -55,7 +55,7 @@ class PromotionsController < ApplicationController
     Store.all.each do |store|
       Print.create item: buy_item, store: store, promotion: promotion
     end
-    message = "Terdapat promo baru "+promotion.promo_code
+    message = "PROMO - "+promotion.promo_code
     to_users.each do |to_user|
       set_notification current_user, to_user, "info", message, prints_path
     end

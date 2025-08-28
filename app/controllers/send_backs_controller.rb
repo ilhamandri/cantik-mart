@@ -74,7 +74,7 @@ class SendBacksController < ApplicationController
 	  	users = User.where(store: Store.find_by(id: 1), level: User::SUPERVISI)
 	    users.each do |user|
 	        set_notification(current_user, user, 
-	          Notification::INFO, "Terdapat barang BS yang akan dikirimkan oleh "+current_user.store.name + " ("+invoice+")", urls)
+	          Notification::INFO, "Barang BS Dikirimkan Oleh "+current_user.store.name + " ("+invoice+")", urls)
 	    end
 	  	return redirect_success urls, "Retur barang BS ke Gudang berhasil disimpan"
   	end
