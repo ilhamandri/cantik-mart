@@ -3,8 +3,11 @@
 .form-group.table-responsive.text-nowrap
   .row
     .col
-      label
-        h3 Harga Jual
+      h3 HARGA NORMAL : 
+    .col
+      h3 style="font-weight: 900;" 
+        b #{number_with_delimiter(@item.price_before.to_i, delimiter: ".")}
+
     - if buttonAccess "grocer_items", "new"
       .col-3.text-right
         a href="#{new_grocer_item_path(id: @item.id)}"
@@ -12,19 +15,21 @@
             i.fas.fa-plus 
             |   Harga
 
+    
   table class="table table-hover"
     thead
       th Min
       th Max
       th Diskon
-      th Pajak
-      th Harga Jual
-      th Profit
+      th Harga Final
+      - if buttonAccess "items", "new"
+        th Pajak
+        th Profit
       th Diperbarui
       th
     tbody
       tr
-        td 0
+        td -
         td 1
         - disc = @item.discount
         - disc = @item.discount * @item.buy / 100 if disc < 100
@@ -38,11 +43,13 @@
         - else
           td -
 
-        td #{number_with_delimiter(@item.ppn.ceil(2), delimiter: ".", separator: ",")}
         td #{number_with_delimiter(@item.sell, delimiter: ".", separator: ",")}
         - profit = (@item.sell - @item.buy - @item.ppn).round
         - text_danger = "text-danger" if profit <= 0
-        td class="#{text_danger}" #{number_with_delimiter(profit, delimiter: ".", separator: ",")}
+
+        - if buttonAccess "items", "new"
+          td #{number_with_delimiter(@item.ppn.ceil(2), delimiter: ".", separator: ",")}
+          td class="#{text_danger}" #{number_with_delimiter(profit, delimiter: ".", separator: ",")}
         td #{last_update}
         td.text-right
           - if current_user.store.store_type == "retail"

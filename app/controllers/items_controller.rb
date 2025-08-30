@@ -158,6 +158,7 @@ class ItemsController < ApplicationController
     code = params[:item][:code].gsub(" ","")
     item.assign_attributes item_params
     item.sell = params[:item][:sell].gsub(".","").to_f
+    item.price_before = params[:item][:sell_normal].gsub(".","").to_f
     changes = item.changes
     item.sell_member = item.sell
 

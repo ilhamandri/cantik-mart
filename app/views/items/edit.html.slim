@@ -53,13 +53,10 @@
           .form-group
             label for="sell" Margin
             = form.number_field :margin, required: true, class: "form-control md-form", id: "margin", min: "0", onchange:"changePriceNormalEditItem()", step:"0.1"
-          - buy = @item.buy
-          - base_price = buy + (buy*@item.margin/100.0)
-          - ppn = base_price * @item.tax / 100.0
-          - normal_sell = (base_price + ppn).ceil(-2)
+        
           .form-group
             label for="sell" Harga Jual Normal
-            = form.text_field :sell, required: true, class: "form-control md-form", id: "normal_sell", value: "#{number_with_delimiter(normal_sell, delimiter: '.')}", readonly:"true"
+            = form.text_field :sell_normal, required: true, class: "form-control md-form", id: "normal_sell", value: "#{number_with_delimiter(@item.price_before.to_i, delimiter: '.')}", readonly:"true"
           .form-group
             label for="sell" Diskon Satuan
             br

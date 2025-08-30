@@ -1,5 +1,17 @@
 class UpdateData
 
+	def self.updatePriceBefore
+		Item.all.each do |item|
+			buy = item.buy.to_f
+          	base_price = buy + (buy*item.margin.to_f/100.0)
+          	ppn = base_price * item.tax / 100.0
+          	raw_price = base_price + ppn
+          	item.price_before = (raw_price/50).ceil*50
+          	puts item.id.to_s + " ==========> " + item.price_before.to_i.to_s
+          	item.save!
+      	end
+	end
+
 	def self.updateStockCandyDream
 		StoreItem.where(item: ItemCat.find(179).item).update_all(stock: 99999)
 	end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_02_092444) do
+ActiveRecord::Schema[7.2].define(version: 2025_08_30_162504) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -303,6 +303,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_02_092444) do
     t.float "ppn", default: 0.0, null: false
     t.float "selisih_pembulatan", default: 0.0, null: false
     t.bigint "edited_by"
+    t.float "price_before", default: 0.0
     t.index ["item_cat_id"], name: "index_items_on_item_cat_id"
   end
 

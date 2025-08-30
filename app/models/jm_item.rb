@@ -1,4 +1,0 @@
-class JmItem < ApplicationRecord
-  
-end
-
