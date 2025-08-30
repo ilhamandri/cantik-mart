@@ -7,7 +7,6 @@ class PopularsController < ApplicationController
     item_cats_data = higher_item_cats_graph @date
     gon.higher_item_cats_data = item_cats_data.values
     gon.higher_item_cats_label = item_cats_data.keys
-
     item_cats_data = lower_item_cats_graph @date
     gon.lower_item_cats_data = item_cats_data.values
     gon.lower_item_cats_label = item_cats_data.keys
@@ -16,19 +15,25 @@ class PopularsController < ApplicationController
     @lower_item = lower_item @date
   end
 
+  def generate
+    Thread.start{
+      Analyze.generate_popular_items
+    }
+    redirect_success populars_path, "Refresh rekap item sedang berjalan."
+  end
+
   private
     def param_page
       params[:page]
     end
 
     def higher_item date
-      PopularItem.where(item_cat_id: 134).destroy_all
-      item_sells = PopularItem.where(store: current_user.store).where("date = ?", date).order("n_sell DESC").limit(20).pluck(:item_id, :n_sell)
+      item_sells = PopularItem.where(store: current_user.store, date: date).order("n_sell DESC").limit(20).pluck(:item_id, :n_sell)
       return Hash[item_sells]
     end
 
     def lower_item date
-      item_sells = PopularItem.where(store: current_user.store).where("date = ?", date).order("n_sell ASC").limit(20).pluck(:item_id, :n_sell)
+      item_sells = PopularItem.where(store: current_user.store).where("date = ?", date).order("n_sell DESC").limit(20).pluck(:item_id, :n_sell)
       return Hash[item_sells]
     end
 
@@ -75,4 +80,6 @@ class PopularsController < ApplicationController
       return date
       
     end 
+
+    
 end

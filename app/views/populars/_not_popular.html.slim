@@ -1,17 +1,4 @@
 .card-body
   .row
-    .col-12.text-right
-      a href="#{refresh_popular_items_path}" class="btn btn-warning"
-        | Perbarui
     .col-12
-      canvas id="lower_sales"
-    .col-12.pb-2
-      table.table.table-hover 
-        thead
-          th Nama
-          th Terjual
-        tbody
-          - @lower_item.each do |item|
-            tr
-              td #{Item.find_by(id: item[0]).name}
-              td #{item[1]}
+      canvas id="higher_sales"

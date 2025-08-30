@@ -4,6 +4,7 @@
     - stores = [current_user.store] if current_user.level == "super_visi"
     - trxs = @daily_transaction
     - stores.each do |store|
+      - next if trxs.nil?
       - store_trxs = trxs.where(store: store)
       - trx_last_timestamp = "Tidak ada transaksi"
       - trx_last_timestamp = store_trxs.last.created_at.strftime("%d/%m/%Y - %H.%M") if store_trxs.present?

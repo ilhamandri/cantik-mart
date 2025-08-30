@@ -3,7 +3,7 @@ class HomesController < ApplicationController
   # require 'usagewatch'
 
   def index
-
+    
     # DeleteData.clean_data
     
     if  ["super_admin", "developer", "owner"].include? current_user.level
@@ -138,23 +138,6 @@ class HomesController < ApplicationController
     
   end
 
-  def popular_items
-    # trxs = Transaction.where(store: current_user.store).where("created_at >= ?", (DateTime.now - 2.month)).pluck(:id).uniq
-    # item_sells = TransactionItem.where(transaction_id: trxs).group(:item_id).count
-    # high_results = Hash[item_sells.sort_by{|k, v| v}.reverse]
-    # highs = high_results
-    # curr_date_pop_item = PopularItem.where("date = ?", DateTime.now.beginning_of_month)
-    # curr_date_pop_item.destroy_all if curr_date_pop_item.present?
-    # date = DateTime.now.beginning_of_month
-    # highs.each do |data|
-    #   item = Item.find_by(id: data[0])
-    #   item_cat = item.item_cat
-    #   department = item_cat.department
-    #   sell = data[1]
-    #   pop_item = PopularItem.create item: item, item_cat: item_cat,
-    #    department: department, n_sell: sell, date: date, store: current_user.store
-    # end
-    redirect_success populars_path, "Refresh rekap item selesai."
-  end
+  
 
 end

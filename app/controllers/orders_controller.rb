@@ -147,7 +147,7 @@ class OrdersController < ApplicationController
       supplier_item = SupplierItem.find_by(item_id: item_arr[0], supplier: supplier)
       supplier_item.destroy if supplier_item.present?
       SupplierItem.create supplier_id: address_to, item: item 
-
+      supplier.local = item.local_item
       supplier.save!
 
       order_item = OrderItem.create item_id: item_arr[0], order_id: order.id, quantity: item_arr[4], price: 0, description: item_arr[5]

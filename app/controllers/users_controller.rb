@@ -55,7 +55,7 @@ class UsersController < ApplicationController
     end
     return redirect_back_data_error users_path, "Data Pengguna Tidak Ditemukan" unless @user.present?
 
-    @salaries = UserSalary.where(user: @user).includes(:user,:store).order("created_at DESC").limit(12)
+    @salaries = UserSalary.where(user: @user).includes(:user).order("created_at DESC").limit(12)
 
     @receivables = Receivable.where(to_user: @user, finance_type: "EMPLOYEE").includes(:user,:store).order("created_at DESC").page param_page
     

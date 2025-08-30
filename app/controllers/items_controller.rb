@@ -10,8 +10,6 @@ class ItemsController < ApplicationController
     @search = params[:search]
     s = "%#{@search}%".upcase
     @items = Item.where("name like ? OR code like ?", s, s).order(name: :asc).includes(:item_cat, :item_cat => :department).page param_page
-   
-
   end
 
   def item_recaps
@@ -64,8 +62,6 @@ class ItemsController < ApplicationController
       end
     end
     
-    
-
     p.serialize(filename)
     send_file(filename)
   end
@@ -116,24 +112,6 @@ class ItemsController < ApplicationController
     @returs = Retur.where(id: @retur_ids)
   end
 
-  def calculate_kpi item
-    date_end = DateTime.now
-    order_3months = OrderItem.where(item: item, created_at: (DateTime.now-3.months)..date_end).sum(:receive).to_f
-    order_6months = OrderItem.where(item: item, created_at: (DateTime.now-6.months)..date_end).sum(:receive).to_f
-
-    sell_3months = TransactionItem.where(item: item, created_at: (DateTime.now-3.months)..date_end).sum(:quantity).to_f
-    sell_6months = TransactionItem.where(item: item, created_at: (DateTime.now-6.months)..date_end).sum(:quantity).to_f
-
-    kpi_3month = 0.01
-    kpi_6month = 0.01
-    kpi_3month = (sell_3months / order_3months) * 100 if order_3months > 0 && sell_3months > 0
-    kpi_6month = (sell_6months / order_6months) * 100 if order_6months > 0 && sell_6months > 0
-    
-    kpi = (kpi_3month*0.75) + (kpi_6month*0.25) 
-    item.kpi = kpi.ceil(2)
-    item.save!
-  end
-
   def new
     @item_cats = ItemCat.all
   end
@@ -163,7 +141,6 @@ class ItemsController < ApplicationController
     item.create_activity :create, owner: current_user
     urls = item_path id: item.id
     return redirect_success urls, "Data Barang Berhasil Ditambahkan"
-
   end
 
   def edit
@@ -232,54 +209,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def refresh_predict
-    data_item = []
-    data = []
-    trxs = Transaction.where("created_at >= ?", DateTime.now.beginning_of_day-30.days)
-    trxs.each do |trx|
-      trx_items_id = trx.transaction_items.pluck(:item_id)
-      item_cats_id = Item.where(id: trx_items_id).pluck(:item_cat_id)
-      # data_item << trx_items_id
-      data << item_cats_id
-    end
-    # data = [[1,2,3,4], [1,2,4,5], [2,3,4,5]]
-    # item_set = Apriori::ItemSet.new(data_item)
-    item_cat_set = Apriori::ItemSet.new(data)
-    support = 1
-    confidence = 1
-    # minings_item = item_set.mine(support, confidence)
-    # minings_item.each do |mining|
-    #   percentage = mining[1]
-    #   items = mining[0].split("=>")
-    #   buy = Item.find_by(id: items[0])
-    #   usually = Item.find_by(id: items[1])
-    #   predict = PredictItem.find_by(buy: buy, usually: usually)
-    #   if predict.present?
-    #     predict.percentage = percentage
-    #     predict.save!
-    #   else
-    #     predict = PredictItem.create percentage: percentage, buy: buy, usually: usually
-    #   end
-    # end
-
-    minings_item_cats = item_cat_set.mine(support, confidence)
-    minings_item_cats.each do |mining|
-      percentage = mining[1]
-      items = mining[0].split("=>")
-      buy = ItemCat.find_by(id: items[0])
-      next if items[1] == 134 || items[0] == 134
-      usually = ItemCat.find_by(id: items[1])
-      predict_cat = PredictCategory.find_by(buy: buy, usually: usually)
-      if predict_cat.present?
-        predict_cat.percentage = ( percentage.to_f + predict_cat.percentage) / 2
-        predict_cat.save!
-      else
-        predict_cat = PredictCategory.create percentage: percentage, buy: buy, usually: usually
-      end
-    end
-
-    return redirect_success predict_item_path, "Refresh Prediksi Item Selesai" 
-  end
 
   def predict
     @predicts = PredictItem.order("percentage DESC").page param_page

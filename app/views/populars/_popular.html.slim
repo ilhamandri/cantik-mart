@@ -1,10 +1,14 @@
 .card-body
   .row
-    .col-12.text-right
-      a href="#{refresh_popular_items_path}" class="btn btn-warning"
-        | Perbarui
     .col-12
-      canvas id="higher_sales"
+      .row
+        .col-9
+          | LAST UPDATE : 
+          .text-danger
+            | #{PopularItem.last.date}
+        .col-3
+          a href="#{refresh_popular_items_path}" class="btn btn-warning"
+            | Perbarui
     .col-12.pb-2
       table.table.table-hover 
         thead

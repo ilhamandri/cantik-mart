@@ -2,16 +2,18 @@ class DeleteData
 
 	def self.clean_data
 		start_date = DateTime.now.beginning_of_year - 10.years
-		end_date = ((DateTime.now.beginning_of_year - 3.years) - 1.day).end_of_day
+		end_date_1 = ((DateTime.now.beginning_of_year - 1.years) - 1.day).end_of_day
+		end_date_3 = ((DateTime.now.beginning_of_year - 3.years) - 1.day).end_of_day
+		end_date_6 = ((DateTime.now.beginning_of_year - 6.years) - 1.day).end_of_day
 		
 		deleteNotifications
 		deleteOrder start_date, end_date
 		deleteTransaction start_date, end_date
 		deleteComplain start_date, end_date
-		deleteTransfer start_date, end_date
-		deleteRetur start_date, end_date
-		deleteSendBack start_date, end_date
-		deleteActivityLog start_date, end_date
+		deleteTransfer start_date, end_date_3
+		deleteRetur start_date, end_date_3
+		deleteSendBack start_date, end_date_3
+		deleteActivityLog start_date, end_date_1
 
 		puts "DATA CLEAN UP SUCCESS !!"
 	end
