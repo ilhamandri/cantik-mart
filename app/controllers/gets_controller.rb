@@ -11,7 +11,7 @@ class GetsController < ApplicationController
 			 # from = params[:from].gsub("  "," +").to_time
 			 # to = params[:to].gsub("  "," +").to_time
 
-			 from = DateTime.now.beginning_of_day-1.day
+			 from = DateTime.now.beginning_of_day-7.day
 			 to = DateTime.now
 
 			 # LOCALHOST
