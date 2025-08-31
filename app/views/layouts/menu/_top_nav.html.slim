@@ -1,24 +1,23 @@
-nav.navbar.fixed-top.navbar-expand-lg.scrolling-navbar.double-nav
+nav.navbar.fixed-top
   .float-left
     a.button-collapse data-activates="slide-out" href="#" 
       i.fas.fa-bars
 
-  .breadcrumb-dn.mr-auto
-    .float-left
+  /.breadcrumb-dn.mr-auto
+    .float-center
       #txt style="padding: 0 0 0 50px;"
     - if @title.present?
       .float-left style="margin: 0 0 0 20px; font-weight: bold;"
-        i.fas.fa-arrow-right
-        | &nbsp #{@title}
+        h4.bold &nbsp #{@title.upcase}
         
     - if @method.present?
       .float-left style="margin: 0 0 0 20px; font-weight: bold;"
         i.fas.fa-arrow-right
-        | &nbsp #{@method}
+        | &nbsp #{@method.upcase}
 
   .d-flex.change-mode
     ul.nav.navbar-nav.nav-flex-icons.ml-auto
-      li.nav-item.dropdown.notifications-nav
+      /li.nav-item.dropdown.notifications-nav
         - total_notifications = Notification.where(to_user: current_user, read: 0).order("date_created DESC").count
       
         a#navbarDropdownMenuLink.nav-link.dropdown-toggle.waves-effect aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" onclick="update_notification()"
@@ -34,7 +33,7 @@ nav.navbar.fixed-top.navbar-expand-lg.scrolling-navbar.double-nav
         input type="text" style="display: none;" value="#{DateTime.now}" id="last_check"
         .dropdown-menu.dropdown-menu-right aria-labelledby="navbarDropdownMenuLink" id="notification_list"
 
-          = render "layouts/menu/notif"            
+           = render "layouts/menu/notif"            
 
       li.nav-item.dropdown
         a#userDropdown.nav-link.dropdown-toggle.waves-effect aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="#" 

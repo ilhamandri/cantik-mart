@@ -12996,7 +12996,7 @@ span[data-jarallax-element] {
   left: 0;
   right: 0;
   height: 120vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0);
   z-index: 997;
   will-change: opacity; }
 

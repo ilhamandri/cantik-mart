@@ -7,7 +7,7 @@ html
 
     meta charset="UTF-8"  /
     meta http-equiv="X-UA-Compatible" content="chrome=1"  /
-    meta name="copyright" content="Novia" /
+    meta name="copyright" content="Cantik Mart" /
     meta name="distribution" content="Global" /
     meta name="rating" content="General" /
 
@@ -18,7 +18,7 @@ html
     link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" /
 
     = stylesheet_link_tag "https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-    = stylesheet_link_tag '/dist/css/mdb.min.css'
+    = stylesheet_link_tag '/dist/css/mdb.css'
     = stylesheet_link_tag "/dist/css/application", media: "all"
 
     css:
@@ -51,12 +51,24 @@ html
         padding-left: 1rem;
       }
       .tab-content{
-        height: 88vh; overflow: scroll; padding-top: 0;
+        height: 84vh; overflow: scroll; padding-top: 0;
       }
+
       @media (min-width:1200px) {
         .fixed-sn .page-footer .container-fluid, .fixed-sn main {
           margin-left:0%;
           margin-right:0%;
+        }
+      }
+
+      .container-fluid{
+        height: 94vh; overflow: scroll; padding-top: 0;
+      }
+
+      @media (min-width: 992px) {
+        .fixed-sn .page-footer .container-fluid, .fixed-sn main {
+          margin-left: 0%;
+          margin-right: 0%;
         }
       }
 
@@ -66,7 +78,7 @@ html
 
 
       .fixed-sn main, .hidden-sn main{
-        padding-top: .5rem !important;
+        padding-top: 5vh !important;
       }
 
       thead, tbody{
@@ -117,6 +129,10 @@ html
         background-color: green;
         display: block;
       }
+
+      .navbar{
+        padding: 0 1rem !important;
+      }
       
   body.fixed-sn.white-skin onload="startTime()" 
     - if params[:controller] != "sessions" && params[:controller] != "registers"
@@ -164,7 +180,7 @@ html
                 = render "layouts/menu/navbar"
           .sidenav-bg.mask-strong
 
-        / = render "layouts/menu/top_nav"
+        = render "layouts/menu/top_nav"
 
       main
         = yield
