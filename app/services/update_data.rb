@@ -1,7 +1,7 @@
 class UpdateData
 
 	def self.updatePriceBefore
-		Item.all.each do |item|
+		Item.where("discount > 0").each do |item|
 			buy = item.buy.to_f
           	base_price = buy + (buy*item.margin.to_f/100.0)
           	ppn = base_price * item.tax / 100.0

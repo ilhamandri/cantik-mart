@@ -25,9 +25,10 @@
                 = form.text_field :name, required: true, class: "form-control md-form", id: "name", disabled: true
             .col-12
               hr
-            .col
-              - if @item.name.upcase == "TELOR RETAK" || (["002024", "002030", "002040"].include? @item.code)
-                / -  if isSuperVisi
+          .row
+            - if @item.name.upcase == "TELOR RETAK" || (["002024", "002030", "002040"].include? @item.code)
+              / -  if isSuperVisi
+                .col
                   .form_group
                     label for="category" Stok
                     = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}"
@@ -35,7 +36,8 @@
                     label for="sell" Harga Beli Saat Ini
                     label.text-danger for="type" (*Isi dengan harga satuan sesuai dengan harga beli saat ini)
                     = form.number_field :buy, required: true, class: "form-control md-form", id: "buy"
-              - if isStockAdmin
+            - if isStockAdmin
+              .col
                 .form_group
                   label for="category" Stok
                   = form.number_field :stock, required: true, class: "form-control md-form", value:"#{@stock.stock}", step: "0.001"

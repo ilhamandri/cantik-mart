@@ -18,12 +18,13 @@
     hr
     table.table.table-hover 
       thead.text-center
-        th width="15%" Kode
-        th width="25%" Nama
-        th width="15%" Kategori
-        th.text-right width="10%" Beli
+        th width="18%" Kode
+        th width="30%" Nama
+        th width="17%" Kategori
+        - if buttonAccess "items", "new"
+          th.text-right width="10%" Beli
         th.text-right width="10%" Jual
-        th  
+        th
         
 table.table.table-hover 
   tbody

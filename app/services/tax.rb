@@ -1,6 +1,5 @@
 class Tax
 	def self.calculate
-
 		Transaction.update_all(tax: 0)
 		Order.update_all(tax: 0)
 		Supplier.update_all(tax: 0)
