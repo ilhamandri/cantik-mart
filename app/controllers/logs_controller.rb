@@ -3,7 +3,7 @@ class LogsController < ApplicationController
   before_action :screening
 
   def index
-    Thread,start{
+    Thread.start{
       end_date = DateTime.now - 6.months
       UserDevice.where("created_at <= ?", end_date).destroy_all
     }
