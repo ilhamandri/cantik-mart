@@ -19,7 +19,7 @@
               h5.font-weight-500.my-1
                 | #{order.invoice}
     - if buttonAccess "orders", "confirmation"
-      - if @order_items.first.order.date_receive.nil? && @order_items.first.order.date_paid_off.nil?
+      - if order.date_receive.nil? && order.date_paid_off.nil?
         .col-1.text-center
           a.btn.btn-success href="#{order_confirmation_path(id: order_id)}"
               | Terima
