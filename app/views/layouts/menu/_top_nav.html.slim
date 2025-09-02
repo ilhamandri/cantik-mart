@@ -3,17 +3,21 @@ nav.navbar.fixed-top
     a.button-collapse data-activates="slide-out" href="#" 
       i.fas.fa-bars
 
-  /.breadcrumb-dn.mr-auto
-    .float-center
-      #txt style="padding: 0 0 0 50px;"
-    - if @title.present?
-      .float-left style="margin: 0 0 0 20px; font-weight: bold;"
-        h4.bold &nbsp #{@title.upcase}
-        
-    - if @method.present?
-      .float-left style="margin: 0 0 0 20px; font-weight: bold;"
-        i.fas.fa-arrow-right
-        | &nbsp #{@method.upcase}
+
+  
+  .float-left
+    .float-left style="margin: 0 0 0 20px; font-weight: bold;"
+      .bold &nbsp #{controller.controller_name.gsub("_", " ").upcase}
+  - if controller.action_name == "index"  
+    .float-left
+      - curr_path = request.original_url
+      form action="#{curr_path}" method="get" style="margin-bottom: 0 !important;"
+        i.fas.fa-search
+        | &nbsp 
+        input type="text" class="form-control" id="search" name="search" placeholder="Pencarian ..." style="width: 20rem; display: inline !important;" 
+        | &nbsp 
+        button.btn-primary.btn-rounded
+          | &nbsp   CARI &nbsp 
 
   .d-flex.change-mode
     ul.nav.navbar-nav.nav-flex-icons.ml-auto

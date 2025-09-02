@@ -89,7 +89,7 @@
           .col-6.text-right
             | TERAKHIR UPDATE : 
           .col-6.text-danger
-            | #{@user.updated_at}
+            | #{@user.updated_at.strftime('%d/%m/%Y - %H:%M:%S')}
 
       - if current_user.level == "super_admin"
         .col-12.text-center

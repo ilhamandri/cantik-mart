@@ -2,4 +2,4 @@ tr onclick="window.location='#{loss_path(id: loss.id)}'"
 	td width="25%" #{loss.invoice}
 	td width="25%" #{loss.store.name}
 	td.text-center width="25%" #{loss.total_item}
-	td width="25%" #{loss.user.name} ( #{loss.created_at.to_date} )
+	td width="25%" #{loss.user.name} ( #{loss.created_at.to_date.strftime('%d/%m/%Y')} )

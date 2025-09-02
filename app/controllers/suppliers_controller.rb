@@ -4,6 +4,7 @@ class SuppliersController < ApplicationController
   before_action :screening
   
   def index
+    # binding.pry
     @suppliers = Supplier.order("name ASC").page param_page
     @suppliers = @suppliers.where(supplier_type: 0)
     @search = "Pencarian "

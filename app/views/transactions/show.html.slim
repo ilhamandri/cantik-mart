@@ -2,7 +2,7 @@
 - check_complain = Complain.find_by(transaction_id: transaction.id)
 - member_name = "-"
 - member_name = transaction.member_card.name if transaction.member_card.present?
-.container-fluid
+.div
   - if buttonAccess "returs", "new"
     - complain = Complain.where(transaction_id: transaction).first
     - in_range_complain = (transaction.created_at >= (DateTime.now - 30.days))
@@ -20,7 +20,7 @@
           | &nbsp&nbsp&nbsp#{trx_from_retur.invoice}
 
 br
-.container-fluid
+.div
   .col-lg-12.col-md-12
     .card.mb-4
       .card-header.white-text.bg-primary
@@ -96,7 +96,7 @@ br
               label Voucher
               input disabled="disabled" class="form-control md-form" value="#{Voucher.find_by(id: transaction.voucher_id).exchange_point.name}"
 
-.container-fluid
+.div
   .col-lg-12.col-md-12
     .card.mb-4
       .card-header.white-text.bg-primary
@@ -142,7 +142,6 @@ br
 
 
 - if check_complain.present? || transaction.from_complain?
-  .container-fluid
     .col-lg-12.col-md-12
       .card.mb-4
         .card-header.white-text.danger-color

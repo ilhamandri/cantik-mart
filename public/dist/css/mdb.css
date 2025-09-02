@@ -10014,7 +10014,9 @@ table.table a.btn.btn-discord {
       margin-bottom: 3px; }
     .classic-tabs .nav li a.active {
       border-bottom: 3px solid;
-      color: #fff; }
+      color: #fff; 
+      font-size: large;
+      font-weight: bold;}
   @media (min-width: 62em) {
     .classic-tabs .nav li:first-child {
       margin-left: 56px; } }

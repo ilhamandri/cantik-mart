@@ -8,16 +8,16 @@ tr onclick="window.location='#{retur_path(retur)}'"
 
   - if retur.date_approve.present?
     - color = "alert-primary"
-    - status = "DISETUJUI - " + retur.approved_by.name + " ("+ retur.date_approve.to_date.to_s + ")"
+    - status = "DISETUJUI - " + retur.approved_by.name + " ("+ retur.date_approve.to_date.strftime('%d/%m/%Y') + ")"
 
   - if retur.date_picked.present?
     - color = "alert-warning"
-    - status = "DIAMBIL - " + retur.supplier.name + " (" + retur.date_picked.to_date.to_s + ")"
+    - status = "DIAMBIL - " + retur.supplier.name + " (" + retur.date_picked.to_date.strftime('%d/%m/%Y') + ")"
 
   - if retur.status.present?
     - color = "alert-success"
     - confirmed = retur.confirmed_by.name if retur.confirmed_by.present?
-    - status = "DITERIMA - " + confirmed + " (" + retur.status.to_date.to_s + ")"
+    - status = "DITERIMA - " + confirmed + " (" + retur.status.to_date.strftime('%d/%m/%Y') + ")"
 
   td  width="25%"
     .alert class="#{color}" 

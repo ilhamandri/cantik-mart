@@ -33,7 +33,7 @@ hr
 	      		label for="n_item" Terakhir Update
 	      		- edited_by = "()"
 	      		- edited_by = "("+@dept.edited_by.name+")" if @dept.edited_by.present?
-	      		input class="md-form form-control" value="#{@dept.updated_at.strftime("%d/%m/%Y - %H.%M").to_s+" "+edited_by}" disabled="disabled"
+	      		input class="md-form form-control" value="#{@dept.updated_at.strftime('%d/%m/%Y - %H:%M:%S')+" "+edited_by}" disabled="disabled"
 
 
 .row.text-center

@@ -5,13 +5,13 @@
     td width="15%" #{trx.invoice.gsub("/TP", "")}
     td width="15%" #{retur.store.name}
     td.text-center width="15%"
-      | #{trx.created_at.to_date} 
+      | #{trx.created_at.to_date.strftime('%d/%m/%Y')} 
       br
-      | ( #{trx.user.name} )
+      .bold #{trx.user.name} 
     td.text-center width="15%"
-      | #{retur.created_at.to_date} 
+      | #{retur.created_at.to_date.strftime('%d/%m/%Y')} 
       br
-      | ( #{retur.user.name} )
+      .bold #{retur.user.name}
     td width="20%"
       .row.text-center
         .col-6

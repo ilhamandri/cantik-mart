@@ -1,0 +1,15 @@
+- sub total "diskon" di order_info -> barang (list)
+- tombol + di semua jadi xl-2 lg-3 , btn-rounded
+	-> tombol + .m-0
+	
+- bayar piutang
+
+
+strftime('%d %b %Y - %H:%M:%S')
+
+strftime('%d/%m/%Y - %H:%M:%S')
+
+.bold 
+
+.m-0 = MARGIN 0
+

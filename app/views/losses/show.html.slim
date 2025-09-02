@@ -1,10 +1,10 @@
 - loss = @loss
-.container-fluid
+.div
   .col.text-right
     a.btn.btn-warning.col-12 href="#{loss_path(id: loss.id, format: :pdf)}"
         | CETAK
 br
-.container-fluid
+.div
     .col-lg-12.col-md-12
       .card.mb-4
         .card-header.white-text.bg-primary
@@ -17,7 +17,6 @@ br
                 | &nbsp&nbsp#{loss.invoice}
         .card-body
           .row
-
             .col-md-3
               .form-group
                 label for="from" Toko
@@ -26,13 +25,14 @@ br
             .col-md-6
               .form-group
                 label for="from" Dibuat 
-                input type="text" class="form-control md-form" disabled=true value="#{loss.user.name} ( #{loss.created_at.to_date} )"
+                input type="text" class="form-control md-form" disabled=true value="#{loss.user.name} ( #{loss.created_at.to_date.strftime('%d/%m/%Y')} )"
 
             .col-md-3
               label for="form" TOTAL
               input type="text" class="form-control md-form" disabled=true value="#{loss.total_item} Item"
 br
-.container-fluid
+
+.div
   .col-lg-12.col-md-12
     .card.mb-4
       .card-header.white-text.bg-primary
@@ -51,6 +51,9 @@ br
                 td #{loss_item.item.code}
                 td #{loss_item.item.name}
                 td #{loss_item.quantity}
-                td #{loss_item.description}
+                td 
+                 - desc = loss_item.description.split("#")
+                 | #{desc[0]}
+                 .bold #{desc[1]}
           
             

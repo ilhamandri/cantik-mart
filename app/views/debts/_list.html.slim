@@ -2,7 +2,7 @@ tr
   td 	
   	| #{finance.user.name} (#{finance.store.name}) 
   	br 
-  	| #{finance.date_created}
+  	b #{finance.date_created.strftime('%d/%m/%Y - %H:%M:%S')}
   td #{finance.finance_type}
   td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
   td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}

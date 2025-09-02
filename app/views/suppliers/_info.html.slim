@@ -41,7 +41,7 @@
           .col-6.text-right
             | LAST UPDATE : 
           .col-6.text-danger
-            | #{@supplier.updated_at}
+            | #{@supplier.updated_at.strftime('%d %b %Y - %H:%M:%S')}
         hr
     .form-group
       
