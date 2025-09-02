@@ -1,22 +1,11 @@
 .classic-tabs.mx-2
   ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
     li.nav-item
-      a#profile-tab-classic-blue.nav-link.waves-light aria-controls="search" aria-selected="true" data-toggle="tab" href="#search" role="tab" 
-        i.fa.fa-search.fa-2x.pb-2 aria-hidden="true" 
-        br
-        | Pencarian 
-
-    li.nav-item
       a#profile-tab-classic-blue.nav-link.waves-light.active.show aria-controls="data" aria-selected="true" data-toggle="tab" href="#data" role="tab" 
-        i.fa.fa-database.fa-2x.pb-2 aria-hidden="true" 
-        br
         | Data 
 
 
 
   #myClassicTabContentOrange.tab-content.card
-    #search.tab-pane.fade aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
-      = render partial: 'search'
-
     #data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
         = render partial: 'data'

@@ -7,32 +7,30 @@
       .alert-heading
           .row
             .col
-              h5.font-weight-500.my-1
-                | RETUR SUPPLIER
+              | RETUR SUPPLIER
             .col.text-right
-              h5.font-weight-500.my-1
-                | #{@retur_items.first.retur.invoice}
+              | #{@retur_items.first.retur.invoice}
   
   - if buttonAccess "retur_items", "feedback"
     - if retur.date_approve.present? && retur.date_picked.present? && retur.status.nil?
-      .col-lg-2.col-xl-1.text-center
-        a.btn.btn-rounded.btn-primary.m-0 href="#{retur_feedback_path(id: retur_id)}"
+      .col-lg-3.col-xl-2.text-center
+        a.btn.btn-rounded.btn-primary.m-0 href="#{retur_feedback_path(id: retur_id)}" style="width: inherit;"
             | FEEDBACK
 
   - if buttonAccess "returs", "confirmation"
     - if retur.date_approve.nil?
-      .col-lg-2.col-xl-1.text-center
-        a.btn.btn-rounded.btn-warning.m-0 href="#{retur_confirmation_path(id: retur_id)}"
+      .col-lg-3.col-xl-2.text-center
+        a.btn.btn-rounded.btn-warning.m-0 href="#{retur_confirmation_path(id: retur_id)}" style="width: inherit;"
             | KONFIRMASI
 
   - if buttonAccess "returs", "picked"
     - if retur.date_picked.nil? && retur.date_approve.present?
       .col-xl-1.col-lg-2.text-center
-        a.btn.btn-warning.btn-rounded.m-0 href="#{retur_picked_path(id: retur_id)}"
+        a.btn.btn-warning.btn-rounded.m-0 href="#{retur_picked_path(id: retur_id)}" style="width: inherit;"
             | AMBIL
 
   .col-xl-1.col-lg-2.text-center
-    a.btn.btn-rounded.btn-dark.m-0 href="#{retur_path(id: retur_id, format: :pdf)}"
+    a.btn.btn-rounded.btn-dark.m-0 href="#{retur_path(id: retur_id, format: :pdf)}" style="width: inherit;"
         | CETAK
 br
 

@@ -2,7 +2,7 @@ tr onclick="window.location='#{retur_path(retur)}'"
   td width="20%" #{retur.invoice}
   td width="20%" #{retur.store.name}
   td width="20%" #{retur.supplier.name}
-  td width="15%" #{retur.date_created.to_date}
+  td width="15%" #{retur.date_created.strftime('%d/%m/%Y')}
   - color = "alert-dark"
   - status = "Menunggu disetujui"
 

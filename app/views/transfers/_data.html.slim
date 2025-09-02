@@ -1,7 +1,7 @@
 .data-header
   .row.padding-top-1
     .col
-      .alert.alert-primary
+      .alert.alert-primary.btn-rounded
         .alert-heading
           .row
             .col-3
@@ -10,8 +10,8 @@
               = page_entries_info @transfers
     
     - if buttonAccess "transfers", "new"
-      .col-2.text-right
-        a.btn.btn-dark href="#{new_transfer_path}"
+      .col-xl-2.col-lg-3.text-right
+        a.m-0.btn-rounded.btn.btn-dark href="#{new_transfer_path}" style="width: inherit;"
           i.fas.fa-plus 
           | &nbsp Transfer
             

@@ -13,18 +13,16 @@
         .alert-heading  
           .row
             .col
-              h5.font-weight-500.my-1
-                | ORDER
+              | ORDER
             .col.text-right
-              h5.font-weight-500.my-1
-                | #{order.invoice}
+              | #{order.invoice}
     - if buttonAccess "orders", "confirmation"
       - if order.date_receive.nil? && order.date_paid_off.nil?
-        .col-lg-2.col-xl-1.text-center
-          a.m-0.btn-rounded.btn.btn-success href="#{order_confirmation_path(id: order_id)}"
+        .col-lg-2.col-xl-2.text-center
+          a.m-0.btn-rounded.btn.btn-success href="#{order_confirmation_path(id: order_id)}" style="width: inherit;"
               | Terima
     .col-lg-2.col-xl-1.text-right
-      a.m-0.btn-rounded.btn.btn-dark href="#{order_path(id: order_id, format: :pdf)}"
+      a.m-0.btn-rounded.btn.btn-dark href="#{order_path(id: order_id, format: :pdf)}" style="width: inherit;"
           |  CETAK
   br
   .row      

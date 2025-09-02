@@ -14,3 +14,4 @@ number_with_delimiter(xxxx, delimiter: ".")
 
 .m-0 = MARGIN 0
 
+style="width: inherit;"

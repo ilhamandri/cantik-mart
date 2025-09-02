@@ -1,6 +1,6 @@
 tr onclick="window.location='#{transfer_path(id: transfer.id)}'"
   td width="15%" #{transfer.invoice}
-  td width="15%" #{transfer.date_created.to_date}
+  td width="15%" #{transfer.date_created.strftime('%d/%m/%Y')}
   td width="15%" #{transfer.from_store.name}
   td width="15%" #{transfer.to_store.name}
   td width="10%" #{transfer.total_items}

@@ -3,19 +3,17 @@
 .row.padding-top-1
   .col
     - if ["","-", nil].exclude? transfer.description
-      .alert.alert-danger
+      .alert.alert-danger.btn-rounded
         .alert-heading  
           | #{transfer.invoice} - #{transfer.description}
     - else
-      .alert.alert-primary
+      .alert.alert-primary.btn-rounded
         .alert-heading  
           .row
             .col
-              h5.font-weight-500.my-1
-                | TRANSFER
+              | TRANSFER
             .col.text-right
-              h5.font-weight-500.my-1
-                | #{transfer.invoice}
+              | #{transfer.invoice}
 
 
 
@@ -23,28 +21,28 @@
   - if transfer.invoice.include? "DTRF"
     - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.to_store.id == current_user.store.id
       .col-1.text-center
-        a.btn.btn-success href="#{transfer_receive_path(id: transfer_id)}"
+        a.btn.btn-success.btn-rounded.m-0 href="#{transfer_receive_path(id: transfer_id)}" style="width: inherit;"
           | TERIMA
 
   - else
     - if transfer.date_approve.present? && transfer.date_picked.present? && transfer.status.nil? && transfer.from_store.id == current_user.store.id
-      .col-1.text-center
-        a.btn.btn-success href="#{transfer_receive_path(id: transfer_id)}"
+      .col-2.text-center 
+        a.btn.btn-success.btn-rounded.m-0 href="#{transfer_receive_path(id: transfer_id)}" style="width: inherit;"
           | TERIMA
 
     - if transfer.date_approve.nil? && transfer.to_store.id == current_user.store.id 
       .col-2.text-center
-        a.btn.btn-warning href="#{transfer_confirmation_path(id: transfer_id)}"
+        a.btn.btn-warning.btn-rounded.m-0 href="#{transfer_confirmation_path(id: transfer_id)}" style="width: inherit;"
           | KONFIRMASI
 
     - if transfer.date_approve.present? && transfer.date_picked.nil? && transfer.to_store.id == current_user.store.id
-      .col-2.text-center
-        a.btn.btn-warning href="#{transfer_picked_path(id: transfer_id)}"
+      .col-3.text-center
+        a.btn.btn-warning.btn-rounded.m-0 href="#{transfer_picked_path(id: transfer_id)}" style="width: inherit;"
             | SIAPKAN BARANG
 
 
-  .col-2.text-center
-    a.btn.btn-dark type="button" href="#{transfer_path(id: transfer_id, format: :pdf)}"
+  .col-lg-2.col-xl-1.text-center
+    a.btn.btn-dark.btn-rounded.m-0 type="button" href="#{transfer_path(id: transfer_id, format: :pdf)}"  style="width: inherit;"
       | CETAK
 
 br
