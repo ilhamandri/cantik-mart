@@ -3,7 +3,7 @@
   ul#myClassicTabOrange.nav.tabs-blue role="tablist" 
     li.nav-item
       - if isLevel ["super_visi", "finance"]
-        a#profile-tab-classic-blue.nav-link.waves-light aria-controls="search" aria-selected="true" data-toggle="tab" href="#search" role="tab" 
+        a#profile-tab-classic-blue.nav-link.waves-light aria-controls="sad" aria-selected="true" data-toggle="tab" href="#sad" role="tab" 
           i.fa.fa-search.fa-2x.pb-2 aria-hidden="true" 
           br
           | Pencarian
@@ -25,6 +25,7 @@
           br
           | Grafik
 
+
   #myClassicTabContentOrange.tab-content.card
     #all_data.tab-pane.fade.active.show aria-labelledby="profile-tab-classic-blue" role="tabpanel" 
         = render partial: 'all_data'
@@ -32,8 +33,9 @@
     #recap.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
         = render partial: 'recap'
 
+
     - if isLevel ["super_visi", "finance"]
-      #search.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
+      #sad.tab-pane.fade aria-labelledby="follow-tab-classic-blue" role="tabpanel" 
           = render partial: 'search'
 
 

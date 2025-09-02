@@ -1,7 +1,7 @@
 .data-header
   .row
     .col.padding-top-1
-      .alert.alert-primary
+      .alert.alert-primary.btn-rounded
         .alert-heading
           .row
             .col-3
@@ -10,8 +10,8 @@
               = page_entries_info @suppliers
     
     - if buttonAccess "suppliers", "new"
-      .col-2.text-center.padding-top-1
-        a.btn.btn-dark.btn-rounded href="#{new_supplier_path}"
+      .col-lg-3.col-xl-2.text-center.padding-top-1
+        a.m-0.btn.btn-dark.btn-rounded href="#{new_supplier_path}"
           i.fas.fa-plus 
           | &nbsp Supplier
 

@@ -18,38 +18,18 @@ table.table.table-hover.padding-top-1
       = render partial: 'list_show', collection: @order_items, as: :order_item
     tfoot.text-right.text-danger
       tr
-        td
-        td
-        td
-        td
-        td
-        td.font-weight-bold SUB TOTAL
+        td.font-weight-bold colspan="6" SUB TOTAL
         td
         td.font-weight-bold #{number_with_delimiter(order.total, separator: ",", delimiter: ".")}
       tr
-        td
-        td
-        td
-        td
-        td
-        td.font-weight-bold DISKON (#{order.discount_percentage}% )
+        td.font-weight-bold colspan="6" DISKON (#{order.discount_percentage}% )
         td
         td.font-weight-bold #{number_with_delimiter(order.discount, separator: ",", delimiter: ".")}
       tr
-        td
-        td
-        td
-        td
-        td
-        td.font-weight-bold PPN (#{@order_items.first.ppn}% )
+        td.font-weight-bold colspan="6" PPN (#{@order_items.first.ppn}% )
         td
         td.font-weight-bold #{number_with_delimiter(@order.tax, separator: ",", delimiter: ".")}
       tr
-        td
-        td
-        td
-        td
-        td
-        td.font-weight-bold TOTAL
+        td.font-weight-bold colspan="6" TOTAL
         td
         td.font-weight-bold #{number_with_delimiter(order.grand_total, separator: ",", delimiter: ".")}

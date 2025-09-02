@@ -14,10 +14,10 @@ class OrdersController < ApplicationController
     @orders = filter[1]
     @params = params.to_s
 
-    orders = Serve.order_graph_monthly dataFilter, nil
-    gon.loss_label = orders["label"]
-    gon.order = orders["order"]
-    gon.order_nominal = orders["order_nominal"]
+    # orders = Serve.order_graph_monthly dataFilter, nil
+    # gon.loss_label = orders["label"]
+    # gon.order = orders["order"]
+    # gon.order_nominal = orders["order_nominal"]
 
     respond_to do |format|
       format.html
@@ -512,42 +512,27 @@ class OrdersController < ApplicationController
 
     def filter_search params, r_type
       results = []
-      @orders = Order.all
+      orders = Order.all
+      @orders = orders
       if r_type == "html"
         @orders = @orders.includes(:supplier, :user).page param_page if r_type=="html"
       end
       @orders = @orders.where(store: current_user.store) if  !isAdmin
-      @search = ""
+     
       if params["search"].present?
-        @search += "Pencarian "+params["search"]
         search = "ORD-"+params["search"].gsub("ORD-","")
-        @orders =@orders.search_by_invoice search
-      end
-
-      before_months = params["months"].to_i
-      if before_months != 0
-        @search += before_months.to_s + " bulan terakhir "
-        start_months = (DateTime.now - before_months.months).beginning_of_month.beginning_of_day 
-        @orders = @orders.where("created_at >= ?", start_months)
-      end
-
-      store_name = "SEMUA TOKO"
-      if params["store_id"].present?
-        store = Store.find_by(id: params["store_id"])
-        if store.present?
-          @orders = @orders.where(store: store)
-          store_name = store.name
-          @search += "Pencarian" if @search==""
-          @search += " di Toko '"+store.name+"'"
-        else
-          @search += "Pencarian" if @search==""
-          @search += " di Semua Toko"
+        search_1 = @orders.search_by_invoice search
+        if search_1.empty?
+          s = params[:search]
+          search_name = "%#{s}%".upcase
+          suppliers = Supplier.where('name like ?', search_name)
+          search_1 = @orders.where(supplier: suppliers)
         end
+        @orders = search_1
       end
 
       if params["type"].present?
         @color = ""
-        @search += "Pencarian " if @search==""
         type = params["type"]
         if type == "ongoing" 
           @color = "warning"
@@ -566,9 +551,9 @@ class OrdersController < ApplicationController
 
       @orders = @orders.order("date_receive DESC, created_at DESC, date_paid_off DESC")
 
-      results << @search
+      results << "PENCARIAN ORDER"
       results << @orders
-      results << store_name
+      results << current_user.store.name
       return results
     end
 

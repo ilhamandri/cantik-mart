@@ -2,7 +2,7 @@
   .row.padding-top-1
     .col
       - if @color == "danger"
-        .alert.alert-danger
+        .alert.alert-danger.btn-rounded
           .alert-heading
             .row
               .col
@@ -10,7 +10,7 @@
               .col.text-right
                 | Telah Diterima & Belum Lunas
       - elsif @color == "success"
-        .alert.alert-success
+        .alert.alert-success.btn-rounded
           .alert-heading
             .row
               .col
@@ -18,7 +18,7 @@
               .col.text-right
                 | Lunas
       - elsif @color == "warning"
-        .alert.alert-warning
+        .alert.alert-warning.btn-rounded
           .alert-heading
             .row
               .col
@@ -26,7 +26,7 @@
               .col.text-right
                 | Dalam Proses
       - else
-        .alert.alert-primary
+        .alert.alert-primary.btn-rounded
           .alert-heading
             .row
               .col
@@ -35,8 +35,8 @@
                 = page_entries_info @orders
 
     - if buttonAccess "orders", "new"
-      .col-2.text-center
-        a.btn.btn-dark.btn-rounded href="#{new_order_path}"
+      .col-lg-3.col-xl-2.text-center
+        a.m-0.btn.btn-dark.btn-rounded href="#{new_order_path}"
           i.fas.fa-plus 
           |   Order
 
@@ -45,8 +45,8 @@
         thead
           th width="20%" Invoice
           th width="20%" Supplier
-          th width="20%" Tagihan
-          th width="20%" Tanggal
+          th.text-center width="20%" Tanggal
+          th.text-right width="20%" Tagihan
           th width="20%" Status
 
 

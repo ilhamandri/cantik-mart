@@ -399,12 +399,10 @@ class TransactionsController < ApplicationController
 
     def filter_search params, r_type
       results = []
-      trx = nil
+      trx = Transaction.all
 
       if current_user.level == "candy_dream"
         trx = Transaction.where(has_coin: true) 
-      else
-        trx = Transaction.where(has_coin: false) 
       end
 
       @transactions = trx.order("created_at DESC").includes(:user, :user => :store)

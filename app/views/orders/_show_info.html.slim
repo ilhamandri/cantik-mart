@@ -9,7 +9,7 @@
 .card-body
   .row
     .col
-      .alert.alert-primary
+      .alert.alert-primary.btn-rounded
         .alert-heading  
           .row
             .col
@@ -20,11 +20,11 @@
                 | #{order.invoice}
     - if buttonAccess "orders", "confirmation"
       - if order.date_receive.nil? && order.date_paid_off.nil?
-        .col-1.text-center
-          a.btn.btn-success href="#{order_confirmation_path(id: order_id)}"
+        .col-lg-2.col-xl-1.text-center
+          a.m-0.btn-rounded.btn.btn-success href="#{order_confirmation_path(id: order_id)}"
               | Terima
-    .col-1.text-right
-      a.btn.btn-dark href="#{order_path(id: order_id, format: :pdf)}"
+    .col-lg-2.col-xl-1.text-right
+      a.m-0.btn-rounded.btn.btn-dark href="#{order_path(id: order_id, format: :pdf)}"
           |  CETAK
   br
   .row      

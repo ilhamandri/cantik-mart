@@ -21,11 +21,15 @@
                 label Toko
               .col-12
                 select class="mdb-select md-form" id="store_id" name="store_id"
-                  option value="0"
-                    | Semua Toko
-                  - Store.all.each do |store|
-                    option value="#{store.id}"
-                      | #{store.name}
+                  - if isLevel ['stock_admin', 'finance']
+                    option value="0"
+                      | Semua Toko
+                    - Store.all.each do |store|
+                      option value="#{store.id}"
+                        | #{store.name}
+                  - else
+                    option value="#{current_user.store.id}"
+                      | #{current_user.store.name}
       .col-12
         label Rentang Tanggal
       .col-12

@@ -1,3 +1,4 @@
+- controller_names = ['HOMES', 'NOTIFICATIONS', 'CASH_FLOWS', 'DEBTS', 'RECEIVABLES', 'LOSS_PROFITS', 'TAXS', 'OPERATIONALS', 'SALARIES', 'KASBONS', 'POPULARS', 'STOCK_OPNAMES', 'PRINTS', 'TRANSACTIONS', 'ABSENTS']
 nav.navbar.fixed-top
   .float-left
     a.button-collapse data-activates="slide-out" href="#" 
@@ -8,7 +9,7 @@ nav.navbar.fixed-top
   .float-left
     .float-left style="margin: 0 0 0 20px; font-weight: bold;"
       .bold &nbsp #{controller.controller_name.gsub("_", " ").upcase}
-  - if controller.action_name == "index"  
+  - if (controller.action_name == "index" )  && ( controller_names.exclude? controller.controller_name.upcase )
     .float-left
       - curr_path = request.original_url
       form action="#{curr_path}" method="get" style="margin-bottom: 0 !important;"

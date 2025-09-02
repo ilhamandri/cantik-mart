@@ -1,16 +1,35 @@
-tr
-  	td 
-      a href="#{user_path(id: absent.user.id)}"
-        | #{absent.user.name}
+tr onclick="window.location='#{user_path(absent.user)}'"
+  	td width="20%"
+      | #{absent.user.name}
+
     - if absent.store.present?
-      td #{absent.store.name }
+      td width="20%"
+        | #{absent.store.name}
     - else
       td -
-  	td #{absent.check_in}
+
+    td width="15%"
+      | #{absent.check_in.strftime('%d %b %Y ')}
+
+  	td  width="15%" 
+      | #{absent.check_in.strftime('%H:%M:%S')}
+
     - if absent.check_out.nil?
       td -
     - else
-      td #{absent.check_out}
+      td width="15%"
+        | #{absent.check_out.strftime('%H:%M:%S')}
+
+    td width="15%"
+      - if absent.check_out.present?
+        - time_split = absent.work_hour.split(":")
+        | #{sprintf('%02d', time_split[0])} : #{sprintf('%02d', time_split[1])} : #{sprintf('%02d', time_split[2])} JAM
+      
+      - else
+        .text-danger
+          i.fas.fa-times
+
+
     / - if absent.overtime_in.nil?
     /   td -
     / - else
@@ -19,17 +38,12 @@ tr
     /   td -
     / - else
     /   td #{absent.overtime_out}
-    td
-      - if absent.check_out.present?
-        - time_split = absent.work_hour.split(":")
-        | #{time_split[0]} Jam #{time_split[1]} Menit #{time_split[2]} Detik
-      - else
-        .text-danger
-          i.fas.fa-times
+
+
     / td
     /   - if absent.overtime_out.present?
     /     - time_split = absent.overtime_hour.split(":")
-    /     | #{time_split[0]} Jam #{time_split[1]} Menit #{time_split[2]} Detik
+    /     | #{time_split[0]} : #{time_split[1]} : #{time_split[2]} JAM
     /   - else
     /     .text-danger
     /       i.fas.fa-times

@@ -2,7 +2,7 @@
   .row.padding-top-1
     .col
       - if @color == "danger"
-        .alert.alert-danger
+        .alert.alert-danger.btn-rounded
           .alert-heading
             | Telah Diterima & Belum Lunas
       - elsif @color == "success"
@@ -10,11 +10,11 @@
           .alert-heading
             | Lunas
       - elsif @color == "warning"
-        .alert.alert-warning
+        .alert.alert-warning.btn-rounded
           .alert-heading
             | Dalam Proses
       - else
-        .alert.alert-primary
+        .alert.alert-primary.btn-rounded
           .alert-heading
             .row
               .col
@@ -24,9 +24,9 @@
 
     
     - if buttonAccess "returs", "new"
-      .col-2.text-center
+      .col-2.text-center.btn-rounded
         a href="#{new_retur_path}"
-          button.btn.btn-dark.btn-rounded type="button" 
+          button.m-0.btn.btn-dark.btn-rounded type="button" 
             i.fas.fa-plus 
             |   Retur
 

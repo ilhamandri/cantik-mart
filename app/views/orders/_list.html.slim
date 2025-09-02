@@ -1,8 +1,11 @@
 tr onclick="window.location='#{order_path(order)}'"
   td width="20%"  #{order.invoice}
   td width="20%" #{order.supplier.name}
-  td.text-center width="20%" #{number_with_delimiter(order.grand_total, delimiter: ".")}
-  td width="20%" #{order.user.name} (#{order.date_created.to_date})
+  td.text-center width="20%" 
+    |#{order.user.name} 
+    br
+    .bold #{order.date_created.strftime('%d/%m/%Y')}
+  td.text-right.pr-10 width="20%" #{number_with_delimiter(order.grand_total, delimiter: ".")}
   - color = "alert-warning"
   - status = "Menunggu pengiriman"
   - if order.date_receive.present?

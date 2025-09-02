@@ -9,10 +9,10 @@ class RetursController < ApplicationController
     @params = params.to_s
 
 
-    returs = Serve.retur_graph_monthly dataFilter
-    gon.loss_label = returs["label"]
-    gon.retur = returs["retur"]
-    gon.retur_item = returs["retur_item"]
+    # returs = Serve.retur_graph_monthly dataFilter
+    # gon.loss_label = returs["label"]
+    # gon.retur = returs["retur"]
+    # gon.retur_item = returs["retur_item"]
 
     respond_to do |format|
       format.html
@@ -206,37 +206,21 @@ class RetursController < ApplicationController
         @returs = @returs.page param_page if r_type=="html"
       end
       @returs = @returs.where(store: current_user.store) if  !["owner", "super_admin", "finance"].include? current_user.level
-      @search = ""
+      
       if params["search"].present?
-        @search += "Pencarian "+params["search"]
         search = "RE-"+params["search"].gsub("RE-","")
-        @returs =@returs.search_by_invoice search
-      end
-
-      before_months = params["months"].to_i
-      if before_months != 0
-        @search += before_months.to_s + " bulan terakhir "
-        start_months = (DateTime.now - before_months.months).beginning_of_month.beginning_of_day 
-        @returs = @returs.where("created_at >= ?", start_months)
-      end
-
-      store_name = "SEMUA TOKO"
-      if params["store_id"].present?
-        store = Store.find_by(id: params["store_id"])
-        if store.present?
-          @returs = @returs.where(store: store)
-          store_name = store.name
-          @search += "Pencarian" if @search==""
-          @search += " di Toko '"+store.name+"' "
-        else
-          @search += "Pencarian" if @search==""
-          @search += " di Semua Toko "
+        search_1 = @returs.search_by_invoice search
+        if search_1.empty?
+          s = params[:search]
+          search_name = "%#{s}%".upcase
+          suppliers = Supplier.where('name like ?', search_name)
+          search_1 = @returs.where(supplier: suppliers)
         end
+        @returs = search_1
       end
 
       if params["type"].present?
         @color = ""
-        @search += "Pencarian " if @search==""
         type = params["type"]
         if type == "pick" 
           @color = "warning"
@@ -257,9 +241,9 @@ class RetursController < ApplicationController
         end
       end
 
-      results << @search
+      results << "PENCARIAN RETUR"
       results << @returs
-      results << store_name
+      results << current_user.store.name
       return results
     end
 

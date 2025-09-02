@@ -1,24 +1,30 @@
 - trx = Transaction.find_by(id: retur.transaction_id)
 - if trx.present?
   tr
-    td width="15%" #{retur.invoice}
-    td width="15%" #{trx.invoice.gsub("/TP", "")}
-    td width="15%" #{retur.store.name}
-    td.text-center width="15%"
-      | #{trx.created_at.to_date.strftime('%d/%m/%Y')} 
-      br
-      .bold #{trx.user.name} 
-    td.text-center width="15%"
-      | #{retur.created_at.to_date.strftime('%d/%m/%Y')} 
+    td width="15%" 
+      | #{retur.invoice}
       br
       .bold #{retur.user.name}
+      br
+      | #{retur.created_at.to_date.strftime('%d/%m/%Y')} 
+
+
+    td width="15%" 
+      | #{trx.invoice.gsub("/TP", "")}
+      br
+      .bold #{trx.user.name} 
+      br
+      | #{trx.created_at.to_date.strftime('%d/%m/%Y')} 
+      
+    td.text-center width="10%" #{retur.store.name}
+
+
+
     td width="20%"
       .row.text-center
         .col-6
-          a href='#{transaction_path(id: retur.transaction_id)}'
-            button class="btn btn-warning"
+          a.btn.btn-warning.btn-rounded href='#{transaction_path(id: retur.transaction_id)}'
               | Transaksi
         .col-6
-          a href='#{complain_path(id: retur.id)}'
-            button class="btn btn-primary"
+          a.btn.btn-primary.btn-rounded href='#{complain_path(id: retur.id)}'
               | Detil

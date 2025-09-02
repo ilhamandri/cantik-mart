@@ -1,7 +1,7 @@
 .data-header
   .row.padding-top-1
     .col
-      .alert.alert-primary
+      .alert.alert-primary.btn-rounded
           .alert-heading
             .row
               .col-3
@@ -10,21 +10,18 @@
                 = page_entries_info @complains
 
     - if buttonAccess "complains", "new"
-      .col-2.text-center
-        a href="#{transactions_path(from: "complain")}"
-          button.btn.btn-dark.btn-rounded type="button" 
+      .col-lg-3.col-xl-2.text-center
+        a.btn.btn-dark.btn-rounded.m-0 href="#{transactions_path(from: "complain")}"
             i.fas.fa-plus 
-            | &nbsp Komplain
+            |  Komplain
 
-
-    table.table.table-hover 
-      thead.text-center
-        th.text-left width="15%" Invoice
-        th.text-left width="15%" Transaksi
-        th.text-left width="15%" Toko
-        th width="15%" Transaksi
-        th width="15%" Retur
-        th width="20%"
+    .col-12
+      table.table.table-hover 
+        thead.text-center
+          th.text-left width="15%" Retur 
+          th.text-left width="15%" Dari Transaksi
+          th.text-left.text-center width="10%" Toko
+          th width="20%"
 
 table.table.table-hover
   tbody

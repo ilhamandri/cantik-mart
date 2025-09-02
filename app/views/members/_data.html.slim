@@ -1,6 +1,6 @@
 .row.padding-top-1
   .col
-    .alert.alert-primary
+    .alert.alert-primary.btn-rounded
         .alert-heading
           .row
             .col
@@ -9,9 +9,8 @@
               = page_entries_info @members
   
   - if buttonAccess "members", "new"
-    .col-2.text-center
-      a href="#{new_member_path}"
-        button.btn.btn-dark.btn-rounded type="button" 
+    .col-xl-2.col-lg-3.text-center
+      a.btn.btn-dark.btn-rounded.m-0 href="#{new_member_path}"
           i.fas.fa-plus 
           | &nbsp Member
 hr
