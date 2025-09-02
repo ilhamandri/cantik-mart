@@ -1,13 +1,14 @@
 - sub total "diskon" di order_info -> barang (list)
 - tombol + di semua jadi xl-2 lg-3 , btn-rounded
 	-> tombol + .m-0
-	
-- bayar piutang
+- piutang deficiency < 0 ----> dibersihkan jadi 0
 
 
 strftime('%d %b %Y - %H:%M:%S')
 
 strftime('%d/%m/%Y - %H:%M:%S')
+
+number_with_delimiter(xxxx, delimiter: ".")
 
 .bold 
 

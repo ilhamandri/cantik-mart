@@ -5,10 +5,10 @@
       th  Diterima Oleh              
       th  Tanggal
       th  Nominal
-    - pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivable.id)
+    - pays = CashFlow.where(finance_type: "Income", payment: "receivable", ref_id: @receivable.id).order("created_at DESC")
     - pays.each do |pay|
       tr
         td #{pay.invoice}
         td #{pay.user.name} - #{pay.store.name}
-        td #{pay.created_at}
+        td #{pay.created_at.strftime('%d/%m/%Y - %H:%M:%S')}
         td #{number_with_delimiter(pay.nominal, delimiter: ".", separator: ",")}

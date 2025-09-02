@@ -1,13 +1,13 @@
 .container-fluid
   .col-lg-12.col-md-12
-    .card-header.white-text.bg-dark
+    .card-header.white-text.bg-primary
       .row
         .col
           h5.font-weight-500.my-1
             | EDIT 
         .col.text-right
           h5.font-weight-500.my-1
-            | #{@receivable.description}
+            | #{@receivable.description.upcase}
     .card.mb-4
       .card-body
         = form_for :receivable, url: receivable_path, method: "PUT" do |form|
@@ -15,10 +15,10 @@
             input type="text" value="#{@receivable.description}" name="pay[from_to]" class="form-control md-form" disabled="disabled" style="display: none;"
           .form-group
             label for="type" Nominal saat Ini
-            input type="text" value="#{@receivable.nominal}" name="pay[nominal]" class="form-control md-form"disabled="disabled"
+            input type="text" value="#{number_with_delimiter(@receivable.nominal, delimiter: ".")}" name="pay[nominal]" class="form-control md-form"disabled="disabled"
           .form-group
             label for="type" Kekurangan saat ini
-            input type="text" value="#{@receivable.deficiency}" name="pay[deficiency]" class="form-control md-form" disabled="disabled"
+            input type="text" value="#{number_with_delimiter(@receivable.deficiency, delimiter: ".")}" name="pay[deficiency]" class="form-control md-form" disabled="disabled"
           hr
           .form-group
             label for="nominal" Nominal baru

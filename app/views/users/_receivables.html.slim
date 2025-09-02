@@ -16,30 +16,34 @@
       th 
     - @receivables.each do |finance|
         tr
-          td #{finance.user.name} (#{finance.store.name})
+          td 
+            | #{finance.user.name} 
           - if finance.finance_type == "RETUR"
             - to_user = Supplier.find finance.to_user
             td #{to_user.name}
           - else
             - user = User.find(finance.to_user)
-            td #{user.name} (#{user.store.name}) 
-          td #{finance.date_created}
+            td #{user.name}
+          td #{finance.date_created.strftime('%d/%m/%Y')}
           td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
           td #{finance.n_term} x
           - if finance.nominal_term == 0
-            td #{number_with_delimiter(finance.nominal, delimiter: ".", separator: ",")}
+            td #{number_with_delimiter(finance.nominal.to_i, delimiter: ".", separator: ",")}
           - else
-            td #{number_with_delimiter(finance.nominal_term, delimiter: ".", separator: ",")}
+            td #{number_with_delimiter(finance.nominal_term.to_i, delimiter: ".", separator: ",")}
           td #{number_with_delimiter(finance.deficiency.to_i, delimiter: ".", separator: ",")}
-          td 
-            - if finance.deficiency.abs > 0 
-              a href='#{edit_receivable_path(id: finance.id)}' class="btn btn-danger"
-                    | EDIT
-              | &nbsp
-              a href='#{receivable_path(id: finance.id)}' class="btn btn-warning"
-                | #{finance.description}
-            - else
-              a href='#{receivable_path(id: finance.id)}' class="btn btn-success"
-                | #{finance.description}
+          td
+            .row
+              - if finance.deficiency.abs > 0 
+                .col-3
+                  a.btn.btn-warning.btn-rounded href='#{edit_receivable_path(id: finance.id)}' 
+                      | EDIT
+                .col
+                  a.btn.btn-dark.btn-rounded href='#{receivable_path(id: finance.id)}' style="width: inherit;"
+                    | #{finance.description}
+              - else
+                .col-12
+                  a.btn.btn-success.btn-rounded href='#{receivable_path(id: finance.id)}' style="width: inherit;"
+                    | #{finance.description}
   .container.pagination.justify-content-center
     = paginate @receivables

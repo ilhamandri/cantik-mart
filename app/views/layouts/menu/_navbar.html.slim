@@ -15,6 +15,33 @@ li
           a.waves-effect href="#{users_path}"  Daftar Karyawan
       li
         a.collapsible-header.waves-effect.arrow-r href="#{absents_path}" Absensi
+- if buttonAccess "members", "index"
+  li
+    a.collapsible-header.waves-effect.arrow-r class="#{class_select if ['members', 'complains'].include? controller_name}"
+      .row
+        .col-9 style="padding: 0; padding-left: 1.8rem"
+          | Member 
+        .col-1
+          i.fas.fa-angle-down.rotate-icon
+    .collapsible-body
+      ul
+        li
+          a.waves-effect href="#{members_path}" Daftar Member
+
+        / - if buttonAccess "exchange_points", "index"
+          li
+            a.waves-effect href="#{exchange_points_path}"  Kriterian Penukaran Poin
+
+        / - if buttonAccess "vouchers", "index"
+          li
+            a.waves-effect href="#{vouchers_path}"  Daftar Voucher
+
+        - if buttonAccess "complains", "index"
+          li
+            a.waves-effect href="#{complains_path}" Retur Konsumen
+          
+
+
 
 - if current_user.level == "candy_dream"
   li
@@ -42,33 +69,6 @@ li
         - if buttonAccess "returs", "index"
           li
             a.waves-effect href="#{returs_path}" Retur Suplier
-
-
-- if buttonAccess "members", "index"
-  li
-    a.collapsible-header.waves-effect.arrow-r class="#{class_select if ['members', 'complains'].include? controller_name}"
-      .row
-        .col-9 style="padding: 0; padding-left: 1.8rem"
-          | Member 
-        .col-1
-          i.fas.fa-angle-down.rotate-icon
-    .collapsible-body
-      ul
-        li
-          a.waves-effect href="#{members_path}" Daftar Member
-
-        / - if buttonAccess "exchange_points", "index"
-          li
-            a.waves-effect href="#{exchange_points_path}"  Kriterian Penukaran Poin
-
-        / - if buttonAccess "vouchers", "index"
-          li
-            a.waves-effect href="#{vouchers_path}"  Daftar Voucher
-
-        - if buttonAccess "complains", "index"
-          li
-            a.waves-effect href="#{complains_path}" Retur Konsumen
-          
 
 
 

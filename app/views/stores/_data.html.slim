@@ -1,6 +1,6 @@
 .row.padding-top-1
   .col
-    .alert.alert-primary
+    .alert.alert-primary.btn-rounded
       .alert-heading 
         .row
           .col
@@ -9,9 +9,8 @@
             = page_entries_info @stores
   
   - if buttonAccess "stores", "new"
-    .col-2.text-center
-      a href="#{new_store_path}"
-        button.btn.btn-dark.btn-rounded type="button" 
+    .col-xl-1.col-lg-2.text-center
+      a.btn.btn-dark.btn-rounded.m-0 href="#{new_store_path}"
           i.fas.fa-plus 
           | &nbsp Toko
 hr

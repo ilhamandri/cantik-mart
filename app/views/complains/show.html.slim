@@ -1,14 +1,14 @@
 - member = "-"
 - member = Member.find_by(card_number: @transaction.member_card) if @transaction.member_card.present?
 
-.container-fluid
+.div
   .col-lg-12.col-md-12
     a.btn.btn-primary.col-12 href="#{complain_path(id: @complain.id, format: :pdf)}"
         | CETAK
 br
 
 - new_trx = Transaction.find_by(complain: @complain)
-.container-fluid
+.div
   .col-lg-12.col-md-12
     .card.mb-4
       .card-header.white-text.bg-dark
@@ -48,7 +48,7 @@ br
             label Nominal Tambahan
             input disabled="disabled" class="form-control md-form" value="#{number_with_delimiter(@complain.nominal.to_i, delimiter: ".")}"
 
-.container-fluid
+.div
   .col-lg-12.col-md-12
     .card.mb-4
       .card-header.white-text.danger-color
@@ -79,7 +79,7 @@ br
                 td #{trx_item.replace}
 
 - if new_trx.present?
-  .container-fluid
+  .div
     .col-lg-12.col-md-12
       .card.mb-4
         .card-header.dark-text.success-color

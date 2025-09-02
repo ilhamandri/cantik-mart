@@ -1,6 +1,6 @@
 .container-fluid
   .col-lg-12.col-md-12
-    .card-header.white-text.info-color
+    .card-header.white-text.primary-color
         h5.font-weight-500.my-1
           | Pembayaran
     .card.mb-4
@@ -25,10 +25,10 @@
 
           .form-group
             label.text-primary for="type" Nominal
-            input type="text" value="#{@data.nominal}" name="pay[nominal]" class="form-control md-form"disabled="disabled"
+            input type="text" value="#{number_with_delimiter(@data.nominal, delimiter: ".")}" name="pay[nominal]" class="form-control md-form"disabled="disabled"
           .form-group
             label.text-primary for="type" Kekurangan
-            input type="text" value="#{@data.deficiency}" name="pay[deficiency]" class="form-control md-form" disabled="disabled"
+            input type="text" value="#{number_with_delimiter(@data.deficiency, delimiter: ".")}" name="pay[deficiency]" class="form-control md-form" disabled="disabled"
           .form-group
             label.text-primary for="nominal" Bayar
             = form.number_field :pay_nominal, required: true, class: "form-control md-form", id: "nominal", value:"0", min:"0" 
